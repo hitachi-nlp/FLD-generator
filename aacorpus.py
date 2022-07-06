@@ -275,13 +275,17 @@ def pipeline_create_argument(corpus_config, domain_id, scheme_id,
     if permutate_premises:
         premises = list(random.choice(list(itertools.permutations(premises))))
 
-    premise_str = ''.join([str(sent) for sent in [arg_intro] + premises]).rstrip()
+    arg_intro_str = str(arg_intro)
+    premise_str = ''.join([str(sent) for sent in premises]).rstrip()
     conclusion_str = str(conclusion)
 
     argument = {
         'id': argument_id,
-        'premise': premise_str,
-        'conclusion': conclusion_str,
+
+        'arg_intro_str': arg_intro_str,
+        'premise_str': premise_str,
+        'conclusion_str': conclusion_str,
+
         # 'proofs': proofs,
         'scheme_id': scheme_id,
         'domain_id': domain_id,

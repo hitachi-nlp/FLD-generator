@@ -71,7 +71,9 @@ def main(input_dir, output_dir, text_mixin_type):
         for jlfile in tqdm(input_json_files):
             with jsonlines.open(jlfile) as reader:
                 for arg in reader:
-                    arg_string = ' '.join([arg['premise'], arg['conclusion']])
+                    arg_string = ' '.join([arg['arg_intro_str'],
+                                           arg['premise_str'],
+                                           arg['conclusion_str']])
                     if (arg['scheme_variant'] == 'base_scheme')\
                             & (arg['base_scheme_group'] in ('Modus barbara', 'Hypothetical Syllogism 1', 'Generalized Contraposition')):
                         trainfile01.write(arg_string + '\n')
