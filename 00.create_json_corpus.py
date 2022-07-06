@@ -14,14 +14,16 @@ logger = logging.getLogger(__name__)
 def main():
     setup_logger(level=logging.INFO)
 
-    output_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial')
+    # output_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial')
+    output_top_dir = Path('./outputs/00.create_json_corpus/20220706.format_changed')
 
     config = './configs/conf_syllogistic_corpus-02.json'
     corpus_name = 'org'
+    # split = 'train'
     split = 'test'
 
     # originally 9000 for train and 100 for test
-    # size = 9000
+    # size = 1000
     size = 100
 
     # engine = QsubEngine('ABCI', 'rt_AG.small')

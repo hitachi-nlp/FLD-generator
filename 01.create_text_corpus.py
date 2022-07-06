@@ -15,8 +15,12 @@ logger = logging.getLogger(__name__)
 def main():
     setup_logger(level=logging.INFO)
 
-    input_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial/')
-    output_top_dir = Path('./outputs/01.create_text_corpus/20220705.trial/')
+    # input_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial/')
+    # output_top_dir = Path('./outputs/01.create_text_corpus/20220705.trial/')
+    # text_mixin_type = 'MOCK'
+
+    input_top_dir = Path('./outputs/00.create_json_corpus/20220706.format_changed/')
+    output_top_dir = Path('./outputs/01.create_text_corpus/20220706.format_changed/')
     text_mixin_type = 'MOCK'
 
     # engine = QsubEngine('ABCI', 'rt_AG.small')

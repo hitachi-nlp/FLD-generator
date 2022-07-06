@@ -125,9 +125,9 @@ def get_names(domain, n=1, exclude_names=None):
 
 
 def add_intros(arguments: List[str],
-              possible_arg_intros,
-              possible_premise_intros,
-              possible_conclusion_intros) -> List[Argument]:
+               possible_arg_intros,
+               possible_premise_intros,
+               possible_conclusion_intros) -> List[Argument]:
     """Function that addas intros and intros
 
     output is like: [
@@ -207,9 +207,30 @@ def extend_split(nl_argument, split: str):
     }
 
 
+def gather_arguments(premises, conclusion):
+    sentences = {}
+
+    for idx, premise in enumerate(premises):
+        sentences[f'premise-{idx}'] = premise.claim
+
+    distractors = []
+    for idx, distractor in enumerate(distractors):
+        sentences[f'distractor-{idx}'] = distractor.claim
+
+    sentences['conclusion'] = conclusion.claim
+
+    proofs = [
+        [[f'premise-{idx}' for idx in range(len(premises))], 'conclusion'],
+    ]
+    return sentences, proofs
+
+
 def pipeline_create_argument(corpus_config, domain_id, scheme_id,
+                             depth: int = 1,
                              permutate_premises=False, argument_id='none', split_arg=False,
                              add_proof=False):
+    if depth != 1:
+        raise NotImplementedError()
 
     # STEP1: Get domain and formal argument scheme
     domain = next(d for d in corpus_config['domains'] if d['id'] == domain_id)
@@ -241,29 +262,30 @@ def pipeline_create_argument(corpus_config, domain_id, scheme_id,
         corpus_config['premise_intros'],
         corpus_config['conclusion_indicators'],
     )
-
     all_intro, premises, conclusion = arguments_with_intros[0], arguments_with_intros[1:-1], arguments_with_intros[-1]
     if permutate_premises:
         premises = list(random.choice(list(itertools.permutations(premises))))
 
+    intros = {
+        'all': all_intro.intro,
+        'premise': [premise.intro for premise in premises],
+        'conclusion': conclusion.intro,
+    }
+    sentences, proofs = gather_arguments(premises, conclusion)
+
     argument = {
         'id': argument_id,
 
-        'all_intro': all_intro.intro,
-        'premise_intros': [premise.intro for premise in premises],
-        'conclusion_intro': conclusion.intro,
-
-        'premises': [premise.claim for premise in premises],
-        'conclusion': conclusion.claim,
-        'distractors': [],
-        'intermediates': [],
-        'proofs': [],
+        'intros': intros,
+        'sentences': sentences,
+        'proofs': proofs,
 
         'scheme_id': scheme_id,
         'domain_id': domain_id,
         'base_scheme_group': formal_argument_scheme['base_scheme_group'],
         'scheme_variant': formal_argument_scheme['scheme_variant'],
-        'permutate_premises': str(permutate_premises)
+        'permutate_premises': str(permutate_premises),
+        'depth': depth,
     }
 
     # determine trailing sequence

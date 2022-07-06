@@ -58,14 +58,18 @@ def make_arg_string(arguments) -> str:
             if claim is None:
                 return intro[0].upper() + intro[1:]
             else:
-                return intro[0].upper() + intro[1:] + claim
+                return intro[0].upper() + intro[1:] + ' ' + claim
 
     arguments_str = ''
-    arguments_str += join(arguments['all_intro'], None)
-    for premise_intro, premise in zip(arguments['premise_intros'], arguments['premises']):
-        arguments_str += join(premise_intro, premise)
-    arguments_str += join(arguments['conclusion_intro'], arguments['conclusion'])
-    return arguments
+    arguments_str += join(arguments['intros']['all'], None)
+
+    premises = [sent for sent_id, sent in arguments['sentences'].items()
+                if sent_id.startswith('premise')]
+    for premise_intro, premise in zip(arguments['intros']['premise'], premises):
+        arguments_str += ' ' + join(premise_intro, premise)
+
+    arguments_str += ' ' + join(arguments['intros']['conclusion'], arguments['sentences']['conclusion'])
+    return arguments_str
 
 
 @click.command()
