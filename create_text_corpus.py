@@ -2,6 +2,7 @@ import random
 import jsonlines
 import logging
 from logger_setup import setup as setup_logger
+from typing import Optional
 
 from pathlib import Path
 import click
@@ -48,6 +49,25 @@ def get_text_mixer(num_jsonl_files: int, type_: str):
     return get_mixin_text
 
 
+def make_arg_string(arguments) -> str:
+
+    def join(intro: Optional[str], claim: Optional[str]) -> str:
+        if intro is None:
+            return claim[0].upper() + claim[1:]
+        else:
+            if claim is None:
+                return intro[0].upper() + intro[1:]
+            else:
+                return intro[0].upper() + intro[1:] + claim
+
+    arguments_str = ''
+    arguments_str += join(arguments['all_intro'], None)
+    for premise_intro, premise in zip(arguments['premise_intros'], arguments['premises']):
+        arguments_str += join(premise_intro, premise)
+    arguments_str += join(arguments['conclusion_intro'], arguments['conclusion'])
+    return arguments
+
+
 @click.command()
 @click.argument('input_dir')
 @click.argument('output_dir')
@@ -71,9 +91,7 @@ def main(input_dir, output_dir, text_mixin_type):
         for jlfile in tqdm(input_json_files):
             with jsonlines.open(jlfile) as reader:
                 for arg in reader:
-                    arg_string = ' '.join([arg['arg_intro_str'],
-                                           arg['premise_str'],
-                                           arg['conclusion_str']])
+                    arg_string = make_arg_string(arg)
                     if (arg['scheme_variant'] == 'base_scheme')\
                             & (arg['base_scheme_group'] in ('Modus barbara', 'Hypothetical Syllogism 1', 'Generalized Contraposition')):
                         trainfile01.write(arg_string + '\n')

@@ -6,6 +6,57 @@ import re
 from string import Template
 
 
+class Argument:
+
+    def __init__(self,
+                 type_: str,
+                 claim: Optional[str] = None,
+                 intro: Optional[str] = None):
+        self._claim = claim
+        self._intro = intro
+        self._type = type_
+        if type_ not in ['arg_intro', 'premise', 'conclusion']:
+            raise ValueError()
+        self._IA_reg = re.compile(' a ([aeiou])')
+
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def claim(self) -> Optional[str]:
+        if self._claim is None or re.match(r'^\s*$', self._claim):
+            return None
+        return self._lower(self._normalize(self._claim))
+
+    @property
+    def intro(self) -> Optional[str]:
+        if self._intro is None or re.match(r'^\s*$', self._intro):
+            return None
+        return self._lower(self._normalize(self._intro))
+
+    def _normalize(self, sent: str) -> str:
+        return self._lower(self._adjust_indef(sent.strip(' ')))
+
+    def _adjust_indef(self, sent: str) -> str:
+        # a apple => an apple
+        return self._IA_reg.sub(r' an \1', sent)
+
+    def __repr__(self) -> str:
+        if self.claim is None:
+            return self.intro
+        else:
+            if self.intro is None:
+                return self.claim
+            else:
+                return ' '.join([self.intro, self.claim])
+
+    # def _upper(self, sent: str) -> str:
+    #     return sent[0].upper() + sent[1:]
+
+    def _lower(self, sent: str) -> str:
+        return sent[0].lower() + sent[1:]
+
 
 def create_nl_equivalent(formal_scheme, translations):
     """Generate a natural language scheme equivalent to a formal scheme, given the translations provided"""
@@ -73,64 +124,11 @@ def get_names(domain, n=1, exclude_names=None):
     return random.sample(list(set(domain['subjects']) - set(exclude_names)), n)
 
 
-class Argument:
-
-    def __init__(self,
-                 type_: str,
-                 claim: Optional[str] = None,
-                 intro: Optional[str] = None):
-        self._claim = claim
-        self._intro = intro
-        self._type = type_
-        if type_ not in ['arg_intro', 'premise', 'conclusion']:
-            raise ValueError()
-        self._IA_reg = re.compile(' a ([aeiou])')
-
-    @property
-    def claim(self):
-        return self._claim
-
-    @property
-    def intro(self):
-        return self._intro
-
-    @property
-    def type(self):
-        return self._type
-
-    def __repr__(self) -> str:
-        if self._claim is None or self._claim == '':
-            repr_ = self._upper(self._intro)
-        else:
-            if self._intro is None or self._intro == '':
-                repr_ = self._upper(self._claim)
-            else:
-                repr_ = self._upper(self._intro) + self._lower(self._claim)
-        if re.match(r'^ *if.*', repr_):
-            import pudb; pudb.set_trace()
-        return self._adjust_indef(repr_)
-
-    def _upper(self, sent: str) -> str:
-        if sent == '':
-            return ''
-        return sent[0].upper() + sent[1:]
-
-    def _lower(self, sent: str) -> str:
-        if sent == '':
-            return ''
-        return sent[0].lower() + sent[1:]
-
-    def _adjust_indef(self, sent: str) -> str:
-        # a apple => an apple
-        return self._IA_reg.sub(r' an \1', sent)
-
-
-def nl_encase(arguments: List[str],
+def add_intros(arguments: List[str],
               possible_arg_intros,
               possible_premise_intros,
-              possible_conclusion_indicators,
-              permutate_premises=False) -> List[Argument]:
-    """Function that addas intros and indicators
+              possible_conclusion_intros) -> List[Argument]:
+    """Function that addas intros and intros
 
     output is like: [
         'Consider the following argument: ',
@@ -144,8 +142,6 @@ def nl_encase(arguments: List[str],
     """
 
     premises, conclusion = arguments[:-1], arguments[-1]
-    if permutate_premises:
-        premises = random.choice(list(itertools.permutations(premises)))
 
     num_arguments = len(arguments)
     premise_intros = random.choice(
@@ -154,35 +150,15 @@ def nl_encase(arguments: List[str],
          if len(p) > (num_arguments - 2)]
     )
     arg_intro = random.choice(possible_arg_intros)
-    conclusion_indicator = random.choice(possible_conclusion_indicators)
+    conclusion_intro = random.choice(possible_conclusion_intros)
     
     ret_argments = []
 
     ret_argments.append(Argument('arg_intro', intro=arg_intro,))
     for premise_intro, premise in zip(premise_intros, premises):
         ret_argments.append(Argument('premise', claim=premise, intro=premise_intro))
-    ret_argments.append(Argument('conclusion', claim=conclusion.rstrip(), intro=conclusion_indicator))
-
+    ret_argments.append(Argument('conclusion', claim=conclusion.rstrip(), intro=conclusion_intro))
     return ret_argments
-
-
-def make_lower_case(arguments: List[str], domain) -> List[str]:
-    lcased_arguments = []
-
-    for i_sent, sentence in enumerate(arguments):
-        prev_sent = arguments[i_sent - 1]
-        requires_capital_letter = (prev_sent[-2] in ['.', ':']) if len(prev_sent) > 1 else True
-
-        if i_sent < 1 or len(sentence) < 2:
-            lcased_arguments.append(sentence)
-        elif requires_capital_letter:
-            lcased_arguments.append(sentence)
-        elif sentence.partition(' ')[0] in domain['subjects']:
-            lcased_arguments.append(sentence)
-        else:
-            lcased_arguments.append(sentence[0].lower() + sentence[1:])
-
-    return lcased_arguments
 
 
 def get_translations(corpus_config, domain):
@@ -214,19 +190,21 @@ def split_argument(nl_argument, predicates):
     return rseq.lstrip(' ')
 
 
-def extend_split(nl_argument, split):
+def extend_split(nl_argument, split: str):
     split_extended = split
     argument_trunk = nl_argument[0:-len(split_extended)]
     argument_trunk = argument_trunk.strip(' ')
     words = argument_trunk.split(' ')
-    split_extended = words[-1] + split_extended
+    split_extended = ' '.join([words[-1], split_extended])
     if words[-2] == 'not':
         split_inversed = split_extended
-        split_extended = words[-2] + split_extended
+        split_extended = ' '.join(words[-2] + split_extended)
     else:
-        split_inversed = 'not' + split_extended
-    rdict = {'split_extended': split_extended, 'split_inversed': split_inversed}
-    return rdict
+        split_inversed = ' '.join(['not', split_extended])
+    return {
+        'split_extended': split_extended,
+        'split_inversed': split_inversed
+    }
 
 
 def pipeline_create_argument(corpus_config, domain_id, scheme_id,
@@ -256,37 +234,28 @@ def pipeline_create_argument(corpus_config, domain_id, scheme_id,
         for i_premise, sent in enumerate(bare_arguments[:-1]):
             bare_arguments[i_premise] = f'[premise]{sent}'
 
-    # STEP4 & STEP5: Add intros and indicators
-    encased_arguments = nl_encase(
+    # STEP4 & STEP5: Add intros
+    arguments_with_intros = add_intros(
         bare_arguments,
         domain['intros'],
         corpus_config['premise_intros'],
         corpus_config['conclusion_indicators'],
-        permutate_premises=permutate_premises
     )
-    # cased_arguments = make_lower_case(
-    #     encased_arguments,
-    #     domain,
-    # )
-    # indef_adjusted_arguments = adjust_indef_article(cased_arguments)
-    # indef_adjusted_arguments = adjust_indef_article(encased_arguments)
 
-    arg_intro, premises, conclusion = encased_arguments[0], encased_arguments[1:-1], encased_arguments[-1]
+    all_intro, premises, conclusion = arguments_with_intros[0], arguments_with_intros[1:-1], arguments_with_intros[-1]
     if permutate_premises:
         premises = list(random.choice(list(itertools.permutations(premises))))
-
-    arg_intro_str = str(arg_intro)
-    premise_str = ''.join([str(sent) for sent in premises]).rstrip()
-    conclusion_str = str(conclusion)
 
     argument = {
         'id': argument_id,
 
-        'arg_intro_str': arg_intro_str,
-        'premise_str': premise_str,
-        'conclusion_str': conclusion_str,
+        'all_intro': all_intro.intro,
+        'premise_intros': [premise.intro for premise in premises],
+        'conclusion_intro': conclusion.intro,
 
-        # 'proofs': proofs,
+        'premises': [premise.claim for premise in premises],
+        'conclusion': conclusion.claim,
+
         'scheme_id': scheme_id,
         'domain_id': domain_id,
         'base_scheme_group': formal_argument_scheme['base_scheme_group'],
@@ -296,8 +265,8 @@ def pipeline_create_argument(corpus_config, domain_id, scheme_id,
 
     # determine trailing sequence
     if split_arg:
-        split_arg = {'split' : split_argument(conclusion_str, domain['relations'])}
+        split_arg = {'split' : split_argument(str(conclusion), domain['relations'])}
         argument.update(split_arg)
-        argument.update(extend_split(conclusion_str, argument['split']))
+        argument.update(extend_split(str(conclusion), argument['split']))
 
     return argument
