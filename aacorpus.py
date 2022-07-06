@@ -255,6 +255,9 @@ def pipeline_create_argument(corpus_config, domain_id, scheme_id,
 
         'premises': [premise.claim for premise in premises],
         'conclusion': conclusion.claim,
+        'distractors': [],
+        'intermediates': [],
+        'proofs': [],
 
         'scheme_id': scheme_id,
         'domain_id': domain_id,
