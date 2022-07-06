@@ -1,4 +1,6 @@
 # todo
+* ours: ./outputs/00.create_json_corpus/20220705.trial/org/test/mb7-test.jsonl
+* gold: ./res/data/20201106-TEST_ONLY-SYL02/jsonlines/20201106-TEST_ONLY-SYL02-mb7-test.jsonl
 * "要求機能"
 
 

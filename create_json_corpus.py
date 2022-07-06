@@ -19,7 +19,7 @@ def create_json(config: Dict,
 
     domain_ids = [domain['id'] for domain in config['domains']]
 
-    output_json_path = output_dir / f'{scheme_id}-{split}.jsonl'
+    output_json_path = Path(output_dir) / f'{scheme_id}-{split}.jsonl'
     arg_id = 1
     with jsonlines.open(str(output_json_path), mode='w') as writer:
         for _ in range(size):
