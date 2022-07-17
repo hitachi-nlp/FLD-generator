@@ -8,7 +8,7 @@ import click
 from logger_setup import setup as setup_logger
 from tqdm import tqdm
 import jsonlines
-from aacorpus import pipeline_create_argument
+from aacorpus import pipeline
 
 
 def create_json(config: Dict,
@@ -23,7 +23,7 @@ def create_json(config: Dict,
     arg_id = 1
     with jsonlines.open(str(output_json_path), mode='w') as writer:
         for _ in range(size):
-            argument = pipeline_create_argument(
+            argument = pipeline(
                 config,
                 random.choice(domain_ids),
                 scheme_id,
