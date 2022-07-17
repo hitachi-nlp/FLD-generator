@@ -15,69 +15,76 @@ def main():
     setup_logger(level=logging.INFO)
 
     # output_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial')
-    output_top_dir = Path('./outputs/00.create_json_corpus/20220706.format_changed')
+    # output_top_dir = Path('./outputs/00.create_json_corpus/20220706.format_changed')
+    output_top_dir = Path('./outputs/00.create_json_corpus/20220707.small')
 
     config = './configs/conf_syllogistic_corpus-02.json'
     corpus_name = 'org'
-    # split = 'train'
-    split = 'test'
 
-    # originally 9000 for train and 100 for test
-    # size = 1000
-    size = 100
+    split_sizes = {
+        # original size
+        # 'train': 9000,
+        # 'test': 100,
+
+        'train': 1000,
+        'valid': 10,
+        'test': 10,
+    }
 
     # engine = QsubEngine('ABCI', 'rt_AG.small')
     engine = SubprocessEngine()
 
     dry_run = False
 
-    settings = {
-        'corpus_name': corpus_name,
-        'split': split,
-        'config': config,
-        'size': size
-    }
+    for split, size in split_sizes.items():
 
-    output_dir = build_dir(
-        settings,
-        top_dir=str(output_top_dir / settings["corpus_name"] / settings["split"]),
-        short=True,
-        dirname_exclude_params=[
-            'corpus_name',
-            'split',
-            'config',
-            'size',
-        ],
-        save_params=True
-    )
+        settings = {
+            'corpus_name': corpus_name,
+            'split': split,
+            'config': config,
+            'size': size
+        }
 
-    log_path = output_dir / 'log.txt'
-    command = ' '.join([
-        'python ./create_json_corpus.py',
-        f'{settings["corpus_name"]}',
-        f'{settings["split"]}',
-        f'--output-dir {output_dir}',
-        f'--config {settings["config"]}',
-        f'--size {settings["size"]}',
-    ])
+        output_dir = build_dir(
+            settings,
+            top_dir=str(output_top_dir / settings["corpus_name"] / settings["split"]),
+            short=True,
+            dirname_exclude_params=[
+                'corpus_name',
+                'split',
+                'config',
+                'size',
+            ],
+            save_params=True
+        )
 
-    if isinstance(engine, SubprocessEngine):
-        stdout = None
-        stderr = None
-        wait_until_finish = True
-    else:
-        command += f' 1>{str(log_path)} 2>&1'
-        stdout = output_dir / 'stdout.txt'
-        stderr = output_dir / 'stderr.txt'
-        wait_until_finish = False
-    engine.run(
-        command,
-        stdout=stdout,
-        stderr=stderr,
-        options={'l_opts': ['h_rt=3:00:00']},
-        dry_run=dry_run,
-        wait_until_finish=wait_until_finish,
-    )
+        log_path = output_dir / 'log.txt'
+        command = ' '.join([
+            'python ./create_json_corpus.py',
+            f'{settings["corpus_name"]}',
+            f'{settings["split"]}',
+            f'--output-dir {output_dir}',
+            f'--config {settings["config"]}',
+            f'--size {settings["size"]}',
+        ])
+
+        if isinstance(engine, SubprocessEngine):
+            stdout = None
+            stderr = None
+            wait_until_finish = True
+        else:
+            command += f' 1>{str(log_path)} 2>&1'
+            stdout = output_dir / 'stdout.txt'
+            stderr = output_dir / 'stderr.txt'
+            wait_until_finish = False
+        engine.run(
+            command,
+            stdout=stdout,
+            stderr=stderr,
+            options={'l_opts': ['h_rt=3:00:00']},
+            dry_run=dry_run,
+            wait_until_finish=wait_until_finish,
+        )
 
 
 if __name__ == '__main__':
