@@ -36,7 +36,6 @@ def pipeline(corpus_config,
              scheme_id,
              depth: int = 1,
              permutate_premises=False,
-             argument_id='none',
              split_arg=False):
     if depth != 1:
         raise NotImplementedError()
@@ -76,8 +75,6 @@ def pipeline(corpus_config,
     named_propositions, proofs = create_names_and_proof(premises, conclusion)
 
     argument = {
-        'id': argument_id,
-
         'intros': {
             'all': scheme_intro,
             'premise': premise_intros,

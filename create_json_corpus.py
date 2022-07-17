@@ -28,8 +28,8 @@ def create_json(config: Dict,
                 random.choice(domain_ids),
                 scheme_id,
                 permutate_premises=True,
-                argument_id=f'{split}-{str(arg_id)}',
                 split_arg = True if split == 'test' else False)
+            argument['id'] = f'{split}-{str(arg_id)}'
             arg_id = arg_id + 1
             writer.write(argument)
 
