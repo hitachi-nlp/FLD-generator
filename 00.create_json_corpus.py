@@ -16,7 +16,8 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial')
     # output_top_dir = Path('./outputs/00.create_json_corpus/20220706.format_changed')
-    output_top_dir = Path('./outputs/00.create_json_corpus/20220707.small')
+    # output_top_dir = Path('./outputs/00.create_json_corpus/20220707.small')
+    output_top_dir = Path('./outputs/00.create_json_corpus/debug')
 
     config = './configs/conf_syllogistic_corpus-02.json'
     corpus_name = 'org'
@@ -26,7 +27,7 @@ def main():
         # 'train': 9000,
         # 'test': 100,
 
-        'train': 1000,
+        'train': 10,
         'valid': 10,
         'test': 10,
     }
