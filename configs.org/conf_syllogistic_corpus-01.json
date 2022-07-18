@@ -1,110 +1,123 @@
 {
     "id": "syllogistic_corpus-01",
-    "fss+translations": {
-        "(x): ${A}x -> ${B}x": [
+    "fss+translations":{
+        "(x): ${A}x -> ${B}x" : [
             "Every ${A} is a ${B}. ",
             "Being a ${A} is sufficient for being a ${B}. ",
             "Being a ${B} is necessary for being a ${A}. "
         ],
-        "(x): ¬${A}x -> ${B}x": [
+        "(x): ¬${A}x -> ${B}x" : [
             "Being a ${B} is necessary for not being a ${A}. "
         ],
-        "(x): ${A}x -> ¬${B}x": [
+        "(x): ${A}x -> ¬${B}x" : [
             "No ${A} is a ${B}. ",
             "Being a ${A} is sufficient for not being a ${B}. "
         ],
-        "(x): ¬${A}x -> ¬${B}x": [
+        "(x): ¬${A}x -> ¬${B}x" : [
             "Not being a ${A} is sufficient for not being a ${B}. "
         ],
-        "(x): (${A}x & ${B}x) -> ${C}x": [],
-        "(x): (${A}x v ${B}x) -> ${C}x": [
+        "(x): (${A}x & ${B}x) -> ${C}x" : [
+        ],
+        "(x): (${A}x v ${B}x) -> ${C}x" : [
             "Every ${A} and every ${B} is a ${C}. ",
             "Being a ${A} or a ${B} is sufficient for being a ${C}. "
         ],
-        "(x): ¬(${A}x & ${B}x) -> ${C}x": [],
-        "(x): ¬(${A}x v ${B}x) -> ${C}x": [],
-        "(x): (¬${A}x & ¬${B}x) -> ${C}x": [],
-        "(x): (${A}x & ${B}x) -> ¬${C}x": [],
-        "(x): (${A}x v ${B}x) -> ¬${C}x": [
+        "(x): ¬(${A}x & ${B}x) -> ${C}x" : [
+        ],
+        "(x): ¬(${A}x v ${B}x) -> ${C}x" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ${C}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (${A}x v ${B}x) -> ¬${C}x" : [
             "No ${A} and no ${B} is a ${C}. ",
             "No ${B} and no ${A} is a ${C}. "
         ],
-        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x": [],
-        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)": [],
-        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)": [],
-        "(x): ${A}x -> (${B}x & ${C}x)": [
+        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x & ${C}x)" : [
             "Every ${A} is a ${B} and a ${C}. ",
             "Every ${A} is a ${C} and a ${B}. ",
             "Every ${A} is both a ${B} and a ${C}. "
         ],
-        "(x): ${A}x -> (${B}x v ${C}x)": [
+        "(x): ${A}x -> (${B}x v ${C}x)" : [
             "Every ${A} is a ${B} or a ${C}. ",
             "Every ${A} is a ${C} or a ${B}. ",
             "Every ${A} is either a ${B} or a ${C}, or both. ",
             "To be a ${B} or a ${C} is necessary for being a ${A}. "
         ],
-        "(x): ${A}x -> (¬${B}x v ${C}x)": [
+        "(x): ${A}x -> (¬${B}x v ${C}x)" : [
             "Every ${A} is not a ${B} or a ${C}. ",
             "Every ${A} is a ${C} or, otherwise, neither a ${C} nor a ${B}. ",
             "No ${A} is, in the same time, a ${B} without being a ${C}. ",
             "There is no ${A} who is a ${B} yet not a ${C}. "
         ],
-        "(x): ${A}x -> (${B}x v ¬${C}x)": [
+        "(x): ${A}x -> (${B}x v ¬${C}x)" : [
             "Every ${A} is not a ${C} or a ${B}. ",
             "Every ${A} is a ${B} or, otherwise, neither a ${B} nor a ${C}. ",
             "No ${A} is, in the same time, a ${C} but not a ${B}. ",
             "There is no ${A} who is a ${C} yet not a ${B}. "
         ],
-        "(x): ${A}x -> ¬(${B}x & ${C}x)": [
+        "(x): ${A}x -> ¬(${B}x & ${C}x)" : [
             "No ${A} is a ${B} and, in the same time, a ${C}. ",
             "No ${A} is both a ${B} and a ${C}. "
         ],
-        "(x): ${A}x -> ¬(${B}x v ${C}x)": [
+        "(x): ${A}x -> ¬(${B}x v ${C}x)" : [
             "No ${A} is a ${B} or a ${C}. ",
             "Every ${A} is neither a ${B} nor a ${C}. "
         ],
-        "(x): ${A}x -> (¬${B}x & ¬${C}x)": [
+        "(x): ${A}x -> (¬${B}x & ¬${C}x)" : [
             "Every ${A} is not a ${B} and not a ${C}. ",
             "Every ${A} is neither a ${B} nor a ${C}. ",
             "Every ${A} is not a ${C} and not a ${B}. ",
             "Every ${A} is neither a ${C} nor a ${B}. "
         ],
-        "(x): ${A}x -> (¬${B}x v ¬${C}x)": [
+        "(x): ${A}x -> (¬${B}x v ¬${C}x)" : [
             "Every ${A} is not a ${B} or not a ${C}. ",
             "Every ${A} is not a ${C} or not a ${B}. "
         ],
-        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)": [
+        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)" : [
             "Every ${A} is a ${B} or a ${C} or a ${D}. "
         ],
-        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)": [],
-        "(x): ¬${A}x -> ¬(${B}x & ${C}x)": [],
-        "(x): ¬${A}x -> ¬(${B}x v ${C}x)": [],
-        "(x): ¬${A}x -> (${B}x v ${C}x)": [],
-        "(Ex): ${A}x & ${B}x": [
+        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ¬${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ¬${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ¬${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ${B}x" : [
             "Some ${A} is a ${B}. "
         ],
-        "(Ex): ${A}x & ¬(${B}x & ${C}x)": [
+        "(Ex): ${A}x & ¬(${B}x & ${C}x)" : [
             "Some ${A} is not both a ${B} and a ${C}. ",
             "Not every ${A} is both a ${B} and a ${C}. "
         ],
-        "(Ex): ${A}x & ¬(${B}x v ${C}x)": [
+        "(Ex): ${A}x & ¬(${B}x v ${C}x)" : [
             "Some ${A} is neither a ${B} nor a ${C}. ",
             "Not every ${A} is also a ${B} or a ${C}. "
         ],
-        "(Ex): ${A}x & ¬${B}x": [
+        "(Ex): ${A}x & ¬${B}x" : [
             "Some ${A} is not a ${B}. ",
             "Not every ${A} is a ${B}. "
         ],
-        "(Ex): ${A}x & (¬${B}x v ¬${C}x)": [
+        "(Ex): ${A}x & (¬${B}x v ¬${C}x)" : [
             "Some ${A} is not a ${B} or not a ${C}. "
         ],
-        "(Ex): (${A}x & ${B}x) & ¬${C}x": [
+        "(Ex): (${A}x & ${B}x) & ¬${C}x" : [
             "Some ${A} is a ${B} yet not a ${C}. "
         ],
-        "(Ex): (${A}x & ${B}x) & ${C}x": [
+        "(Ex): (${A}x & ${B}x) & ${C}x" : [
             "Some ${A} is a ${B} and a ${C}. "
         ],
-        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)": [],
+        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)" : [
+        ],
         "${A}${a}": [
             "${a} is a ${A}. "
         ],
@@ -122,47 +135,47 @@
             "${a} is not both: a ${A} and a ${B}. "
         ]
     },
-    "fss+translations_persons": {
-        "(x): ${A}x -> ${B}x": [
+    "fss+translations_persons":{
+        "(x): ${A}x -> ${B}x" : [
             "Everyone who is a ${A} is a ${B}, too. "
         ],
-        "(x): ¬${A}x -> ${B}x": [
+        "(x): ¬${A}x -> ${B}x" : [
             "Whoever is not a ${A} is a ${B}. ",
             "Nobody is neither a ${A} nor a ${B}. "
         ],
-        "(x): ${A}x -> ¬${B}x": [
+        "(x): ${A}x -> ¬${B}x" : [
             "Whoever is a ${A} is not a ${B}. "
         ],
-        "(x): ¬${A}x -> ¬${B}x": [
+        "(x): ¬${A}x -> ¬${B}x" : [
             "Not being a ${A} is sufficient for not being a ${B}. "
         ],
-        "(x): (${A}x & ${B}x) -> ${C}x": [
+        "(x): (${A}x & ${B}x) -> ${C}x" : [
             "Every ${A} who is a ${B} is also a ${C}. ",
             "Every ${B} who is a ${A} is also a ${C}. ",
             "Everyone who is both a ${A} and a ${B} is a ${C}, too. ",
             "Whoever is a ${A} and a ${B} is also a ${C}."
         ],
-        "(x): (${A}x v ${B}x) -> ${C}x": [
+        "(x): (${A}x v ${B}x) -> ${C}x" : [
             "Everyone who is a ${A} or a ${B} is also a ${C}. ",
             "Whoever is a ${A} or a ${B} is a ${C}. "
         ],
-        "(x): ¬(${A}x & ${B}x) -> ${C}x": [
+        "(x): ¬(${A}x & ${B}x) -> ${C}x" : [
             "Everyone who is not both a ${A} and a ${B} is however a ${C}. ",
             "Everyone who is not both a ${A} and a ${B} is a ${C}. ",
             "Everyone who is not both a ${B} and a ${A} is a ${C}. ",
             "Whoever is not both a ${A} and a ${B} is a ${C}. ",
             "Whoever is not both a ${B} and a ${A} is a ${C}. "
         ],
-        "(x): ¬(${A}x v ${B}x) -> ${C}x": [
+        "(x): ¬(${A}x v ${B}x) -> ${C}x" : [
             "Whoever is none of this: a ${A} or ${B}, is a ${C}. "
         ],
-        "(x): (¬${A}x & ¬${B}x) -> ${C}x": [
+        "(x): (¬${A}x & ¬${B}x) -> ${C}x" : [
             "Whoever is neither a ${A} nor a ${B} is a ${C}. ",
             "Everybody who is neither a ${B} nor a ${A} is however a ${C}. ",
             "Everyone who is neither a ${A} nor a ${B} is a ${C}, though. ",
             "Whoever is not a ${A} and not a ${B} is however a ${C}. "
         ],
-        "(x): (${A}x & ${B}x) -> ¬${C}x": [
+        "(x): (${A}x & ${B}x) -> ¬${C}x" : [
             "Every ${A} who is a ${B} is not a ${C}. ",
             "No ${A} who is a ${B} is a ${C}. ",
             "Every ${B} who is a ${A} is not a ${C}. ",
@@ -170,140 +183,148 @@
             "Everyone who is both a ${A} and a ${B} is not a ${C}. ",
             "Whoever is a ${A} and a ${B} is not a ${C}. "
         ],
-        "(x): (${A}x v ${B}x) -> ¬${C}x": [
+        "(x): (${A}x v ${B}x) -> ¬${C}x" : [
             "Everyone who is a ${A} or a ${B} is not a ${C}. ",
             "Whoever is a ${A} or a ${B} is not a ${C}. "
         ],
-        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x": [
+        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x" : [
             "Whoever is neither a ${A} nor a ${B} is not a ${C}. ",
             "Everyone who is neither a ${A} nor a ${B} is not a ${C}. ",
             "Everyone who is neither a ${B} nor a ${C} is not a ${C}. ",
             "Whoever is not a ${A} and not a ${B} is not a ${C}, either. "
         ],
-        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)": [
+        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)" : [
             "Every ${A} who is a ${B} is a ${C} or a ${D}. ",
             "Every ${B} who is a ${A} is a ${C} or a ${D}. ",
             "Everyone who is both a ${A} and a ${B} is a ${C} or a ${D}. ",
             "Whoever is both a ${A} and a ${B} is a ${C} or a ${D}."
         ],
-        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)": [
+        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)" : [
             "Everyone who is not a ${A} and not a ${B} is a ${C} or a ${D}. ",
             "Everyone who is neither a ${A} nor a ${B} is a ${C} or a ${D}. ",
             "Whoever is neither a ${A} nor a ${B} is a ${C} or a ${D}."
         ],
-        "(x): ${A}x -> (${B}x & ${C}x)": [
+        "(x): ${A}x -> (${B}x & ${C}x)" : [
             "Everyone who is a ${A} is also a ${B} and a ${C}. "
         ],
-        "(x): ${A}x -> (${B}x v ${C}x)": [],
-        "(x): ${A}x -> (¬${B}x v ${C}x)": [
+        "(x): ${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x v ${C}x)" : [
             "Whoever is a ${A} is not a ${B} or a ${C}. "
         ],
-        "(x): ${A}x -> (${B}x v ¬${C}x)": [
+        "(x): ${A}x -> (${B}x v ¬${C}x)" : [
             "There is no ${A} who is a ${C} yet not a ${B}. ",
             "Whoever is a ${A} is not a ${C} or a ${B}. "
         ],
-        "(x): ${A}x -> ¬(${B}x & ${C}x)": [],
-        "(x): ${A}x -> ¬(${B}x v ${C}x)": [],
-        "(x): ${A}x -> (¬${B}x & ¬${C}x)": [
+        "(x): ${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x & ¬${C}x)" : [
             "Whoever is a ${A} is not a ${B} and not a ${C}, either. "
         ],
-        "(x): ${A}x -> (¬${B}x v ¬${C}x)": [],
-        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)": [
+        "(x): ${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)" : [
             "Whoever is ${A} is at least one of these: a ${B}, a ${C} or a ${D}. "
         ],
-        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)": [
+        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)" : [
             "If someone is not a ${A}, then that person is not a ${B} or not a ${C}. ",
             "Everyone who is not a ${A} is not a ${B} or not a ${C}. ",
             "Whoever is not a ${A} is not a ${C} or not a ${B}. "
         ],
-        "(x): ¬${A}x -> ¬(${B}x & ${C}x)": [
+        "(x): ¬${A}x -> ¬(${B}x & ${C}x)" : [
             "Everyone who is not a ${A} is not both a ${B} and a ${C}. ",
             "Whoever is not a ${A} is not both a ${B} and a ${C}. "
         ],
-        "(x): ¬${A}x -> ¬(${B}x v ${C}x)": [
+        "(x): ¬${A}x -> ¬(${B}x v ${C}x)" : [
             "Everyone who is not a ${A} is neither a ${B} nor a ${C}. ",
             "Whoever is not a ${A} is not any of this: a ${B} or a ${C}. "
         ],
-        "(x): ¬${A}x -> (${B}x v ${C}x)": [
+        "(x): ¬${A}x -> (${B}x v ${C}x)" : [
             "Someone who is not a ${A} is a ${B} or a ${C}. ",
             "Whoever is not a ${A} is however a ${B} or a ${C}. "
         ],
-        "(Ex): ${A}x & ${B}x": [
+        "(Ex): ${A}x & ${B}x" : [
             "Somebody is a ${A} and a ${B}. ",
             "There is somebody who is a ${A} and a ${B}. "
         ],
-        "(Ex): ${A}x & ¬(${B}x & ${C}x)": [
+        "(Ex): ${A}x & ¬(${B}x & ${C}x)" : [
             "There is somebody who is a ${A} and not both a ${B} and a ${C}. "
         ],
-        "(Ex): ${A}x & ¬(${B}x v ${C}x)": [
+        "(Ex): ${A}x & ¬(${B}x v ${C}x)" : [
             "There is somebody who is a ${A} but neither a ${B} nor a ${C}. "
         ],
-        "(Ex): ${A}x & ¬${B}x": [
+        "(Ex): ${A}x & ¬${B}x" : [
             "Somebody is a ${A} and not a ${B}. ",
             "There is somebody who is a ${A} and not a ${B}. "
         ],
-        "(Ex): ${A}x & (¬${B}x v ¬${C}x)": [
+        "(Ex): ${A}x & (¬${B}x v ¬${C}x)" : [
             "There exists a ${A} who is not a ${B} or not a ${C}. ",
             "There is somebody who is a ${A} and, in addition, not a ${B} or not a ${C}. "
         ],
-        "(Ex): (${A}x & ${B}x) & ¬${C}x": [
+        "(Ex): (${A}x & ${B}x) & ¬${C}x" : [
             "There exists a ${B} who is a ${A} while not a ${C}. ",
             "There is somebody who is a ${A} and a ${B} but not a ${C}. "
         ],
-        "(Ex): (${A}x & ${B}x) & ${C}x": [
+        "(Ex): (${A}x & ${B}x) & ${C}x" : [
             "There exists a ${B} who is a ${A} and a ${C}. ",
             "There is somebody who is a ${A}, a ${B}, and a ${C}. "
         ],
-        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)": [
+        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)" : [
             "Somebody is not a ${A} and, in addition, not a ${B} or not a ${C}. ",
             "There is somebody who is not a ${A} and who is not a ${B} or not a ${C}. "
         ],
-        "${A}${a}": [],
-        "¬${A}${a}": [],
-        "¬(${A}${a} v ${B}${a})": [],
-        "¬${A}${a} v ¬${B}${a}": []
-    },
-    "fss+translations_things": {
-        "(x): ${A}x -> ${B}x": [
+        "${A}${a}": [
+        ],
+        "¬${A}${a}": [
+        ],
+        "¬(${A}${a} v ${B}${a})": [
+        ],
+        "¬${A}${a} v ¬${B}${a}": [
+        ]
+    },    
+    "fss+translations_things":{
+        "(x): ${A}x -> ${B}x" : [
             "Everything that is a ${A} is a ${B}, too. "
         ],
-        "(x): ¬${A}x -> ${B}x": [
+        "(x): ¬${A}x -> ${B}x" : [
             "Whatever is not a ${A} is a ${B}. ",
             "Nothing is neither a ${A} nor a ${B}. "
         ],
-        "(x): ${A}x -> ¬${B}x": [
+        "(x): ${A}x -> ¬${B}x" : [
             "Whatever is a ${A} is not a ${B}. "
         ],
-        "(x): ¬${A}x -> ¬${B}x": [
+        "(x): ¬${A}x -> ¬${B}x" : [
             "Not being a ${A} is sufficient for not being a ${B}. "
         ],
-        "(x): (${A}x & ${B}x) -> ${C}x": [
+        "(x): (${A}x & ${B}x) -> ${C}x" : [
             "Every ${A} that is a ${B} is also a ${C}. ",
             "Every ${B} that is a ${A} is also a ${C}. ",
             "Everything that is both a ${A} and a ${B} is a ${C}, too. ",
             "Whatever is a ${A} and a ${B} is also a ${C}."
         ],
-        "(x): (${A}x v ${B}x) -> ${C}x": [
+        "(x): (${A}x v ${B}x) -> ${C}x" : [
             "Everything that is a ${A} or a ${B} is also a ${C}. ",
             "Whatever is a ${A} or a ${B} is a ${C}. "
         ],
-        "(x): ¬(${A}x & ${B}x) -> ${C}x": [
+        "(x): ¬(${A}x & ${B}x) -> ${C}x" : [
             "Everything that is not both a ${A} and a ${B} is however a ${C}. ",
             "Everything that is not both a ${A} and a ${B} is a ${C}. ",
             "Everything that is not both a ${B} and a ${A} is a ${C}. ",
             "Whatever is not both a ${A} and a ${B} is a ${C}. ",
             "Whatever is not both a ${B} and a ${A} is a ${C}. "
         ],
-        "(x): ¬(${A}x v ${B}x) -> ${C}x": [
+        "(x): ¬(${A}x v ${B}x) -> ${C}x" : [
             "Whatever is none of this: a ${A} or ${B}, is a ${C}. "
         ],
-        "(x): (¬${A}x & ¬${B}x) -> ${C}x": [
+        "(x): (¬${A}x & ¬${B}x) -> ${C}x" : [
             "Whatever is neither a ${A} nor a ${B} is a ${C}. ",
             "Everything that is neither a ${B} nor a ${A} is however a ${C}. ",
             "Everything that is neither a ${A} nor a ${B} is a ${C}, though. ",
             "Whatever is not a ${A} and not a ${B} is however a ${C}. "
         ],
-        "(x): (${A}x & ${B}x) -> ¬${C}x": [
+        "(x): (${A}x & ${B}x) -> ¬${C}x" : [
             "Every ${A} that is a ${B} is not a ${C}. ",
             "No ${A} that is a ${B} is a ${C}. ",
             "Every ${B} that is a ${A} is not a ${C}. ",
@@ -311,729 +332,312 @@
             "Everything that is both a ${A} and a ${B} is not a ${C}. ",
             "Whatever is a ${A} and a ${B} is not a ${C}. "
         ],
-        "(x): (${A}x v ${B}x) -> ¬${C}x": [
+        "(x): (${A}x v ${B}x) -> ¬${C}x" : [
             "Everything that is a ${A} or a ${B} is not a ${C}. ",
             "Whatever is a ${A} or a ${B} is not a ${C}. "
         ],
-        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x": [
+        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x" : [
             "Whatever is neither a ${A} nor a ${B} is not a ${C}. ",
             "Everything that is neither a ${A} nor a ${B} is not a ${C}. ",
             "Everything that is neither a ${B} nor a ${C} is not a ${C}. ",
             "Whatever is not a ${A} and not a ${B} is not a ${C}, either. "
         ],
-        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)": [
+        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)" : [
             "Every ${A} that is a ${B} is a ${C} or a ${D}. ",
             "Every ${B} that is a ${A} is a ${C} or a ${D}. ",
             "Everything that is both a ${A} and a ${B} is a ${C} or a ${D}. ",
             "Whatever is both a ${A} and a ${B} is a ${C} or a ${D}."
         ],
-        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)": [
+        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)" : [
             "Everything that is not a ${A} and not a ${B} is a ${C} or a ${D}. ",
             "Everything that is neither a ${A} nor a ${B} is a ${C} or a ${D}. ",
             "Whatever is neither a ${A} nor a ${B} is a ${C} or a ${D}."
         ],
-        "(x): ${A}x -> (${B}x & ${C}x)": [
+        "(x): ${A}x -> (${B}x & ${C}x)" : [
             "Everything that is a ${A} is also a ${B} and a ${C}. "
         ],
-        "(x): ${A}x -> (${B}x v ${C}x)": [],
-        "(x): ${A}x -> (¬${B}x v ${C}x)": [
+        "(x): ${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x v ${C}x)" : [
             "Whatever is a ${A} is not a ${B} or a ${C}. "
         ],
-        "(x): ${A}x -> (${B}x v ¬${C}x)": [
+        "(x): ${A}x -> (${B}x v ¬${C}x)" : [
             "There is no ${A} that is a ${C} yet not a ${B}. ",
             "Whatever is a ${A} is not a ${C} or a ${B}. "
         ],
-        "(x): ${A}x -> ¬(${B}x & ${C}x)": [],
-        "(x): ${A}x -> ¬(${B}x v ${C}x)": [],
-        "(x): ${A}x -> (¬${B}x & ¬${C}x)": [
+        "(x): ${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x & ¬${C}x)" : [
             "Whatever is a ${A} is not a ${B} and not a ${C}, either. "
         ],
-        "(x): ${A}x -> (¬${B}x v ¬${C}x)": [],
-        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)": [
+        "(x): ${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)" : [
             "Whatever is ${A} is at least one of these: a ${B}, a ${C} or a ${D}. "
         ],
-        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)": [
+        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)" : [
             "If something is not a ${A}, then that thing is not a ${B} or not a ${C}. ",
             "Everything that is not a ${A} is not a ${B} or not a ${C}. ",
             "Whatever is not a ${A} is not a ${C} or not a ${B}. "
         ],
-        "(x): ¬${A}x -> ¬(${B}x & ${C}x)": [
+        "(x): ¬${A}x -> ¬(${B}x & ${C}x)" : [
             "Everything that is not a ${A} is not both a ${B} and a ${C}. ",
             "Whatever is not a ${A} is not both a ${B} and a ${C}. "
         ],
-        "(x): ¬${A}x -> ¬(${B}x v ${C}x)": [
+        "(x): ¬${A}x -> ¬(${B}x v ${C}x)" : [
             "Everything that is not a ${A} is neither a ${B} nor a ${C}. ",
             "Whatever is not a ${A} is not any of this: a ${B} or a ${C}. "
         ],
-        "(x): ¬${A}x -> (${B}x v ${C}x)": [
+        "(x): ¬${A}x -> (${B}x v ${C}x)" : [
             "Something that is not a ${A} is a ${B} or a ${C}. ",
             "Whatever is not a ${A} is however a ${B} or a ${C}. "
         ],
-        "(Ex): ${A}x & ${B}x": [
+        "(Ex): ${A}x & ${B}x" : [
             "Something is a ${A} and a ${B}. ",
             "There is something that is a ${A} and a ${B}. "
         ],
-        "(Ex): ${A}x & ¬(${B}x & ${C}x)": [
+        "(Ex): ${A}x & ¬(${B}x & ${C}x)" : [
             "There is something that is a ${A} and not both a ${B} and a ${C}. "
         ],
-        "(Ex): ${A}x & ¬(${B}x v ${C}x)": [
+        "(Ex): ${A}x & ¬(${B}x v ${C}x)" : [
             "There is something that is a ${A} but neither a ${B} nor a ${C}. "
         ],
-        "(Ex): ${A}x & ¬${B}x": [
+        "(Ex): ${A}x & ¬${B}x" : [
             "Something is a ${A} and not a ${B}. ",
             "There is something that is a ${A} and not a ${B}. "
         ],
-        "(Ex): ${A}x & (¬${B}x v ¬${C}x)": [
+        "(Ex): ${A}x & (¬${B}x v ¬${C}x)" : [
             "There exists a ${A} that is not a ${B} or not a ${C}. ",
             "There is something that is a ${A} and, in addition, not a ${B} or not a ${C}. "
         ],
-        "(Ex): (${A}x & ${B}x) & ¬${C}x": [
+        "(Ex): (${A}x & ${B}x) & ¬${C}x" : [
             "There exists a ${B} that is a ${A} while not a ${C}. ",
             "There is something that is a ${A} and a ${B} but not a ${C}. "
         ],
-        "(Ex): (${A}x & ${B}x) & ${C}x": [
+        "(Ex): (${A}x & ${B}x) & ${C}x" : [
             "There exists a ${B} that is a ${A} and a ${C}. ",
             "There is something that is a ${A}, a ${B}, and a ${C}. "
         ],
-        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)": [
+        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)" : [
             "Something is not a ${A} and, in addition, not a ${B} or not a ${C}. ",
             "There is something that is not a ${A} and that is not a ${B} or not a ${C}. "
         ],
-        "${A}${a}": [],
-        "¬${A}${a}": [],
-        "¬(${A}${a} v ${B}${a})": [],
-        "¬${A}${a} v ¬${B}${a}": []
-    },
+        "${A}${a}": [
+        ],
+        "¬${A}${a}": [
+        ],
+        "¬(${A}${a} v ${B}${a})": [
+        ],
+        "¬${A}${a} v ¬${B}${a}": [
+        ]
+    },  
     "formal_argument_schemes": [
         {
             "id": "mb0",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb1",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb2",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb3",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${H}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${H}${a}",
-                    {
-                        "H": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb4",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x v ${H}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): (${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb5",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x v ${H}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "${H}${a}",
-                    {
-                        "H": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): (${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb6",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ¬(${F}x & ${H}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ¬(${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "mb7",
             "base_scheme_group": "Modus barbara",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (¬${F}x & ¬${H}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "¬(${F}${a} v ${H}${a})",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): (¬${A}x & ¬${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["¬(${A}${a} v ${B}${a})", {"A": "${F}", "B": "${H}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
         },
         {
             "id": "gmt0",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "¬${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
         },
         {
             "id": "gmt1",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
         },
         {
             "id": "gmt2",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "¬${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "gmt3",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x & ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "¬${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x & ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "gmt4",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x v ${G}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "¬${H}${a}",
-                    {
-                        "H": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬(${F}${a} v ${G}${a})",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "a": "a"
-                    }
-                ]
+                ["(x): (${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["¬(${A}${a} v ${B}${a})", {"A": "${F}", "B": "${G}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "gmt5",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "¬${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${H}${a}",
-                    {
-                        "H": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "gmt6",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x & ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "¬${G}${a} v ¬${H}${a}",
-                    {
-                        "G": "A",
-                        "H": "B",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x & ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a} v ¬${B}${a}", {"A": "${G}", "B": "${H}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
-        },
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
         {
             "id": "gmt7",
             "base_scheme_group": "Generalized modus tollens",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬(${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "${G}${a}",
-                    {
-                        "G": "A",
-                        "a": "a"
-                    }
-                ],
-                [
-                    "¬${F}${a}",
-                    {
-                        "F": "A",
-                        "a": "a"
-                    }
-                ]
+                ["(x): ${A}x -> ¬(${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
-            "entity-placeholders": [
-                "a"
-            ]
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
         },
         {
             "id": "hyps10",
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${H}x",
-                    {
-                        "G": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1041,33 +645,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${H}x",
-                    {
-                        "G": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1075,33 +657,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${G}x -> ${H}x",
-                    {
-                        "G": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1109,33 +669,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ¬${H}x",
-                    {
-                        "G": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1143,36 +681,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "C",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${H}x",
-                    {
-                        "G": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): (${F}x & ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "C",
-                        "I": "B"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "C": "${G}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "C": "${H}", "B": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1180,36 +693,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> (${H}x v ${I}x)",
-                    {
-                        "G": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> (${H}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${G}", "B": "${H}", "C": "${I}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1217,42 +705,12 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${I}x",
-                    {
-                        "F": "A",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): (${G}x & ${I}x) -> ${H}x",
-                    {
-                        "G": "A",
-                        "H": "C",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${G}", "C": "${H}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1260,36 +718,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (¬${F}x & ¬${I}x) -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "C",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${H}x",
-                    {
-                        "G": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): ¬(${F}x v ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "C",
-                        "I": "B"
-                    }
-                ]
+                ["(x): (¬${A}x & ¬${B}x) -> ${C}x", {"A": "${F}", "C": "${G}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "C": "${H}", "B": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1297,36 +730,11 @@
             "base_scheme_group": "Hypothetical Syllogism 1",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> (¬${H}x v ¬${I}x)",
-                    {
-                        "G": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬(${H}x & ${I}x)",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${H}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1334,33 +742,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ¬${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1368,33 +754,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ¬${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1402,33 +766,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ¬${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1436,33 +778,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ¬${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1470,36 +790,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): (${F}x & ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1507,36 +802,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ¬(${G}x v ${I}x)",
-                    {
-                        "H": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬(${B}x v ${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1544,42 +814,12 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${F}x -> ${I}x",
-                    {
-                        "F": "A",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ¬(${G}x & ${I}x)",
-                    {
-                        "H": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ¬${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): ¬${A}x -> ¬(${B}x & ${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1587,36 +827,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (¬${F}x & ¬${I}x) -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬(${F}x v ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (¬${A}x & ¬${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1624,36 +839,11 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> (¬${G}x & ¬${I}x)",
-                    {
-                        "H": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> (¬${B}x & ¬${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1661,42 +851,12 @@
             "base_scheme_group": "Hypothetical Syllogism 2",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${F}x -> ${I}x",
-                    {
-                        "F": "A",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> (¬${G}x v ¬${I}x)",
-                    {
-                        "H": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ¬${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): ¬${A}x -> (¬${B}x v ¬${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1704,33 +864,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬${F}x",
-                    {
-                        "H": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1738,33 +876,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ${F}x",
-                    {
-                        "H": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1772,33 +888,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬${F}x",
-                    {
-                        "H": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1806,33 +900,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${G}x -> ${F}x",
-                    {
-                        "G": "A",
-                        "F": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ${F}x",
-                    {
-                        "H": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${F}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -1840,42 +912,12 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${I}x",
-                    {
-                        "F": "A",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬(${G}x & ${I}x)",
-                    {
-                        "H": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬${F}x",
-                    {
-                        "H": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(Ex): ${A}x & ¬(${B}x & ${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1883,36 +925,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): (${H}x & ${I}x) & ¬${G}x",
-                    {
-                        "H": "A",
-                        "I": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(Ex): (${H}x & ${I}x) & ${F}x",
-                    {
-                        "H": "A",
-                        "I": "B",
-                        "F": "C"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): (${A}x & ${B}x) & ¬${C}x", {"A": "${H}", "B": "${I}", "C": "${G}"}],
+                ["(Ex): (${A}x & ${B}x) & ${C}x", {"A": "${H}", "B": "${I}", "C": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1920,36 +937,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬(${F}x & ${I}x)",
-                    {
-                        "H": "A",
-                        "F": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬(${B}x & ${C}x)", {"A": "${H}", "B": "${F}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -1957,42 +949,12 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${I}x",
-                    {
-                        "F": "A",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & (¬${G}x v ¬${I}x)",
-                    {
-                        "H": "A",
-                        "G": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ¬${F}x",
-                    {
-                        "H": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(Ex): ${A}x & (¬${B}x v ¬${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2000,36 +962,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ¬${G}x & (¬${H}x v ¬${I}x)",
-                    {
-                        "G": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(Ex): ${F}x & ¬(${H}x & ${I}x)",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ¬${A}x & (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${H}", "C": "${I}"}],
+                ["(Ex): ${A}x & ¬(${B}x & ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2037,36 +974,11 @@
             "base_scheme_group": "Hypothetical Syllogism 3",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & ${G}x",
-                    {
-                        "H": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(Ex): ${H}x & (¬${F}x v ¬${I}x)",
-                    {
-                        "H": "A",
-                        "F": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & (¬${B}x v ¬${C}x)", {"A": "${H}", "B": "${F}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2074,34 +986,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -2109,34 +998,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> (¬${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (¬${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -2144,34 +1010,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ¬${F}x",
-                    {
-                        "G": "A",
-                        "F": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${F}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -2179,34 +1022,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ¬${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ¬${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -2214,43 +1034,12 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C",
-                        "I": "D"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${I}x",
-                    {
-                        "F": "A",
-                        "I": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${H}x",
-                    {
-                        "F": "A",
-                        "H": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2258,38 +1047,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C",
-                        "H": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ¬(${F}x & ${I}x)",
-                    {
-                        "G": "A",
-                        "F": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): (${F}x & ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${G}", "B": "${F}", "C": "${I}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2297,37 +1059,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C",
-                        "I": "D"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> (${H}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2335,38 +1071,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C",
-                        "H": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> (¬${F}x v ¬${I}x)",
-                    {
-                        "G": "A",
-                        "F": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): (${F}x & ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${F}", "C": "${I}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2374,38 +1083,11 @@
             "base_scheme_group": "Disjunctive Syllogism",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (¬${F}x & ¬${I}x) -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C",
-                        "H": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> (${F}x v ${I}x)",
-                    {
-                        "G": "A",
-                        "F": "B",
-                        "I": "C"
-                    }
-                ],
-                [
-                    "(x): ¬(${F}x v ${I}x) -> ${H}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${G}", "B": "${F}", "C": "${I}"}],
+                ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","I"],
             "entity-placeholders": []
         },
         {
@@ -2413,42 +1095,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${J}x",
-                    {
-                        "F": "A",
-                        "J": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J"
-            ],
+            "predicate-placeholders": ["F","G","H","J"],
             "entity-placeholders": []
         },
         {
@@ -2456,42 +1108,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> (¬${G}x v ¬${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ¬${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${J}x",
-                    {
-                        "F": "A",
-                        "J": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J"
-            ],
+            "predicate-placeholders": ["F","G","H","J"],
             "entity-placeholders": []
         },
         {
@@ -2499,42 +1121,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ¬${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ¬${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${J}x",
-                    {
-                        "F": "A",
-                        "J": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J"
-            ],
+            "predicate-placeholders": ["F","G","H","J"],
             "entity-placeholders": []
         },
         {
@@ -2542,42 +1134,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ${J}x -> ¬${G}x",
-                    {
-                        "J": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${J}x -> ¬${H}x",
-                    {
-                        "J": "A",
-                        "H": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ¬${J}x",
-                    {
-                        "F": "A",
-                        "J": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${J}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${J}", "B": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J"
-            ],
+            "predicate-placeholders": ["F","G","H","J"],
             "entity-placeholders": []
         },
         {
@@ -2585,51 +1147,13 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C",
-                        "I": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${I}x -> ${J}x",
-                    {
-                        "I": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${J}x",
-                    {
-                        "F": "A",
-                        "J": "B"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${I}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
             "entity-placeholders": []
         },
         {
@@ -2637,45 +1161,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${I}x) -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C",
-                        "H": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): (${F}x & ${I}x) -> ${J}x",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "J": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
             "entity-placeholders": []
         },
         {
@@ -2683,45 +1174,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> (${G}x v ${H}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C",
-                        "I": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> (${J}x v ${I}x)",
-                    {
-                        "F": "A",
-                        "J": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${J}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
             "entity-placeholders": []
         },
         {
@@ -2729,42 +1187,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬(${G}x & ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): ¬${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${F}x -> ${J}x",
-                    {
-                        "F": "A",
-                        "J": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J"
-            ],
+            "predicate-placeholders": ["F","G","H","J"],
             "entity-placeholders": []
         },
         {
@@ -2772,45 +1200,12 @@
             "base_scheme_group": "Generalized Dilemma",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (¬${F}x & ¬${I}x) -> (${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "I": "B",
-                        "G": "C",
-                        "H": "D"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${J}x",
-                    {
-                        "G": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ${H}x -> ${J}x",
-                    {
-                        "H": "A",
-                        "J": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${J}x -> (${F}x v ${I}x)",
-                    {
-                        "J": "A",
-                        "F": "B",
-                        "I": "C"
-                    }
-                ]
+                ["(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ¬${A}x -> (${B}x v ${C}x)", {"A": "${J}", "B": "${F}", "C": "${I}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H",
-                "J",
-                "I"
-            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
             "entity-placeholders": []
         },
         {
@@ -2818,25 +1213,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "base_scheme",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ¬${F}x",
-                    {
-                        "G": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
+            "predicate-placeholders": ["F","G"],
             "entity-placeholders": []
         },
         {
@@ -2844,25 +1224,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${G}x -> ${F}x",
-                    {
-                        "G": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
+            "predicate-placeholders": ["F","G"],
             "entity-placeholders": []
         },
         {
@@ -2870,25 +1235,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ¬${F}x -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ${F}x",
-                    {
-                        "G": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
+            "predicate-placeholders": ["F","G"],
             "entity-placeholders": []
         },
         {
@@ -2896,25 +1246,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "negation_variant",
             "scheme": [
-                [
-                    "(x): ${F}x -> ${G}x",
-                    {
-                        "F": "A",
-                        "G": "B"
-                    }
-                ],
-                [
-                    "(x): ¬${G}x -> ¬${F}x",
-                    {
-                        "G": "A",
-                        "F": "B"
-                    }
-                ]
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${G}", "B": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G"
-            ],
+            "predicate-placeholders": ["F","G"],
             "entity-placeholders": []
         },
         {
@@ -2922,28 +1257,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): (${F}x & ${H}x) -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> ¬(${F}x & ${H}x)",
-                    {
-                        "G": "A",
-                        "F": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${G}", "B": "${F}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -2951,28 +1268,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "complex_predicates",
             "scheme": [
-                [
-                    "(x): ${F}x -> ¬(${G}x v ${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): (${G}x v ${H}x) -> ¬${F}x",
-                    {
-                        "G": "A",
-                        "H": "B",
-                        "F": "C"
-                    }
-                ]
+                ["(x): ${A}x -> ¬(${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): (${A}x v ${B}x) -> ¬${C}x", {"A": "${G}", "B": "${H}", "C": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -2980,28 +1279,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): (${F}x & ${H}x) -> ¬${G}x",
-                    {
-                        "F": "A",
-                        "H": "B",
-                        "G": "C"
-                    }
-                ],
-                [
-                    "(x): ${G}x -> (¬${F}x v ¬${H}x)",
-                    {
-                        "G": "A",
-                        "F": "B",
-                        "H": "C"
-                    }
-                ]
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${F}", "C": "${H}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         },
         {
@@ -3009,28 +1290,10 @@
             "base_scheme_group": "Generalized Contraposition",
             "scheme_variant": "de_morgan",
             "scheme": [
-                [
-                    "(x): ${F}x -> (¬${G}x & ¬${H}x)",
-                    {
-                        "F": "A",
-                        "G": "B",
-                        "H": "C"
-                    }
-                ],
-                [
-                    "(x): (${G}x v ${H}x) -> ¬${F}x",
-                    {
-                        "G": "A",
-                        "H": "B",
-                        "F": "C"
-                    }
-                ]
+                ["(x): ${A}x -> (¬${B}x & ¬${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): (${A}x v ${B}x) -> ¬${C}x", {"A": "${G}", "B": "${H}", "C": "${F}"}]
             ],
-            "predicate-placeholders": [
-                "F",
-                "G",
-                "H"
-            ],
+            "predicate-placeholders": ["F","G","H"],
             "entity-placeholders": []
         }
     ],
@@ -3038,8 +1301,7 @@
         {
             "id": "female_relatives",
             "type": "persons",
-            "subjects": [
-                "Elsa",
+            "subjects": ["Elsa",
                 "Sarah",
                 "Lillian",
                 "Lea",
@@ -3538,10 +1800,8 @@
                 "Yong",
                 "Betty",
                 "Joni",
-                "Pamela"
-            ],
-            "objects": [
-                "Florene",
+                "Pamela"],
+            "objects": ["Florene",
                 "Dorothy",
                 "Gwendolyn",
                 "Kathleen",
@@ -4040,8 +2300,7 @@
                 "Barbara",
                 "Pricilla",
                 "Jeanette",
-                "Anna"
-            ],
+                "Anna"],
             "relations": [
                 "sister of ${name}",
                 "stepsister of ${name}",
@@ -4053,7 +2312,7 @@
                 "niece of ${name}",
                 "close friend of ${name}",
                 "aunt of ${name}",
-                "ancestor of ${name}",
+                "ancestor of ${name}", 
                 "classmate of ${name}",
                 "schoolmate of ${name}",
                 "workmate of ${name}"
@@ -4067,8 +2326,7 @@
         {
             "id": "male_relatives",
             "type": "persons",
-            "subjects": [
-                "Ryan",
+            "subjects": ["Ryan",
                 "Alfred",
                 "Michel",
                 "Carlton",
@@ -4567,10 +2825,8 @@
                 "Gerald",
                 "Alex",
                 "Stanley",
-                "Michael"
-            ],
-            "objects": [
-                "Don",
+                "Michael"],
+            "objects": ["Don",
                 "Curtis",
                 "Dewayne",
                 "Daniel",
@@ -5069,8 +3325,7 @@
                 "Armando",
                 "Curt",
                 "Marvin",
-                "Lee"
-            ],
+                "Lee"],
             "relations": [
                 "brother of ${name}",
                 "stepbrother of ${name}",
@@ -5082,7 +3337,7 @@
                 "nephew of ${name}",
                 "close friend of ${name}",
                 "uncle of ${name}",
-                "ancestor of ${name}",
+                "ancestor of ${name}", 
                 "classmate of ${name}",
                 "schoolmate of ${name}",
                 "workmate of ${name}"
@@ -5096,8 +3351,7 @@
         {
             "id": "football_fans",
             "type": "persons",
-            "subjects": [
-                "Ryan",
+            "subjects": ["Ryan",
                 "Alfred",
                 "Michel",
                 "Carlton",
@@ -5596,10 +3850,8 @@
                 "Gerald",
                 "Alex",
                 "Stanley",
-                "Michael"
-            ],
-            "objects": [
-                "Real Madrid CF",
+                "Michael"],
+            "objects": ["Real Madrid CF",
                 "Club Atlético de Madrid",
                 "FC Barcelona",
                 "FC Bayern München",
@@ -5811,7 +4063,7 @@
                 "backer of ${name}",
                 "expert of ${name}",
                 "friend of ${name}",
-                "opponent to ${name}",
+                "opponent to ${name}", 
                 "critic of ${name}",
                 "follower of ${name}"
             ],
@@ -5824,8 +4076,7 @@
         {
             "id": "consumers_personalcare",
             "type": "persons",
-            "subjects": [
-                "Alfred",
+            "subjects": ["Alfred",
                 "Michel",
                 "Carlton",
                 "Shane",
@@ -6108,107 +4359,8 @@
                 "April",
                 "Lois",
                 "Lavina",
-                "Amanda"
-            ],
-            "objects": [
-                "TRESemmé shampoo",
-                "Dove shampoo",
-                "L'Oreal shampoo",
-                "Pantene shampoo",
-                "Herbal Essences shampoo",
-                "Head & Shoulders shampoo",
-                "Garnier shampoo",
-                "Schwarzkopf shampoo",
-                "Redken shampoo",
-                "Biolage shampoo",
-                "Matrix shampoo",
-                "Sunsilk shampoo",
-                "Organix Hair shampoo",
-                "Paul Mitchell shampoo",
-                "Aussie shampoo",
-                "Aveda shampoo",
-                "Bed Head shampoo",
-                "Nexxus shampoo",
-                "Suave shampoo",
-                "Neutrogena shampoo",
-                "Pureology shampoo",
-                "Aveeno shampoo",
-                "John Frieda shampoo",
-                "Bumble and bumble shampoo",
-                "Burt's Bees shampoo",
-                "TIGI shampoo",
-                "Biosilk shampoo",
-                "Revlon shampoo",
-                "Sexy Hair shampoo",
-                "Clairol shampoo",
-                "CHI shampoo",
-                "Nioxin shampoo",
-                "Joico shampoo",
-                "Frederic Fekkai shampoo",
-                "American Crew shampoo",
-                "Infusium shampoo",
-                "AXE shampoo",
-                "Finesse shampoo",
-                "Shiseido shampoo",
-                "Giovanni shampoo",
-                "KMS shampoo",
-                "René Furterer shampoo",
-                "Alterna Haircare shampoo",
-                "Bio Ionic shampoo",
-                "Dove soap",
-                "Olay soap",
-                "Dial soap",
-                "Irish Spring soap",
-                "Ivory soap",
-                "Caress soap",
-                "Aveeno soap",
-                "Zest soap",
-                "Cetaphil soap",
-                "Neutrogena soap",
-                "Pears soap",
-                "Lever soap",
-                "Burt's Bees soap",
-                "Lush soap",
-                "Yardley London soap",
-                "Bath & Body Works soap",
-                "The Body Shop soap",
-                "Vaseline soap",
-                "Dettol soap",
-                "Tom's of Maine soap",
-                "Camay soap",
-                "Colgate-Palmolive soap",
-                "Eucalyptus soap",
-                "Mysore soap",
-                "Mrs. Meyer's soap",
-                "Shield soap",
-                "Lifebuoy soap",
-                "Clearly Natural soap",
-                "Kirk's soap",
-                "Kiss My Face soap",
-                "Proactiv soap",
-                "Origins soap",
-                "Nubian Heritage soap",
-                "Softsoap soap",
-                "Tocca soap",
-                "Bee & Flower soap",
-                "Natural Bar soap",
-                "Dermasil soap",
-                "South of France soap",
-                "Paul Mitchell soap",
-                "Pre De Provence soap",
-                "Protex soap",
-                "Dawn soap",
-                "Crafted soap",
-                "Bliss soap",
-                "Pacifica soap",
-                "Fels-Naptha soap",
-                "Purpose soap",
-                "Celtic Sea Salt soap",
-                "Caswell-Massey soap",
-                "Canus soap",
-                "Nag Champa soap",
-                "Organic Fiji soap",
-                "Bentley Organic soap"
+                "Amanda"],
+            "objects": ["TRESemmé shampoo","Dove shampoo","L'Oreal shampoo","Pantene shampoo","Herbal Essences shampoo","Head & Shoulders shampoo","Garnier shampoo","Schwarzkopf shampoo","Redken shampoo","Biolage shampoo","Matrix shampoo","Sunsilk shampoo","Organix Hair shampoo","Paul Mitchell shampoo","Aussie shampoo","Aveda shampoo","Bed Head shampoo","Nexxus shampoo","Suave shampoo","Neutrogena shampoo","Pureology shampoo","Aveeno shampoo","John Frieda shampoo","Bumble and bumble shampoo","Burt's Bees shampoo","TIGI shampoo","Biosilk shampoo","Revlon shampoo","Sexy Hair shampoo","Clairol shampoo","CHI shampoo","Nioxin shampoo","Joico shampoo","Frederic Fekkai shampoo","American Crew shampoo","Infusium shampoo","AXE shampoo","Finesse shampoo","Shiseido shampoo","Giovanni shampoo","KMS shampoo","René Furterer shampoo","Alterna Haircare shampoo","Bio Ionic shampoo","Dove soap","Olay soap","Dial soap","Irish Spring soap","Ivory soap","Caress soap","Aveeno soap","Zest soap","Cetaphil soap","Neutrogena soap","Pears soap","Lever soap","Burt's Bees soap","Lush soap","Yardley London soap","Bath & Body Works soap","The Body Shop soap","Vaseline soap","Dettol soap","Tom's of Maine soap","Camay soap","Colgate-Palmolive soap","Eucalyptus soap","Mysore soap","Mrs. Meyer's soap","Shield soap","Lifebuoy soap","Clearly Natural soap","Kirk's soap","Kiss My Face soap","Proactiv soap","Origins soap","Nubian Heritage soap","Softsoap soap","Tocca soap","Bee & Flower soap","Natural Bar soap","Dermasil soap","South of France soap","Paul Mitchell soap","Pre De Provence soap","Protex soap","Dawn soap","Crafted soap","Bliss soap","Pacifica soap","Fels-Naptha soap","Purpose soap","Celtic Sea Salt soap","Caswell-Massey soap","Canus soap","Nag Champa soap","Organic Fiji soap","Bentley Organic soap"
             ],
             "relations": [
                 "regular consumer of ${name}",
@@ -6229,8 +4381,7 @@
         {
             "id": "chemical_ingredients",
             "type": "things",
-            "subjects": [
-                "Benzophenone-4",
+            "subjects": ["Benzophenone-4",
                 "Retinyl palmitate",
                 "Retinol palmitate",
                 "Mica",
@@ -6309,9 +4460,8 @@
                 "Lead acetate",
                 "Avobenzone",
                 "Coffee"
-            ],
-            "objects": [
-                "Believe",
+                ],
+            "objects": ["Believe",
                 "Maypole Soap",
                 "Crystal XII",
                 "Spa Hand Wash",
@@ -11311,7 +9461,7 @@
                 "Neutral Lip Gloss",
                 "Vitamin C Serum",
                 "EYES TO MESMERISE"
-            ],
+                ],
             "relations": [
                 "ingredient of ${name}"
             ],
@@ -11320,45 +9470,15 @@
                 "It is not always easy to see which chemicals are contained in our consumer products. The following argument pertains to this question: ",
                 "Is Titanium oxide an ingredient of my washing power? Which chemicals does my perfume contain? It is really difficult to keep track of all chemicals one is regularly exposed to. The following argument seeks to clarify some such relations: "
             ]
-        }
+        }        
     ],
     "premise_intros": [
-        [
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        ],
-        [
-            "First, ",
-            "Second, ",
-            "Third, ",
-            "Fourth, "
-        ],
-        [
-            "First premise: ",
-            "Second premise: ",
-            "Third premise: ",
-            "Fourth premise: "
-        ],
-        [
-            "To begin with, ",
-            "Moreover, ",
-            "Finally, "
-        ],
-        [
-            "First of all, ",
-            "Next, ",
-            "Plus,",
-            "Finally, "
-        ],
-        [
-            "To start with, ",
-            "Now, ",
-            "Moreover, "
-        ]
+        ["", "", "", "", "", ""],
+        ["First, ", "Second, ", "Third, ", "Fourth, "],
+        ["First premise: ", "Second premise: ", "Third premise: ", "Fourth premise: "],
+        ["To begin with, ", "Moreover, ", "Finally, "],
+        ["First of all, ", "Next, ", "Plus,", "Finally, "],
+        ["To start with, ", "Now, ", "Moreover, "]
     ],
     "conclusion_indicators": [
         "So, necessarily, ",

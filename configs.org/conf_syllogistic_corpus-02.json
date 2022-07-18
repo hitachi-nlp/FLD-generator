@@ -1,0 +1,1505 @@
+{
+    "id": "syllogistic_corpus-02_dino-and-philo",
+    "fss+translations":{
+        "(x): ${A}x -> ${B}x" : [
+        ],
+        "(x): ¬${A}x -> ${B}x" : [
+        ],
+        "(x): ${A}x -> ¬${B}x" : [
+        ],
+        "(x): ¬${A}x -> ¬${B}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> ${C}x" : [
+        ],
+        "(x): (${A}x v ${B}x) -> ${C}x" : [
+        ],
+        "(x): ¬(${A}x & ${B}x) -> ${C}x" : [
+        ],
+        "(x): ¬(${A}x v ${B}x) -> ${C}x" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ${C}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (${A}x v ${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x & ${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x & ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)" : [
+        ],
+        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ¬${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ¬${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ¬${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ${B}x" : [
+        ],
+        "(Ex): ${A}x & ¬(${B}x & ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ¬(${B}x v ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ¬${B}x" : [
+        ],
+        "(Ex): ${A}x & (¬${B}x v ¬${C}x)" : [
+        ],
+        "(Ex): (${A}x & ${B}x) & ¬${C}x" : [
+        ],
+        "(Ex): (${A}x & ${B}x) & ${C}x" : [
+        ],
+        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)" : [
+        ],
+        "${A}${a}": [
+            "${a} is a ${A}. "
+        ],
+        "¬${A}${a}": [
+            "${a} is not a ${A}. "
+        ],
+        "¬(${A}${a} v ${B}${a})": [
+            "It is not the case that ${a} is a ${A} or a ${B}. "
+        ],
+        "¬${A}${a} v ¬${B}${a}": [
+            "${a} is not a ${A} or not a ${B}. "
+        ]
+    },
+    "fss+translations_persons":{
+        "(x): ${A}x -> ${B}x" : [
+            "If someone is a ${A}, then they are a ${B}. "
+        ],
+        "(x): ¬${A}x -> ${B}x" : [
+            "If someone is not a ${A}, then they are a ${B}. "
+        ],
+        "(x): ${A}x -> ¬${B}x" : [
+            "If someone is a ${A}, then they are not a ${B}. "
+        ],
+        "(x): ¬${A}x -> ¬${B}x" : [
+            "If someone is not a ${A}, then they are not a ${B}. "
+        ],
+        "(x): (${A}x & ${B}x) -> ${C}x" : [
+            "If someone is a ${A} and a ${B}, then they are a ${C}. "
+        ],
+        "(x): (${A}x v ${B}x) -> ${C}x" : [
+            "If someone is a ${A} or a ${B}, then they are a ${C}. "
+        ],
+        "(x): ¬(${A}x & ${B}x) -> ${C}x" : [
+            "If someone is not both a ${A} and a ${B}, then they are a ${C}. "
+        ],
+        "(x): ¬(${A}x v ${B}x) -> ${C}x" : [
+            "If it is not the case that someone is a ${A} or a ${B}, then they are a ${C}. "
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ${C}x" : [
+            "If someone is neither a ${A} nor a ${B}, then they are a ${C}. "
+        ],
+        "(x): (${A}x & ${B}x) -> ¬${C}x" : [
+            "If someone is a ${A} and a ${B}, then they are not a ${C}. "
+        ],
+        "(x): (${A}x v ${B}x) -> ¬${C}x" : [
+            "If someone is a ${A} or a ${B}, then they are not a ${C}. "
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x" : [
+            "If someone is neither a ${A} nor a ${B}, then they are not a ${C}. "
+        ],
+        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)" : [
+            "If someone is a ${A} and a ${B}, then they are a ${C} or a ${D}. "
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)" : [
+            "If someone is neither a ${A} nor a ${B}, then they are a ${C} or a ${D}. "
+        ],
+        "(x): ${A}x -> (${B}x & ${C}x)" : [
+            "If someone is a ${A}, then they are a ${B} and a ${C}. "
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x)" : [
+            "If someone is a ${A}, then they are a ${B} or a ${C}. "
+        ],
+        "(x): ${A}x -> (¬${B}x v ${C}x)" : [
+            "If someone is a ${A}, then they are not a ${B}, or a ${C}. "
+        ],
+        "(x): ${A}x -> (${B}x v ¬${C}x)" : [
+            "If someone is a ${A}, then they are a ${B}, or not a ${C}. "
+        ],
+        "(x): ${A}x -> ¬(${B}x & ${C}x)" : [
+            "If someone is a ${A}, then they are not both a ${B} and a ${C}. "
+        ],
+        "(x): ${A}x -> ¬(${B}x v ${C}x)" : [
+            "If someone is a ${A}, then it is not the case that they are a ${B} or a ${C}. "
+        ],
+        "(x): ${A}x -> (¬${B}x & ¬${C}x)" : [
+            "If someone is a ${A}, then they are not a ${B} and not a ${C}. "
+        ],
+        "(x): ${A}x -> (¬${B}x v ¬${C}x)" : [
+            "If someone is a ${A}, then they are not a ${B} or not a ${C}. "
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)" : [
+            "If someone is a ${A}, then they are at least one of these: a ${B}, a ${C} or a ${D}. "
+        ],
+        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)" : [
+            "If someone is not a ${A}, then they are not a ${B}, or not a ${C}. "
+        ],
+        "(x): ¬${A}x -> ¬(${B}x & ${C}x)" : [
+            "If someone is not a ${A}, then it is not the case that they are a ${B} and a ${C}. "
+        ],
+        "(x): ¬${A}x -> ¬(${B}x v ${C}x)" : [
+            "If someone is not a ${A}, then it is not the case that they are a ${B} or a ${C}. "
+        ],
+        "(x): ¬${A}x -> (${B}x v ${C}x)" : [
+            "If someone is not a ${A}, then they are a ${B} or a ${C}. "
+        ],
+        "(Ex): ${A}x & ${B}x" : [
+            "Someone is a ${A} and a ${B}. "
+        ],
+        "(Ex): ${A}x & ¬(${B}x & ${C}x)" : [
+            "Someone is a ${A} and not both a ${B} and a ${C}. "
+        ],
+        "(Ex): ${A}x & ¬(${B}x v ${C}x)" : [
+            "Someone is a ${A} but neither a ${B} nor a ${C}. "
+        ],
+        "(Ex): ${A}x & ¬${B}x" : [
+            "Someone is a ${A} and not a ${B}. "
+        ],
+        "(Ex): ${A}x & (¬${B}x v ¬${C}x)" : [
+            "Someone is a ${A} and, in addition, not a ${B} or not a ${C}. "
+        ],
+        "(Ex): (${A}x & ${B}x) & ¬${C}x" : [
+            "Someone is a ${A} and a ${B}, but not a ${C}. "
+        ],
+        "(Ex): (${A}x & ${B}x) & ${C}x" : [
+            "Someone is a ${A}, a ${B}, and a ${C}. "
+        ],
+        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)" : [
+            "Somebody is not a ${A} and, in addition, not a ${B} or not a ${C}. ",
+            "Someone, who is not a ${A}, is not a ${B} or not a ${C}. "
+        ],
+        "${A}${a}": [
+        ],
+        "¬${A}${a}": [
+        ],
+        "¬(${A}${a} v ${B}${a})": [
+        ],
+        "¬${A}${a} v ¬${B}${a}": [
+        ]
+    },    
+    "fss+translations_things":{
+        "(x): ${A}x -> ${B}x" : [
+        ],
+        "(x): ¬${A}x -> ${B}x" : [
+        ],
+        "(x): ${A}x -> ¬${B}x" : [
+        ],
+        "(x): ¬${A}x -> ¬${B}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> ${C}x" : [
+        ],
+        "(x): (${A}x v ${B}x) -> ${C}x" : [
+        ],
+        "(x): ¬(${A}x & ${B}x) -> ${C}x" : [
+        ],
+        "(x): ¬(${A}x v ${B}x) -> ${C}x" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ${C}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (${A}x v ${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> ¬${C}x" : [
+        ],
+        "(x): (${A}x & ${B}x) -> (${C}x v ${D}x)" : [
+        ],
+        "(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x & ${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x & ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ${A}x -> (${B}x v ${C}x v ${D}x)" : [
+        ],
+        "(x): ¬${A}x -> (¬${B}x v ¬${C}x)" : [
+        ],
+        "(x): ¬${A}x -> ¬(${B}x & ${C}x)" : [
+        ],
+        "(x): ¬${A}x -> ¬(${B}x v ${C}x)" : [
+        ],
+        "(x): ¬${A}x -> (${B}x v ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ${B}x" : [
+        ],
+        "(Ex): ${A}x & ¬(${B}x & ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ¬(${B}x v ${C}x)" : [
+        ],
+        "(Ex): ${A}x & ¬${B}x" : [
+        ],
+        "(Ex): ${A}x & (¬${B}x v ¬${C}x)" : [
+        ],
+        "(Ex): (${A}x & ${B}x) & ¬${C}x" : [
+        ],
+        "(Ex): (${A}x & ${B}x) & ${C}x" : [
+        ],
+        "(Ex): ¬${A}x & (¬${B}x v ¬${C}x)" : [
+        ],
+        "${A}${a}": [
+        ],
+        "¬${A}${a}": [
+        ],
+        "¬(${A}${a} v ${B}${a})": [
+        ],
+        "¬${A}${a} v ¬${B}${a}": [
+        ]
+    },  
+    "formal_argument_schemes": [
+        {
+            "id": "mb0",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb1",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb2",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb3",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb4",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb5",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb6",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ¬(${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "mb7",
+            "base_scheme_group": "Modus barbara",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (¬${A}x & ¬${B}x) -> ${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["¬(${A}${a} v ${B}${a})", {"A": "${F}", "B": "${H}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },
+        {
+            "id": "gmt0",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },
+        {
+            "id": "gmt1",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },
+        {
+            "id": "gmt2",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "gmt3",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x & ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "gmt4",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["¬(${A}${a} v ${B}${a})", {"A": "${F}", "B": "${G}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "gmt5",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${H}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "gmt6",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x & ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["¬${A}${a} v ¬${B}${a}", {"A": "${G}", "B": "${H}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },        
+        {
+            "id": "gmt7",
+            "base_scheme_group": "Generalized modus tollens",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> ¬(${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["${A}${a}", {"A": "${G}", "a": "${a}"}],
+                ["¬${A}${a}", {"A": "${F}", "a": "${a}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": ["a"]
+        },
+        {
+            "id": "hyps10",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps11",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps12",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps13",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps14",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "C": "${G}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "C": "${H}", "B": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps15",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${G}", "B": "${H}", "C": "${I}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps16",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${G}", "C": "${H}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps17",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (¬${A}x & ¬${B}x) -> ${C}x", {"A": "${F}", "C": "${G}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${H}"}],
+                ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "C": "${H}", "B": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps18",
+            "base_scheme_group": "Hypothetical Syllogism 1",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${H}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps20",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps21",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps22",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps23",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps24",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps25",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬(${B}x v ${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps26",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): ¬${A}x -> ¬(${B}x & ${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps27",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (¬${A}x & ¬${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps28",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> (¬${B}x & ¬${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps29",
+            "base_scheme_group": "Hypothetical Syllogism 2",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): ¬${A}x -> (¬${B}x v ¬${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps30",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps31",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps32",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps33",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${F}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps34",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(Ex): ${A}x & ¬(${B}x & ${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps35",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): (${A}x & ${B}x) & ¬${C}x", {"A": "${H}", "B": "${I}", "C": "${G}"}],
+                ["(Ex): (${A}x & ${B}x) & ${C}x", {"A": "${H}", "B": "${I}", "C": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps36",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & ¬(${B}x & ${C}x)", {"A": "${H}", "B": "${F}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps37",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(Ex): ${A}x & (¬${B}x v ¬${C}x)", {"A": "${H}", "B": "${G}", "C": "${I}"}],
+                ["(Ex): ${A}x & ¬${B}x", {"A": "${H}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps38",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(Ex): ¬${A}x & (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${H}", "C": "${I}"}],
+                ["(Ex): ${A}x & ¬(${B}x & ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "hyps39",
+            "base_scheme_group": "Hypothetical Syllogism 3",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                ["(Ex): ${A}x & ${B}x", {"A": "${H}", "B": "${G}"}],
+                ["(Ex): ${A}x & (¬${B}x v ¬${C}x)", {"A": "${H}", "B": "${F}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs0",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs1",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> (¬${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs2",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${F}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs3",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ¬${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs4",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs5",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${G}", "B": "${F}", "C": "${I}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs6",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${H}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs7",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${F}", "C": "${I}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "disjs8",
+            "base_scheme_group": "Disjunctive Syllogism",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${G}", "B": "${F}", "C": "${I}"}],
+                ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem0",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem1",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem2",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem3",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${J}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${J}", "B": "${H}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem4",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${I}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem5",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): (${A}x & ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem6",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> (${B}x v ${C}x v ${D}x)", {"A": "${F}", "B": "${G}", "C": "${H}", "D": "${I}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> (${B}x v ${C}x)", {"A": "${F}", "B": "${J}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem7",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${J}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gdilem8",
+            "base_scheme_group": "Generalized Dilemma",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (¬${A}x & ¬${B}x) -> (${C}x v ${D}x)", {"A": "${F}", "B": "${I}", "C": "${G}", "D": "${H}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${J}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${H}", "B": "${J}"}],
+                ["(x): ¬${A}x -> (${B}x v ${C}x)", {"A": "${J}", "B": "${F}", "C": "${I}"}]
+            ],
+            "predicate-placeholders": ["F","G","H","J","I"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap0",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "base_scheme",
+            "scheme": [
+                ["(x): ${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ¬${B}x", {"A": "${G}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap1",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ${B}x", {"A": "${G}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap2",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ${A}x -> ${B}x", {"A": "${G}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap3",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "negation_variant",
+            "scheme": [
+                ["(x): ${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
+                ["(x): ¬${A}x -> ¬${B}x", {"A": "${G}", "B": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap4",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["(x): ${A}x -> ¬(${B}x & ${C}x)", {"A": "${G}", "B": "${F}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap5",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "complex_predicates",
+            "scheme": [
+                ["(x): ${A}x -> ¬(${B}x v ${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): (${A}x v ${B}x) -> ¬${C}x", {"A": "${G}", "B": "${H}", "C": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap6",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): (${A}x & ${B}x) -> ¬${C}x", {"A": "${F}", "B": "${H}", "C": "${G}"}],
+                ["(x): ${A}x -> (¬${B}x v ¬${C}x)", {"A": "${G}", "B": "${F}", "C": "${H}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        },
+        {
+            "id": "gcontrap7",
+            "base_scheme_group": "Generalized Contraposition",
+            "scheme_variant": "de_morgan",
+            "scheme": [
+                ["(x): ${A}x -> (¬${B}x & ¬${C}x)", {"A": "${F}", "B": "${G}", "C": "${H}"}],
+                ["(x): (${A}x v ${B}x) -> ¬${C}x", {"A": "${G}", "B": "${H}", "C": "${F}"}]
+            ],
+            "predicate-placeholders": ["F","G","H"],
+            "entity-placeholders": []
+        }
+    ],
+    "domains": [
+        {
+            "id": "dinos",
+            "type": "persons",
+            "subjects": ["Tyrannosaurus Rex",
+                "Stegosaurus",
+                "Triceratops",
+                "Velociraptor",
+                "Spinosaurus",
+                "Allosaurus",
+                "Archaeopteryx",
+                "Megalosaurus",
+                "Diplodocus",
+                "Ankylosaurus",
+                "Brachiosaurus",
+                "Iguanodon",
+                "Parasaurolophus",
+                "Hadrosaurus"
+            ],
+            "objects": ["Tyrannosaurus Rex",
+                "Stegosaurus",
+                "Triceratops",
+                "Velociraptor",
+                "Spinosaurus",
+                "Allosaurus",
+                "Archaeopteryx",
+                "Megalosaurus",
+                "Diplodocus",
+                "Ankylosaurus",
+                "Brachiosaurus",
+                "Iguanodon",
+                "Parasaurolophus",
+                "Hadrosaurus"
+            ],
+            "relations": [
+                "contemporary of ${name}",
+                "prey of ${name}",
+                "predator of ${name}",
+                "descendant of ${name}",
+                "ancestor of ${name}", 
+                "successor of ${name}"
+            ],
+            "intros": [
+                "Consider the following argument: ",
+                "Some dinos are carnivores. "
+            ]
+        },
+        {
+            "id": "philosophers",
+            "type": "persons",
+            "subjects": [
+                "Acrion",
+                "Adrastus of Aphrodisias",
+                "Aedesia",
+                "Aedesius",
+                "Aeneas of Gaza",
+                "Aenesidemus",
+                "Aesara",
+                "Aeschines of Neapolis",
+                "Aeschines of Sphettus",
+                "Aetius",
+                "Agapius",
+                "Agathobulus",
+                "Agathosthenes",
+                "Agrippa the Skeptic",
+                "Albinus",
+                "Alcinous",
+                "Alcibiades",
+                "Alcmaeon of Croton",
+                "Alexamenus of Teos",
+                "Alexander of Aegae",
+                "Alexander of Aphrodisias",
+                "Alexicrates",
+                "Alexinus",
+                "Amelius",
+                "Ammonius Hermiae",
+                "Ammonius of Athens",
+                "Ammonius Saccas",
+                "Anaxagoras",
+                "Anaxarchus",
+                "Anaxilaus",
+                "Anaximander",
+                "Anaximenes of Miletus",
+                "Androcydes",
+                "Andronicus of Rhodes",
+                "Anniceris",
+                "Antiochus of Ascalon",
+                "Antipater of Cyrene",
+                "Antipater of Tarsus",
+                "Antipater of Tyre",
+                "Antisthenes",
+                "Antoninus",
+                "Apollodorus of Athens",
+                "Apollodorus of Seleucia",
+                "Apollodorus the Epicurean",
+                "Apollonius Cronus",
+                "Apollonius of Tyana",
+                "Apollonius of Tyre",
+                "Arcesilaus",
+                "Archedemus of Tarsus",
+                "Archelaus",
+                "Archytas",
+                "Arete of Cyrene",
+                "Arignote",
+                "Aristarchus of Samos",
+                "Aristippus",
+                "Aristippus the Younger",
+                "Aristoclea",
+                "Aristocles of Messene",
+                "Aristocreon",
+                "Aristo of Alexandria",
+                "Aristo of Ceos",
+                "Aristo of Chios",
+                "Aristotle",
+                "Aristotle of Cyrene",
+                "Aristotle of Mytilene",
+                "Aristoxenus",
+                "Arius Didymus",
+                "Asclepiades of Phlius",
+                "Asclepiades the Cynic",
+                "Asclepigenia",
+                "Asclepiodotus",
+                "Asclepiodotus of Alexandria",
+                "Aspasius",
+                "Athenaeus of Seleucia",
+                "Athenodoros Cananites",
+                "Athenodoros Cordylion",
+                "Athenodorus of Soli",
+                "Attalus",
+                "Atticus",
+                "Basilides the Epicurean",
+                "Batis of Lampsacus",
+                "Bion of Borysthenes",
+                "Boethus of Sidon",
+                "Bolus of Mendes",
+                "Brontinus",
+                "Bryson of Achaea",
+                "Callicles",
+                "Calliphon",
+                "Calliphon of Croton",
+                "Callistratus",
+                "Carneades",
+                "Carneiscus",
+                "Cassius Longinus",
+                "Cebes",
+                "Celsus",
+                "Cercidas",
+                "Cercops",
+                "Chaerephon",
+                "Chamaeleon",
+                "Charmadas",
+                "Chrysanthius",
+                "Chrysippus",
+                "Cleanthes",
+                "Clearchus of Soli",
+                "Cleinias of Tarentum",
+                "Cleomedes",
+                "Cleomenes",
+                "Clinomachus",
+                "Clitomachus",
+                "Colotes",
+                "Crantor",
+                "Crates of Athens",
+                "Crates of Mallus",
+                "Crates of Thebes",
+                "Cratippus of Pergamon",
+                "Cratylus",
+                "Crescens the Cynic",
+                "Crinis",
+                "Critolaus",
+                "Cronius",
+                "Damascius",
+                "Damis",
+                "Damo",
+                "Dardanus of Athens",
+                "Demetrius Lacon",
+                "Demetrius Phalereus",
+                "Demetrius of Amphipolis",
+                "Demetrius the Cynic",
+                "Democrates",
+                "Democritus",
+                "Demonax",
+                "Dexippus",
+                "Diagoras of Melos",
+                "Dicaearchus",
+                "Dio Chrysostom",
+                "Diocles of Cnidus",
+                "Diodorus Cronus",
+                "Diodorus of Adramyttium",
+                "Diodorus of Aspendus",
+                "Diodorus of Tyre",
+                "Diodotus",
+                "Diogenes of Apollonia",
+                "Diogenes of Babylon"
+            ],
+            "objects": [
+                "Acrion",
+                "Adrastus of Aphrodisias",
+                "Aedesia",
+                "Aedesius",
+                "Aeneas of Gaza",
+                "Aenesidemus",
+                "Aesara",
+                "Aeschines of Neapolis",
+                "Aeschines of Sphettus",
+                "Aetius",
+                "Agapius",
+                "Agathobulus",
+                "Agathosthenes",
+                "Agrippa the Skeptic",
+                "Albinus",
+                "Alcinous",
+                "Alcibiades",
+                "Alcmaeon of Croton",
+                "Alexamenus of Teos",
+                "Alexander of Aegae",
+                "Alexander of Aphrodisias",
+                "Alexicrates",
+                "Alexinus",
+                "Amelius",
+                "Ammonius Hermiae",
+                "Ammonius of Athens",
+                "Ammonius Saccas",
+                "Anaxagoras",
+                "Anaxarchus",
+                "Anaxilaus",
+                "Anaximander",
+                "Anaximenes of Miletus",
+                "Androcydes",
+                "Andronicus of Rhodes",
+                "Anniceris",
+                "Antiochus of Ascalon",
+                "Antipater of Cyrene",
+                "Antipater of Tarsus",
+                "Antipater of Tyre",
+                "Antisthenes",
+                "Antoninus",
+                "Apollodorus of Athens",
+                "Apollodorus of Seleucia",
+                "Apollodorus the Epicurean",
+                "Apollonius Cronus",
+                "Apollonius of Tyana",
+                "Apollonius of Tyre",
+                "Arcesilaus",
+                "Archedemus of Tarsus",
+                "Archelaus",
+                "Archytas",
+                "Arete of Cyrene",
+                "Arignote",
+                "Aristarchus of Samos",
+                "Aristippus",
+                "Aristippus the Younger",
+                "Aristoclea",
+                "Aristocles of Messene",
+                "Aristocreon",
+                "Aristo of Alexandria",
+                "Aristo of Ceos",
+                "Aristo of Chios",
+                "Aristotle",
+                "Aristotle of Cyrene",
+                "Aristotle of Mytilene",
+                "Aristoxenus",
+                "Arius Didymus",
+                "Asclepiades of Phlius",
+                "Asclepiades the Cynic",
+                "Asclepigenia",
+                "Asclepiodotus",
+                "Asclepiodotus of Alexandria",
+                "Aspasius",
+                "Athenaeus of Seleucia",
+                "Athenodoros Cananites",
+                "Athenodoros Cordylion",
+                "Athenodorus of Soli",
+                "Attalus",
+                "Atticus",
+                "Basilides the Epicurean",
+                "Batis of Lampsacus",
+                "Bion of Borysthenes",
+                "Boethus of Sidon",
+                "Bolus of Mendes",
+                "Brontinus",
+                "Bryson of Achaea",
+                "Callicles",
+                "Calliphon",
+                "Calliphon of Croton",
+                "Callistratus",
+                "Carneades",
+                "Carneiscus",
+                "Cassius Longinus",
+                "Cebes",
+                "Celsus",
+                "Cercidas",
+                "Cercops",
+                "Chaerephon",
+                "Chamaeleon",
+                "Charmadas",
+                "Chrysanthius",
+                "Chrysippus",
+                "Cleanthes",
+                "Clearchus of Soli",
+                "Cleinias of Tarentum",
+                "Cleomedes",
+                "Cleomenes",
+                "Clinomachus",
+                "Clitomachus",
+                "Colotes",
+                "Crantor",
+                "Crates of Athens",
+                "Crates of Mallus",
+                "Crates of Thebes",
+                "Cratippus of Pergamon",
+                "Cratylus",
+                "Crescens the Cynic",
+                "Crinis",
+                "Critolaus",
+                "Cronius",
+                "Damascius",
+                "Damis",
+                "Damo",
+                "Dardanus of Athens",
+                "Demetrius Lacon",
+                "Demetrius Phalereus",
+                "Demetrius of Amphipolis",
+                "Demetrius the Cynic",
+                "Democrates",
+                "Democritus",
+                "Demonax",
+                "Dexippus",
+                "Diagoras of Melos",
+                "Dicaearchus",
+                "Dio Chrysostom",
+                "Diocles of Cnidus",
+                "Diodorus Cronus",
+                "Diodorus of Adramyttium",
+                "Diodorus of Aspendus",
+                "Diodorus of Tyre",
+                "Diodotus",
+                "Diogenes of Apollonia",
+                "Diogenes of Babylon"
+            ],
+            "relations": [
+                "teacher of ${name}",
+                "pupil of ${name}",
+                "reader of ${name}",
+                "student of ${name}"
+            ],
+            "intros": [
+                "Here comes a perfectly valid argument: ",
+                "Greek philosophers have carefully studied each others' work. "            ]
+        }
+    ],
+    "premise_intros": [
+        ["", "", "", "", "", ""],
+        ["", "Moreover, ", "In addition, ", "Finally, "]
+    ],
+    "conclusion_indicators": [
+        "Thus, "
+    ]
+}
