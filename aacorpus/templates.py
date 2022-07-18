@@ -5,7 +5,7 @@ from string import Template
 from .common import Proposition
 
 
-def create_nl_propositions_with_placeholders(formal_scheme_config,
+def create_nl_propositions_with_FGH(formal_scheme_config,
                                              domain_config,
                                              corpus_config) -> List[Proposition]:
     """
@@ -16,7 +16,7 @@ def create_nl_propositions_with_placeholders(formal_scheme_config,
     ]
     """
     return [
-        _create_nl_proposition_with_placeholders(proposition,
+        _create_nl_proposition_with_FGH(proposition,
                                                 placeolder_substitutions,
                                                 domain_config,
                                                 corpus_config)
@@ -24,7 +24,7 @@ def create_nl_propositions_with_placeholders(formal_scheme_config,
     ]
 
 
-def _create_nl_proposition_with_placeholders(proposition: str,
+def _create_nl_proposition_with_FGH(proposition: str,
                                             placeolder_substitutions: Dict,
                                             domain_config,
                                             corpus_config) -> Proposition:
@@ -67,7 +67,7 @@ def _get_proposition_translations(corpus_config: Dict, domain: Dict) -> Dict[str
     return merged_translations
 
 
-def substitute_placeholders(propositions: List[Proposition],
+def substitute_FGH(propositions: List[Proposition],
                             formal_scheme_config: Dict,
                             domain_config: Dict) -> List[Proposition]:
     """Substitute the subject and predicate placeholders.
@@ -106,5 +106,3 @@ def _get_predicates(domain_config, n=1, exclude_names=None):
     names = random.sample(list(set(domain_config['objects']) - set(exclude_names)), n)
 
     return [Template(p[0]).substitute(name=p[1]) for p in zip(rel, names)]
-
-

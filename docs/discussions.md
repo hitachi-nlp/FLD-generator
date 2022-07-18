@@ -4,6 +4,90 @@
 
 
 # 要求機能
+
+### multistep
+* 目標
+    - modus ponensを2つつなげたルールを作る．
+        ```
+        (x) Fx -> Gx  Fa
+        ----------------
+               Ga    (x) Gx -> Hx
+               ------------------
+                       Ha
+        ```
+* データ作成
+    - ランダムにルールをサンプリングして，どのように証明データを作るか．
+    - 例えば，generalized contraposition が選ばれた場合:
+        - P=`(x) Gx -> ^Fx` がまず証明される．
+        - 次にありうるステップとして，
+            1. PのpremiseであるGa をデータセットに加え，modus ponens によって，^Faを導出する．
+                ```
+                Gx -> ^Fx    Ga
+                ----------------------
+                ^Fa
+                ```
+                **いや，これは2と変わらない．** 別のルール = modus ponens であるだけだ．
+            2. Pを"premiseのうちの１つとして"，別のルールを用いて，別の命題を求める．
+                ```
+                Gx -> ^Fx    ^Fx -> Hx
+                ----------------------
+                Gx -> Hx
+                ```
+    - F, Gに対称性がある．どうするか？
+        - 前件のマッチングなどに使いたい．
+        - placeholderのpermutation版でマッチングさせればよい．
+    - "not バージョン"のルールは任意個できる．これをどう表現するか？
+        - placeholderのnot版でマッチングさせればよい．
+    - テストケースドリブンでやる．
+    - G, Fになってからじゃないと，命題のunificationが取れない．
+        ```
+            {
+                "id": "hyps27",
+                "base_scheme_group": "Hypothetical Syllogism 2",
+                "scheme_variant": "de_morgan",
+                "scheme": [
+                    ["(x): (¬${A}x & ¬${B}x) -> ¬${C}x", {"A": "${F}", "B": "${I}", "C": "${G}"}],
+                    ["(x): ¬${A}x -> ${B}x", {"A": "${H}", "B": "${G}"}],
+                    ["(x): ¬(${A}x v ${B}x) -> ${C}x", {"A": "${F}", "B": "${I}", "C": "${H}"}]
+                ],
+                "predicate-placeholders": ["F","G","H","I"],
+                "entity-placeholders": []
+            },        ```
+            AがFになったりHになったりしている．
+        ```
+        G, F でやっておいて，A, Bに戻して，翻訳する．
+
+
+## 推論ルール
+* \/導入
+    ```
+    ---- premise ----
+    F(a)
+    G(a)
+    (x) F(x) /\ G(x) -> H(x)
+
+    ---- hypothesis ----
+    H(a)
+
+    ```
+* syllogismをmodus ponensから導出する．
+    ```
+    ---- premise ----
+    (x) Fx -> G(x)
+    (x) Gx -> H(x)
+
+    ---- hypothesis ----
+    (x) Fx -> H(x)
+
+
+    ---- proof ----
+    ```
+    これを自然演繹で示そうとすると，仮定導入(しかも，自由変数として出現させる)が必要になる．
+    ただ，できなくはない，気がする．自由変数は"something"にすればよい．
+
+
+
+## full
 * ./learning_to_reason/ideas.dataset.md
     * 既存研究との比較
         * ours

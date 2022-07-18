@@ -6,8 +6,8 @@ from string import Template
 
 from .common import Proposition
 from .templates import (
-    create_nl_propositions_with_placeholders,
-    substitute_placeholders,
+    create_nl_propositions_with_FGH,
+    substitute_FGH,
 )
 from .intros import get_intros
 from .split import extend_split, split_argument
@@ -47,13 +47,13 @@ def pipeline(corpus_config,
                                 if a['id'] == scheme_id)
 
     # STEP2 of Fugre.2
-    nl_propositions_with_placeholders = create_nl_propositions_with_placeholders(
+    nl_propositions_with_FGH = create_nl_propositions_with_FGH(
         formal_scheme_config, domain_config, corpus_config
     )
 
     # STEP3 of Fugre.2
-    nl_propositions = substitute_placeholders(
-        nl_propositions_with_placeholders, formal_scheme_config, domain_config,
+    nl_propositions = substitute_FGH(
+        nl_propositions_with_FGH, formal_scheme_config, domain_config,
     )
     premises, conclusion = nl_propositions[:-1], nl_propositions[-1]
 
