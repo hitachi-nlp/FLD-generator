@@ -6,8 +6,8 @@ from .common import Proposition
 
 
 def create_nl_propositions_with_FGH(formal_scheme_config,
-                                             domain_config,
-                                             corpus_config) -> List[Proposition]:
+                                    domain_config,
+                                    corpus_config) -> List[Proposition]:
     """
     output is like: [
         'If someone is a ${F}, then they are a ${G}. ',
@@ -17,28 +17,33 @@ def create_nl_propositions_with_FGH(formal_scheme_config,
     """
     return [
         _create_nl_proposition_with_FGH(proposition,
-                                                placeolder_substitutions,
-                                                domain_config,
-                                                corpus_config)
+                                        placeolder_substitutions,
+                                        domain_config,
+                                        corpus_config)
         for proposition, placeolder_substitutions in formal_scheme_config['scheme']
     ]
 
 
 def _create_nl_proposition_with_FGH(proposition: str,
-                                            placeolder_substitutions: Dict,
-                                            domain_config,
-                                            corpus_config) -> Proposition:
+                                    placeolder_substitutions: Dict,
+                                    domain_config,
+                                    corpus_config) -> Proposition:
     """
     Args:
-        proposition (str)              : e.g. "(x): ${A}x -> ${B}x"
-        placeolder_substitutions (Dict): e.g. {"A": "${F}", "B": "${G}"}.
+        proposition (str)              : e.g. "(x): ${F}x -> ${G}x"
+        placeolder_substitutions (Dict): e.g. {"F": "A", "G": "B"}.
     Returns:
         str: e.g. 'If someone is a ${F}, then they are a ${G}. '
     """
-    proposition_to_nl = _get_proposition_translations(corpus_config, domain_config)
+    ABC_proposition = Template(proposition).substitute(
+        {FGH: f'${{{ABC}}}' for FGH, ABC in placeolder_substitutions.items()})
 
-    nl_proposition = random.choice(proposition_to_nl[proposition])
-    nl_proposition_subtituted = Template(nl_proposition).substitute(placeolder_substitutions)
+    proposition_to_nl = _get_proposition_translations(corpus_config, domain_config)
+    nl_proposition = random.choice(proposition_to_nl[ABC_proposition])
+
+    nl_proposition_subtituted = Template(nl_proposition).substitute(
+        {ABC: f'${{{FGH}}}' for FGH, ABC in placeolder_substitutions.items()})
+
     return Proposition(nl_proposition_subtituted)
 
 
@@ -68,8 +73,8 @@ def _get_proposition_translations(corpus_config: Dict, domain: Dict) -> Dict[str
 
 
 def substitute_FGH(propositions: List[Proposition],
-                            formal_scheme_config: Dict,
-                            domain_config: Dict) -> List[Proposition]:
+                   formal_scheme_config: Dict,
+                   domain_config: Dict) -> List[Proposition]:
     """Substitute the subject and predicate placeholders.
     output is like [
         'If someone is a descendant of Velociraptor, then they are a ancestor of Stegosaurus. ',

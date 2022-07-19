@@ -5,7 +5,9 @@
 
 # 要求機能
 
-### multistep
+## multistep化
+* todo
+
 * 目標
     - modus ponensを2つつなげたルールを作る．
         ```
@@ -15,6 +17,12 @@
                ------------------
                        Ha
         ```
+* 生成手法
+    - treeを作るべき．そちらの方が分かりやすそう．
+    - treeが偏らないためには，以下を満遍なくやる必要がある:
+        - 導いた結論を使ってさらに導出
+        - 前提を導出
+        - 前提(3つ以上ある場合)のうち，3つ目を導出
 * データ作成
     - ランダムにルールをサンプリングして，どのように証明データを作るか．
     - 例えば，generalized contraposition が選ばれた場合:
@@ -58,7 +66,7 @@
         G, F でやっておいて，A, Bに戻して，翻訳する．
 
 
-## 推論ルール
+## 推論ルールの拡充
 * \/導入
     ```
     ---- premise ----
@@ -104,3 +112,12 @@
             - verified on NL dataset: no
             - 公理系
                 * predicate logic
+
+
+
+
+# naming
+* Q    : atomic formula
+* Q v A: logical formula
+* v    : logical connective
+
