@@ -3,6 +3,7 @@ import random
 
 from .common import Proposition
 
+
 def get_intros(propositions: List[Proposition],
                possible_scheme_intros: List[str],
                possible_premise_intros: List[str],

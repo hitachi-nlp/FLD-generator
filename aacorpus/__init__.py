@@ -1,1 +1,1 @@
-from .pipeline import pipeline
+from .natural_language.pipeline import pipeline
