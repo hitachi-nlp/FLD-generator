@@ -7,8 +7,6 @@
 
 ## multistep化
 * todo
-    - テストコードを書きたい
-    - 重複を除く
 
 * 目標
     - modus ponensを2つつなげたルールを作る．

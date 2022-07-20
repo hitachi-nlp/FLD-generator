@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from .formula import Formula
+from aacorpus.formal_logic import Formula
 
 
 class Scheme:
