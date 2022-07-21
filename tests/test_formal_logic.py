@@ -1,3 +1,4 @@
+from typing import List
 from aacorpus.formal_logic import (
     generate_replacements,
     replace,
@@ -30,6 +31,22 @@ def test_replacements():
     assert(len(other_formula.constants) == 2)
 
     assert(len(list(generate_replacements(formula, other_formula))) == 4**3 * 2**2)
+
+
+class Argument:
+
+    def __init__(self,
+                 premises: List[Formula],
+                 conclusion: Formula):
+        self.premises = premises
+        self.conclusion = conclusion
+
+
+def test_argument():
+    modus_ponens_arg = Argument(
+        [Formula('(x): ${F}x -> ${G}x'), Formula('${F}${a}')],
+        Formula('${G}${a}'),
+    )
 
 
 if __name__ == '__main__':
