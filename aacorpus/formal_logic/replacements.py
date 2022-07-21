@@ -7,28 +7,28 @@ from .formula import Formula
 from .utils import templatify, detemplatify
 
 
-def generate_replacements(formula: Formula, other_formula: Formula) -> Iterable[Dict[str, str]]:
+def generate_replacements(src_formula: Formula,
+                          tgt_formula: Formula,
+                          allow_negation=True) -> Iterable[Dict[str, str]]:
+    src_predicates = [p.rep for p in src_formula.predicates]
+    tgt_predicates = [p.rep for p in tgt_formula.predicates]
+    if allow_negation:
+        tgt_predicates += [Formula(f'¬{p.rep}').rep for p in tgt_formula.predicates]
     get_pred_replacements = lambda: _generate_replacements(
-        [p.rep for p in formula.predicates],
-        [p.rep for p in other_formula.predicates],
+        src_predicates,
+        tgt_predicates,
     )
 
     get_const_replacements = lambda: _generate_replacements(
-        [c.rep for c in formula.constants],
-        [c.rep for c in other_formula.constants],
+        [c.rep for c in src_formula.constants],
+        [c.rep for c in tgt_formula.constants],
     )
 
-    # done_formula_reps = set()
     for pred_replacements in get_pred_replacements():
         for const_replacements in get_const_replacements():
             replacements = copy.deepcopy(pred_replacements)
             replacements.update(const_replacements)
 
-            # replaced_formula_rep = replace(formula, replacements).rep
-            # if replaced_formula_rep in done_formula_reps:
-            #     continue
-
-            # done_formula_reps.add(replaced_formula_rep)
             yield replacements
 
 

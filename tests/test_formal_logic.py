@@ -18,11 +18,12 @@ def test_replacements():
     print('other_formula                    :', other_formula)
     print('other_formula placeholders       :', other_formula.predicates + other_formula.constants)
 
-    print('-------------------- replacements --------------------')
-    for replacements in generate_replacements(formula, other_formula):
-        print('')
-        print('replacements     :', replacements)
-        print('replaced formula :', replace(formula, replacements))
+    replaced_formulas = list(generate_replacements(formula, other_formula, allow_negation=True))
+    # print('-------------------- replacements --------------------')
+    # for replacements in replaced_formlas:
+    #     print('')
+    #     print('replacements     :', replacements)
+    #     print('replaced formula :', replace(formula, replacements))
 
     assert(len(formula.predicates) == 3)
     assert(len(formula.constants) == 2)
@@ -30,7 +31,7 @@ def test_replacements():
     assert(len(other_formula.predicates) == 4)
     assert(len(other_formula.constants) == 2)
 
-    assert(len(list(generate_replacements(formula, other_formula))) == 4**3 * 2**2)
+    assert(len(replaced_formulas) == (2 * 4)**3 * 2**2)  # 2*4 because of the negated patterns
 
 
 class Argument:
