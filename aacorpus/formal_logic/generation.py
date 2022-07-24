@@ -178,7 +178,6 @@ def generate_tree(arguments: List[Argument],
         premise_variant_replaced, premise_mapping = random.choice(premise_variants_replaced)
 
         # Chose argument mapping which is consistent with the premise mapping above.
-        argument_mappings = []
         src_predicates = list(set([
             term.rep
             for formula in next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion]
@@ -198,15 +197,24 @@ def generate_tree(arguments: List[Argument],
             for term in premise_to_chain_unreplaced.constants
         ] + constant_pool))
 
+        argument_mappings = []
         for mapping in generate_replacement_mappings_from_terms(src_predicates, src_constants,
                                                                 tgt_predicates, tgt_constants):
             if all([mapping.get(key, None) == val
                     for key, val in premise_mapping.items()]):
                 argument_mappings.append(mapping)
-        mapping = random.choice(argument_mappings)
 
         # Get the argument replaced by the mapping.
-        next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+        proven_formula_reps = [node.formula.rep for node in proof_tree.nodes]
+        new_formula_is_deduced = False
+        for i_retry in range(10):
+            mapping = random.choice(argument_mappings)
+            next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+            if next_arg_replaced.conclusion.rep not in proven_formula_reps:
+                new_formula_is_deduced = True
+                break
+        if not new_formula_is_deduced:
+            logger.info('Retry since no new forumla can be deduced.')
 
         # Prepare nodes
         next_conclusion_node = ProofNode(next_arg_replaced.conclusion)
