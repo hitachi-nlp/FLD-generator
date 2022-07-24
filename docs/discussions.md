@@ -1,12 +1,26 @@
 # todo
+* テンプレートの段階でnotが入っていると，notにreplaceしたときにnot notが現れてしまう．
+* Gx -> Gx みたいな自明なのが入ってしまう．
+* premise方向に伸ばす．
+* 高速化．generateがたくさん呼ばれている．
+* test codeのリファクタリング
 * "要求機能"
 
+## future
+* できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
+    - ダメな例
+        - {G, ^G}
+        - {(Ea) Ga, (x) Gx -> Fx,  (x) Gx -> ^F(x)}
+            - 後者２つだけでは矛盾していないことに注意．
+        - その他にも，複数ステップの証明を介して矛盾するものもあるかも．
+    - 解決: Z3でsatであることを確認する．
+        * [Testing logical equivalences (and more) using Z3 Theorem Prover - DEV Community](https://dev.to/donaldkellett/testing-logical-equivalences-and-more-using-z3-theorem-prover-3k8h)
+        * [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
+        * [Z3 Playground](https://jfmc.github.io/z3-play/)
 
 
-# 要求機能
 
-## multistep化
-* todo
+# 考察
 * 目標
     - modus ponensを2つつなげたルールを作る．
         ```
@@ -16,12 +30,6 @@
                ------------------
                        Ha
         ```
-* 生成手法
-    - treeを作るべき．そちらの方が分かりやすそう．
-    - treeが偏らないためには，以下を満遍なくやる必要がある:
-        - 導いた結論を使ってさらに導出
-        - 前提を導出
-        - 前提(3つ以上ある場合)のうち，3つ目を導出
 * データ作成
     - ランダムにルールをサンプリングして，どのように証明データを作るか．
     - 例えば，generalized contraposition が選ばれた場合:
@@ -107,10 +115,6 @@
     - configに対して，replacementをかける．
 
 
-
-
-
-
 ## 推論ルールの拡充
 * \/導入
     ```
@@ -162,7 +166,6 @@
 
 
 # naming
-* Q    : atomic formula
+* Q    : atomic formula, predicates
 * Q v A: logical formula
 * v    : logical connective
-

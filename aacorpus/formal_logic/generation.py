@@ -1,4 +1,5 @@
 import random
+import copy
 from typing import List, Tuple, Optional, Iterable, Union
 from aacorpus.formal_logic import (
     generate_replacement_mappings,
@@ -11,6 +12,7 @@ from aacorpus.formal_logic import (
     replace_formula,
     replace_argument,
     replace_rep,
+    is_satisfiable,
 )
 import logging
 
@@ -32,10 +34,7 @@ class ProofNode:
 
     def add_child(self, node: 'ProofNode') -> None:
         if node.parent is not None:
-            raise MultipleParentError('Can\'t add child since it already has a paret.')
-        # existent_parent_node = self._tree.get_parent_node(node)
-        # if existent_parent_node is not None and existent_parent_node != self:
-        #     raise MultipleParentError('Cant add child since it already has a paret.')
+            raise MultipleParentError('Can\'t add child since it already has a parent.')
 
         node.parent = self
         if node not in self._children:
@@ -136,7 +135,7 @@ def generate_tree(arguments: List[Argument],
     cur_arg = random.choice(arguments)
     cur_conclusion_node = ProofNode(cur_arg.conclusion)
     cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
-    update_tree(cur_premise_nodes, cur_conclusion_node, cur_arg, proof_tree)
+    update(cur_premise_nodes, cur_conclusion_node, cur_arg, proof_tree)
 
     cur_depth = 0
     while True:
@@ -213,43 +212,45 @@ def generate_tree(arguments: List[Argument],
         next_conclusion_node = ProofNode(next_arg_replaced.conclusion)
         next_conclusion_node.argument = next_arg_replaced
         next_premise_nodes = []
-        should_retry = False
+        premise_already_in_tree = False
         for premise in next_arg_replaced.premises:
             if premise.rep == premise_variant_replaced.rep:
                 next_premise_nodes.append(cur_conclusion_node)
             else:
                 for existent_node in proof_tree.nodes:
                     if premise.rep == existent_node.formula.rep:
-                        logger.info('Retry the step genertion since the premise already exists in the tree, which will result in a graph rather than tree.')
-                        should_retry = True
+                        logger.info('Retry the step since the premise already exists in the tree, which will result in a graph rather than tree.')
+                        premise_already_in_tree = True
                         break
                         # next_premise_nodes.append(existent_node)
-                if should_retry:
+                if premise_already_in_tree:
                     break
 
                 next_premise_nodes.append(ProofNode(premise))
 
-        if should_retry:
+        if premise_already_in_tree:
             continue
+
+        if not is_satisfiable([node.formula for node in proof_tree.nodes + next_premise_nodes + [next_conclusion_node]]):
+            logger.info('Retry step since the step generated formulas contradicting the existing formulas.')
+            continue
+
+        update(next_premise_nodes, next_conclusion_node, next_arg_replaced, proof_tree)
 
         cur_arg = next_arg_replaced
         cur_conclusion_node = next_conclusion_node
         cur_premise_nodes = next_premise_nodes
-        update_tree(cur_premise_nodes, cur_conclusion_node, cur_arg, proof_tree)
         cur_depth += 1
 
     return proof_tree
 
 
-def update_tree(premise_nodes: List[ProofNode],
-                conclusion_node: ProofNode,
-                argument: Argument,
-                proof_tree: ProofTree):
+def update(premise_nodes: List[ProofNode],
+           conclusion_node: ProofNode,
+           argument: Argument,
+           proof_tree: ProofTree):
     for premise_node in premise_nodes:
         conclusion_node.add_child(premise_node)
     conclusion_node.argument = argument
     for node in premise_nodes + [conclusion_node]:
         proof_tree.add_node(node)
-
-
-

@@ -1,45 +1,74 @@
 import re
-from typing import Dict, List, Any, Iterable
+from typing import Dict, List, Any, Iterable, Tuple
 import copy
 
 from string import Template
-from .formula import Formula
-# from .formula import templatify, detemplatify
+from .formula import Formula, Argument
+from .formula import templatify, detemplatify
 
 
 def generate_replaced_formulas(src_formula: Formula,
                                tgt_formula: Formula,
-                               allow_negation=True) -> Iterable[Formula]:
-    for mapping in generate_replacement_mappings(src_formula,
-                                                 tgt_formula,
-                                                 allow_negation=allow_negation):
-        yield replace_formula(src_formula, mapping)
+                               allow_negation=True) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+    for mapping in generate_replacement_mappings_from_formula([src_formula],
+                                                              [tgt_formula],
+                                                              allow_negation=allow_negation):
+        yield replace_formula(src_formula, mapping), mapping
+
+
+def generate_replaced_arguments(src_arg: Argument,
+                                tgt_arg: Argument,
+                                allow_negation=True) -> Iterable[Tuple[Argument, Dict[str, str]]]:
+    for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
+                                                              tgt_arg.premises + [tgt_arg.conclusion],
+                                                              allow_negation=allow_negation):
+        yield replace_argument(src_arg, mapping), mapping
 
 
 def replace_formula(formula: Formula, replacements: Dict[str, str]) -> Formula:
-    template_replacements = {
-        # detemplatify(src): templatify(tgt) for src, tgt in replacements.items()
-        src: tgt for src, tgt in replacements.items()
-    }
-    replaced = Template(formula.rep).substitute(template_replacements)
-    return Formula(replaced)
+    return Formula(Template(templatify(formula.rep)).substitute(replacements))
 
 
-def generate_replacement_mappings(src_formula: Formula,
-                                  tgt_formula: Formula,
-                                  allow_negation=True) -> Iterable[Dict[str, str]]:
-    src_predicates = [p.rep for p in src_formula.predicates]
-    tgt_predicates = [p.rep for p in tgt_formula.predicates]
+def replace_argument(arg: Argument, replacements: Dict[str, str]) -> Argument:
+    replaced_premises = [replace_formula(formula, replacements)
+                         for formula in arg.premises]
+    replaced_conclusion = replace_formula(arg.conclusion, replacements)
+    return Argument(replaced_premises, replaced_conclusion)
+
+
+def replace_rep(rep: str, replacements: Dict[str, str]) -> str:
+    return Template(templatify(rep)).substitute(replacements)
+
+
+def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
+                                               tgt_formulas: List[Formula],
+                                               allow_negation=True) -> Iterable[Dict[str, str]]:
+    src_predicates = [p.rep for src_formula in src_formulas for p in src_formula.predicates]
+    tgt_predicates = [p.rep for tgt_formula in tgt_formulas for p in tgt_formula.predicates]
+
+    src_constants = [c.rep for src_formula in src_formulas for c in src_formula.constants]
+    tgt_constants = [c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]
+    yield from generate_replacement_mappings_from_terms(src_predicates, src_constants,
+                                                        tgt_predicates, tgt_constants,
+                                                        allow_negation=allow_negation)
+
+
+def generate_replacement_mappings_from_terms(src_predicates: List[str],
+                                             src_constants: List[str],
+                                             tgt_predicates: List[str],
+                                             tgt_constants: List[str],
+                                             allow_negation=True) -> Iterable[Dict[str, str]]:
     if allow_negation:
-        tgt_predicates += [Formula(f'¬{p.rep}').rep for p in tgt_formula.predicates]
-    get_pred_replacements = lambda: _generate_replacement_mappings(
+        tgt_predicates += [f'¬{p}' for p in tgt_predicates]
+
+    get_pred_replacements = lambda: generate_replacement_mappings(
         src_predicates,
         tgt_predicates,
     )
 
-    get_const_replacements = lambda: _generate_replacement_mappings(
-        [c.rep for c in src_formula.constants],
-        [c.rep for c in tgt_formula.constants],
+    get_const_replacements = lambda: generate_replacement_mappings(
+        src_constants,
+        tgt_constants,
     )
 
     for pred_replacements in get_pred_replacements():
@@ -50,8 +79,8 @@ def generate_replacement_mappings(src_formula: Formula,
             yield replacements
 
 
-def _generate_replacement_mappings(src_objs: List[Any],
-                                   tgt_objs: List[Any]) -> Iterable[Dict[Any, Any]]:
+def generate_replacement_mappings(src_objs: List[Any],
+                                  tgt_objs: List[Any]) -> Iterable[Dict[Any, Any]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError()
     if len(set(tgt_objs)) != len(tgt_objs):

@@ -20,6 +20,9 @@ class Formula:
     def __repr__(self) -> str:
         return f'Formula("{self._formula_str}")'
 
+    # def __eq__(self, other):
+    #     return self.rep == other.rep
+
     @property
     def premise(self) -> Optional['Formula']:
         if _get_premise(self.rep) is not None:
@@ -47,10 +50,26 @@ class Formula:
         return [Formula(rep) for rep in _get_variables(self.rep)]
 
 
+class Argument:
+
+    def __init__(self,
+                 premises: List[Formula],
+                 conclusion: Formula):
+        self.premises = premises
+        self.conclusion = conclusion
+
+    def __str__(self) -> str:
+        return f'Argument(premises={str(self.premises)}, conclusion={str(self.conclusion)})'
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
 def templatify(rep: str) -> str:
     converted = ''
+    variables = _get_variables(rep)
     for char in rep:
-        if _is_predicate_char(char) or _is_individual_char(char):
+        if _is_predicate_char(char) or (_is_individual_char(char) and char not in variables):
             converted += '${' + char + '}'
         else:
             converted += char
@@ -119,3 +138,13 @@ def _is_individual_char(char: str) -> bool:
 
 def _is_template(rep: str) -> bool:
     return re.match(r'[{}\$]', rep) is not None
+
+
+def is_satisfiable(formulas: List[Formula]) -> bool:
+    # TODO: きちんとやる．今は，{Ga, ¬Ga} のチェックのみを行っている．
+    single_terms = [formula.rep for formula in formulas]
+    for i_this_term, this_term in enumerate(single_terms):
+        for that_term in single_terms[i_this_term + 1:]:
+            if this_term == f'¬{that_term}' or that_term == f'¬{this_term}':
+                return False
+    return True
