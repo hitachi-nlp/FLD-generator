@@ -10,4 +10,3 @@ def detemplatify(rep: str) -> str:
         return rep[2:-1]
     else:
         return rep
-

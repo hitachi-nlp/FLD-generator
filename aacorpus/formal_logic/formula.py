@@ -13,11 +13,9 @@ class Formula:
         return self._formula_str
 
     def __str__(self) -> str:
-        # only for printing
         return f'Formula("{self._formula_str}")'
 
     def __repr__(self) -> str:
-        # only for printing
         return f'Formula("{self._formula_str}")'
 
     @property
