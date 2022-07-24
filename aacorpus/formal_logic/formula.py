@@ -5,6 +5,8 @@ from typing import List, Optional
 class Formula:
 
     def __init__(self, formula_str: str):
+        if _is_template(formula_str):
+            raise Exception('The input string is template. De-template it by detemplatify().')
         # formula_str is like "(x): (${F}x v ${H}x) -> ${G}x"
         self._formula_str = formula_str
 
@@ -20,50 +22,100 @@ class Formula:
 
     @property
     def premise(self) -> Optional['Formula']:
-        if self._formula_str.find('->') < 0:
+        if _get_premise(self.rep) is not None:
+            return Formula(_get_premise(self.rep))
+        else:
             return None
-        return Formula(' -> '.join(self._formula_str.split(' -> ')[:-1]))
 
     @property
     def conclusion(self) -> Optional['Formula']:
-        if self._formula_str.find('->') < 0:
+        if _get_conclusion(self.rep) is not None:
+            return Formula(_get_conclusion(self.rep))
+        else:
             return None
-        return Formula(self._formula_str.split(' -> ')[-1])
 
     @property
     def predicates(self) -> List['Formula']:
-        matches = re.finditer(r'\${[^}]*}', self._formula_str)
-        unique_preds = set(
-            [m.group() for m in matches
-             if m.group().isupper()]
-        )
-        return [Formula(rep)
-                for rep in sorted(unique_preds)]
+        return [Formula(rep) for rep in _get_predicates(self.rep)]
 
     @property
     def constants(self) -> List['Formula']:
-        matches = re.finditer(r'\${[^}]*}', self._formula_str)
-        unique_constants = set([m.group() for m in matches
-                                if m.group().islower()])
-
-        return [Formula(rep)
-                for rep in sorted(unique_constants)]
+        return [Formula(rep) for rep in _get_constants(self.rep)]
 
     @property
     def variables(self) -> List['Formula']:
-        unique_variables = set()
+        return [Formula(rep) for rep in _get_variables(self.rep)]
 
-        # "(x)"
-        matches = re.finditer(r'\([xyz]*\)', self._formula_str)
-        unique_variables = unique_variables.union(
-            set([m.group()[1] for m in matches])
-        )
 
-        # "(Ex)"
-        matches = re.finditer(r'\(E[xyz]*\)', self._formula_str)
-        unique_variables = unique_variables.union(
-            set([m.group()[2] for m in matches])
-        )
+def templatify(rep: str) -> str:
+    converted = ''
+    for char in rep:
+        if _is_predicate_char(char) or _is_individual_char(char):
+            converted += '${' + char + '}'
+        else:
+            converted += char
+    return converted
 
-        return [Formula(rep)
-                for rep in sorted(unique_variables)]
+
+def detemplatify(rep: str) -> str:
+    return re.sub(r'[{}\$]', '', re.sub(r'\$', '', rep))
+
+
+def _get_premise(rep) -> Optional[str]:
+    if rep.find('->') < 0:
+        return None
+    return ' -> '.join(rep.split(' -> ')[:-1])
+
+
+def _get_conclusion(rep) -> Optional[str]:
+    if rep.find('->') < 0:
+        return None
+    return rep.split(' -> ')[-1]
+
+
+def _get_predicates(rep) -> List[str]:
+    predicate_reps = set()
+    for char in rep:
+        if _is_predicate_char(char):
+            predicate_reps.add(char)
+    return sorted(predicate_reps)
+
+
+def _get_constants(rep: str) -> List[str]:
+    constant_reps = set()
+    variables = _get_variables(rep)
+    for char in rep:
+        if _is_individual_char(char) and char not in variables:
+            constant_reps.add(char)
+    return sorted(constant_reps)
+
+
+def _get_variables(rep: str) -> List[str]:
+    unique_variables = set()
+
+    # "(x)"
+    matches = re.finditer(r'\([a-z]*\)', rep)
+    unique_variables = unique_variables.union(
+        set([m.group()[1] for m in matches])
+    )
+
+    # "(Ex)"
+    matches = re.finditer(r'\(E[a-z]*\)', rep)
+    unique_variables = unique_variables.union(
+        set([m.group()[2] for m in matches])
+    )
+
+    return sorted(unique_variables)
+
+
+def _is_predicate_char(char: str) -> bool:
+    return re.match(r'[A-Z]', char) is not None
+
+
+def _is_individual_char(char: str) -> bool:
+    """ individuals = constants + variables """
+    return re.match(r'[a-z]', char) is not None
+
+
+def _is_template(rep: str) -> bool:
+    return re.match(r'[{}\$]', rep) is not None

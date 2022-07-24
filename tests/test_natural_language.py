@@ -39,6 +39,7 @@ def test_scheme():
     }
 
     mb_scheme = Scheme.parse_obj(mb_scheme_config)
+    assert(mb_scheme.formulas[0].rep == "(x): Fx -> Gx")
 
     for formula in mb_scheme.formulas:
         print('')

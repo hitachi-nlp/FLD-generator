@@ -8,8 +8,8 @@ from aacorpus.formal_logic import (
 
 def test_replacements():
 
-    formula = Formula('(x): ${F}x ${G}${a} ${G}${b} -> ${H}x')
-    other_formula = Formula('(y): ${F}y ${I}${a} ${J}${b} -> ${K}y')
+    formula = Formula('(x): Fx Ga Gb -> Hx')
+    other_formula = Formula('(y): Fy Ia Jb -> Ky')
 
     print('-------------------- placeholders --------------------')
     print('formula                          :', formula)
@@ -51,8 +51,8 @@ class Argument:
 
 def test_argument():
     modus_ponens_arg = Argument(
-        [Formula('(x): ${F}x -> ¬${G}x'), Formula('${F}${a}')],
-        Formula('¬${G}${a}'),
+        [Formula('(x): Fx -> ¬Gx'), Formula('Fa')],
+        Formula('¬Ga'),
     )
 
     possible_args = [modus_ponens_arg]
@@ -76,5 +76,5 @@ def test_argument():
 
 
 if __name__ == '__main__':
-    # test_replacements()
+    test_replacements()
     test_argument()

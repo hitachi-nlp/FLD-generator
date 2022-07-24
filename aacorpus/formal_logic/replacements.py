@@ -4,7 +4,7 @@ import copy
 
 from string import Template
 from .formula import Formula
-from .utils import templatify, detemplatify
+# from .formula import templatify, detemplatify
 
 
 def generate_replaced_formulas(src_formula: Formula,
@@ -18,7 +18,8 @@ def generate_replaced_formulas(src_formula: Formula,
 
 def replace_formula(formula: Formula, replacements: Dict[str, str]) -> Formula:
     template_replacements = {
-        detemplatify(src): templatify(tgt) for src, tgt in replacements.items()
+        # detemplatify(src): templatify(tgt) for src, tgt in replacements.items()
+        src: tgt for src, tgt in replacements.items()
     }
     replaced = Template(formula.rep).substitute(template_replacements)
     return Formula(replaced)

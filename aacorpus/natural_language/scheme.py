@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from aacorpus.formal_logic import Formula
+from aacorpus.formal_logic import Formula, detemplatify
 
 
 class Scheme:
@@ -32,7 +32,7 @@ class Scheme:
         json_dict.pop('entity-placeholders', None)
 
         json_dict['formulas'] = [
-            Formula(formula_str)
+            Formula(detemplatify(formula_str))
             for formula_str, _ in json_dict['scheme']
         ]
         json_dict['template_mappings'] = [
