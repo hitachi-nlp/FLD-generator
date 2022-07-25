@@ -52,7 +52,7 @@ def test_generation():
         ),
 
     ]
-    for i in range(100):
+    for i in range(5):
         print('=================== generating proof tree =========================')
         proof_tree = generate_tree(args, depth=3)
         print(proof_tree.format_str)

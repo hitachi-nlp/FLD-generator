@@ -1,6 +1,7 @@
 import random
 import copy
 from typing import List, Tuple, Optional, Iterable, Union
+from aacorpus.formal_logic.formula import PREDICATE_POOL, CONSTANT_POOL
 from aacorpus.formal_logic import (
     generate_replacement_mappings,
     generate_replacement_mappings_from_formula,
@@ -15,6 +16,7 @@ from aacorpus.formal_logic import (
     is_satisfiable as is_formulas_satisfiable,
 )
 import logging
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -123,21 +125,19 @@ class ProofTree:
         return rep
 
 
+@profile
 def generate_tree(arguments: List[Argument], depth=1) -> ProofTree:
-    predicate_pool = ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-                      'R', 'S', 'T', 'U', 'V', 'W']
-    constant_pool =  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-                      'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w']
-
-    proof_tree = _generate_stem(arguments, depth, predicate_pool, constant_pool)
-    _extend_braches(proof_tree, arguments, depth, predicate_pool, constant_pool)
+    proof_tree = _generate_stem(arguments, depth, PREDICATE_POOL, CONSTANT_POOL)
+    _extend_braches(proof_tree, arguments, depth, PREDICATE_POOL, CONSTANT_POOL)
     return proof_tree
 
 
+@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
-                   constant_pool: List[str]):
+                   constant_pool: List[str],
+                   max_retry=30):
 
     def update(premise_nodes: List[ProofNode],
                conclusion_node: ProofNode,
@@ -156,7 +156,6 @@ def _generate_stem(arguments: List[Argument],
     update(cur_premise_nodes, cur_conclusion_node, cur_arg, proof_tree)
 
     cur_depth = 0
-    max_retry = 30
     retry = 0
     while True:
         if retry >= max_retry:
@@ -207,7 +206,7 @@ def _generate_stem(arguments: List[Argument],
             break
 
         if not is_proper_mapping:
-            logger.debug('Retry since proper mapping can not be chosen...')
+            logger.info('Retry since proper mapping could not be chosen...')
             continue
 
         # Update tree
@@ -227,19 +226,21 @@ def _generate_stem(arguments: List[Argument],
     return proof_tree
 
 
+@profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     steps: int,
                     predicate_pool: List[str],
-                    constant_pool: List[str]):
+                    constant_pool: List[str],
+                    max_retry=30):
     cur_step = 0
-    max_retry = 30
     retry = 0
     while True:
         if retry >= max_retry:
             logger.warning('Exit since retry exceeded max_retry(%d)', max_retry)
             break
         retry += 1
+
         if cur_step >= steps:
             break
 
@@ -257,36 +258,44 @@ def _extend_braches(proof_tree: ProofTree,
         next_arg_unreplaced = random.choice(chainable_args)
 
         # Choose mapping
-        mappings = list(
-            generate_replacement_mappings_from_formula(
-                next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
-                [leaf_node.formula] + [Formula(' '.join(constant_pool)), Formula(' '.join(predicate_pool))]
-            )
-        )
+        # The following two nested loop is for speedup:
+        # 1. First, we generate the small number of mappings by using small number of symbols. Then, we find appropriate sub-mappings
+        # 2. Second, we generate full number of mappings, using the sub-mappings as filters.
         is_proper_mapping = False
-        for mapping in random.sample(mappings, len(mappings)):
-            next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
-            if next_arg_replaced.conclusion.rep != leaf_node.formula.rep:
-                # print(next_arg_replaced.conclusion, leaf_node.formula)
+        for conclusion_mapping in generate_replacement_mappings_from_formula([next_arg_unreplaced.conclusion],
+                                                                             [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
+                                                                             shuffle=True):
+            conclusion_replaced = replace_formula(next_arg_unreplaced.conclusion, conclusion_mapping)
+            if conclusion_replaced.rep != leaf_node.formula.rep:
                 continue
 
-            if _has_ng_premises(next_arg_replaced):
-                continue
+            for mapping in generate_replacement_mappings_from_formula(
+                next_arg_unreplaced.all_formulas,
+                [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
+                constraints=conclusion_mapping,
+                shuffle=True,
+            ):
+                next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+                if next_arg_replaced.conclusion.rep != leaf_node.formula.rep:
+                    raise Exception()
 
-            if len(_get_premises_already_in_tree(next_arg_replaced, proof_tree)) >= 1:  # 1 for the chained promise:
-                continue
+                if _has_ng_premises(next_arg_replaced):
+                    continue
 
-            if not _is_satisfiable(next_arg_replaced, proof_tree):
-                continue
+                if len(_get_premises_already_in_tree(next_arg_replaced, proof_tree)) >= 1:
+                    continue
 
-            is_proper_mapping = True
+                if not _is_satisfiable(next_arg_replaced, proof_tree):
+                    continue
 
-
-            break
+                is_proper_mapping = True
+                break
+            
+            if is_proper_mapping:
+                break
 
         if not is_proper_mapping:
-            logger.debug('Retry since proper mapping can not be chosen...')
-            continue
+            logger.info('Retry since proper mapping could not be chosen...')
 
         # Upate tree
         leaf_node.argument = next_arg_replaced

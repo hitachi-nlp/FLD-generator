@@ -2,6 +2,17 @@ import re
 from typing import List, Optional
 
 
+PREDICATE_POOL = ['F', 'G', 'H', 'I', 'J',
+                  'K', 'L', 'M', 'N', 'O',
+                  'P', 'Q', 'R', 'S', 'T',
+                  'U', 'V', 'W']
+CONSTANT_POOL = ['a', 'b', 'c', 'd', 'e',
+                 'f', 'g', 'h', 'i', 'j',
+                 'k', 'l', 'm', 'n', 'o',
+                 'p', 'q', 'r', 's', 't',
+                 'u', 'v', 'w']
+
+
 class Formula:
 
     def __init__(self, formula_str: str):
@@ -63,6 +74,10 @@ class Argument:
 
     def __repr__(self) -> str:
         return str(self)
+
+    @property
+    def all_formulas(self) -> List[Formula]:
+        return self.premises + [self.conclusion]
 
 
 def templatify(rep: str) -> str:
