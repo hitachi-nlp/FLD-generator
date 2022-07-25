@@ -112,7 +112,7 @@ class ProofTree:
         yield (start_node, depth) if get_depth else start_node
 
     def __repr__(self):
-        return 'ProofTree()'
+        return 'ProofTree(...)'
 
     def __str__(self):
         return self.__repr__()
@@ -154,7 +154,7 @@ def _generate_stem(arguments: List[Argument],
         conclusion_node.argument = argument
         for node in premise_nodes + [conclusion_node]:
             proof_tree.add_node(node)
-        
+
     proof_tree = ProofTree()
     cur_arg = random.choice(arguments)
     cur_conclusion_node = ProofNode(cur_arg.conclusion)
@@ -168,121 +168,78 @@ def _generate_stem(arguments: List[Argument],
 
         cur_conclusion = cur_conclusion_node.formula
 
-        # List chainable arguments
-        chainable_args = []
-        for arg in arguments:
-            is_chainable = False
-            for premise in arg.premises:
-                for premise_variant_replaced, _ in generate_replaced_formulas(premise, cur_conclusion):
-                    if premise_variant_replaced.rep == cur_conclusion.rep:
-                        is_chainable = True
-                        break
-                if is_chainable:
-                    break
-            if is_chainable:
-                chainable_args.append(arg)
+        # Chose next argument
+        chainable_args = [
+            arg for arg in arguments
+            if any([premise_replaced.rep == cur_conclusion.rep
+                    for premise in arg.premises
+                    for premise_replaced, _ in generate_replaced_formulas(premise, cur_conclusion)])
+        ]
         next_arg_unreplaced = random.choice(chainable_args)
 
-        # Chose one premise which is chainable from the conclusion
-        chainable_premises_unreplaced = [
-            premise for premise in next_arg_unreplaced.premises
-            if any([premise_variant_replaced.rep == cur_conclusion.rep
-                    for premise_variant_replaced, _ in generate_replaced_formulas(premise, cur_conclusion)])
-        ]
-        premise_to_chain_unreplaced = random.choice(chainable_premises_unreplaced)
-
-        # Chose one premise variant which is chainable from the conclusion
-        premise_variants_replaced = [
-            (premise_variant_replaced, premise_mapping)
-            for premise_variant_replaced, premise_mapping in generate_replaced_formulas(premise_to_chain_unreplaced, cur_conclusion)
-            if premise_variant_replaced.rep == cur_conclusion.rep
-        ]
-        premise_variant_replaced, premise_mapping = random.choice(premise_variants_replaced)
-
-        # Chose argument mapping which is consistent with the premise mapping above.
-        src_predicates = list(set([
-            term.rep
-            for formula in next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion]
-            for term in formula.predicates
-        ]))
-        src_constants = list(set([
-            term.rep
-            for formula in next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion]
-            for term in formula.constants
-        ]))
-        tgt_predicates = list(set([
-            term.rep
-            for term in premise_to_chain_unreplaced.predicates
-        ] + predicate_pool))
-        tgt_constants = list(set([
-            term.rep
-            for term in premise_to_chain_unreplaced.constants
-        ] + constant_pool))
-
-        argument_mappings = []
-        for mapping in generate_replacement_mappings_from_terms(src_predicates, src_constants,
-                                                                tgt_predicates, tgt_constants):
-            if all([mapping.get(key, None) == val
-                    for key, val in premise_mapping.items()]):
-                argument_mappings.append(mapping)
-
-        # Get the argument replaced by the mapping.
+        # Chose mapping
         proven_formula_reps = [node.formula.rep for node in proof_tree.nodes]
+        has_ng_premise = False
+        other_premise_already_in_tree = False
         new_formula_is_deduced = False
-        ng_premise_found = False
-        random.shuffle(argument_mappings)
-        for mapping in argument_mappings:
+        _is_satisfiable = False
+        mappings = list(
+            generate_replacement_mappings_from_formula(
+                next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
+                [cur_conclusion] + [Formula(' '.join(constant_pool)), Formula(' '.join(predicate_pool))]
+            )
+        )
+        for mapping in random.sample(mappings, len(mappings)):
             next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
-            
-            for premise in next_arg_replaced.premises:
-                for ng_formula in _NG_FORMULAS:
-                    for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise):
-                        if premise.rep == ng_formula_replaced.rep:
-                            ng_premise_found = True
-                            break
-                    if ng_premise_found:
-                        break
-                if ng_premise_found:
-                    break
-            if ng_premise_found:
+            if all([premise.rep != cur_conclusion.rep for premise in next_arg_replaced.premises]):
                 continue
-            if next_arg_replaced.conclusion.rep not in proven_formula_reps:
-                new_formula_is_deduced = True
+
+            has_ng_premise = any([
+                ng_formula_replaced.rep == premise.rep
+                for premise in next_arg_replaced.premises
+                for ng_formula in _NG_FORMULAS
+                for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise)
+            ])
+            if has_ng_premise:
+                continue
+
+            other_premise_already_in_tree = sum([
+                premise.rep == existent_node.formula.rep
+                for existent_node in proof_tree.nodes
+                for premise in next_arg_replaced.premises
+            ]) >= 2
+            if other_premise_already_in_tree:
+                continue
+
+            _is_satisfiable = is_satisfiable([node.formula for node in proof_tree.nodes]
+                                             + next_arg_replaced.premises
+                                             + [next_arg_replaced.conclusion])
+            if not _is_satisfiable:
+                continue
+
+            new_formula_is_deduced = next_arg_replaced.conclusion.rep not in proven_formula_reps
+            if new_formula_is_deduced:
                 break
-        if ng_premise_found:
+
+        if has_ng_premise:
             logger.info('Retry since NG premise found.')
             continue
+        if other_premise_already_in_tree:
+            logger.info('Retry the step since the premise already exists in the tree, which will result in a graph rather than tree.')
+            continue
+        if not _is_satisfiable:
+            logger.info('Retry step since the step generated formulas contradicting the existing formulas.')
         if not new_formula_is_deduced:
             logger.info('Retry since no new forumla can be deduced.')
             continue
 
-        # Prepare nodes
+        # Update tree
         next_conclusion_node = ProofNode(next_arg_replaced.conclusion)
         next_conclusion_node.argument = next_arg_replaced
-        next_premise_nodes = []
-        premise_already_in_tree = False
-        for premise in next_arg_replaced.premises:
-            if premise.rep == premise_variant_replaced.rep:
-                next_premise_nodes.append(cur_conclusion_node)
-            else:
-                for existent_node in proof_tree.nodes:
-                    if premise.rep == existent_node.formula.rep:
-                        logger.info('Retry the step since the premise already exists in the tree, which will result in a graph rather than tree.')
-                        premise_already_in_tree = True
-                        break
-                        # next_premise_nodes.append(existent_node)
-                if premise_already_in_tree:
-                    break
-
-                next_premise_nodes.append(ProofNode(premise))
-
-        if premise_already_in_tree:
-            continue
-
-        if not is_satisfiable([node.formula for node in proof_tree.nodes + next_premise_nodes + [next_conclusion_node]]):
-            logger.info('Retry step since the step generated formulas contradicting the existing formulas.')
-            continue
-
+        next_premise_nodes = [
+            cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
+            for premise in next_arg_replaced.premises
+        ]
         update(next_premise_nodes, next_conclusion_node, next_arg_replaced, proof_tree)
 
         cur_arg = next_arg_replaced
@@ -306,25 +263,46 @@ def _extend_braches(proof_tree: ProofTree,
         leaves = proof_tree.leaf_nodes
         leaf = random.choice(leaves)
 
-        # List chainable arguments
-        chainable_args = []
-        for arg in arguments:
-            is_chainable = False
-            for conclusion_variant_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf.formula.conclusion):
-                if conclusion_variant_replaced.rep == leaf.formula.rep:
-                    is_chainable = True
-                    break
-            if is_chainable:
-                chainable_args.append(arg)
-
+        # Chose next argument
+        chainable_args = [
+            arg for arg in arguments
+            if any([conclsion_replaced.rep == leaf.formula.rep
+                    for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf.formula)])
+        ]
         next_arg_unreplaced = random.choice(chainable_args)
 
-        # Chose one conclusion variant which is chainable to the leaf
-        conclusion_variants_replaced = [
-            (conclusion_variant_replaced, conclusion_mapping)
-            for conclusion_variant_replaced, conclusion_mapping in generate_replaced_formulas(arg.conclusion, leaf.formula.conclusion)
-            if conclusion_variant_replaced.rep == leaf.formula.rep
-        ]
-        conclusion_variant_replaced, conclusion_mapping = random.choice(conclusion_variants_replaced)
+        # Chose mapping
+        proven_formula_reps = [node.formula.rep for node in proof_tree.nodes]
+        new_formula_is_deduced = False
+        has_ng_premise = False
+        mappings = list(
+            generate_replacement_mappings_from_formula(
+                next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
+                [leaf.formula] + [Formula(' '.join(constant_pool)), Formula(' '.join(predicate_pool))]
+            )
+        )
+        for mapping in random.sample(mappings, len(mappings)):
+            next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+            if next_arg_replaced.conclusion.rep != leaf.formula.rep:
+                continue
 
-        cur_step += 1
+            has_ng_premise = any([
+                ng_formula_replaced.rep == premise.rep
+                for premise in next_arg_replaced.premises
+                for ng_formula in _NG_FORMULAS
+                for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise)
+            ])
+            if has_ng_premise:
+                continue
+
+            new_formula_is_deduced = next_arg_replaced.conclusion.rep not in proven_formula_reps
+            if new_formula_is_deduced:
+                break
+
+        if has_ng_premise:
+            logger.info('Retry since NG premise found.')
+            continue
+
+        if not new_formula_is_deduced:
+            logger.info('Retry since no new forumla can be deduced.')
+            continue

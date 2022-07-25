@@ -43,11 +43,11 @@ def replace_rep(rep: str, replacements: Dict[str, str]) -> str:
 def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                tgt_formulas: List[Formula],
                                                allow_negation=True) -> Iterable[Dict[str, str]]:
-    src_predicates = [p.rep for src_formula in src_formulas for p in src_formula.predicates]
-    tgt_predicates = [p.rep for tgt_formula in tgt_formulas for p in tgt_formula.predicates]
+    src_predicates = list(set([p.rep for src_formula in src_formulas for p in src_formula.predicates]))
+    tgt_predicates = list(set([p.rep for tgt_formula in tgt_formulas for p in tgt_formula.predicates]))
 
-    src_constants = [c.rep for src_formula in src_formulas for c in src_formula.constants]
-    tgt_constants = [c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]
+    src_constants = list(set([c.rep for src_formula in src_formulas for c in src_formula.constants]))
+    tgt_constants = list(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
     yield from generate_replacement_mappings_from_terms(src_predicates, src_constants,
                                                         tgt_predicates, tgt_constants,
                                                         allow_negation=allow_negation)
