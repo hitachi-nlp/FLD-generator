@@ -68,7 +68,7 @@ def _generate_stem(arguments: List[Argument],
     cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
     update(cur_premise_nodes, cur_conclusion_node, cur_arg, proof_tree)
 
-    cur_depth = 0
+    cur_depth = 1
     retry = 0
     while True:
         if retry >= max_retry:
@@ -172,7 +172,13 @@ def _extend_braches(proof_tree: ProofTree,
             break
 
         leaves = proof_tree.leaf_nodes
-        leaf_node = random.choice(leaves)
+        leaf_node = None
+        for leaf_node in random.sample(leaves, len(leaves)):
+            if proof_tree.get_node_depth(leaf_node) >= proof_tree.depth:
+                continue
+            break
+        if leaf_node is None:
+            break
 
         # Choose next argument
         chainable_args = [

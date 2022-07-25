@@ -78,6 +78,19 @@ class ProofTree:
         return [node for node in self._nodes
                 if node.parent is None][0]
 
+    @property
+    def depth(self) -> int:
+        return max([self.get_node_depth(leaf_node)
+                    for leaf_node in self.leaf_nodes])
+
+    def get_node_depth(self, node: ProofNode) -> int:
+        depth = 0
+        cur_node = node
+        while cur_node.parent is not None:
+            cur_node = cur_node.parent
+            depth += 1
+        return depth
+
     def depth_first_traverse(self,
                              start_node: Optional[ProofNode] = None,
                              depth=0,
