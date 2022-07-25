@@ -1,9 +1,9 @@
 # todo
-* テンプレートの段階でnotが入っていると，notにreplaceしたときにnot notが現れてしまう．
-* premise方向に伸ばす．
+* 述語の文字種多くしないと，干渉してしまう．
+* retryに引っかかる．
+* random.choiceよりもfor in shuffle(..)の方が，スパースな場合は重複を引かないので引きやすい．
 * 高速化．generateがたくさん呼ばれている．
 * test codeのリファクタリング
-* random.choiceよりもfor in shuffle(..)の方が，スパースな場合は重複を引かないので引きやすい．
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．

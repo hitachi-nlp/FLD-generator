@@ -46,10 +46,15 @@ def test_generation():
             [Formula('(x): Fx -> Gx'), Formula('Fa')],
             Formula('Ga'),
         ),
+        Argument(
+            [Formula('(x): Fx -> Gx'), Formula('(x): Gx -> Hx')],
+            Formula('(x): Fx -> Hx'),
+        ),
+
     ]
     for i in range(100):
         print('=================== generating proof tree =========================')
-        proof_tree = generate_tree(args, depth=5)
+        proof_tree = generate_tree(args, depth=3)
         print(proof_tree.format_str)
 
 
