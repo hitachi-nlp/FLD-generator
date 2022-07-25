@@ -132,10 +132,29 @@ class ProofTree:
 def generate_tree(arguments: List[Argument],
                   depth=1,
                   predicate_pool: Optional[List[str]] = None,
-                  constant_pool: Optional[List[str]] = None):
+                  constant_pool: Optional[List[str]] = None) -> ProofTree:
     predicate_pool = predicate_pool or ['F', 'G', 'H', 'I', 'J', 'K', 'L']
     constant_pool = constant_pool or ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-    
+
+    proof_tree = _generate_stem(arguments, depth, predicate_pool, constant_pool)
+    return proof_tree
+
+
+def _generate_stem(arguments: List[Argument],
+                   depth: int,
+                   predicate_pool: List[str],
+                   constant_pool: List[str]):
+
+    def update(premise_nodes: List[ProofNode],
+               conclusion_node: ProofNode,
+               argument: Argument,
+               proof_tree: ProofTree):
+        for premise_node in premise_nodes:
+            conclusion_node.add_child(premise_node)
+        conclusion_node.argument = argument
+        for node in premise_nodes + [conclusion_node]:
+            proof_tree.add_node(node)
+        
     proof_tree = ProofTree()
     cur_arg = random.choice(arguments)
     cur_conclusion_node = ProofNode(cur_arg.conclusion)
@@ -162,8 +181,6 @@ def generate_tree(arguments: List[Argument],
                     break
             if is_chainable:
                 chainable_args.append(arg)
-        assert(len(chainable_args) == 1)
-
         next_arg_unreplaced = random.choice(chainable_args)
 
         # Chose one premise which is chainable from the conclusion
@@ -276,12 +293,38 @@ def generate_tree(arguments: List[Argument],
     return proof_tree
 
 
-def update(premise_nodes: List[ProofNode],
-           conclusion_node: ProofNode,
-           argument: Argument,
-           proof_tree: ProofTree):
-    for premise_node in premise_nodes:
-        conclusion_node.add_child(premise_node)
-    conclusion_node.argument = argument
-    for node in premise_nodes + [conclusion_node]:
-        proof_tree.add_node(node)
+def _extend_braches(proof_tree: ProofTree,
+                    arguments: List[Argument],
+                    depth: int,
+                    predicate_pool: List[str],
+                    constant_pool: List[str]):
+    cur_step = 0
+    while True:
+        if cur_step <= 5:
+            break
+
+        leaves = proof_tree.leaf_nodes
+        leaf = random.choice(leaves)
+
+        # List chainable arguments
+        chainable_args = []
+        for arg in arguments:
+            is_chainable = False
+            for conclusion_variant_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf.formula.conclusion):
+                if conclusion_variant_replaced.rep == leaf.formula.rep:
+                    is_chainable = True
+                    break
+            if is_chainable:
+                chainable_args.append(arg)
+
+        next_arg_unreplaced = random.choice(chainable_args)
+
+        # Chose one conclusion variant which is chainable to the leaf
+        conclusion_variants_replaced = [
+            (conclusion_variant_replaced, conclusion_mapping)
+            for conclusion_variant_replaced, conclusion_mapping in generate_replaced_formulas(arg.conclusion, leaf.formula.conclusion)
+            if conclusion_variant_replaced.rep == leaf.formula.rep
+        ]
+        conclusion_variant_replaced, conclusion_mapping = random.choice(conclusion_variants_replaced)
+
+        cur_step += 1
