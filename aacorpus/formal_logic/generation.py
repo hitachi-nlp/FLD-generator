@@ -18,6 +18,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+_NG_FORMULAS = [
+    Formula('(x): Fx -> Fx'),
+    Formula('(Ex): Fx -> Fx'),
+]
+
 
 class MultipleParentError(Exception):
     pass
@@ -144,7 +149,7 @@ def generate_tree(arguments: List[Argument],
 
         cur_conclusion = cur_conclusion_node.formula
 
-        # Listup chainable arguments
+        # List chainable arguments
         chainable_args = []
         for arg in arguments:
             is_chainable = False
@@ -207,14 +212,32 @@ def generate_tree(arguments: List[Argument],
         # Get the argument replaced by the mapping.
         proven_formula_reps = [node.formula.rep for node in proof_tree.nodes]
         new_formula_is_deduced = False
-        for i_retry in range(10):
-            mapping = random.choice(argument_mappings)
+        ng_premise_found = False
+        random.shuffle(argument_mappings)
+        for mapping in argument_mappings:
             next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+            
+            for premise in next_arg_replaced.premises:
+                for ng_formula in _NG_FORMULAS:
+                    for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise):
+                        if premise.rep == ng_formula_replaced.rep:
+                            ng_premise_found = True
+                            break
+                    if ng_premise_found:
+                        break
+                if ng_premise_found:
+                    break
+            if ng_premise_found:
+                continue
             if next_arg_replaced.conclusion.rep not in proven_formula_reps:
                 new_formula_is_deduced = True
                 break
+        if ng_premise_found:
+            logger.info('Retry since NG premise found.')
+            continue
         if not new_formula_is_deduced:
             logger.info('Retry since no new forumla can be deduced.')
+            continue
 
         # Prepare nodes
         next_conclusion_node = ProofNode(next_arg_replaced.conclusion)

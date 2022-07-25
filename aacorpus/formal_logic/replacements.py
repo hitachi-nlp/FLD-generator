@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Any, Iterable, Tuple
+from typing import Dict, List, Any, Iterable, Tuple, Optional
 import copy
 
 from string import Template
@@ -73,6 +73,8 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
 
     for pred_replacements in get_pred_replacements():
         for const_replacements in get_const_replacements():
+            if pred_replacements is None or const_replacements is None:
+                continue
             replacements = copy.deepcopy(pred_replacements)
             replacements.update(const_replacements)
 
@@ -80,16 +82,22 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
 
 
 def generate_replacement_mappings(src_objs: List[Any],
-                                  tgt_objs: List[Any]) -> Iterable[Dict[Any, Any]]:
+                                  tgt_objs: List[Any]) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError()
     if len(set(tgt_objs)) != len(tgt_objs):
         raise ValueError()
-    for chosen_tgt_objs in _permutations_with_replacement(tgt_objs, len(src_objs)):
-        yield {
-            src_obj: tgt_obj
-            for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
-        }
+
+    if len(src_objs) > 0 and len(tgt_objs) > 0:
+        for chosen_tgt_objs in _permutations_with_replacement(tgt_objs, len(src_objs)):
+            yield {
+                src_obj: tgt_obj
+                for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
+            }
+    elif len(src_objs) == 0 and len(tgt_objs) == 0:
+        yield {}
+    else:
+        yield None
 
 
 def _permutations_with_replacement(objs: List[Any], length: int) -> Iterable[List[Any]]:
