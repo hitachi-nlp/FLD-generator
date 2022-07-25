@@ -1,8 +1,4 @@
 # todo
-* retryに引っかかる
-    * 述語の文字種を増やす？
-    * random.choiceよりもfor in shuffle(..)の方が，スパースな場合は重複を引かないので引きやすい．
-* generate...が遅いかも．
 * test codeのリファクタリング
 
 ## future

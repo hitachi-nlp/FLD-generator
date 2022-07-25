@@ -15,8 +15,8 @@ from aacorpus.formal_logic import (
     replace_rep,
     is_satisfiable as is_formulas_satisfiable,
 )
+from aacorpus.exception import AACorpusExceptionBase
 import logging
-import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,11 @@ _NG_FORMULAS = [
 ]
 
 
-class MultipleParentError(Exception):
+class MultipleParentError(AACorpusExceptionBase):
+    pass
+
+
+class MaxRetryExceedError(AACorpusExceptionBase):
     pass
 
 
@@ -125,19 +129,28 @@ class ProofTree:
         return rep
 
 
-@profile
-def generate_tree(arguments: List[Argument], depth=1) -> ProofTree:
-    proof_tree = _generate_stem(arguments, depth, PREDICATE_POOL, CONSTANT_POOL)
-    _extend_braches(proof_tree, arguments, depth, PREDICATE_POOL, CONSTANT_POOL)
+def generate_tree(arguments: List[Argument], depth=1) -> Optional[ProofTree]:
+    max_retry = 10
+    try:
+        proof_tree = _generate_stem(arguments, depth, PREDICATE_POOL, CONSTANT_POOL, max_retry=max_retry)
+    except MaxRetryExceedError:
+        logger.warning('_generate_stem() exception max retry (%d). Will return None.', max_retry)
+        return None
+
+    try:
+        _extend_braches(proof_tree, arguments, depth, PREDICATE_POOL, CONSTANT_POOL, max_retry=max_retry)
+    except MaxRetryExceedError:
+        logger.warning('_extend_braches() exception max retry (%d). Will return None.', max_retry)
+        return None
+
     return proof_tree
 
 
-@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
                    constant_pool: List[str],
-                   max_retry=30):
+                   max_retry=10) -> Optional[ProofTree]:
 
     def update(premise_nodes: List[ProofNode],
                conclusion_node: ProofNode,
@@ -159,8 +172,8 @@ def _generate_stem(arguments: List[Argument],
     retry = 0
     while True:
         if retry >= max_retry:
-            logger.warning('Exit since retry exceeded max_retry(%d)', max_retry)
-            break
+            raise MaxRetryExceedError()
+        retry += 1
 
         if cur_depth >= depth:
             break
@@ -177,36 +190,52 @@ def _generate_stem(arguments: List[Argument],
         next_arg_unreplaced = random.choice(chainable_args)
 
         # Choose mapping
-        mappings = list(
-            generate_replacement_mappings_from_formula(
-                next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
-                [cur_conclusion] + [Formula(' '.join(constant_pool)), Formula(' '.join(predicate_pool))]
-            )
-        )
+        # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
         is_proper_mapping = False
-        for mapping in random.sample(mappings, len(mappings)):
-            next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
-            if all([premise.rep != cur_conclusion.rep
-                    for premise in next_arg_replaced.premises]):
-                continue
+        for premise in random.sample(next_arg_unreplaced.premises, len(next_arg_unreplaced.premises)):
+            for premise_mapping in generate_replacement_mappings_from_formula(
+                [premise],
+                [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
+                shuffle=True,
+            ):
+                premise_replaced = replace_formula(premise, premise_mapping)
+                if premise_replaced.rep != cur_conclusion.rep:
+                    continue
 
-            if _has_ng_premises(next_arg_replaced):
-                continue
+                for mapping in generate_replacement_mappings_from_formula(
+                    next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
+                    [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
+                    constraints=premise_mapping,
+                    shuffle=True,
+                ):
 
-            if len(_get_premises_already_in_tree(next_arg_replaced, proof_tree)) >= 2:  # 1 for the chained promise:
-                continue
+                    next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
 
-            if not _is_satisfiable(next_arg_replaced, proof_tree):
-                continue
+                    if all([premise.rep != cur_conclusion.rep
+                            for premise in next_arg_replaced.premises]):
+                        continue
 
-            if not _new_formula_is_deduced(next_arg_replaced, proof_tree):
-                continue
+                    if _has_ng_premises(next_arg_replaced):
+                        continue
 
-            is_proper_mapping = True
-            break
+                    if len(_get_premises_already_in_tree(next_arg_replaced, proof_tree)) >= 2:  # 1 for the chained promise:
+                        continue
+
+                    if not _is_satisfiable(next_arg_replaced, proof_tree):
+                        continue
+
+                    if not _new_formula_is_deduced(next_arg_replaced, proof_tree):
+                        continue
+
+                    is_proper_mapping = True
+                    break
+                if is_proper_mapping:
+                    break
+            if is_proper_mapping:
+                break
 
         if not is_proper_mapping:
-            logger.info('Retry since proper mapping could not be chosen...')
+            logger.info('_generate_stem() retry since proper mapping could not be generated...')
             continue
 
         # Update tree
@@ -226,19 +255,17 @@ def _generate_stem(arguments: List[Argument],
     return proof_tree
 
 
-@profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     steps: int,
                     predicate_pool: List[str],
                     constant_pool: List[str],
-                    max_retry=30):
+                    max_retry=10) -> None:
     cur_step = 0
     retry = 0
     while True:
         if retry >= max_retry:
-            logger.warning('Exit since retry exceeded max_retry(%d)', max_retry)
-            break
+            raise MaxRetryExceedError()
         retry += 1
 
         if cur_step >= steps:
@@ -290,12 +317,12 @@ def _extend_braches(proof_tree: ProofTree,
 
                 is_proper_mapping = True
                 break
-            
+
             if is_proper_mapping:
                 break
 
         if not is_proper_mapping:
-            logger.info('Retry since proper mapping could not be chosen...')
+            logger.info('_extend_branches() retry since proper mapping could not be generated...')
 
         # Upate tree
         leaf_node.argument = next_arg_replaced

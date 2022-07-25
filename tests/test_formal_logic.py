@@ -52,10 +52,11 @@ def test_generation():
         ),
 
     ]
-    for i in range(5):
+    for i in range(100):
         print('=================== generating proof tree =========================')
-        proof_tree = generate_tree(args, depth=3)
-        print(proof_tree.format_str)
+        proof_tree = generate_tree(args, depth=5)
+        if proof_tree is not None:
+            print(proof_tree.format_str)
 
 
 if __name__ == '__main__':
