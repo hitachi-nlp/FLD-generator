@@ -19,7 +19,7 @@ def main():
     # output_top_dir = Path('./outputs/00.create_json_corpus/20220707.small')
     output_top_dir = Path('./outputs/00.create_json_corpus/debug')
 
-    config = './configs/conf_syllogistic_corpus-02.json'
+    config = './configs/aacorpus/conf_syllogistic_corpus-02.json'
     corpus_name = 'org'
 
     split_sizes = {

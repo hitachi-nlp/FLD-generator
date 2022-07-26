@@ -1,8 +1,12 @@
 # todo
+* スキームを増やす．
+    * 命題論理も．
+    * notなどは，初手で入れないと現れない．
+* distractorを用意する．
 * NLに落とす．
-* 全てのスキームを用意する
-    - 命題論理も欲しい．
-* distractor
+    - motivational exampleを取り入れるように．
+    - A cause B, A then B
+    - F, G, H, I, J, Kなどいろいろと現れる．どうするか？
 * NLProofSに変換する．
 * 学習する．
 
