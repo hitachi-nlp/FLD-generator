@@ -4,8 +4,8 @@ from typing import Dict, List, Any, Iterable, Tuple, Optional
 import copy
 
 from string import Template
-from .formula import Formula, Argument
-from .formula import templatify, detemplatify
+from .formula import Formula, templatify, detemplatify
+from .argument import Argument
 
 
 def generate_replaced_formulas(src_formula: Formula,

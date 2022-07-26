@@ -1,8 +1,5 @@
-from formal_logic import (
-    generate_replacement_mappings_from_formula,
-    Formula,
-)
-from formal_logic.scheme import Scheme
+from formal_logic.generation import generate_replacement_mappings_from_formula
+from formal_logic.formula import Formula
 
 
 def test_replacements():

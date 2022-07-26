@@ -1,21 +1,22 @@
 import random
-from typing import List, Tuple, Optional, Iterable, Union
-from formal_logic.formula import PREDICATE_POOL, CONSTANT_POOL
-from formal_logic import (
-    generate_replacement_mappings,
-    generate_replacement_mappings_from_formula,
-    generate_replacement_mappings_from_terms,
-    generate_replaced_formulas,
-    generate_replaced_arguments,
+import logging
+from typing import List, Tuple, Optional
+
+from .formula import (
+    PREDICATE_POOL,
+    CONSTANT_POOL,
     Formula,
-    Argument,
-    replace_formula,
-    replace_argument,
     is_satisfiable as is_formulas_satisfiable,
 )
+from .argument import Argument
+from .replacements import (
+    generate_replacement_mappings_from_formula,
+    generate_replaced_formulas,
+    replace_formula,
+    replace_argument,
+)
 from .proof import ProofTree, ProofNode
-from formal_logic.exception import AACorpusExceptionBase
-import logging
+from .exception import AACorpusExceptionBase
 
 logger = logging.getLogger(__name__)
 
