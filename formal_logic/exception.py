@@ -1,0 +1,2 @@
+class AACorpusExceptionBase(Exception):
+    pass
