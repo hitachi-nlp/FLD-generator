@@ -75,11 +75,8 @@ def pipeline(corpus_config,
     else:
         intros_json = None
 
-    # permute
     if permutate_premises:
-        indexes = random.choice(list(itertools.permutations(range(len(premises)))))
-        premises = [premises[idx] for idx in indexes]
-        premise_intros = [premise_intros[idx] for idx in indexes]
+        random.shuffle(premises)
 
     named_propositions, proofs = create_names_and_proof(premises, conclusion)
 
