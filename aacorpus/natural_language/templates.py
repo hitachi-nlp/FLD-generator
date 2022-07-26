@@ -2,12 +2,10 @@ from typing import List, Dict
 import random
 from string import Template
 
-from .common import Proposition
-
 
 def create_nl_propositions_with_FGH(formal_scheme_config,
                                     domain_config,
-                                    corpus_config) -> List[Proposition]:
+                                    corpus_config) -> List[str]:
     """
     output is like: [
         'If someone is a ${F}, then they are a ${G}. ',
@@ -27,7 +25,7 @@ def create_nl_propositions_with_FGH(formal_scheme_config,
 def _create_nl_proposition_with_FGH(proposition: str,
                                     placeolder_substitutions: Dict,
                                     domain_config,
-                                    corpus_config) -> Proposition:
+                                    corpus_config) -> str:
     """
     Args:
         proposition (str)              : e.g. "(x): ${F}x -> ${G}x"
@@ -44,7 +42,7 @@ def _create_nl_proposition_with_FGH(proposition: str,
     nl_proposition_subtituted = Template(nl_proposition).substitute(
         {ABC: f'${{{FGH}}}' for FGH, ABC in placeolder_substitutions.items()})
 
-    return Proposition(nl_proposition_subtituted)
+    return nl_proposition_subtituted
 
 
 def _get_proposition_translations(corpus_config: Dict, domain: Dict) -> Dict[str, List[str]]:
@@ -72,9 +70,9 @@ def _get_proposition_translations(corpus_config: Dict, domain: Dict) -> Dict[str
     return merged_translations
 
 
-def substitute_FGH(propositions: List[Proposition],
+def substitute_FGH(propositions: List[str],
                    formal_scheme_config: Dict,
-                   domain_config: Dict) -> List[Proposition]:
+                   domain_config: Dict) -> List[str]:
     """Substitute the subject and predicate placeholders.
     output is like [
         'If someone is a descendant of Velociraptor, then they are a ancestor of Stegosaurus. ',
@@ -93,7 +91,7 @@ def substitute_FGH(propositions: List[Proposition],
         _get_predicates(domain_config, n=len(predicate_placeholders), exclude_names=subjects)
     ))
     subst = dict(zsubjects + zpredicates)  # Merge dicts
-    return [Proposition(Template(str(p)).substitute(subst))
+    return [Template(p).substitute(subst)
             for p in propositions]
 
 

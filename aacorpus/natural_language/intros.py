@@ -1,10 +1,8 @@
 from typing import List, Optional
 import random
 
-from .common import Proposition
 
-
-def get_intros(propositions: List[Proposition],
+def get_intros(propositions: List[str],
                possible_scheme_intros: List[str],
                possible_premise_intros: List[str],
                possible_conclusion_intros: List[str]) -> List[str]:

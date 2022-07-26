@@ -1,29 +1,27 @@
 from typing import List
 import random
 import itertools
-import re
-from string import Template
 
-from .common import Proposition
 from .templates import (
     create_nl_propositions_with_FGH,
     substitute_FGH,
 )
 from .intros import get_intros
 from .split import extend_split, split_argument
+from .normalization import normalize
 
 
-def create_names_and_proof(premises: List[Proposition], conclusion: List[Proposition]):
+def create_names_and_proof(premises: List[str], conclusion: str):
     sentences = {}
 
     for idx, premise in enumerate(premises):
-        sentences[f'premise-{idx}'] = str(premise)
+        sentences[f'premise-{idx}'] = premise
 
     distractors = []
     for idx, distractor in enumerate(distractors):
-        sentences[f'distractor-{idx}'] = str(distractor)
+        sentences[f'distractor-{idx}'] = distractor
 
-    sentences['conclusion'] = str(conclusion)
+    sentences['conclusion'] = conclusion
 
     proofs = [
         [[f'premise-{idx}' for idx in range(len(premises))], 'conclusion'],
@@ -36,35 +34,46 @@ def pipeline(corpus_config,
              scheme_id,
              depth: int = 1,
              permutate_premises=False,
-             split_arg=False):
+             split_arg=False,
+             do_get_intros=False):
     if depth != 1:
         raise NotImplementedError()
 
-    # STEP1 of Fugre.2
+    # STEP1 of Figure.2
     domain_config = next(d for d in corpus_config['domains']
                          if d['id'] == domain_id)
     formal_scheme_config = next(a for a in corpus_config['formal_argument_schemes']
                                 if a['id'] == scheme_id)
 
-    # STEP2 of Fugre.2
+    # STEP2 of Figure.2
     nl_propositions_with_FGH = create_nl_propositions_with_FGH(
         formal_scheme_config, domain_config, corpus_config
     )
 
-    # STEP3 of Fugre.2
+    # STEP3 of Figure.2
     nl_propositions = substitute_FGH(
         nl_propositions_with_FGH, formal_scheme_config, domain_config,
     )
+    nl_propositions = [normalize(proposition) for proposition in nl_propositions]
+
     premises, conclusion = nl_propositions[:-1], nl_propositions[-1]
 
-    # STEP4 & STEP5 of Fugre.2
-    intros = get_intros(
-        nl_propositions,
-        domain_config['intros'],
-        corpus_config['premise_intros'],
-        corpus_config['conclusion_indicators'],
-    )
-    scheme_intro, premise_intros, conclusion_intro = intros[0], intros[1:-1], intros[-1]
+    # STEP4 & STEP5 of Figure.2
+    if do_get_intros:
+        intros = get_intros(
+            nl_propositions,
+            domain_config['intros'],
+            corpus_config['premise_intros'],
+            corpus_config['conclusion_indicators'],
+        )
+        scheme_intro, premise_intros, conclusion_intro = intros[0], intros[1:-1], intros[-1]
+        intros_json = {
+            'all': scheme_intro,
+            'premise': premise_intros,
+            'conclusion': conclusion_intro,
+        }
+    else:
+        intros_json = None
 
     # permute
     if permutate_premises:
@@ -75,11 +84,7 @@ def pipeline(corpus_config,
     named_propositions, proofs = create_names_and_proof(premises, conclusion)
 
     argument = {
-        'intros': {
-            'all': scheme_intro,
-            'premise': premise_intros,
-            'conclusion': conclusion_intro,
-        },
+        'intros': intros_json,
 
         'sentences': named_propositions,
         'proofs': proofs,
