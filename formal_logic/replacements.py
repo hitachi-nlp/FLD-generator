@@ -154,7 +154,11 @@ def replace_argument(arg: Argument, replacements: Dict[str, str]) -> Argument:
     replaced_premises = [replace_formula(formula, replacements)
                          for formula in arg.premises]
     replaced_conclusion = replace_formula(arg.conclusion, replacements)
-    return Argument(replaced_premises, replaced_conclusion)
+    return Argument(replaced_premises,
+                    replaced_conclusion,
+                    id=arg.id,
+                    base_scheme_group=arg.base_scheme_group,
+                    scheme_variant=arg.scheme_variant)
 
 
 def replace_rep(rep: str, replacements: Dict[str, str]) -> str:
