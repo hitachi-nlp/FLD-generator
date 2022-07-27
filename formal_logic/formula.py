@@ -1,16 +1,28 @@
 import re
 from typing import List, Optional
 
+AND = '&'
+OR = 'v'
+NOT = '¬'
 
-PREDICATE_POOL = ['F', 'G', 'H', 'I', 'J',
-                  'K', 'L', 'M', 'N', 'O',
-                  'P', 'Q', 'R', 'S', 'T',
-                  'U', 'V', 'W']
-CONSTANT_POOL = ['a', 'b', 'c', 'd', 'e',
-                 'f', 'g', 'h', 'i', 'j',
-                 'k', 'l', 'm', 'n', 'o',
-                 'p', 'q', 'r', 's', 't',
-                 'u', 'v', 'w']
+PREDICATE_SYMBOLS = [
+    'A', 'B', 'C', 'D', 'E',
+    'F', 'G', 'H', 'I', 'J',
+    'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U',
+]
+_PREDICATE_SYMBOLS_SET = set(PREDICATE_SYMBOLS)
+
+CONSTANT_SYMBOLS = [
+    'a', 'b', 'c', 'd', 'e',
+    'f', 'g', 'h', 'i', 'j',
+    'k', 'l', 'm', 'n', 'o',
+    'p', 'q', 'r', 's', 't', 'u',
+]  # do not use 'v' = OR
+_CONSTANT_SYMBOLS_SET = set(CONSTANT_SYMBOLS)
+
+VARIABLE_SYMBOLS = ['x', 'y', 'z']  # do not use 'v' = OR
+_VARIABLE_SYMBOLS_SET = set(VARIABLE_SYMBOLS)
 
 
 class Formula:
@@ -30,9 +42,6 @@ class Formula:
 
     def __repr__(self) -> str:
         return f'Formula("{self._formula_str}")'
-
-    # def __eq__(self, other):
-    #     return self.rep == other.rep
 
     @property
     def premise(self) -> Optional['Formula']:
@@ -62,14 +71,19 @@ class Formula:
 
 
 def templatify(rep: str) -> str:
+    if len(rep.split(':')) == 2:
+        quantifier_rep, content_rep = rep.split(':')
+    else:
+        quantifier_rep = ''
+        content_rep = rep
+
     converted = ''
-    variables = _get_variables(rep)
-    for char in rep:
-        if _is_predicate_char(char) or (_is_individual_char(char) and char not in variables):
+    for char in content_rep:
+        if _is_predicate_char(char) or _is_constant_char(char):
             converted += '${' + char + '}'
         else:
             converted += char
-    return converted
+    return quantifier_rep + converted
 
 
 def detemplatify(rep: str) -> str:
@@ -88,9 +102,10 @@ def _get_conclusion(rep) -> Optional[str]:
     return rep.split(' -> ')[-1]
 
 
-def _get_predicates(rep) -> List[str]:
+def _get_predicates(rep: str) -> List[str]:
+    rep_wo_quantifier = rep.split(':')[-1]
     predicate_reps = set()
-    for char in rep:
+    for char in rep_wo_quantifier:
         if _is_predicate_char(char):
             predicate_reps.add(char)
     return sorted(predicate_reps)
@@ -98,38 +113,30 @@ def _get_predicates(rep) -> List[str]:
 
 def _get_constants(rep: str) -> List[str]:
     constant_reps = set()
-    variables = _get_variables(rep)
     for char in rep:
-        if _is_individual_char(char) and char not in variables:
+        if _is_constant_char(char):
             constant_reps.add(char)
     return sorted(constant_reps)
 
 
 def _get_variables(rep: str) -> List[str]:
-    unique_variables = set()
-
-    # "(x)"
-    matches = re.finditer(r'\([a-z]*\)', rep)
-    unique_variables = unique_variables.union(
-        set([m.group()[1] for m in matches])
-    )
-
-    # "(Ex)"
-    matches = re.finditer(r'\(E[a-z]*\)', rep)
-    unique_variables = unique_variables.union(
-        set([m.group()[2] for m in matches])
-    )
-
-    return sorted(unique_variables)
+    variable_reps = set()
+    for char in rep:
+        if _is_variable_char(char):
+            variable_reps.add(char)
+    return sorted(variable_reps)
 
 
 def _is_predicate_char(char: str) -> bool:
-    return re.match(r'[A-Z]', char) is not None
+    return char in _PREDICATE_SYMBOLS_SET
 
 
-def _is_individual_char(char: str) -> bool:
-    """ individuals = constants + variables """
-    return re.match(r'[a-z]', char) is not None
+def _is_constant_char(char: str) -> bool:
+    return char in _CONSTANT_SYMBOLS_SET
+
+
+def _is_variable_char(char: str) -> bool:
+    return char in _VARIABLE_SYMBOLS_SET
 
 
 def _is_template(rep: str) -> bool:

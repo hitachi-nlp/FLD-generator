@@ -3,8 +3,8 @@ import logging
 from typing import List, Tuple, Optional
 
 from .formula import (
-    PREDICATE_POOL,
-    CONSTANT_POOL,
+    PREDICATE_SYMBOLS,
+    CONSTANT_SYMBOLS,
     Formula,
     is_satisfiable as is_formulas_satisfiable,
 )
@@ -33,13 +33,13 @@ class MaxRetryExceedError(AACorpusExceptionBase):
 def generate_tree(arguments: List[Argument], depth=1) -> Optional[ProofTree]:
     max_retry = 10
     try:
-        proof_tree = _generate_stem(arguments, depth, PREDICATE_POOL, CONSTANT_POOL, max_retry=max_retry)
+        proof_tree = _generate_stem(arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
     except MaxRetryExceedError:
         logger.warning('_generate_stem() exception max retry (%d). Will return None.', max_retry)
         return None
 
     try:
-        _extend_braches(proof_tree, arguments, depth, PREDICATE_POOL, CONSTANT_POOL, max_retry=max_retry)
+        _extend_braches(proof_tree, arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
     except MaxRetryExceedError:
         logger.warning('_extend_braches() exception max retry (%d). Will return None.', max_retry)
         return None

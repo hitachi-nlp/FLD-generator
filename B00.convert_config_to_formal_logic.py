@@ -6,11 +6,12 @@ from string import Template
 
 import click
 from logger_setup import setup as setup_logger
+from formal_logic.formula import AND, OR, NOT
 
 logger = logging.getLogger(__name__)
 
 
-def convert(config_in_path: str, config_out_path: str):
+def convert_config(config_in_path: str, config_out_path: str):
     config_in = json.load(open(config_in_path))
 
     schemes = config_in["formal_argument_schemes"]
@@ -29,6 +30,7 @@ def convert(config_in_path: str, config_out_path: str):
                 for key, val in ABC2FGH_mapping.items()
             }
             formula = Template(ABC_template_formula).substitute(ABC2FGH_mapping_wo_template)
+            formula = convert_formula_rep(formula)
             formulas.append(formula)
 
         scheme_converted['premises'] = formulas[:-1]
@@ -44,6 +46,13 @@ def convert(config_in_path: str, config_out_path: str):
                   indent=4)
 
 
+def convert_formula_rep(rep: str) -> str:
+    rep = rep.replace('&', AND)
+    rep = rep.replace('v', OR)
+    rep = rep.replace('¬', NOT)
+    return rep
+
+
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
@@ -53,7 +62,7 @@ def main():
     #     './configs/formal_logic/syllogistic_corpus-01.json',
     # )
 
-    convert(
+    convert_config(
         './configs.org/conf_syllogistic_corpus-02.json',
         './configs/formal_logic/syllogistic_corpus-02.json',
     )
