@@ -108,11 +108,12 @@ class ProofTree:
 
     @property
     def format_str(self):
-        rep = 'ProofTree(\n'
+        rep = ''
+        # rep = 'ProofTree(\n'
         for node, depth in self.depth_first_traverse(get_depth=True):
-            rep += '\n'
-            rep += '    ' + '    ' * depth + f'node     : {node}\n'
-            rep += '    ' + '    ' * depth + f' argument : {node.argument}'
-            rep += '\n'
-        rep += '\n)'
+            rep += ''.join(['|    '] * 10) + '\n'
+            rep += '|    ' + '|    ' * depth + f'|{node.argument}\n'
+            rep += '|    ' + '|    ' * depth + f'|{node}\n'
+            rep += ''.join(['|    '] * 10) + '\n'
+        # rep += '\n)'
         return rep

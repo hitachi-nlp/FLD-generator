@@ -1,4 +1,5 @@
 # todo
+* not not
 * argumentを増やす
     * 命題論理も．
     * notなどは，初手で入れないと現れない．
