@@ -43,6 +43,6 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger()
 
-    test_simple_generation()
+    # test_simple_generation()
 
-    # test_generation()
+    test_generation()
