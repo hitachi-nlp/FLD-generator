@@ -1,5 +1,9 @@
 import json
+import random
+
 from formal_logic import generate_tree, Formula, Argument, load_argument_config
+from logger_setup import setup as setup_logger
+
 
 
 def test_simple_generation():
@@ -36,9 +40,9 @@ def test_generation():
 
 
 if __name__ == '__main__':
-    from logger_setup import setup as setup_logger
+    random.seed(0)
     setup_logger()
 
-    # test_simple_generation()
+    test_simple_generation()
 
-    test_generation()
+    # test_generation()

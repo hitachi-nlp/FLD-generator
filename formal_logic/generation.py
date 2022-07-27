@@ -88,6 +88,10 @@ def _generate_stem(arguments: List[Argument],
                     for premise in arg.premises
                     for premise_replaced, _ in generate_replaced_formulas(premise, cur_conclusion)])
         ]
+        if len(chainable_args) == 0:
+            logger.info('_generate_stem() retry since no chainable arguments found ...')
+            continue
+
         next_arg_unreplaced = random.choice(chainable_args)
 
         # Choose mapping

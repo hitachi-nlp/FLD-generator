@@ -73,17 +73,18 @@ class Formula:
 def templatify(rep: str) -> str:
     if len(rep.split(':')) == 2:
         quantifier_rep, content_rep = rep.split(':')
+        quantifier_rep += ':'
     else:
         quantifier_rep = ''
         content_rep = rep
 
-    converted = ''
+    converted_content_rep = ''
     for char in content_rep:
         if _is_predicate_char(char) or _is_constant_char(char):
-            converted += '${' + char + '}'
+            converted_content_rep += '${' + char + '}'
         else:
-            converted += char
-    return quantifier_rep + converted
+            converted_content_rep += char
+    return quantifier_rep + converted_content_rep
 
 
 def detemplatify(rep: str) -> str:
