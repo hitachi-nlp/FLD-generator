@@ -1,5 +1,6 @@
 import random
 import logging
+import re
 from typing import List, Optional
 
 from .formula import (
@@ -18,25 +19,49 @@ from .replacements import (
 from .proof import ProofTree, ProofNode
 from .exception import AACorpusExceptionBase
 
+from .formula import (
+    IMPLICATION,
+    AND,
+    OR,
+    NOT,
+    PREDICATE_SYMBOLS,
+    CONSTANT_SYMBOLS,
+    VARIABLE_SYMBOLS,
+)
+
 logger = logging.getLogger(__name__)
 
-_NG_FORMULAS = [
-    Formula('F -> F'),
-    Formula('F & F'),
-    Formula('F v F'),
 
-    Formula('Fa -> Fa'),
-    Formula('Fa & Fa'),
-    Formula('Fa v Fa'),
+_NG_FORMULA_REGEXPS = [
+    f'({predicate}|{NOT}{predicate}) ({IMPLICATION}|{AND}|{OR}) ({predicate}|{NOT}{predicate})'
+    for predicate in PREDICATE_SYMBOLS
+] + [
+    f'({predicate}{individual}|{NOT}{predicate}{individual}) ({IMPLICATION}|{AND}|{OR}) ({predicate}{individual}|{NOT}{predicate}{individual})'
+    for predicate in PREDICATE_SYMBOLS
+    for individual in CONSTANT_SYMBOLS + VARIABLE_SYMBOLS
 
-    Formula('(x): Fx -> Fx'),
-    Formula('(x): Fx & Fx'),
-    Formula('(x): Fx v Fx'),
-
-    Formula('(Ex): Fx -> Fx'),
-    Formula('(Ex): Fx & Fx'),
-    Formula('(Ex): Fx v Fx'),
 ]
+
+_NG_FORMULA_REGEXP = re.compile('|'.join(_NG_FORMULA_REGEXPS))
+
+
+# _NG_FORMULAS = [
+#     Formula('F -> F'),
+#     Formula('F & F'),
+#     Formula('F v F'),
+# 
+#     Formula('Fa -> Fa'),
+#     Formula('Fa & Fa'),
+#     Formula('Fa v Fa'),
+# 
+#     Formula('(x): Fx -> Fx'),
+#     Formula('(x): Fx & Fx'),
+#     Formula('(x): Fx v Fx'),
+# 
+#     Formula('(Ex): Fx -> Fx'),
+#     Formula('(Ex): Fx & Fx'),
+#     Formula('(Ex): Fx v Fx'),
+# ]
 
 
 class MaxRetryExceedError(AACorpusExceptionBase):
@@ -259,11 +284,15 @@ def _extend_braches(proof_tree: ProofTree,
 
 
 def _has_ng_premises(arg: Argument) -> bool:
+    # return any([
+    #     premise.rep.find(ng_formula_replaced.rep) >= 0
+    #     for premise in arg.premises
+    #     for ng_formula in _NG_FORMULAS
+    #     for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise)
+    # ])
     return any([
-        premise.rep.find(ng_formula_replaced.rep) >= 0
+        _NG_FORMULA_REGEXP.search(premise.rep) is not None
         for premise in arg.premises
-        for ng_formula in _NG_FORMULAS
-        for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise)
     ])
 
 

@@ -1,6 +1,7 @@
 import re
 from typing import List, Optional
 
+IMPLICATION = '->'
 AND = '&'
 OR = 'v'
 NOT = '¬'
