@@ -1,6 +1,6 @@
 import random
 import logging
-from typing import List, Tuple, Optional
+from typing import List, Optional
 
 from .formula import (
     PREDICATE_SYMBOLS,
@@ -21,8 +21,21 @@ from .exception import AACorpusExceptionBase
 logger = logging.getLogger(__name__)
 
 _NG_FORMULAS = [
+    Formula('F -> F'),
+    Formula('F & F'),
+    Formula('F v F'),
+
+    Formula('Fa -> Fa'),
+    Formula('Fa & Fa'),
+    Formula('Fa v Fa'),
+
     Formula('(x): Fx -> Fx'),
+    Formula('(x): Fx & Fx'),
+    Formula('(x): Fx v Fx'),
+
     Formula('(Ex): Fx -> Fx'),
+    Formula('(Ex): Fx & Fx'),
+    Formula('(Ex): Fx v Fx'),
 ]
 
 
@@ -247,7 +260,7 @@ def _extend_braches(proof_tree: ProofTree,
 
 def _has_ng_premises(arg: Argument) -> bool:
     return any([
-        ng_formula_replaced.rep == premise.rep
+        premise.rep.find(ng_formula_replaced.rep) >= 0
         for premise in arg.premises
         for ng_formula in _NG_FORMULAS
         for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise)

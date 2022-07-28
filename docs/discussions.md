@@ -1,4 +1,5 @@
 # todo
+* too slow
 * not not
 * argumentを増やす
     * 命題論理も．

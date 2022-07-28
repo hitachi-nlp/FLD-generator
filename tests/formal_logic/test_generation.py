@@ -5,7 +5,6 @@ from formal_logic import generate_tree, Formula, Argument, load_argument_config
 from logger_setup import setup as setup_logger
 
 
-
 def test_simple_generation():
     arguments = [
         # modus ponens
