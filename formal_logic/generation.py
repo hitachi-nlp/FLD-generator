@@ -191,7 +191,10 @@ def _generate_stem(arguments: List[Argument],
                 next_arg_replaced.premises[i_premise] = cur_conclusion  # refer to the unique object.
         next_conclusion_node = ProofNode(next_arg_replaced.conclusion)
         next_conclusion_node.argument = next_arg_replaced
-        next_premise_nodes = [ProofNode(premise) for premise in next_arg_replaced.premises]
+        next_premise_nodes = [
+            cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
+            for premise in next_arg_replaced.premises
+        ]
         update(next_premise_nodes, next_conclusion_node, next_arg_replaced, proof_tree)
 
         cur_arg = next_arg_replaced
