@@ -3,6 +3,8 @@ import logging
 import re
 from typing import List, Optional
 
+from timeout_timer import timeout as timeout_context
+
 from .formula import (
     PREDICATE_SYMBOLS,
     CONSTANT_SYMBOLS,
@@ -28,6 +30,7 @@ from .formula import (
     CONSTANT_SYMBOLS,
     VARIABLE_SYMBOLS,
 )
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -45,46 +48,39 @@ _NG_FORMULA_REGEXPS = [
 _NG_FORMULA_REGEXP = re.compile('|'.join(_NG_FORMULA_REGEXPS))
 
 
-# _NG_FORMULAS = [
-#     Formula('F -> F'),
-#     Formula('F & F'),
-#     Formula('F v F'),
-# 
-#     Formula('Fa -> Fa'),
-#     Formula('Fa & Fa'),
-#     Formula('Fa v Fa'),
-# 
-#     Formula('(x): Fx -> Fx'),
-#     Formula('(x): Fx & Fx'),
-#     Formula('(x): Fx v Fx'),
-# 
-#     Formula('(Ex): Fx -> Fx'),
-#     Formula('(Ex): Fx & Fx'),
-#     Formula('(Ex): Fx v Fx'),
-# ]
-
-
 class MaxRetryExceedError(AACorpusExceptionBase):
     pass
 
 
-def generate_tree(arguments: List[Argument], depth=1) -> Optional[ProofTree]:
-    max_retry = 10
-    try:
-        proof_tree = _generate_stem(arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
-    except MaxRetryExceedError:
-        logger.warning('_generate_stem() exception max retry (%d). Will return None.', max_retry)
-        return None
+class TimeoutError(AACorpusExceptionBase):
+    pass
 
-    try:
-        _extend_braches(proof_tree, arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
-    except MaxRetryExceedError:
-        logger.warning('_extend_braches() exception max retry (%d). Will return None.', max_retry)
-        return None
+
+
+@profile
+def generate_tree(arguments: List[Argument],
+                  depth=1,
+                  timeout: Optional[int] = None) -> Optional[ProofTree]:
+    timeout = timeout or 99999999
+    with timeout_context(timeout, exception=TimeoutError):
+
+        max_retry = 10
+        try:
+            proof_tree = _generate_stem(arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
+        except MaxRetryExceedError:
+            logger.warning('_generate_stem() exception max retry (%d). Will return None.', max_retry)
+            return None
+
+        try:
+            _extend_braches(proof_tree, arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
+        except MaxRetryExceedError:
+            logger.warning('_extend_braches() exception max retry (%d). Will return None.', max_retry)
+            return None
 
     return proof_tree
 
 
+@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
@@ -138,11 +134,19 @@ def _generate_stem(arguments: List[Argument],
         for premise in random.sample(next_arg_unreplaced.premises, len(next_arg_unreplaced.premises)):
             for premise_mapping in generate_replacement_mappings_from_formula(
                 [premise],
-                [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
+                # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
+                [cur_conclusion],
                 shuffle=True,
             ):
                 premise_replaced = replace_formula(premise, premise_mapping)
+
                 if premise_replaced.rep != cur_conclusion.rep:
+                    continue
+
+                if _has_ng_formulas([premise_replaced]):
+                    continue
+
+                if not _is_satisfiable([premise_replaced], proof_tree):
                     continue
 
                 for mapping in generate_replacement_mappings_from_formula(
@@ -154,20 +158,19 @@ def _generate_stem(arguments: List[Argument],
 
                     next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
 
-                    if all([premise.rep != cur_conclusion.rep
-                            for premise in next_arg_replaced.premises]):
+                    if _is_conclusion_in_premises(next_arg_replaced):
                         continue
 
-                    if _has_ng_premises(next_arg_replaced):
+                    if _has_ng_formulas(next_arg_replaced.premises):
                         continue
 
-                    if len(_get_premises_already_in_tree(next_arg_replaced, proof_tree)) >= 2:  # 1 for the chained promise:
+                    if not _is_formula_new(next_arg_replaced.conclusion, proof_tree):
                         continue
 
-                    if not _is_satisfiable(next_arg_replaced, proof_tree):
+                    if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 2:  # 1 for the chained promise:
                         continue
 
-                    if not _new_formula_is_deduced(next_arg_replaced, proof_tree):
+                    if not _is_satisfiable(next_arg_replaced.all_formulas, proof_tree):
                         continue
 
                     is_proper_mapping = True
@@ -198,6 +201,7 @@ def _generate_stem(arguments: List[Argument],
     return proof_tree
 
 
+@profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     steps: int,
@@ -230,6 +234,7 @@ def _extend_braches(proof_tree: ProofTree,
                     for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf_node.formula)])
         ]
         if len(chainable_args) == 0:
+            logger.info('_extend_braches() retry since no chainable arguments found ...')
             continue
         next_arg_unreplaced = random.choice(chainable_args)
 
@@ -238,11 +243,21 @@ def _extend_braches(proof_tree: ProofTree,
         # 1. First, we generate the small number of mappings by using small number of symbols. Then, we find appropriate sub-mappings
         # 2. Second, we generate full number of mappings, using the sub-mappings as filters.
         is_proper_mapping = False
-        for conclusion_mapping in generate_replacement_mappings_from_formula([next_arg_unreplaced.conclusion],
-                                                                             [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
-                                                                             shuffle=True):
+        for conclusion_mapping in generate_replacement_mappings_from_formula(
+                [next_arg_unreplaced.conclusion],
+                # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
+                [leaf_node.formula],
+                shuffle=True):
+
             conclusion_replaced = replace_formula(next_arg_unreplaced.conclusion, conclusion_mapping)
+
             if conclusion_replaced.rep != leaf_node.formula.rep:
+                continue
+
+            if _has_ng_formulas([conclusion_replaced]):
+                continue
+
+            if not _is_satisfiable([conclusion_replaced], proof_tree):
                 continue
 
             for mapping in generate_replacement_mappings_from_formula(
@@ -252,16 +267,14 @@ def _extend_braches(proof_tree: ProofTree,
                 shuffle=True,
             ):
                 next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
-                if next_arg_replaced.conclusion.rep != leaf_node.formula.rep:
-                    raise Exception()
 
-                if _has_ng_premises(next_arg_replaced):
+                if _has_ng_formulas(next_arg_replaced.premises):
                     continue
 
-                if len(_get_premises_already_in_tree(next_arg_replaced, proof_tree)) >= 1:
+                if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 1:
                     continue
 
-                if not _is_satisfiable(next_arg_replaced, proof_tree):
+                if not _is_satisfiable(next_arg_replaced.all_formulas, proof_tree):
                     continue
 
                 is_proper_mapping = True
@@ -272,6 +285,7 @@ def _extend_braches(proof_tree: ProofTree,
 
         if not is_proper_mapping:
             logger.info('_extend_branches() retry since proper mapping could not be generated...')
+            continue
 
         # Upate tree
         leaf_node.argument = next_arg_replaced
@@ -283,36 +297,34 @@ def _extend_braches(proof_tree: ProofTree,
         cur_step += 1
 
 
-def _has_ng_premises(arg: Argument) -> bool:
-    # return any([
-    #     premise.rep.find(ng_formula_replaced.rep) >= 0
-    #     for premise in arg.premises
-    #     for ng_formula in _NG_FORMULAS
-    #     for ng_formula_replaced, _ in generate_replaced_formulas(ng_formula, premise)
-    # ])
+def _is_conclusion_in_premises(arg: Argument) -> bool:
+    return any([arg.conclusion.rep == premise.rep
+                for premise in arg.premises])
+
+
+def _has_ng_formulas(formulas: List[Formula]) -> bool:
     return any([
-        _NG_FORMULA_REGEXP.search(premise.rep) is not None
-        for premise in arg.premises
+        _NG_FORMULA_REGEXP.search(formula.rep) is not None
+        for formula in formulas
     ])
 
 
-def _get_premises_already_in_tree(arg: Argument, proof_tree: ProofTree) -> List[Formula]:
+def _get_formulas_already_in_tree(formulas: List[Formula], proof_tree: ProofTree) -> List[Formula]:
     return [
-        premise
+        formula
         for existent_node in proof_tree.nodes
-        for premise in arg.premises
-        if premise.rep == existent_node.formula.rep
+        for formula in formulas
+        if formula.rep == existent_node.formula.rep
     ]
 
 
-def _is_satisfiable(arg: Argument, proof_tree: ProofTree) -> bool:
+def _is_satisfiable(formulas: List[Formula], proof_tree: ProofTree) -> bool:
     return is_formulas_satisfiable([node.formula for node in proof_tree.nodes]
-                                   + arg.premises
-                                   + [arg.conclusion])
+                                   + formulas)
 
 
-def _new_formula_is_deduced(arg: Argument, proof_tree: ProofTree) -> bool:
+def _is_formula_new(formula: Formula, proof_tree: ProofTree) -> bool:
     return all([
-        arg.conclusion.rep != node.formula.rep
+        formula.rep != node.formula.rep
         for node in proof_tree.nodes
     ])
