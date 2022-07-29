@@ -9,26 +9,26 @@ from logger_setup import setup as setup_logger
 def test_simple_generation():
     arguments = [
         Argument(
-            [Formula('(x): Fx -> Gx'), Formula('Fa')],
-            Formula('Ga'),
+            [Formula('(x): {F}x -> {G}x'), Formula('{F}{a}')],
+            Formula('{G}{a}'),
             id='modus ponens',
         ),
         Argument(
-            [Formula('(x): Fx -> Gx'), Formula('(x): Gx -> Hx')],
-            Formula('(x): Fx -> Hx'),
+            [Formula('(x): {F}x -> {G}x'), Formula('(x): {G}x -> {H}x')],
+            Formula('(x): {F}x -> {H}x'),
             id='syllogism',
         ),
 
     ]
 
-    sentence_translations: Dict[Formula, List[str]] = {
-        Formula('(x): Ax -> Bx'): [
-            'Every A is a B',
-        ],
-        Formula('Ga'): [
-            'a is a G',
-        ],
-    }
+    # sentence_translations: Dict[Formula, List[str]] = {
+    #     Formula('(x): Ax -> Bx'): [
+    #         'Every A is a B',
+    #     ],
+    #     Formula('Ga'): [
+    #         'a is a G',
+    #     ],
+    # }
 
     for _ in range(100):
         print('=================== generating proof tree =========================')
@@ -52,5 +52,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger()
 
-    test_simple_generation()
-    # test_generation()
+    # test_simple_generation()
+    test_generation()

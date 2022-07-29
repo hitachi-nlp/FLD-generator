@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from formal_logic import Formula, detemplatify
+from formal_logic import Formula
 
 
 class Scheme:
@@ -32,7 +32,7 @@ class Scheme:
         json_dict.pop('entity-placeholders', None)
 
         json_dict['formulas'] = [
-            Formula(detemplatify(formula_str))
+            Formula(formula_str)
             for formula_str, _ in json_dict['scheme']
         ]
         json_dict['template_mappings'] = [

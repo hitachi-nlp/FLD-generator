@@ -4,719 +4,719 @@
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> Gx",
-            "Fa"
+            "(x): {F}x -> {G}x",
+            "{F}{a}"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "mb1",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "¬Fa"
+            "(x): ¬{F}x -> {G}x",
+            "¬{F}{a}"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "mb2",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> ¬Gx",
-            "Fa"
+            "(x): {F}x -> ¬{G}x",
+            "{F}{a}"
         ],
-        "conclusion": "¬Ga"
+        "conclusion": "¬{G}{a}"
     },
     {
         "id": "mb3",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Hx) -> Gx",
-            "Fa",
-            "Ha"
+            "(x): ({F}x & {H}x) -> {G}x",
+            "{F}{a}",
+            "{H}{a}"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "mb4",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx v Hx) -> Gx",
-            "Fa"
+            "(x): ({F}x v {H}x) -> {G}x",
+            "{F}{a}"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "mb5",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx v Hx) -> Gx",
-            "Ha"
+            "(x): ({F}x v {H}x) -> {G}x",
+            "{H}{a}"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "mb6",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): ¬(Fx & Hx) -> Gx",
-            "¬Fa"
+            "(x): ¬({F}x & {H}x) -> {G}x",
+            "¬{F}{a}"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "mb7",
         "base_scheme_group": "Modus barbara",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (¬Fx & ¬Hx) -> Gx",
-            "¬(Fa v Ha)"
+            "(x): (¬{F}x & ¬{H}x) -> {G}x",
+            "¬({F}{a} v {H}{a})"
         ],
-        "conclusion": "Ga"
+        "conclusion": "{G}{a}"
     },
     {
         "id": "gmt0",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> Gx",
-            "¬Ga"
+            "(x): {F}x -> {G}x",
+            "¬{G}{a}"
         ],
-        "conclusion": "¬Fa"
+        "conclusion": "¬{F}{a}"
     },
     {
         "id": "gmt1",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> ¬Gx",
-            "Ga"
+            "(x): {F}x -> ¬{G}x",
+            "{G}{a}"
         ],
-        "conclusion": "¬Fa"
+        "conclusion": "¬{F}{a}"
     },
     {
         "id": "gmt2",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "¬Ga"
+            "(x): ¬{F}x -> {G}x",
+            "¬{G}{a}"
         ],
-        "conclusion": "Fa"
+        "conclusion": "{F}{a}"
     },
     {
         "id": "gmt3",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> (Gx & Hx)",
-            "¬Ga"
+            "(x): {F}x -> ({G}x & {H}x)",
+            "¬{G}{a}"
         ],
-        "conclusion": "¬Fa"
+        "conclusion": "¬{F}{a}"
     },
     {
         "id": "gmt4",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx v Gx) -> Hx",
-            "¬Ha"
+            "(x): ({F}x v {G}x) -> {H}x",
+            "¬{H}{a}"
         ],
-        "conclusion": "¬(Fa v Ga)"
+        "conclusion": "¬({F}{a} v {G}{a})"
     },
     {
         "id": "gmt5",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> (Gx v Hx)",
-            "¬Ga",
-            "¬Ha"
+            "(x): {F}x -> ({G}x v {H}x)",
+            "¬{G}{a}",
+            "¬{H}{a}"
         ],
-        "conclusion": "¬Fa"
+        "conclusion": "¬{F}{a}"
     },
     {
         "id": "gmt6",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> (Gx & Hx)",
-            "¬Ga v ¬Ha"
+            "(x): {F}x -> ({G}x & {H}x)",
+            "¬{G}{a} v ¬{H}{a}"
         ],
-        "conclusion": "¬Fa"
+        "conclusion": "¬{F}{a}"
     },
     {
         "id": "gmt7",
         "base_scheme_group": "Generalized modus tollens",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> ¬(Gx v Hx)",
-            "Ga"
+            "(x): {F}x -> ¬({G}x v {H}x)",
+            "{G}{a}"
         ],
-        "conclusion": "¬Fa"
+        "conclusion": "¬{F}{a}"
     },
     {
         "id": "hyps10",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Gx -> Hx"
+            "(x): {F}x -> {G}x",
+            "(x): {G}x -> {H}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "hyps11",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(x): Gx -> Hx"
+            "(x): ¬{F}x -> {G}x",
+            "(x): {G}x -> {H}x"
         ],
-        "conclusion": "(x): ¬Fx -> Hx"
+        "conclusion": "(x): ¬{F}x -> {H}x"
     },
     {
         "id": "hyps12",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> ¬Gx",
-            "(x): ¬Gx -> Hx"
+            "(x): {F}x -> ¬{G}x",
+            "(x): ¬{G}x -> {H}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "hyps13",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Gx -> ¬Hx"
+            "(x): {F}x -> {G}x",
+            "(x): {G}x -> ¬{H}x"
         ],
-        "conclusion": "(x): Fx -> ¬Hx"
+        "conclusion": "(x): {F}x -> ¬{H}x"
     },
     {
         "id": "hyps14",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Ix) -> Gx",
-            "(x): Gx -> Hx"
+            "(x): ({F}x & {I}x) -> {G}x",
+            "(x): {G}x -> {H}x"
         ],
-        "conclusion": "(x): (Fx & Ix) -> Hx"
+        "conclusion": "(x): ({F}x & {I}x) -> {H}x"
     },
     {
         "id": "hyps15",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Gx -> (Hx v Ix)"
+            "(x): {F}x -> {G}x",
+            "(x): {G}x -> ({H}x v {I}x)"
         ],
-        "conclusion": "(x): Fx -> (Hx v Ix)"
+        "conclusion": "(x): {F}x -> ({H}x v {I}x)"
     },
     {
         "id": "hyps16",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Fx -> Ix",
-            "(x): (Gx & Ix) -> Hx"
+            "(x): {F}x -> {G}x",
+            "(x): {F}x -> {I}x",
+            "(x): ({G}x & {I}x) -> {H}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "hyps17",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (¬Fx & ¬Ix) -> Gx",
-            "(x): Gx -> Hx"
+            "(x): (¬{F}x & ¬{I}x) -> {G}x",
+            "(x): {G}x -> {H}x"
         ],
-        "conclusion": "(x): ¬(Fx v Ix) -> Hx"
+        "conclusion": "(x): ¬({F}x v {I}x) -> {H}x"
     },
     {
         "id": "hyps18",
         "base_scheme_group": "Hypothetical Syllogism 1",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Gx -> (¬Hx v ¬Ix)"
+            "(x): {F}x -> {G}x",
+            "(x): {G}x -> (¬{H}x v ¬{I}x)"
         ],
-        "conclusion": "(x): Fx -> ¬(Hx & Ix)"
+        "conclusion": "(x): {F}x -> ¬({H}x & {I}x)"
     },
     {
         "id": "hyps20",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): ¬Hx -> ¬Gx"
+            "(x): {F}x -> {G}x",
+            "(x): ¬{H}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "hyps21",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Hx -> ¬Gx"
+            "(x): {F}x -> {G}x",
+            "(x): {H}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Fx -> ¬Hx"
+        "conclusion": "(x): {F}x -> ¬{H}x"
     },
     {
         "id": "hyps22",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(x): ¬Hx -> ¬Gx"
+            "(x): ¬{F}x -> {G}x",
+            "(x): ¬{H}x -> ¬{G}x"
         ],
-        "conclusion": "(x): ¬Fx -> Hx"
+        "conclusion": "(x): ¬{F}x -> {H}x"
     },
     {
         "id": "hyps23",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): ¬Hx -> ¬Gx"
+            "(x): {F}x -> {G}x",
+            "(x): ¬{H}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "hyps24",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Ix) -> ¬Gx",
-            "(x): ¬Hx -> Gx"
+            "(x): ({F}x & {I}x) -> ¬{G}x",
+            "(x): ¬{H}x -> {G}x"
         ],
-        "conclusion": "(x): (Fx & Ix) -> Hx"
+        "conclusion": "(x): ({F}x & {I}x) -> {H}x"
     },
     {
         "id": "hyps25",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> (Gx v Ix)",
-            "(x): Hx -> ¬(Gx v Ix)"
+            "(x): {F}x -> ({G}x v {I}x)",
+            "(x): {H}x -> ¬({G}x v {I}x)"
         ],
-        "conclusion": "(x): Fx -> ¬Hx"
+        "conclusion": "(x): {F}x -> ¬{H}x"
     },
     {
         "id": "hyps26",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(x): ¬Fx -> Ix",
-            "(x): ¬Hx -> ¬(Gx & Ix)"
+            "(x): ¬{F}x -> {G}x",
+            "(x): ¬{F}x -> {I}x",
+            "(x): ¬{H}x -> ¬({G}x & {I}x)"
         ],
-        "conclusion": "(x): ¬Fx -> Hx"
+        "conclusion": "(x): ¬{F}x -> {H}x"
     },
     {
         "id": "hyps27",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (¬Fx & ¬Ix) -> ¬Gx",
-            "(x): ¬Hx -> Gx"
+            "(x): (¬{F}x & ¬{I}x) -> ¬{G}x",
+            "(x): ¬{H}x -> {G}x"
         ],
-        "conclusion": "(x): ¬(Fx v Ix) -> Hx"
+        "conclusion": "(x): ¬({F}x v {I}x) -> {H}x"
     },
     {
         "id": "hyps28",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> (Gx v Ix)",
-            "(x): Hx -> (¬Gx & ¬Ix)"
+            "(x): {F}x -> ({G}x v {I}x)",
+            "(x): {H}x -> (¬{G}x & ¬{I}x)"
         ],
-        "conclusion": "(x): Fx -> ¬Hx"
+        "conclusion": "(x): {F}x -> ¬{H}x"
     },
     {
         "id": "hyps29",
         "base_scheme_group": "Hypothetical Syllogism 2",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(x): ¬Fx -> Ix",
-            "(x): ¬Hx -> (¬Gx v ¬Ix)"
+            "(x): ¬{F}x -> {G}x",
+            "(x): ¬{F}x -> {I}x",
+            "(x): ¬{H}x -> (¬{G}x v ¬{I}x)"
         ],
-        "conclusion": "(x): ¬Fx -> Hx"
+        "conclusion": "(x): ¬{F}x -> {H}x"
     },
     {
         "id": "hyps30",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> Gx",
-            "(Ex): Hx & ¬Gx"
+            "(x): {F}x -> {G}x",
+            "(Ex): {H}x & ¬{G}x"
         ],
-        "conclusion": "(Ex): Hx & ¬Fx"
+        "conclusion": "(Ex): {H}x & ¬{F}x"
     },
     {
         "id": "hyps31",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(Ex): Hx & ¬Gx"
+            "(x): ¬{F}x -> {G}x",
+            "(Ex): {H}x & ¬{G}x"
         ],
-        "conclusion": "(Ex): Hx & Fx"
+        "conclusion": "(Ex): {H}x & {F}x"
     },
     {
         "id": "hyps32",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> ¬Gx",
-            "(Ex): Hx & Gx"
+            "(x): {F}x -> ¬{G}x",
+            "(Ex): {H}x & {G}x"
         ],
-        "conclusion": "(Ex): Hx & ¬Fx"
+        "conclusion": "(Ex): {H}x & ¬{F}x"
     },
     {
         "id": "hyps33",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Gx -> Fx",
-            "(Ex): Hx & Gx"
+            "(x): {G}x -> {F}x",
+            "(Ex): {H}x & {G}x"
         ],
-        "conclusion": "(Ex): Hx & Fx"
+        "conclusion": "(Ex): {H}x & {F}x"
     },
     {
         "id": "hyps34",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Fx -> Ix",
-            "(Ex): Hx & ¬(Gx & Ix)"
+            "(x): {F}x -> {G}x",
+            "(x): {F}x -> {I}x",
+            "(Ex): {H}x & ¬({G}x & {I}x)"
         ],
-        "conclusion": "(Ex): Hx & ¬Fx"
+        "conclusion": "(Ex): {H}x & ¬{F}x"
     },
     {
         "id": "hyps35",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(Ex): (Hx & Ix) & ¬Gx"
+            "(x): ¬{F}x -> {G}x",
+            "(Ex): ({H}x & {I}x) & ¬{G}x"
         ],
-        "conclusion": "(Ex): (Hx & Ix) & Fx"
+        "conclusion": "(Ex): ({H}x & {I}x) & {F}x"
     },
     {
         "id": "hyps36",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Ix) -> ¬Gx",
-            "(Ex): Hx & Gx"
+            "(x): ({F}x & {I}x) -> ¬{G}x",
+            "(Ex): {H}x & {G}x"
         ],
-        "conclusion": "(Ex): Hx & ¬(Fx & Ix)"
+        "conclusion": "(Ex): {H}x & ¬({F}x & {I}x)"
     },
     {
         "id": "hyps37",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> Gx",
-            "(x): Fx -> Ix",
-            "(Ex): Hx & (¬Gx v ¬Ix)"
+            "(x): {F}x -> {G}x",
+            "(x): {F}x -> {I}x",
+            "(Ex): {H}x & (¬{G}x v ¬{I}x)"
         ],
-        "conclusion": "(Ex): Hx & ¬Fx"
+        "conclusion": "(Ex): {H}x & ¬{F}x"
     },
     {
         "id": "hyps38",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): ¬Fx -> Gx",
-            "(Ex): ¬Gx & (¬Hx v ¬Ix)"
+            "(x): ¬{F}x -> {G}x",
+            "(Ex): ¬{G}x & (¬{H}x v ¬{I}x)"
         ],
-        "conclusion": "(Ex): Fx & ¬(Hx & Ix)"
+        "conclusion": "(Ex): {F}x & ¬({H}x & {I}x)"
     },
     {
         "id": "hyps39",
         "base_scheme_group": "Hypothetical Syllogism 3",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (Fx & Ix) -> ¬Gx",
-            "(Ex): Hx & Gx"
+            "(x): ({F}x & {I}x) -> ¬{G}x",
+            "(Ex): {H}x & {G}x"
         ],
-        "conclusion": "(Ex): Hx & (¬Fx v ¬Ix)"
+        "conclusion": "(Ex): {H}x & (¬{F}x v ¬{I}x)"
     },
     {
         "id": "disjs0",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> (Gx v Hx)",
-            "(x): Fx -> ¬Gx"
+            "(x): {F}x -> ({G}x v {H}x)",
+            "(x): {F}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "disjs1",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> (¬Gx v Hx)",
-            "(x): Fx -> Gx"
+            "(x): {F}x -> (¬{G}x v {H}x)",
+            "(x): {F}x -> {G}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "disjs2",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> (Gx v Hx)",
-            "(x): Gx -> ¬Fx"
+            "(x): {F}x -> ({G}x v {H}x)",
+            "(x): {G}x -> ¬{F}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "disjs3",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> (Gx v ¬Hx)",
-            "(x): Fx -> ¬Gx"
+            "(x): {F}x -> ({G}x v ¬{H}x)",
+            "(x): {F}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Fx -> ¬Hx"
+        "conclusion": "(x): {F}x -> ¬{H}x"
     },
     {
         "id": "disjs4",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> (Gx v Hx v Ix)",
-            "(x): Fx -> ¬Gx",
-            "(x): Fx -> ¬Ix"
+            "(x): {F}x -> ({G}x v {H}x v {I}x)",
+            "(x): {F}x -> ¬{G}x",
+            "(x): {F}x -> ¬{I}x"
         ],
-        "conclusion": "(x): Fx -> Hx"
+        "conclusion": "(x): {F}x -> {H}x"
     },
     {
         "id": "disjs5",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Ix) -> (Gx v Hx)",
-            "(x): Gx -> ¬(Fx & Ix)"
+            "(x): ({F}x & {I}x) -> ({G}x v {H}x)",
+            "(x): {G}x -> ¬({F}x & {I}x)"
         ],
-        "conclusion": "(x): (Fx & Ix) -> Hx"
+        "conclusion": "(x): ({F}x & {I}x) -> {H}x"
     },
     {
         "id": "disjs6",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> (Gx v Hx v Ix)",
-            "(x): Fx -> ¬Gx"
+            "(x): {F}x -> ({G}x v {H}x v {I}x)",
+            "(x): {F}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Fx -> (Hx v Ix)"
+        "conclusion": "(x): {F}x -> ({H}x v {I}x)"
     },
     {
         "id": "disjs7",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (Fx & Ix) -> (Gx v Hx)",
-            "(x): Gx -> (¬Fx v ¬Ix)"
+            "(x): ({F}x & {I}x) -> ({G}x v {H}x)",
+            "(x): {G}x -> (¬{F}x v ¬{I}x)"
         ],
-        "conclusion": "(x): (Fx & Ix) -> Hx"
+        "conclusion": "(x): ({F}x & {I}x) -> {H}x"
     },
     {
         "id": "disjs8",
         "base_scheme_group": "Disjunctive Syllogism",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (¬Fx & ¬Ix) -> (Gx v Hx)",
-            "(x): Gx -> (Fx v Ix)"
+            "(x): (¬{F}x & ¬{I}x) -> ({G}x v {H}x)",
+            "(x): {G}x -> ({F}x v {I}x)"
         ],
-        "conclusion": "(x): ¬(Fx v Ix) -> Hx"
+        "conclusion": "(x): ¬({F}x v {I}x) -> {H}x"
     },
     {
         "id": "gdilem0",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> (Gx v Hx)",
-            "(x): Gx -> Jx",
-            "(x): Hx -> Jx"
+            "(x): {F}x -> ({G}x v {H}x)",
+            "(x): {G}x -> {J}x",
+            "(x): {H}x -> {J}x"
         ],
-        "conclusion": "(x): Fx -> Jx"
+        "conclusion": "(x): {F}x -> {J}x"
     },
     {
         "id": "gdilem1",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> (¬Gx v ¬Hx)",
-            "(x): ¬Gx -> Jx",
-            "(x): ¬Hx -> Jx"
+            "(x): {F}x -> (¬{G}x v ¬{H}x)",
+            "(x): ¬{G}x -> {J}x",
+            "(x): ¬{H}x -> {J}x"
         ],
-        "conclusion": "(x): Fx -> Jx"
+        "conclusion": "(x): {F}x -> {J}x"
     },
     {
         "id": "gdilem2",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> (Gx v Hx)",
-            "(x): Gx -> ¬Jx",
-            "(x): Hx -> ¬Jx"
+            "(x): {F}x -> ({G}x v {H}x)",
+            "(x): {G}x -> ¬{J}x",
+            "(x): {H}x -> ¬{J}x"
         ],
-        "conclusion": "(x): Fx -> ¬Jx"
+        "conclusion": "(x): {F}x -> ¬{J}x"
     },
     {
         "id": "gdilem3",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> (Gx v Hx)",
-            "(x): Jx -> ¬Gx",
-            "(x): Jx -> ¬Hx"
+            "(x): {F}x -> ({G}x v {H}x)",
+            "(x): {J}x -> ¬{G}x",
+            "(x): {J}x -> ¬{H}x"
         ],
-        "conclusion": "(x): Fx -> ¬Jx"
+        "conclusion": "(x): {F}x -> ¬{J}x"
     },
     {
         "id": "gdilem4",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> (Gx v Hx v Ix)",
-            "(x): Gx -> Jx",
-            "(x): Hx -> Jx",
-            "(x): Ix -> Jx"
+            "(x): {F}x -> ({G}x v {H}x v {I}x)",
+            "(x): {G}x -> {J}x",
+            "(x): {H}x -> {J}x",
+            "(x): {I}x -> {J}x"
         ],
-        "conclusion": "(x): Fx -> Jx"
+        "conclusion": "(x): {F}x -> {J}x"
     },
     {
         "id": "gdilem5",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Ix) -> (Gx v Hx)",
-            "(x): Gx -> Jx",
-            "(x): Hx -> Jx"
+            "(x): ({F}x & {I}x) -> ({G}x v {H}x)",
+            "(x): {G}x -> {J}x",
+            "(x): {H}x -> {J}x"
         ],
-        "conclusion": "(x): (Fx & Ix) -> Jx"
+        "conclusion": "(x): ({F}x & {I}x) -> {J}x"
     },
     {
         "id": "gdilem6",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> (Gx v Hx v Ix)",
-            "(x): Gx -> Jx",
-            "(x): Hx -> Jx"
+            "(x): {F}x -> ({G}x v {H}x v {I}x)",
+            "(x): {G}x -> {J}x",
+            "(x): {H}x -> {J}x"
         ],
-        "conclusion": "(x): Fx -> (Jx v Ix)"
+        "conclusion": "(x): {F}x -> ({J}x v {I}x)"
     },
     {
         "id": "gdilem7",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> ¬(Gx & Hx)",
-            "(x): ¬Gx -> Jx",
-            "(x): ¬Hx -> Jx"
+            "(x): {F}x -> ¬({G}x & {H}x)",
+            "(x): ¬{G}x -> {J}x",
+            "(x): ¬{H}x -> {J}x"
         ],
-        "conclusion": "(x): Fx -> Jx"
+        "conclusion": "(x): {F}x -> {J}x"
     },
     {
         "id": "gdilem8",
         "base_scheme_group": "Generalized Dilemma",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (¬Fx & ¬Ix) -> (Gx v Hx)",
-            "(x): Gx -> Jx",
-            "(x): Hx -> Jx"
+            "(x): (¬{F}x & ¬{I}x) -> ({G}x v {H}x)",
+            "(x): {G}x -> {J}x",
+            "(x): {H}x -> {J}x"
         ],
-        "conclusion": "(x): ¬Jx -> (Fx v Ix)"
+        "conclusion": "(x): ¬{J}x -> ({F}x v {I}x)"
     },
     {
         "id": "gcontrap0",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "base_scheme",
         "premises": [
-            "(x): Fx -> ¬Gx"
+            "(x): {F}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Gx -> ¬Fx"
+        "conclusion": "(x): {G}x -> ¬{F}x"
     },
     {
         "id": "gcontrap1",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> Gx"
+            "(x): ¬{F}x -> {G}x"
         ],
-        "conclusion": "(x): ¬Gx -> Fx"
+        "conclusion": "(x): ¬{G}x -> {F}x"
     },
     {
         "id": "gcontrap2",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): ¬Fx -> ¬Gx"
+            "(x): ¬{F}x -> ¬{G}x"
         ],
-        "conclusion": "(x): Gx -> Fx"
+        "conclusion": "(x): {G}x -> {F}x"
     },
     {
         "id": "gcontrap3",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "negation_variant",
         "premises": [
-            "(x): Fx -> Gx"
+            "(x): {F}x -> {G}x"
         ],
-        "conclusion": "(x): ¬Gx -> ¬Fx"
+        "conclusion": "(x): ¬{G}x -> ¬{F}x"
     },
     {
         "id": "gcontrap4",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): (Fx & Hx) -> ¬Gx"
+            "(x): ({F}x & {H}x) -> ¬{G}x"
         ],
-        "conclusion": "(x): Gx -> ¬(Fx & Hx)"
+        "conclusion": "(x): {G}x -> ¬({F}x & {H}x)"
     },
     {
         "id": "gcontrap5",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "complex_predicates",
         "premises": [
-            "(x): Fx -> ¬(Gx v Hx)"
+            "(x): {F}x -> ¬({G}x v {H}x)"
         ],
-        "conclusion": "(x): (Gx v Hx) -> ¬Fx"
+        "conclusion": "(x): ({G}x v {H}x) -> ¬{F}x"
     },
     {
         "id": "gcontrap6",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): (Fx & Hx) -> ¬Gx"
+            "(x): ({F}x & {H}x) -> ¬{G}x"
         ],
-        "conclusion": "(x): Gx -> (¬Fx v ¬Hx)"
+        "conclusion": "(x): {G}x -> (¬{F}x v ¬{H}x)"
     },
     {
         "id": "gcontrap7",
         "base_scheme_group": "Generalized Contraposition",
         "scheme_variant": "de_morgan",
         "premises": [
-            "(x): Fx -> (¬Gx & ¬Hx)"
+            "(x): {F}x -> (¬{G}x & ¬{H}x)"
         ],
-        "conclusion": "(x): (Gx v Hx) -> ¬Fx"
+        "conclusion": "(x): ({G}x v {H}x) -> ¬{F}x"
     }
 ]

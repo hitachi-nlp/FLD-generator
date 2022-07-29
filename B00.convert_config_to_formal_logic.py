@@ -26,7 +26,7 @@ def convert_config(config_in_path: str, config_out_path: str):
         formulas = []
         for ABC_template_formula, ABC2FGH_mapping in scheme['scheme']:
             ABC2FGH_mapping_wo_template = {
-                key: val[2:-1]
+                key: val[1:]
                 for key, val in ABC2FGH_mapping.items()
             }
             formula = Template(ABC_template_formula).substitute(ABC2FGH_mapping_wo_template)

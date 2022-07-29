@@ -4,8 +4,8 @@ from formal_logic.formula import Formula
 
 def test_replacements():
 
-    formula = Formula('(x): Fx Ga Gb -> Hx')
-    other_formula = Formula('(y): Fy Ia Jb -> Ky')
+    formula = Formula('(x): {F}x {G}{a} {G}{b} -> {H}x')
+    other_formula = Formula('(y): {F}y {I}{a} {J}{b} -> {K}{y}')
 
     print('-------------------- placeholders --------------------')
     print('formula                          :', formula)
