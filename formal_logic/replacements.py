@@ -4,7 +4,7 @@ from typing import Dict, List, Any, Iterable, Tuple, Optional
 import copy
 
 from string import Template
-from .formula import Formula, templatify, detemplatify
+from .formula import Formula, templatify, NOT
 from .argument import Argument
 
 
@@ -12,26 +12,28 @@ def generate_replaced_formulas(src_formula: Formula,
                                tgt_formula: Formula,
                                allow_negation=True,
                                constraints: Optional[Dict[str, str]] = None,
-                               shuffle=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+                               shuffle=False,
+                               elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula([src_formula],
                                                               [tgt_formula],
                                                               allow_negation=allow_negation,
                                                               constraints=constraints,
                                                               shuffle=shuffle):
-        yield replace_formula(src_formula, mapping), mapping
+        yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
 def generate_replaced_arguments(src_arg: Argument,
                                 tgt_arg: Argument,
                                 allow_negation=True,
                                 constraints: Optional[Dict[str, str]] = None,
-                                shuffle=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
+                                shuffle=False,
+                                elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
                                                               tgt_arg.premises + [tgt_arg.conclusion],
                                                               allow_negation=allow_negation,
                                                               constraints=constraints,
                                                               shuffle=shuffle):
-        yield replace_argument(src_arg, mapping), mapping
+        yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
 
 def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
@@ -147,14 +149,12 @@ def _permutations_with_replacement(objs: List[Any],
                 yield [head] + tail
 
 
-def replace_formula(formula: Formula, replacements: Dict[str, str]) -> Formula:
-    return Formula(Template(templatify(formula.rep)).substitute(replacements))
-
-
-def replace_argument(arg: Argument, replacements: Dict[str, str]) -> Argument:
-    replaced_premises = [replace_formula(formula, replacements)
+def replace_argument(arg: Argument,
+                     replacements: Dict[str, str],
+                     elim_dneg=False) -> Argument:
+    replaced_premises = [replace_formula(formula, replacements, elim_dneg=elim_dneg)
                          for formula in arg.premises]
-    replaced_conclusion = replace_formula(arg.conclusion, replacements)
+    replaced_conclusion = replace_formula(arg.conclusion, replacements, elim_dneg=elim_dneg)
     return Argument(replaced_premises,
                     replaced_conclusion,
                     id=arg.id,
@@ -162,5 +162,17 @@ def replace_argument(arg: Argument, replacements: Dict[str, str]) -> Argument:
                     scheme_variant=arg.scheme_variant)
 
 
-def replace_rep(rep: str, replacements: Dict[str, str]) -> str:
-    return Template(templatify(rep)).substitute(replacements)
+def replace_formula(formula: Formula,
+                    replacements: Dict[str, str],
+                    elim_dneg=False) -> Formula:
+    return Formula(replace_rep(formula.rep, replacements, elim_dneg=elim_dneg))
+
+
+def replace_rep(rep: str,
+                replacements: Dict[str, str],
+                elim_dneg=False) -> str:
+    replaced = Template(templatify(rep)).substitute(replacements)
+    if elim_dneg:
+        replaced = re.sub(f'{NOT}{NOT}', '', replaced)
+    return replaced
+

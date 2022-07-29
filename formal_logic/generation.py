@@ -30,7 +30,7 @@ from .formula import (
     CONSTANT_SYMBOLS,
     VARIABLE_SYMBOLS,
 )
-import kern_profiler
+# import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -52,27 +52,27 @@ class MaxRetryExceedError(AACorpusExceptionBase):
     pass
 
 
-class TimeoutError(AACorpusExceptionBase):
-    pass
-
-
-
-@profile
+# @profile
 def generate_tree(arguments: List[Argument],
                   depth=1,
+                  elim_dneg=False,
                   timeout: Optional[int] = None) -> Optional[ProofTree]:
     timeout = timeout or 99999999
     with timeout_context(timeout, exception=TimeoutError):
 
         max_retry = 10
         try:
-            proof_tree = _generate_stem(arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
+            proof_tree = _generate_stem(arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS,
+                                        elim_dneg=elim_dneg,
+                                        max_retry=max_retry)
         except MaxRetryExceedError:
             logger.warning('_generate_stem() exception max retry (%d). Will return None.', max_retry)
             return None
 
         try:
-            _extend_braches(proof_tree, arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS, max_retry=max_retry)
+            _extend_braches(proof_tree, arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS,
+                            elim_dneg=elim_dneg,
+                            max_retry=max_retry)
         except MaxRetryExceedError:
             logger.warning('_extend_braches() exception max retry (%d). Will return None.', max_retry)
             return None
@@ -80,11 +80,12 @@ def generate_tree(arguments: List[Argument],
     return proof_tree
 
 
-@profile
+# @profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
                    constant_pool: List[str],
+                   elim_dneg=False,
                    max_retry=10) -> Optional[ProofTree]:
 
     def update(premise_nodes: List[ProofNode],
@@ -120,7 +121,7 @@ def _generate_stem(arguments: List[Argument],
             arg for arg in arguments
             if any([premise_replaced.rep == cur_conclusion.rep
                     for premise in arg.premises
-                    for premise_replaced, _ in generate_replaced_formulas(premise, cur_conclusion)])
+                    for premise_replaced, _ in generate_replaced_formulas(premise, cur_conclusion, elim_dneg=elim_dneg)])
         ]
         if len(chainable_args) == 0:
             logger.info('_generate_stem() retry since no chainable arguments found ...')
@@ -138,7 +139,7 @@ def _generate_stem(arguments: List[Argument],
                 [cur_conclusion],
                 shuffle=True,
             ):
-                premise_replaced = replace_formula(premise, premise_mapping)
+                premise_replaced = replace_formula(premise, premise_mapping, elim_dneg=elim_dneg)
 
                 if premise_replaced.rep != cur_conclusion.rep:
                     continue
@@ -156,7 +157,7 @@ def _generate_stem(arguments: List[Argument],
                     shuffle=True,
                 ):
 
-                    next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+                    next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
 
                     if _is_conclusion_in_premises(next_arg_replaced):
                         continue
@@ -201,12 +202,13 @@ def _generate_stem(arguments: List[Argument],
     return proof_tree
 
 
-@profile
+# @profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     steps: int,
                     predicate_pool: List[str],
                     constant_pool: List[str],
+                    elim_dneg=False,
                     max_retry=10) -> None:
     cur_step = 0
     retry = 0
@@ -231,7 +233,7 @@ def _extend_braches(proof_tree: ProofTree,
         chainable_args = [
             arg for arg in arguments
             if any([conclsion_replaced.rep == leaf_node.formula.rep
-                    for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf_node.formula)])
+                    for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf_node.formula, elim_dneg=elim_dneg)])
         ]
         if len(chainable_args) == 0:
             logger.info('_extend_braches() retry since no chainable arguments found ...')
@@ -247,9 +249,10 @@ def _extend_braches(proof_tree: ProofTree,
                 [next_arg_unreplaced.conclusion],
                 # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                 [leaf_node.formula],
-                shuffle=True):
+                shuffle=True,
+        ):
 
-            conclusion_replaced = replace_formula(next_arg_unreplaced.conclusion, conclusion_mapping)
+            conclusion_replaced = replace_formula(next_arg_unreplaced.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
 
             if conclusion_replaced.rep != leaf_node.formula.rep:
                 continue
@@ -266,7 +269,7 @@ def _extend_braches(proof_tree: ProofTree,
                 constraints=conclusion_mapping,
                 shuffle=True,
             ):
-                next_arg_replaced = replace_argument(next_arg_unreplaced, mapping)
+                next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
 
                 if _has_ng_formulas(next_arg_replaced.premises):
                     continue

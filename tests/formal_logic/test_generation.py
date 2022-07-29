@@ -22,7 +22,7 @@ def test_simple_generation():
     ]
     for _ in range(100):
         print('=================== generating proof tree =========================')
-        proof_tree = generate_tree(arguments, depth=5)
+        proof_tree = generate_tree(arguments, elim_dneg=False, depth=5)
         if proof_tree is not None:
             print(proof_tree.format_str)
 
@@ -33,7 +33,7 @@ def test_generation():
 
     for _ in range(100):
         print('=================== generating proof tree =========================')
-        proof_tree = generate_tree(arguments, depth=5)
+        proof_tree = generate_tree(arguments, elim_dneg=False, depth=5)
         if proof_tree is not None:
             print(proof_tree.format_str)
 
