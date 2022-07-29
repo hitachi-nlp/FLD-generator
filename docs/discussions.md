@@ -1,15 +1,17 @@
 # todo
-* not notの扱いをどうするか？
-* argumentを増やす
-    * 命題論理も．
-    * notなどは，初手で入れないと現れない．
-* distractorを用意する．
-* NLに落とす．
-    - motivational exampleを取り入れるように．
-    - A cause B, A then B
-    - F, G, H, I, J, Kなどいろいろと現れる．どうするか？
-* NLProofSに変換する．
-* 学習する．
+* 簡単な体系でよいので，1-pass通すべきか．
+    - modus-ponensの連鎖？
+* 作業フロー
+    * argumentを増やす
+        * 命題論理も．
+        * notなどは，初手で入れないと現れない．
+    * distractorを用意する．
+    * NLに落とす．
+        - motivational exampleを取り入れるように．
+        - A cause B, A then B
+        - F, G, H, I, J, Kなどいろいろと現れる．どうするか？
+    * NLProofSに変換する．
+    * 学習する．
 
 ## future
 * ->導入 (仮定の除去)が入れられていない．
