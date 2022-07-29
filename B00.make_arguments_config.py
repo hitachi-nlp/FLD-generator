@@ -30,7 +30,7 @@ def convert_config(config_in_path: str, config_out_path: str):
                 for key, val in ABC2FGH_mapping.items()
             }
             formula = Template(ABC_template_formula).substitute(ABC2FGH_mapping_wo_template)
-            formula = convert_formula_rep(formula)
+            formula = convert_formula(formula)
             formulas.append(formula)
 
         scheme_converted['premises'] = formulas[:-1]
@@ -46,7 +46,8 @@ def convert_config(config_in_path: str, config_out_path: str):
                   indent=4)
 
 
-def convert_formula_rep(rep: str) -> str:
+def convert_formula(rep: str) -> str:
+    rep.replace('$', '')
     rep = rep.replace('&', AND)
     rep = rep.replace('v', OR)
     rep = rep.replace('¬', NOT)
@@ -56,11 +57,6 @@ def convert_formula_rep(rep: str) -> str:
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
-
-    # convert(
-    #     './configs.org/conf_syllogistic_corpus-01.json',
-    #     './configs/formal_logic/syllogistic_corpus-01.json',
-    # )
 
     convert_config(
         './configs.org/conf_syllogistic_corpus-02.json',

@@ -3,7 +3,7 @@ import random
 from typing import Dict, List
 
 from formal_logic import generate_tree, Formula, Argument, load_argument_config
-from formal_logic.translation import add_sentence_translations_to_tree
+from formal_logic.translation import add_sentence_translations_to_tree, load_sentence_translation_config
 from logger_setup import setup as setup_logger
 
 
@@ -22,11 +22,11 @@ def test_simple_generation():
 
     ]
 
-    sentence_translations: Dict[Formula, List[str]] = {
-        Formula('(x): {A}x -> {B}x'): [
+    sentence_translations: Dict[str, List[str]] = {
+        '(x): {A}x -> {B}x': [
             'Every {A} is a {B}.',
         ],
-        Formula('{A}{a}'): [
+        '{A}{a}': [
             '{a} is {A}.',
         ],
     }
@@ -39,14 +39,18 @@ def test_simple_generation():
             print(proof_tree.format_str)
 
 
-def test_generation():
+def test_generation_from_loaded_config():
     arguments_config_path = './configs/formal_logic/arguments/syllogistic_corpus-02.json'
     arguments = load_argument_config(arguments_config_path)
+
+    sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
+    sentence_translations = load_sentence_translation_config(sentence_translations_config_path)
 
     for _ in range(100):
         print('=================== generating proof tree =========================')
         proof_tree = generate_tree(arguments, elim_dneg=False, depth=5)
         if proof_tree is not None:
+            add_sentence_translations_to_tree(proof_tree, sentence_translations['general'])
             print(proof_tree.format_str)
 
 
@@ -54,5 +58,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger()
 
-    test_simple_generation()
-    # test_generation()
+    # test_simple_generation()
+    test_generation_from_loaded_config()
