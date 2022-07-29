@@ -40,7 +40,7 @@ class ProofNode:
         return self._children
 
     def __str__(self) -> str:
-        return f'ProofNode({self.formula.rep})'
+        return f'ProofNode({self.formula})'
 
     def __repr__(self) -> str:
         return str(self)
@@ -112,7 +112,7 @@ class ProofTree:
         # rep = 'ProofTree(\n'
         for node, depth in self.depth_first_traverse(get_depth=True):
             rep += ''.join(['|    '] * 10) + '\n'
-            rep += '|    ' + '|    ' * depth + f'|{node.argument}\n'
+            rep += '|    ' + '|    ' * depth + f'|  {node.argument}\n'
             rep += '|    ' + '|    ' * depth + f'|{node}\n'
             rep += ''.join(['|    '] * 10) + '\n'
         # rep += '\n)'

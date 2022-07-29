@@ -3,6 +3,7 @@ import random
 from typing import Dict, List
 
 from formal_logic import generate_tree, Formula, Argument, load_argument_config
+from formal_logic.translation import add_sentence_translations_to_tree
 from logger_setup import setup as setup_logger
 
 
@@ -21,19 +22,20 @@ def test_simple_generation():
 
     ]
 
-    # sentence_translations: Dict[Formula, List[str]] = {
-    #     Formula('(x): Ax -> Bx'): [
-    #         'Every A is a B',
-    #     ],
-    #     Formula('Ga'): [
-    #         'a is a G',
-    #     ],
-    # }
+    sentence_translations: Dict[Formula, List[str]] = {
+        Formula('(x): {A}x -> {B}x'): [
+            'Every {A} is a {B}.',
+        ],
+        Formula('{A}{a}'): [
+            '{a} is {A}.',
+        ],
+    }
 
     for _ in range(100):
         print('=================== generating proof tree =========================')
         proof_tree = generate_tree(arguments, elim_dneg=False, depth=5)
         if proof_tree is not None:
+            add_sentence_translations_to_tree(proof_tree, sentence_translations)
             print(proof_tree.format_str)
 
 
@@ -52,5 +54,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger()
 
-    # test_simple_generation()
-    test_generation()
+    test_simple_generation()
+    # test_generation()

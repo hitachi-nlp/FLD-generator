@@ -185,13 +185,13 @@ def _generate_stem(arguments: List[Argument],
             logger.info('_generate_stem() retry since proper mapping could not be generated...')
             continue
 
-        # Update tree
+        # Update
+        for i_premise, premise in enumerate(next_arg_replaced.premises):
+            if premise.rep == cur_conclusion.rep:
+                next_arg_replaced.premises[i_premise] = cur_conclusion  # refer to the unique object.
         next_conclusion_node = ProofNode(next_arg_replaced.conclusion)
         next_conclusion_node.argument = next_arg_replaced
-        next_premise_nodes = [
-            cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
-            for premise in next_arg_replaced.premises
-        ]
+        next_premise_nodes = [ProofNode(premise) for premise in next_arg_replaced.premises]
         update(next_premise_nodes, next_conclusion_node, next_arg_replaced, proof_tree)
 
         cur_arg = next_arg_replaced
@@ -291,6 +291,7 @@ def _extend_braches(proof_tree: ProofTree,
             continue
 
         # Upate tree
+        next_arg_replaced.conclusion = leaf_node.formula  # refer to the sampe object
         leaf_node.argument = next_arg_replaced
         next_premise_nodes = [ProofNode(premise)
                               for premise in next_arg_replaced.premises]

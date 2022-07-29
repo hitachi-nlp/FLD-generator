@@ -28,18 +28,22 @@ _VARIABLE_REGEXP = re.compile('|'.join(VARIABLE_SYMBOLS))
 
 class Formula:
 
-    def __init__(self, formula_str: str):
+    def __init__(self,
+                 formula_str: str,
+                 translation: Optional[str] = None):
         self._formula_str = formula_str
+        self.translation = translation
 
     @property
     def rep(self) -> str:
         return self._formula_str
 
     def __str__(self) -> str:
-        return f'Formula("{self._formula_str}")'
+        transl_repr = '"' + self.translation + '"' if self.translation is not None else 'None'
+        return f'Formula("{self._formula_str}", transl={transl_repr})'
 
     def __repr__(self) -> str:
-        return f'Formula("{self._formula_str}")'
+        return self.__str__()
 
     @property
     def premise(self) -> Optional['Formula']:
