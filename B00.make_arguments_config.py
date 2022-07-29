@@ -64,7 +64,7 @@ def main():
 
     convert_config(
         './configs.org/conf_syllogistic_corpus-02.json',
-        './configs/formal_logic/syllogistic_corpus-02.json',
+        './configs/formal_logic/arguments/syllogistic_corpus-02.json',
     )
 
 

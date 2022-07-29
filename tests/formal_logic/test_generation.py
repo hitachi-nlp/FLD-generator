@@ -40,7 +40,7 @@ def test_simple_generation():
 
 
 def test_generation():
-    arguments_config_path = './configs/formal_logic/syllogistic_corpus-02.json'
+    arguments_config_path = './configs/formal_logic/arguments/syllogistic_corpus-02.json'
     arguments = load_argument_config(arguments_config_path)
 
     for _ in range(100):
