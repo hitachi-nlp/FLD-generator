@@ -1,13 +1,22 @@
 # todo
-* sort translations by number of variables
-* 簡単な体系でよいので，1-pass通すべきか．
-    - modus-ponensの連鎖？
-* 作業フロー
-    * argumentを増やす
-        * 命題論理も．
-        * notなどは，初手で入れないと現れない．
-    * Translation
-    * distractor
+## argument
+* 疑問: きちんと多様でchainableな命題がたくさん生まれるだろうか？
+- 最初に選んだ後に，replacementで膨らませるべき?
+    - notなど．
+- replacementでは，notだけでなく，&やvも使うべき？
+    * 今，premiseに「A & B」が無いので，これがチェインできないことが問題である．
+        * これだけであれば，(x) Fx & Gx -> Hx を定理として加えるだけ．
+* 個別の事実も入れたい．
+    * 「Aa & Ba -> Ca」
+    * ベースラインには，全称量化子しか含まれていない．
+* 命題論理も．
+
+## その後
+* argumentを増やす
+    * 命題論理も．
+    * notなどは，初手で入れないと現れない．
+* "Translation"
+* distractor
 
 ## future
 * ->導入 (仮定の除去)が入れられていない．
@@ -26,6 +35,7 @@
 
 # Translation
 * todo
+    - "アルゴリズム"の実装．Translatorとして実装できる．
     - motivational exampleを取り入れるように．
 
 ## 事例と機能
@@ -36,7 +46,7 @@
         * List[formula] でよいか．
 * Ga -> Ha = If storm is severe, the damage will be huge.
 * Ga -> Ha = severe storm will cause huge damage.
-    * 動詞節か名詞節かの違いで文型を分ければ良い？
+    * idea: 動詞節か名詞節かの違いで文型を分ければ良い？
 * (x): ({A}x & {B}x) -> {C}x
     * "If someone is a {A} and a {B}, then they are a {C}. "
     * small and smart person is always kind.
