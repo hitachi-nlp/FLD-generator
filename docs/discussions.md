@@ -1,17 +1,13 @@
 # todo
+* sort translations by number of variables
 * 簡単な体系でよいので，1-pass通すべきか．
     - modus-ponensの連鎖？
 * 作業フロー
     * argumentを増やす
         * 命題論理も．
         * notなどは，初手で入れないと現れない．
-    * distractorを用意する．
-    * NLに落とす．
-        - motivational exampleを取り入れるように．
-        - A cause B, A then B
-        - F, G, H, I, J, Kなどいろいろと現れる．どうするか？
-    * NLProofSに変換する．
-    * 学習する．
+    * Translation
+    * distractor
 
 ## future
 * ->導入 (仮定の除去)が入れられていない．
@@ -25,6 +21,31 @@
         * [Testing logical equivalences (and more) using Z3 Theorem Prover - DEV Community](https://dev.to/donaldkellett/testing-logical-equivalences-and-more-using-z3-theorem-prover-3k8h)
         * [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
         * [Z3 Playground](https://jfmc.github.io/z3-play/)
+
+
+
+# Translation
+* todo
+    - motivational exampleを取り入れるように．
+
+## 事例と機能
+* G -> H = storm cause disastor
+    - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
+    - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．
+    * 以上より，Translationの入力は1セットのFormulaである必要がある．
+        * List[formula] でよいか．
+* Ga -> Ha = If storm is severe, the damage will be huge.
+* Ga -> Ha = severe storm will cause huge damage.
+    * 動詞節か名詞節かの違いで文型を分ければ良い？
+* (x): ({A}x & {B}x) -> {C}x
+    * "If someone is a {A} and a {B}, then they are a {C}. "
+    * small and smart person is always kind.
+
+## アルゴリズム
+1. 名詞節 vs 動詞節を決める
+2. ドメインを決める (human, objet)
+3. predicate, individual を集める．
+4. テンプレートに当てはめる．
 
 
 
