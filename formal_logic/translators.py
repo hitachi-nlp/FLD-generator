@@ -1,6 +1,7 @@
 import json
 from typing import List, Dict, Optional
 from abc import abstractmethod, ABC
+from collections import OrderedDict
 import random
 
 from formal_logic import Formula
@@ -18,7 +19,18 @@ class Translator(ABC):
 class SentenceTranslator(Translator):
 
     def __init__(self, sentence_translations: Dict[str, List[str]]):
-        self._sentence_translations = sentence_translations
+
+        def num_terms(formula_rep: str) -> int:
+            formula = Formula(formula_rep)
+            return len(formula.predicates) + len(formula.constants) + len(formula.variables)
+
+        self._sentence_translations = OrderedDict()
+        for formula, translations in sorted(sentence_translations.items(),
+                                            key=lambda formula_trans: num_terms(formula_trans[0])):
+            # sort by "complexity" of the formulas
+            # We want first match to simple = constrained formulas first.
+            # e.g.) We want matched to "Fa & Fb" first, rather than general "Fa & Gb"
+            self._sentence_translations[formula] = translations
 
     def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
         translations = []
