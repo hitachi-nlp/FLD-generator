@@ -47,7 +47,3 @@ class Argument:
             'premises': [premise.rep for premise in self.premises],
             'conclusion': self.conclusion.rep,
         }
-
-
-def load_config(path: str) -> List[Argument]:
-    return [Argument.from_json(obj) for obj in json.load(open(path, 'r'))]

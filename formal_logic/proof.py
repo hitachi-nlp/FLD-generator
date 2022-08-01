@@ -1,6 +1,7 @@
 from typing import List, Tuple, Optional, Iterable, Union
-from formal_logic import Formula, Argument
-from formal_logic.exception import AACorpusExceptionBase
+from .formula import Formula
+from .argument import Argument
+from .exception import AACorpusExceptionBase
 import logging
 
 logger = logging.getLogger(__name__)

@@ -1,4 +1,5 @@
 # todo
+* retry周り，何がしたいのか分からない．
 * MPで1-pass通すべき．
 * "argument"
 * "distractor"

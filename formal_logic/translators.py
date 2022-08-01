@@ -4,9 +4,9 @@ from abc import abstractmethod, ABC
 from collections import OrderedDict
 import random
 
-from formal_logic import Formula
-from formal_logic.proof import ProofTree
-from formal_logic.replacements import generate_replacement_mappings_from_formula, replace_formula
+from .formula import Formula
+from .proof import ProofTree
+from .replacements import generate_replacement_mappings_from_formula, replace_formula
 
 
 class Translator(ABC):

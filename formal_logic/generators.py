@@ -52,11 +52,28 @@ class MaxRetryExceedError(AACorpusExceptionBase):
     pass
 
 
+class FormalLogicGenerator:
+
+    def __init__(self,
+                 arguments: List[Argument],
+                 elim_dneg=False,
+                 timeout: Optional[int] = None):
+        self.arguments = arguments
+        self.elim_dneg = elim_dneg
+        self.timeout = timeout
+
+    def generate_tree(self, depth=3) -> Optional[ProofTree]:
+        return _generate_tree(self.arguments,
+                              elim_dneg=self.elim_dneg,
+                              timeout=self.timeout,
+                              depth=depth)
+
+
 # @profile
-def generate_tree(arguments: List[Argument],
-                  depth=1,
-                  elim_dneg=False,
-                  timeout: Optional[int] = None) -> Optional[ProofTree]:
+def _generate_tree(arguments: List[Argument],
+                   depth=1,
+                   elim_dneg=False,
+                   timeout: Optional[int] = None) -> Optional[ProofTree]:
     timeout = timeout or 99999999
     with timeout_context(timeout, exception=TimeoutError):
 
