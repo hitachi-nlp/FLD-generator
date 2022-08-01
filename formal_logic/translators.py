@@ -55,13 +55,3 @@ class SentenceTranslator(Translator):
                 translations.append(None)
 
         return translations
-
-
-def load_sentence_translation_config(path: str) -> Dict[str, Dict[str, List]]:
-    return json.load(open(path))
-
-
-def add_translations_to_tree(tree: ProofTree, translator: Translator) -> None:
-    translations = translator.translate([node.formula for node in tree.nodes])
-    for node, translation in zip(tree.nodes, translations):
-        node.formula.translation = translation

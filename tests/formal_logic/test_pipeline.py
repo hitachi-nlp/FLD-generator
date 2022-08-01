@@ -8,7 +8,7 @@ from formal_logic.argument import Argument
 from formal_logic.proof import ProofTree
 from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import FormalLogicDistractor, UnknownFactDistractor
-from formal_logic.translators import Translator, load_sentence_translation_config, add_translations_to_tree, SentenceTranslator
+from formal_logic.translators import Translator, SentenceTranslator
 from formal_logic.pipeline import Pipeline
 from logger_setup import setup as setup_logger
 
@@ -62,7 +62,7 @@ def test_pipeline_from_config():
     distractor = UnknownFactDistractor()
 
     sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
-    sentence_translations = load_sentence_translation_config(sentence_translations_config_path)
+    sentence_translations = json.load(open(sentence_translations_config_path))
     translator = SentenceTranslator(sentence_translations['general'])
 
     pipeline = Pipeline(generator, distractor=distractor, translator=translator)
