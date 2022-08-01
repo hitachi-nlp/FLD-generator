@@ -6,24 +6,24 @@ AND = '&'
 OR = 'v'
 NOT = '¬'
 
-PREDICATE_SYMBOLS = [
+PREDICATES = [
     '{A}', '{B}', '{C}', '{D}', '{E}',
     '{F}', '{G}', '{H}', '{I}', '{J}',
     '{K}', '{L}', '{M}', '{N}', '{O}',
     '{P}', '{Q}', '{R}', '{S}', '{T}', '{U}',
 ]
-_PREDICATE_REGEXP = re.compile('|'.join(PREDICATE_SYMBOLS))
+_PREDICATE_REGEXP = re.compile('|'.join(PREDICATES))
 
-CONSTANT_SYMBOLS = [
+CONSTANTS = [
     '{a}', '{b}', '{c}', '{d}', '{e}',
     '{f}', '{g}', '{h}', '{i}', '{j}',
     '{k}', '{l}', '{m}', '{n}', '{o}',
     '{p}', '{q}', '{r}', '{s}', '{t}', '{u}',
 ]  # do not use 'v' = OR
-_CONSTANT_REGEXP = re.compile('|'.join(CONSTANT_SYMBOLS))
+_CONSTANT_REGEXP = re.compile('|'.join(CONSTANTS))
 
-VARIABLE_SYMBOLS = ['x', 'y', 'z']  # do not use 'v' = OR
-_VARIABLE_REGEXP = re.compile('|'.join(VARIABLE_SYMBOLS))
+VARIABLES = ['x', 'y', 'z']  # do not use 'v' = OR
+_VARIABLE_REGEXP = re.compile('|'.join(VARIABLES))
 
 
 class Formula:

@@ -6,8 +6,8 @@ from typing import List, Optional
 from timeout_timer import timeout as timeout_context
 
 from .formula import (
-    PREDICATE_SYMBOLS,
-    CONSTANT_SYMBOLS,
+    PREDICATES,
+    CONSTANTS,
     Formula,
     is_satisfiable as is_formulas_satisfiable,
 )
@@ -26,9 +26,9 @@ from .formula import (
     AND,
     OR,
     NOT,
-    PREDICATE_SYMBOLS,
-    CONSTANT_SYMBOLS,
-    VARIABLE_SYMBOLS,
+    PREDICATES,
+    CONSTANTS,
+    VARIABLES,
 )
 # import kern_profiler
 
@@ -37,11 +37,11 @@ logger = logging.getLogger(__name__)
 
 _NG_FORMULA_REGEXPS = [
     f'({predicate}|{NOT}{predicate}) ({IMPLICATION}|{AND}|{OR}) ({predicate}|{NOT}{predicate})'
-    for predicate in PREDICATE_SYMBOLS
+    for predicate in PREDICATES
 ] + [
     f'({predicate}{individual}|{NOT}{predicate}{individual}) ({IMPLICATION}|{AND}|{OR}) ({predicate}{individual}|{NOT}{predicate}{individual})'
-    for predicate in PREDICATE_SYMBOLS
-    for individual in CONSTANT_SYMBOLS + VARIABLE_SYMBOLS
+    for predicate in PREDICATES
+    for individual in CONSTANTS + VARIABLES
 
 ]
 
@@ -62,7 +62,7 @@ def generate_tree(arguments: List[Argument],
 
         max_retry = 10
         try:
-            proof_tree = _generate_stem(arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS,
+            proof_tree = _generate_stem(arguments, depth, PREDICATES, CONSTANTS,
                                         elim_dneg=elim_dneg,
                                         max_retry=max_retry)
         except MaxRetryExceedError:
@@ -70,7 +70,7 @@ def generate_tree(arguments: List[Argument],
             return None
 
         try:
-            _extend_braches(proof_tree, arguments, depth, PREDICATE_SYMBOLS, CONSTANT_SYMBOLS,
+            _extend_braches(proof_tree, arguments, depth, PREDICATES, CONSTANTS,
                             elim_dneg=elim_dneg,
                             max_retry=max_retry)
         except MaxRetryExceedError:

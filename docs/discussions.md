@@ -1,8 +1,8 @@
 # todo
 * MPで1-pass通すべき．
 * "argument"
+* "distractor"
 * "translation"
-* distractor
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
@@ -219,3 +219,15 @@
         AがFになったりHになったりしている．
     ```
     G, F でやっておいて，A, Bに戻して，翻訳する．
+
+
+
+# distractor
+* 手法
+    - Ga がtreeに合ったときに，GbやHaを加える．
+        - この方式だと，命題論理は扱えない．
+        - この方式は，formal logicの後にdistractorが挟まる．
+    - F (the storm is coming) に対して，表層が似ている文(the storm is strong)をコーパスから取ってきて追加する．
+        - この方式は，translationの後にdistractorが挟まる．
+* 結論
+    - 両方やる．
