@@ -69,7 +69,7 @@ def test_pipeline_from_config():
 
     sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
     sentence_translations = json.load(open(sentence_translations_config_path))
-    translator = SentenceTranslator(sentence_translations['general'])
+    translator = SentenceTranslator(sentence_translations)
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 

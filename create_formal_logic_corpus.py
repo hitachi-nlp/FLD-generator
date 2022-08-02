@@ -39,7 +39,7 @@ def main(output_path, argument_config, translation_config, size, depth, num_dist
     distractor = UnknownFactDistractor()
 
     sentence_translations = json.load(open(translation_config))
-    translator = SentenceTranslator(sentence_translations['general'])
+    translator = SentenceTranslator(sentence_translations)
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 

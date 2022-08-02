@@ -53,7 +53,7 @@ def main():
 
     convert_config(
         './configs.org/conf_syllogistic_corpus-02.json',
-        './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json',
+        './configs/formal_logic/sentence_translations/syllogistic_corpus-02.domains.json',
     )
 
 
