@@ -49,6 +49,7 @@ class SentenceTranslator(Translator):
                     if trans_formula_replaced.rep == formula.rep:
                         trans_nl = random.choice(trans_nls)
                         translations.append(replace_formula(Formula(trans_nl), mapping).rep)
+                        import pudb; pudb.set_trace()
                         done_translation = True
 
             if not done_translation:

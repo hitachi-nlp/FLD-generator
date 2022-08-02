@@ -29,7 +29,7 @@ def convert_config(config_in_path: str, config_out_path: str):
             converted_formula = convert_formula(formula)
             converted_config[converted_name][converted_formula] = []
             for translation in translations:
-                converted_config[converted_name][converted_formula].append(convert_formula(translation))
+                converted_config[converted_name][converted_formula].append(convert_formula(translation).rstrip(' '))
 
     Path(config_out_path).parent.mkdir(exist_ok=True, parents=True)
     with open(str(config_out_path), 'w') as f_out:

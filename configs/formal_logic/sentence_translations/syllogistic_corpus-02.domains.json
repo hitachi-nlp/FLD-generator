@@ -36,124 +36,124 @@
         "(Ex): ({A}x & {B}x) & {C}x": [],
         "(Ex): ¬{A}x & (¬{B}x v ¬{C}x)": [],
         "{A}{a}": [
-            "{a} is a {A}. "
+            "{a} is a {A}."
         ],
         "¬{A}{a}": [
-            "{a} is not a {A}. "
+            "{a} is not a {A}."
         ],
         "¬({A}{a} v {B}{a})": [
-            "It is not the case that {a} is a {A} or a {B}. "
+            "It is not the case that {a} is a {A} or a {B}."
         ],
         "¬{A}{a} v ¬{B}{a}": [
-            "{a} is not a {A} or not a {B}. "
+            "{a} is not a {A} or not a {B}."
         ]
     },
     "persons": {
         "(x): {A}x -> {B}x": [
-            "If someone is a {A}, then they are a {B}. "
+            "If someone is a {A}, then they are a {B}."
         ],
         "(x): ¬{A}x -> {B}x": [
-            "If someone is not a {A}, then they are a {B}. "
+            "If someone is not a {A}, then they are a {B}."
         ],
         "(x): {A}x -> ¬{B}x": [
-            "If someone is a {A}, then they are not a {B}. "
+            "If someone is a {A}, then they are not a {B}."
         ],
         "(x): ¬{A}x -> ¬{B}x": [
-            "If someone is not a {A}, then they are not a {B}. "
+            "If someone is not a {A}, then they are not a {B}."
         ],
         "(x): ({A}x & {B}x) -> {C}x": [
-            "If someone is a {A} and a {B}, then they are a {C}. "
+            "If someone is a {A} and a {B}, then they are a {C}."
         ],
         "(x): ({A}x v {B}x) -> {C}x": [
-            "If someone is a {A} or a {B}, then they are a {C}. "
+            "If someone is a {A} or a {B}, then they are a {C}."
         ],
         "(x): ¬({A}x & {B}x) -> {C}x": [
-            "If someone is not both a {A} and a {B}, then they are a {C}. "
+            "If someone is not both a {A} and a {B}, then they are a {C}."
         ],
         "(x): ¬({A}x v {B}x) -> {C}x": [
-            "If it is not the case that someone is a {A} or a {B}, then they are a {C}. "
+            "If it is not the case that someone is a {A} or a {B}, then they are a {C}."
         ],
         "(x): (¬{A}x & ¬{B}x) -> {C}x": [
-            "If someone is neither a {A} nor a {B}, then they are a {C}. "
+            "If someone is neither a {A} nor a {B}, then they are a {C}."
         ],
         "(x): ({A}x & {B}x) -> ¬{C}x": [
-            "If someone is a {A} and a {B}, then they are not a {C}. "
+            "If someone is a {A} and a {B}, then they are not a {C}."
         ],
         "(x): ({A}x v {B}x) -> ¬{C}x": [
-            "If someone is a {A} or a {B}, then they are not a {C}. "
+            "If someone is a {A} or a {B}, then they are not a {C}."
         ],
         "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
-            "If someone is neither a {A} nor a {B}, then they are not a {C}. "
+            "If someone is neither a {A} nor a {B}, then they are not a {C}."
         ],
         "(x): ({A}x & {B}x) -> ({C}x v {D}x)": [
-            "If someone is a {A} and a {B}, then they are a {C} or a {D}. "
+            "If someone is a {A} and a {B}, then they are a {C} or a {D}."
         ],
         "(x): (¬{A}x & ¬{B}x) -> ({C}x v {D}x)": [
-            "If someone is neither a {A} nor a {B}, then they are a {C} or a {D}. "
+            "If someone is neither a {A} nor a {B}, then they are a {C} or a {D}."
         ],
         "(x): {A}x -> ({B}x & {C}x)": [
-            "If someone is a {A}, then they are a {B} and a {C}. "
+            "If someone is a {A}, then they are a {B} and a {C}."
         ],
         "(x): {A}x -> ({B}x v {C}x)": [
-            "If someone is a {A}, then they are a {B} or a {C}. "
+            "If someone is a {A}, then they are a {B} or a {C}."
         ],
         "(x): {A}x -> (¬{B}x v {C}x)": [
-            "If someone is a {A}, then they are not a {B}, or a {C}. "
+            "If someone is a {A}, then they are not a {B}, or a {C}."
         ],
         "(x): {A}x -> ({B}x v ¬{C}x)": [
-            "If someone is a {A}, then they are a {B}, or not a {C}. "
+            "If someone is a {A}, then they are a {B}, or not a {C}."
         ],
         "(x): {A}x -> ¬({B}x & {C}x)": [
-            "If someone is a {A}, then they are not both a {B} and a {C}. "
+            "If someone is a {A}, then they are not both a {B} and a {C}."
         ],
         "(x): {A}x -> ¬({B}x v {C}x)": [
-            "If someone is a {A}, then it is not the case that they are a {B} or a {C}. "
+            "If someone is a {A}, then it is not the case that they are a {B} or a {C}."
         ],
         "(x): {A}x -> (¬{B}x & ¬{C}x)": [
-            "If someone is a {A}, then they are not a {B} and not a {C}. "
+            "If someone is a {A}, then they are not a {B} and not a {C}."
         ],
         "(x): {A}x -> (¬{B}x v ¬{C}x)": [
-            "If someone is a {A}, then they are not a {B} or not a {C}. "
+            "If someone is a {A}, then they are not a {B} or not a {C}."
         ],
         "(x): {A}x -> ({B}x v {C}x v {D}x)": [
-            "If someone is a {A}, then they are at least one of these: a {B}, a {C} or a {D}. "
+            "If someone is a {A}, then they are at least one of these: a {B}, a {C} or a {D}."
         ],
         "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
-            "If someone is not a {A}, then they are not a {B}, or not a {C}. "
+            "If someone is not a {A}, then they are not a {B}, or not a {C}."
         ],
         "(x): ¬{A}x -> ¬({B}x & {C}x)": [
-            "If someone is not a {A}, then it is not the case that they are a {B} and a {C}. "
+            "If someone is not a {A}, then it is not the case that they are a {B} and a {C}."
         ],
         "(x): ¬{A}x -> ¬({B}x v {C}x)": [
-            "If someone is not a {A}, then it is not the case that they are a {B} or a {C}. "
+            "If someone is not a {A}, then it is not the case that they are a {B} or a {C}."
         ],
         "(x): ¬{A}x -> ({B}x v {C}x)": [
-            "If someone is not a {A}, then they are a {B} or a {C}. "
+            "If someone is not a {A}, then they are a {B} or a {C}."
         ],
         "(Ex): {A}x & {B}x": [
-            "Someone is a {A} and a {B}. "
+            "Someone is a {A} and a {B}."
         ],
         "(Ex): {A}x & ¬({B}x & {C}x)": [
-            "Someone is a {A} and not both a {B} and a {C}. "
+            "Someone is a {A} and not both a {B} and a {C}."
         ],
         "(Ex): {A}x & ¬({B}x v {C}x)": [
-            "Someone is a {A} but neither a {B} nor a {C}. "
+            "Someone is a {A} but neither a {B} nor a {C}."
         ],
         "(Ex): {A}x & ¬{B}x": [
-            "Someone is a {A} and not a {B}. "
+            "Someone is a {A} and not a {B}."
         ],
         "(Ex): {A}x & (¬{B}x v ¬{C}x)": [
-            "Someone is a {A} and, in addition, not a {B} or not a {C}. "
+            "Someone is a {A} and, in addition, not a {B} or not a {C}."
         ],
         "(Ex): ({A}x & {B}x) & ¬{C}x": [
-            "Someone is a {A} and a {B}, but not a {C}. "
+            "Someone is a {A} and a {B}, but not a {C}."
         ],
         "(Ex): ({A}x & {B}x) & {C}x": [
-            "Someone is a {A}, a {B}, and a {C}. "
+            "Someone is a {A}, a {B}, and a {C}."
         ],
         "(Ex): ¬{A}x & (¬{B}x v ¬{C}x)": [
-            "Somebody is not a {A} and, in addition, not a {B} or not a {C}. ",
-            "Someone, who is not a {A}, is not a {B} or not a {C}. "
+            "Somebody is not a {A} and, in addition, not a {B} or not a {C}.",
+            "Someone, who is not a {A}, is not a {B} or not a {C}."
         ],
         "{A}{a}": [],
         "¬{A}{a}": [],
