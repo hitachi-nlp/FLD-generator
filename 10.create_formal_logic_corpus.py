@@ -14,23 +14,21 @@ logger = logging.getLogger(__name__)
 def main():
     setup_logger(level=logging.INFO)
 
-    # output_top_dir = Path('./outputs/00.create_json_corpus/20220705.trial')
-    # output_top_dir = Path('./outputs/00.create_json_corpus/20220706.format_changed')
-    # output_top_dir = Path('./outputs/00.create_json_corpus/20220707.small')
-    output_top_dir = Path('./outputs/00.create_json_corpus/debug')
+    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220802.modus_ponens')
 
-    config = './configs/aacorpus/conf_syllogistic_corpus-02.json'
-    corpus_name = 'org'
+    argument_config = './configs/formal_logic/arguments/syllogistic_corpus-02.json'
+    translation_config = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
+    corpus_name = 'modus_ponens.trial'
 
     split_sizes = {
-        # original size
-        # 'train': 9000,
-        # 'test': 100,
-
-        'train': 10,
-        'valid': 10,
-        'test': 10,
+        'train': 100,
+        'valid': 100,
+        'test': 100,
     }
+    depth = 3
+    num_distractors = 3
+    world_assump = 'CWA'
+    elim_dneg = True
 
     # engine = QsubEngine('ABCI', 'rt_AG.small')
     engine = SubprocessEngine()
@@ -41,31 +39,46 @@ def main():
 
         settings = {
             'corpus_name': corpus_name,
+
+            'argument_config': argument_config,
+            'translation_config': translation_config,
+
             'split': split,
-            'config': config,
-            'size': size
+            'size': size,
+            'depth': depth,
+            'num_distractors': num_distractors,
+            'world_assump': world_assump,
+            'elim_dneg': elim_dneg,
         }
 
         output_dir = build_dir(
             settings,
-            top_dir=str(output_top_dir / settings["corpus_name"] / settings["split"]),
+            top_dir=str(output_top_dir / settings["corpus_name"]),
             short=True,
             dirname_exclude_params=[
+                'argument_config',
+                'translation_config',
+
                 'corpus_name',
                 'split',
-                'config',
-                'size',
             ],
             save_params=True
         )
+        output_path = output_dir / f'{split}.jsonl'
 
         log_path = output_dir / 'log.txt'
         command = ' '.join([
-            'python ./create_json_corpus.py',
-            f'{settings["split"]}',
-            f'--output-dir {output_dir}',
-            f'--config {settings["config"]}',
-            f'--size {settings["size"]}',
+            'python ./create_formal_logic_corpus.py',
+
+            f'{output_path}',
+            f'{settings["argument_config"]}',
+            f'{settings["translation_config"]}',
+            f'{settings["size"]}',
+
+            f'--depth {settings["depth"]}',
+            f'--num-distractors {settings["num_distractors"]}',
+            f'--world-assump {settings["world_assump"]}',
+            f'--elim-dneg' if settings["elim_dneg"] else '',
         ])
 
         if isinstance(engine, SubprocessEngine):

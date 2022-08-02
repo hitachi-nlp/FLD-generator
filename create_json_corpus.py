@@ -37,12 +37,11 @@ def create_json(config: Dict,
 
 
 @click.command()
-@click.argument('corpus-name')
 @click.argument('split', type=click.Choice(['train', 'valid', 'test']))
 @click.option('--output-dir', default='./corpora')
 @click.option('--config', default='./configs/conf_syllogistic_corpus-02.json')
 @click.option('--size', type=int, default=None)
-def main(corpus_name, split, output_dir, config, size):
+def main(split, output_dir, config, size):
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed()
 
