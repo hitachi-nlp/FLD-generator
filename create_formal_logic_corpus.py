@@ -2,7 +2,7 @@ import random
 import json
 from pathlib import Path
 import logging
-from pprint import pprint
+from pprint import pformat
 
 import click
 from tqdm import tqdm
@@ -13,6 +13,8 @@ from formal_logic.translators import SentenceTranslator
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.dataset import NLProofSDataset
 from logger_setup import setup as setup_logger
+
+logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -46,13 +48,22 @@ def main(output_path, argument_config, translation_config, size, depth, num_dist
 
     with open(output_path, 'w') as f_out:
         for nlproof_json, proof_tree, distractors in tqdm(dataset.generate(size)):
-            print('\n\n\n=================== generating proof tree =========================')
-            print('\n--------------- tree --------------')
-            print(proof_tree.format_str)
-            print('\n--------------- distractors --------------')
-            print(distractors)
-            print('\n--------------- NLProofs json --------------')
-            pprint(nlproof_json)
+            logger.info('')
+            logger.info('')
+            logger.info('')
+            logger.info('=================== generating proof tree =========================')
+
+            logger.info('')
+            logger.info('--------------- tree --------------')
+            logger.info(proof_tree.format_str)
+
+            logger.info('')
+            logger.info('--------------- distractors --------------')
+            logger.info(str(distractors))
+
+            logger.info('')
+            logger.info('--------------- NLProofs json --------------')
+            logger.info(pformat(nlproof_json))
 
             print(json.dumps(nlproof_json), file=f_out)
 

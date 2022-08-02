@@ -14,11 +14,11 @@ logger = logging.getLogger(__name__)
 def main():
     setup_logger(level=logging.INFO)
 
-    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220802.modus_ponens')
+    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220802.minumum')
 
-    argument_config = './configs/formal_logic/arguments/syllogistic_corpus-02.json'
+    argument_config = './configs/formal_logic/arguments/minumum.json'
     translation_config = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
-    corpus_name = 'modus_ponens.trial'
+    corpus_name = 'minumum'
 
     split_sizes = {
         'train': 100,
@@ -65,8 +65,8 @@ def main():
             save_params=True
         )
         output_path = output_dir / f'{split}.jsonl'
-
         log_path = output_dir / 'log.txt'
+
         command = ' '.join([
             'python ./create_formal_logic_corpus.py',
 
@@ -78,7 +78,8 @@ def main():
             f'--depth {settings["depth"]}',
             f'--num-distractors {settings["num_distractors"]}',
             f'--world-assump {settings["world_assump"]}',
-            f'--elim-dneg' if settings["elim_dneg"] else '',
+            '--elim-dneg' if settings["elim_dneg"] else '',
+            f'1>{str(log_path)} 2>&1',
         ])
 
         if isinstance(engine, SubprocessEngine):
