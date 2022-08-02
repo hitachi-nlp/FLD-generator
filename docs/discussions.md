@@ -3,6 +3,7 @@
 * "argument"
 * "distractor"
 * "translation"
+* "OWA vs CWA"
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
@@ -231,3 +232,7 @@
         - この方式は，translationの後にdistractorが挟まる．
 * 結論
     - 両方やる．
+
+
+
+# OWA vs CWA

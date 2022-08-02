@@ -132,6 +132,7 @@ def _generate_stem(arguments: List[Argument],
                 break
 
             is_arg_done = False
+            next_arg_replaced = None
             for next_arg_unreplaced in _shuffle(chainable_args):
                 if is_arg_done:
                     break
@@ -204,7 +205,6 @@ def _generate_stem(arguments: List[Argument],
                 ]
                 update(next_premise_nodes, next_conclusion_node, next_arg_replaced, proof_tree)
 
-                cur_arg = next_arg_replaced
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
             else:
@@ -235,9 +235,13 @@ def _extend_braches(proof_tree: ProofTree,
             return
 
         is_leaf_node_done = False
+        next_arg_replaced = None
+        target_leaf_node = None
         for leaf_node in _shuffle(leaf_nodes):
             if is_leaf_node_done:
                 break
+
+            target_leaf_node = leaf_node
 
             # Choose next argument
             chainable_args = [
@@ -299,13 +303,13 @@ def _extend_braches(proof_tree: ProofTree,
 
         if is_leaf_node_done:
             # Upate tree
-            next_arg_replaced.conclusion = leaf_node.formula  # refer to the sampe object
-            leaf_node.argument = next_arg_replaced
+            next_arg_replaced.conclusion = target_leaf_node.formula  # refer to the sampe object
+            target_leaf_node.argument = next_arg_replaced
             next_premise_nodes = [ProofNode(premise)
                                   for premise in next_arg_replaced.premises]
             for premise_node in next_premise_nodes:
                 proof_tree.add_node(premise_node)
-                leaf_node.add_child(premise_node)
+                target_leaf_node.add_child(premise_node)
             cur_step += 1
         else:
             raise GenerationFailure()

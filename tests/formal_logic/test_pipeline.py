@@ -2,14 +2,16 @@ import json
 import random
 from typing import Dict, List
 import logging
+from pprint import pprint
 
 from formal_logic.formula import Formula
 from formal_logic.argument import Argument
-from formal_logic.proof import ProofTree
+from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import FormalLogicDistractor, UnknownFactDistractor
 from formal_logic.translators import Translator, SentenceTranslator
 from formal_logic.pipeline import Pipeline
+# from formal_logic.converters import to_nlproof
 from logger_setup import setup as setup_logger
 
 logger = logging.getLogger(__name__)
@@ -47,11 +49,14 @@ def test_simple_pipeline():
 
     for _ in range(100):
         proof_tree, distractors = pipeline.run(depth=5, num_distractors=5)
+        # nlproof_json = to_nlproof(proof_tree, distractors)
+
         print('\n\n\n=================== generating proof tree =========================')
         print('--------------- tree --------------')
         print(proof_tree.format_str)
         print('--------------- distractors --------------')
         print(distractors)
+        # pprint(nlproof_json)
 
 
 def test_pipeline_from_config():
@@ -69,11 +74,14 @@ def test_pipeline_from_config():
 
     for _ in range(100):
         proof_tree, distractors = pipeline.run(depth=5, num_distractors=5)
+        # nlproof_json = to_nlproof(proof_tree, distractors)
+
         print('\n\n\n=================== generating proof tree =========================')
         print('--------------- tree --------------')
         print(proof_tree.format_str)
         print('--------------- distractors --------------')
         print(distractors)
+        # pprint(nlproof_json)
 
 
 if __name__ == '__main__':
