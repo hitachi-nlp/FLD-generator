@@ -10,7 +10,7 @@ from formal_logic.translators import Translator
 logger = logging.getLogger(__name__)
 
 
-class Pipeline:
+class TreePipeline:
 
     def __init__(self,
                  generator: FormalLogicGenerator,

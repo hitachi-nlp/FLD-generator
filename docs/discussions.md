@@ -236,3 +236,26 @@
 
 
 # OWA vs CWA
+* CWA
+    - 定義
+        - True : 仮説のproofを作成できる．
+        - False: 仮説のproofを作成できない．
+    - 手法
+        - Falseの方は，ProofTreeから適当にnodeを削り取ったものでできる．
+* OWA
+    - 定義
+        - True   : 仮説のproofを作成できる．
+        - False  : not仮説のproofを作成できる．
+        - Unknown: 仮説もnot仮説も，proofを作成できない．
+    - 手法
+        - FalseはCWAと同じやり方で作れる．
+        - Unknownは，not仮説を示すことで作れる．
+            * ただ，複合命題 (Fx -> Gx)のnotなど，微妙な問題を持っている．
+* 方針
+    - 一旦，CWAでやる．
+        - 複合命題のnotなどの問題を回避できる．
+        - EntailmentBankはCWAに近いので，CWAで一旦十分．
+    - 時間ができたら，OWAをやる．
+        - 例えば，Ga みたいな単体の命題のOWAは簡単に作れる．
+
+

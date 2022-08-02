@@ -10,8 +10,8 @@ from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import FormalLogicDistractor, UnknownFactDistractor
 from formal_logic.translators import Translator, SentenceTranslator
-from formal_logic.pipeline import Pipeline
-from formal_logic.converters import to_nlproof
+from formal_logic.tree_pipeline import TreePipeline
+from formal_logic.dataset import NLProofSDataset
 from logger_setup import setup as setup_logger
 
 logger = logging.getLogger(__name__)
@@ -45,12 +45,12 @@ def test_simple_pipeline():
     }
     translator = SentenceTranslator(sentence_translations)
 
-    pipeline = Pipeline(generator, distractor=distractor, translator=translator)
+    tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
-    for _ in range(100):
-        proof_tree, distractors = pipeline.run(depth=5, num_distractors=5)
-        nlproof_json = to_nlproof(proof_tree, distractors)
+    dataset = NLProofSDataset(tree_pipeline, 'CWA',
+                              depth=5, num_distractors=5)
 
+    for nlproof_json, proof_tree, distractors in dataset.generate(100):
         print('\n\n\n=================== generating proof tree =========================')
         print('\n--------------- tree --------------')
         print(proof_tree.format_str)
@@ -71,12 +71,12 @@ def test_pipeline_from_config():
     sentence_translations = json.load(open(sentence_translations_config_path))
     translator = SentenceTranslator(sentence_translations['general'])
 
-    pipeline = Pipeline(generator, distractor=distractor, translator=translator)
+    tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
-    for _ in range(100):
-        proof_tree, distractors = pipeline.run(depth=5, num_distractors=5)
-        nlproof_json = to_nlproof(proof_tree, distractors)
+    dataset = NLProofSDataset(tree_pipeline, 'CWA',
+                              depth=5, num_distractors=5)
 
+    for nlproof_json, proof_tree, distractors in dataset.generate(100):
         print('\n\n\n=================== generating proof tree =========================')
         print('\n--------------- tree --------------')
         print(proof_tree.format_str)
