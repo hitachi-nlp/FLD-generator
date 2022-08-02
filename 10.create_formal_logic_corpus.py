@@ -21,13 +21,13 @@ def main():
     corpus_name = 'minumum'
 
     split_sizes = {
-        'train': 100,
+        'train': 1000,
         'valid': 100,
         'test': 100,
     }
     depth = 3
     num_distractors = 3
-    world_assump = 'CWA'
+    world_assump = 'label_true_only'
     elim_dneg = True
 
     # engine = QsubEngine('ABCI', 'rt_AG.small')

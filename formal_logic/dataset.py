@@ -48,7 +48,7 @@ class NLProofSDataset:
         for i_sample in range(size):
             proof_tree, distractors = self.tree_pipeline.run(depth=self.depth, num_distractors=self.num_distractors)
 
-            if self.world_assump == 'true_only':
+            if self.world_assump == 'label_true_only':
                 label = True
                 unproven_leaf_nodes = []
             elif self.world_assump == 'CWA':
