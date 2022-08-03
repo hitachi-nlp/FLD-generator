@@ -3,6 +3,7 @@ from typing import List, Dict, Optional
 from abc import abstractmethod, ABC
 from collections import OrderedDict
 import random
+import re
 
 from .formula import Formula
 from .proof import ProofTree
@@ -16,7 +17,7 @@ class Translator(ABC):
         pass
 
 
-class SentenceTranslator(Translator):
+class SentenceWiseTranslator(Translator):
 
     def __init__(self, sentence_translations: Dict[str, List[str]]):
 
@@ -53,3 +54,54 @@ class SentenceTranslator(Translator):
                 translations.append(None)
 
         return translations
+
+
+class IterativeRegexpTranslator(Translator):
+    """ sample implementation of regexp matching """
+
+    def __init__(self):
+        pass
+
+    def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
+        translations = {
+            '\({A} v {B}\)x': [
+                'someone is {A} and {B}'
+            ],
+            '{A}x': [
+                'someone is {A}',
+                'he is {A}',
+                'she is {A}',
+            ],
+            '\(x\): (.*) -> (.*)': [
+                'if \g<1>, then \g<2>'
+            ],
+        }
+        translations = OrderedDict([
+            (k, v) for k, v in sorted(translations.items(),
+                                      key=lambda k_v: len(k_v[0]))
+        ][::-1])
+
+        translated_reps = []
+        for formula in formulas:
+            translated_formula = Formula(formula.rep)
+
+            has_translation = True
+            while has_translation:
+                has_translation = False
+                for i_translation, (src_rep, tgt_reps) in enumerate(translations.items()):
+                    tgt_rep = random.choice(tgt_reps)
+
+                    src_formula = Formula(src_rep)
+                    tgt_formula = Formula(tgt_rep)
+
+                    for mapping in generate_replacement_mappings_from_formula([src_formula], [formula]):
+                        src_formula_replaced = replace_formula(src_formula, mapping)
+                        tgt_formula_replaced = replace_formula(tgt_formula, mapping)
+                        if re.search(src_formula_replaced.rep, translated_formula.rep) is not None:
+                            translated_formula = Formula(re.sub(src_formula_replaced.rep, tgt_formula_replaced.rep, translated_formula.rep))
+                            has_translation = True
+                            break
+
+            translated_reps.append(translated_formula.rep)
+
+        return translated_reps

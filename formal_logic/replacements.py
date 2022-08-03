@@ -218,8 +218,11 @@ def replace_formula(formula: Formula,
 def replace_rep(rep: str,
                 replacements: Dict[str, str],
                 elim_dneg=False) -> str:
-    pattern = re.compile("|".join(replacements.keys()))
-    replaced = pattern.sub(lambda m: replacements[m.group(0)], rep)
+    replaced = rep
+
+    if len(replacements) >= 1:
+        pattern = re.compile("|".join(replacements.keys()))
+        replaced = pattern.sub(lambda m: replacements[m.group(0)], rep)
 
     if elim_dneg:
         replaced = re.sub(f'{NOT}{NOT}', '', replaced)

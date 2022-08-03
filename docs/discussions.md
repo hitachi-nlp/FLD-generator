@@ -1,10 +1,11 @@
 # todo
-* allow_negationはcomplicatorに入れるべき
 * [doing] MPで1-pass通すべき．
 * "argument生成"
 * "distractor"
 * "translation"
 * "OWA vs CWA"
+* 実験計画を立てる．
+    * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．

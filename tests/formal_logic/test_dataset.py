@@ -9,7 +9,7 @@ from formal_logic.argument import Argument
 from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import FormalLogicDistractor, UnknownFactDistractor
-from formal_logic.translators import Translator, SentenceTranslator
+from formal_logic.translators import Translator, SentenceWiseTranslator, IterativeRegexpTranslator
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.dataset import NLProofSDataset
 from logger_setup import setup as setup_logger
@@ -36,14 +36,24 @@ def test_simple_pipeline():
     distractor = UnknownFactDistractor()
 
     sentence_translations: Dict[str, List[str]] = {
-        '(x): {A}x -> {B}x': [
-            'Every {A} is a {B}.',
-        ],
         '{A}{a}': [
             '{a} is {A}.',
         ],
+
+        '(x): {A}x -> {B}x': [
+            'If someone is {A}, then the one is {B}.',
+            'Every {A} is a {B}.',
+        ],
+
+        '(x): ({A} v {B})x -> {C}x': [
+            'If someone is {A} or {B}, then the one is {C}.',
+        ],
+        '(x): ({A} & {B})x -> {C}x': [
+            'If someone is {A} and {B}, then the one is {C}.',
+        ],
     }
-    translator = SentenceTranslator(sentence_translations)
+    translator = SentenceWiseTranslator(sentence_translations)
+    # translator = IterativeRegexpTranslator()
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
@@ -73,7 +83,7 @@ def test_pipeline_from_config():
 
     sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
     sentence_translations = json.load(open(sentence_translations_config_path))
-    translator = SentenceTranslator(sentence_translations)
+    translator = SentenceWiseTranslator(sentence_translations)
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
