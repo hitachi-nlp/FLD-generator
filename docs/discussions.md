@@ -1,6 +1,6 @@
 # todo
-* MPで1-pass通すべき．
-* "argument"
+* [doing] MPで1-pass通すべき．
+* "argument生成"
 * "distractor"
 * "translation"
 * "OWA vs CWA"
@@ -20,11 +20,13 @@
 
 
 
-# argument
+# argument生成
 * 疑問
     * きちんと多様でchainableな命題がたくさん生まれるだろうか？
-* パターン生成の手法
-    * 手法: replacementで，自動で増やす．
+
+## 手法
+* 手法
+    1. replacementで，自動で増やす．
         - 詳細
             * この方法の場合，最初に選んだパターンのreplacementで実現すべき．なぜならば，後段のchainingではパターンを増やす余地はないから．
             * 例えば， A -> (F v G),  A -> (F & G),  A -> ^F などのreplacementでふやす．
@@ -39,52 +41,54 @@
         - Cons
             - 調整しにくい．
             - 扱いは難しい．
-    * パターン直書きする．
+    2. パターン直書きする．
         - 手法: 先行研究のcomplex predicateのようなもの．
         - Pros
             - 調整は効きやすい．
         - Cons
             - パターンの数が3倍に膨れ上がる．
-    * 考察
-        1. 自然言語のテンプレートは全パターンで自作する必要があるかもしれない．
-            - [todo] FSをチェック
-        2. formal logicは，完全ルールでも作れそう．replacementの最初に，A -> A v B という置き換えを挟むだけ．
-            - しかし1があるなら，2を完全ルールでやっても大して工数が減らない？
-        3. notをどのように扱うか？ と通じる話がある．
-    * 方針
-        - [todo] 自動で増やす方法にトライしてみる．formalも翻訳も．
-* 増やしたいパターン
-    * 形式論理の公理系
-        * e.g.) & 導入
-            ```
-            ---- premise ----
-            F(a)
-            G(a)
-            -----------------
-            F(a) & G(a)   (x) F(x) /\ G(x) -> H(x)
-            -----------------
-            H(a)
-            ```
-    * 命題論理
-    * 個別の事実も入れたい．
-        * 「Aa & Ba -> Ca」
-        * ベースラインには，全称量化子しか含まれていない．
-    * ->導入
-        - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
-        - e.g.) syllogismをmodus ponensから導出する．
-            ```
-            ---- premise ----
-            (x) Fx -> G(x)
-            (x) Gx -> H(x)
+* 考察
+    1. 自然言語のテンプレートは全パターンで自作する必要があるかもしれない．
+        - [todo] FSをチェック
+    2. formal logicは，完全ルールでも作れそう．replacementの最初に，A -> A v B という置き換えを挟むだけ．
+        - しかし1があるなら，2を完全ルールでやっても大して工数が減らない？
+    3. notをどのように扱うか？ と通じる話がある．
+* 方針
+    - [todo]
+        * 自動で増やす方法にトライしてみる．formalもtranslationも．
 
-            ---- hypothesis ----
-            (x) Fx -> H(x)
+## 増やしたいパターン
+* 形式論理の公理系
+    * e.g.) & 導入
+        ```
+        ---- premise ----
+        F(a)
+        G(a)
+        -----------------
+        F(a) & G(a)   (x) F(x) /\ G(x) -> H(x)
+        -----------------
+        H(a)
+        ```
+* 命題論理
+* 個別の事実も入れたい．
+    * 「Aa & Ba -> Ca」
+    * ベースラインには，全称量化子しか含まれていない．
+* ->導入
+    - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
+    - e.g.) syllogismをmodus ponensから導出する．
+        ```
+        ---- premise ----
+        (x) Fx -> G(x)
+        (x) Gx -> H(x)
+
+        ---- hypothesis ----
+        (x) Fx -> H(x)
 
 
-            ---- proof ----
-            ```
-            これを自然演繹で示そうとすると，仮定導入(しかも，自由変数として出現させる)が必要になる．
-            ただ，できなくはない，気がする．自由変数は"something"にすればよい．
+        ---- proof ----
+        ```
+        これを自然演繹で示そうとすると，仮定導入(しかも，自由変数として出現させる)が必要になる．
+        ただ，できなくはない，気がする．自由変数は"something"にすればよい．
 
 ## notをどのように扱うか？
 - 背景
@@ -132,6 +136,30 @@
 
 
 
+# distractor
+* 方針
+    - [done] 翻訳にテンプレート文を使う場合は，手法1をやる．
+    - 翻訳に自然文を使う場合は，手法2も検討する．
+* 手法
+    1. Ga がtreeに合ったときに，GbやHaを加える．
+        - Pros
+            * 述語論理にとって，hard-negativeになる．
+            * 実装が容易．
+        - Cons
+            * テンプレート文しか使えない．
+                * もちろん，proofの文がテンプレート文なら，distractorがテンプレート文であっても問題無い．
+    2. 表層が似ている自然文をコーパスから取ってきて追加する．
+        - Pros
+            * proofの文が自然文の場合は，良いnegativeになる．
+        - Cons
+            * proofの文がテンプレート文の場合は，negativeにはならない．テンプレート的かどうかで判断できてしまうため．
+
+
+
+
+
+
+
 # translation
 * todo
     - "アルゴリズム"の実装．Translatorとして実装できる．
@@ -150,11 +178,25 @@
     * "If someone is a {A} and a {B}, then they are a {C}. "
     * small and smart person is always kind.
 
-## アルゴリズム
+## 手法
 1. 名詞節 vs 動詞節を決める
 2. ドメインを決める (human, objet)
 3. predicate, individual を集める．
 4. テンプレートに当てはめる．
+
+## 複雑な翻訳をどうするか
+* 事例
+    * `(x): ({F}x v {H}x) -> {G}x`
+        - "If someone is F and H then he is G"
+        - F and H person is also G
+    * `(x): (^{F}x v {H}x) -> {G}x`
+        - "If someone is not F and H then he is G"
+        - non-F and H person is also G
+    * `(x): {F}x -> {G}x & {H}x`
+        - "If someone is F then he is G and H"
+        - F person is also G and H.
+* (F v H) (F & H) みたいなのに限られているのであれば，例えばregexpなどでいけるのでは？
+
 
 
 
@@ -176,6 +218,40 @@
             - verified on NL dataset: no
             - 公理系
                 * predicate logic
+
+
+
+# OWA vs CWA
+
+## 方針
+- [todo] EBへの転移実験はlabel_true_onlyでやる．
+- [todo] それ以外の実験は，CWAでやる．
+    - 複合命題のnotなどの問題を回避できる．
+    - EntailmentBankはCWAに近いので，CWAで一旦十分．
+- (時間ができたら) OWAをやる．
+    - 例えば，Ga みたいな単体の命題のOWAは簡単に作れる．
+    - 一方で，複合命題の否定は自明では無い．
+
+## 手法
+* label_true_only
+    - あり得るラベル
+        - True : 仮説のproofを作成できる．
+* CWA
+    - あり得るラベル
+        - True : 仮説のproofを作成できる．
+        - False: 仮説のproofを作成できない．
+    - 手法
+        - Falseの方は，ProofTreeから適当にnodeを削り取ったものでできる．
+* OWA
+    - あり得るラベル
+        - True   : 仮説のproofを作成できる．
+        - False  : not仮説のproofを作成できる．
+        - Unknown: 仮説もnot仮説も，proofを作成できない．
+    - 手法
+        - FalseはCWAと同じやり方で作れる．
+        - Unknownは，not仮説を示すことで作れる．
+            * ただ，複合命題 (Fx -> Gx)のnotなど，微妙な問題を持っている．
+
 
 
 
@@ -222,40 +298,5 @@
     G, F でやっておいて，A, Bに戻して，翻訳する．
 
 
-
-# distractor
-* 手法
-    - Ga がtreeに合ったときに，GbやHaを加える．
-        - この方式だと，命題論理は扱えない．
-        - この方式は，formal logicの後にdistractorが挟まる．
-    - F (the storm is coming) に対して，表層が似ている文(the storm is strong)をコーパスから取ってきて追加する．
-        - この方式は，translationの後にdistractorが挟まる．
-* 結論
-    - 両方やる．
-
-
-
-# OWA vs CWA
-* CWA
-    - 定義
-        - True : 仮説のproofを作成できる．
-        - False: 仮説のproofを作成できない．
-    - 手法
-        - Falseの方は，ProofTreeから適当にnodeを削り取ったものでできる．
-* OWA
-    - 定義
-        - True   : 仮説のproofを作成できる．
-        - False  : not仮説のproofを作成できる．
-        - Unknown: 仮説もnot仮説も，proofを作成できない．
-    - 手法
-        - FalseはCWAと同じやり方で作れる．
-        - Unknownは，not仮説を示すことで作れる．
-            * ただ，複合命題 (Fx -> Gx)のnotなど，微妙な問題を持っている．
-* 方針
-    - 一旦，CWAでやる．
-        - 複合命題のnotなどの問題を回避できる．
-        - EntailmentBankはCWAに近いので，CWAで一旦十分．
-    - 時間ができたら，OWAをやる．
-        - 例えば，Ga みたいな単体の命題のOWAは簡単に作れる．
 
 

@@ -21,9 +21,9 @@ def main():
     corpus_name = 'minumum'
 
     split_sizes = {
-        'train': 1000,
-        'valid': 100,
-        'test': 100,
+        'train': 100,
+        'valid': 10,
+        'test': 10,
     }
     depth = 3
     num_distractors = 3

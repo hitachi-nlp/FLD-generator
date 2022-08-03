@@ -133,7 +133,7 @@ class NLProofSDataset:
 
                 else:
                     raise Exception()
-            proof_str = '; '.join(proof_strs)
+            proof_str = '; '.join(proof_strs) + ';'
 
             dataset_json = {
                 'hypothesis': hypothesis,
