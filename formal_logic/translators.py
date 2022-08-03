@@ -42,9 +42,7 @@ class SentenceTranslator(Translator):
                     continue
 
                 trans_formula = Formula(trans_formula_rep)
-                for mapping in generate_replacement_mappings_from_formula([trans_formula],
-                                                                          [formula],
-                                                                          allow_negation=False):
+                for mapping in generate_replacement_mappings_from_formula([trans_formula], [formula]):
                     trans_formula_replaced = replace_formula(trans_formula, mapping)
                     if trans_formula_replaced.rep == formula.rep:
                         trans_nl = random.choice(trans_nls)

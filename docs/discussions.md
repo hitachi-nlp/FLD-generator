@@ -1,4 +1,5 @@
 # todo
+* allow_negationはcomplicatorに入れるべき
 * [doing] MPで1-pass通すべき．
 * "argument生成"
 * "distractor"

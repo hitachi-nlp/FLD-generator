@@ -15,6 +15,7 @@ from .argument import Argument
 from .replacements import (
     generate_replacement_mappings_from_formula,
     generate_replaced_formulas,
+    generate_complicated_arguments,
     replace_formula,
     replace_argument,
 )
@@ -30,7 +31,7 @@ from .formula import (
     CONSTANTS,
     VARIABLES,
 )
-# import kern_profiler
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -56,9 +57,11 @@ class FormalLogicGenerator:
 
     def __init__(self,
                  arguments: List[Argument],
+                 allow_complication=False,
                  elim_dneg=False,
                  timeout: Optional[int] = 30):
         self.arguments = arguments
+        self.allow_complication = allow_complication
         self.elim_dneg = elim_dneg
         self.timeout = timeout
 
@@ -66,9 +69,10 @@ class FormalLogicGenerator:
         for _ in range(0, 10):
             try:
                 proof_tree = _generate_tree(self.arguments,
+                                            depth=depth,
+                                            allow_complication=self.allow_complication,
                                             elim_dneg=self.elim_dneg,
-                                            timeout=self.timeout,
-                                            depth=depth)
+                                            timeout=self.timeout)
                 return proof_tree
             except GenerationFailure:
                 logger.info('Generation failed with GenerationFailure(). Will retry')
@@ -77,11 +81,19 @@ class FormalLogicGenerator:
         raise GenerationFailure()
 
 
-# @profile
+@profile
 def _generate_tree(arguments: List[Argument],
                    depth=1,
+                   allow_complication=True,
                    elim_dneg=False,
                    timeout: Optional[int] = None) -> Optional[ProofTree]:
+    if allow_complication:
+        arguments = arguments + [
+            complicated_argument
+            for argment in arguments
+            for complicated_argument, _ in generate_complicated_arguments(argment, elim_dneg=elim_dneg)
+        ]
+
     timeout = timeout or 99999999
     with timeout_context(timeout, exception=TimeoutError):
         proof_tree = _generate_stem(arguments, depth, PREDICATES, CONSTANTS, elim_dneg=elim_dneg)
@@ -90,7 +102,7 @@ def _generate_tree(arguments: List[Argument],
     return proof_tree
 
 
-# @profile
+@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
@@ -126,7 +138,10 @@ def _generate_stem(arguments: List[Argument],
                 arg for arg in arguments
                 if any([premise_replaced.rep == cur_conclusion.rep
                         for premise in arg.premises
-                        for premise_replaced, _ in generate_replaced_formulas(premise, cur_conclusion, elim_dneg=elim_dneg)])
+                        for premise_replaced, _ in generate_replaced_formulas(premise,
+                                                                              cur_conclusion,
+                                                                              allow_complication=False,
+                                                                              elim_dneg=elim_dneg)])
             ]
             if len(chainable_args) == 0:
                 break
@@ -147,6 +162,7 @@ def _generate_stem(arguments: List[Argument],
                         [premise],
                         # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [cur_conclusion],
+                        allow_complication=False,
                         shuffle=True,
                     ):
                         if is_arg_done:
@@ -167,6 +183,7 @@ def _generate_stem(arguments: List[Argument],
                             next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
                             [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
+                            allow_complication=False,
                             shuffle=True,
                         ):
                             if is_arg_done:
@@ -216,7 +233,7 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
-# @profile
+@profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     max_steps: int,
@@ -247,7 +264,10 @@ def _extend_braches(proof_tree: ProofTree,
             chainable_args = [
                 arg for arg in arguments
                 if any([conclsion_replaced.rep == leaf_node.formula.rep
-                        for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion, leaf_node.formula, elim_dneg=elim_dneg)])
+                        for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion,
+                                                                                leaf_node.formula,
+                                                                                allow_complication=False,
+                                                                                elim_dneg=elim_dneg)])
             ]
             if len(chainable_args) == 0:
                 # logger.info('_extend_braches() retry since no chainable arguments found ...')
@@ -265,6 +285,7 @@ def _extend_braches(proof_tree: ProofTree,
                         [next_arg_unreplaced.conclusion],
                         # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
+                        allow_complication=False,
                         shuffle=True,
                 ):
                     if is_leaf_node_done:
@@ -285,6 +306,7 @@ def _extend_braches(proof_tree: ProofTree,
                         next_arg_unreplaced.all_formulas,
                         [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         constraints=conclusion_mapping,
+                        allow_complication=False,
                         shuffle=True,
                     ):
                         next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)

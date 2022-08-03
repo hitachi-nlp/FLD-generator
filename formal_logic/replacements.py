@@ -3,74 +3,122 @@ import random
 from typing import Dict, List, Any, Iterable, Tuple, Optional
 import copy
 
-from .formula import Formula, NOT
+from .formula import Formula, NOT, OR, AND, PREDICATES
 from .argument import Argument
 
 
-def generate_replaced_formulas(src_formula: Formula,
-                               tgt_formula: Formula,
-                               allow_negation=True,
-                               constraints: Optional[Dict[str, str]] = None,
-                               shuffle=False,
-                               elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for mapping in generate_replacement_mappings_from_formula([src_formula],
-                                                              [tgt_formula],
-                                                              allow_negation=allow_negation,
-                                                              constraints=constraints,
-                                                              shuffle=shuffle):
+def generate_complicated_arguments(src_arg: Argument,
+                                   elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
+    for mapping in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion]):
+        yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
+
+
+def generate_complicated_formulas(src_formula: Formula,
+                                  elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+    for mapping in generate_complication_mappings_from_formula([src_formula]):
         yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
+
+
+def generate_complication_mappings_from_formula(formulas: List[Formula]) -> Iterable[Dict[str, str]]:
+    predicates = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
+    constants = sorted(set([p.rep for formula in formulas for p in formula.constants]))
+
+    identity_mapping = {pred: pred for pred in predicates}
+    identity_mapping.update({const: const for const in constants})
+    yield identity_mapping
+
+    unknown_predicates = list(set(PREDICATES) - set(predicates))
+    unk_pred0 = unknown_predicates[0]
+    unk_pred1 = unknown_predicates[1]
+
+    for predicate in predicates:
+        mapping = copy.deepcopy(identity_mapping)
+        mapping[predicate] = f'{NOT}{unk_pred1}'
+        yield mapping
+
+    for predicate in predicates:
+        mapping = copy.deepcopy(identity_mapping)
+        mapping[predicate] = f'({unk_pred0} {OR} {unk_pred1})'
+        yield mapping
+
+    for predicate in predicates:
+        mapping = copy.deepcopy(identity_mapping)
+        mapping[predicate] = f'({unk_pred0} {AND} {unk_pred1})'
+        yield mapping
 
 
 def generate_replaced_arguments(src_arg: Argument,
                                 tgt_arg: Argument,
-                                allow_negation=True,
+                                allow_complication=False,
                                 constraints: Optional[Dict[str, str]] = None,
                                 shuffle=False,
                                 elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
                                                               tgt_arg.premises + [tgt_arg.conclusion],
-                                                              allow_negation=allow_negation,
+                                                              allow_complication=allow_complication,
                                                               constraints=constraints,
                                                               shuffle=shuffle):
         yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
 
+def generate_replaced_formulas(src_formula: Formula,
+                               tgt_formula: Formula,
+                               allow_complication=False,
+                               constraints: Optional[Dict[str, str]] = None,
+                               shuffle=False,
+                               elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+    for mapping in generate_replacement_mappings_from_formula([src_formula],
+                                                              [tgt_formula],
+                                                              allow_complication=allow_complication,
+                                                              constraints=constraints,
+                                                              shuffle=shuffle):
+        yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
+
+
 def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                tgt_formulas: List[Formula],
-                                               allow_negation=True,
+                                               allow_complication=False,
                                                constraints: Optional[Dict[str, str]] = None,
                                                shuffle=False) -> Iterable[Dict[str, str]]:
-    # Use "sorted" to eliminate randomness here.
-    src_predicates = sorted(set([p.rep for src_formula in src_formulas for p in src_formula.predicates]))
-    tgt_predicates = sorted(set([p.rep for tgt_formula in tgt_formulas for p in tgt_formula.predicates]))
+    if allow_complication:
+        complication_mappings = generate_complication_mappings_from_formula(src_formulas)
+    else:
+        complication_mappings = [
+            {p.rep: p.rep for formula in src_formulas for p in formula.predicates}  # identity mapping
+        ]
 
-    src_constants = sorted(set([c.rep for src_formula in src_formulas for c in src_formula.constants]))
-    tgt_constants = sorted(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
-    yield from generate_replacement_mappings_from_terms(src_predicates, src_constants,
-                                                        tgt_predicates, tgt_constants,
-                                                        allow_negation=allow_negation,
-                                                        constraints=constraints,
-                                                        shuffle=shuffle)
+    for complication_mapping in complication_mappings:
+        complicated_formulas = [replace_formula(formula, complication_mapping)
+                                for formula in src_formulas]
+
+        # Use "sorted" to eliminate randomness here.
+        src_predicates = sorted(set([p.rep for src_formula in complicated_formulas for p in src_formula.predicates]))
+        tgt_predicates = sorted(set([p.rep for tgt_formula in tgt_formulas for p in tgt_formula.predicates]))
+
+        src_constants = sorted(set([c.rep for src_formula in complicated_formulas for c in src_formula.constants]))
+        tgt_constants = sorted(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
+        yield from _generate_replacement_mappings_from_terms(src_predicates,
+                                                             src_constants,
+                                                             tgt_predicates,
+                                                             tgt_constants,
+                                                             constraints=constraints,
+                                                             shuffle=shuffle)
 
 
-def generate_replacement_mappings_from_terms(src_predicates: List[str],
-                                             src_constants: List[str],
-                                             tgt_predicates: List[str],
-                                             tgt_constants: List[str],
-                                             allow_negation=True,
-                                             constraints: Optional[Dict[str, str]] = None,
-                                             shuffle=False) -> Iterable[Dict[str, str]]:
-    if allow_negation:
-        tgt_predicates += [f'¬{p}' for p in tgt_predicates]
-
-    get_pred_replacements = lambda: generate_replacement_mappings(
+def _generate_replacement_mappings_from_terms(src_predicates: List[str],
+                                              src_constants: List[str],
+                                              tgt_predicates: List[str],
+                                              tgt_constants: List[str],
+                                              constraints: Optional[Dict[str, str]] = None,
+                                              shuffle=False) -> Iterable[Dict[str, str]]:
+    get_pred_replacements = lambda: _generate_replacement_mappings(
         src_predicates,
         tgt_predicates,
         constraints=constraints,
         shuffle=shuffle,
     )
 
-    get_const_replacements = lambda: generate_replacement_mappings(
+    get_const_replacements = lambda: _generate_replacement_mappings(
         src_constants,
         tgt_constants,
         constraints=constraints,
@@ -87,10 +135,10 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
             yield replacements
 
 
-def generate_replacement_mappings(src_objs: List[Any],
-                                  tgt_objs: List[Any],
-                                  constraints: Optional[Dict[Any, Any]] = None,
-                                  shuffle=False) -> Iterable[Optional[Dict[Any, Any]]]:
+def _generate_replacement_mappings(src_objs: List[Any],
+                                   tgt_objs: List[Any],
+                                   constraints: Optional[Dict[Any, Any]] = None,
+                                   shuffle=False) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError()
     if len(set(tgt_objs)) != len(tgt_objs):
@@ -177,4 +225,3 @@ def replace_rep(rep: str,
         replaced = re.sub(f'{NOT}{NOT}', '', replaced)
 
     return replaced
-

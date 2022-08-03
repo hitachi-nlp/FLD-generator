@@ -31,7 +31,7 @@ def test_simple_pipeline():
         ),
 
     ]
-    generator = FormalLogicGenerator(arguments, elim_dneg=False)
+    generator = FormalLogicGenerator(arguments, elim_dneg=False, allow_complication=True)
 
     distractor = UnknownFactDistractor()
 
@@ -63,7 +63,11 @@ def test_simple_pipeline():
 def test_pipeline_from_config():
     arguments_config_path = './configs/formal_logic/arguments/syllogistic_corpus-02.json'
     arguments = [Argument.from_json(json_obj) for json_obj in json.load(open(arguments_config_path))]
-    generator = FormalLogicGenerator(arguments, elim_dneg=False)
+    generator = FormalLogicGenerator(
+        arguments,
+        elim_dneg=False,
+        allow_complication=False,  # the config already includes the complicated formulas
+    )
 
     distractor = UnknownFactDistractor()
 
@@ -90,5 +94,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger()
 
-    # test_simple_pipeline()
-    test_pipeline_from_config()
+    test_simple_pipeline()
+    # test_pipeline_from_config()
