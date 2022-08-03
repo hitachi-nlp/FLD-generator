@@ -52,7 +52,14 @@ def test_simple_pipeline():
             'If someone is {A} and {B}, then the one is {C}.',
         ],
     }
-    translator = SentenceWiseTranslator(sentence_translations)
+    predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
+    constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
+    translator = SentenceWiseTranslator(
+        sentence_translations,
+        predicate_translations=predicate_translations,
+        constant_translations=constant_translations,
+        translate_terms=True,
+    )
     # translator = IterativeRegexpTranslator()
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
@@ -83,7 +90,14 @@ def test_pipeline_from_config():
 
     sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
     sentence_translations = json.load(open(sentence_translations_config_path))
-    translator = SentenceWiseTranslator(sentence_translations)
+    predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
+    constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
+    translator = SentenceWiseTranslator(
+        sentence_translations,
+        predicate_translations=predicate_translations,
+        constant_translations=constant_translations,
+        translate_terms=True,
+    )
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
@@ -104,5 +118,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger()
 
-    test_simple_pipeline()
-    # test_pipeline_from_config()
+    # test_simple_pipeline()
+    test_pipeline_from_config()

@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Set
 from abc import abstractmethod, ABC
 from collections import OrderedDict
 import random
@@ -7,7 +7,11 @@ import re
 
 from .formula import Formula
 from .proof import ProofTree
-from .replacements import generate_replacement_mappings_from_formula, replace_formula
+from .replacements import (
+    generate_replacement_mappings_from_formula,
+    generate_replacement_mappings_from_terms,
+    replace_formula,
+)
 
 
 class Translator(ABC):
@@ -19,7 +23,11 @@ class Translator(ABC):
 
 class SentenceWiseTranslator(Translator):
 
-    def __init__(self, sentence_translations: Dict[str, List[str]]):
+    def __init__(self,
+                 sentence_translations: Dict[str, List[str]],
+                 predicate_translations: Optional[List[str]] = None,
+                 constant_translations: Optional[List[str]] = None,
+                 translate_terms=True):
 
         def num_terms(formula_rep: str) -> int:
             formula = Formula(formula_rep)
@@ -32,9 +40,14 @@ class SentenceWiseTranslator(Translator):
             # We want first match to simple = constrained formulas first.
             # e.g.) We want matched to "Fa & Fb" first, rather than general "Fa & Gb"
             self._sentence_translations[formula] = translations
+        self.predicate_translations = predicate_translations
+        self.constant_translations = constant_translations
+        self.translate_terms = translate_terms
 
     def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
         translations = []
+
+        # sentence translation
         for formula in formulas:
 
             done_translation = False
@@ -52,6 +65,23 @@ class SentenceWiseTranslator(Translator):
 
             if not done_translation:
                 translations.append(None)
+
+        # term translation
+        if self.translate_terms:
+            term_mappings = generate_replacement_mappings_from_terms(
+                list(set([predicate.rep for formula in formulas for predicate in formula.predicates])),
+                list(set([constant.rep for formula in formulas for constant in formula.constants])),
+                self.predicate_translations,
+                self.constant_translations,
+                shuffle=True
+            )
+            term_mapping = next(term_mappings)
+            for i_formula, (formula, translation) in enumerate(zip(formulas, translations)):
+                if translation is not None:
+                    translations[i_formula] = replace_formula(Formula(translation), term_mapping).rep
+                    print('[translated]:', translations[i_formula])
+                else:
+                    print('[no translation]', formula.rep)
 
         return translations
 

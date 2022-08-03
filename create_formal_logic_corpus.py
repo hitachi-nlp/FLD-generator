@@ -9,7 +9,7 @@ from tqdm import tqdm
 from formal_logic.argument import Argument
 from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import UnknownFactDistractor
-from formal_logic.translators import SentenceTranslator
+from formal_logic.translators import SentenceWiseTranslator
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.dataset import NLProofSDataset
 from logger_setup import setup as setup_logger
@@ -39,7 +39,7 @@ def main(output_path, argument_config, translation_config, size, depth, num_dist
     distractor = UnknownFactDistractor()
 
     sentence_translations = json.load(open(translation_config))
-    translator = SentenceTranslator(sentence_translations)
+    translator = SentenceWiseTranslator(sentence_translations)
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 

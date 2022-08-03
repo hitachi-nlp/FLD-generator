@@ -97,20 +97,20 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
 
         src_constants = sorted(set([c.rep for src_formula in complicated_formulas for c in src_formula.constants]))
         tgt_constants = sorted(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
-        yield from _generate_replacement_mappings_from_terms(src_predicates,
-                                                             src_constants,
-                                                             tgt_predicates,
-                                                             tgt_constants,
-                                                             constraints=constraints,
-                                                             shuffle=shuffle)
+        yield from generate_replacement_mappings_from_terms(src_predicates,
+                                                            src_constants,
+                                                            tgt_predicates,
+                                                            tgt_constants,
+                                                            constraints=constraints,
+                                                            shuffle=shuffle)
 
 
-def _generate_replacement_mappings_from_terms(src_predicates: List[str],
-                                              src_constants: List[str],
-                                              tgt_predicates: List[str],
-                                              tgt_constants: List[str],
-                                              constraints: Optional[Dict[str, str]] = None,
-                                              shuffle=False) -> Iterable[Dict[str, str]]:
+def generate_replacement_mappings_from_terms(src_predicates: List[str],
+                                             src_constants: List[str],
+                                             tgt_predicates: List[str],
+                                             tgt_constants: List[str],
+                                             constraints: Optional[Dict[str, str]] = None,
+                                             shuffle=False) -> Iterable[Dict[str, str]]:
     get_pred_replacements = lambda: _generate_replacement_mappings(
         src_predicates,
         tgt_predicates,
@@ -144,9 +144,9 @@ def _generate_replacement_mappings(src_objs: List[Any],
     if len(set(tgt_objs)) != len(tgt_objs):
         raise ValueError()
 
-    if shuffle:
-        src_objs = random.sample(src_objs, len(src_objs))
-        tgt_objs = random.sample(tgt_objs, len(tgt_objs))
+    # if shuffle:
+    #     src_objs = random.sample(src_objs, len(src_objs))
+    #     tgt_objs = random.sample(tgt_objs, len(tgt_objs))
 
     if len(src_objs) > 0 and len(tgt_objs) > 0:
         if constraints is not None:
@@ -157,7 +157,8 @@ def _generate_replacement_mappings(src_objs: List[Any],
             idx_constraints = None
         for chosen_tgt_objs in _permutations_with_replacement(tgt_objs,
                                                               len(src_objs),
-                                                              constraints=idx_constraints):
+                                                              constraints=idx_constraints,
+                                                              shuffle=shuffle):
             yield {
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
@@ -172,27 +173,31 @@ def _generate_replacement_mappings(src_objs: List[Any],
 
 def _permutations_with_replacement(objs: List[Any],
                                    length: int,
-                                   idx=0,
-                                   constraints: Optional[Dict[int, Any]] = None) -> Iterable[List[Any]]:
+                                   src_idx=0,
+                                   constraints: Optional[Dict[int, Any]] = None,
+                                   shuffle=False) -> Iterable[List[Any]]:
     if length < 1:
         return
+    if shuffle:
+        objs = random.sample(objs, len(objs))
 
     if length == 1:
-        if constraints is not None and idx in constraints:
-            yield [constraints[idx]]
+        if constraints is not None and src_idx in constraints:
+            yield [constraints[src_idx]]
         else:
             for obj in objs:
                 yield [obj]
     else:
-        if constraints is not None and idx in constraints:
-            heads = [constraints[idx]]
+        if constraints is not None and src_idx in constraints:
+            heads = [constraints[src_idx]]
         else:
             heads = objs
         for head in heads:
             for tail in _permutations_with_replacement(objs,
                                                        length - 1,
-                                                       idx=idx + 1,
-                                                       constraints=constraints):
+                                                       src_idx=src_idx + 1,
+                                                       constraints=constraints,
+                                                       shuffle=shuffle):
                 yield [head] + tail
 
 
