@@ -6,6 +6,11 @@
 * "OWA vs CWA"
 * 実験計画を立てる．
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
+    * ablation
+        - which scheme useful
+        - depth
+        - which NL translation is useful
+    * schemeの
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
@@ -166,6 +171,22 @@
 * todo
     - "アルゴリズム"の実装．Translatorとして実装できる．
     - motivational exampleを取り入れるように．
+
+## 辞書
+* 必要な機能
+    - 語彙の獲得
+        - 名詞・動詞・助動詞 の判定
+        - 自動詞か他動詞かを判定する．
+    - ing (present continuous) へのtense変換
+* ライブラリ・辞書
+    * 語彙の獲得
+        * WordNet
+            * [NLTK :: Sample usage for wordnet](https://www.nltk.org/howto/wordnet.html)
+        * [rejected] NodeBox
+            * [NodeBox](https://www.nodebox.net/code/index.php/Linguistics#verb_conjugation)
+                - もう開発が終わっている．ダウンロードできない．
+    * ingへの変換
+        * [bjascob/pyInflect](https://github.com/bjascob/pyInflect)
 
 ## 事例と機能
 * G -> H = storm cause disastor
