@@ -9,7 +9,7 @@ class WordBank(ABC):
         pass
 
     @abstractmethod
-    def to_present_continuous(self, verb: str) -> Optional[str]:
+    def change_verb_form(self, verb: str, form: str) -> Optional[str]:
         pass
 
     @abstractmethod

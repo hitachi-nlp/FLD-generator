@@ -34,9 +34,9 @@ class EnglishWordBank(WordBank):
                 done_lemmas.add(lemma_str)
                 break
 
-    def to_present_continuous(self, verb: str) -> Optional[str]:
-        # run -> running
-        results = getInflection(verb, tag='VBG')
+    def change_verb_form(self, verb: str, form: str) -> Optional[str]:
+        # see https://github.com/bjascob/pyInflect for available forms
+        results = getInflection(verb, tag=form)
         return results[0] if results is not None else None
 
     def can_be_intransitive_verb(self, verb: str) -> bool:

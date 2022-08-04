@@ -8,7 +8,7 @@ for word in wb.get_words(pos=EnglishWordBank.VERB):
         print('verb (intransitive):', word)
     else:
         print('verb   (transitive):', word)
-    print('        continuous form:', wb.to_present_continuous(word))
+    print('        continuous form:', wb.change_verb_form(word, 'VBG'))
 
 for word in wb.get_words(pos=EnglishWordBank.NOUN):
     print('noun:', word)
