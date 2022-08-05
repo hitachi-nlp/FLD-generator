@@ -1,15 +1,14 @@
 # todo
-* 'adj' などをどこに書くか．
-    - word bankに書くべき？
-    - word_bank.get_pos も欲しい．
-    - change_verb_form(), can_be_intransitive_verb()でposのチェックをするべき．
-* logging.WARNING 戻す．
-
 * 1-pass通す．
-* "argument生成"
-* "distractor"
-* "translation"
-* "OWA vs CWA"
+* コンポーネントを完成させていく
+    * "argument生成"
+    * [pending] "distractor"
+        - [pending] 翻訳に自然文を使う場合は，手法2も検討する．
+    * "translation"
+        - "アルゴリズム"の実装．Translatorとして実装できる．
+    * "OWA vs CWA"
+        - [todo] EBへの転移実験はlabel_true_onlyでやる．
+        - [todo] それ以外の実験は，CWAでやる．
 * 実験計画を立てる．
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
     * ablation
@@ -34,10 +33,11 @@
 
 
 # argument生成
-* 疑問
-    * きちんと多様でchainableな命題がたくさん生まれるだろうか？
 
-## 手法
+## todo
+* "パターン"
+
+## [done] 手法
 * 手法
     1. replacementで，自動で増やす．
         - 詳細
@@ -62,16 +62,15 @@
             - パターンの数が3倍に膨れ上がる．
 * 考察
     1. 自然言語のテンプレートは全パターンで自作する必要があるかもしれない．
-        - [todo] FSをチェック
     2. formal logicは，完全ルールでも作れそう．replacementの最初に，A -> A v B という置き換えを挟むだけ．
         - しかし1があるなら，2を完全ルールでやっても大して工数が減らない？
     3. notをどのように扱うか？ と通じる話がある．
 * 方針
-    - [todo]
+    - [done]
         * 自動で増やす方法にトライしてみる．formalもtranslationも．
 
-## 増やしたいパターン
-* 形式論理の公理系
+## パターン
+* [todo] 形式論理の公理系
     * e.g.) & 導入
         ```
         ---- premise ----
@@ -82,11 +81,9 @@
         -----------------
         H(a)
         ```
-* 命題論理
-* 個別の事実も入れたい．
-    * 「Aa & Ba -> Ca」
-    * ベースラインには，全称量化子しか含まれていない．
-* ->導入
+* [todo] 命題論理
+* [todo] その他，EBに含まれているパターン
+* [pending] ->導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．
         ```
@@ -102,8 +99,11 @@
         ```
         これを自然演繹で示そうとすると，仮定導入(しかも，自由変数として出現させる)が必要になる．
         ただ，できなくはない，気がする．自由変数は"something"にすればよい．
+* [rejected] 個別の事実も入れたい．
+    * 「Aa & Ba -> Ca」
+    * ベースラインには，全称量化子しか含まれていない．
 
-## notをどのように扱うか？
+## [done] notをどのように扱うか？
 - 背景
     - 論理学でのnot
         - /\などと同じように，logical connectiveである．
@@ -152,7 +152,7 @@
 # distractor
 * 方針
     - [done] 翻訳にテンプレート文を使う場合は，手法1をやる．
-    - 翻訳に自然文を使う場合は，手法2も検討する．
+    - [pending] 翻訳に自然文を使う場合は，手法2も検討する．
 * 手法
     1. Ga がtreeに合ったときに，GbやHaを加える．
         - Pros
@@ -175,10 +175,43 @@
 
 # translation
 * todo
-    - "アルゴリズム"の実装．Translatorとして実装できる．
-    - motivational exampleを取り入れるように．
+    - "アルゴリズム"
+        - ドメインの追加
+    - "事例"
 
-## 辞書
+## アルゴリズム
+1. [done] 名詞節 vs 動詞節を決める
+2. [todo] ドメインを決める (human, objet)
+3. [done] predicate, individual を集める．
+4. [done] テンプレートに当てはめる．
+
+## 事例
+* [todo] G -> H = storm cause disastor
+    - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
+    - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．
+    * 以上より，Translationの入力は1セットのFormulaである必要がある．
+        * List[formula] でよいか．
+* [done] Ga -> Ha = If storm is severe, the damage will be huge.
+* [done] Ga -> Ha = severe storm will cause huge damage.
+    * idea: 動詞節か名詞節かの違いで文型を分ければ良い？
+* [done] (x): ({A}x & {B}x) -> {C}x
+    * "If someone is a {A} and a {B}, then they are a {C}. "
+    * small and smart person is always kind.
+
+## [rejected] 複雑な翻訳をどうするか
+* 事例
+    * `(x): ({F}x v {H}x) -> {G}x`
+        - "If someone is F and H then he is G"
+        - F and H person is also G
+    * `(x): (^{F}x v {H}x) -> {G}x`
+        - "If someone is not F and H then he is G"
+        - non-F and H person is also G
+    * `(x): {F}x -> {G}x & {H}x`
+        - "If someone is F then he is G and H"
+        - F person is also G and H.
+* (F v H) (F & H) みたいなのに限られているのであれば，例えばregexpなどでいけるのでは？
+
+## [done] 辞書
 * 必要な機能
     - 語彙の獲得
         - 名詞・動詞・助動詞 の判定
@@ -195,37 +228,6 @@
         * [bjascob/pyInflect](https://github.com/bjascob/pyInflect)
             * [Tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)
 
-## 事例と機能
-* G -> H = storm cause disastor
-    - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
-    - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．
-    * 以上より，Translationの入力は1セットのFormulaである必要がある．
-        * List[formula] でよいか．
-* Ga -> Ha = If storm is severe, the damage will be huge.
-* Ga -> Ha = severe storm will cause huge damage.
-    * idea: 動詞節か名詞節かの違いで文型を分ければ良い？
-* (x): ({A}x & {B}x) -> {C}x
-    * "If someone is a {A} and a {B}, then they are a {C}. "
-    * small and smart person is always kind.
-
-## 手法
-1. 名詞節 vs 動詞節を決める
-2. ドメインを決める (human, objet)
-3. predicate, individual を集める．
-4. テンプレートに当てはめる．
-
-## 複雑な翻訳をどうするか
-* 事例
-    * `(x): ({F}x v {H}x) -> {G}x`
-        - "If someone is F and H then he is G"
-        - F and H person is also G
-    * `(x): (^{F}x v {H}x) -> {G}x`
-        - "If someone is not F and H then he is G"
-        - non-F and H person is also G
-    * `(x): {F}x -> {G}x & {H}x`
-        - "If someone is F then he is G and H"
-        - F person is also G and H.
-* (F v H) (F & H) みたいなのに限られているのであれば，例えばregexpなどでいけるのでは？
 
 
 

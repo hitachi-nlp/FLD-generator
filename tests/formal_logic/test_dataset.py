@@ -18,6 +18,68 @@ from logger_setup import setup as setup_logger
 logger = logging.getLogger(__name__)
 
 
+def load_translator(type_: str, from_: str):
+    if type_ == 'sentence_translator':
+        if from_ == 'config':
+            sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
+            sentence_translations = json.load(open(sentence_translations_config_path))
+            predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
+            constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
+            return SentenceWiseTranslator(
+                sentence_translations,
+                predicate_translations=predicate_translations,
+                constant_translations=constant_translations,
+                translate_terms=True,
+            )
+        elif from_ == 'minimum':
+            sentence_translations = {
+                '{A}{a}': [
+                    '{a} is {A}.',
+                ],
+
+                '(x): {A}x -> {B}x': [
+                    'If someone is {A}, then the one is {B}.',
+                    'Every {A} is a {B}.',
+                ],
+
+                '(x): ({A} v {B})x -> {C}x': [
+                    'If someone is {A} or {B}, then the one is {C}.',
+                ],
+                '(x): ({A} & {B})x -> {C}x': [
+                    'If someone is {A} and {B}, then the one is {C}.',
+                ],
+            }
+            predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
+            constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
+            return SentenceWiseTranslator(
+                sentence_translations,
+                predicate_translations=predicate_translations,
+                constant_translations=constant_translations,
+                translate_terms=True,
+            )
+        else:
+            raise ValueError()
+    elif type_ == 'clause_typed_translator':
+        if from_ == 'config':
+            return ClauseTypedTranslator(
+                json.load(open('./configs/formal_logic/sentence_translations/person.json')),
+                EnglishWordBank(),
+            )
+        elif from_ == 'minimum':
+            raise ValueError()
+        else:
+            raise ValueError()
+    elif type_ == 'iterative_regexp':
+        if from_ == 'config':
+            raise ValueError()
+        elif from_ == 'minimum':
+            return IterativeRegexpTranslator()
+        else:
+            raise ValueError()
+    else:
+        raise ValueError()
+
+
 def test_simple_pipeline():
     arguments = [
         Argument(
@@ -36,34 +98,7 @@ def test_simple_pipeline():
 
     distractor = UnknownFactDistractor()
 
-    # sentence_translations: Dict[str, List[str]] = {
-    #     '{A}{a}': [
-    #         '{a} is {A}.',
-    #     ],
-
-    #     '(x): {A}x -> {B}x': [
-    #         'If someone is {A}, then the one is {B}.',
-    #         'Every {A} is a {B}.',
-    #     ],
-
-    #     '(x): ({A} v {B})x -> {C}x': [
-    #         'If someone is {A} or {B}, then the one is {C}.',
-    #     ],
-    #     '(x): ({A} & {B})x -> {C}x': [
-    #         'If someone is {A} and {B}, then the one is {C}.',
-    #     ],
-    # }
-    # predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
-    # constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
-    # translator = SentenceWiseTranslator(
-    #     sentence_translations,
-    #     predicate_translations=predicate_translations,
-    #     constant_translations=constant_translations,
-    #     translate_terms=True,
-    # )
-    # translator = IterativeRegexpTranslator()
-    translator = ClauseTypedTranslator(json.load(open('./configs/formal_logic/sentence_translations/person.json')),
-                                       EnglishWordBank())
+    translator = load_translator('clause_typed_translator', 'config')
 
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
@@ -104,17 +139,7 @@ def test_pipeline_from_config():
 
     distractor = UnknownFactDistractor()
 
-    sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
-    sentence_translations = json.load(open(sentence_translations_config_path))
-    predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
-    constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
-    translator = SentenceWiseTranslator(
-        sentence_translations,
-        predicate_translations=predicate_translations,
-        constant_translations=constant_translations,
-        translate_terms=True,
-    )
-
+    translator = load_translator('sentence_translator', 'config')
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
@@ -141,7 +166,6 @@ def test_pipeline_from_config():
         logger.info('\n')
         logger.info('--------------- stats --------------')
         logger.info(stats)
-
 
 
 if __name__ == '__main__':
