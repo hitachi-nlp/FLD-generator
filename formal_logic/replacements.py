@@ -69,13 +69,13 @@ def generate_replaced_arguments(src_arg: Argument,
                                 tgt_arg: Argument,
                                 allow_complication=False,
                                 constraints: Optional[Dict[str, str]] = None,
-                                shuffle=False,
+                                block_shuffle=False,
                                 elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
                                                               tgt_arg.premises + [tgt_arg.conclusion],
                                                               allow_complication=allow_complication,
                                                               constraints=constraints,
-                                                              shuffle=shuffle):
+                                                              block_shuffle=block_shuffle):
         yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
 
@@ -83,13 +83,13 @@ def generate_replaced_formulas(src_formula: Formula,
                                tgt_formula: Formula,
                                allow_complication=False,
                                constraints: Optional[Dict[str, str]] = None,
-                               shuffle=False,
+                               block_shuffle=False,
                                elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula([src_formula],
                                                               [tgt_formula],
                                                               allow_complication=allow_complication,
                                                               constraints=constraints,
-                                                              shuffle=shuffle):
+                                                              block_shuffle=block_shuffle):
         yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
@@ -97,7 +97,7 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                tgt_formulas: List[Formula],
                                                allow_complication=False,
                                                constraints: Optional[Dict[str, str]] = None,
-                                               shuffle=False) -> Iterable[Dict[str, str]]:
+                                               block_shuffle=False) -> Iterable[Dict[str, str]]:
     if allow_complication:
         complication_mappings = generate_complication_mappings_from_formula(src_formulas)
     else:
@@ -120,7 +120,7 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                             tgt_predicates,
                                                             tgt_constants,
                                                             constraints=constraints,
-                                                            shuffle=shuffle)
+                                                            block_shuffle=block_shuffle)
 
 
 def generate_replacement_mappings_from_terms(src_predicates: List[str],
@@ -128,19 +128,19 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
                                              tgt_predicates: List[str],
                                              tgt_constants: List[str],
                                              constraints: Optional[Dict[str, str]] = None,
-                                             shuffle=False) -> Iterable[Dict[str, str]]:
+                                             block_shuffle=False) -> Iterable[Dict[str, str]]:
     get_pred_replacements = lambda: _generate_replacement_mappings(
         src_predicates,
         tgt_predicates,
         constraints=constraints,
-        shuffle=shuffle,
+        block_shuffle=block_shuffle,
     )
 
     get_const_replacements = lambda: _generate_replacement_mappings(
         src_constants,
         tgt_constants,
         constraints=constraints,
-        shuffle=shuffle,
+        block_shuffle=block_shuffle,
     )
 
     for pred_replacements in get_pred_replacements():
@@ -156,13 +156,13 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
 def _generate_replacement_mappings(src_objs: List[Any],
                                    tgt_objs: List[Any],
                                    constraints: Optional[Dict[Any, Any]] = None,
-                                   shuffle=False) -> Iterable[Optional[Dict[Any, Any]]]:
+                                   block_shuffle=False) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError()
     if len(set(tgt_objs)) != len(tgt_objs):
         raise ValueError()
 
-    # if shuffle:
+    # if block_shuffle:
     #     src_objs = random.sample(src_objs, len(src_objs))
     #     tgt_objs = random.sample(tgt_objs, len(tgt_objs))
 
@@ -176,7 +176,7 @@ def _generate_replacement_mappings(src_objs: List[Any],
         for chosen_tgt_objs in _permutations_with_replacement(tgt_objs,
                                                               len(src_objs),
                                                               constraints=idx_constraints,
-                                                              shuffle=shuffle):
+                                                              block_shuffle=block_shuffle):
             yield {
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
@@ -193,10 +193,16 @@ def _permutations_with_replacement(objs: List[Any],
                                    length: int,
                                    src_idx=0,
                                    constraints: Optional[Dict[int, Any]] = None,
-                                   shuffle=False) -> Iterable[List[Any]]:
+                                   block_shuffle=False) -> Iterable[List[Any]]:
+    """
+
+    block_shuffle=Trueであって，完全にblock_shuffleできるわけではない．
+    for head in heads: のループにおいて，headごとにブロック化しているため．
+    しかし，ここをblock_shuffleしようとすると，generatorではなくlistを作る必要があり，速度が落ちる．
+    """
     if length < 1:
         return
-    if shuffle:
+    if block_shuffle:
         objs = random.sample(objs, len(objs))
 
     if length == 1:
@@ -215,7 +221,7 @@ def _permutations_with_replacement(objs: List[Any],
                                                        length - 1,
                                                        src_idx=src_idx + 1,
                                                        constraints=constraints,
-                                                       shuffle=shuffle):
+                                                       block_shuffle=block_shuffle):
                 yield [head] + tail
 
 
@@ -264,3 +270,10 @@ def is_formula_identical(this: Formula,
                                                            allow_complication=allow_complication,
                                                            elim_dneg=elim_dneg)
     ])
+
+
+def is_argument_identical(this: Argument,
+                          that: Argument,
+                          allow_complication=False,
+                          elim_dneg=False) -> bool:
+    raise NotImplementedError()

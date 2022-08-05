@@ -164,7 +164,7 @@ def _generate_stem(arguments: List[Argument],
                         # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [cur_conclusion],
                         allow_complication=False,
-                        shuffle=True,
+                        block_shuffle=True,
                     ):
                         if is_arg_done:
                             break
@@ -185,7 +185,7 @@ def _generate_stem(arguments: List[Argument],
                             [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
                             allow_complication=False,
-                            shuffle=True,
+                            block_shuffle=True,
                         ):
                             if is_arg_done:
                                 break
@@ -283,7 +283,7 @@ def _extend_braches(proof_tree: ProofTree,
                         # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
                         allow_complication=False,
-                        shuffle=True,
+                        block_shuffle=True,
                 ):
                     if is_leaf_node_done:
                         break
@@ -304,7 +304,7 @@ def _extend_braches(proof_tree: ProofTree,
                         [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         constraints=conclusion_mapping,
                         allow_complication=False,
-                        shuffle=True,
+                        block_shuffle=True,
                     ):
                         next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
 
