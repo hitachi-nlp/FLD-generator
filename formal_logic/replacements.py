@@ -251,3 +251,16 @@ def replace_rep(rep: str,
         replaced = re.sub(f'{NOT}{NOT}', '', replaced)
 
     return replaced
+
+
+def is_formula_identical(this: Formula,
+                         that: Formula,
+                         allow_complication=False,
+                         elim_dneg=False) -> bool:
+    return any([
+        this.rep == that_replaced.rep
+        for that_replaced, _ in generate_replaced_formulas(that,
+                                                           this,
+                                                           allow_complication=allow_complication,
+                                                           elim_dneg=elim_dneg)
+    ])

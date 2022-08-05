@@ -18,6 +18,7 @@ from .replacements import (
     generate_complicated_arguments,
     replace_formula,
     replace_argument,
+    is_formula_identical,
 )
 from .proof import ProofTree, ProofNode
 from .exception import AACorpusExceptionBase
@@ -136,12 +137,8 @@ def _generate_stem(arguments: List[Argument],
             # Choose next argument
             chainable_args = [
                 arg for arg in arguments
-                if any([premise_replaced.rep == cur_conclusion.rep
-                        for premise in arg.premises
-                        for premise_replaced, _ in generate_replaced_formulas(premise,
-                                                                              cur_conclusion,
-                                                                              allow_complication=False,
-                                                                              elim_dneg=elim_dneg)])
+                if any([is_formula_identical(premise, cur_conclusion)
+                        for premise in arg.premises])
             ]
             if len(chainable_args) == 0:
                 break
@@ -263,11 +260,7 @@ def _extend_braches(proof_tree: ProofTree,
             # Choose next argument
             chainable_args = [
                 arg for arg in arguments
-                if any([conclsion_replaced.rep == leaf_node.formula.rep
-                        for conclsion_replaced, _ in generate_replaced_formulas(arg.conclusion,
-                                                                                leaf_node.formula,
-                                                                                allow_complication=False,
-                                                                                elim_dneg=elim_dneg)])
+                if is_formula_identical(arg.conclusion, leaf_node.formula)
             ]
             if len(chainable_args) == 0:
                 # logger.info('_extend_braches() retry since no chainable arguments found ...')
