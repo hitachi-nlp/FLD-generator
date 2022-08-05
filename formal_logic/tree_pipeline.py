@@ -34,10 +34,10 @@ class TreePipeline:
                 distractors = []
 
             if self.translator is not None:
-                translations = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors)
+                named_translations = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors)
                 for i_node, node in enumerate(proof_tree.nodes):
-                    node.formula.translation = translations[i_node]
+                    node.formula.translation, node.formula.translation_name = named_translations[i_node]
                 for i_distractor, distractor_formula in enumerate(distractors):
-                    distractor_formula.translation = translations[len(proof_tree.nodes) + i_distractor]
+                    distractor_formula.translation, distractor_formula.translation_name = named_translations[len(proof_tree.nodes) + i_distractor]
 
             return proof_tree, distractors

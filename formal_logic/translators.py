@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from abc import abstractmethod, ABC
 from collections import OrderedDict, defaultdict
 import random
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class Translator(ABC):
 
     @abstractmethod
-    def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
+    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
         pass
 
 
@@ -49,7 +49,7 @@ class SentenceWiseTranslator(Translator):
         self.constant_translations = constant_translations
         self.translate_terms = translate_terms
 
-    def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
+    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
         translations = []
 
         # sentence translation
@@ -88,7 +88,7 @@ class SentenceWiseTranslator(Translator):
                 else:
                     print('[no translation]', formula.rep)
 
-        return translations
+        return [(None, translation) for translation in translations]
 
 
 class IterativeRegexpTranslator(Translator):
@@ -97,7 +97,7 @@ class IterativeRegexpTranslator(Translator):
     def __init__(self):
         pass
 
-    def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
+    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
         translations = {
             '\({A} v {B}\)x': [
                 'someone is {A} and {B}'
@@ -139,7 +139,7 @@ class IterativeRegexpTranslator(Translator):
 
             translated_reps.append(translated_formula.rep)
 
-        return translated_reps
+        return [(None, translated_rep) for translated_rep in translated_reps]
 
 
 _COUNTER = defaultdict(int)
@@ -177,8 +177,9 @@ class ClauseTypedTranslator(Translator):
 
         self.verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
-    def translate(self, formulas: List[Formula]) -> List[Optional[str]]:
+    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
         replaced_typed_translations: List[Dict] = []
+        translation_formula_reps = []
 
         # sentence translation
         for formula in formulas:
@@ -201,6 +202,7 @@ class ClauseTypedTranslator(Translator):
                                     translated_nl = replace_formula(Formula(nl), mapping)
                                     replaced_translations[clause_type][pos_type].append(translated_nl)
                         replaced_typed_translations.append(replaced_translations)
+                        translation_formula_reps.append(trans_formula_rep)
                         done_translation = True
                         break
                 if done_translation:
@@ -212,6 +214,7 @@ class ClauseTypedTranslator(Translator):
 
         # term translation
         translations = []
+        translation_names = []
 
         if self.translate_terms:
             term_mappings = generate_replacement_mappings_from_terms(
@@ -225,6 +228,7 @@ class ClauseTypedTranslator(Translator):
             for i_formula, (formula, _replaced_typed_translations) in enumerate(zip(formulas, replaced_typed_translations)):
                 if _replaced_typed_translations is None:
                     translations.append(None)
+                    translation_names[i_formula] = None
                 else:
                     predicate_symbols = [pred.rep for pred in formula.predicates]
                     if any([word in self._adjs
@@ -237,7 +241,9 @@ class ClauseTypedTranslator(Translator):
                     clause_type = random.choice(['verb_clause', 'noun_clause'])
                     pos_type = random.choice(possible_pos_types)
                     nls = _replaced_typed_translations[clause_type][pos_type]
-                    nl = random.choice(nls).rep
+
+                    i_translation = random.choice(range(len(nls)))
+                    nl = nls[i_translation].rep
 
                     inflated_mapping = {}
                     for symbol, word in term_mapping.items():
@@ -277,9 +283,10 @@ class ClauseTypedTranslator(Translator):
                             inflated_mapping[symbol] = inflated_word
                             pprint(dict(_COUNTER))
 
+                    translation_names[i_formula] = '.'.join([translation_formula_reps[i_formula], f'clause-{clause_type}', f'pos-{pos_type}', str(i_translation)])
                     translations.append(replace_formula(Formula(nl), inflated_mapping).rep)
 
-        return translations
+        return [(name, translation) for name, translation in zip(translation_names, translations)]
 
     def _sample_predicate_translations(self, num=100) -> List[str]:
         # We sample more from verbs since the condition for "possible_pos_types" (see lines around 230)

@@ -30,9 +30,11 @@ class Formula:
 
     def __init__(self,
                  formula_str: str,
-                 translation: Optional[str] = None):
+                 translation: Optional[str] = None,
+                 translation_name: Optional[str] = None):
         self._formula_str = formula_str
         self.translation = translation
+        self.translation_name = translation_name
 
     @property
     def rep(self) -> str:

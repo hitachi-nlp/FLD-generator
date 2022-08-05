@@ -49,6 +49,7 @@ class NLProofSDataset:
         stats = {
             'trees': 0,
             'arguments': defaultdict(int),
+            'translations': defaultdict(int),
         }
 
         for i_sample in range(size):
@@ -158,3 +159,4 @@ class NLProofSDataset:
         for node in proof_tree.nodes:
             if node.argument is not None:
                 stats['arguments'][node.argument.id] += 1
+            stats['translations'][node.formula.translation_name] += 1
