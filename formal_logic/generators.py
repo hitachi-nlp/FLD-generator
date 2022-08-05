@@ -88,7 +88,7 @@ def _generate_tree(arguments: List[Argument],
                    elim_dneg=False,
                    timeout: Optional[int] = None) -> Optional[ProofTree]:
     if allow_complication:
-        arguments = arguments + [
+        arguments = [
             complicated_argument
             for argment in arguments
             for complicated_argument, _ in generate_complicated_arguments(argment, elim_dneg=elim_dneg)
