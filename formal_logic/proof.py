@@ -1,13 +1,13 @@
 from typing import List, Tuple, Optional, Iterable, Union
 from .formula import Formula
 from .argument import Argument
-from .exception import AACorpusExceptionBase
+from .exception import FormalLogicExceptionBase
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class MultipleParentError(AACorpusExceptionBase):
+class MultipleParentError(FormalLogicExceptionBase):
     pass
 
 

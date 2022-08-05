@@ -15,14 +15,19 @@ from .replacements import (
     replace_formula,
 )
 from .word_banks import POS, VerbForm
+from .exception import FormalLogicExceptionBase
 
 logger = logging.getLogger(__name__)
+
+
+class TranslationNotFoundError(FormalLogicExceptionBase):
+    pass
 
 
 class Translator(ABC):
 
     @abstractmethod
-    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
         pass
 
 
@@ -50,7 +55,7 @@ class SentenceWiseTranslator(Translator):
         self.constant_translations = constant_translations
         self.translate_terms = translate_terms
 
-    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
         translations = []
 
         # sentence translation
@@ -70,7 +75,11 @@ class SentenceWiseTranslator(Translator):
                         done_translation = True
 
             if not done_translation:
-                translations.append(None)
+                if raise_if_translation_not_found:
+                    raise TranslationNotFoundError(f'translation not found for {formula.rep}')
+                else:
+                    logger.warning('translation not found for %s', formula.rep)
+                    translations.append(None)
 
         # term translation
         if self.translate_terms:
@@ -98,7 +107,7 @@ class IterativeRegexpTranslator(Translator):
     def __init__(self):
         pass
 
-    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
         translations = {
             '\({A} v {B}\)x': [
                 'someone is {A} and {B}'
@@ -173,7 +182,7 @@ class ClauseTypedTranslator(Translator):
 
         self.verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
-    def translate(self, formulas: List[Formula]) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
         replaced_typed_translations: List[Dict] = []
         translation_formula_reps = []
 
@@ -205,9 +214,12 @@ class ClauseTypedTranslator(Translator):
                     break
 
             if not done_translation:
-                logger.warning('Translation not found for %s', formula.rep)
-                replaced_typed_translations.append(None)
-                translation_formula_reps.append(None)
+                if raise_if_translation_not_found:
+                    raise TranslationNotFoundError(f'translation not found for {formula.rep}')
+                else:
+                    logger.warning('translation not found for %s', formula.rep)
+                    replaced_typed_translations.append(None)
+                    translation_formula_reps.append(None)
 
         # term translation
         translations = []

@@ -1,2 +1,2 @@
-class AACorpusExceptionBase(Exception):
+class FormalLogicExceptionBase(Exception):
     pass

@@ -103,7 +103,8 @@ def test_simple_pipeline():
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
-                              depth=5, num_distractors=5)
+                              depth=5, num_distractors=5,
+                              raise_if_translation_not_found=False)
 
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(1000):
         logger.info('\n\n')
@@ -143,7 +144,8 @@ def test_pipeline_from_config():
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
-                              depth=5, num_distractors=5)
+                              depth=5, num_distractors=5,
+                              raise_if_translation_not_found=False)
 
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(1000):
         logger.info('\n\n')

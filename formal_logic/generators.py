@@ -21,7 +21,7 @@ from .replacements import (
     is_formula_identical,
 )
 from .proof import ProofTree, ProofNode
-from .exception import AACorpusExceptionBase
+from .exception import FormalLogicExceptionBase
 
 from .formula import (
     IMPLICATION,
@@ -50,7 +50,7 @@ _NG_FORMULA_REGEXPS = [
 _NG_FORMULA_REGEXP = re.compile('|'.join(_NG_FORMULA_REGEXPS))
 
 
-class GenerationFailure(AACorpusExceptionBase):
+class GenerationFailure(FormalLogicExceptionBase):
     pass
 
 

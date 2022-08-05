@@ -20,7 +20,10 @@ class TreePipeline:
         self.distractor = distractor
         self.translator = translator
 
-    def run(self, depth: int = 5, num_distractors: int = 5) -> Tuple[ProofTree, Optional[List[Formula]]]:
+    def run(self,
+            depth: int = 5,
+            num_distractors: int = 5,
+            raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]]]:
         while True:
             proof_tree = self.generator.generate_tree(depth=depth)
 
@@ -34,7 +37,8 @@ class TreePipeline:
                 distractors = []
 
             if self.translator is not None:
-                named_translations = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors)
+                named_translations = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors,
+                                                               raise_if_translation_not_found=raise_if_translation_not_found)
                 for i_node, node in enumerate(proof_tree.nodes):
                     node.formula.translation_name, node.formula.translation = named_translations[i_node]
                 for i_distractor, distractor_formula in enumerate(distractors):
