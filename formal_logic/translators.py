@@ -166,12 +166,10 @@ class ClauseTypedTranslator(Translator):
         self.translate_terms = translate_terms
         self.wb = word_bank
 
-        logger.info('loading word bank ...')
         self._adjs = set(self.wb.get_words(pos=POS.ADJ))
         self._verbs = {word for word in self.wb.get_words(pos=POS.VERB)
                        if self.wb.can_be_intransitive_verb(word)}
         self._nouns = {word for word in self.wb.get_words(pos=POS.NOUN)}
-        logger.info('loading word bank done!')
 
         self.verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
@@ -253,16 +251,16 @@ class ClauseTypedTranslator(Translator):
                             inflated_mapping[symbol] = word
                         else:
                             if predicate_pos_type == 'adj_predicate':
-                                if word in self._adjs:
+                                if POS.ADJ in self.wb.get_pos(word):
                                     inflated_word = word
-                                elif word in self._verbs:
+                                elif POS.VERB in self.wb.get_pos(word):
                                     inflated_word = self.wb.change_verb_form(word, VerbForm.VBG, force=True)
                                 else:
                                     raise Exception()
                             elif predicate_pos_type == 'verb_predicate':
-                                if word in self._adjs:
+                                if POS.ADJ in self.wb.get_pos(word):
                                     raise Exception()
-                                elif word in self._verbs:
+                                elif POS.VERB in self.wb.get_pos(word):
                                     if nl.find(f'does not {symbol}') >= 0:
                                         inflated_word = self.wb.change_verb_form(word, VerbForm.VB, force=True)
                                     else:

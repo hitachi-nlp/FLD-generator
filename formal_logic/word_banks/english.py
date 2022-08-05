@@ -1,6 +1,7 @@
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Dict, List
 import re
 import logging
+from itertools import chain
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
@@ -18,12 +19,31 @@ class EnglishWordBank(WordBank):
         POS.ADJ: wn.ADJ,
     }
 
-    def get_words(self, pos: Optional[POS] = None) -> Iterable[str]:
-        if pos not in self._POS_WB_TO_WN:
-            raise ValueError()
+    def __init__(self):
+        logger.info('loading words ...')
+        self._cached_word_list = {
+            pos: list(self._get_words_wo_cache(pos))
+            for pos in chain(POS, [None])
+        }
+        self._cached_word_sets = {
+            pos: set(pos_list)
+            for pos, pos_list in self._cached_word_list.items()
+        }
+        logger.info('loading words done!')
 
+    def get_words(self, pos: Optional[POS] = None) -> Iterable[str]:
+        yield from self._cached_word_list[pos]
+
+    def get_pos(self, word: str) -> List[POS]:
+        posses = []
+        for pos in POS:
+            if word in self._cached_word_sets[pos]:
+                posses.append(pos)
+        return posses
+
+    def _get_words_wo_cache(self, pos: Optional[POS] = None) -> Iterable[str]:
         done_lemmas = set()
-        wn_pos = self._POS_WB_TO_WN[pos]
+        wn_pos = self._POS_WB_TO_WN[pos] if pos is not None else None
         for s in self._get_sensets_by_pos(wn_pos=wn_pos):
             for lemma in self._get_standard_lemmas(s):
                 lemma_str = lemma.name()
@@ -34,7 +54,7 @@ class EnglishWordBank(WordBank):
                 done_lemmas.add(lemma_str)
                 break
 
-    def change_verb_form(self, verb: str, form: VerbForm, force=True) -> Optional[str]:
+    def _change_verb_form(self, verb: str, form: VerbForm, force=True) -> Optional[str]:
         # see https://github.com/bjascob/pyInflect for available forms
         results = getInflection(verb, tag=form)
         if results is None:
@@ -74,7 +94,7 @@ class EnglishWordBank(WordBank):
         else:
             return results[0]
 
-    def can_be_intransitive_verb(self, verb: str) -> bool:
+    def _can_be_intransitive_verb(self, verb: str) -> bool:
         return any([self._can_be_transitive_verb_synset(s)
                     for s in self._get_synsets_by_word(verb)])
 

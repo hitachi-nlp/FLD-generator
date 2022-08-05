@@ -2,7 +2,7 @@
 * 'adj' などをどこに書くか．
     - word bankに書くべき？
     - word_bank.get_pos も欲しい．
-    - change_verb_form()でposのチェックをするべき．
+    - change_verb_form(), can_be_intransitive_verb()でposのチェックをするべき．
 * logging.WARNING 戻す．
 
 * 1-pass通す．

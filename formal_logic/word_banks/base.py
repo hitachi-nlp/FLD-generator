@@ -1,4 +1,4 @@
-from typing import Optional, Iterable
+from typing import Optional, Iterable, List
 from enum import Enum
 from abc import ABC, abstractmethod
 
@@ -23,9 +23,23 @@ class WordBank(ABC):
         pass
 
     @abstractmethod
-    def change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+    def get_pos(self, word: str) -> List[POS]:
         pass
 
+    def change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+        if POS.VERB not in self.get_pos(verb):
+            raise ValueError()
+        return self._change_verb_form(verb, form, force=force)
+
     @abstractmethod
+    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+        pass
+
     def can_be_intransitive_verb(self, verb: str) -> bool:
+        if POS.VERB not in self.get_pos(verb):
+            raise ValueError()
+        return self._can_be_intransitive_verb(verb)
+
+    @abstractmethod
+    def _can_be_intransitive_verb(self, verb: str) -> bool:
         pass
