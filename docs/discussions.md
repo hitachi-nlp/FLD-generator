@@ -1,5 +1,4 @@
 # todo
-* "despiteful one is not despiteful"
 * デバッグのために，ルールのstatisticsを取る．
     - rule statistics
     - translation statistics

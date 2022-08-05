@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Optional, Set, Tuple
+from typing import List, Dict, Optional
 from abc import abstractmethod, ABC
 from collections import OrderedDict, defaultdict
 import random
@@ -8,7 +8,6 @@ import logging
 from pprint import pprint
 
 from .formula import Formula, CONSTANTS
-from .proof import ProofTree
 from .word_banks.base import WordBank
 from .replacements import (
     generate_replacement_mappings_from_formula,

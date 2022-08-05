@@ -66,11 +66,11 @@ class FormalLogicGenerator:
         self.timeout = timeout
 
         if allow_complication:
-            self.arguments = [
-                complicated_argument
-                for argment in arguments
-                for complicated_argument, _ in generate_complicated_arguments(argment, elim_dneg=elim_dneg)
-            ]
+            self.arguments = []
+            for argment in arguments:
+                for complicated_argument, _, name in generate_complicated_arguments(argment, elim_dneg=elim_dneg, get_name=True):
+                    complicated_argument.id += f'.{name}'
+                    self.arguments.append(complicated_argument)
         else:
             self.arguments = arguments
 

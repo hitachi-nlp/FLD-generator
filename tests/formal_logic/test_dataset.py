@@ -23,7 +23,7 @@ def test_simple_pipeline():
         Argument(
             [Formula('(x): {F}x -> {G}x'), Formula('{F}{a}')],
             Formula('{G}{a}'),
-            id='modus ponens',
+            id='modus_ponens',
         ),
         Argument(
             [Formula('(x): {F}x -> {G}x'), Formula('(x): {G}x -> {H}x')],

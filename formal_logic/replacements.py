@@ -1,6 +1,6 @@
 import re
 import random
-from typing import Dict, List, Any, Iterable, Tuple, Optional
+from typing import Dict, List, Any, Iterable, Tuple, Optional, Union
 import copy
 
 from .formula import Formula, NOT, OR, AND, PREDICATES
@@ -8,18 +8,29 @@ from .argument import Argument
 
 
 def generate_complicated_arguments(src_arg: Argument,
-                                   elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion]):
-        yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
+                                   elim_dneg=False,
+                                   get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
+    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion], get_name=True):
+        replaced_formula = replace_argument(src_arg, mapping, elim_dneg=elim_dneg)
+        if get_name:
+            yield replaced_formula, mapping, name
+        else:
+            yield replaced_formula, mapping
 
 
 def generate_complicated_formulas(src_formula: Formula,
-                                  elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for mapping in generate_complication_mappings_from_formula([src_formula]):
-        yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
+                                  elim_dneg=False,
+                                  get_name=False) -> Union[Iterable[Tuple[Formula, Dict[str, str]]], Iterable[Tuple[Formula, Dict[str, str], str]]]:
+    for mapping, name in generate_complication_mappings_from_formula([src_formula], get_name=True):
+        replaced_formula = replace_formula(src_formula, mapping, elim_dneg=elim_dneg)
+        if get_name:
+            yield replaced_formula, mapping, name
+        else:
+            yield replaced_formula, mapping
 
 
-def generate_complication_mappings_from_formula(formulas: List[Formula]) -> Iterable[Dict[str, str]]:
+def generate_complication_mappings_from_formula(formulas: List[Formula],
+                                                get_name=False) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
     predicates = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
     constants = sorted(set([p.rep for formula in formulas for p in formula.constants]))
 
@@ -50,19 +61,24 @@ def generate_complication_mappings_from_formula(formulas: List[Formula]) -> Iter
                 mapping[original_predicate] = predicate_with_not
             yield mapping
 
-    for mapping in generate_not_enhanced_mappings(predicates):
-        yield mapping
+    for i_not, mapping in enumerate(generate_not_enhanced_mappings(predicates)):
+        if get_name:
+            yield mapping, f'not-{i_not}'
+        else:
+            yield mapping
 
     for expand_op in [OR, AND]:
         for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
             unk_extended_predicates = [unk_pred0, unk_pred1]\
                 + predicates[:i_predicate_to_expand]\
                 + predicates[i_predicate_to_expand + 1:]
-
-            for not_enhanced_mapping in generate_not_enhanced_mappings(unk_extended_predicates):
+            for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
                 mapping = copy.deepcopy(not_enhanced_mapping)
                 mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {expand_op} {not_enhanced_mapping[unk_pred1]})'
-                yield mapping
+                if get_name:
+                    yield mapping, f'{expand_op}-{i_predicate_to_expand}.not-{i_not}'
+                else:
+                    yield mapping
 
 
 def generate_replaced_arguments(src_arg: Argument,
