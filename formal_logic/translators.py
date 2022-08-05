@@ -14,6 +14,7 @@ from .replacements import (
     generate_replacement_mappings_from_terms,
     replace_formula,
 )
+from .word_banks import POS, VerbForm
 
 logger = logging.getLogger(__name__)
 
@@ -142,9 +143,6 @@ class IterativeRegexpTranslator(Translator):
         return [(None, translated_rep) for translated_rep in translated_reps]
 
 
-_COUNTER = defaultdict(int)
-
-
 class ClauseTypedTranslator(Translator):
 
     def __init__(self,
@@ -169,10 +167,10 @@ class ClauseTypedTranslator(Translator):
         self.wb = word_bank
 
         logger.info('loading word bank ...')
-        self._adjs = set(self.wb.get_words(pos=self.wb.ADJ))
-        self._verbs = {word for word in self.wb.get_words(pos=self.wb.VERB)
+        self._adjs = set(self.wb.get_words(pos=POS.ADJ))
+        self._verbs = {word for word in self.wb.get_words(pos=POS.VERB)
                        if self.wb.can_be_intransitive_verb(word)}
-        self._nouns = {word for word in self.wb.get_words(pos=self.wb.NOUN)}
+        self._nouns = {word for word in self.wb.get_words(pos=POS.NOUN)}
         logger.info('loading word bank done!')
 
         self.verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
@@ -257,10 +255,8 @@ class ClauseTypedTranslator(Translator):
                             if predicate_pos_type == 'adj_predicate':
                                 if word in self._adjs:
                                     inflated_word = word
-                                    _COUNTER[0] += 1
                                 elif word in self._verbs:
-                                    inflated_word = self.wb.change_verb_form(word, 'VBG', force=True)
-                                    _COUNTER[1] += 1
+                                    inflated_word = self.wb.change_verb_form(word, VerbForm.VBG, force=True)
                                 else:
                                     raise Exception()
                             elif predicate_pos_type == 'verb_predicate':
@@ -268,11 +264,9 @@ class ClauseTypedTranslator(Translator):
                                     raise Exception()
                                 elif word in self._verbs:
                                     if nl.find(f'does not {symbol}') >= 0:
-                                        inflated_word = self.wb.change_verb_form(word, 'VB', force=True)
-                                        _COUNTER[2] += 1
+                                        inflated_word = self.wb.change_verb_form(word, VerbForm.VB, force=True)
                                     else:
-                                        inflated_word = self.wb.change_verb_form(word, 'VBZ', force=True)
-                                        _COUNTER[3] += 1
+                                        inflated_word = self.wb.change_verb_form(word, VerbForm.VBZ, force=True)
                                 else:
                                     raise Exception()
 
@@ -282,7 +276,6 @@ class ClauseTypedTranslator(Translator):
                             if inflated_word is None:
                                 raise Exception()
                             inflated_mapping[symbol] = inflated_word
-                            pprint(dict(_COUNTER))
 
                     translation_names.append('.'.join([translation_formula_reps[i_formula], f'clause-{clause_type}', f'predicate-{predicate_pos_type}', str(i_translation)]))
                     translations.append(replace_formula(Formula(nl), inflated_mapping).rep)

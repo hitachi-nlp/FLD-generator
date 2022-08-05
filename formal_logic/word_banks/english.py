@@ -5,7 +5,7 @@ import logging
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
-from .base import WordBank
+from .base import WordBank, POS, VerbForm
 
 logger = logging.getLogger(__name__)
 
@@ -13,12 +13,12 @@ logger = logging.getLogger(__name__)
 class EnglishWordBank(WordBank):
 
     _POS_WB_TO_WN = {
-        'VERB': wn.VERB,
-        'NOUN': wn.NOUN,
-        'ADJ': wn.ADJ,
+        POS.VERB: wn.VERB,
+        POS.NOUN: wn.NOUN,
+        POS.ADJ: wn.ADJ,
     }
 
-    def get_words(self, pos: Optional[str] = None) -> Iterable[str]:
+    def get_words(self, pos: Optional[POS] = None) -> Iterable[str]:
         if pos not in self._POS_WB_TO_WN:
             raise ValueError()
 
@@ -34,16 +34,15 @@ class EnglishWordBank(WordBank):
                 done_lemmas.add(lemma_str)
                 break
 
-    def change_verb_form(self, verb: str, form: str, force=True) -> Optional[str]:
+    def change_verb_form(self, verb: str, form: VerbForm, force=True) -> Optional[str]:
         # see https://github.com/bjascob/pyInflect for available forms
-        # and https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html for tag system.
         results = getInflection(verb, tag=form)
         if results is None:
             if force:
-                if form == 'VB':
+                if form == VerbForm.VB:
                     # watch
                     inflated_verb = verb
-                elif form == 'VBG':
+                elif form == VerbForm.VBG:
                     # [現在分詞](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo82.htm)
                     if re.match('.*[^aeiou]e$', verb):
                         # date -> dating
@@ -53,7 +52,7 @@ class EnglishWordBank(WordBank):
                         inflated_verb = verb + verb[-1] + 'ing'
                     else:
                         inflated_verb = verb + 'ing'
-                elif form == 'VBZ':
+                elif form == VerbForm.VBZ:
                     # [３単現及び名詞の複数形の -s, -es](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo52.htm)
                     if re.match('.*(s|sh|ch|x|o)$', verb):
                         # wash -> washes

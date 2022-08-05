@@ -1,14 +1,8 @@
 # todo
-* デバッグのために，ルールのstatisticsを取る．
-    - rule statistics
-    - translation statistics
-* どうやったら偏りをなくせるか．
-    - ルールを別のに取り替えた場合でも通用するように．
 * 'adj' などをどこに書くか．
     - word bankに書くべき？
     - word_bank.get_pos も欲しい．
     - change_verb_form()でposのチェックをするべき．
-* wb.NNS の体系
 * logging.WARNING 戻す．
 
 * 1-pass通す．
