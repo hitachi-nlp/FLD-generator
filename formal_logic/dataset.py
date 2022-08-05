@@ -1,7 +1,8 @@
 import random
-from typing import Dict, List, Optional, Union, Iterable, Tuple
+from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
 import logging
 import copy
+from collections import defaultdict
 
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.formula import Formula
@@ -28,7 +29,7 @@ class NLProofSDataset:
         self.depth = depth
         self.num_distractors = num_distractors
 
-    def generate(self, size: int) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]]]]:
+    def generate(self, size: int) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
 
         def is_root(node: Union[ProofNode, _DistractorNode]) -> bool:
             return isinstance(node, ProofNode) and node == proof_tree.root_node
@@ -44,6 +45,11 @@ class NLProofSDataset:
 
         def _get_sent(node: Union[ProofNode, _DistractorNode]) -> str:
             return node.formula.translation or node.formula.rep
+
+        stats = {
+            'trees': 0,
+            'arguments': defaultdict(int),
+        }
 
         for i_sample in range(size):
             proof_tree, distractors = self.tree_pipeline.run(depth=self.depth, num_distractors=self.num_distractors)
@@ -143,4 +149,12 @@ class NLProofSDataset:
                 'depth': proof_tree.depth,
             }
 
-            yield dataset_json, proof_tree, distractors
+            self._update_stats(stats, proof_tree)
+
+            yield dataset_json, proof_tree, distractors, stats
+
+    def _update_stats(self, stats: Dict[str, Any], proof_tree: ProofTree) -> None:
+        stats['trees'] += 1
+        for node in proof_tree.nodes:
+            if node.argument is not None:
+                stats['arguments'][node.argument.id] += 1

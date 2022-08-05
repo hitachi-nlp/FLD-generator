@@ -70,7 +70,7 @@ def test_simple_pipeline():
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
                               depth=5, num_distractors=5)
 
-    for nlproof_json, proof_tree, distractors in dataset.generate(1000):
+    for nlproof_json, proof_tree, distractors, stats in dataset.generate(1000):
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
 
@@ -87,6 +87,10 @@ def test_simple_pipeline():
         logger.info('\n')
         logger.info('--------------- NLProofs json --------------')
         logger.info(pformat(nlproof_json))
+
+        logger.info('\n')
+        logger.info('--------------- stats --------------')
+        logger.info(stats)
 
 
 def test_pipeline_from_config():
@@ -116,7 +120,7 @@ def test_pipeline_from_config():
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
                               depth=5, num_distractors=5)
 
-    for nlproof_json, proof_tree, distractors in dataset.generate(1000):
+    for nlproof_json, proof_tree, distractors, stats in dataset.generate(1000):
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
 
@@ -133,6 +137,11 @@ def test_pipeline_from_config():
         logger.info('\n')
         logger.info('--------------- NLProofs json --------------')
         logger.info(pformat(nlproof_json))
+
+        logger.info('\n')
+        logger.info('--------------- stats --------------')
+        logger.info(stats)
+
 
 
 if __name__ == '__main__':
