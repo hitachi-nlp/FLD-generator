@@ -32,7 +32,7 @@ from .formula import (
     CONSTANTS,
     VARIABLES,
 )
-import kern_profiler
+# import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -61,17 +61,28 @@ class FormalLogicGenerator:
                  allow_complication=False,
                  elim_dneg=False,
                  timeout: Optional[int] = 30):
-        self.arguments = arguments
         self.allow_complication = allow_complication
         self.elim_dneg = elim_dneg
         self.timeout = timeout
+
+        if allow_complication:
+            self.arguments = [
+                complicated_argument
+                for argment in arguments
+                for complicated_argument, _ in generate_complicated_arguments(argment, elim_dneg=elim_dneg)
+            ]
+        else:
+            self.arguments = arguments
+
+        logger.info('============ arguments for generation ============')
+        for argument in sorted(self.arguments, key=lambda arg: arg.id):
+            logger.info(argument)
 
     def generate_tree(self, depth=3) -> Optional[ProofTree]:
         for _ in range(0, 10):
             try:
                 proof_tree = _generate_tree(self.arguments,
                                             depth=depth,
-                                            allow_complication=self.allow_complication,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
                 return proof_tree
@@ -82,18 +93,11 @@ class FormalLogicGenerator:
         raise GenerationFailure()
 
 
-@profile
+# @profile
 def _generate_tree(arguments: List[Argument],
                    depth=1,
-                   allow_complication=True,
                    elim_dneg=False,
                    timeout: Optional[int] = None) -> Optional[ProofTree]:
-    if allow_complication:
-        arguments = [
-            complicated_argument
-            for argment in arguments
-            for complicated_argument, _ in generate_complicated_arguments(argment, elim_dneg=elim_dneg)
-        ]
 
     timeout = timeout or 99999999
     with timeout_context(timeout, exception=TimeoutError):
@@ -103,7 +107,7 @@ def _generate_tree(arguments: List[Argument],
     return proof_tree
 
 
-@profile
+# @profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
@@ -230,7 +234,7 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
-@profile
+# @profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     max_steps: int,
