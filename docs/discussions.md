@@ -1,6 +1,8 @@
 # todo
-* A v B のnot enhance
-* きちんとshuffleできているか．
+* "despiteful one is not despiteful"
+* デバッグのために，ルールのstatisticsを取る．
+    - rule statistics
+    - translation statistics
 * どうやったら偏りをなくせるか．
     - ルールを別のに取り替えた場合でも通用するように．
 * 'adj' などをどこに書くか．
@@ -9,7 +11,6 @@
     - change_verb_form()でposのチェックをするべき．
 * wb.NNS の体系
 * logging.WARNING 戻す．
-* デバッグのために，ルールのstatisticsを取る．
 
 * 1-pass通す．
 * "argument生成"

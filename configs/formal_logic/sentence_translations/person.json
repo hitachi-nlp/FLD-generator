@@ -1,0 +1,116 @@
+{
+    "{A}{a}": {
+        "verb_clause": {
+          "adj": [
+            "{a} is {A}"
+          ],
+          "verb": [
+            "{a} {A}"
+          ]
+        },
+        "noun_clause": {
+          "adj": [
+            "{a} is {A}"
+          ],
+          "verb": [
+            "{a} {A}"
+          ]
+        }
+    },
+
+    "¬{A}{a}": {
+        "verb_clause": {
+          "adj": [
+            "{a} is not {A}"
+          ],
+          "verb": [
+            "{a} does not {A}"
+          ]
+        },
+        "noun_clause": {
+          "adj": [
+            "{a} is not {A}"
+          ],
+          "verb": [
+            "{a} does not {A}"
+          ]
+        }
+    },
+
+    "(x): {A}x -> {B}x": {
+        "verb_clause": {
+          "adj": [
+            "If someone is {A}, then she is {B}"
+          ],
+          "verb": [
+            "If someone {A}, then she {B}"
+          ]
+        },
+        "noun_clause": {
+          "adj": [
+            "{A} one is {B}"
+          ],
+          "verb": [
+            "Someone who {A} {B}"
+          ]
+        }
+    },
+
+    "(x): ¬{A}x -> {B}x": {
+        "verb_clause": {
+          "adj": [
+            "If someone is not {A}, then she is {B}"
+          ],
+          "verb": [
+            "If someone does not {A}, then she {B}"
+          ]
+        },
+        "noun_clause": {
+          "adj": [
+            "non-{A} one is {B}"
+          ],
+          "verb": [
+            "Someone who does not {A} {B}"
+          ]
+        }
+    },
+
+    "(x): {A}x -> ¬{B}x": {
+        "verb_clause": {
+          "adj": [
+            "If someone is {A}, then she is not {B}"
+          ],
+          "verb": [
+            "If someone {A}, then she does not {B}"
+          ]
+        },
+        "noun_clause": {
+          "adj": [
+            "{A} one is not {B}"
+          ],
+          "verb": [
+            "Someone who {A} does not {B}"
+          ]
+        }
+    },
+
+    "(x): ¬{A}x -> ¬{B}x": {
+        "verb_clause": {
+          "adj": [
+            "If someone is not {A}, then she is not {B}"
+          ],
+          "verb": [
+            "If someone does not {A}, then she does not {B}"
+          ]
+        },
+        "noun_clause": {
+          "adj": [
+            "non-{A} one is not {B}"
+          ],
+          "verb": [
+            "Someone who does not {A} does not {B}"
+          ]
+        }
+    }
+
+}

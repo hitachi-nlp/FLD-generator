@@ -66,9 +66,9 @@ class EnglishWordBank(WordBank):
                 else:
                     raise NotImplementedError()
                 logger.info('Will force changing verb form to %s by hand-made rules as: "%s" -> "%s"',
-                               form,
-                               verb,
-                               inflated_verb)
+                            form,
+                            verb,
+                            inflated_verb)
                 return inflated_verb
             else:
                 return None

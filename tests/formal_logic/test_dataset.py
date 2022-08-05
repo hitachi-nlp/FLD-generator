@@ -116,19 +116,29 @@ def test_pipeline_from_config():
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
                               depth=5, num_distractors=5)
 
-    for nlproof_json, proof_tree, distractors in dataset.generate(100):
-        print('\n\n\n=================== generating proof tree =========================')
-        print('\n--------------- tree --------------')
-        print(proof_tree.format_str)
-        print('\n--------------- distractors --------------')
-        print(distractors)
-        print('\n--------------- NLProofs json --------------')
-        pprint(nlproof_json)
+    for nlproof_json, proof_tree, distractors in dataset.generate(1000):
+        logger.info('\n\n')
+        logger.info('=================== generating proof tree =========================')
+
+        logger.info('\n')
+        logger.info('--------------- tree --------------')
+
+        logger.info('\n')
+        logger.info(proof_tree.format_str)
+
+        logger.info('\n')
+        logger.info('--------------- distractors --------------')
+        logger.info(distractors)
+
+        logger.info('\n')
+        logger.info('--------------- NLProofs json --------------')
+        logger.info(pformat(nlproof_json))
 
 
 if __name__ == '__main__':
     random.seed(0)
-    setup_logger()
+    # setup_logger(level=logging.WARNING)
+    setup_logger(level=logging.INFO)
 
-    # test_simple_pipeline()
-    test_pipeline_from_config()
+    test_simple_pipeline()
+    # test_pipeline_from_config()
