@@ -25,26 +25,44 @@ def generate_complication_mappings_from_formula(formulas: List[Formula]) -> Iter
 
     identity_mapping = {pred: pred for pred in predicates}
     identity_mapping.update({const: const for const in constants})
-    yield identity_mapping
+    # yield identity_mapping
 
     unknown_predicates = list(set(PREDICATES) - set(predicates))
     unk_pred0 = unknown_predicates[0]
     unk_pred1 = unknown_predicates[1]
 
-    for predicate in predicates:
-        mapping = copy.deepcopy(identity_mapping)
-        mapping[predicate] = f'{NOT}{unk_pred1}'
+    def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
+        if len(predicates) == 1:
+            predicate = predicates[0]
+            for prefix in ['', f'{NOT}']:
+                yield [f'{prefix}{predicate}']
+        else:
+            predicate = predicates[0]
+            for prefix in ['', f'{NOT}']:
+                for tail in not_enhance(predicates[1:]):
+                    yield [f'{prefix}{predicate}'] + tail
+
+    def generate_not_enhanced_mappings(predicates) -> Iterable[Dict]:
+        for predicates_with_not in not_enhance(predicates):
+            mapping = copy.deepcopy(identity_mapping)
+            for predicate_with_not in predicates_with_not:
+                original_predicate = predicate_with_not.lstrip(f'{NOT}')
+                mapping[original_predicate] = predicate_with_not
+            yield mapping
+
+    for mapping in generate_not_enhanced_mappings(predicates):
         yield mapping
 
-    for predicate in predicates:
-        mapping = copy.deepcopy(identity_mapping)
-        mapping[predicate] = f'({unk_pred0} {OR} {unk_pred1})'
-        yield mapping
+    for expand_op in [OR, AND]:
+        for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
+            unk_extended_predicates = [unk_pred0, unk_pred1]\
+                + predicates[:i_predicate_to_expand]\
+                + predicates[i_predicate_to_expand + 1:]
 
-    for predicate in predicates:
-        mapping = copy.deepcopy(identity_mapping)
-        mapping[predicate] = f'({unk_pred0} {AND} {unk_pred1})'
-        yield mapping
+            for not_enhanced_mapping in generate_not_enhanced_mappings(unk_extended_predicates):
+                mapping = copy.deepcopy(not_enhanced_mapping)
+                mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {expand_op} {not_enhanced_mapping[unk_pred1]})'
+                yield mapping
 
 
 def generate_replaced_arguments(src_arg: Argument,
