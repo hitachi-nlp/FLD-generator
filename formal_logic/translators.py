@@ -196,11 +196,11 @@ class ClauseTypedTranslator(Translator):
                         replaced_translations = {}
                         for clause_type, pos_typed_translations in clause_typed_translations.items():
                             replaced_translations[clause_type] = {}
-                            for pos_type, nls in pos_typed_translations.items():
-                                replaced_translations[clause_type][pos_type] = []
+                            for predicate_pos_type, nls in pos_typed_translations.items():
+                                replaced_translations[clause_type][predicate_pos_type] = []
                                 for nl in nls:
                                     translated_nl = replace_formula(Formula(nl), mapping)
-                                    replaced_translations[clause_type][pos_type].append(translated_nl)
+                                    replaced_translations[clause_type][predicate_pos_type].append(translated_nl)
                         replaced_typed_translations.append(replaced_translations)
                         translation_formula_reps.append(trans_formula_rep)
                         done_translation = True
@@ -211,6 +211,7 @@ class ClauseTypedTranslator(Translator):
             if not done_translation:
                 logger.warning('Translation not found for %s', formula.rep)
                 replaced_typed_translations.append(None)
+                translation_formula_reps.append(None)
 
         # term translation
         translations = []
@@ -228,19 +229,19 @@ class ClauseTypedTranslator(Translator):
             for i_formula, (formula, _replaced_typed_translations) in enumerate(zip(formulas, replaced_typed_translations)):
                 if _replaced_typed_translations is None:
                     translations.append(None)
-                    translation_names[i_formula] = None
+                    translation_names.append(None)
                 else:
                     predicate_symbols = [pred.rep for pred in formula.predicates]
                     if any([word in self._adjs
                             for symbol, word in term_mapping.items()
                             if symbol in predicate_symbols]):
-                        possible_pos_types = ['adj']
+                        possible_predicate_pos_types = ['adj_predicate']
                     else:
-                        possible_pos_types = ['verb', 'adj']
+                        possible_predicate_pos_types = ['verb_predicate', 'adj_predicate']
 
                     clause_type = random.choice(['verb_clause', 'noun_clause'])
-                    pos_type = random.choice(possible_pos_types)
-                    nls = _replaced_typed_translations[clause_type][pos_type]
+                    predicate_pos_type = random.choice(possible_predicate_pos_types)
+                    nls = _replaced_typed_translations[clause_type][predicate_pos_type]
 
                     i_translation = random.choice(range(len(nls)))
                     nl = nls[i_translation].rep
@@ -253,7 +254,7 @@ class ClauseTypedTranslator(Translator):
                         if symbol in CONSTANTS:
                             inflated_mapping[symbol] = word
                         else:
-                            if pos_type == 'adj':
+                            if predicate_pos_type == 'adj_predicate':
                                 if word in self._adjs:
                                     inflated_word = word
                                     _COUNTER[0] += 1
@@ -262,7 +263,7 @@ class ClauseTypedTranslator(Translator):
                                     _COUNTER[1] += 1
                                 else:
                                     raise Exception()
-                            elif pos_type == 'verb':
+                            elif predicate_pos_type == 'verb_predicate':
                                 if word in self._adjs:
                                     raise Exception()
                                 elif word in self._verbs:
@@ -283,7 +284,7 @@ class ClauseTypedTranslator(Translator):
                             inflated_mapping[symbol] = inflated_word
                             pprint(dict(_COUNTER))
 
-                    translation_names[i_formula] = '.'.join([translation_formula_reps[i_formula], f'clause-{clause_type}', f'pos-{pos_type}', str(i_translation)])
+                    translation_names.append('.'.join([translation_formula_reps[i_formula], f'clause-{clause_type}', f'predicate-{predicate_pos_type}', str(i_translation)]))
                     translations.append(replace_formula(Formula(nl), inflated_mapping).rep)
 
         return [(name, translation) for name, translation in zip(translation_names, translations)]
