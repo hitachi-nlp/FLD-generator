@@ -1,5 +1,9 @@
 # todo
-* [doing] MPで1-pass通すべき．
+* logging.WARNING 戻す．
+* デバッグのために，ルールのstatisticsを取る．
+* wb.NNS
+
+* 1-pass通す．
 * "argument生成"
 * "distractor"
 * "translation"
@@ -187,6 +191,7 @@
                 - もう開発が終わっている．ダウンロードできない．
     * ingへの変換
         * [bjascob/pyInflect](https://github.com/bjascob/pyInflect)
+            * [Tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)
 
 ## 事例と機能
 * G -> H = storm cause disastor
@@ -319,7 +324,3 @@
         AがFになったりHになったりしている．
     ```
     G, F でやっておいて，A, Bに戻して，翻訳する．
-
-
-
-
