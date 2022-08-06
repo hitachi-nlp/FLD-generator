@@ -18,10 +18,10 @@ from logger_setup import setup as setup_logger
 logger = logging.getLogger(__name__)
 
 
-def load_translator(type_: str, from_: str):
-    if type_ == 'sentence_translator':
+def load_translator(type_: str, from_: str, translate_terms=True):
+    if type_ == 'sentence_wise_translator':
         if from_ == 'config':
-            sentence_translations_config_path = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
+            sentence_translations_config_path = './configs/formal_logic/translations/syllogistic_corpus-02.json'
             sentence_translations = json.load(open(sentence_translations_config_path))
             predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
             constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
@@ -29,7 +29,7 @@ def load_translator(type_: str, from_: str):
                 sentence_translations,
                 predicate_translations=predicate_translations,
                 constant_translations=constant_translations,
-                translate_terms=True,
+                translate_terms=translate_terms,
             )
         elif from_ == 'minimum':
             sentence_translations = {
@@ -55,15 +55,16 @@ def load_translator(type_: str, from_: str):
                 sentence_translations,
                 predicate_translations=predicate_translations,
                 constant_translations=constant_translations,
-                translate_terms=True,
+                translate_terms=translate_terms,
             )
         else:
             raise ValueError()
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
             return ClauseTypedTranslator(
-                json.load(open('./configs/formal_logic/sentence_translations/person.json')),
+                json.load(open('./configs/formal_logic/translations/clause_typed.person.json')),
                 EnglishWordBank(),
+                translate_terms=translate_terms,
             )
         elif from_ == 'minimum':
             raise ValueError()
@@ -82,16 +83,16 @@ def load_translator(type_: str, from_: str):
 
 def test_simple_pipeline():
     arguments = [
-        Argument(
-            [Formula('{F} -> {G}'), Formula('{F}')],
-            Formula('{G}'),
-            id='LP.modus_ponens',
-        ),
-        Argument(
-            [Formula('{F} -> {G}'), Formula('{G} -> {H}')],
-            Formula('{F} -> {H}'),
-            id='LP.syllogism',
-        ),
+        # Argument(
+        #     [Formula('{F} -> {G}'), Formula('{F}')],
+        #     Formula('{G}'),
+        #     id='LP.modus_ponens',
+        # ),
+        # Argument(
+        #     [Formula('{F} -> {G}'), Formula('{G} -> {H}')],
+        #     Formula('{F} -> {H}'),
+        #     id='LP.syllogism',
+        # ),
 
         Argument(
             [Formula('(x): {F}x -> {G}x'), Formula('{F}{a}')],
@@ -137,7 +138,7 @@ def test_simple_pipeline():
 
         logger.info('\n')
         logger.info('--------------- stats --------------')
-        logger.info(stats)
+        logger.info(dict(stats))
 
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -154,7 +155,7 @@ def test_pipeline_from_config():
 
     distractor = UnknownFactDistractor()
 
-    translator = load_translator('sentence_translator', 'config')
+    translator = load_translator('sentence_wise_translator', 'config')
     tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(tree_pipeline, 'CWA',
@@ -184,7 +185,7 @@ def test_pipeline_from_config():
 
         logger.info('\n')
         logger.info('--------------- stats --------------')
-        logger.info(stats)
+        logger.info(dict(stats))
 
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')

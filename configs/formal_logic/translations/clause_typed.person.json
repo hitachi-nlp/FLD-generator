@@ -1,0 +1,82 @@
+{
+  "translations": {
+    "{A}{a}": [
+      "{verb_clause.{A}{a}}."
+    ],
+    "¬{A}{a}": [
+      "{verb_clause.¬{A}{a}}."
+    ],
+    "({A} & {B}){a}": [
+      "{verb_clause.({A} & {B}){a}}."
+    ],
+    "({A} v {B}){a}": [
+      "{verb_clause.({A} v {B}){a}}."
+    ],
+
+    "(x): {A}x -> {B}x": [
+      "if {verb_clause.{A}x}, then {verb_clause.{B}one}."
+    ],
+    "(x): ({A} & {B})x -> {C}x": [
+      "if {verb_clause.({A} & {B})x}, then {verb_clause.{C}one}."
+    ]
+  },
+
+  "clauses": {
+    "verb_clause": {
+      "{A}{a}": [
+        "{a} is {A}[ADJ]",
+        "{a} is {A}[VERB]",
+        "{a} {A}[VERB.s]"
+      ],
+      "¬{A}{a}": [
+        "{a} is not {A}[ADJ]",
+        "{a} is not {A}[VERB]",
+        "{a} does not {A}[VERB]"
+      ],
+      "({A} & {B}){a}": [
+          "{a} is both {A}[ADJ] and {B}[ADJ]",
+          "{a} is {A}[ADJ] and {B}[VERB.s]",
+          "{a} {A}[VERB.s] and is {B}[ADJ]",
+          "{a} {A}[VERB.s] and {B}[VERB.s]"
+      ],
+      "{A}x": [
+        "someone is {A}[ADJ]",
+        "someone {A}[VERB.s]"
+      ],
+      "{A}one": [
+        "the one is {A}[ADJ]",
+        "the one {A}[VERB.s]"
+      ],
+      "({A} & {B})x": [
+        "someone is both {A}[ADJ] and {B}[ADJ]",
+        "someone {A}[VERB.s] and is {B}[ADJ]",
+        "someone is {A}[ADJ] and is {B}[VERB.s]",
+        "someone both {A}[VERB.s] and is {B}[VERB.s]"
+      ]
+    },
+    "noun_clause": {
+      "{A}{a}": [
+        "{A}[ADJ] {a}",
+        "{A}[VERB.ing] {a}",
+        "{a} who {A}[VERB.s]"
+      ],
+      "{A}x": [
+        "{A}[ADJ] one",
+        "{A}[VERB.ing] one",
+        "someone who {A}[VERB.s]"
+      ],
+
+      "{A}x": [
+        "{A}[ADJ] one",
+        "{A}[VERB.ing] one",
+        "someone who {A}[VERB.s]"
+      ],
+
+      "{A}": [
+        "{A}[ADJ.ness]",
+        "{A}[VERB.ing]",
+        "{A}[NOUN]"
+      ]
+    }
+  }
+}

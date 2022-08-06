@@ -16,6 +16,11 @@ class VerbForm(Enum):
     VBZ = 'VBZ'
 
 
+class AdjForm(Enum):
+    NORMAL = 'NORMA'
+    NESS = 'NESS'
+
+
 class WordBank(ABC):
 
     @abstractmethod
@@ -33,6 +38,15 @@ class WordBank(ABC):
 
     @abstractmethod
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+        pass
+
+    def change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+        if POS.ADJ not in self.get_pos(adj):
+            raise ValueError()
+        return self._change_adj_form(adj, form, force=force)
+
+    @abstractmethod
+    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
         pass
 
     def can_be_intransitive_verb(self, verb: str) -> bool:

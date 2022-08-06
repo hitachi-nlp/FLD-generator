@@ -1,5 +1,9 @@
 # todo
+* person -> thing
 * 1-pass通す
+* test code の設定
+    - allow_complication
+
 * コンポーネントを完成させていく
     * "argument生成"
     * [pending] "distractor"
@@ -16,6 +20,7 @@
         - depth
         - which NL translation is useful
     * schemeの
+    * retrieverの学習
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．

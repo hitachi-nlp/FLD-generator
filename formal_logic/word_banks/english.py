@@ -6,7 +6,7 @@ from itertools import chain
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
-from .base import WordBank, POS, VerbForm
+from .base import WordBank, POS, VerbForm, AdjForm
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +93,18 @@ class EnglishWordBank(WordBank):
                 return None
         else:
             return results[0]
+
+    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+        if form == AdjForm.NORMAL:
+            return adj
+        elif form == AdjForm.NESS:
+            if adj.endswith('y'):
+                # peaky -> peakiness
+                return adj[:-1] + 'iness'
+            else:
+                return adj + 'ness'
+        else:
+            raise ValueError(f'Unknown form {form}')
 
     def _can_be_intransitive_verb(self, verb: str) -> bool:
         return any([self._can_be_transitive_verb_synset(s)
