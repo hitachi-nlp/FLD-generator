@@ -1,5 +1,5 @@
 # todo
-* 1-pass通す．
+* 1-pass通す
 * コンポーネントを完成させていく
     * "argument生成"
     * [pending] "distractor"
@@ -70,6 +70,18 @@
         * 自動で増やす方法にトライしてみる．formalもtranslationも．
 
 ## パターン
+* ルール
+    * (x): Fx -> Gx
+    * Fa -> Gb
+        - If car crashes, human will be injred.
+    * A -> B
+        - If car crashes, human will be injred.
+            - A = car crashes
+        - Storm leads to injuries.
+            - A = storm
+
+
+
 * [todo] 形式論理の公理系
     * e.g.) & 導入
         ```

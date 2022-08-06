@@ -83,14 +83,25 @@ def load_translator(type_: str, from_: str):
 def test_simple_pipeline():
     arguments = [
         Argument(
+            [Formula('{F} -> {G}'), Formula('{F}')],
+            Formula('{G}'),
+            id='LP.modus_ponens',
+        ),
+        Argument(
+            [Formula('{F} -> {G}'), Formula('{G} -> {H}')],
+            Formula('{F} -> {H}'),
+            id='LP.syllogism',
+        ),
+
+        Argument(
             [Formula('(x): {F}x -> {G}x'), Formula('{F}{a}')],
             Formula('{G}{a}'),
-            id='modus_ponens',
+            id='MPL.modus_ponens',
         ),
         Argument(
             [Formula('(x): {F}x -> {G}x'), Formula('(x): {G}x -> {H}x')],
             Formula('(x): {F}x -> {H}x'),
-            id='syllogism',
+            id='MPL.syllogism',
         ),
 
     ]
@@ -106,9 +117,9 @@ def test_simple_pipeline():
                               depth=5, num_distractors=5,
                               raise_if_translation_not_found=False)
 
+    logger.info('\n\n')
+    logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(1000):
-        logger.info('\n\n')
-        logger.info('=================== generating proof tree =========================')
 
         logger.info('\n')
         logger.info('--------------- tree --------------')
@@ -127,6 +138,9 @@ def test_simple_pipeline():
         logger.info('\n')
         logger.info('--------------- stats --------------')
         logger.info(stats)
+
+        logger.info('\n\n')
+        logger.info('=================== generating proof tree =========================')
 
 
 def test_pipeline_from_config():
@@ -147,6 +161,9 @@ def test_pipeline_from_config():
                               depth=5, num_distractors=5,
                               raise_if_translation_not_found=False)
 
+    logger.info('\n\n')
+    logger.info('=================== generating proof tree =========================')
+
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(1000):
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -168,6 +185,9 @@ def test_pipeline_from_config():
         logger.info('\n')
         logger.info('--------------- stats --------------')
         logger.info(stats)
+
+        logger.info('\n\n')
+        logger.info('=================== generating proof tree =========================')
 
 
 if __name__ == '__main__':
