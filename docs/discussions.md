@@ -1,8 +1,6 @@
 # todo
 * person -> thing
 * 1-pass通す
-* test code の設定
-    - allow_complication
 
 * コンポーネントを完成させていく
     * "argument生成"

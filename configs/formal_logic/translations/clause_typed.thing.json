@@ -40,18 +40,18 @@
           "{a} {A}[VERB.s] and {B}[VERB.s]"
       ],
       "{A}x": [
-        "someone is {A}[ADJ]",
-        "someone {A}[VERB.s]"
+        "something is {A}[ADJ]",
+        "something {A}[VERB.s]"
       ],
       "{A}one": [
-        "the one is {A}[ADJ]",
-        "the one {A}[VERB.s]"
+        "it is {A}[ADJ]",
+        "it {A}[VERB.s]"
       ],
       "({A} & {B})x": [
-        "someone is both {A}[ADJ] and {B}[ADJ]",
-        "someone {A}[VERB.s] and is {B}[ADJ]",
-        "someone is {A}[ADJ] and is {B}[VERB.s]",
-        "someone both {A}[VERB.s] and is {B}[VERB.s]"
+        "something is both {A}[ADJ] and {B}[ADJ]",
+        "something {A}[VERB.s] and is {B}[ADJ]",
+        "something is {A}[ADJ] and is {B}[VERB.s]",
+        "something both {A}[VERB.s] and is {B}[VERB.s]"
       ]
     },
     "noun_clause": {
@@ -63,13 +63,13 @@
       "{A}x": [
         "{A}[ADJ] one",
         "{A}[VERB.ing] one",
-        "someone who {A}[VERB.s]"
+        "something who {A}[VERB.s]"
       ],
 
       "{A}x": [
         "{A}[ADJ] one",
         "{A}[VERB.ing] one",
-        "someone who {A}[VERB.s]"
+        "something who {A}[VERB.s]"
       ],
 
       "{A}": [

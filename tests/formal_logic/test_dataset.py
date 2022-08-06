@@ -62,7 +62,7 @@ def load_translator(type_: str, from_: str, translate_terms=True):
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
             return ClauseTypedTranslator(
-                json.load(open('./configs/formal_logic/translations/clause_typed.person.json')),
+                json.load(open('./configs/formal_logic/translations/clause_typed.thing.json')),
                 EnglishWordBank(),
                 translate_terms=translate_terms,
             )
