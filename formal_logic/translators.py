@@ -240,7 +240,7 @@ class ClauseTypedTranslator(Translator):
                     translation_names.append(None)
                 else:
                     predicate_symbols = [pred.rep for pred in formula.predicates]
-                    if any([word in self._adjs
+                    if any([POS.ADJ in self.wb.get_pos(word)
                             for symbol, word in term_mapping.items()
                             if symbol in predicate_symbols]):
                         possible_predicate_pos_types = ['adj_predicate']
