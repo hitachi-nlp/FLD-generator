@@ -39,6 +39,13 @@ class WordBank(ABC):
     def get_antonyms(self, word: str) -> List[str]:
         pass
 
+    @abstractmethod
+    def get_negnyms(self, word: str) -> List[str]:
+        # might be the subset of antonyms.
+        # antonyms may include words such as alkaline being antonym to acidic.
+        # negnym exclude such ones and include only the words like inaccrate being a negnym to accurate.
+        pass
+
     def change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         if POS.VERB not in self.get_pos(verb):
             raise ValueError()

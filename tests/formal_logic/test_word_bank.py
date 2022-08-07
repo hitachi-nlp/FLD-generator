@@ -23,3 +23,5 @@ for word in wb.get_words(pos=POS.ADJ):
         print('    synonym:', synonym)
     for antonym in wb.get_antonyms(word):
         print('    antonym:', antonym)
+    for negnym in wb.get_negnyms(word):
+        print('    negnym:', negnym)

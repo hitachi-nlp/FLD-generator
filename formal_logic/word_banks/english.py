@@ -59,6 +59,26 @@ class EnglishWordBank(WordBank):
                         antonyms.append(antonym.name())
         return antonyms
 
+    def get_negnyms(self, word) -> List[str]:
+        # See [here](https://langsquare.exblog.jp/28548624/) for the following detection rules.
+        negnyms = []
+        negation_prefixes = ['in', 'im', 'il', 'ir', 'un', 'dis', 'non']
+        negation_postfixes = ['less']
+
+        for antonym in self.get_antonyms(word):
+            if any([antonym == f'{prefix}{word}' for prefix in negation_prefixes])\
+                    or any([antonym == f'{word}{postfix}' for postfix in negation_postfixes]):
+                negnyms.append(antonym)
+
+            if any([word.startswith(prefix) and word.lstrip(prefix) in self._cached_word_list[None]
+                    for prefix in negation_prefixes])\
+                or any([word.endswith(postfix) and word.rstrip(postfix) in self._cached_word_list[None]
+                        for postfix in negation_postfixes]):
+                negnyms.append(antonym)
+        if len(negnyms) == 0:
+            negnyms.append(f'non-{word}')
+        return negnyms
+
     def _get_words_wo_cache(self, pos: Optional[POS] = None) -> Iterable[str]:
         done_lemmas = set()
         wn_pos = self._POS_WB_TO_WN[pos] if pos is not None else None
