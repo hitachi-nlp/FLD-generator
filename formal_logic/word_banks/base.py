@@ -31,6 +31,14 @@ class WordBank(ABC):
     def get_pos(self, word: str) -> List[POS]:
         pass
 
+    @abstractmethod
+    def get_synonyms(self, word: str) -> List[str]:
+        pass
+
+    @abstractmethod
+    def get_antonyms(self, word: str) -> List[str]:
+        pass
+
     def change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         if POS.VERB not in self.get_pos(verb):
             raise ValueError()

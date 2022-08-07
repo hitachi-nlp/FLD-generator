@@ -41,6 +41,25 @@ class EnglishWordBank(WordBank):
                 posses.append(pos)
         return posses
 
+    def get_synonyms(self, word: str) -> List[str]:
+        synonyms = []
+        for syn in wn.synsets(word):
+            for lemma in syn.lemmas():
+                if "_" not in lemma.name() and "-" not in lemma.name():
+                    if lemma.name() not in synonyms:
+                        synonyms.append(lemma.name())
+        return synonyms
+
+    def get_antonyms(self, word: str) -> List[str]:
+        antonyms = []
+        for syn in wn.synsets(word):
+            for lemma in syn.lemmas():
+                if lemma.antonyms():
+                    for antonym in lemma.antonyms():
+                        if antonym.name() not in antonyms:
+                            antonyms.append(antonym.name())
+        return antonyms
+
     def _get_words_wo_cache(self, pos: Optional[POS] = None) -> Iterable[str]:
         done_lemmas = set()
         wn_pos = self._POS_WB_TO_WN[pos] if pos is not None else None
