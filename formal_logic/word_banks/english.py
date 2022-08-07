@@ -54,10 +54,9 @@ class EnglishWordBank(WordBank):
         antonyms = []
         for syn in wn.synsets(word):
             for lemma in syn.lemmas():
-                if lemma.antonyms():
-                    for antonym in lemma.antonyms():
-                        if antonym.name() not in antonyms:
-                            antonyms.append(antonym.name())
+                for antonym in lemma.antonyms():
+                    if antonym.name() not in antonyms:
+                        antonyms.append(antonym.name())
         return antonyms
 
     def _get_words_wo_cache(self, pos: Optional[POS] = None) -> Iterable[str]:
