@@ -6,7 +6,7 @@ from itertools import chain
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
-from .base import WordBank, POS, VerbForm, AdjForm
+from .base import WordBank, POS, VerbForm, AdjForm, NounForm
 
 logger = logging.getLogger(__name__)
 
@@ -152,6 +152,12 @@ class EnglishWordBank(WordBank):
                     return None
             else:
                 return negnyms[0]
+        else:
+            raise ValueError(f'Unknown form {form}')
+
+    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+        if form == NounForm.NORMAL:
+            return noun
         else:
             raise ValueError(f'Unknown form {form}')
 

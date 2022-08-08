@@ -22,6 +22,10 @@ class AdjForm(Enum):
     NEGATION = 'NEGATION'
 
 
+class NounForm(Enum):
+    NORMAL = 'NORMAL'
+
+
 class WordBank(ABC):
 
     @abstractmethod
@@ -63,6 +67,15 @@ class WordBank(ABC):
 
     @abstractmethod
     def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+        pass
+
+    def change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+        if POS.NOUN not in self.get_pos(noun):
+            raise ValueError()
+        return self._change_noun_form(noun, form, force=force)
+
+    @abstractmethod
+    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
         pass
 
     def can_be_intransitive_verb(self, verb: str) -> bool:
