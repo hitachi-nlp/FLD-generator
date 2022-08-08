@@ -1,7 +1,15 @@
-# todo
-* non- はnegnymとして統一する．
+# tod
+* unimportantがある場合はそれを使う．無い場合は，non-important? あるいは使わない？
+* ness (force)は乱暴
+    - nickelicness は存在しない..．
+
 * int nodeの翻訳からは乱数性を消すべきでは？
 * 1-pass通す
+
+* 高速化
+    - bp16
+    - maxlen
+    - A100 8並列
 
 * コンポーネントを完成させていく
     * "argument生成"
@@ -245,6 +253,8 @@
             * [Tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)
 
 ## 考察
+* [rejected] notの翻訳として，non- + 形容詞を常に使えるか？
+    - 使えない．nickelic などは，non-nickelicという使い方はされない．
 * [todo] wordnetの類義語によって，言語表現を膨らませられるか？
     - ノイジーだから微妙かもしれない．
 * "not"の翻訳に，wordnetの対義語が使えるか？

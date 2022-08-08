@@ -11,14 +11,15 @@ class POS(Enum):
 
 class VerbForm(Enum):
     """ https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html """
-    VB = 'VB'
+    NORMAL = 'NORMAL'
     VBG = 'VBG'
     VBZ = 'VBZ'
 
 
 class AdjForm(Enum):
-    NORMAL = 'NORMA'
+    NORMAL = 'NORMAL'
     NESS = 'NESS'
+    NEGATION = 'NEGATION'
 
 
 class WordBank(ABC):

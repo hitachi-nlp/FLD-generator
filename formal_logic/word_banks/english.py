@@ -90,12 +90,12 @@ class EnglishWordBank(WordBank):
                 done_lemmas.add(lemma_str)
                 break
 
-    def _change_verb_form(self, verb: str, form: VerbForm, force=True) -> Optional[str]:
+    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         # see https://github.com/bjascob/pyInflect for available forms
         results = getInflection(verb, tag=form)
         if results is None:
             if force:
-                if form == VerbForm.VB:
+                if form == VerbForm.NORMAL:
                     # watch
                     inflated_verb = verb
                 elif form == VerbForm.VBG:
@@ -136,9 +136,22 @@ class EnglishWordBank(WordBank):
         elif form == AdjForm.NESS:
             if adj.endswith('y'):
                 # peaky -> peakiness
-                return adj[:-1] + 'iness'
+                ness_adj = adj[:-1] + 'iness'
             else:
-                return adj + 'ness'
+                ness_adj = adj + 'ness'
+            if force or ness_adj in self._cached_word_list[None]:
+                return ness_adj
+            else:
+                return None
+        elif form == AdjForm.NEGATION:
+            negnyms = self.get_negnyms(adj)
+            if len(negnyms) == 0:
+                if force:
+                    return f'non-{adj}'
+                else:
+                    return None
+            else:
+                return negnyms[0]
         else:
             raise ValueError(f'Unknown form {form}')
 
