@@ -250,23 +250,19 @@
 * "not"の翻訳に，wordnetの対義語が使えるか？
     - 使えない．酸性に対して，アルカリ性が対義語になっている．中性や両性があるので，これは誤り．
 * [done] v の口語英語について
-    * 問題点
+    * 問題点と対策
         * `or` のような表現は通常，排他的選言を表してしまう．
-            * [Exclusive or - Wikipedia](https://en.wikipedia.org/wiki/Exclusive_or#Exclusive_"or"_in_natural_language)
-                - Either A or B **or both**
+            * 対策
+                - "or both"を付与する
+                    * [Exclusive or - Wikipedia](https://en.wikipedia.org/wiki/Exclusive_or#Exclusive_"or"_in_natural_language)
+                        - Either A or B **or both**
         * `not or`の意味は，曖昧性がある．
             - `Anna is not beautiful or smart.` => 口語だと，^beautiful(Anna) or ^smart(Anna) という意味に解釈されてしまう．
+            - 対策1: notを後ろに持ってくる: `Anna is either smart or not beautiful`
+            - 対策2: 動詞の前にeitherを付与する． `Anna either is smart or is not beautiful`
+                - **[accepted]** これならば，片方が動詞，片方が形容詞の場合と整合性がとれる: `Anna either does not sing or is smart.`
         * `or`は言い換えの意味になってしまう場合もある．: `It is not beautiful, or, smart` => `It is not beautiful, or in other words, smart.`
-    * 案
-        * eitherを使って言う．
-            * `Anna either is not beautiful or is kind.`
-                * **採用．**
-                * 注意: 後段の`is`を除くと，`Anna is not beautiful or smart.` の意味になってしまう．
-            * `Either Anna is not beautiful or she is smart, or both`
-                * **採用．**
-                * 注意: 後段の`she is`を除くと，`Anna is not beautiful or smart.` の意味になってしまう．
-            * `Either of the following holds, Anna is not beautiful or he is smart, or both`
-                * 不採用．長い．
+    * キワモノ
         * `¬A -> B` として言う．
             - e.g.) `If it is not beautiful, then it is smart.`
             - `A v B`と`¬A -> B`は同値
