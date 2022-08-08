@@ -75,8 +75,6 @@ class EnglishWordBank(WordBank):
                 or any([word.endswith(postfix) and word.rstrip(postfix) in self._cached_word_list[None]
                         for postfix in negation_postfixes]):
                 negnyms.append(antonym)
-        if len(negnyms) == 0:
-            negnyms.append(f'non-{word}')
         return negnyms
 
     def _get_words_wo_cache(self, pos: Optional[POS] = None) -> Iterable[str]:
