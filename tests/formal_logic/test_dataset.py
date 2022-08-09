@@ -138,7 +138,8 @@ def test_simple_pipeline():
 
         logger.info('\n')
         logger.info('--------------- stats --------------')
-        logger.info(dict(stats))
+        # logger.info(dict(stats))
+        logger.info(pformat(stats))
 
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -185,7 +186,7 @@ def test_pipeline_from_config():
 
         logger.info('\n')
         logger.info('--------------- stats --------------')
-        logger.info(dict(stats))
+        logger.info(pformat(stats))
 
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')

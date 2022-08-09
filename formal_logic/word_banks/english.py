@@ -2,6 +2,7 @@ from typing import Optional, Iterable, Dict, List
 import re
 import logging
 from itertools import chain
+from collections import defaultdict
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
@@ -13,10 +14,16 @@ logger = logging.getLogger(__name__)
 
 class EnglishWordBank(WordBank):
 
-    _POS_WB_TO_WN = {
+    _pos_wb_to_wn = {
         POS.VERB: wn.VERB,
         POS.NOUN: wn.NOUN,
         POS.ADJ: wn.ADJ,
+    }
+
+    _verb_inflation_mapping = {
+        VerbForm.NORMAL: 'VB',
+        VerbForm.ING: 'VBG',
+        VerbForm.S: 'VBZ',
     }
 
     def __init__(self):
@@ -79,7 +86,7 @@ class EnglishWordBank(WordBank):
 
     def _get_words_wo_cache(self, pos: Optional[POS] = None) -> Iterable[str]:
         done_lemmas = set()
-        wn_pos = self._POS_WB_TO_WN[pos] if pos is not None else None
+        wn_pos = self._pos_wb_to_wn[pos] if pos is not None else None
         for s in self._get_sensets_by_pos(wn_pos=wn_pos):
             for lemma in self._get_standard_lemmas(s):
                 lemma_str = lemma.name()
@@ -92,13 +99,16 @@ class EnglishWordBank(WordBank):
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         # see https://github.com/bjascob/pyInflect for available forms
-        results = getInflection(verb, tag=form)
-        if results is None:
+        results = getInflection(verb,
+                                tag=self._verb_inflation_mapping[form])
+        if results is not None:
+            return results[0]
+        else:
             if force:
                 if form == VerbForm.NORMAL:
                     # watch
                     inflated_verb = verb
-                elif form == VerbForm.VBG:
+                elif form == VerbForm.ING:
                     # [現在分詞](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo82.htm)
                     if re.match('.*[^aeiou]e$', verb):
                         # date -> dating
@@ -108,7 +118,7 @@ class EnglishWordBank(WordBank):
                         inflated_verb = verb + verb[-1] + 'ing'
                     else:
                         inflated_verb = verb + 'ing'
-                elif form == VerbForm.VBZ:
+                elif form == VerbForm.S:
                     # [３単現及び名詞の複数形の -s, -es](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo52.htm)
                     if re.match('.*(s|sh|ch|x|o)$', verb):
                         # wash -> washes
@@ -120,15 +130,9 @@ class EnglishWordBank(WordBank):
                         inflated_verb = verb + 's'
                 else:
                     raise NotImplementedError()
-                # logger.info('Will force changing verb form to %s by hand-made rules as: "%s" -> "%s"',
-                #             form,
-                #             verb,
-                #             inflated_verb)
                 return inflated_verb
             else:
                 return None
-        else:
-            return results[0]
 
     def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
         if form == AdjForm.NORMAL:
@@ -143,13 +147,14 @@ class EnglishWordBank(WordBank):
                 return ness_adj
             else:
                 return None
-        elif form == AdjForm.NEGATION:
+        elif form == AdjForm.NEG:
             negnyms = self.get_negnyms(adj)
             if len(negnyms) == 0:
                 if force:
                     return f'non-{adj}'
                 else:
-                    return None
+                    return f'non-{adj}'
+                    # return None
             else:
                 return negnyms[0]
         else:

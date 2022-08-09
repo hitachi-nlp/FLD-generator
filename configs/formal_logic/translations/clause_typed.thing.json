@@ -405,10 +405,12 @@
 
       "{A}{a}": [
         "{A}[ADJ] {a}",
+        "{a} that is {A}[ADJ]",
         "{a} that {A}[VERB.s]"
       ],
       "¬{A}{a}": [
-        "non-{A}[ADJ] {a}",
+        "{A}[ADJ.neg] {a}",
+        "{a} that is not {A}[ADJ]",
         "{a} that does not {A}[VERB]"
       ],
 
@@ -475,26 +477,26 @@
 
       "({A} & {B})x": [
           "{A}[ADJ] and {B}[ADJ] thing",
-          "{B}[ADJ] something that {A}[VERB.s]",
-          "{A}[ADJ] something that {B}[VERB.s]",
+          "{B}[ADJ] thing that {A}[VERB.s]",
+          "{A}[ADJ] thing that {B}[VERB.s]",
           "something that {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A} & {B})x": [
           "non-{A}[ADJ] and {B}[ADJ] thing",
-          "{B}[ADJ] something that does not {A}[VERB]",
-          "non-{A}[ADJ] something that {B}[VERB.s]",
+          "{B}[ADJ] thing that does not {A}[VERB]",
+          "non-{A}[ADJ] thing that {B}[VERB.s]",
           "something that does not {A}[VERB] and {B}[VERB.s]"
       ],
       "({A} & ¬{B})x": [
           "{A}[ADJ] and non-{B}[ADJ] thing",
-          "non-{B}[ADJ] something that {A}[VERB.s]",
-          "{A}[ADJ] something that does not {B}[VERB]",
+          "non-{B}[ADJ] thing that {A}[VERB.s]",
+          "{A}[ADJ] thing that does not {B}[VERB]",
           "something that {A}[VERB.s] and does not {B}[VERB]"
       ],
       "(¬{A} & ¬{B})x": [
           "non-{A}[ADJ] and non-{B}[ADJ] thing",
-          "non-{B}[ADJ] something that does not {A}[VERB]",
-          "non-{A}[ADJ] something that does not {B}[VERB]",
+          "non-{B}[ADJ] thing that does not {A}[VERB]",
+          "non-{A}[ADJ] thing that does not {B}[VERB]",
           "something that does not {A}[VERB] and does not {B}[VERB]"
       ],
 

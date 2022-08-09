@@ -1,7 +1,15 @@
 # tod
-* unimportantがある場合はそれを使う．無い場合は，non-important? あるいは使わない？
-* ness (force)は乱暴
-    - nickelicness は存在しない..．
+* it vs one
+* ness, negなどがきちんと出ているか？
+    - statの名前
+    - negが出ていない．
+    - wordbank側にstatを実現すればよいのでは？
+* distractor, 似ているものしか集まっていない．
+* ness, neg などを追加する．
+* templace noun_clause "{a} that is not " を追加する．
+* ^A v B -> A みたいのを排除したい．
+
+
 
 * int nodeの翻訳からは乱数性を消すべきでは？
 * 1-pass通す
@@ -91,9 +99,8 @@
             - A = car crashes
         - Storm leads to injuries.
             - A = storm
-
-
-
+* notの意味
+    - ２重否定やドモルガン，あるいはcontrapositionなどを導入しないと，not Aは単なる独立な命題になってしまう．
 * [todo] 形式論理の公理系
     * e.g.) & 導入
         ```

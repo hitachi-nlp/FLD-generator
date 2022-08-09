@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, List
+from typing import Optional, Iterable, List, Dict
 from enum import Enum
 from abc import ABC, abstractmethod
 
@@ -11,19 +11,19 @@ class POS(Enum):
 
 class VerbForm(Enum):
     """ https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html """
-    NORMAL = 'NORMAL'
-    VBG = 'VBG'
-    VBZ = 'VBZ'
+    NORMAL = 'normal'
+    ING = 'ing'
+    S = 's'
 
 
 class AdjForm(Enum):
-    NORMAL = 'NORMAL'
-    NESS = 'NESS'
-    NEGATION = 'NEGATION'
+    NORMAL = 'normal'
+    NESS = 'ness'
+    NEG = 'neg'
 
 
 class NounForm(Enum):
-    NORMAL = 'NORMAL'
+    NORMAL = 'normal'
 
 
 class WordBank(ABC):
