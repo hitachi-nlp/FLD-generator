@@ -153,8 +153,7 @@ class EnglishWordBank(WordBank):
                 if force:
                     return f'non-{adj}'
                 else:
-                    return f'non-{adj}'
-                    # return None
+                    return None
             else:
                 return negnyms[0]
         else:

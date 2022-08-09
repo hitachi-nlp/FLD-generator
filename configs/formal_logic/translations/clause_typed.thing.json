@@ -471,7 +471,8 @@
         "something that {A}[VERB.s]"
       ],
       "¬{A}x": [
-        "non-{A}[ADJ] thing",
+        "{A}[ADJ.neg] thing",
+        "something that is not {A}[ADJ]",
         "something that does not {A}[VERB]"
       ],
 

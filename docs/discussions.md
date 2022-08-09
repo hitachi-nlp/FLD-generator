@@ -1,12 +1,12 @@
 # tod
+* word_bankのstat
+    - あり．
 * it vs one
-* ness, negなどがきちんと出ているか？
-    - statの名前
-    - negが出ていない．
-    - wordbank側にstatを実現すればよいのでは？
+* config
+    * nonの廃止
+    * ness, neg などを追加する．
+    * templace noun_clause "{a} that is not " を追加する．
 * distractor, 似ているものしか集まっていない．
-* ness, neg などを追加する．
-* templace noun_clause "{a} that is not " を追加する．
 * ^A v B -> A みたいのを排除したい．
 
 
