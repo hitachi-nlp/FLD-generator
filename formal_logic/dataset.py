@@ -7,6 +7,7 @@ from collections import defaultdict
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.formula import Formula
 from formal_logic.proof import ProofTree, ProofNode
+from formal_logic.utils import flatten_dict
 
 logger = logging.getLogger(__name__)
 
@@ -48,18 +49,18 @@ class NLProofSDataset:
         def _get_sent(node: Union[ProofNode, _DistractorNode]) -> str:
             return node.formula.translation or node.formula.rep
 
-        stats = {
-            'trees': 0,
-            'arguments': defaultdict(int),
-            'translations': defaultdict(int),
-        }
+        stats = defaultdict(int)
 
         for i_sample in range(size):
-            proof_tree, distractors = self.tree_pipeline.run(
+            proof_tree, distractors, pipeline_stats = self.tree_pipeline.run(
                 depth=self.depth,
                 num_distractors=self.num_distractors,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
+
+            stats['trees'] += 1
+            for key, count in flatten_dict(pipeline_stats).items():
+                stats[key] += count
 
             if self.world_assump == 'label_true_only':
                 label = True
@@ -156,13 +157,4 @@ class NLProofSDataset:
                 'depth': proof_tree.depth,
             }
 
-            self._update_stats(stats, proof_tree)
-
             yield dataset_json, proof_tree, distractors, stats
-
-    def _update_stats(self, stats: Dict[str, Any], proof_tree: ProofTree) -> None:
-        stats['trees'] += 1
-        for node in proof_tree.nodes:
-            if node.argument is not None:
-                stats['arguments'][node.argument.id] += 1
-            stats['translations'][node.formula.translation_name] += 1

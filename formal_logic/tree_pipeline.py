@@ -1,11 +1,13 @@
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Dict, Any
 import logging
+from collections import defaultdict
 
 from formal_logic.formula import Formula
 from formal_logic.proof import ProofTree
 from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import FormalLogicDistractor
 from formal_logic.translators import Translator
+from formal_logic.utils import flatten_dict
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +25,7 @@ class TreePipeline:
     def run(self,
             depth: int = 5,
             num_distractors: int = 5,
-            raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]]]:
+            raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]], Dict[str, int]]:
         while True:
             proof_tree = self.generator.generate_tree(depth=depth)
 
@@ -37,11 +39,31 @@ class TreePipeline:
                 distractors = []
 
             if self.translator is not None:
-                named_translations = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors,
-                                                               raise_if_translation_not_found=raise_if_translation_not_found)
+                named_translations, translator_stats = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors,
+                                                                                 raise_if_translation_not_found=raise_if_translation_not_found)
                 for i_node, node in enumerate(proof_tree.nodes):
                     node.formula.translation_name, node.formula.translation = named_translations[i_node]
                 for i_distractor, distractor_formula in enumerate(distractors):
                     distractor_formula.translation_name, distractor_formula.translation = named_translations[len(proof_tree.nodes) + i_distractor]
 
-            return proof_tree, distractors
+            return proof_tree, distractors, self._get_stats(proof_tree, translator_stats)
+
+    def _get_stats(self,
+                   proof_tree: ProofTree,
+                   translator_stats: Dict[str, int]) -> Dict[str, int]:
+        stats = {
+            'arguments': defaultdict(int),
+            'translation': {
+                'names': defaultdict(int),
+                'others': defaultdict(int),
+            },
+        }
+        for node in proof_tree.nodes:
+            if node.argument is not None:
+                stats['arguments'][node.argument.id] += 1
+            stats['translation']['names'][node.formula.translation_name] += 1
+
+        for key, val in flatten_dict(translator_stats).items():
+            stats['translation']['others'][key] = val
+
+        return stats

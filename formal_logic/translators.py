@@ -26,7 +26,8 @@ class TranslationNotFoundError(FormalLogicExceptionBase):
 class Translator(ABC):
 
     @abstractmethod
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                                                                                               Dict[str, int]]:
         pass
 
 
@@ -54,7 +55,8 @@ class SentenceWiseTranslator(Translator):
         self.constant_translations = constant_translations
         self.translate_terms = translate_terms
 
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                                                                                               Dict[str, int]]:
         translations = []
 
         # sentence translation
@@ -94,7 +96,7 @@ class SentenceWiseTranslator(Translator):
                 if translation is not None:
                     translations[i_formula] = replace_formula(Formula(translation), term_mapping).rep
 
-        return [(None, translation) for translation in translations]
+        return [(None, translation) for translation in translations], {}
 
 
 class IterativeRegexpTranslator(Translator):
@@ -103,7 +105,9 @@ class IterativeRegexpTranslator(Translator):
     def __init__(self):
         pass
 
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                                                                                               Dict[str, int]]:
+
         translations = {
             '\({A} v {B}\)x': [
                 'someone is {A} and {B}'
@@ -145,7 +149,7 @@ class IterativeRegexpTranslator(Translator):
 
             translated_reps.append(translated_formula.rep)
 
-        return [(None, translated_rep) for translated_rep in translated_reps]
+        return [(None, translated_rep) for translated_rep in translated_reps], {}
 
 
 class ClauseTypedTranslator(Translator):
@@ -181,9 +185,12 @@ class ClauseTypedTranslator(Translator):
 
         self._translate_terms = translate_terms
 
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> List[Tuple[Optional[str], Optional[str]]]:
+    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                                                                                               Dict[str, int]]:
+
         translations = []
         translation_names = []
+        count_stats = {'inflation': defaultdict(int)}
 
         term_mapping = self._choose_term_mapping(formulas)
 
@@ -219,7 +226,9 @@ class ClauseTypedTranslator(Translator):
                     logger.warning('translation may not be complete for %s', term_templated_translation_replaced)
 
             # inflation
-            inflated_mapping = self._make_inflated_mapping(term_mapping, term_templated_translation_replaced)
+            inflated_mapping, _inflation_stats = self._make_inflated_mapping(term_mapping, term_templated_translation_replaced)
+            for inflation_type, count in _inflation_stats.items():
+                count_stats['inflation'][f'{inflation_type}'] = count
 
             term_templated_translation_replaced_wo_info = re.sub('\[[^\]]*\]', '', term_templated_translation_replaced)
 
@@ -235,7 +244,7 @@ class ClauseTypedTranslator(Translator):
                              term_templated_translation])
             )
 
-        return list(zip(translation_names, translations))
+        return list(zip(translation_names, translations)), count_stats
 
     def _choose_term_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
         predicates = list({predicate.rep for formula in formulas for predicate in formula.predicates})
@@ -300,7 +309,6 @@ class ClauseTypedTranslator(Translator):
                                            clause_templated_translation_replaced: str,
                                            term_mapping: Dict[str, str]) -> Optional[str]:
         
-        term_templated_translation_key = None
         term_templated_translation_replaced = clause_templated_translation_replaced
 
         has_clause_replacement = True
@@ -373,8 +381,9 @@ class ClauseTypedTranslator(Translator):
 
     def _make_inflated_mapping(self,
                                term_mapping: Dict[str, str],
-                               term_templated_translation_replaced: str) -> Dict[str, str]:
+                               term_templated_translation_replaced: str) -> Tuple[Dict[str, str], Dict[str, int]]:
         inflated_mapping = {}
+        stats = defaultdict(int)
 
         for constraint_formula in Formula(term_templated_translation_replaced).constants:
             inflated_mapping[constraint_formula.rep] = term_mapping[constraint_formula.rep]
@@ -385,14 +394,15 @@ class ClauseTypedTranslator(Translator):
 
                 word = term_mapping[predicate_symbol]
                 pos, form = self._get_predicate_info(predicate_symbol, term_templated_translation_replaced)
+                stats[f'{pos.value}.{form.value}'] += 1
                 inflated_word = self._get_inflated_word(word, pos, form)
                 assert(inflated_word is not None)
 
-                inflated_mapping[f'{predicate_symbol}'] = inflated_word
             else:
-                word = term_mapping[predicate_symbol]
-                inflated_mapping[predicate_symbol] = word
-        return inflated_mapping
+                # inflated_word = term_mapping[predicate_symbol]
+                raise Exception()
+            inflated_mapping[predicate_symbol] = inflated_word
+        return inflated_mapping, stats
 
     def _get_predicate_info(self, predicate: str, rep: str) -> Tuple[POS, Union[AdjForm, VerbForm, NounForm]]:
         info = re.sub(f'.*{predicate}\[([^\]]*)\].*', r'\g<1>', rep)
@@ -403,7 +413,6 @@ class ClauseTypedTranslator(Translator):
             pos_str, form_str = info, None
 
         pos = POS[pos_str]
-
 
         if pos == POS.ADJ:
             form = AdjForm.NORMAL if form_str is None else AdjForm(form_str)
