@@ -1,17 +1,13 @@
 # tod
-* word_bankのstat
-    - あり．
-* it vs one
+* ng formula系をまとめる
+    * ./formal_logic/generators.py の中のロジックをformula.pyにうつす
+    * `_is_conclusion_in_premises`を入れると，A v B -> A が排除されてしまう．
+
 * config
     * nonの廃止
     * ness, neg などを追加する．
     * templace noun_clause "{a} that is not " を追加する．
-* distractor, 似ているものしか集まっていない．
-* ^A v B -> A みたいのを排除したい．
-
-
-
-* int nodeの翻訳からは乱数性を消すべきでは？
+    * it vs one
 * 1-pass通す
 
 * 高速化
@@ -28,7 +24,7 @@
     * "OWA vs CWA"
         - [todo] EBへの転移実験はlabel_true_onlyでやる．
         - [todo] それ以外の実験は，CWAでやる．
-* 実験計画を立てる．
+* 研究計画を立てる．
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
     * ablation
         - which scheme useful
@@ -36,6 +32,9 @@
         - which NL translation is useful
     * schemeの
     * retrieverの学習
+    * Transformers as Soft Reasoners over Language
+        - Fig.(a) を見ると，公理系を使っているように見える．差分は大丈夫か？
+
 
 ## future
 * できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
@@ -209,6 +208,13 @@
     - "アルゴリズム"
         - ドメインの追加
     - "事例"
+    * [pending] int nodeの翻訳からは乱数性を消すべきでは？
+        - [pending] 問題になりそうだったら考える．この実装はわりと面倒なので?
+        - Pros
+            - モデルの中間出力のパターンが固定されるので，よりconsistent．学習しやすいかもしれない．
+        - Cons
+            - int node 全ての言語パターンが固定されてしまうので，表現の多様性は学習しづらくなるかもしれない．
+            - 実際，乱数性があったとしても，単にgenerationの1位, 2位に埋め込むから問題無いかもしれない．
 
 ## アルゴリズム
 1. [done] 名詞節 vs 動詞節を決める
