@@ -1,4 +1,5 @@
 # tod
+* git stash pop
 * ng formula系をまとめる
     * ./formal_logic/generators.py の中のロジックをformula.pyにうつす
     * `_is_conclusion_in_premises`を入れると，A v B -> A が排除されてしまう．

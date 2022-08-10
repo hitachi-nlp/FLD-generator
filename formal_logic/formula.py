@@ -25,6 +25,12 @@ _CONSTANT_REGEXP = re.compile('|'.join(CONSTANTS))
 VARIABLES = ['x', 'y', 'z']  # do not use 'v' = OR
 _VARIABLE_REGEXP = re.compile('|'.join(VARIABLES))
 
+PREDICATE_ARGUMENTS = [
+    f'{pred}{arg}'
+    for pred in PREDICATES
+    for arg in CONSTANTS + VARIABLES + ['']
+]
+
 
 class Formula:
 

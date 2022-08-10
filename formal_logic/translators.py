@@ -223,7 +223,8 @@ class ClauseTypedTranslator(Translator):
                 if raise_if_translation_not_found:
                     raise TranslationNotFoundError(f'translation may not be complete for "{term_templated_translation_replaced}"')
                 else:
-                    logger.warning('translation may not be complete for %s', term_templated_translation_replaced)
+                    import pudb; pudb.set_trace()
+                    logger.warning('translation may not be complete for "%s"', term_templated_translation_replaced)
 
             # inflation
             inflated_mapping, _inflation_stats = self._make_inflated_mapping(term_mapping, term_templated_translation_replaced)

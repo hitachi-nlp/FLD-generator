@@ -3,7 +3,7 @@ import random
 from typing import Dict, List, Any, Iterable, Tuple, Optional, Union
 import copy
 
-from .formula import Formula, NOT, OR, AND, PREDICATES
+from .formula import Formula, NOT, OR, AND, PREDICATES, CONSTANTS, VARIABLES
 from .argument import Argument
 
 
@@ -11,11 +11,11 @@ def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
                                    get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
     for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion], get_name=True):
-        replaced_formula = replace_argument(src_arg, mapping, elim_dneg=elim_dneg)
+        replaced_argument = replace_argument(src_arg, mapping, elim_dneg=elim_dneg)
         if get_name:
-            yield replaced_formula, mapping, name
+            yield replaced_argument, mapping, name
         else:
-            yield replaced_formula, mapping
+            yield replaced_argument, mapping
 
 
 def generate_complicated_formulas(src_formula: Formula,
@@ -67,16 +67,16 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
         else:
             yield mapping
 
-    for expand_op in [OR, AND]:
+    for op in [OR, AND]:
         for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
             unk_extended_predicates = [unk_pred0, unk_pred1]\
                 + predicates[:i_predicate_to_expand]\
                 + predicates[i_predicate_to_expand + 1:]
             for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
                 mapping = copy.deepcopy(not_enhanced_mapping)
-                mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {expand_op} {not_enhanced_mapping[unk_pred1]})'
+                mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
                 if get_name:
-                    yield mapping, f'{expand_op}-{i_predicate_to_expand}.not-{i_not}'
+                    yield mapping, f'{op}-{i_predicate_to_expand}.not-{i_not}'
                 else:
                     yield mapping
 
@@ -257,7 +257,33 @@ def replace_argument(arg: Argument,
 def replace_formula(formula: Formula,
                     replacements: Dict[str, str],
                     elim_dneg=False) -> Formula:
-    return Formula(replace_rep(formula.rep, replacements, elim_dneg=elim_dneg))
+    return _expand_op(Formula(replace_rep(formula.rep, replacements, elim_dneg=elim_dneg)))
+
+
+def _expand_op(formula: Formula) -> Formula:
+    rep = formula.rep
+
+    while True:
+        rep_wo_quantifier = rep.split(': ')[-1]
+
+        match = None
+        for arg in CONSTANTS + VARIABLES:
+            match = re.search(f'\([^\)]*\){arg}', rep_wo_quantifier)
+            if match is not None:
+                break
+        if match is None:
+            break
+
+        op_pred_arg = rep_wo_quantifier[match.span()[0]: match.span()[1]]
+        op_pred, constant = op_pred_arg.lstrip('(').split(')')
+        left_pred, op, right_pred = op_pred.split(' ')
+        expanded_op_pred_arg = f'({left_pred}{constant} {op} {right_pred}{constant})'
+        rep = rep.replace(f'{op_pred_arg}', f'{expanded_op_pred_arg}')
+
+    # if rep.find('x}') >= 0:
+    #     import pudb; pudb.set_trace()
+
+    return Formula(rep)
 
 
 def replace_rep(rep: str,

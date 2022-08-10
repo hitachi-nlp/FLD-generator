@@ -41,10 +41,9 @@ _NG_FORMULA_REGEXPS = [
     f'({predicate}|{NOT}{predicate}) ({IMPLICATION}|{AND}|{OR}) ({predicate}|{NOT}{predicate})'
     for predicate in PREDICATES
 ] + [
-    f'({predicate}{individual}|{NOT}{predicate}{individual}) ({IMPLICATION}|{AND}|{OR}) ({predicate}{individual}|{NOT}{predicate}{individual})'
+    f'({predicate}{arg}|{NOT}{predicate}{arg}) ({IMPLICATION}|{AND}|{OR}) ({predicate}{arg}|{NOT}{predicate}{arg})'
     for predicate in PREDICATES
-    for individual in CONSTANTS + VARIABLES
-
+    for arg in CONSTANTS + VARIABLES
 ]
 
 _NG_FORMULA_REGEXP = re.compile('|'.join(_NG_FORMULA_REGEXPS))
