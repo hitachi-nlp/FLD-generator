@@ -264,7 +264,7 @@ def _expand_op(formula: Formula) -> Formula:
     rep = formula.rep
 
     while True:
-        rep_wo_quantifier = rep.split(': ')[-1]
+        rep_wo_quantifier = Formula(rep).wo_quantifier.rep
 
         match = None
         for arg in CONSTANTS + VARIABLES:

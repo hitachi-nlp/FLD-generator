@@ -1,11 +1,8 @@
 # tod
-* ng formula系をまとめる
-    * ./formal_logic/generators.py の中のロジックをformula.pyにうつす
 * もっとsparseにして，述語の衝突を無くした方が良い？
 * `_is_conclusion_in_premises`を入れると，A v B -> A が排除されてしまう．
 
 * A -> B は(A -> B)であるべき．
-* ": ".split みたいのをformula.pyにまとめる．変更に頑健にするため．
 
 * config
     * nonの廃止

@@ -1,6 +1,5 @@
 import random
 import logging
-import re
 from typing import List, Optional, Any
 
 from timeout_timer import timeout as timeout_context

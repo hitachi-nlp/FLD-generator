@@ -209,7 +209,7 @@ def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[st
 
     values = set()
 
-    rep = Formula(formula.rep.split(': ')[-1]).rep
+    rep = formula.wo_quantifier.rep
     if rep.find(AND) >= 0:
         if re.match(f'^\({pred_arg_rep} {AND} .*\)$', rep):
             values.add('T')
