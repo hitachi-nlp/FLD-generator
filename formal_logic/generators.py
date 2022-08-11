@@ -9,7 +9,9 @@ from .formula import (
     PREDICATES,
     CONSTANTS,
     Formula,
-    is_satisfiable as is_formulas_satisfiable,
+)
+from .formula_checker import (
+    is_formulas_nonsense,
 )
 from .argument import Argument
 from .replacements import (
@@ -35,18 +37,6 @@ from .formula import (
 # import kern_profiler
 
 logger = logging.getLogger(__name__)
-
-
-_NG_FORMULA_REGEXPS = [
-    f'({predicate}|{NOT}{predicate}) ({IMPLICATION}|{AND}|{OR}) ({predicate}|{NOT}{predicate})'
-    for predicate in PREDICATES
-] + [
-    f'({predicate}{arg}|{NOT}{predicate}{arg}) ({IMPLICATION}|{AND}|{OR}) ({predicate}{arg}|{NOT}{predicate}{arg})'
-    for predicate in PREDICATES
-    for arg in CONSTANTS + VARIABLES
-]
-
-_NG_FORMULA_REGEXP = re.compile('|'.join(_NG_FORMULA_REGEXPS))
 
 
 class GenerationFailure(FormalLogicExceptionBase):
@@ -173,10 +163,17 @@ def _generate_stem(arguments: List[Argument],
                         if premise_replaced.rep != cur_conclusion.rep:
                             continue
 
-                        if _has_ng_formulas([premise_replaced]):
-                            continue
+                        # if _has_ng_formulas([premise_replaced]):
+                        #     continue
 
-                        if not _is_satisfiable([premise_replaced], proof_tree):
+                        # if _has_inconsistent_formulas([premise_replaced]):
+                        #     continue
+
+                        # if not _is_satisfiable([premise_replaced], proof_tree):
+                        #     continue
+
+                        if is_formulas_nonsense([premise_replaced]
+                                                + [node.formula for node in proof_tree.nodes]):
                             continue
 
                         for mapping in generate_replacement_mappings_from_formula(
@@ -194,8 +191,11 @@ def _generate_stem(arguments: List[Argument],
                             if _is_conclusion_in_premises(next_arg_replaced):
                                 continue
 
-                            if _has_ng_formulas(next_arg_replaced.premises):
-                                continue
+                            # if _has_ng_formulas(next_arg_replaced.premises):
+                            #     continue
+
+                            # if _has_inconsistent_formulas(next_arg_replaced.premises):
+                            #     continue
 
                             if not _is_formula_new(next_arg_replaced.conclusion, proof_tree):
                                 continue
@@ -203,7 +203,11 @@ def _generate_stem(arguments: List[Argument],
                             if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 2:  # 1 for the chained promise:
                                 continue
 
-                            if not _is_satisfiable(next_arg_replaced.all_formulas, proof_tree):
+                            # if not _is_satisfiable(next_arg_replaced.all_formulas, proof_tree):
+                            #     continue
+
+                            if is_formulas_nonsense(next_arg_replaced.premises
+                                                    + [node.formula for node in proof_tree.nodes]):
                                 continue
 
                             is_arg_done = True
@@ -292,10 +296,8 @@ def _extend_braches(proof_tree: ProofTree,
                     if conclusion_replaced.rep != leaf_node.formula.rep:
                         continue
 
-                    if _has_ng_formulas([conclusion_replaced]):
-                        continue
-
-                    if not _is_satisfiable([conclusion_replaced], proof_tree):
+                    if is_formulas_nonsense([conclusion_replaced]
+                                            + [node.formula for node in proof_tree.nodes]):
                         continue
 
                     for mapping in generate_replacement_mappings_from_formula(
@@ -307,13 +309,11 @@ def _extend_braches(proof_tree: ProofTree,
                     ):
                         next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
 
-                        if _has_ng_formulas(next_arg_replaced.premises):
-                            continue
-
                         if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 1:
                             continue
 
-                        if not _is_satisfiable(next_arg_replaced.all_formulas, proof_tree):
+                        if is_formulas_nonsense(next_arg_replaced.all_formulas
+                                                + [node.formula for node in proof_tree.nodes]):
                             continue
 
                         is_leaf_node_done = True
@@ -338,13 +338,6 @@ def _is_conclusion_in_premises(arg: Argument) -> bool:
                 for premise in arg.premises])
 
 
-def _has_ng_formulas(formulas: List[Formula]) -> bool:
-    return any([
-        _NG_FORMULA_REGEXP.search(formula.rep) is not None
-        for formula in formulas
-    ])
-
-
 def _get_formulas_already_in_tree(formulas: List[Formula], proof_tree: ProofTree) -> List[Formula]:
     return [
         formula
@@ -352,11 +345,6 @@ def _get_formulas_already_in_tree(formulas: List[Formula], proof_tree: ProofTree
         for formula in formulas
         if formula.rep == existent_node.formula.rep
     ]
-
-
-def _is_satisfiable(formulas: List[Formula], proof_tree: ProofTree) -> bool:
-    return is_formulas_satisfiable([node.formula for node in proof_tree.nodes]
-                                   + formulas)
 
 
 def _is_formula_new(formula: Formula, proof_tree: ProofTree) -> bool:

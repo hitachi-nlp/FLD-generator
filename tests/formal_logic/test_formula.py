@@ -1,41 +1,24 @@
-from formal_logic.formula import is_consistent, Formula
+from typing import List
+from formal_logic.formula import Formula
+from formal_logic.formula_checker import (
+    # _search_inconsistent_subformula,
+    _get_boolean_values,
+
+    is_single_formula_inconsistent,
+    is_formulas_inconsistent,
+    is_single_formula_nonsense,
+)
 
 
-def test_is_consistent():
-    assert is_consistent(Formula('{F}{a}'))
-    assert is_consistent(Formula('{F}{a} -> {G}{a}'))
-    assert is_consistent(Formula('(x): {F}x -> {G}x'))
+def test_formula():
+    assert {f.rep for f in Formula('{A}{a} -> {B}{b} v {C}x v {D}').predicates} == {'{A}', '{B}', '{C}', '{D}'}
+    assert {f.rep for f in Formula('{A}{a} -> {B}{b} v {C}x v {D}').constants} == {'{a}', '{b}'}
+    assert {f.rep for f in Formula('{A}{a} -> {B}{b} v {C}x v {D}').variables} == {'x'}
+    assert {f.rep for f in Formula('{A}{a} -> {B}{b} v {C}x v {D}').predicate_arguments} == {'{A}{a}', '{B}{b}', '{C}x', '{D}'}
 
-    assert not is_consistent(Formula('{F}{a} -> ¬{F}{a}'))
-    assert not is_consistent(Formula('(x): {F}x -> ¬{F}x'))
-
-    assert is_consistent(Formula('({F} & {G}){a}'))
-    assert is_consistent(Formula('({F} & {G}){a} -> {H}{a}'))
-    assert is_consistent(Formula('{F}{a} -> ({G} & {H}){a}'))
-    assert is_consistent(Formula('(x): ({F} & {G})x -> {H}x'))
-    assert is_consistent(Formula('(x): {F}x -> ({G} & {H})x'))
-
-    assert not is_consistent(Formula('({F} & ¬{F}){a}'))
-    assert not is_consistent(Formula('({F} & {G}){a} -> ¬{F}{a}'))
-    assert not is_consistent(Formula('(¬{F} & {G}){a} -> {F}{a}'))
-    assert not is_consistent(Formula('({F} & ¬{F}){a} -> {G}{a}'))
-    assert not is_consistent(Formula('¬{F}{a} -> ({F} & {H}){a}'))
-    assert not is_consistent(Formula('{F}{a} -> (¬{F} & {H}){a}'))
-    assert not is_consistent(Formula('(x): (¬{F} & {G})x -> {F}x'))
-    assert not is_consistent(Formula('(x): ¬{F}x -> ({F} & {H})x'))
-
-    assert is_consistent(Formula('({F} v {G}){a}'))
-    assert is_consistent(Formula('({F} v {G}){a} -> {H}{a}'))
-    assert is_consistent(Formula('{F}{a} -> ({G} v {H}){a}'))
-    assert is_consistent(Formula('(x): ({F} v {G})x -> {H}x'))
-    assert is_consistent(Formula('(x): {F}x -> ({G} v {H})x'))
-
-    assert is_consistent(Formula('({F} v ¬{F}){a}'))
-    assert is_consistent(Formula('(¬{F} v {G}){a} -> {F}{a}'))
-    assert is_consistent(Formula('¬{F}{a} -> ({F} v {H}){a}'))
-    assert is_consistent(Formula('(x): (¬{F} v {G})x -> {F}x'))
-    assert is_consistent(Formula('(x): {F}x -> (¬{F} v {H})x'))
+    assert {f.rep for f in Formula('(x): {A}x -> {B}x').universal_variables} == {'x'}
+    assert {f.rep for f in Formula('(Ex): {A}x -> {B}x').existential_variables} == {'x'}
 
 
 if __name__ == '__main__':
-    test_is_consistent()
+    test_formula()

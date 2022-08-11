@@ -3,7 +3,7 @@ import random
 from typing import Dict, List, Any, Iterable, Tuple, Optional, Union
 import copy
 
-from .formula import Formula, NOT, OR, AND, PREDICATES, CONSTANTS, VARIABLES
+from .formula import Formula, NOT, OR, AND, PREDICATES, CONSTANTS, VARIABLES, eliminate_double_negation
 from .argument import Argument
 
 
@@ -274,7 +274,7 @@ def _expand_op(formula: Formula) -> Formula:
         if match is None:
             break
 
-        op_pred_arg = rep_wo_quantifier[match.span()[0]: match.span()[1]]
+        op_pred_arg = match.group()
         op_pred, constant = op_pred_arg.lstrip('(').split(')')
         left_pred, op, right_pred = op_pred.split(' ')
         expanded_op_pred_arg = f'({left_pred}{constant} {op} {right_pred}{constant})'
@@ -296,7 +296,7 @@ def replace_rep(rep: str,
         replaced = pattern.sub(lambda m: replacements[m.group(0)], rep)
 
     if elim_dneg:
-        replaced = re.sub(f'{NOT}{NOT}', '', replaced)
+        replaced = eliminate_double_negation(Formula(replaced)).rep
 
     return replaced
 

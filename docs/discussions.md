@@ -1,8 +1,11 @@
 # tod
-* git stash pop
 * ng formula系をまとめる
     * ./formal_logic/generators.py の中のロジックをformula.pyにうつす
-    * `_is_conclusion_in_premises`を入れると，A v B -> A が排除されてしまう．
+* もっとsparseにして，述語の衝突を無くした方が良い？
+* `_is_conclusion_in_premises`を入れると，A v B -> A が排除されてしまう．
+
+* A -> B は(A -> B)であるべき．
+* ": ".split みたいのをformula.pyにまとめる．変更に頑健にするため．
 
 * config
     * nonの廃止
@@ -12,9 +15,12 @@
 * 1-pass通す
 
 * 高速化
-    - bp16
-    - maxlen
-    - A100 8並列
+    * replacements.py `_expand_op()`をregexpにまとめる．
+    * 今現在，若干遅くなっている．
+    * 学習
+        - bp16
+        - maxlen
+        - A100 8並列
 
 * コンポーネントを完成させていく
     * "argument生成"
@@ -35,6 +41,8 @@
     * retrieverの学習
     * Transformers as Soft Reasoners over Language
         - Fig.(a) を見ると，公理系を使っているように見える．差分は大丈夫か？
+* n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
+    - 完全性など．
 
 
 ## future
@@ -54,42 +62,7 @@
 
 # argument生成
 
-## todo
-* "パターン"
-
-## [done] 手法
-* 手法
-    1. replacementで，自動で増やす．
-        - 詳細
-            * この方法の場合，最初に選んだパターンのreplacementで実現すべき．なぜならば，後段のchainingではパターンを増やす余地はないから．
-            * 例えば， A -> (F v G),  A -> (F & G),  A -> ^F などのreplacementでふやす．
-        - 考察
-            - notだけでなく，&やvも使えるか？
-                * 今，premiseに「A & B」が無いので，これがチェインできないことが問題である．
-                    * これだけであれば，(x) Fx & Gx -> Hx を定理として加えるだけ．
-                * 例えば，modus ponensの「Fx -> Gx」のFが「A & B」に変わった場合，うまく動くか？
-                    * できなくもない気がする．replacementを駆使してマッチングを取れるから．
-        - Pros
-            - 拡張可能性がはある．
-        - Cons
-            - 調整しにくい．
-            - 扱いは難しい．
-    2. パターン直書きする．
-        - 手法: 先行研究のcomplex predicateのようなもの．
-        - Pros
-            - 調整は効きやすい．
-        - Cons
-            - パターンの数が3倍に膨れ上がる．
-* 考察
-    1. 自然言語のテンプレートは全パターンで自作する必要があるかもしれない．
-    2. formal logicは，完全ルールでも作れそう．replacementの最初に，A -> A v B という置き換えを挟むだけ．
-        - しかし1があるなら，2を完全ルールでやっても大して工数が減らない？
-    3. notをどのように扱うか？ と通じる話がある．
-* 方針
-    - [done]
-        * 自動で増やす方法にトライしてみる．formalもtranslationも．
-
-## パターン
+## [todo] パターン
 * ルール
     * (x): Fx -> Gx
     * Fa -> Gb
@@ -114,6 +87,16 @@
         ```
 * [todo] 命題論理
 * [todo] その他，EBに含まれているパターン
+* ドモルガン: ^(A v B) -> ^A & ^B
+* [pending] AND + not
+    * [pending]
+        - 実装コストが割とある．
+        - これ無しでも，notの意味は学べる．例えば，contrapositionみたいなので．
+            - というか，not関連のパターンは２重否定の除去から全て導ける．
+    * やりたいこと
+        * not(A v B) みたいのを扱う．
+        * 上記のドモルガンバージョンを扱う．
+    * 上記のパターンを追加した場合，consistency checking 周りも更新する必要があると思う．
 * [pending] ->導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．
@@ -175,6 +158,38 @@
         - Z3
         - Transformer Generalize
     - 判断理由は，調整が効かないこと，スパース性，などであった気がする．ただ，後者に関してはSAT方式論文では実現できているようである．よって，考え直しても良いかもしれない．
+
+## [done] 手法
+* 手法
+    1. replacementで，自動で増やす．
+        - 詳細
+            * この方法の場合，最初に選んだパターンのreplacementで実現すべき．なぜならば，後段のchainingではパターンを増やす余地はないから．
+            * 例えば， A -> (F v G),  A -> (F & G),  A -> ^F などのreplacementでふやす．
+        - 考察
+            - notだけでなく，&やvも使えるか？
+                * 今，premiseに「A & B」が無いので，これがチェインできないことが問題である．
+                    * これだけであれば，(x) Fx & Gx -> Hx を定理として加えるだけ．
+                * 例えば，modus ponensの「Fx -> Gx」のFが「A & B」に変わった場合，うまく動くか？
+                    * できなくもない気がする．replacementを駆使してマッチングを取れるから．
+        - Pros
+            - 拡張可能性がはある．
+        - Cons
+            - 調整しにくい．
+            - 扱いは難しい．
+    2. パターン直書きする．
+        - 手法: 先行研究のcomplex predicateのようなもの．
+        - Pros
+            - 調整は効きやすい．
+        - Cons
+            - パターンの数が3倍に膨れ上がる．
+* 考察
+    1. 自然言語のテンプレートは全パターンで自作する必要があるかもしれない．
+    2. formal logicは，完全ルールでも作れそう．replacementの最初に，A -> A v B という置き換えを挟むだけ．
+        - しかし1があるなら，2を完全ルールでやっても大して工数が減らない？
+    3. notをどのように扱うか？ と通じる話がある．
+* 方針
+    - [done]
+        * 自動で増やす方法にトライしてみる．formalもtranslationも．
 
 
 
