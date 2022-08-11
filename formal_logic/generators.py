@@ -162,15 +162,6 @@ def _generate_stem(arguments: List[Argument],
                         if premise_replaced.rep != cur_conclusion.rep:
                             continue
 
-                        # if _has_ng_formulas([premise_replaced]):
-                        #     continue
-
-                        # if _has_inconsistent_formulas([premise_replaced]):
-                        #     continue
-
-                        # if not _is_satisfiable([premise_replaced], proof_tree):
-                        #     continue
-
                         if is_formulas_nonsense([premise_replaced]
                                                 + [node.formula for node in proof_tree.nodes]):
                             continue
@@ -190,20 +181,11 @@ def _generate_stem(arguments: List[Argument],
                             if _is_conclusion_in_premises(next_arg_replaced):
                                 continue
 
-                            # if _has_ng_formulas(next_arg_replaced.premises):
-                            #     continue
-
-                            # if _has_inconsistent_formulas(next_arg_replaced.premises):
-                            #     continue
-
                             if not _is_formula_new(next_arg_replaced.conclusion, proof_tree):
                                 continue
 
                             if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 2:  # 1 for the chained promise:
                                 continue
-
-                            # if not _is_satisfiable(next_arg_replaced.all_formulas, proof_tree):
-                            #     continue
 
                             if is_formulas_nonsense(next_arg_replaced.premises
                                                     + [node.formula for node in proof_tree.nodes]):
