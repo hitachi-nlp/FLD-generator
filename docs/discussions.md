@@ -1,6 +1,4 @@
 # tod
-* A -> B は(A -> B)であるべき．
-
 * config
     * nonの廃止
     * ness, neg などを追加する．
@@ -10,7 +8,6 @@
 
 * 高速化
     * 若干遅くなっている？
-    * replacements.py `_expand_op()`をregexpにまとめる．
     * 学習
         - bp16
         - maxlen

@@ -260,17 +260,16 @@ def replace_formula(formula: Formula,
     return _expand_op(Formula(replace_rep(formula.rep, replacements, elim_dneg=elim_dneg)))
 
 
+_expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
+
+
 def _expand_op(formula: Formula) -> Formula:
     rep = formula.rep
 
     while True:
         rep_wo_quantifier = Formula(rep).wo_quantifier.rep
 
-        match = None
-        for arg in CONSTANTS + VARIABLES:
-            match = re.search(f'\([^\)]*\){arg}', rep_wo_quantifier)
-            if match is not None:
-                break
+        match = _expand_op_regexp.search(rep_wo_quantifier)
         if match is None:
             break
 
