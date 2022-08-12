@@ -78,9 +78,9 @@ class Formula:
             return None
 
     def _find_premise_rep(self, rep) -> Optional[str]:
-        if rep.find('->') < 0:
+        if rep.find(IMPLICATION) < 0:
             return None
-        return ' -> '.join(rep.split(' -> ')[:-1])
+        return f' {IMPLICATION} '.join(rep.split(f' {IMPLICATION} ')[:-1])
 
     @property
     def conclusion(self) -> Optional['Formula']:
@@ -90,9 +90,9 @@ class Formula:
             return None
 
     def _find_conclusion_rep(self, rep) -> Optional[str]:
-        if rep.find('->') < 0:
+        if rep.find(IMPLICATION) < 0:
             return None
-        return rep.split(' -> ')[-1]
+        return rep.split(f' {IMPLICATION} ')[-1]
 
     @property
     def predicates(self) -> List['Formula']:
