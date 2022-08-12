@@ -35,7 +35,7 @@ class UnknownFactDistractor(FormalLogicDistractor):
             for constant in known_constants:
                 fact_rep = f'{predicate}{constant}'
 
-                if all([fact_rep not in formula.rep for formula in formulas + unknown_combinations]):
+                if all((fact_rep not in formula.rep for formula in formulas + unknown_combinations)):
                     unknown_combinations.append(Formula(fact_rep))
 
         other_unknown_combinations = []

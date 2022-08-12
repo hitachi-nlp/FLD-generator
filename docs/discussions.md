@@ -4,14 +4,11 @@
     * ness, neg などを追加する．
     * templace noun_clause "{a} that is not " を追加する．
     * it vs one
-* 1-pass通す
 
-* 高速化
-    * 若干遅くなっている？
-    * 学習
-        - bp16
-        - maxlen
-        - A100 8並列
+* 学習の高速化
+    - bp16
+    - maxlen
+    - A100 8並列
 
 * コンポーネントを完成させていく
     * "argument生成"

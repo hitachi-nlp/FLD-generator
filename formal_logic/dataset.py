@@ -121,7 +121,7 @@ class NLProofSDataset:
             unproven_nodes = copy.copy(unproven_leaf_nodes)
             for node in proof_tree.depth_first_traverse():
                 if is_root(node):
-                    if any([child in unproven_nodes for child in node.children]):
+                    if any((child in unproven_nodes for child in node.children)):
                         unproven_nodes.append(node)
                         continue
 
@@ -133,7 +133,7 @@ class NLProofSDataset:
                     continue
 
                 elif is_int(node):
-                    if any([child in unproven_nodes for child in node.children]):
+                    if any((child in unproven_nodes for child in node.children)):
                         unproven_nodes.append(node)
                         continue
 

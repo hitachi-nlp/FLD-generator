@@ -141,8 +141,8 @@ def _generate_stem(arguments: List[Argument],
             # Choose next argument
             chainable_args = [
                 arg for arg in arguments
-                if any([is_formula_identical(premise, cur_conclusion)
-                        for premise in arg.premises])
+                if any((is_formula_identical(premise, cur_conclusion)
+                        for premise in arg.premises))
             ]
             if len(chainable_args) == 0:
                 break
@@ -344,8 +344,8 @@ def _extend_braches(proof_tree: ProofTree,
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:
-    return all([_is_formula_new(formula, existing_formulas)
-                for formula in formulas])
+    return all((_is_formula_new(formula, existing_formulas)
+                for formula in formulas))
 
 
 def _is_formula_new(formula: Formula,

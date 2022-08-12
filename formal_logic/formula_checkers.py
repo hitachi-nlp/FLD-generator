@@ -89,10 +89,10 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
     """
     if formula.premise is not None:
         return False
-    return any([
+    return any((
         pa for pa in formula.predicate_arguments
         if 'T' in _get_boolean_values(formula, pa) and 'F' in _get_boolean_values(formula, pa)
-    ])
+    ))
 
 
 # def _search_inconsistent_subformula(formula: Formula) -> Optional[re.Match]:
@@ -128,8 +128,8 @@ def is_formula_set_senseful(formulas: List[Formula]) -> bool:
 def is_formula_set_nonsense(formulas: List[Formula]) -> bool:
     if is_formulas_inconsistent(formulas):
         return True
-    return any([is_single_formula_nonsense(formula)
-                for formula in formulas])
+    return any((is_single_formula_nonsense(formula)
+                for formula in formulas))
 
 
 def is_single_formula_senseful(formula: Formula) -> bool:

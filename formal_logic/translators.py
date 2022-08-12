@@ -250,8 +250,8 @@ class ClauseTypedTranslator(Translator):
     def _choose_term_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
         predicates = list({predicate.rep for formula in formulas for predicate in formula.predicates})
         zeroary_predicates = [p_rep for p_rep in predicates
-                              if all([f'{p_rep}x' not in formula.rep and f'{p_rep}{{' not in formula.rep
-                                      for formula in formulas])]
+                              if all((f'{p_rep}x' not in formula.rep and f'{p_rep}{{' not in formula.rep
+                                      for formula in formulas))]
         unary_predicates = [p_rep for p_rep in predicates
                             if p_rep not in zeroary_predicates]
         constraints = list({constant.rep for formula in formulas for constant in formula.constants})
