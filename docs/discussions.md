@@ -1,7 +1,7 @@
 # tod
 * もっとsparseにして，述語の衝突を無くした方が良い？
+    * complication mapping (shuffle=True)
 * `_is_conclusion_in_premises`を入れると，A v B -> A が排除されてしまう．
-
 * A -> B は(A -> B)であるべき．
 
 * config
@@ -12,8 +12,8 @@
 * 1-pass通す
 
 * 高速化
+    * 若干遅くなっている？
     * replacements.py `_expand_op()`をregexpにまとめる．
-    * 今現在，若干遅くなっている．
     * 学習
         - bp16
         - maxlen

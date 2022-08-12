@@ -6,11 +6,19 @@ AND = '&'
 OR = 'v'
 NOT = '¬'
 
+_PREDICATE_ALPHABETS = [
+    'A', 'B', 'C', 'D', 'E',
+    'F', 'G', 'H', 'I', 'J',
+    'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U',
+]
 PREDICATES = [
-    '{A}', '{B}', '{C}', '{D}', '{E}',
-    '{F}', '{G}', '{H}', '{I}', '{J}',
-    '{K}', '{L}', '{M}', '{N}', '{O}',
-    '{P}', '{Q}', '{R}', '{S}', '{T}', '{U}',
+    f'{{{char}}}'
+    for char in _PREDICATE_ALPHABETS
+] + [
+    f'{{{char0}{char1}}}'
+    for char0 in _PREDICATE_ALPHABETS
+    for char1 in _PREDICATE_ALPHABETS
 ]
 _PREDICATE_REGEXP = re.compile('|'.join(PREDICATES))
 

@@ -84,24 +84,24 @@ def load_translator(type_: str, from_: str, translate_terms=True):
 def test_simple_pipeline():
     arguments = [
         # Argument(
-        #     [Formula('{F} -> {G}'), Formula('{F}')],
-        #     Formula('{G}'),
+        #     [Formula('{A} -> {B}'), Formula('{A}')],
+        #     Formula('{B}'),
         #     id='LP.modus_ponens',
         # ),
         # Argument(
-        #     [Formula('{F} -> {G}'), Formula('{G} -> {H}')],
-        #     Formula('{F} -> {H}'),
+        #     [Formula('{A} -> {B}'), Formula('{B} -> {C}')],
+        #     Formula('{A} -> {C}'),
         #     id='LP.syllogism',
         # ),
 
         Argument(
-            [Formula('(x): {F}x -> {G}x'), Formula('{F}{a}')],
-            Formula('{G}{a}'),
+            [Formula('(x): {A}x -> {B}x'), Formula('{A}{a}')],
+            Formula('{B}{a}'),
             id='MPL.modus_ponens',
         ),
         Argument(
-            [Formula('(x): {F}x -> {G}x'), Formula('(x): {G}x -> {H}x')],
-            Formula('(x): {F}x -> {H}x'),
+            [Formula('(x): {A}x -> {B}x'), Formula('(x): {B}x -> {C}x')],
+            Formula('(x): {A}x -> {C}x'),
             id='MPL.syllogism',
         ),
 

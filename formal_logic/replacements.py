@@ -39,8 +39,8 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
     # yield identity_mapping
 
     unknown_predicates = list(set(PREDICATES) - set(predicates))
-    unk_pred0 = unknown_predicates[0]
-    unk_pred1 = unknown_predicates[1]
+    unk_pred0 = sorted(unknown_predicates)[0]
+    unk_pred1 = sorted(unknown_predicates)[1]
 
     def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
         if len(predicates) == 1:
@@ -279,9 +279,6 @@ def _expand_op(formula: Formula) -> Formula:
         left_pred, op, right_pred = op_pred.split(' ')
         expanded_op_pred_arg = f'({left_pred}{constant} {op} {right_pred}{constant})'
         rep = rep.replace(f'{op_pred_arg}', f'{expanded_op_pred_arg}')
-
-    # if rep.find('x}') >= 0:
-    #     import pudb; pudb.set_trace()
 
     return Formula(rep)
 
