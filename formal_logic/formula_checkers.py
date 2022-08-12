@@ -121,11 +121,11 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
 #     return None
 
 
-def is_formulas_senseful(formulas: List[Formula]) -> bool:
-    return not is_formulas_nonsense(formulas)
+def is_formula_set_senseful(formulas: List[Formula]) -> bool:
+    return not is_formula_set_nonsense(formulas)
 
 
-def is_formulas_nonsense(formulas: List[Formula]) -> bool:
+def is_formula_set_nonsense(formulas: List[Formula]) -> bool:
     if is_formulas_inconsistent(formulas):
         return True
     return any([is_single_formula_nonsense(formula)

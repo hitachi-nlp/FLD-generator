@@ -1,6 +1,6 @@
 from typing import List
 from formal_logic.formula import Formula
-from formal_logic.formula_checker import (
+from formal_logic.formula_checkers import (
     # _search_inconsistent_subformula,
     _get_boolean_values,
 

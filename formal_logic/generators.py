@@ -9,10 +9,11 @@ from .formula import (
     CONSTANTS,
     Formula,
 )
-from .formula_checker import (
-    is_formulas_nonsense,
+from .formula_checkers import (
+    is_formula_set_nonsense,
 )
 from .argument import Argument
+from .argument_checkers import is_argument_nonsense
 from .replacements import (
     generate_replacement_mappings_from_formula,
     generate_replaced_formulas,
@@ -101,6 +102,15 @@ def _generate_stem(arguments: List[Argument],
                    predicate_pool: List[str],
                    constant_pool: List[str],
                    elim_dneg=False) -> Optional[ProofTree]:
+    """ Generate stem of proof tree in a top-down manner.
+
+    The steps are:
+    (i) Choose an argument.
+    (ii) Add the premises of the argument to tree.
+    (iii) Choose next argument where one of the premises of the chosen argument is the same as the conclusion of the argument chosen in (i).
+    (iv) Add the premises of the argument chosen in (iii)
+    (v) Repeat (iii) - (iv).
+    """
 
     def update(premise_nodes: List[ProofNode],
                conclusion_node: ProofNode,
@@ -123,6 +133,8 @@ def _generate_stem(arguments: List[Argument],
             if proof_tree.depth >= depth:
                 is_tree_done = True
                 break
+
+            formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
             cur_conclusion = cur_conclusion_node.formula
 
@@ -159,11 +171,11 @@ def _generate_stem(arguments: List[Argument],
 
                         premise_replaced = replace_formula(premise, premise_mapping, elim_dneg=elim_dneg)
 
-                        if premise_replaced.rep != cur_conclusion.rep:
+                        if premise_replaced.rep != cur_conclusion.rep:  # chainable or not
                             continue
 
-                        if is_formulas_nonsense([premise_replaced]
-                                                + [node.formula for node in proof_tree.nodes]):
+                        # for early rejection
+                        if is_formula_set_nonsense([premise_replaced] + formulas_in_tree):
                             continue
 
                         for mapping in generate_replacement_mappings_from_formula(
@@ -178,17 +190,20 @@ def _generate_stem(arguments: List[Argument],
 
                             next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
 
-                            if _is_conclusion_in_premises(next_arg_replaced):
+                            if is_argument_nonsense(next_arg_replaced):
                                 continue
 
-                            if not _is_formula_new(next_arg_replaced.conclusion, proof_tree):
+                            if is_formula_set_nonsense(next_arg_replaced.all_formulas + formulas_in_tree):
                                 continue
 
-                            if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 2:  # 1 for the chained promise:
+                            if not _is_formula_new(next_arg_replaced.conclusion, formulas_in_tree):
                                 continue
 
-                            if is_formulas_nonsense(next_arg_replaced.premises
-                                                    + [node.formula for node in proof_tree.nodes]):
+                            other_premises = [premise for premise in next_arg_replaced.premises
+                                              if premise.rep != cur_conclusion.rep]
+                            if not _is_formulas_new(other_premises, formulas_in_tree):
+                                # If any of other premises already exists in the tree, it will lead to a loop.
+                                # We want to avoid a loop.
                                 continue
 
                             is_arg_done = True
@@ -225,11 +240,21 @@ def _extend_braches(proof_tree: ProofTree,
                     predicate_pool: List[str],
                     constant_pool: List[str],
                     elim_dneg=False) -> None:
+    """ Extend branches of the proof_tree tree in a bottom-up manner.
+
+    The steps are:
+    (i) Choose a leaf node in the tree.
+    (ii) Choose an argument where the conclusion of the argument matched the leaf node chosen in (i)
+    (iii) Add the psemises of the chosen argument into tree.
+    (iv) Repeat (ii) and (iii)
+    """
 
     cur_step = 0
     while True:
         if cur_step >= max_steps:
             break
+
+        formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
         leaf_nodes = [node for node in proof_tree.leaf_nodes
                       if proof_tree.get_node_depth(node) < proof_tree.depth]
@@ -277,8 +302,8 @@ def _extend_braches(proof_tree: ProofTree,
                     if conclusion_replaced.rep != leaf_node.formula.rep:
                         continue
 
-                    if is_formulas_nonsense([conclusion_replaced]
-                                            + [node.formula for node in proof_tree.nodes]):
+                    # for early rejection
+                    if is_formula_set_nonsense([conclusion_replaced] + formulas_in_tree):
                         continue
 
                     for mapping in generate_replacement_mappings_from_formula(
@@ -290,11 +315,15 @@ def _extend_braches(proof_tree: ProofTree,
                     ):
                         next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
 
-                        if len(_get_formulas_already_in_tree(next_arg_replaced.premises, proof_tree)) >= 1:
+                        if is_argument_nonsense(next_arg_replaced):
                             continue
 
-                        if is_formulas_nonsense(next_arg_replaced.all_formulas
-                                                + [node.formula for node in proof_tree.nodes]):
+                        if is_formula_set_nonsense(next_arg_replaced.all_formulas + formulas_in_tree):
+                            continue
+
+                        if not _is_formulas_new(next_arg_replaced.premises, formulas_in_tree):
+                            # If any of the premises are already in the tree, it will lead to a loop.
+                            # We want to avoid a loop.
                             continue
 
                         is_leaf_node_done = True
@@ -314,25 +343,33 @@ def _extend_braches(proof_tree: ProofTree,
             raise GenerationFailure()
 
 
-def _is_conclusion_in_premises(arg: Argument) -> bool:
-    return any([arg.conclusion.rep == premise.rep
-                for premise in arg.premises])
+def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:
+    return all([_is_formula_new(formula, existing_formulas)
+                for formula in formulas])
 
 
-def _get_formulas_already_in_tree(formulas: List[Formula], proof_tree: ProofTree) -> List[Formula]:
+def _is_formula_new(formula: Formula,
+                    existing_formulas: List[Formula]) -> bool:
+    return len(_search_formulas([formula], existing_formulas)) == 0
+
+
+def _search_formulas(formulas: List[Formula],
+                     existing_formulas: List[Formula]) -> List[Formula]:
     return [
-        formula
-        for existent_node in proof_tree.nodes
+        existing_formula
         for formula in formulas
-        if formula.rep == existent_node.formula.rep
+        for existing_formula in existing_formulas
+        if existing_formula.rep == formula.rep
     ]
 
 
-def _is_formula_new(formula: Formula, proof_tree: ProofTree) -> bool:
-    return all([
-        formula.rep != node.formula.rep
-        for node in proof_tree.nodes
-    ])
+def _search_formula(formula: Formula,
+                    existing_formulas: List[Formula]) -> List[Formula]:
+    return [
+        existing_formula
+        for existing_formula in existing_formulas
+        if existing_formula.rep == formula.rep
+    ]
 
 
 def _shuffle(elems: List[Any]) -> List[Any]:
