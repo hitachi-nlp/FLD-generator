@@ -1,10 +1,4 @@
 # tod
-* config
-    * nonの廃止
-    * ness, neg などを追加する．
-    * templace noun_clause "{a} that is not " を追加する．
-    * it vs one
-
 * 学習の高速化
     - bp16
     - maxlen
@@ -32,18 +26,6 @@
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
 
-
-## future
-* できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
-    - ダメな例
-        - {G, ^G}
-        - {(Ea) Ga, (x) Gx -> Fx,  (x) Gx -> ^F(x)}
-            - 後者２つだけでは矛盾していないことに注意．
-        - その他にも，複数ステップの証明を介して矛盾するものもあるかも．
-    - 解決: Z3でsatであることを確認する．
-        * [Testing logical equivalences (and more) using Z3 Theorem Prover - DEV Community](https://dev.to/donaldkellett/testing-logical-equivalences-and-more-using-z3-theorem-prover-3k8h)
-        * [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
-        * [Z3 Playground](https://jfmc.github.io/z3-play/)
 
 
 
@@ -104,6 +86,21 @@
 * [rejected] 個別の事実も入れたい．
     * 「Aa & Ba -> Ca」
     * ベースラインには，全称量化子しか含まれていない．
+
+## [pending] 無矛盾性の担保
+* [pending] できあがった証明が無矛盾であることを担保する必要がある．今は簡易的なチェックのみを行っている．
+    - [pending] 現状，そこまで問題になっていない．
+        1. 述語のパターンを増やしたので，衝突する頻度が小さく，簡易的なチェックで十分機能している．
+    - ダメな例
+        - {G, ^G}
+        - {(Ea) Ga, (x) Gx -> Fx,  (x) Gx -> ^F(x)}
+            - 後者２つだけでは矛盾していないことに注意．
+        - その他にも，複数ステップの証明を介して矛盾するものもあるかも．
+    - 解決: Z3でsatであることを確認する．
+        * [Testing logical equivalences (and more) using Z3 Theorem Prover - DEV Community](https://dev.to/donaldkellett/testing-logical-equivalences-and-more-using-z3-theorem-prover-3k8h)
+        * [Programming Z3](https://theory.stanford.edu/~nikolaj/programmingz3.html)
+        * [Z3 Playground](https://jfmc.github.io/z3-play/)
+
 
 ## [done] notをどのように扱うか？
 - 背景
@@ -309,6 +306,11 @@
                     1 0 1
                     0 0 0
                 ```
+* not + {and, or}
+    * notのスコープは基本的に，notの後ろ全てと解釈される．
+        * The apple is not new and red.  = リンゴは新しくて赤いものではありません。 = ¬ (new & red)
+        * The apple is not new or red.   = リンゴは新しくもなく、赤くもない。       = ¬ (new v red) = ¬new and ¬red
+        * The apple is not new but red.  = リンゴは新品ではなく、赤色です。         = ¬ new & red
 
 
 

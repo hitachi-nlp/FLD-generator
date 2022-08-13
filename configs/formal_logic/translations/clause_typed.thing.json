@@ -43,87 +43,87 @@
 
     "(x): {A}x -> {B}x": [
       "if {verb_clause.{A}x}, then {verb_clause.{B}it}.",
-      "{noun_clause.{A}x} is the {noun_clause.{B}it}."
+      "{noun_clause.{A}x} is {noun_clause.{B}the_thing}."
     ],
     "(x): ¬{A}x -> {B}x": [
       "if {verb_clause.¬{A}x}, then {verb_clause.{B}it}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.{B}it}."
+      "{noun_clause.¬{A}x} is {noun_clause.{B}the_thing}."
     ],
     "(x): {A}x -> ¬{B}x": [
       "if {verb_clause.{A}x}, then {verb_clause.¬{B}it}.",
-      "{noun_clause.{A}x} is the {noun_clause.¬{B}it}."
+      "{noun_clause.{A}x} is {noun_clause.¬{B}the_thing}."
     ],
     "(x): ¬{A}x -> ¬{B}x": [
       "if {verb_clause.¬{A}x}, then {verb_clause.¬{B}it}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.¬{B}it}."
+      "{noun_clause.¬{A}x} is {noun_clause.¬{B}the_thing}."
     ],
 
 
     "(x): ({A}x & {B}x) -> {C}x": [
       "if {verb_clause.({A}x & {B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.({A}x & {B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.({A}x & {B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): (¬{A}x & {B}x) -> {C}x": [
       "if {verb_clause.(¬{A}x & {B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.(¬{A}x & {B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.(¬{A}x & {B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): ({A}x & ¬{B}x) -> {C}x": [
       "if {verb_clause.({A}x & ¬{B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.({A}x & ¬{B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.({A}x & ¬{B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): ({A}x & {B}x) -> ¬{C}x": [
       "if {verb_clause.({A}x & {B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.({A}x & {B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.({A}x & {B}x)} is {noun_clause.¬{C}the_thing}."
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}x": [
       "if {verb_clause.(¬{A}x & ¬{B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.(¬{A}x & ¬{B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.(¬{A}x & ¬{B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}x": [
       "if {verb_clause.(¬{A}x & {B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.(¬{A}x & {B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.(¬{A}x & {B}x)} is {noun_clause.¬{C}the_thing}."
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
       "if {verb_clause.({A}x & ¬{B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.({A}x & ¬{B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.({A}x & ¬{B}x)} is {noun_clause.¬{C}the_thing}."
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
       "if {verb_clause.(¬{A}x & ¬{B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.(¬{A}x & ¬{B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.(¬{A}x & ¬{B}x)} is {noun_clause.¬{C}the_thing}."
     ],
 
 
     "(x): {A}x -> ({B}x & {C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.({B}it & {C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.({B}it & {C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.({B}the_thing & {C}the_thing)}."
     ],
     "(x): ¬{A}x -> ({B}x & {C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.({B}it & {C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.({B}it & {C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.({B}the_thing & {C}the_thing)}."
     ],
     "(x): {A}x -> (¬{B}x & {C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it & {C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.(¬{B}it & {C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.(¬{B}the_thing & {C}the_thing)}."
     ],
     "(x): {A}x -> ({B}x & ¬{C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.({B}it & ¬{C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.({B}it & ¬{C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.({B}the_thing & ¬{C}the_thing)}."
     ],
     "(x): ¬{A}x -> (¬{B}x & {C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it & {C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.(¬{B}it & {C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.(¬{B}the_thing & {C}the_thing)}."
     ],
     "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.({B}it & ¬{C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.({B}it & ¬{C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.({B}the_thing & ¬{C}the_thing)}."
     ],
     "(x): {A}x -> (¬{B}x & ¬{C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it & ¬{C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.(¬{B}it & ¬{C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.(¬{B}the_thing & ¬{C}the_thing)}."
     ],
     "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it & ¬{C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.(¬{B}it & ¬{C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.(¬{B}the_thing & ¬{C}the_thing)}."
     ],
 
 
@@ -131,69 +131,69 @@
 
     "(x): ({A}x v {B}x) -> {C}x": [
       "if {verb_clause.({A}x v {B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.({A}x v {B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.({A}x v {B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
       "if {verb_clause.(¬{A}x v {B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.(¬{A}x v {B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.(¬{A}x v {B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
       "if {verb_clause.({A}x v ¬{B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.({A}x v ¬{B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.({A}x v ¬{B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
       "if {verb_clause.({A}x v {B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.({A}x v {B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.({A}x v {B}x)} is {noun_clause.¬{C}the_thing}."
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
       "if {verb_clause.(¬{A}x v ¬{B}x)}, then {verb_clause.{C}it}.",
-      "{noun_clause.(¬{A}x v ¬{B}x)} is the {noun_clause.{C}it}."
+      "{noun_clause.(¬{A}x v ¬{B}x)} is {noun_clause.{C}the_thing}."
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
       "if {verb_clause.(¬{A}x v {B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.(¬{A}x v {B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.(¬{A}x v {B}x)} is {noun_clause.¬{C}the_thing}."
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
       "if {verb_clause.({A}x v ¬{B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.({A}x v ¬{B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.({A}x v ¬{B}x)} is {noun_clause.¬{C}the_thing}."
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
       "if {verb_clause.(¬{A}x v ¬{B}x)}, then {verb_clause.¬{C}it}.",
-      "{noun_clause.(¬{A}x v ¬{B}x)} is the {noun_clause.¬{C}it}."
+      "{noun_clause.(¬{A}x v ¬{B}x)} is {noun_clause.¬{C}the_thing}."
     ],
 
 
     "(x): {A}x -> ({B}x v {C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.({B}it v {C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.({B}it v {C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.({B}the_thing v {C}the_thing)}."
     ],
     "(x): ¬{A}x -> ({B}x v {C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.({B}it v {C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.({B}it v {C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.({B}the_thing v {C}the_thing)}."
     ],
     "(x): {A}x -> (¬{B}x v {C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it v {C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.(¬{B}it v {C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.(¬{B}the_thing v {C}the_thing)}."
     ],
     "(x): {A}x -> ({B}x v ¬{C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.({B}it v ¬{C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.({B}it v ¬{C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.({B}the_thing v ¬{C}the_thing)}."
     ],
     "(x): ¬{A}x -> (¬{B}x v {C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it v {C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.(¬{B}it v {C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.(¬{B}the_thing v {C}the_thing)}."
     ],
     "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.({B}it v ¬{C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.({B}it v ¬{C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.({B}the_thing v ¬{C}the_thing)}."
     ],
     "(x): {A}x -> (¬{B}x v ¬{C}x)": [
       "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it v ¬{C}it)}.",
-      "{noun_clause.{A}x} is the {noun_clause.(¬{B}it v ¬{C}it)}."
+      "{noun_clause.{A}x} is {noun_clause.(¬{B}the_thing v ¬{C}the_thing)}."
     ],
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
       "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it v ¬{C}it)}.",
-      "{noun_clause.¬{A}x} is the {noun_clause.(¬{B}it v ¬{C}it)}."
+      "{noun_clause.¬{A}x} is {noun_clause.(¬{B}the_thing v ¬{C}the_thing)}."
     ]
 
   },
@@ -403,6 +403,9 @@
 
     "noun_clause": {
 
+
+
+
       "{A}{a}": [
         "{A}[ADJ] {a}",
         "{a} that is {A}[ADJ]",
@@ -416,58 +419,125 @@
 
       "({A}{a} & {B}{a})": [
           "{A}[ADJ] and {B}[ADJ] {a}",
-          "{B}[ADJ] {a} that {A}[VERB.s]",
+          "{A}[ADJ] {a} that is {B}[ADJ]",
+          "{B}[ADJ] {a} that is {A}[ADJ]",
+          "{a} that is {A}[ADJ] and {B}[ADJ]",
+
           "{A}[ADJ] {a} that {B}[VERB.s]",
+          "{a} that is {A}[ADJ] and {B}[VERB.s]",
+
+          "{B}[ADJ] {a} that {A}[VERB.s]",
+          "{a} that is {B}[ADJ] and {A}[VERB.s]",
+
           "{a} that {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}{a} & {B}{a})": [
-          "non-{A}[ADJ] and {B}[ADJ] {a}",
+          "{A}[ADJ.neg] and {B}[ADJ] {a}",
+          "{A}[ADJ.neg] {a} that is {B}[ADJ]",
+          "{B}[ADJ] {a} that is not {A}[ADJ]",
+          "{B}[ADJ] {a} that is {A}[ADJ.neg]",
+          "{a} that is not {A}[ADJ] but {B}[ADJ]",
+          "{a} that is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "{A}[ADJ.neg] {a} that {B}[VERB.s]",
+          "{a} that is not {A}[ADJ] but {B}[VERB.s]",
+          "{a} that is {A}[ADJ.neg] but {B}[VERB.s]",
+
           "{B}[ADJ] {a} that does not {A}[VERB]",
-          "non-{A}[ADJ] {a} that {B}[VERB.s]",
-          "{a} that does not {A}[VERB] and {B}[VERB.s]"
+          "{a} that is {B}[ADJ] but does not {A}[VERB]",
+
+          "{a} that does not {A}[VERB.s] but {B}[VERB.s]"
       ],
       "({A}{a} & ¬{B}{a})": [
-          "{A}[ADJ] and non-{B}[ADJ] {a}",
-          "non-{B}[ADJ] {a} that {A}[VERB.s]",
+          "{A}[ADJ] and {B}[ADJ.neg] {a}",
+          "{A}[ADJ] {a} that is not {B}[ADJ]",
+          "{A}[ADJ] {a} that is {B}[ADJ.neg]",
+          "{B}[ADJ.neg] {a} that is {A}[ADJ]",
+          "{a} that is {A}[ADJ] but not {B}[ADJ]",
+          "{a} that is {A}[ADJ] and {B}[ADJ.neg]",
+
           "{A}[ADJ] {a} that does not {B}[VERB]",
-          "{a} that {A}[VERB.s] and does not {B}[VERB]"
+          "{a} that is {A}[ADJ] but does not {B}[VERB]",
+
+          "{B}[ADJ.neg] {a} that {A}[VERB.s]",
+          "{a} that is not {B}[ADJ] but {A}[VERB.s]",
+          "{a} that is {B}[ADJ.neg] and {A}[VERB.s]",
+
+          "{a} that {A}[VERB.s] but does not {B}[VERB]"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
-          "non-{A}[ADJ] and non-{B}[ADJ] {a}",
-          "non-{B}[ADJ] {a} that does not {A}[VERB]",
-          "non-{A}[ADJ] {a} that does not {B}[VERB]",
-          "{a} that does not {A}[VERB] and does not {B}[VERB]"
+          "{A}[ADJ.neg] and {B}[ADJ.neg] {a}",
+          "{A}[ADJ.neg] {a} that is not {B}[ADJ]",
+          "{A}[ADJ.neg] {a} that is {B}[ADJ.neg]",
+          "{B}[ADJ.neg] {a} that is not {A}[ADJ]",
+          "{B}[ADJ.neg] {a} that is {A}[ADJ.neg]",
+          "{a} that is not {A}[ADJ] or {B}[ADJ]",
+          "{a} that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "{A}[ADJ.neg] {a} that does not {B}[VERB]",
+          "{a} that is not {A}[ADJ] and does not {B}[VERB]",
+          "{a} that is {A}[ADJ.neg] but does not {B}[VERB]",
+
+          "{B}[ADJ.neg] {a} that does not {A}[VERB]",
+          "{a} that is not {B}[ADJ] and does not {A}[VERB]",
+          "{a} that is {B}[ADJ.neg] but does not {A}[VERB]",
+
+          "{a} that does not {A}[VERB] or {B}[VERB]"
       ],
 
       "({A}{a} v {B}{a})": [
           "{a} that either is {A}[ADJ] or is {B}[ADJ] or both",
+
           "{a} that either {A}[VERB.s] or is {B}[ADJ] or both",
+
           "{a} that either is {A}[ADJ] or {B}[VERB.s] or both",
+
           "{a} that either {A}[VERB.s] or {B}[VERB.s]"
+
       ],
       "(¬{A}{a} v {B}{a})": [
           "{a} that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "{a} that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
           "{a} that either does not {A}[VERB] or is {B}[ADJ] or both",
+
           "{a} that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "{a} that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
           "{a} that either does not {A}[VERB] or {B}[VERB.s]"
       ],
       "({A}{a} v ¬{B}{a})": [
           "{a} that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "{a} that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
           "{a} that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "{a} that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
           "{a} that either is {A}[ADJ] or does not {B}[VERB] or both",
+
           "{a} that either {A}[VERB.s] or does not {B}[VERB]"
       ],
       "(¬{A}{a} v ¬{B}{a})": [
           "{a} that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "{a} that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "{a} that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "{a} that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
           "{a} that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "{a} that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
           "{a} that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "{a} that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+
           "{a} that either does not {A}[VERB] or does not {B}[VERB]"
       ],
 
 
 
+
       "{A}x": [
         "{A}[ADJ] thing",
+        "something that is {A}[ADJ]",
         "something that {A}[VERB.s]"
       ],
       "¬{A}x": [
@@ -478,120 +548,254 @@
 
       "({A}x & {B}x)": [
           "{A}[ADJ] and {B}[ADJ] thing",
-          "{B}[ADJ] thing that {A}[VERB.s]",
+          "{A}[ADJ] thing that is {B}[ADJ]",
+          "{B}[ADJ] thing that is {A}[ADJ]",
+          "something that is {A}[ADJ] and {B}[ADJ]",
+
           "{A}[ADJ] thing that {B}[VERB.s]",
+          "something that is {A}[ADJ] and {B}[VERB.s]",
+
+          "{B}[ADJ] thing that {A}[VERB.s]",
+          "something that is {B}[ADJ] and {A}[VERB.s]",
+
           "something that {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}x & {B}x)": [
-          "non-{A}[ADJ] and {B}[ADJ] thing",
+          "{A}[ADJ.neg] and {B}[ADJ] thing",
+          "{A}[ADJ.neg] thing that is {B}[ADJ]",
+          "{B}[ADJ] thing that is not {A}[ADJ]",
+          "{B}[ADJ] thing that is {A}[ADJ.neg]",
+          "something that is not {A}[ADJ] but {B}[ADJ]",
+          "something that is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "{A}[ADJ.neg] thing that {B}[VERB.s]",
+          "something that is not {A}[ADJ] but {B}[VERB.s]",
+          "something that is {A}[ADJ.neg] but {B}[VERB.s]",
+
           "{B}[ADJ] thing that does not {A}[VERB]",
-          "non-{A}[ADJ] thing that {B}[VERB.s]",
-          "something that does not {A}[VERB] and {B}[VERB.s]"
+          "something that is {B}[ADJ] but does not {A}[VERB]",
+
+          "something that does not {A}[VERB.s] but {B}[VERB.s]"
       ],
       "({A}x & ¬{B}x)": [
-          "{A}[ADJ] and non-{B}[ADJ] thing",
-          "non-{B}[ADJ] thing that {A}[VERB.s]",
+          "{A}[ADJ] and {B}[ADJ.neg] thing",
+          "{A}[ADJ] thing that is not {B}[ADJ]",
+          "{A}[ADJ] thing that is {B}[ADJ.neg]",
+          "{B}[ADJ.neg] thing that is {A}[ADJ]",
+          "something that is {A}[ADJ] but not {B}[ADJ]",
+          "something that is {A}[ADJ] and {B}[ADJ.neg]",
+
           "{A}[ADJ] thing that does not {B}[VERB]",
-          "something that {A}[VERB.s] and does not {B}[VERB]"
+          "something that is {A}[ADJ] but does not {B}[VERB]",
+
+          "{B}[ADJ.neg] thing that {A}[VERB.s]",
+          "something that is not {B}[ADJ] but {A}[VERB.s]",
+          "something that is {B}[ADJ.neg] and {A}[VERB.s]",
+
+          "something that {A}[VERB.s] but does not {B}[VERB]"
       ],
       "(¬{A}x & ¬{B}x)": [
-          "non-{A}[ADJ] and non-{B}[ADJ] thing",
-          "non-{B}[ADJ] thing that does not {A}[VERB]",
-          "non-{A}[ADJ] thing that does not {B}[VERB]",
-          "something that does not {A}[VERB] and does not {B}[VERB]"
+          "{A}[ADJ.neg] and {B}[ADJ.neg] thing",
+          "{A}[ADJ.neg] thing that is not {B}[ADJ]",
+          "{A}[ADJ.neg] thing that is {B}[ADJ.neg]",
+          "{B}[ADJ.neg] thing that is not {A}[ADJ]",
+          "{B}[ADJ.neg] thing that is {A}[ADJ.neg]",
+          "something that is not {A}[ADJ] or {B}[ADJ]",
+          "something that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "{A}[ADJ.neg] thing that does not {B}[VERB]",
+          "something that is not {A}[ADJ] and does not {B}[VERB]",
+          "something that is {A}[ADJ.neg] but does not {B}[VERB]",
+
+          "{B}[ADJ.neg] thing that does not {A}[VERB]",
+          "something that is not {B}[ADJ] and does not {A}[VERB]",
+          "something that is {B}[ADJ.neg] but does not {A}[VERB]",
+
+          "something that does not {A}[VERB] or {B}[VERB]"
       ],
 
       "({A}x v {B}x)": [
           "something that either is {A}[ADJ] or is {B}[ADJ] or both",
+
           "something that either {A}[VERB.s] or is {B}[ADJ] or both",
+
           "something that either is {A}[ADJ] or {B}[VERB.s] or both",
+
           "something that either {A}[VERB.s] or {B}[VERB.s]"
+
       ],
       "(¬{A}x v {B}x)": [
           "something that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "something that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
           "something that either does not {A}[VERB] or is {B}[ADJ] or both",
+
           "something that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "something that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
           "something that either does not {A}[VERB] or {B}[VERB.s]"
       ],
       "({A}x v ¬{B}x)": [
           "something that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "something that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
           "something that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "something that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
           "something that either is {A}[ADJ] or does not {B}[VERB] or both",
+
           "something that either {A}[VERB.s] or does not {B}[VERB]"
       ],
       "(¬{A}x v ¬{B}x)": [
           "something that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "something that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "something that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "something that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
           "something that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "something that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
           "something that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "something that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+
           "something that either does not {A}[VERB] or does not {B}[VERB]"
       ],
 
 
-      "{A}it": [
-        "{A}[ADJ] thing",
-        "thing that {A}[VERB.s]"
+
+
+      "{A}the_thing": [
+        "the {A}[ADJ] thing",
+        "the thing that is {A}[ADJ]",
+        "the thing that {A}[VERB.s]"
       ],
-      "¬{A}it": [
-        "non-{A}[ADJ] thing",
-        "thing that does not {A}[VERB]"
+      "¬{A}the_thing": [
+        "the {A}[ADJ.neg] thing",
+        "the thing that is not {A}[ADJ]",
+        "the thing that does not {A}[VERB]"
       ],
 
-      "({A}it & {B}it)": [
-          "{A}[ADJ] and {B}[ADJ] thing",
-          "{B}[ADJ] thing that {A}[VERB.s]",
-          "{A}[ADJ] thing that {B}[VERB.s]",
-          "thing that {A}[VERB.s] and {B}[VERB.s]"
+      "({A}the_thing & {B}the_thing)": [
+          "the {A}[ADJ] and {B}[ADJ] thing",
+          "the {A}[ADJ] thing that is {B}[ADJ]",
+          "the {B}[ADJ] thing that is {A}[ADJ]",
+          "the thing that is {A}[ADJ] and {B}[ADJ]",
+
+          "the {A}[ADJ] thing that {B}[VERB.s]",
+          "the thing that is {A}[ADJ] and {B}[VERB.s]",
+
+          "the {B}[ADJ] thing that {A}[VERB.s]",
+          "the thing that is {B}[ADJ] and {A}[VERB.s]",
+
+          "the thing that {A}[VERB.s] and {B}[VERB.s]"
       ],
-      "(¬{A}it & {B}it)": [
-          "non-{A}[ADJ] and {B}[ADJ] thing",
-          "{B}[ADJ] thing that does not {A}[VERB]",
-          "non-{A}[ADJ] thing that {B}[VERB.s]",
-          "thing that does not {A}[VERB] and {B}[VERB.s]"
+      "(¬{A}the_thing & {B}the_thing)": [
+          "the {A}[ADJ.neg] and {B}[ADJ] thing",
+          "the {A}[ADJ.neg] thing that is {B}[ADJ]",
+          "the {B}[ADJ] thing that is not {A}[ADJ]",
+          "the {B}[ADJ] thing that is {A}[ADJ.neg]",
+          "the thing that is not {A}[ADJ] but {B}[ADJ]",
+          "the thing that is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "the {A}[ADJ.neg] thing that {B}[VERB.s]",
+          "the thing that is not {A}[ADJ] but {B}[VERB.s]",
+          "the thing that is {A}[ADJ.neg] but {B}[VERB.s]",
+
+          "the {B}[ADJ] thing that does not {A}[VERB]",
+          "the thing that is {B}[ADJ] but does not {A}[VERB]",
+
+          "the thing that does not {A}[VERB.s] but {B}[VERB.s]"
       ],
-      "({A}it & ¬{B}it)": [
-          "{A}[ADJ] and non-{B}[ADJ] thing",
-          "non-{B}[ADJ] thing that {A}[VERB.s]",
-          "{A}[ADJ] thing that does not {B}[VERB]",
-          "thing that {A}[VERB.s] and does not {B}[VERB]"
+      "({A}the_thing & ¬{B}the_thing)": [
+          "the {A}[ADJ] and {B}[ADJ.neg] thing",
+          "the {A}[ADJ] thing that is not {B}[ADJ]",
+          "the {A}[ADJ] thing that is {B}[ADJ.neg]",
+          "the {B}[ADJ.neg] thing that is {A}[ADJ]",
+          "the thing that is {A}[ADJ] but not {B}[ADJ]",
+          "the thing that is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "the {A}[ADJ] thing that does not {B}[VERB]",
+          "the thing that is {A}[ADJ] but does not {B}[VERB]",
+
+          "the {B}[ADJ.neg] thing that {A}[VERB.s]",
+          "the thing that is not {B}[ADJ] but {A}[VERB.s]",
+          "the thing that is {B}[ADJ.neg] and {A}[VERB.s]",
+
+          "the thing that {A}[VERB.s] but does not {B}[VERB]"
       ],
-      "(¬{A}it & ¬{B}it)": [
-          "non-{A}[ADJ] and non-{B}[ADJ] thing",
-          "non-{B}[ADJ] thing that does not {A}[VERB]",
-          "non-{A}[ADJ] thing that does not {B}[VERB]",
-          "thing that does not {A}[VERB] and does not {B}[VERB]"
+      "(¬{A}the_thing & ¬{B}the_thing)": [
+          "the {A}[ADJ.neg] and {B}[ADJ.neg] thing",
+          "the {A}[ADJ.neg] thing that is not {B}[ADJ]",
+          "the {A}[ADJ.neg] thing that is {B}[ADJ.neg]",
+          "the {B}[ADJ.neg] thing that is not {A}[ADJ]",
+          "the {B}[ADJ.neg] thing that is {A}[ADJ.neg]",
+          "the thing that is not {A}[ADJ] or {B}[ADJ]",
+          "the thing that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "the {A}[ADJ.neg] thing that does not {B}[VERB]",
+          "the thing that is not {A}[ADJ] and does not {B}[VERB]",
+          "the thing that is {A}[ADJ.neg] but does not {B}[VERB]",
+
+          "the {B}[ADJ.neg] thing that does not {A}[VERB]",
+          "the thing that is not {B}[ADJ] and does not {A}[VERB]",
+          "the thing that is {B}[ADJ.neg] but does not {A}[VERB]",
+
+          "the thing that does not {A}[VERB] or {B}[VERB]"
       ],
 
-      "({A}it v {B}it)": [
-          "thing that either is {A}[ADJ] or is {B}[ADJ] or both",
-          "thing that either {A}[VERB.s] or is {B}[ADJ] or both",
-          "thing that either is {A}[ADJ] or {B}[VERB.s] or both",
-          "thing that either {A}[VERB.s] or {B}[VERB.s]"
+      "({A}the_thing v {B}the_thing)": [
+          "the thing that either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "the thing that either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "the thing that either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "the thing that either {A}[VERB.s] or {B}[VERB.s]"
+
       ],
-      "(¬{A}it v {B}it)": [
-          "thing that either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "thing that either does not {A}[VERB] or is {B}[ADJ] or both",
-          "thing that either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "thing that either does not {A}[VERB] or {B}[VERB.s]"
+      "(¬{A}the_thing v {B}the_thing)": [
+          "the thing that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "the thing that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "the thing that either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "the thing that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "the thing that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "the thing that either does not {A}[VERB] or {B}[VERB.s]"
       ],
-      "({A}it v ¬{B}it)": [
-          "thing that either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "thing that either {A}[VERB.s] or is not {B}[ADJ] or both",
-          "thing that either is {A}[ADJ] or does not {B}[VERB] or both",
-          "thing that either {A}[VERB.s] or does not {B}[VERB]"
+      "({A}the_thing v ¬{B}the_thing)": [
+          "the thing that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "the thing that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "the thing that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "the thing that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "the thing that either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "the thing that either {A}[VERB.s] or does not {B}[VERB]"
       ],
-      "(¬{A}it v ¬{B}it)": [
-          "thing that either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "thing that either does not {A}[VERB] or is not {B}[ADJ] or both",
-          "thing that either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "thing that either does not {A}[VERB] or does not {B}[VERB]"
+      "(¬{A}the_thing v ¬{B}the_thing)": [
+          "the thing that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "the thing that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "the thing that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "the thing that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "the thing that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "the thing that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "the thing that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "the thing that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+
+          "the thing that either does not {A}[VERB] or does not {B}[VERB]"
       ],
 
 
 
 
       "{A}": [
-        "{A}[ADJ.ness]",
-        "{A}[NOUN]"
+        "{A}[NOUN]",
+        "{A}[ADJ.ness]"
       ]
     }
   }
