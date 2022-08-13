@@ -1,6 +1,4 @@
 # tod
-* butの使用法が微妙？
-    - 特に，does not {VERB} but is {ADJ}[neg]
 * 学習の高速化
     - bp16
     - maxlen
@@ -312,7 +310,11 @@
     * notのスコープは基本的に，notの後ろ全てと解釈される．
         * The apple is not new and red.  = リンゴは新しくて赤いものではありません。 = ¬ (new & red)
         * The apple is not new or red.   = リンゴは新しくもなく、赤くもない。       = ¬ (new v red) = ¬new and ¬red
-        * The apple is not new but red.  = リンゴは新品ではなく、赤色です。         = ¬ new & red
+    * 例外
+        * [rejected] The apple is not new but red.  = リンゴは新品ではなく、赤色です。         = ¬ new & red
+            - not but は口語的には，2つの形容詞に反義的なつながりがあることを仮定している．よって， つながりの無い形容詞でこの表現を使うのは，言語的にはおかしい．
+            - さらに，EntailmentBankに "not but"という表現があるようには思えないので，転移実験のプラスにもならない．
+        * The apple is not new and is not red.  = リンゴは新しくもなく、赤くもない。         = ¬new & ¬red
 
 
 
