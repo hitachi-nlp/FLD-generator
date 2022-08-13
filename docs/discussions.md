@@ -1,4 +1,6 @@
 # tod
+* butの使用法が微妙？
+    - 特に，does not {VERB} but is {ADJ}[neg]
 * 学習の高速化
     - bp16
     - maxlen

@@ -5,6 +5,7 @@ from collections import OrderedDict, defaultdict
 import random
 import re
 import logging
+from pprint import pformat
 
 from .formula import Formula, CONSTANTS
 from .word_banks.base import WordBank
@@ -161,12 +162,6 @@ class ClauseTypedTranslator(Translator):
                  translate_terms=True,
                  ):
 
-        self._clause_translations = {
-            f'{clause_type}.{terms_rep}': pos_typed_translations
-            for clause_type, clause_translations in config_json['clauses'].items()
-            for terms_rep, pos_typed_translations in clause_translations.items()
-        }
-
         def num_terms(formula_rep: str) -> int:
             formula = Formula(formula_rep)
             return len(formula.predicates) + len(formula.constants) + len(formula.variables)
@@ -175,6 +170,29 @@ class ClauseTypedTranslator(Translator):
             (rep, translations)
             for rep, translations in sorted(config_json['translations'].items(), key=lambda rep_trans: num_terms(rep_trans[0]))
         ][::-1])
+
+        self._clause_translations = {
+            f'{clause_type}.{terms_rep}': pos_typed_translations
+            for clause_type, clause_translations in config_json['clauses'].items()
+            for terms_rep, pos_typed_translations in clause_translations.items()
+        }
+
+        logger.info('')
+        logger.info('')
+        logger.info('============================== Loaded Translations =====================================  ')
+        logger.info('')
+        logger.info('------------------ sentence translations -----------------------')
+        for sentence_key, nls in self._translations.items():
+            logger.info('"%s"', sentence_key)
+            for nl in nls:
+                logger.info('    "%s"', nl)
+        logger.info('')
+        logger.info('------------------ clause translations -----------------------')
+        for clause_key, nls in self._clause_translations.items():
+            logger.info('"%s"', clause_key)
+            for nl in nls:
+                logger.info('    "%s"', nl)
+                # logger.info(re.sub('\n', '\n    ', pformat(self._translations)))
 
         self._wb = word_bank
         self._adjs = set(self._wb.get_words(pos=POS.ADJ))
@@ -223,7 +241,6 @@ class ClauseTypedTranslator(Translator):
                 if raise_if_translation_not_found:
                     raise TranslationNotFoundError(f'translation may not be complete for "{term_templated_translation_replaced}"')
                 else:
-                    import pudb; pudb.set_trace()
                     logger.warning('translation may not be complete for "%s"', term_templated_translation_replaced)
 
             # inflation

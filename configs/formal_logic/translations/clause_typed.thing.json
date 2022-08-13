@@ -213,65 +213,117 @@
 
 
 
+
     "verb_clause": {
+
+
+
       "{A}{a}": [
         "{a} is {A}[ADJ]",
         "{a} {A}[VERB.s]"
       ],
       "¬{A}{a}": [
         "{a} is not {A}[ADJ]",
+        "{a} is {A}[ADJ.neg]",
         "{a} does not {A}[VERB]"
       ],
 
+
       "({A}{a} & {B}{a})": [
           "{a} is {A}[ADJ] and {B}[ADJ]",
-          "{a} {A}[VERB.s] and it is {B}[ADJ]",
-          "{a} is {A}[ADJ] and it {B}[VERB.s]",
+
+          "{a} is {A}[ADJ] and {B}[VERB.s]",
+
+          "{a} {A}[VERB.s] and is {B}[ADJ]",
+
           "{a} {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}{a} & {B}{a})": [
           "{a} is not {A}[ADJ] but {B}[ADJ]",
-          "{a} does not {A}[VERB] but it is {B}[ADJ]",
-          "{a} is not {A}[ADJ] but it {B}[VERB.s]",
-          "{a} does not {A}[VERB] but it {B}[VERB.s]"
+          "{a} is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "{a} is not {A}[ADJ] but {B}[VERB.s]",
+          "{a} is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "{a} does not {A}[VERB] but is {B}[ADJ]",
+
+          "{a} does not {A}[VERB] but {B}[VERB]"
       ],
       "({A}{a} & ¬{B}{a})": [
           "{a} is {A}[ADJ] but not {B}[ADJ]",
-          "{a} {A}[VERB.s] but it is not {B}[ADJ]",
-          "{a} is {A}[ADJ] but it does not {B}[VERB]",
-          "{a} {A}[VERB.s] but it does not {B}[VERB]"
+          "{a} is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "{a} is {A}[ADJ] but does not {B}[VERB]",
+
+          "{a} {A}[VERB.s] but is not {B}[ADJ]",
+          "{a} {A}[VERB.s] but is {B}[ADJ.neg]",
+
+          "{a} {A}[VERB.s] but does not {B}[VERB]"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
           "{a} is not {A}[ADJ] or {B}[ADJ]",
-          "{a} does not {A}[VERB] and it is not {B}[ADJ]",
-          "{a} is not {A}[ADJ] and it does not {B}[VERB]",
-          "{a} does not {A}[VERB] or {B}[VERB.s]"
+          "{a} is not {A}[ADJ] but {B}[ADJ.neg]",
+          "{a} is {A}[ADJ.neg] but not {B}[ADJ]",
+          "{a} is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "{a} is not {A}[ADJ] and does not {B}[VERB]",
+          "{a} is {A}[ADJ.neg] but {B}[VERB.s]",
+
+          "{a} does not {A}[VERB] and is not {B}[ADJ]",
+          "{a} does not {A}[VERB] but is {B}[ADJ.neg]",
+
+          "{a} does not {A}[VERB.s] or {B}[VERB.s]"
       ],
+
+
 
       "({A}{a} v {B}{a})": [
           "{a} either is {A}[ADJ] or is {B}[ADJ] or both",
-          "{a} either {A}[VERB.s] or is {B}[ADJ] or both",
+
           "{a} either is {A}[ADJ] or {B}[VERB.s] or both",
-          "{a} either {A}[VERB.s] or {B}[VERB.s]"
+
+          "{a} either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "{a} either {A}[VERB.s] or {B}[VERB.s] or both"
       ],
       "(¬{A}{a} v {B}{a})": [
           "{a} either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "{a} either does not {A}[VERB] or is {B}[ADJ] or both",
+          "{a} either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
           "{a} either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "{a} either does not {A}[VERB] or {B}[VERB.s]"
+          "{a} either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "{a} either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "{a} either does not {A}[VERB] or {B}[VERB.s] or both"
       ],
       "({A}{a} v ¬{B}{a})": [
           "{a} either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "{a} either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "{a} either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
           "{a} either is {A}[ADJ] or does not {B}[VERB] or both",
-          "{a} either {A}[VERB.s] or does not {B}[VERB]"
+
+          "{a} either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "{a} either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "{a} either {A}[VERB.s] or does not {B}[VERB] or both"
       ],
       "(¬{A}{a} v ¬{B}{a})": [
           "{a} either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "{a} either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "{a} either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "{a} either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "{a} either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
           "{a} either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "{a} either does not {A}[VERB] or does not {B}[VERB]"
+          "{a} either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "{a} either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "{a} either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "{a} either does not {A}[VERB] or does not {B}[VERB] or both"
       ],
+
+
 
 
 
@@ -281,58 +333,107 @@
       ],
       "¬{A}x": [
         "something is not {A}[ADJ]",
+        "something is {A}[ADJ.neg]",
         "something does not {A}[VERB]"
       ],
 
+
       "({A}x & {B}x)": [
           "something is {A}[ADJ] and {B}[ADJ]",
-          "something {A}[VERB.s] and it is {B}[ADJ]",
-          "something is {A}[ADJ] and it {B}[VERB.s]",
+
+          "something is {A}[ADJ] and {B}[VERB.s]",
+
+          "something {A}[VERB.s] and is {B}[ADJ]",
+
           "something {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}x & {B}x)": [
           "something is not {A}[ADJ] but {B}[ADJ]",
-          "something does not {A}[VERB] but it is {B}[ADJ]",
-          "something is not {A}[ADJ] but it {B}[VERB.s]",
-          "something does not {A}[VERB] but it {B}[VERB.s]"
+          "something is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "something is not {A}[ADJ] but {B}[VERB.s]",
+          "something is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "something does not {A}[VERB] but is {B}[ADJ]",
+
+          "something does not {A}[VERB] but {B}[VERB]"
       ],
       "({A}x & ¬{B}x)": [
           "something is {A}[ADJ] but not {B}[ADJ]",
-          "something {A}[VERB.s] but it is not {B}[ADJ]",
-          "something is {A}[ADJ] but it does not {B}[VERB]",
-          "something {A}[VERB.s] but it does not {B}[VERB]"
+          "something is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "something is {A}[ADJ] but does not {B}[VERB]",
+
+          "something {A}[VERB.s] but is not {B}[ADJ]",
+          "something {A}[VERB.s] but is {B}[ADJ.neg]",
+
+          "something {A}[VERB.s] but does not {B}[VERB]"
       ],
       "(¬{A}x & ¬{B}x)": [
           "something is not {A}[ADJ] or {B}[ADJ]",
-          "something does not {A}[VERB] and it is not {B}[ADJ]",
-          "something is not {A}[ADJ] and it does not {B}[VERB]",
-          "something does not {A}[VERB] or {B}[VERB.s]"
+          "something is not {A}[ADJ] but {B}[ADJ.neg]",
+          "something is {A}[ADJ.neg] but not {B}[ADJ]",
+          "something is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "something is not {A}[ADJ] and does not {B}[VERB]",
+          "something is {A}[ADJ.neg] but {B}[VERB.s]",
+
+          "something does not {A}[VERB] and is not {B}[ADJ]",
+          "something does not {A}[VERB] but is {B}[ADJ.neg]",
+
+          "something does not {A}[VERB.s] or {B}[VERB.s]"
       ],
+
+
 
       "({A}x v {B}x)": [
           "something either is {A}[ADJ] or is {B}[ADJ] or both",
-          "something either {A}[VERB.s] or is {B}[ADJ] or both",
+
           "something either is {A}[ADJ] or {B}[VERB.s] or both",
-          "something either {A}[VERB.s] or {B}[VERB.s]"
+
+          "something either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "something either {A}[VERB.s] or {B}[VERB.s] or both"
       ],
       "(¬{A}x v {B}x)": [
           "something either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "something either does not {A}[VERB] or is {B}[ADJ] or both",
+          "something either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
           "something either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "something either does not {A}[VERB] or {B}[VERB.s]"
+          "something either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "something either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "something either does not {A}[VERB] or {B}[VERB.s] or both"
       ],
       "({A}x v ¬{B}x)": [
           "something either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "something either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "something either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
           "something either is {A}[ADJ] or does not {B}[VERB] or both",
-          "something either {A}[VERB.s] or does not {B}[VERB]"
+
+          "something either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "something either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "something either {A}[VERB.s] or does not {B}[VERB] or both"
       ],
       "(¬{A}x v ¬{B}x)": [
           "something either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "something either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "something either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "something either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "something either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
           "something either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "something either does not {A}[VERB] or does not {B}[VERB]"
+          "something either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "something either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "something either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "something either does not {A}[VERB] or does not {B}[VERB] or both"
       ],
+
+
+
 
 
 
@@ -342,58 +443,107 @@
       ],
       "¬{A}it": [
         "it is not {A}[ADJ]",
+        "it is {A}[ADJ.neg]",
         "it does not {A}[VERB]"
       ],
 
+
       "({A}it & {B}it)": [
           "it is {A}[ADJ] and {B}[ADJ]",
-          "it {A}[VERB.s] and it is {B}[ADJ]",
-          "it is {A}[ADJ] and it {B}[VERB.s]",
+
+          "it is {A}[ADJ] and {B}[VERB.s]",
+
+          "it {A}[VERB.s] and is {B}[ADJ]",
+
           "it {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}it & {B}it)": [
           "it is not {A}[ADJ] but {B}[ADJ]",
-          "it does not {A}[VERB] but it is {B}[ADJ]",
-          "it is not {A}[ADJ] but it {B}[VERB.s]",
-          "it does not {A}[VERB] but it {B}[VERB.s]"
+          "it is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "it is not {A}[ADJ] but {B}[VERB.s]",
+          "it is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "it does not {A}[VERB] but is {B}[ADJ]",
+
+          "it does not {A}[VERB] but {B}[VERB]"
       ],
       "({A}it & ¬{B}it)": [
           "it is {A}[ADJ] but not {B}[ADJ]",
-          "it {A}[VERB.s] but it is not {B}[ADJ]",
-          "it is {A}[ADJ] but it does not {B}[VERB]",
-          "it {A}[VERB.s] but it does not {B}[VERB]"
+          "it is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "it is {A}[ADJ] but does not {B}[VERB]",
+
+          "it {A}[VERB.s] but is not {B}[ADJ]",
+          "it {A}[VERB.s] but is {B}[ADJ.neg]",
+
+          "it {A}[VERB.s] but does not {B}[VERB]"
       ],
       "(¬{A}it & ¬{B}it)": [
           "it is not {A}[ADJ] or {B}[ADJ]",
-          "it does not {A}[VERB] and it is not {B}[ADJ]",
-          "it is not {A}[ADJ] and it does not {B}[VERB]",
-          "it does not {A}[VERB] or {B}[VERB.s]"
+          "it is not {A}[ADJ] but {B}[ADJ.neg]",
+          "it is {A}[ADJ.neg] but not {B}[ADJ]",
+          "it is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "it is not {A}[ADJ] and does not {B}[VERB]",
+          "it is {A}[ADJ.neg] but {B}[VERB.s]",
+
+          "it does not {A}[VERB] and is not {B}[ADJ]",
+          "it does not {A}[VERB] but is {B}[ADJ.neg]",
+
+          "it does not {A}[VERB.s] or {B}[VERB.s]"
       ],
+
+
 
       "({A}it v {B}it)": [
           "it either is {A}[ADJ] or is {B}[ADJ] or both",
-          "it either {A}[VERB.s] or is {B}[ADJ] or both",
+
           "it either is {A}[ADJ] or {B}[VERB.s] or both",
-          "it either {A}[VERB.s] or {B}[VERB.s]"
+
+          "it either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "it either {A}[VERB.s] or {B}[VERB.s] or both"
       ],
       "(¬{A}it v {B}it)": [
           "it either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "it either does not {A}[VERB] or is {B}[ADJ] or both",
+          "it either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
           "it either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "it either does not {A}[VERB] or {B}[VERB.s]"
+          "it either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "it either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "it either does not {A}[VERB] or {B}[VERB.s] or both"
       ],
       "({A}it v ¬{B}it)": [
           "it either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "it either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "it either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
           "it either is {A}[ADJ] or does not {B}[VERB] or both",
-          "it either {A}[VERB.s] or does not {B}[VERB]"
+
+          "it either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "it either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "it either {A}[VERB.s] or does not {B}[VERB] or both"
       ],
       "(¬{A}it v ¬{B}it)": [
           "it either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "it either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "it either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "it either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "it either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
           "it either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "it either does not {A}[VERB] or does not {B}[VERB]"
+          "it either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "it either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "it either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "it either does not {A}[VERB] or does not {B}[VERB] or both"
       ]
+
+
+
     },
 
 
@@ -417,6 +567,7 @@
         "{a} that does not {A}[VERB]"
       ],
 
+      
       "({A}{a} & {B}{a})": [
           "{A}[ADJ] and {B}[ADJ] {a}",
           "{A}[ADJ] {a} that is {B}[ADJ]",
@@ -485,6 +636,7 @@
           "{a} that does not {A}[VERB] or {B}[VERB]"
       ],
 
+
       "({A}{a} v {B}{a})": [
           "{a} that either is {A}[ADJ] or is {B}[ADJ] or both",
 
@@ -535,6 +687,9 @@
 
 
 
+
+
+
       "{A}x": [
         "{A}[ADJ] thing",
         "something that is {A}[ADJ]",
@@ -545,6 +700,7 @@
         "something that is not {A}[ADJ]",
         "something that does not {A}[VERB]"
       ],
+
 
       "({A}x & {B}x)": [
           "{A}[ADJ] and {B}[ADJ] thing",
@@ -614,6 +770,7 @@
           "something that does not {A}[VERB] or {B}[VERB]"
       ],
 
+
       "({A}x v {B}x)": [
           "something that either is {A}[ADJ] or is {B}[ADJ] or both",
 
@@ -664,6 +821,8 @@
 
 
 
+
+
       "{A}the_thing": [
         "the {A}[ADJ] thing",
         "the thing that is {A}[ADJ]",
@@ -674,6 +833,7 @@
         "the thing that is not {A}[ADJ]",
         "the thing that does not {A}[VERB]"
       ],
+
 
       "({A}the_thing & {B}the_thing)": [
           "the {A}[ADJ] and {B}[ADJ] thing",
@@ -742,6 +902,7 @@
 
           "the thing that does not {A}[VERB] or {B}[VERB]"
       ],
+
 
       "({A}the_thing v {B}the_thing)": [
           "the thing that either is {A}[ADJ] or is {B}[ADJ] or both",
