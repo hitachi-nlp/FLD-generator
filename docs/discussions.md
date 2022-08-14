@@ -1,18 +1,14 @@
 # tod
+* `That {a} is {A}` をtranslationに加える
+* コンポーネントを完成させていく
+    * "proof tree generation"
+    * "world assumption"
+        - [todo] EBへの転移実験はlabel_true_onlyでやる．
+        - [todo] それ以外の実験は，CWAでやる．
 * 学習の高速化
     - bp16
     - maxlen
     - A100 8並列
-
-* コンポーネントを完成させていく
-    * "argument生成"
-    * [pending] "distractor"
-        - [pending] 翻訳に自然文を使う場合は，手法2も検討する．
-    * "translation"
-        - "アルゴリズム"の実装．Translatorとして実装できる．
-    * "OWA vs CWA"
-        - [todo] EBへの転移実験はlabel_true_onlyでやる．
-        - [todo] それ以外の実験は，CWAでやる．
 * 研究計画を立てる．
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
     * ablation
@@ -30,34 +26,38 @@
 
 
 
-# argument生成
+# proof tree generation
 
 ## [todo] パターン
-* ルール
+* 述語論理
+    - 公理系
+        - 例: & 導入
+            ```
+            ---- premise ----
+            F(a)
+            G(a)
+            -----------------
+            F(a) & G(a)   (x) F(x) /\ G(x) -> H(x)
+            -----------------
+            H(a)
+            ```
+* 命題論理
+    - 述語論理と同じものを入れる．
+    - 現状だと，A -> noun_clause なので，"If A is B then C is D" "If C is D then E is F" := "If A is B then E is F" のような英語で表されるsyllogismを表現できていない．
+        * A, B などを文に置き換えるか？
+* [todo] ルール
     * (x): Fx -> Gx
     * Fa -> Gb
-        - If car crashes, human will be injred.
+        - If car crashes, human will be injured.
     * A -> B
-        - If car crashes, human will be injred.
+        - If car crashes, human will be injured.
             - A = car crashes
         - Storm leads to injuries.
             - A = storm
-* notの意味
+* [todo] notの意味
     - ２重否定やドモルガン，あるいはcontrapositionなどを導入しないと，not Aは単なる独立な命題になってしまう．
-* [todo] 形式論理の公理系
-    * e.g.) & 導入
-        ```
-        ---- premise ----
-        F(a)
-        G(a)
-        -----------------
-        F(a) & G(a)   (x) F(x) /\ G(x) -> H(x)
-        -----------------
-        H(a)
-        ```
-* [todo] 命題論理
 * [todo] その他，EBに含まれているパターン
-* ドモルガン: ^(A v B) -> ^A & ^B
+* [todo] ドモルガン: ^(A v B) -> ^A & ^B
 * [pending] AND + not
     * [pending]
         - 実装コストが割とある．
@@ -180,7 +180,7 @@
 
 
 
-# distractor
+# [pending] distractor
 * 方針
     - [done] 翻訳にテンプレート文を使う場合は，手法1をやる．
     - [pending] 翻訳に自然文を使う場合は，手法2も検討する．
@@ -205,26 +205,9 @@
 
 
 # translation
-* todo
-    - "アルゴリズム"
-        - ドメインの追加
-    - "事例"
-    * [pending] int nodeの翻訳からは乱数性を消すべきでは？
-        - [pending] 問題になりそうだったら考える．この実装はわりと面倒なので?
-        - Pros
-            - モデルの中間出力のパターンが固定されるので，よりconsistent．学習しやすいかもしれない．
-        - Cons
-            - int node 全ての言語パターンが固定されてしまうので，表現の多様性は学習しづらくなるかもしれない．
-            - 実際，乱数性があったとしても，単にgenerationの1位, 2位に埋め込むから問題無いかもしれない．
 
-## アルゴリズム
-1. [done] 名詞節 vs 動詞節を決める
-2. [todo] ドメインを決める (human, objet)
-3. [done] predicate, individual を集める．
-4. [done] テンプレートに当てはめる．
-
-## 事例
-* [todo] G -> H = storm cause disastor
+## [done] 事例
+* [done] G -> H = storm cause disastor
     - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
     - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．
     * 以上より，Translationの入力は1セットのFormulaである必要がある．
@@ -236,42 +219,19 @@
     * "If someone is a {A} and a {B}, then they are a {C}. "
     * small and smart person is always kind.
 
-## [rejected] 複雑な翻訳をどうするか
-* 事例
-    * `(x): ({F}x v {H}x) -> {G}x`
-        - "If someone is F and H then he is G"
-        - F and H person is also G
-    * `(x): (^{F}x v {H}x) -> {G}x`
-        - "If someone is not F and H then he is G"
-        - non-F and H person is also G
-    * `(x): {F}x -> {G}x & {H}x`
-        - "If someone is F then he is G and H"
-        - F person is also G and H.
-* (F v H) (F & H) みたいなのに限られているのであれば，例えばregexpなどでいけるのでは？
-
-## [done] 辞書
-* 必要な機能
-    - 語彙の獲得
-        - 名詞・動詞・助動詞 の判定
-        - 自動詞か他動詞かを判定する．
-    - ing (present continuous) へのtense変換
-* ライブラリ・辞書
-    * 語彙の獲得
-        * WordNet
-            * [NLTK :: Sample usage for wordnet](https://www.nltk.org/howto/wordnet.html)
-        * [rejected] NodeBox
-            * [NodeBox](https://www.nodebox.net/code/index.php/Linguistics#verb_conjugation)
-                - もう開発が終わっている．ダウンロードできない．
-    * ingへの変換
-        * [bjascob/pyInflect](https://github.com/bjascob/pyInflect)
-            * [Tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)
-
-## 考察
+## [pending] その他
+* [pending] wordnetの類義語によって，言語表現を膨らませられるか？
+    - ノイジーだから微妙かもしれない．
+* [pending] int nodeの翻訳からは乱数性を消すべきでは？
+    - [pending] 問題になりそうだったら考える．この実装はわりと面倒なので?
+    - Pros
+        - モデルの中間出力のパターンが固定されるので，よりconsistent．学習しやすいかもしれない．
+    - Cons
+        - int node 全ての言語パターンが固定されてしまうので，表現の多様性は学習しづらくなるかもしれない．
+        - 実際，乱数性があったとしても，単にgenerationの1位, 2位に埋め込むから問題無いかもしれない．
 * [rejected] notの翻訳として，non- + 形容詞を常に使えるか？
     - 使えない．nickelic などは，non-nickelicという使い方はされない．
-* [todo] wordnetの類義語によって，言語表現を膨らませられるか？
-    - ノイジーだから微妙かもしれない．
-* "not"の翻訳に，wordnetの対義語が使えるか？
+* [rejected] "not"の翻訳に，wordnetの対義語が使えるか？
     - 使えない．酸性に対して，アルカリ性が対義語になっている．中性や両性があるので，これは誤り．
 * [done] v の口語英語について
     * 問題点と対策
@@ -306,7 +266,7 @@
                     1 0 1
                     0 0 0
                 ```
-* not + {and, or}
+* [done] not + {and, or}
     * notのスコープは基本的に，notの後ろ全てと解釈される．
         * The apple is not new and red.  = リンゴは新しくて赤いものではありません。 = ¬ (new & red)
         * The apple is not new or red.   = リンゴは新しくもなく、赤くもない。       = ¬ (new v red) = ¬new and ¬red
@@ -315,6 +275,44 @@
             - not but は口語的には，2つの形容詞に反義的なつながりがあることを仮定している．よって， つながりの無い形容詞でこの表現を使うのは，言語的にはおかしい．
             - さらに，EntailmentBankに "not but"という表現があるようには思えないので，転移実験のプラスにもならない．
         * The apple is not new and is not red.  = リンゴは新しくもなく、赤くもない。         = ¬new & ¬red
+
+## [pending] アルゴリズム
+1. [done] 名詞節 vs 動詞節を決める
+2. [pending] ドメインを決める (human, objet)
+    - EBへの転移で必要なのはobjectのみである
+3. [done] predicate, individual を集める．
+4. [done] テンプレートに当てはめる．
+
+## [rejected] 複雑な翻訳をどうするか
+* 事例
+    * `(x): ({F}x v {H}x) -> {G}x`
+        - "If someone is F and H then he is G"
+        - F and H person is also G
+    * `(x): (^{F}x v {H}x) -> {G}x`
+        - "If someone is not F and H then he is G"
+        - non-F and H person is also G
+    * `(x): {F}x -> {G}x & {H}x`
+        - "If someone is F then he is G and H"
+        - F person is also G and H.
+* (F v H) (F & H) みたいなのに限られているのであれば，例えばregexpなどでいけるのでは？
+
+## [done] 辞書
+* 必要な機能
+    - 語彙の獲得
+        - 名詞・動詞・助動詞 の判定
+        - 自動詞か他動詞かを判定する．
+    - ing (present continuous) へのtense変換
+* ライブラリ・辞書
+    * 語彙の獲得
+        * WordNet
+            * [NLTK :: Sample usage for wordnet](https://www.nltk.org/howto/wordnet.html)
+        * [rejected] NodeBox
+            * [NodeBox](https://www.nodebox.net/code/index.php/Linguistics#verb_conjugation)
+                - もう開発が終わっている．ダウンロードできない．
+    * ingへの変換
+        * [bjascob/pyInflect](https://github.com/bjascob/pyInflect)
+            * [Tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html)
+
 
 
 
@@ -341,7 +339,7 @@
 
 
 
-# OWA vs CWA
+# world assumption
 
 ## 方針
 - [todo] EBへの転移実験はlabel_true_onlyでやる．
