@@ -360,9 +360,9 @@
         "scheme_variant": "base_scheme",
         "premises": [
             "(x): {F}x -> {G}x",
-            "(Ex): {H}x & ¬{G}x"
+            "(Ex): ({H}x & ¬{G}x)"
         ],
-        "conclusion": "(Ex): {H}x & ¬{F}x"
+        "conclusion": "(Ex): ({H}x & ¬{F}x)"
     },
     {
         "id": "hyps31",
@@ -370,9 +370,9 @@
         "scheme_variant": "negation_variant",
         "premises": [
             "(x): ¬{F}x -> {G}x",
-            "(Ex): {H}x & ¬{G}x"
+            "(Ex): ({H}x & ¬{G}x)"
         ],
-        "conclusion": "(Ex): {H}x & {F}x"
+        "conclusion": "(Ex): ({H}x & {F}x)"
     },
     {
         "id": "hyps32",
@@ -380,9 +380,9 @@
         "scheme_variant": "negation_variant",
         "premises": [
             "(x): {F}x -> ¬{G}x",
-            "(Ex): {H}x & {G}x"
+            "(Ex): ({H}x & {G}x)"
         ],
-        "conclusion": "(Ex): {H}x & ¬{F}x"
+        "conclusion": "(Ex): ({H}x & ¬{F}x)"
     },
     {
         "id": "hyps33",
@@ -390,9 +390,9 @@
         "scheme_variant": "negation_variant",
         "premises": [
             "(x): {G}x -> {F}x",
-            "(Ex): {H}x & {G}x"
+            "(Ex): ({H}x & {G}x)"
         ],
-        "conclusion": "(Ex): {H}x & {F}x"
+        "conclusion": "(Ex): ({H}x & {F}x)"
     },
     {
         "id": "hyps34",
@@ -403,7 +403,7 @@
             "(x): {F}x -> {I}x",
             "(Ex): {H}x & ¬({G}x & {I}x)"
         ],
-        "conclusion": "(Ex): {H}x & ¬{F}x"
+        "conclusion": "(Ex): ({H}x & ¬{F}x)"
     },
     {
         "id": "hyps35",
@@ -421,7 +421,7 @@
         "scheme_variant": "complex_predicates",
         "premises": [
             "(x): ({F}x & {I}x) -> ¬{G}x",
-            "(Ex): {H}x & {G}x"
+            "(Ex): ({H}x & {G}x)"
         ],
         "conclusion": "(Ex): {H}x & ¬({F}x & {I}x)"
     },
@@ -434,7 +434,7 @@
             "(x): {F}x -> {I}x",
             "(Ex): {H}x & (¬{G}x v ¬{I}x)"
         ],
-        "conclusion": "(Ex): {H}x & ¬{F}x"
+        "conclusion": "(Ex): ({H}x & ¬{F}x)"
     },
     {
         "id": "hyps38",
@@ -452,7 +452,7 @@
         "scheme_variant": "de_morgan",
         "premises": [
             "(x): ({F}x & {I}x) -> ¬{G}x",
-            "(Ex): {H}x & {G}x"
+            "(Ex): ({H}x & {G}x)"
         ],
         "conclusion": "(Ex): {H}x & (¬{F}x v ¬{I}x)"
     },
