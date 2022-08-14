@@ -7,7 +7,7 @@ import re
 import logging
 from pprint import pformat
 
-from .formula import Formula, CONSTANTS
+from .formula import Formula, CONSTANTS, VARIABLES
 from .word_banks.base import WordBank
 from .replacements import (
     generate_replacement_mappings_from_formula,
@@ -266,19 +266,25 @@ class ClauseTypedTranslator(Translator):
 
     def _choose_term_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
         predicates = list({predicate.rep for formula in formulas for predicate in formula.predicates})
-        zeroary_predicates = [p_rep for p_rep in predicates
-                              if all((f'{p_rep}x' not in formula.rep and f'{p_rep}{{' not in formula.rep
-                                      for formula in formulas))]
+        zeroary_predicates = [
+            p_rep for p_rep in predicates
+            if all(
+                (
+                    all((f'{p_rep}{argument}' not in formula.rep for argument in VARIABLES + CONSTANTS))
+                    for formula in formulas
+                )
+            )
+        ]
         unary_predicates = [p_rep for p_rep in predicates
                             if p_rep not in zeroary_predicates]
-        constraints = list({constant.rep for formula in formulas for constant in formula.constants})
+        constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
         zeroary_mapping = next(
             generate_replacement_mappings_from_terms(
                 zeroary_predicates,
-                constraints,
+                constants,
                 random.sample(self._adjs, len(zeroary_predicates)) + random.sample(self._verbs, len(zeroary_predicates)),
-                random.sample(self._nouns, len(constraints)),
+                random.sample(self._nouns, len(constants)),
                 block_shuffle=True,
             )
         )
