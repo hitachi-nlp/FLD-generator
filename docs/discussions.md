@@ -1,7 +1,7 @@
 # tod
-* `That {a} is {A}` をtranslationに加える
 * コンポーネントを完成させていく
     * "proof tree generation"
+    * "translation"
     * "world assumption"
         - [todo] EBへの転移実験はlabel_true_onlyでやる．
         - [todo] それ以外の実験は，CWAでやる．
@@ -29,6 +29,10 @@
 # proof tree generation
 
 ## [todo] パターン
+* 命題論理
+    - 公理系
+    - 定理 ()
+
 * 述語論理
     - 公理系
         - 例: & 導入
@@ -41,10 +45,6 @@
             -----------------
             H(a)
             ```
-* 命題論理
-    - 述語論理と同じものを入れる．
-    - 現状だと，A -> noun_clause なので，"If A is B then C is D" "If C is D then E is F" := "If A is B then E is F" のような英語で表されるsyllogismを表現できていない．
-        * A, B などを文に置き換えるか？
 * [todo] ルール
     * (x): Fx -> Gx
     * Fa -> Gb
@@ -206,7 +206,9 @@
 
 # translation
 
-## [done] 事例
+## [todo] 事例
+* noun clause `The fact that {a} is {A}` をtranslationに加える
+* [todo] EntailmentBankに入っているもの．
 * [done] G -> H = storm cause disastor
     - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
     - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．
@@ -219,7 +221,13 @@
     * "If someone is a {A} and a {B}, then they are a {C}. "
     * small and smart person is always kind.
 
-## [pending] その他
+## [todo] その他
+- [todo] 命題論理のA, B のAに，verb_clauseを入れたい
+    - 現状，{A}{a} -> {B}{b} というルールを書くのがもっとも易しい．
+        * {A} の翻訳を verb_clause にするのはtranslator実装上，非常にコストが高い．
+            * 我々のFWにおいて，{A}というのは命題記号ではなく，述語を表していることが根本原因
+    - 現状だと，A -> noun_clause なので，"If A is B then C is D" "If C is D then E is F" := "If A is B then E is F" のような英語で表されるsyllogismを表現できていない．
+        * A, B などを文に置き換えるか？
 * [pending] wordnetの類義語によって，言語表現を膨らませられるか？
     - ノイジーだから微妙かもしれない．
 * [pending] int nodeの翻訳からは乱数性を消すべきでは？
