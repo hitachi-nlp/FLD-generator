@@ -8,20 +8,39 @@ from .formula import Formula, PREDICATES, CONSTANTS
 class FormalLogicDistractor(ABC):
 
     @abstractmethod
-    def generate(self, formulas: List[Formula], num: int) -> List[Formula]:
+    def generate(self, formulas: List[Formula]) -> List[Formula]:
         pass
 
 
 class UnknownFactDistractor(FormalLogicDistractor):
-    """When {G}{a} is already in tree, we add {G}{b} or {H}{a}"""
 
-    def generate(self, formulas: List[Formula], num: int) -> List[Formula]:
-        known_predicates = sorted({
+    def __init__(self, num_distractor_factor: float = 1.0):
+        self.num_distractor_factor = num_distractor_factor
+
+    def generate(self, formulas: List[Formula]) -> List[Formula]:
+        known_zeroary_predicates = sorted({
             pred.rep
             for formula in formulas
-            for pred in formula.predicates
+            for pred in formula.zeroary_predicates
         })
-        unknown_predicates = sorted(set(PREDICATES) - set(known_predicates))
+        unknown_predicates = sorted(set(PREDICATES) - set(known_zeroary_predicates))
+        random.shuffle(unknown_predicates)
+
+        num_zeroary_distractors = len(known_zeroary_predicates) * self.num_distractor_factor
+        distractor_zeroary_predicates = unknown_predicates[:int(num_zeroary_distractors)]
+        zeroary_distractors = [Formula(f'{predicate}') for predicate in distractor_zeroary_predicates]
+
+        unary_predicate_arguments = sorted({
+            pred_arg.rep
+            for formula in formulas
+            for pred_arg in formula.unary_predicate_arguments
+        })
+        known_unary_predicates = sorted({
+            pred.rep
+            for formula in formulas
+            for pred in formula.unary_predicates
+        })
+        unknown_predicates = sorted(set(PREDICATES) - set(known_unary_predicates) - set(distractor_zeroary_predicates))
 
         known_constants = sorted({
             pred.rep
@@ -30,24 +49,26 @@ class UnknownFactDistractor(FormalLogicDistractor):
         })
         unknown_constants = sorted(set(CONSTANTS) - set(known_constants))
 
-        unknown_combinations: List[Formula] = []
-        for predicate in known_predicates:
+        in_domain_unknown_predicate_arguments: List[Formula] = []
+        for predicate in known_unary_predicates:
             for constant in known_constants:
                 fact_rep = f'{predicate}{constant}'
 
-                if all((fact_rep not in formula.rep for formula in formulas + unknown_combinations)):
-                    unknown_combinations.append(Formula(fact_rep))
+                if all((fact_rep not in formula.rep for formula in formulas + in_domain_unknown_predicate_arguments)):
+                    in_domain_unknown_predicate_arguments.append(Formula(fact_rep))
 
-        other_unknown_combinations = []
+        outof_domain_unknown_predicate_arguments = []
         for predicate in unknown_predicates:
             for constant in known_constants:
-                other_unknown_combinations.append(Formula(f'{predicate}{constant}'))
-        for predicate in known_predicates:
+                outof_domain_unknown_predicate_arguments.append(Formula(f'{predicate}{constant}'))
+        for predicate in known_unary_predicates:
             for constant in unknown_constants:
                 fact_rep = f'{predicate}{constant}'
-                other_unknown_combinations.append(Formula(f'{predicate}{constant}'))
+                outof_domain_unknown_predicate_arguments.append(Formula(f'{predicate}{constant}'))
 
-        random.shuffle(unknown_combinations)
-        random.shuffle(other_unknown_combinations)
+        random.shuffle(in_domain_unknown_predicate_arguments)
+        random.shuffle(outof_domain_unknown_predicate_arguments)
+        num_unary_distractors = len(unary_predicate_arguments) * self.num_distractor_factor
+        unary_distractors = (in_domain_unknown_predicate_arguments + outof_domain_unknown_predicate_arguments)[:int(num_unary_distractors)]
 
-        return (unknown_combinations + other_unknown_combinations)[:num]
+        return zeroary_distractors + unary_distractors

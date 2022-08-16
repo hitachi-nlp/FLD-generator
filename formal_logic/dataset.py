@@ -24,12 +24,11 @@ class NLProofSDataset:
                  tree_pipeline: TreePipeline,
                  world_assump: str,
                  depth: int = 5,
-                 num_distractors: int = 5,
+                 num_distractor_factor: int = 5,
                  raise_if_translation_not_found=True):
         self.tree_pipeline = tree_pipeline
         self.world_assump = world_assump
         self.depth = depth
-        self.num_distractors = num_distractors
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
     def generate(self, size: int) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
@@ -54,7 +53,6 @@ class NLProofSDataset:
         for i_sample in range(size):
             proof_tree, distractors, pipeline_stats = self.tree_pipeline.run(
                 depth=self.depth,
-                num_distractors=self.num_distractors,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 

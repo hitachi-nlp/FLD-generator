@@ -213,43 +213,41 @@ class ClauseTypedTranslator(Translator):
         term_mapping = self._choose_term_mapping(formulas)
 
         for formula in formulas:
+            # Choose clauset templated translation
             (predicate_symbol_mapping,
              clause_templated_translation_key,
              clause_templated_translation,
              clause_templated_translation_replaced) = self._choose_clause_templated_translation(formula)
-
             if clause_templated_translation_replaced is None:
                 if raise_if_translation_not_found:
                     raise TranslationNotFoundError(f'translation not found for {formula.rep}')
                 else:
-                    logger.warning('translation not found for %s', formula.rep)
                     translations.append(None)
                     translation_names.append(None)
                     continue
 
-            term_templated_translation_replaced = self._choose_term_templated_translation(
+            # Replace clause template. The result is term templated translation.
+            term_templated_translation_replaced = self._replace_clause_templates(
                 formula,
                 clause_templated_translation_replaced,
                 term_mapping,
             )
-
-            # inverse mapping
-            term_templated_translation = replace_formula(Formula(term_templated_translation_replaced),
-                                                         {v: k for k, v in predicate_symbol_mapping.items()}).rep
-
-            if term_templated_translation_replaced.find('clause') >= 0:
+            if term_templated_translation_replaced is None:
                 if raise_if_translation_not_found:
                     raise TranslationNotFoundError(f'translation may not be complete for "{term_templated_translation_replaced}"')
                 else:
-                    logger.warning('translation may not be complete for "%s"', term_templated_translation_replaced)
+                    translations.append(None)
+                    translation_names.append(None)
+                    continue
 
-            # inflation
+            # Generate word inflated mapping.
             inflated_mapping, _inflation_stats = self._make_inflated_mapping(term_mapping, term_templated_translation_replaced)
             for inflation_type, count in _inflation_stats.items():
                 count_stats['inflation'][f'{inflation_type}'] = count
 
             term_templated_translation_replaced_wo_info = re.sub('\[[^\]]*\]', '', term_templated_translation_replaced)
 
+            # Do translation
             if self._translate_terms:
                 translation = replace_formula(Formula(term_templated_translation_replaced_wo_info), inflated_mapping).rep
             else:
@@ -257,37 +255,55 @@ class ClauseTypedTranslator(Translator):
 
             translations.append(translation)
             translation_names.append(
-                '____'.join([clause_templated_translation_key,
-                             clause_templated_translation,
-                             term_templated_translation])
+                self._make_translation_name(
+                    clause_templated_translation_key,
+                    clause_templated_translation,
+                    term_templated_translation_replaced,
+                    predicate_symbol_mapping
+                )
             )
 
         return list(zip(translation_names, translations)), count_stats
 
+    def _make_translation_name(self,
+                               clause_templated_translation_key,
+                               clause_templated_translation,
+                               term_templated_translation_replaced,
+                               predicate_symbol_mapping) -> str:
+        # inverse mapping
+        term_templated_translation = replace_formula(Formula(term_templated_translation_replaced),
+                                                     {v: k for k, v in predicate_symbol_mapping.items()}).rep
+        return '____'.join([clause_templated_translation_key,
+                            clause_templated_translation,
+                            term_templated_translation])
+
     def _choose_term_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
-        predicates = list({predicate.rep for formula in formulas for predicate in formula.predicates})
-        zeroary_predicates = [
-            p_rep for p_rep in predicates
-            if all(
-                (
-                    all((f'{p_rep}{argument}' not in formula.rep for argument in VARIABLES + CONSTANTS))
-                    for formula in formulas
-                )
-            )
-        ]
-        unary_predicates = [p_rep for p_rep in predicates
-                            if p_rep not in zeroary_predicates]
+        zeroary_predicates = list({predicate.rep
+                                   for formula in formulas
+                                   for predicate in formula.zeroary_predicates})
+        unary_predicates = list({predicate.rep
+                                 for formula in formulas
+                                 for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
+        # print('\n')
+        # for formula in formulas:
+        #     print(formula.rep)
+        # print('zero-ary:', zeroary_predicates)
+        # print('unary:', unary_predicates)
+
+        # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
             generate_replacement_mappings_from_terms(
                 zeroary_predicates,
                 constants,
-                random.sample(self._adjs, len(zeroary_predicates)) + random.sample(self._verbs, len(zeroary_predicates)),
+                # random.sample(self._adjs, len(zeroary_predicates)) + random.sample(self._verbs, len(zeroary_predicates)),  # HONOKA
+                random.sample(self._nouns, len(zeroary_predicates)),
                 random.sample(self._nouns, len(constants)),
                 block_shuffle=True,
             )
         )
+        # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
         unary_mapping = next(
             generate_replacement_mappings_from_terms(
                 unary_predicates,
@@ -326,13 +342,17 @@ class ClauseTypedTranslator(Translator):
                     ).rep
                     clause_templated_translation_key = _translation_formula.rep
                     break
+
+        if clause_templated_translation_key is None:
+            logger.warning('clause templated translation not found for %s', formula.rep)
+
         return mapping, clause_templated_translation_key, clause_templated_translation, clause_templated_translation_replaced
 
-    def _choose_term_templated_translation(self,
-                                           formula: Formula,
-                                           clause_templated_translation_replaced: str,
-                                           term_mapping: Dict[str, str]) -> Optional[str]:
-        
+    def _replace_clause_templates(self,
+                                  formula: Formula,
+                                  clause_templated_translation_replaced: str,
+                                  term_mapping: Dict[str, str]) -> Optional[str]:
+
         term_templated_translation_replaced = clause_templated_translation_replaced
 
         has_clause_replacement = True
@@ -374,7 +394,35 @@ class ClauseTypedTranslator(Translator):
                             possible_term_templated_translations.append(pos_typed_translation)
                             possible_term_templated_translations_replaced.append(pos_typed_translation_replaced)
                     if len(possible_term_templated_translations_replaced) == 0:
-                        raise ValueError(f'pos typed translation not found for "{clause_template_replaced}"')
+                        possible_term_templated_translations = []
+                        possible_term_templated_translations_replaced = []
+                        # import pudb; pudb.set_trace()
+                        # ------------------------
+                        for pos_typed_translation in pos_typed_translations:
+                            pos_typed_translation_replaced = replace_formula(Formula(pos_typed_translation), clause_template_mapping).rep
+                            pos_typed_predicate_found = False
+                            for predicate_symbol in predicate_symbols:
+                                word = term_mapping[predicate_symbol]
+
+                                pos, form = self._get_predicate_info(predicate_symbol, pos_typed_translation_replaced)
+                                if pos not in self._wb.get_pos(word):
+                                    pos_typed_predicate_found = False
+                                    break
+
+                                inflated_word = self._get_inflated_word(word, pos, form)
+
+                                if inflated_word is not None:
+                                    pos_typed_predicate_found = True
+                                else:
+                                    pos_typed_predicate_found = False
+                                    break
+                            if pos_typed_predicate_found:
+                                possible_term_templated_translations.append(pos_typed_translation)
+                                possible_term_templated_translations_replaced.append(pos_typed_translation_replaced)
+                        # ------------------------
+
+                        raise ValueError(f'We could not find any clause replacement for "{clause_template_replaced}, where pos and word-inflation are consistent with the given term mapping:\n{pformat(term_mapping)}')
+
                     _idx = random.choice(range(len(possible_term_templated_translations_replaced)))
                     _term_templated_translation_key = possible_term_templated_translations[_idx]
                     _term_templated_translation_replaced = possible_term_templated_translations_replaced[_idx]
@@ -401,7 +449,13 @@ class ClauseTypedTranslator(Translator):
                     break
                 if has_clause_replacement:
                     break
-        return term_templated_translation_replaced
+
+        if term_templated_translation_replaced.find('verb_clause') >= 0\
+                or term_templated_translation_replaced.find('noun_clause') >= 0:
+            logger.warning('Clause template replacement could not be completed for "%s"', term_templated_translation_replaced)
+            return None
+        else:
+            return term_templated_translation_replaced
 
     def _make_inflated_mapping(self,
                                term_mapping: Dict[str, str],
@@ -415,20 +469,22 @@ class ClauseTypedTranslator(Translator):
         for predicate_symbol_formula in Formula(term_templated_translation_replaced).predicates:
             predicate_symbol = predicate_symbol_formula.rep
             if term_templated_translation_replaced.find(f'{predicate_symbol}[') >= 0:
-
                 word = term_mapping[predicate_symbol]
                 pos, form = self._get_predicate_info(predicate_symbol, term_templated_translation_replaced)
                 stats[f'{pos.value}.{form.value}'] += 1
                 inflated_word = self._get_inflated_word(word, pos, form)
                 assert(inflated_word is not None)
-
             else:
                 # inflated_word = term_mapping[predicate_symbol]
-                raise Exception()
+                raise Exception(
+                    f'Something wrong. Since we have checked in self._replace_clause_templates() that the translation indeed exists, this program must not pass this block.  The problematic translation is "{term_templated_translation_replaced}" and unfound string is "{predicate_symbol}["',
+                )
             inflated_mapping[predicate_symbol] = inflated_word
         return inflated_mapping, stats
 
     def _get_predicate_info(self, predicate: str, rep: str) -> Tuple[POS, Union[AdjForm, VerbForm, NounForm]]:
+        if not re.match(f'.*{predicate}\[([^\]]*)\].*', rep):
+            raise Exception(f'Predicate information for "{predicate}" can not be extracted from "{rep}".')
         info = re.sub(f'.*{predicate}\[([^\]]*)\].*', r'\g<1>', rep)
 
         if len(info.split('.')) >= 2:

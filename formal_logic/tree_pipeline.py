@@ -24,7 +24,6 @@ class TreePipeline:
 
     def run(self,
             depth: int = 5,
-            num_distractors: int = 5,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]], Dict[str, int]]:
         while True:
             proof_tree = self.generator.generate_tree(depth=depth)
@@ -34,7 +33,7 @@ class TreePipeline:
                 continue
 
             if self.distractor is not None:
-                distractors = self.distractor.generate([node.formula for node in proof_tree.nodes], num_distractors)
+                distractors = self.distractor.generate([node.formula for node in proof_tree.nodes])
             else:
                 distractors = []
 
@@ -61,7 +60,8 @@ class TreePipeline:
         for node in proof_tree.nodes:
             if node.argument is not None:
                 stats['arguments'][node.argument.id] += 1
-            stats['translation']['names'][node.formula.translation_name] += 1
+            translation_name = node.formula.translation_name if node.formula.translation_name is not None else '<no_name>'
+            stats['translation']['names'][translation_name] += 1
 
         for key, val in flatten_dict(translator_stats).items():
             stats['translation']['others'][key] = val

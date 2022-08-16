@@ -1,4 +1,6 @@
-# tod
+# todo
+* FormalLogicGenerator => ProofTreeGenerator
+* FormalLogicPipeline => ProofTreeGenerationPipeline
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
@@ -29,12 +31,25 @@
 # proof tree generation
 
 ## [todo] パターン
-* 命題論理
+* [todo] 定理はどれを入れるべきか？
+    - EBでよく使われる定理は入れる．転移性能のため．
+        - syllogism等
+    - 「今回入れられなかった公理」を使わないと導けない定理は入れる．
+    - 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
+* [todo] 命題論理
     - 公理系
-    - 定理 ()
-
-* 述語論理
+        - Ga 版に拡張するプログラム
+    - 定理
+        - 取りあえず，"基本的な"，すなわち，他の定理を導くときに良く使えそうな以下の定理を入れている．
+            - syllogism
+            - contraposition
+    * 述語論理を{A}{a}で膨らませる．
+        * {A}{a} and {B}
+* [todo] 述語論理
     - 公理系
+        - 命題論理の公理系を含むべき．
+            - Fa -> Gb
+                - If car crashes, human will be injured.
         - 例: & 導入
             ```
             ---- premise ----
@@ -45,28 +60,9 @@
             -----------------
             H(a)
             ```
-* [todo] ルール
-    * (x): Fx -> Gx
-    * Fa -> Gb
-        - If car crashes, human will be injured.
-    * A -> B
-        - If car crashes, human will be injured.
-            - A = car crashes
-        - Storm leads to injuries.
-            - A = storm
-* [todo] notの意味
-    - ２重否定やドモルガン，あるいはcontrapositionなどを導入しないと，not Aは単なる独立な命題になってしまう．
-* [todo] その他，EBに含まれているパターン
-* [todo] ドモルガン: ^(A v B) -> ^A & ^B
-* [pending] AND + not
-    * [pending]
-        - 実装コストが割とある．
-        - これ無しでも，notの意味は学べる．例えば，contrapositionみたいなので．
-            - というか，not関連のパターンは２重否定の除去から全て導ける．
-    * やりたいこと
-        * not(A v B) みたいのを扱う．
-        * 上記のドモルガンバージョンを扱う．
-    * 上記のパターンを追加した場合，consistency checking 周りも更新する必要があると思う．
+* [todo] notの意味を表現する．
+    - contraposition
+    - ドモルガン
 * [pending] ->導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．
@@ -83,6 +79,15 @@
         ```
         これを自然演繹で示そうとすると，仮定導入(しかも，自由変数として出現させる)が必要になる．
         ただ，できなくはない，気がする．自由変数は"something"にすればよい．
+* [pending] AND + not
+    * [pending]
+        - 実装コストが割とある．
+        - これ無しでも，notの意味は学べる．例えば，contrapositionみたいなので．
+            - というか，not関連のパターンは２重否定の除去から全て導ける．
+    * やりたいこと
+        * not(A v B) みたいのを扱う．
+        * 上記のドモルガンバージョンを扱う．
+    * 上記のパターンを追加した場合，consistency checking 周りも更新する必要があると思う．
 * [rejected] 個別の事実も入れたい．
     * 「Aa & Ba -> Ca」
     * ベースラインには，全称量化子しか含まれていない．
@@ -207,8 +212,16 @@
 # translation
 
 ## [todo] 事例
-* noun clause `The fact that {a} is {A}` をtranslationに加える
+* term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
+    - eventive noun など．
+* [todo] {A}をNOUNで表す場合，eventiveなnounに限りたい．{A}[NOUN.eventive] とかか？
+* [todo] noun clause `The fact that {a} is {A}` をtranslationに加える
 * [todo] EntailmentBankに入っているもの．
+* [todo] A -> B
+    - If car crashes, human will be injured.
+        - A = car crashes
+    - Storm leads to injuries.
+        - A = storm
 * [done] G -> H = storm cause disastor
     - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
     - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．

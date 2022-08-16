@@ -30,7 +30,8 @@ def generate_complicated_formulas(src_formula: Formula,
 
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],
-                                                get_name=False) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
+                                                get_name=False,
+                                                suppress_op_expansion_if_exists=True) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
     predicates = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
     constants = sorted(set([p.rep for formula in formulas for p in formula.constants]))
 
@@ -67,18 +68,23 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
         else:
             yield mapping
 
-    for op in [OR, AND]:
-        for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
-            unk_extended_predicates = [unk_pred0, unk_pred1]\
-                + predicates[:i_predicate_to_expand]\
-                + predicates[i_predicate_to_expand + 1:]
-            for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
-                mapping = copy.deepcopy(not_enhanced_mapping)
-                mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
-                if get_name:
-                    yield mapping, f'{op}-{i_predicate_to_expand}.not-{i_not}'
-                else:
-                    yield mapping
+    if suppress_op_expansion_if_exists\
+            and any([formula.rep.find(OR) >= 0 or formula.rep.find(AND) >= 0
+                    for formula in formulas]):
+        pass
+    else:
+        for op in [OR, AND]:
+            for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
+                unk_extended_predicates = [unk_pred0, unk_pred1]\
+                    + predicates[:i_predicate_to_expand]\
+                    + predicates[i_predicate_to_expand + 1:]
+                for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
+                    mapping = copy.deepcopy(not_enhanced_mapping)
+                    mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
+                    if get_name:
+                        yield mapping, f'{op}-{i_predicate_to_expand}.not-{i_not}'
+                    else:
+                        yield mapping
 
 
 def generate_replaced_arguments(src_arg: Argument,
@@ -174,9 +180,9 @@ def _generate_replacement_mappings(src_objs: List[Any],
                                    constraints: Optional[Dict[Any, Any]] = None,
                                    block_shuffle=False) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
-        raise ValueError()
+        raise ValueError('Elements in src_objs are not unique: {src_objs}')
     if len(set(tgt_objs)) != len(tgt_objs):
-        raise ValueError()
+        raise ValueError('Elements in tgt_objs are not unique: {tgt_objs}')
 
     # if block_shuffle:
     #     src_objs = random.sample(src_objs, len(src_objs))

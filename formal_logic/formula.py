@@ -102,6 +102,16 @@ class Formula:
         return sorted(set(_PREDICATE_REGEXP.findall(rep)))
 
     @property
+    def zeroary_predicates(self) -> List['Formula']:
+        return [predicate for predicate in self.predicates
+                if all((f'{predicate.rep}{argument}' not in self.rep for argument in VARIABLES + CONSTANTS))]
+
+    @property
+    def unary_predicates(self) -> List['Formula']:
+        return [predicate for predicate in self.predicates
+                if any((f'{predicate.rep}{argument}' in self.rep for argument in VARIABLES + CONSTANTS))]
+
+    @property
     def constants(self) -> List['Formula']:
         return [Formula(rep) for rep in self._find_constant_reps(self.rep)]
 
@@ -114,6 +124,15 @@ class Formula:
 
     def _find_predicate_argument_reps(self, rep: str) -> List[str]:
         return sorted(set(_PREDICATE_ARGUMENT_REGEXP.findall(rep)))
+
+    @property
+    def zeroary_predicate_arguments(self) -> List['Formula']:
+        return self.zeroary_predicates
+
+    @property
+    def unary_predicate_arguments(self) -> List['Formula']:
+        return [pred_arg for pred_arg in self.predicate_arguments
+                if pred_arg not in self.zeroary_predicates]
 
     @property
     def variables(self) -> List['Formula']:

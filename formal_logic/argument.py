@@ -35,8 +35,8 @@ class Argument:
             [Formula(premise_rep) for premise_rep in json_dict['premises']],
             Formula(json_dict['conclusion']),
             id=json_dict['id'],
-            base_scheme_group=json_dict['base_scheme_group'],
-            scheme_variant=json_dict['scheme_variant'],
+            base_scheme_group=json_dict.get('base_scheme_group', None),
+            scheme_variant=json_dict.get('scheme_variant', None),
         )
 
     def to_json(self) -> Dict:

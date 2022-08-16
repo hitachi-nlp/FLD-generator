@@ -1,5 +1,6 @@
 import re
 from typing import List, Optional, Set
+import logging
 
 from .formula import (
     Formula,
@@ -9,6 +10,8 @@ from .formula import (
     OR,
     NOT,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def is_tautology(formula: Formula) -> bool:
@@ -237,7 +240,10 @@ def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[st
             values.add('F')
 
     if len(values) == 0:
-        raise NotImplementedError(f'Please add patterns to handle {rep}')
+        logger.warning('Could not determine the boolean appearance of "%s" in "%s". Please implement logic to handle the pattern.',
+                       pred_arg_rep,
+                       rep)
+        # raise NotImplementedError(f'Please add patterns to handle {rep}')
 
     return values
 
