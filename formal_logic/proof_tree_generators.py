@@ -21,6 +21,7 @@ from .replacements import (
     replace_formula,
     replace_argument,
     is_formula_identical,
+    is_argument_identical,
 )
 from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
@@ -48,6 +49,7 @@ class ProofTreeGenerator:
     def __init__(self,
                  arguments: List[Argument],
                  allow_complication=False,
+                 complicated_arguments_ratio=0.5,
                  elim_dneg=False,
                  timeout: Optional[int] = 30):
         self.allow_complication = allow_complication
@@ -55,22 +57,63 @@ class ProofTreeGenerator:
         self.timeout = timeout
 
         if allow_complication:
-            self.arguments = []
+            original_arguments = []
+            complicated_arguments = []
+            complication_extended_arguments = []
             for argment in arguments:
+                original_arguments.append(argment)
+                complication_extended_arguments.append(argment)
+
                 for complicated_argument, _, name in generate_complicated_arguments(argment, elim_dneg=elim_dneg, get_name=True):
                     complicated_argument.id += f'.{name}'
-                    self.arguments.append(complicated_argument)
-        else:
-            self.arguments = arguments
+                    complicated_arguments.append(complicated_argument)
+                    complication_extended_arguments.append(complicated_argument)
 
-        logger.info('============ arguments for generation ============')
-        for argument in sorted(self.arguments, key=lambda arg: arg.id):
+            self._original_arguments = original_arguments
+            self._complicated_arguments = complicated_arguments
+            self._complication_extended_arguments = complication_extended_arguments
+            self._weight_extended_arguments = self._make_rough_weight_extended_arguments(self._original_arguments,
+                                                                                         self._complicated_arguments,
+                                                                                         1 - complicated_arguments_ratio)
+        else:
+            self._original_arguments = arguments
+            self._complicated_arguments = []
+            self._complication_extended_arguments = arguments
+            self._weight_extended_arguments = arguments
+
+        logger.info('============ complication extented arguments for generation (NOTE that actual arguments used are further extended list in order to weight arguments) ============')
+        for argument in sorted(self._complication_extended_arguments, key=lambda arg: arg.id):
             logger.info(argument)
+
+    def _make_rough_weight_extended_arguments(self,
+                                              this_arguments: List[Argument],
+                                              that_arguments: List[Argument],
+                                              this_ratio: float) -> List[Argument]:
+        """
+        this_ratio = len(this_arguments) * n / (len(this_arguments) * n + len(that_arguments))
+        => n = this_ratio * len(that_arguments) / ( len(this_arguments) - len(this_arguments) * this_ratio )
+             = ( this_ratio / (1 - this_ratio) ) * ( len(that_arguments) / len(this_arguments) )
+        """
+        if this_ratio == 1.0:
+            return this_arguments
+        elif this_ratio >= 0.99:
+            logger.warning('we do not include that_arguments since the this_ratio is so high (>= 0.99)')
+            return this_arguments
+
+        this_multiplier = int(this_ratio / (1 - this_ratio) * (len(that_arguments) / len(this_arguments)))
+        if this_multiplier == 0:  # down sampling
+            raise NotImplementedError()
+
+        weight_extended_this_arguments = []
+        for _ in range(0, this_multiplier):
+            weight_extended_this_arguments.extend(this_arguments)
+
+        return weight_extended_this_arguments + that_arguments
 
     def generate_tree(self, depth=3) -> Optional[ProofTree]:
         for _ in range(0, 10):
             try:
-                proof_tree = _generate_tree(self.arguments,
+                proof_tree = _generate_tree(self._weight_extended_arguments,
                                             depth=depth,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)

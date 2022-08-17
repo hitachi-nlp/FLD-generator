@@ -1,5 +1,5 @@
 # todo
-* notの頻度を落としたい．
+* allow_complication=False でやると，missが多発する．
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"

@@ -48,7 +48,6 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
 
     identity_mapping = {pred: pred for pred in predicates}
     identity_mapping.update({const: const for const in constants})
-    # yield identity_mapping
 
     unknown_predicates = list(set(PREDICATES) - set(predicates))
     unk_pred0 = sorted(unknown_predicates)[0]
@@ -66,7 +65,9 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                     yield [f'{prefix}{predicate}'] + tail
 
     def generate_not_enhanced_mappings(predicates) -> Iterable[Dict]:
-        for predicates_with_not in not_enhance(predicates):
+        for i_enhance, predicates_with_not in enumerate(not_enhance(predicates)):
+            if i_enhance == 0:  # this is the original mapping
+                continue
             mapping = copy.deepcopy(identity_mapping)
             for predicate_with_not in predicates_with_not:
                 original_predicate = predicate_with_not.lstrip(f'{NOT}')
