@@ -1,0 +1,56 @@
+[
+  {
+      "id": "implication_intro",
+      "premises": [
+          "{A} -> {B}",
+          "{A}"
+      ],
+      "conclusion": "{B}"
+  },
+  {
+      "id": "__implication_elim"
+  },
+
+
+  {
+      "id": "and_intro",
+      "premises": [
+          "{A}",
+          "{B}"
+      ],
+      "conclusion": "({A} & {B})"
+  },
+  {
+      "id": "and_elim_0",
+      "premises": [
+          "({A} & {B})"
+      ],
+      "conclusion": "{A}"
+  },
+  {
+      "id": "and_elim_1",
+      "premises": [
+          "({A} & {B})"
+      ],
+      "conclusion": "{B}"
+  },
+
+
+  {
+      "id": "or_intro_0",
+      "premises": [
+          "{A}"
+      ],
+      "conclusion": "({A} v {B})"
+  },
+  {
+      "id": "or_intro_1",
+      "premises": [
+          "{B}"
+      ],
+      "conclusion": "({A} v {B})"
+  },
+  {
+      "id": "__or_elim"
+  }
+]

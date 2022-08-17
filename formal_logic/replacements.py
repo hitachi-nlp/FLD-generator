@@ -184,10 +184,6 @@ def _generate_replacement_mappings(src_objs: List[Any],
     if len(set(tgt_objs)) != len(tgt_objs):
         raise ValueError('Elements in tgt_objs are not unique: {tgt_objs}')
 
-    # if block_shuffle:
-    #     src_objs = random.sample(src_objs, len(src_objs))
-    #     tgt_objs = random.sample(tgt_objs, len(tgt_objs))
-
     if len(src_objs) > 0 and len(tgt_objs) > 0:
         if constraints is not None:
             idx_constraints = {src_objs.index(key): val

@@ -1,4 +1,15 @@
 # todo
+* G[NOUN] -> F[NOUN]
+    - Hard storm leads to injured people.
+    - That storm occurs leads to that people are injured.
+* G[NOUN]a -> F[NOUN]b
+    - Hard storm leads to injured people.
+    - That storm occurs leads to that people are injured.
+* G[NOUN]a -> F[NOUN]a
+    - A red apple is kind apple.
+    - That apple is red leads to that apple is kind.
+* "a", "an" "the"
+
 * FormalLogicGenerator => ProofTreeGenerator
 * FormalLogicPipeline => ProofTreeGenerationPipeline
 * コンポーネントを完成させていく

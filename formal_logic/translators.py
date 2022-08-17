@@ -5,7 +5,7 @@ from collections import OrderedDict, defaultdict
 import random
 import re
 import logging
-from pprint import pformat
+from pprint import pformat, pprint
 
 from .formula import Formula, CONSTANTS, VARIABLES
 from .word_banks.base import WordBank
@@ -198,6 +198,8 @@ class ClauseTypedTranslator(Translator):
         self._adjs = set(self._wb.get_words(pos=POS.ADJ))
         self._verbs = {word for word in self._wb.get_words(pos=POS.VERB)
                        if self._wb.can_be_intransitive_verb(word)}
+        self._adj_and_verbs = self._adjs
+        self._adj_and_verbs = self._adj_and_verbs.union(self._verbs)
         self._nouns = {word for word in self._wb.get_words(pos=POS.NOUN)}
         self._verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
@@ -286,33 +288,28 @@ class ClauseTypedTranslator(Translator):
                                  for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
-        # print('\n')
-        # for formula in formulas:
-        #     print(formula.rep)
-        # print('zero-ary:', zeroary_predicates)
-        # print('unary:', unary_predicates)
-
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
             generate_replacement_mappings_from_terms(
                 zeroary_predicates,
                 constants,
-                # random.sample(self._adjs, len(zeroary_predicates)) + random.sample(self._verbs, len(zeroary_predicates)),  # HONOKA
-                random.sample(self._nouns, len(zeroary_predicates)),
-                random.sample(self._nouns, len(constants)),
+                self._nouns,
+                self._nouns,
                 block_shuffle=True,
             )
         )
+
         # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
         unary_mapping = next(
             generate_replacement_mappings_from_terms(
                 unary_predicates,
                 [],
-                random.sample(self._adjs, len(unary_predicates)) + random.sample(self._verbs, len(unary_predicates)),
+                self._adj_and_verbs,
                 [],
                 block_shuffle=True,
             )
         )
+
         term_mapping = zeroary_mapping.copy()
         term_mapping.update(unary_mapping)
 
@@ -396,30 +393,6 @@ class ClauseTypedTranslator(Translator):
                     if len(possible_term_templated_translations_replaced) == 0:
                         possible_term_templated_translations = []
                         possible_term_templated_translations_replaced = []
-                        # import pudb; pudb.set_trace()
-                        # ------------------------
-                        for pos_typed_translation in pos_typed_translations:
-                            pos_typed_translation_replaced = replace_formula(Formula(pos_typed_translation), clause_template_mapping).rep
-                            pos_typed_predicate_found = False
-                            for predicate_symbol in predicate_symbols:
-                                word = term_mapping[predicate_symbol]
-
-                                pos, form = self._get_predicate_info(predicate_symbol, pos_typed_translation_replaced)
-                                if pos not in self._wb.get_pos(word):
-                                    pos_typed_predicate_found = False
-                                    break
-
-                                inflated_word = self._get_inflated_word(word, pos, form)
-
-                                if inflated_word is not None:
-                                    pos_typed_predicate_found = True
-                                else:
-                                    pos_typed_predicate_found = False
-                                    break
-                            if pos_typed_predicate_found:
-                                possible_term_templated_translations.append(pos_typed_translation)
-                                possible_term_templated_translations_replaced.append(pos_typed_translation_replaced)
-                        # ------------------------
 
                         raise ValueError(f'We could not find any clause replacement for "{clause_template_replaced}, where pos and word-inflation are consistent with the given term mapping:\n{pformat(term_mapping)}')
 

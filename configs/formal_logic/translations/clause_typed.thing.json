@@ -46,156 +46,156 @@
 
     "{A} -> {B}": [
       "if {verb_clause.{A}}, then {verb_clause.{B}}.",
-      "{noun_clause.{A}} is {noun_clause.{B}}."
+      "{noun_clause.{A}} leads to {noun_clause.{B}}."
     ],
     "¬{A} -> {B}": [
       "if {verb_clause.¬{A}}, then {verb_clause.{B}}.",
-      "{noun_clause.¬{A}} is {noun_clause.{B}}."
+      "{noun_clause.¬{A}} leads to {noun_clause.{B}}."
     ],
     "{A} -> ¬{B}": [
       "if {verb_clause.{A}}, then {verb_clause.¬{B}}.",
-      "{noun_clause.{A}} is {noun_clause.¬{B}}."
+      "{noun_clause.{A}} leads to {noun_clause.¬{B}}."
     ],
     "¬{A} -> ¬{B}": [
       "if {verb_clause.¬{A}}, then {verb_clause.¬{B}}.",
-      "{noun_clause.¬{A}} is {noun_clause.¬{B}}."
+      "{noun_clause.¬{A}} leads to {noun_clause.¬{B}}."
     ],
 
 
     "({A} & {B}) -> {C}": [
       "if {verb_clause.({A} & {B})}, then {verb_clause.{C}}.",
-      "{noun_clause.({A} & {B})} is {noun_clause.{C}}."
+      "{noun_clause.({A} & {B})} leads to {noun_clause.{C}}."
     ],
     "(¬{A} & {B}) -> {C}": [
       "if {verb_clause.(¬{A} & {B})}, then {verb_clause.{C}}.",
-      "{noun_clause.(¬{A} & {B})} is {noun_clause.{C}}."
+      "{noun_clause.(¬{A} & {B})} leads to {noun_clause.{C}}."
     ],
     "({A} & ¬{B}) -> {C}": [
       "if {verb_clause.({A} & ¬{B})}, then {verb_clause.{C}}.",
-      "{noun_clause.({A} & ¬{B})} is {noun_clause.{C}}."
+      "{noun_clause.({A} & ¬{B})} leads to {noun_clause.{C}}."
     ],
     "({A} & {B}) -> ¬{C}": [
       "if {verb_clause.({A} & {B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.({A} & {B})} is {noun_clause.¬{C}}."
+      "{noun_clause.({A} & {B})} leads to {noun_clause.¬{C}}."
     ],
     "(¬{A} & ¬{B}) -> {C}": [
       "if {verb_clause.(¬{A} & ¬{B})}, then {verb_clause.{C}}.",
-      "{noun_clause.(¬{A} & ¬{B})} is {noun_clause.{C}}."
+      "{noun_clause.(¬{A} & ¬{B})} leads to {noun_clause.{C}}."
     ],
     "(¬{A} & {B}) -> ¬{C}": [
       "if {verb_clause.(¬{A} & {B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.(¬{A} & {B})} is {noun_clause.¬{C}}."
+      "{noun_clause.(¬{A} & {B})} leads to {noun_clause.¬{C}}."
     ],
     "({A} & ¬{B}) -> ¬{C}": [
       "if {verb_clause.({A} & ¬{B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.({A} & ¬{B})} is {noun_clause.¬{C}}."
+      "{noun_clause.({A} & ¬{B})} leads to {noun_clause.¬{C}}."
     ],
     "(¬{A} & ¬{B}) -> ¬{C}": [
       "if {verb_clause.(¬{A} & ¬{B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.(¬{A} & ¬{B})} is {noun_clause.¬{C}}."
+      "{noun_clause.(¬{A} & ¬{B})} leads to {noun_clause.¬{C}}."
     ],
 
 
     "{A} -> ({B} & {C})": [
       "if {verb_clause.{A}}, then {verb_clause.({B} & {C})}.",
-      "{noun_clause.{A}} is {noun_clause.({B} & {C})}."
+      "{noun_clause.{A}} leads to {noun_clause.({B} & {C})}."
     ],
     "¬{A} -> ({B} & {C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.({B} & {C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.({B} & {C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.({B} & {C})}."
     ],
     "{A} -> (¬{B} & {C})": [
       "if {verb_clause.{A}}, then {verb_clause.(¬{B} & {C})}.",
-      "{noun_clause.{A}} is {noun_clause.(¬{B} & {C})}."
+      "{noun_clause.{A}} leads to {noun_clause.(¬{B} & {C})}."
     ],
     "{A} -> ({B} & ¬{C})": [
       "if {verb_clause.{A}}, then {verb_clause.({B} & ¬{C})}.",
-      "{noun_clause.{A}} is {noun_clause.({B} & ¬{C})}."
+      "{noun_clause.{A}} leads to {noun_clause.({B} & ¬{C})}."
     ],
     "¬{A} -> (¬{B} & {C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.(¬{B} & {C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.(¬{B} & {C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.(¬{B} & {C})}."
     ],
     "¬{A} -> ({B} & ¬{C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.({B} & ¬{C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.({B} & ¬{C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.({B} & ¬{C})}."
     ],
     "{A} -> (¬{B} & ¬{C})": [
       "if {verb_clause.{A}}, then {verb_clause.(¬{B} & ¬{C})}.",
-      "{noun_clause.{A}} is {noun_clause.(¬{B} & ¬{C})}."
+      "{noun_clause.{A}} leads to {noun_clause.(¬{B} & ¬{C})}."
     ],
     "¬{A} -> (¬{B} & ¬{C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.(¬{B} & ¬{C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.(¬{B} & ¬{C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.(¬{B} & ¬{C})}."
     ],
 
 
     "({A} v {B}) -> {C}": [
       "if {verb_clause.({A} v {B})}, then {verb_clause.{C}}.",
-      "{noun_clause.({A} v {B})} is {noun_clause.{C}}."
+      "{noun_clause.({A} v {B})} leads to {noun_clause.{C}}."
     ],
     "(¬{A} v {B}) -> {C}": [
       "if {verb_clause.(¬{A} v {B})}, then {verb_clause.{C}}.",
-      "{noun_clause.(¬{A} v {B})} is {noun_clause.{C}}."
+      "{noun_clause.(¬{A} v {B})} leads to {noun_clause.{C}}."
     ],
     "({A} v ¬{B}) -> {C}": [
       "if {verb_clause.({A} v ¬{B})}, then {verb_clause.{C}}.",
-      "{noun_clause.({A} v ¬{B})} is {noun_clause.{C}}."
+      "{noun_clause.({A} v ¬{B})} leads to {noun_clause.{C}}."
     ],
     "({A} v {B}) -> ¬{C}": [
       "if {verb_clause.({A} v {B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.({A} v {B})} is {noun_clause.¬{C}}."
+      "{noun_clause.({A} v {B})} leads to {noun_clause.¬{C}}."
     ],
     "(¬{A} v ¬{B}) -> {C}": [
       "if {verb_clause.(¬{A} v ¬{B})}, then {verb_clause.{C}}.",
-      "{noun_clause.(¬{A} v ¬{B})} is {noun_clause.{C}}."
+      "{noun_clause.(¬{A} v ¬{B})} leads to {noun_clause.{C}}."
     ],
     "(¬{A} v {B}) -> ¬{C}": [
       "if {verb_clause.(¬{A} v {B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.(¬{A} v {B})} is {noun_clause.¬{C}}."
+      "{noun_clause.(¬{A} v {B})} leads to {noun_clause.¬{C}}."
     ],
     "({A} v ¬{B}) -> ¬{C}": [
       "if {verb_clause.({A} v ¬{B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.({A} v ¬{B})} is {noun_clause.¬{C}}."
+      "{noun_clause.({A} v ¬{B})} leads to {noun_clause.¬{C}}."
     ],
     "(¬{A} v ¬{B}) -> ¬{C}": [
       "if {verb_clause.(¬{A} v ¬{B})}, then {verb_clause.¬{C}}.",
-      "{noun_clause.(¬{A} v ¬{B})} is {noun_clause.¬{C}}."
+      "{noun_clause.(¬{A} v ¬{B})} leads to {noun_clause.¬{C}}."
     ],
 
 
 
     "{A} -> ({B} v {C})": [
       "if {verb_clause.{A}}, then {verb_clause.({B} v {C})}.",
-      "{noun_clause.{A}} is {noun_clause.({B} v {C})}."
+      "{noun_clause.{A}} leads to {noun_clause.({B} v {C})}."
     ],
     "¬{A} -> ({B} v {C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.({B} v {C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.({B} v {C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.({B} v {C})}."
     ],
     "{A} -> (¬{B} v {C})": [
       "if {verb_clause.{A}}, then {verb_clause.(¬{B} v {C})}.",
-      "{noun_clause.{A}} is {noun_clause.(¬{B} v {C})}."
+      "{noun_clause.{A}} leads to {noun_clause.(¬{B} v {C})}."
     ],
     "{A} -> ({B} v ¬{C})": [
       "if {verb_clause.{A}}, then {verb_clause.({B} v ¬{C})}.",
-      "{noun_clause.{A}} is {noun_clause.({B} v ¬{C})}."
+      "{noun_clause.{A}} leads to {noun_clause.({B} v ¬{C})}."
     ],
     "¬{A} -> (¬{B} v {C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.(¬{B} v {C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.(¬{B} v {C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.(¬{B} v {C})}."
     ],
     "¬{A} -> ({B} v ¬{C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.({B} v ¬{C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.({B} v ¬{C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.({B} v ¬{C})}."
     ],
     "{A} -> (¬{B} v ¬{C})": [
       "if {verb_clause.{A}}, then {verb_clause.(¬{B} v ¬{C})}.",
-      "{noun_clause.{A}} is {noun_clause.(¬{B} v ¬{C})}."
+      "{noun_clause.{A}} leads to {noun_clause.(¬{B} v ¬{C})}."
     ],
     "¬{A} -> (¬{B} v ¬{C})": [
       "if {verb_clause.¬{A}}, then {verb_clause.(¬{B} v ¬{C})}.",
-      "{noun_clause.¬{A}} is {noun_clause.(¬{B} v ¬{C})}."
+      "{noun_clause.¬{A}} leads to {noun_clause.(¬{B} v ¬{C})}."
     ],
 
 
@@ -425,6 +425,45 @@
 
 
     "verb_clause": {
+      "{A}": [
+        "{A}[NOUN] occurs"
+      ],
+
+      "¬{A}": [
+        "{A}[NOUN] does not occur"
+      ],
+
+
+      "({A} & {B})": [
+          "{A}[NOUN] and {B}[NOUN] occurs"
+      ],
+      "(¬{A} & {B})": [
+          "{A}[NOUN] does not occur and {B}[NOUN] occurs"
+      ],
+      "({A} & ¬{B})": [
+          "{A}[NOUN] occurs and {B}[NOUN] does not occur"
+      ],
+      "(¬{A} & ¬{B})": [
+          "{A}[NOUN] and {B}[NOUN] do not occur"
+      ],
+
+
+      "({A} v {B})": [
+          "either {A}[NOUN] occurs or {B}[NOUN] occurs or both"
+      ],
+      "(¬{A} v {B})": [
+          "either {A}[NOUN] does not occur or {B}[NOUN] occurs or both"
+      ],
+      "({A} v ¬{B})": [
+          "either {A}[NOUN] occurs or {B}[NOUN] does not occur or both"
+      ],
+      "(¬{A} v ¬{B})": [
+          "either {A}[NOUN] does not occur or {B}[NOUN] does not occur or both"
+      ],
+
+
+
+
 
 
       "{A}{a}": [
@@ -764,11 +803,11 @@
 
       "{A}": [
         "{A}[NOUN]",
-        "That {A}[NOUN] occurs"
+        "that {A}[NOUN] occurs"
       ],
 
       "¬{A}": [
-        "That {A}[NOUN] does not occur"
+        "that {A}[NOUN] does not occur"
       ],
 
 
@@ -776,16 +815,16 @@
 
       "({A} & {B})": [
           "{A}[NOUN] and {B}[NOUN]",
-          "That {A}[NOUN] and {B}[NOUN] occurs"
+          "that {A}[NOUN] and {B}[NOUN] occurs"
       ],
       "(¬{A} & {B})": [
-          "That {A}[NOUN] does not occur and {B}[NOUN] occurs"
+          "that {A}[NOUN] does not occur and {B}[NOUN] occurs"
       ],
       "({A} & ¬{B})": [
-          "That {A}[NOUN] occurs and {B}[NOUN] does not occur"
+          "that {A}[NOUN] occurs and {B}[NOUN] does not occur"
       ],
       "(¬{A} & ¬{B})": [
-          "That {A}[NOUN] and {B}[NOUN] do not occur"
+          "that {A}[NOUN] and {B}[NOUN] do not occur"
       ],
 
 
