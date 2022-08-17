@@ -8,6 +8,7 @@ from formal_logic.generators import FormalLogicGenerator
 from formal_logic.distractors import FormalLogicDistractor
 from formal_logic.translators import Translator
 from formal_logic.utils import flatten_dict
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ class TreePipeline:
         self.distractor = distractor
         self.translator = translator
 
+    @profile
     def run(self,
             depth: int = 5,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]], Dict[str, int]]:

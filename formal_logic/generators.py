@@ -34,7 +34,7 @@ from .formula import (
     CONSTANTS,
     VARIABLES,
 )
-# import kern_profiler
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ class FormalLogicGenerator:
         raise GenerationFailure()
 
 
-# @profile
+@profile
 def _generate_tree(arguments: List[Argument],
                    depth=1,
                    elim_dneg=False,
@@ -96,7 +96,7 @@ def _generate_tree(arguments: List[Argument],
     return proof_tree
 
 
-# @profile
+@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
@@ -233,7 +233,7 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
-# @profile
+@profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     max_steps: int,

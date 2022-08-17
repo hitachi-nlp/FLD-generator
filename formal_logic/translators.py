@@ -7,7 +7,15 @@ import re
 import logging
 from pprint import pformat, pprint
 
-from .formula import Formula, CONSTANTS, VARIABLES
+from .formula import (
+    Formula,
+    CONSTANTS,
+    VARIABLES,
+    AND,
+    OR,
+    IMPLICATION,
+    NOT
+)
 from .word_banks.base import WordBank
 from .replacements import (
     generate_replacement_mappings_from_formula,
@@ -16,6 +24,7 @@ from .replacements import (
 )
 from .word_banks import POS, VerbForm, AdjForm, NounForm
 from .exception import FormalLogicExceptionBase
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -195,16 +204,17 @@ class ClauseTypedTranslator(Translator):
                 # logger.info(re.sub('\n', '\n    ', pformat(self._translations)))
 
         self._wb = word_bank
-        self._adjs = set(self._wb.get_words(pos=POS.ADJ))
-        self._verbs = {word for word in self._wb.get_words(pos=POS.VERB)
+        _adjs = set(self._wb.get_words(pos=POS.ADJ))
+        _verbs = {word for word in self._wb.get_words(pos=POS.VERB)
                        if self._wb.can_be_intransitive_verb(word)}
-        self._adj_and_verbs = self._adjs
-        self._adj_and_verbs = self._adj_and_verbs.union(self._verbs)
-        self._nouns = {word for word in self._wb.get_words(pos=POS.NOUN)}
+        self._adj_and_verbs = _adjs
+        self._adj_and_verbs = sorted(self._adj_and_verbs.union(_verbs))
+        self._nouns = sorted(word for word in self._wb.get_words(pos=POS.NOUN))
         self._verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
         self._translate_terms = translate_terms
 
+    @profile
     def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
                                                                                                Dict[str, int]]:
 
@@ -213,6 +223,8 @@ class ClauseTypedTranslator(Translator):
         count_stats = {'inflation': defaultdict(int)}
 
         term_mapping = self._choose_term_mapping(formulas)
+        # if len(set(term_mapping.values())) != len(term_mapping):
+        #     raise Exception()
 
         for formula in formulas:
             # Choose clauset templated translation
@@ -279,6 +291,7 @@ class ClauseTypedTranslator(Translator):
                             clause_templated_translation,
                             term_templated_translation])
 
+    @profile
     def _choose_term_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
@@ -293,9 +306,10 @@ class ClauseTypedTranslator(Translator):
             generate_replacement_mappings_from_terms(
                 zeroary_predicates,
                 constants,
-                self._nouns,
-                self._nouns,
+                random.sample(self._nouns, len(zeroary_predicates) * 3),
+                random.sample(self._nouns, len(constants) * 3),
                 block_shuffle=True,
+                allow_replacement=False,
             )
         )
 
@@ -304,9 +318,10 @@ class ClauseTypedTranslator(Translator):
             generate_replacement_mappings_from_terms(
                 unary_predicates,
                 [],
-                self._adj_and_verbs,
+                random.sample(self._adj_and_verbs, len(unary_predicates) * 3),
                 [],
                 block_shuffle=True,
+                allow_replacement=False,
             )
         )
 
@@ -315,6 +330,7 @@ class ClauseTypedTranslator(Translator):
 
         return term_mapping
 
+    @profile
     def _choose_clause_templated_translation(self, formula: Formula) -> Tuple[Optional[Dict[str, str]],
                                                                               Optional[str],
                                                                               Optional[str],
@@ -325,6 +341,9 @@ class ClauseTypedTranslator(Translator):
         clause_templated_translation_replaced = None
         for _translation_formula_rep, clause_templated_translations in self._translations.items():
             if len(clause_templated_translations) == 0:
+                continue
+
+            if self._translation_form_does_not_match(_translation_formula_rep, formula.rep):  # early rejection for speed
                 continue
 
             _translation_formula = Formula(_translation_formula_rep)
@@ -345,6 +364,11 @@ class ClauseTypedTranslator(Translator):
 
         return mapping, clause_templated_translation_key, clause_templated_translation, clause_templated_translation_replaced
 
+    def _translation_form_does_not_match(self, translation_rep: str, formula_rep) -> bool:
+        return any([translation_rep.count(symbol) != formula_rep.count(symbol)
+                    for symbol in [AND, OR, IMPLICATION, NOT]])
+
+    @profile
     def _replace_clause_templates(self,
                                   formula: Formula,
                                   clause_templated_translation_replaced: str,

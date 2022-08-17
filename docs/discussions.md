@@ -1,9 +1,9 @@
 # todo
-* "a, "an" "the", "s", 複数形
-    - 文法チェッカーとかで簡易実装できないか．
 * データセット生成の高速化
 * FormalLogicGenerator => ProofTreeGenerator
 * FormalLogicPipeline => ProofTreeGenerationPipeline
+* notの頻度を落としたい．
+* not () のtranslation
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
@@ -224,6 +224,9 @@
         - A = car crashes
     - Storm leads to injuries.
         - A = storm
+* [todo] "a, "an" "the", "s", 複数形, 単数形
+    - 文法チェッカーとかで簡易実装できないだろうか？
+    - [grammar-checker](https://github.com/topics/grammar-checker)
 * [rejected] {A}{a} に対して，`That {a} is {A}`というtranslationを加える．
     - [rejected] verb_clauseとほぼ同じになるので，表現を膨らませる効果が無さそう．
 * [done] 問題
