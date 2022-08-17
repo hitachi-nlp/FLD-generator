@@ -6,11 +6,11 @@ from pprint import pformat
 
 from formal_logic.formula import Formula
 from formal_logic.argument import Argument
-from formal_logic.generators import FormalLogicGenerator
+from formal_logic.proof_tree_generators import ProofTreeGenerator
 from formal_logic.distractors import UnknownFactDistractor
 from formal_logic.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
-from formal_logic.tree_pipeline import TreePipeline
-from formal_logic.dataset import NLProofSDataset
+from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from formal_logic.datasets import NLProofSDataset
 from formal_logic.word_banks import EnglishWordBank
 from logger_setup import setup as setup_logger
 
@@ -27,10 +27,9 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                           for json_obj in json.load(open(config_path))
                           if not json_obj['id'].startswith('__')])
 
-    return FormalLogicGenerator(arguments,
-                                elim_dneg=elim_dneg,
-                                allow_complication=allow_complication)
-
+    return ProofTreeGenerator(arguments,
+                              elim_dneg=elim_dneg,
+                              allow_complication=allow_complication)
 
 
 def load_translator(type_: str,
@@ -137,12 +136,12 @@ def test_original_pipeline():
     distractor = UnknownFactDistractor()
 
     translator = load_translator('sentence_wise_translator', 'config')
-    tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(tree_pipeline, 'CWA',
+    dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
                               num_distractor_factor=2,
-                              raise_if_translation_not_found=False)
+                              raise_if_translation_not_found=True)
 
     generate_dataset(dataset)
 
@@ -168,12 +167,12 @@ def test_pipeline_with_minumum_arguments():
 
     translator = load_translator('clause_typed_translator', 'config')
 
-    tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(tree_pipeline, 'CWA',
+    dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
                               num_distractor_factor=5,
-                              raise_if_translation_not_found=False)
+                              raise_if_translation_not_found=True)
 
     generate_dataset(dataset)
 
@@ -190,16 +189,14 @@ def test_pipeline_with_LP_arguments():
 
     translator = load_translator('clause_typed_translator', 'config')
 
-    tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(tree_pipeline, 'CWA',
+    dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
                               num_distractor_factor=5,
-                              raise_if_translation_not_found=False)
+                              raise_if_translation_not_found=True)
 
     generate_dataset(dataset)
-
-
 
 
 if __name__ == '__main__':

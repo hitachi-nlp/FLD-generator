@@ -4,7 +4,7 @@ import logging
 import copy
 from collections import defaultdict
 
-from formal_logic.tree_pipeline import TreePipeline
+from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from formal_logic.formula import Formula
 from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.utils import flatten_dict
@@ -21,12 +21,12 @@ class _DistractorNode:
 class NLProofSDataset:
 
     def __init__(self,
-                 tree_pipeline: TreePipeline,
+                 pipeline: ProofTreeGenerationPipeline,
                  world_assump: str,
                  depth: int = 5,
                  num_distractor_factor: int = 5,
                  raise_if_translation_not_found=True):
-        self.tree_pipeline = tree_pipeline
+        self.pipeline = pipeline
         self.world_assump = world_assump
         self.depth = depth
         self.raise_if_translation_not_found = raise_if_translation_not_found
@@ -51,7 +51,7 @@ class NLProofSDataset:
         stats = defaultdict(int)
 
         for i_sample in range(size):
-            proof_tree, distractors, pipeline_stats = self.tree_pipeline.run(
+            proof_tree, distractors, pipeline_stats = self.pipeline.run(
                 depth=self.depth,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )

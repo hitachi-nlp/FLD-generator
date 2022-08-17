@@ -1,5 +1,5 @@
 from formal_logic.replacements import _expand_op
-from formal_logic.generators import generate_replacement_mappings_from_formula
+from formal_logic.proof_tree_generators import generate_replacement_mappings_from_formula
 from formal_logic.formula import Formula
 
 

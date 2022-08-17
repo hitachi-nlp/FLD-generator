@@ -1,9 +1,6 @@
 # todo
-* データセット生成の高速化
-* FormalLogicGenerator => ProofTreeGenerator
-* FormalLogicPipeline => ProofTreeGenerationPipeline
-* notの頻度を落としたい．
 * not () のtranslation
+* notの頻度を落としたい．
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"

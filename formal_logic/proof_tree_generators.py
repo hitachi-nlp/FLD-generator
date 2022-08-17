@@ -39,11 +39,11 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
-class GenerationFailure(FormalLogicExceptionBase):
+class ProofTreeGenerationFailure(FormalLogicExceptionBase):
     pass
 
 
-class FormalLogicGenerator:
+class ProofTreeGenerator:
 
     def __init__(self,
                  arguments: List[Argument],
@@ -75,11 +75,11 @@ class FormalLogicGenerator:
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
                 return proof_tree
-            except GenerationFailure:
-                logger.info('Generation failed with GenerationFailure(). Will retry')
+            except ProofTreeGenerationFailure:
+                logger.info('Generation failed with ProofTreeGenerationFailure(). Will retry')
             except TimeoutError:
                 logger.info('Generation failed with TimeoutError(). Will retry')
-        raise GenerationFailure()
+        raise ProofTreeGenerationFailure()
 
 
 @profile
@@ -225,7 +225,7 @@ def _generate_stem(arguments: List[Argument],
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
             else:
-                raise GenerationFailure()
+                raise ProofTreeGenerationFailure()
 
         if is_tree_done:
             return proof_tree
@@ -340,7 +340,7 @@ def _extend_braches(proof_tree: ProofTree,
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
         else:
-            raise GenerationFailure()
+            raise ProofTreeGenerationFailure()
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:

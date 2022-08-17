@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from formal_logic.formula import Formula
 from formal_logic.proof import ProofTree
-from formal_logic.generators import FormalLogicGenerator
+from formal_logic.proof_tree_generators import ProofTreeGenerator
 from formal_logic.distractors import FormalLogicDistractor
 from formal_logic.translators import Translator
 from formal_logic.utils import flatten_dict
@@ -13,10 +13,10 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
-class TreePipeline:
+class ProofTreeGenerationPipeline:
 
     def __init__(self,
-                 generator: FormalLogicGenerator,
+                 generator: ProofTreeGenerator,
                  distractor: Optional[FormalLogicDistractor] = None,
                  translator: Optional[Translator] = None):
         self.generator = generator
