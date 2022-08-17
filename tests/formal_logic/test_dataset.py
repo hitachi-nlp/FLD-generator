@@ -1,15 +1,14 @@
 import json
 import random
-from typing import Dict, List, Optional
+from typing import List, Optional
 import logging
-from pprint import pprint, pformat
+from pprint import pformat
 
 from formal_logic.formula import Formula
 from formal_logic.argument import Argument
-from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.generators import FormalLogicGenerator
-from formal_logic.distractors import FormalLogicDistractor, UnknownFactDistractor
-from formal_logic.translators import Translator, SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
+from formal_logic.distractors import UnknownFactDistractor
+from formal_logic.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.dataset import NLProofSDataset
 from formal_logic.word_banks import EnglishWordBank

@@ -1,17 +1,7 @@
 # todo
-* translation
-    * G[NOUN] -> F[NOUN]
-        - Hard storm leads to injured people.
-        - That storm occurs leads to that people are injured.
-    * G[NOUN]a -> F[NOUN]b
-        - Hard storm leads to injured people.
-        - That storm occurs leads to that people are injured.
-    * G[NOUN]a -> F[NOUN]a
-        - A red apple is kind apple.
-        - That apple is red leads to that apple is kind.
-* "a", "an" "the"
+* "a, "an" "the", "s", 複数形
     - 文法チェッカーとかで簡易実装できないか．
-
+* データセット生成の高速化
 * FormalLogicGenerator => ProofTreeGenerator
 * FormalLogicPipeline => ProofTreeGenerationPipeline
 * コンポーネントを完成させていく
@@ -20,7 +10,6 @@
     * "world assumption"
         - [todo] EBへの転移実験はlabel_true_onlyでやる．
         - [todo] それ以外の実験は，CWAでやる．
-* データセット生成の高速化
 * 学習の高速化
     - bp16
     - maxlen
@@ -226,16 +215,42 @@
 # translation
 
 ## [todo] 事例
-* term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
+* [todo] term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
     - eventive noun など．
 * [todo] {A}をNOUNで表す場合，eventiveなnounに限りたい．{A}[NOUN.eventive] とかか？
-* [todo] noun clause `The fact that {a} is {A}` をtranslationに加える
 * [todo] EntailmentBankに入っているもの．
 * [todo] A -> B
     - If car crashes, human will be injured.
         - A = car crashes
     - Storm leads to injuries.
         - A = storm
+* [rejected] {A}{a} に対して，`That {a} is {A}`というtranslationを加える．
+    - [rejected] verb_clauseとほぼ同じになるので，表現を膨らませる効果が無さそう．
+* [done] 問題
+    * 課題
+        1. "{noun_clause.{A}x} is {noun_clause.{B}x}." に noun_clauseである`That x is A`が入らないこと．
+        2. "{noun_clause.{A}} is {noun_clause.{B}}." に noun_clauseである`That A occurs`が入らないこと．
+    * 考察
+        * {A}x
+            - {A}x.subj
+                - x that is A
+                - A x
+            - {A}x.fact
+                - That x is A
+    * 方針1
+        - isは主語が共有されている場合のみ．
+            * 課題2は解決．
+    * translation
+        1. G[NOUN] -> F[NOUN]
+            - Hard storm leads to injured people.
+            - That storm occurs leads to that people are injured.
+        2. G[NOUN]a -> F[NOUN]b
+            - Hard storm leads to injured people.
+            - That storm occurs leads to that people are injured.
+        3. G[NOUN]a -> F[NOUN]a
+            - A red apple is kind apple.
+            - That apple is red leads to that apple is kind.
+        3より2が先に出ることを保証する．
 * [done] G -> H = storm cause disastor
     - これをやるには，{G, ->, H} の３つを同時に見る必要がある．
     - また，treeの中でGは共通していないといけないので，tree全体を見る必要もある．
