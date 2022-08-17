@@ -1,14 +1,16 @@
 # todo
-* G[NOUN] -> F[NOUN]
-    - Hard storm leads to injured people.
-    - That storm occurs leads to that people are injured.
-* G[NOUN]a -> F[NOUN]b
-    - Hard storm leads to injured people.
-    - That storm occurs leads to that people are injured.
-* G[NOUN]a -> F[NOUN]a
-    - A red apple is kind apple.
-    - That apple is red leads to that apple is kind.
+* translation
+    * G[NOUN] -> F[NOUN]
+        - Hard storm leads to injured people.
+        - That storm occurs leads to that people are injured.
+    * G[NOUN]a -> F[NOUN]b
+        - Hard storm leads to injured people.
+        - That storm occurs leads to that people are injured.
+    * G[NOUN]a -> F[NOUN]a
+        - A red apple is kind apple.
+        - That apple is red leads to that apple is kind.
 * "a", "an" "the"
+    - 文法チェッカーとかで簡易実装できないか．
 
 * FormalLogicGenerator => ProofTreeGenerator
 * FormalLogicPipeline => ProofTreeGenerationPipeline
@@ -18,6 +20,7 @@
     * "world assumption"
         - [todo] EBへの転移実験はlabel_true_onlyでやる．
         - [todo] それ以外の実験は，CWAでやる．
+* データセット生成の高速化
 * 学習の高速化
     - bp16
     - maxlen

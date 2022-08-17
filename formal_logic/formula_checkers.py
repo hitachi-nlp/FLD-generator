@@ -222,6 +222,17 @@ def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[st
             values.add('T')
         elif re.match(f'^\(.* {AND} {NOT}{pred_arg_rep}\)$', rep):
             values.add('F')
+
+        # AND with is converted to OR by DeMorgan, thus it is undecidable.
+        elif re.match(f'^{NOT}\({pred_arg_rep} {AND} .*\)$', rep):
+            values.add('Unknown')
+        elif re.match(f'^{NOT}\({NOT}{pred_arg_rep} {AND} .*\)$', rep):
+            values.add('Unknown')
+        if re.match(f'^{NOT}\(.* {AND} {pred_arg_rep}\)$', rep):
+            values.add('Unknown')
+        elif re.match(f'^{NOT}\(.* {AND} {NOT}{pred_arg_rep}\)$', rep):
+            values.add('Unknown')
+
     elif rep.find(OR) >= 0:
         is_decidable_or = False
         if re.match(f'^\({pred_arg_rep} {OR} {pred_arg_rep}\)$', rep):
@@ -229,6 +240,19 @@ def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[st
             is_decidable_or = True
         elif re.match(f'^\({NOT}{pred_arg_rep} {OR} {NOT}{pred_arg_rep}\)$', rep):
             values.add('F')
+            is_decidable_or = True
+
+        if re.match(f'^{NOT}\({pred_arg_rep} {OR} .*\)$', rep):
+            values.add('F')
+            is_decidable_or = True
+        elif re.match(f'^{NOT}\({NOT}{pred_arg_rep} {OR} .*\)$', rep):
+            values.add('T')
+            is_decidable_or = True
+        if re.match(f'^{NOT}\(.* {OR} {pred_arg_rep}\)$', rep):
+            values.add('F')
+            is_decidable_or = True
+        elif re.match(f'^{NOT}\(.* {OR} {NOT}{pred_arg_rep}\)$', rep):
+            values.add('T')
             is_decidable_or = True
 
         if not is_decidable_or:
