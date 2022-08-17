@@ -3,7 +3,17 @@ import random
 from typing import Dict, List, Any, Iterable, Tuple, Optional, Union
 import copy
 
-from .formula import Formula, NOT, OR, AND, PREDICATES, CONSTANTS, VARIABLES, eliminate_double_negation
+from .formula import (
+    Formula,
+    NOT,
+    OR,
+    AND,
+    IMPLICATION,
+    PREDICATES,
+    CONSTANTS,
+    VARIABLES,
+    eliminate_double_negation,
+)
 from .argument import Argument
 import kern_profiler
 
@@ -327,6 +337,8 @@ def is_formula_identical(this: Formula,
                          that: Formula,
                          allow_complication=False,
                          elim_dneg=False) -> bool:
+    if can_not_be_identical_formula(this, that):
+        return False
     return any((
         this.rep == that_replaced.rep
         for that_replaced, _ in generate_replaced_formulas(that,
@@ -334,6 +346,16 @@ def is_formula_identical(this: Formula,
                                                            allow_complication=allow_complication,
                                                            elim_dneg=elim_dneg)
     ))
+
+
+def can_not_be_identical_formula(this: Formula, that: Formula) -> bool:
+    """ Decide whether two formulas can not be identical by any term. Used for early rejection of is_formula_identical.
+
+    NOTE that False does not mean two formulas are identical.
+    """
+    return any([this.rep.count(symbol) != that.rep.count(symbol)
+                for symbol in [AND, OR, IMPLICATION, NOT]])
+
 
 
 def is_argument_identical(this: Argument,

@@ -14,13 +14,14 @@ from .formula import (
     AND,
     OR,
     IMPLICATION,
-    NOT
+    NOT,
 )
 from .word_banks.base import WordBank
 from .replacements import (
     generate_replacement_mappings_from_formula,
     generate_replacement_mappings_from_terms,
     replace_formula,
+    can_not_be_identical_formula,
 )
 from .word_banks import POS, VerbForm, AdjForm, NounForm
 from .exception import FormalLogicExceptionBase
@@ -343,7 +344,7 @@ class ClauseTypedTranslator(Translator):
             if len(clause_templated_translations) == 0:
                 continue
 
-            if self._translation_form_does_not_match(_translation_formula_rep, formula.rep):  # early rejection for speed
+            if can_not_be_identical_formula(Formula(_translation_formula_rep), formula):  # early rejection for speed
                 continue
 
             _translation_formula = Formula(_translation_formula_rep)
@@ -363,10 +364,6 @@ class ClauseTypedTranslator(Translator):
             logger.warning('clause templated translation not found for %s', formula.rep)
 
         return mapping, clause_templated_translation_key, clause_templated_translation, clause_templated_translation_replaced
-
-    def _translation_form_does_not_match(self, translation_rep: str, formula_rep) -> bool:
-        return any([translation_rep.count(symbol) != formula_rep.count(symbol)
-                    for symbol in [AND, OR, IMPLICATION, NOT]])
 
     @profile
     def _replace_clause_templates(self,
