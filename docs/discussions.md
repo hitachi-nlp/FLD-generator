@@ -1,5 +1,4 @@
 # todo
-* not () のtranslation
 * notの頻度を落としたい．
 * コンポーネントを完成させていく
     * "proof tree generation"
