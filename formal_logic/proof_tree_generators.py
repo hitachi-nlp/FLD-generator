@@ -4,6 +4,7 @@ from typing import List, Optional, Any
 
 from timeout_timer import timeout as timeout_context
 
+from pprint import pprint
 from .formula import (
     PREDICATES,
     CONSTANTS,
@@ -110,19 +111,19 @@ class ProofTreeGenerator:
 
         return weight_extended_this_arguments + that_arguments
 
-    def generate_tree(self, depth=3) -> Optional[ProofTree]:
-        for _ in range(0, 10):
+    def generate_tree(self, depth=3, max_retry=100) -> Optional[ProofTree]:
+        for _ in range(0, max_retry):
             try:
                 proof_tree = _generate_tree(self._weight_extended_arguments,
                                             depth=depth,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
                 return proof_tree
-            except ProofTreeGenerationFailure:
-                logger.info('Generation failed with ProofTreeGenerationFailure(). Will retry')
+            except ProofTreeGenerationFailure as e:
+                logger.info('Generation failed with message "%s" Will retry', str(e))
             except TimeoutError:
                 logger.info('Generation failed with TimeoutError(). Will retry')
-        raise ProofTreeGenerationFailure()
+        raise ProofTreeGenerationFailure(f'generate_tree() failed with max_retry={max_retry}.')
 
 
 @profile
@@ -268,7 +269,7 @@ def _generate_stem(arguments: List[Argument],
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
             else:
-                raise ProofTreeGenerationFailure()
+                raise ProofTreeGenerationFailure('_generate_stem() failed.')
 
         if is_tree_done:
             return proof_tree
@@ -383,7 +384,7 @@ def _extend_braches(proof_tree: ProofTree,
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
         else:
-            raise ProofTreeGenerationFailure()
+            raise ProofTreeGenerationFailure('_extend_braches failed.')
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:

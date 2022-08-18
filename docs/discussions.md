@@ -1,5 +1,4 @@
 # todo
-* allow_complication=False でやると，missが多発する．
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
@@ -22,6 +21,17 @@
         - Fig.(a) を見ると，公理系を使っているように見える．差分は大丈夫か？
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
+
+
+
+
+# know issues
+* allow_complication=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．
+    1. and_introのconclusionは ({A} & {B}) という形をしている．
+    2. allow_complication=Falseでは，前提が({A} & {B})の形なのは，& elimだけである．
+    3. & elimのconclusionは{A}もしくは{B}であるが，これは1のant_introの前提としてtreeに既に入っている．よって，`_is_formula_new() = False`となるので，& elimの利用は却下される．
+    対処療法として，retryを大きくしている．
+
 
 
 
