@@ -210,7 +210,10 @@ class ClauseTypedTranslator(Translator):
                        if self._wb.can_be_intransitive_verb(word)}
         self._adj_and_verbs = _adjs
         self._adj_and_verbs = sorted(self._adj_and_verbs.union(_verbs))
-        self._nouns = sorted(word for word in self._wb.get_words(pos=POS.NOUN))
+        self._entity_nouns = sorted(word for word in self._wb.get_words(pos=POS.NOUN)
+                                    if self._wb.can_be_entity_noun(word))
+        self._event_nouns = sorted(word for word in self._wb.get_words(pos=POS.NOUN)
+                                   if self._wb.can_be_event_noun(word))
         self._verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
         self._translate_terms = translate_terms
@@ -306,9 +309,9 @@ class ClauseTypedTranslator(Translator):
         zeroary_mapping = next(
             generate_replacement_mappings_from_terms(
                 zeroary_predicates,
-                constants,
-                random.sample(self._nouns, len(zeroary_predicates) * 3),
-                random.sample(self._nouns, len(constants) * 3),
+                [],
+                random.sample(self._event_nouns, len(zeroary_predicates) * 3),
+                [],
                 block_shuffle=True,
                 allow_replacement=False,
             )
@@ -318,9 +321,9 @@ class ClauseTypedTranslator(Translator):
         unary_mapping = next(
             generate_replacement_mappings_from_terms(
                 unary_predicates,
-                [],
+                constants,
                 random.sample(self._adj_and_verbs, len(unary_predicates) * 3),
-                [],
+                random.sample(self._entity_nouns, len(constants) * 3),
                 block_shuffle=True,
                 allow_replacement=False,
             )

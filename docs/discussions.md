@@ -1,6 +1,4 @@
 # todo
-* is_agentive_noun
-* precisionを上げるため，get_synsets で一番最初のやつだけ使うべき？
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
@@ -26,6 +24,8 @@
         - not関連を入れると，背理法が必要となってしまう．
             - 背理法で導けるcontrapositionを使っているので，直観主義論理の中にとどまっている，という訳では無い．
     * faithful inference: NLIの間を埋める
+    * 仮説検証器
+        - 「AIは人間を滅ぼすべきだ」
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
 
@@ -233,6 +233,13 @@
     * [todo] term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
         - eventive noun など．
     * [todo] {A}をNOUNで表す場合，eventiveなnounに限りたい．{A}[NOUN.eventive] とかか？
+* can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
+    - [todo] precisionを高くした後の語彙数を調べる．これが十分なのであれば，precisionを上げて良い．
+    - precisionを上げる
+        - Pros
+            - 言語的な不自然さが無くなるので，事前学習からの悪影響が小さくなる．
+        - Cons
+            - 語彙を絞りすぎると，偏りが生じるので，逆に悪影響があるかもしれない．
 * [todo] EntailmentBankに入っているもの．
 * [todo] A -> B
     - If car crashes, human will be injured.
