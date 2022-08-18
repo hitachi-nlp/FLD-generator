@@ -169,8 +169,8 @@ class EnglishWordBank(WordBank):
         return any([self._can_be_transitive_verb_synset(s)
                     for s in self._get_synsets_by_word(verb)])
 
-    def _get_synsets_by_word(self, word: str) -> Iterable[Synset]:
-        return wn.synsets(word)
+    def _get_synsets_by_word(self, word: str, pos: Optional[str] = None ) -> Iterable[Synset]:
+        return wn.synsets(word, pos=pos)
 
     def _get_sensets_by_pos(self, wn_pos: Optional[str] = None) -> Iterable[Synset]:
         yield from wn.all_synsets(wn_pos)
@@ -192,3 +192,53 @@ class EnglishWordBank(WordBank):
             return True
 
         return False
+
+    def _can_be_eventive_noun(self, noun: str) -> bool:
+        """ Decide whether a noun can represent a event.
+
+        References:
+        1. [nlp - How to extract words based on wordnet event synset? - Stack Overflow](https://stackoverflow.com/questions/44856220/how-to-extract-words-based-on-wordnet-event-synset)
+        2. [The first two levels of the WordNet 1.5 ontology of noun meanings](http://www.phmartin.info/CGKAT/ontologies/coWordNet.html)
+        """
+
+        # We chose the following root synsets based on reference 1 and 2.
+        event_synset_root_names = [
+            'event.n.01',
+            'event.n.02',
+            'event.n.03',
+            'consequence.n.01',
+
+            'act.n.02',
+
+            'phenomenon.n.01',
+
+            # 'state.n.02',   # exclude this since precision is not that high
+        ]
+
+        event_root_synsets = [wn.synset(name) for name in event_synset_root_names]
+
+        return any((
+            ancestor_syn in event_root_synsets
+            for syn in self._get_synsets_by_word(noun)
+            for ancestor_syn in self._get_ancestor_synsets(syn)
+        ))
+
+    def _get_ancestor_synsets(self, syn: Synset) -> List[Synset]:
+        ancestors = []
+        for hypernym in syn.hypernyms():
+            if hypernym not in ancestors:
+                ancestors.append(hypernym)
+            for ancestor in self._get_ancestor_synsets(hypernym):
+                if ancestor not in ancestors:
+                    ancestors.append(ancestor)
+        return ancestors
+
+    def _get_descendant_synsets(self, syn: Synset) -> List[Synset]:
+        descendants = []
+        for hypernym in syn.hypernyms():
+            if hypernym not in descendants:
+                descendants.append(hypernym)
+            for descendant in self._get_descendant_synsets(hypernym):
+                if descendant not in descendants:
+                    descendants.append(descendant)
+        return descendants

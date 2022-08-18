@@ -1,4 +1,5 @@
 # todo
+* precisionを上げるため，get_synsets で一番最初のやつだけ使うべき？
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
@@ -226,9 +227,10 @@
 # translation
 
 ## [todo] 事例
-* [todo] term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
-    - eventive noun など．
-* [todo] {A}をNOUNで表す場合，eventiveなnounに限りたい．{A}[NOUN.eventive] とかか？
+* eventive noun
+    * [todo] term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
+        - eventive noun など．
+    * [todo] {A}をNOUNで表す場合，eventiveなnounに限りたい．{A}[NOUN.eventive] とかか？
 * [todo] EntailmentBankに入っているもの．
 * [todo] A -> B
     - If car crashes, human will be injured.

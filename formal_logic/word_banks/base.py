@@ -86,3 +86,12 @@ class WordBank(ABC):
     @abstractmethod
     def _can_be_intransitive_verb(self, verb: str) -> bool:
         pass
+
+    def can_be_eventive_noun(self, noun: str) -> bool:
+        if POS.NOUN not in self.get_pos(noun):
+            raise ValueError()
+        return self._can_be_eventive_noun(noun)
+
+    @abstractmethod
+    def _can_be_eventive_noun(self, noun: str) -> bool:
+        pass

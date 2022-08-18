@@ -16,6 +16,13 @@ for word in wb.get_words(pos=POS.VERB):
 for word in wb.get_words(pos=POS.NOUN):
     print('noun:', word)
 
+
+cnt = 0
+for word in wb.get_words(pos=POS.NOUN):
+    if wb.can_be_eventive_noun(word):
+        cnt += 1
+        print(f'eventive noun ({cnt}):', word)
+
 for word in wb.get_words(pos=POS.ADJ):
     print()
     print(f'============ adj: {word} =============')
