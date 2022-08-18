@@ -1,4 +1,6 @@
-from formal_logic.word_banks import EnglishWordBank, POS, VerbForm, AdjForm
+from typing import List, Optional, Iterable
+
+from formal_logic.word_banks import EnglishWordBank, POS, ATTR, get_form_types
 import logging
 
 from logger_setup import setup as setup_logger
@@ -7,33 +9,26 @@ setup_logger(level=logging.INFO)
 
 wb = EnglishWordBank()
 
-for word in wb.get_words(pos=POS.VERB):
-    print()
-    print(f'============ verb: {word}   is_intransitive: {wb.can_be_intransitive_verb(word)} =============')
-    for form in VerbForm:
-        print(form, wb.change_verb_form(word, form))
 
-for word in wb.get_words(pos=POS.NOUN):
-    print('noun:', word)
-
-
-cnt = 0
-for word in wb.get_words(pos=POS.NOUN):
-    if wb.can_be_event_noun(word):
-        cnt += 1
-        print(f'event noun ({cnt}):', word)
+def get_words(pos: Optional[POS] = None,
+              attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
+    attrs = attrs or []
+    for word in wb.get_words():
+        if pos is not None and pos not in wb.get_pos(word):
+            continue
+        if any((attr not in wb.get_attrs(word)
+                for attr in attrs)):
+            continue
+        yield word
 
 
-cnt = 0
-for word in wb.get_words(pos=POS.NOUN):
-    if wb.can_be_entity_noun(word):
-        cnt += 1
-        print(f'entity noun ({cnt}):', word)
-
-
-for word in wb.get_words(pos=POS.ADJ):
-    print()
-    print(f'============ adj: {word} =============')
-    for form in AdjForm:
-        print(form, wb.change_adj_form(word, form))
-
+for pos in POS:
+    for attr in [None] + list(ATTR):
+        for word in get_words(pos=pos, attrs=[attr]):
+            print(f'{str(pos):<10}{str(attr.value):<30}{word:<20}')
+            form_types = get_form_types(pos)
+            if form_types is not None:
+                for form_type in form_types:
+                    inflated_word = wb.change_word_form(word, form_type)
+                    if inflated_word is not None:
+                        print(f'    {str(form_type):<20}{str(inflated_word):<20}')

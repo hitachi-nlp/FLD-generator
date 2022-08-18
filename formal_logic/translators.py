@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Optional, Tuple, Union
+from typing import List, Dict, Optional, Tuple, Union, Iterable
 from abc import abstractmethod, ABC
 from collections import OrderedDict, defaultdict
 import random
@@ -16,7 +16,7 @@ from .formula import (
     IMPLICATION,
     NOT,
 )
-from .word_banks.base import WordBank
+from .word_banks.base import WordBank, ATTR
 from .replacements import (
     generate_replacement_mappings_from_formula,
     generate_replacement_mappings_from_terms,
@@ -165,6 +165,7 @@ class IterativeRegexpTranslator(Translator):
 
 class ClauseTypedTranslator(Translator):
 
+    @profile
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
@@ -205,18 +206,40 @@ class ClauseTypedTranslator(Translator):
                 # logger.info(re.sub('\n', '\n    ', pformat(self._translations)))
 
         self._wb = word_bank
-        _adjs = set(self._wb.get_words(pos=POS.ADJ))
-        _verbs = {word for word in self._wb.get_words(pos=POS.VERB)
-                       if self._wb.can_be_intransitive_verb(word)}
-        self._adj_and_verbs = _adjs
-        self._adj_and_verbs = sorted(self._adj_and_verbs.union(_verbs))
-        self._entity_nouns = sorted(word for word in self._wb.get_words(pos=POS.NOUN)
-                                    if self._wb.can_be_entity_noun(word))
-        self._event_nouns = sorted(word for word in self._wb.get_words(pos=POS.NOUN)
-                                   if self._wb.can_be_event_noun(word))
+        logger.info('loading words from WordBank ...')
+        _adj_set = set(self._load_words(pos=POS.ADJ))
+        _intransitive_verb_set = {
+            word
+            for word in self._load_words(pos=POS.VERB)
+            if ATTR.can_be_intransitive_verb in self._wb.get_attrs(word)
+        }
+        self._adj_and_verbs = sorted(_adj_set.union(_intransitive_verb_set))
+        self._entity_nouns = sorted(
+            word for word in self._load_words(pos=POS.NOUN)
+            if ATTR.can_be_entity_noun in self._wb.get_attrs(word)
+        )
+        self._event_nouns = sorted(
+            word for word in self._load_words(pos=POS.NOUN)
+            if ATTR.can_be_event_noun in self._wb.get_attrs(word)
+        )
+        logger.info('loading words from WordBank done!')
+
         self._verb_vs_adj_sampling_rate = verb_vs_adj_sampling_rate
 
         self._translate_terms = translate_terms
+
+    @profile
+    def _load_words(self,
+                    pos: Optional[POS] = None,
+                    attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
+        attrs = attrs or []
+        for word in self._wb.get_words():
+            if pos is not None and pos not in self._wb.get_pos(word):
+                continue
+            if any((attr not in self._wb.get_attrs(word)
+                    for attr in attrs)):
+                continue
+            yield word
 
     @profile
     def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
@@ -507,14 +530,11 @@ class ClauseTypedTranslator(Translator):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
         if pos == POS.ADJ:
-            inflation_func = self._wb.change_adj_form
             force = False
         elif pos == POS.VERB:
-            inflation_func = self._wb.change_verb_form
             force = True
         elif pos == POS.NOUN:
-            inflation_func = self._wb.change_noun_form
             force = False
         else:
             raise ValueError()
-        return inflation_func(word, form, force=force)
+        return self._wb.change_word_form(word, form, force=force)

@@ -1,2 +1,2 @@
-from .base import POS, VerbForm, AdjForm, NounForm
+from .base import POS, ATTR, VerbForm, AdjForm, NounForm, get_form_types
 from .english import EnglishWordBank

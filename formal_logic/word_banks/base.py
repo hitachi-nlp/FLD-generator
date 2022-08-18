@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, List, Dict
+from typing import Optional, Iterable, List, Dict, Union
 from enum import Enum
 from abc import ABC, abstractmethod
 
@@ -7,6 +7,13 @@ class POS(Enum):
     VERB = 'VERB'
     NOUN = 'NOUN'
     ADJ = 'ADJ'
+    UNK = 'UNK'
+
+
+class ATTR(Enum):
+    can_be_intransitive_verb = 'can_be_intransitive_verb'
+    can_be_event_noun = 'can_be_event_noun'
+    can_be_entity_noun = 'can_be_entity_noun'
 
 
 class VerbForm(Enum):
@@ -26,14 +33,80 @@ class NounForm(Enum):
     NORMAL = 'normal'
 
 
+def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
+    if pos == POS.VERB:
+        return VerbForm
+    elif pos == POS.ADJ:
+        return AdjForm
+    elif pos == POS.NOUN:
+        return NounForm
+    elif pos == POS.UNK:
+        return None
+    else:
+        raise ValueError(f'Unknown pos {pos}')
+
+
 class WordBank(ABC):
 
     @abstractmethod
-    def get_words(self, pos: Optional[POS] = None) -> Iterable[str]:
+    def get_words(self) -> Iterable[str]:
         pass
 
     @abstractmethod
     def get_pos(self, word: str) -> List[POS]:
+        pass
+
+    def change_word_form(self,
+                         word: str,
+                         form: Union[VerbForm, AdjForm, NounForm],
+                         force=False) -> Optional[str]:
+        if form in VerbForm:
+            if POS.VERB not in self.get_pos(word):
+                raise ValueError(f'The pos of the form ({str(form)}) is Verb. The word {word} does not have this pos.')
+            return self._change_verb_form(word, form, force=force)
+        elif form in AdjForm:
+            if POS.ADJ not in self.get_pos(word):
+                raise ValueError(f'The pos of the form ({str(form)}) is Adj. The word {word} does not have this pos.')
+            return self._change_adj_form(word, form, force=force)
+        elif form in NounForm:
+            if POS.NOUN not in self.get_pos(word):
+                raise ValueError(f'The pos of the form ({str(form)}) is Noun. The word {word} does not have this pos.')
+            return self._change_noun_form(word, form, force=force)
+        else:
+            raise ValueError()
+
+    @abstractmethod
+    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+        pass
+
+    @abstractmethod
+    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+        pass
+
+    @abstractmethod
+    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+        pass
+
+    def get_attrs(self, word: str) -> List[ATTR]:
+        attrs = []
+        if POS.VERB in self.get_pos(word) and self._can_be_intransitive_verb(word):
+            attrs.append(ATTR.can_be_intransitive_verb)
+        if POS.NOUN in self.get_pos(word) and self._can_be_event_noun(word):
+            attrs.append(ATTR.can_be_event_noun)
+        if POS.NOUN in self.get_pos(word) and self._can_be_entity_noun(word):
+            attrs.append(ATTR.can_be_entity_noun)
+        return attrs
+
+    @abstractmethod
+    def _can_be_intransitive_verb(self, verb: str) -> bool:
+        pass
+
+    @abstractmethod
+    def _can_be_event_noun(self, noun: str) -> bool:
+        pass
+
+    @abstractmethod
+    def _can_be_entity_noun(self, noun: str) -> bool:
         pass
 
     @abstractmethod
@@ -49,58 +122,4 @@ class WordBank(ABC):
         # might be the subset of antonyms.
         # antonyms may include words such as alkaline being antonym to acidic.
         # negnym exclude such ones and include only the words like inaccrate being a negnym to accurate.
-        pass
-
-    def change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
-        if POS.VERB not in self.get_pos(verb):
-            raise ValueError()
-        return self._change_verb_form(verb, form, force=force)
-
-    @abstractmethod
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
-        pass
-
-    def change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
-        if POS.ADJ not in self.get_pos(adj):
-            raise ValueError()
-        return self._change_adj_form(adj, form, force=force)
-
-    @abstractmethod
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
-        pass
-
-    def change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
-        if POS.NOUN not in self.get_pos(noun):
-            raise ValueError()
-        return self._change_noun_form(noun, form, force=force)
-
-    @abstractmethod
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
-        pass
-
-    def can_be_intransitive_verb(self, verb: str) -> bool:
-        if POS.VERB not in self.get_pos(verb):
-            raise ValueError()
-        return self._can_be_intransitive_verb(verb)
-
-    @abstractmethod
-    def _can_be_intransitive_verb(self, verb: str) -> bool:
-        pass
-
-    def can_be_event_noun(self, noun: str) -> bool:
-        if POS.NOUN not in self.get_pos(noun):
-            raise ValueError()
-        return self._can_be_event_noun(noun)
-
-    @abstractmethod
-    def _can_be_event_noun(self, noun: str) -> bool:
-        pass
-
-    def can_be_entity_noun(self, noun: str) -> bool:
-        if POS.NOUN not in self.get_pos(noun):
-            raise ValueError()
-        return self._can_be_entity_noun(noun)
-
-    @abstractmethod
-    def _can_be_entity_noun(self, noun: str) -> bool:
         pass
