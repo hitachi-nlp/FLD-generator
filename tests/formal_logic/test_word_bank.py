@@ -19,9 +19,17 @@ for word in wb.get_words(pos=POS.NOUN):
 
 cnt = 0
 for word in wb.get_words(pos=POS.NOUN):
-    if wb.can_be_eventive_noun(word):
+    if wb.can_be_event_noun(word):
         cnt += 1
-        print(f'eventive noun ({cnt}):', word)
+        print(f'event noun ({cnt}):', word)
+
+
+cnt = 0
+for word in wb.get_words(pos=POS.NOUN):
+    if wb.can_be_entity_noun(word):
+        cnt += 1
+        print(f'entity noun ({cnt}):', word)
+
 
 for word in wb.get_words(pos=POS.ADJ):
     print()

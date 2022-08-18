@@ -169,7 +169,7 @@ class EnglishWordBank(WordBank):
         return any([self._can_be_transitive_verb_synset(s)
                     for s in self._get_synsets_by_word(verb)])
 
-    def _get_synsets_by_word(self, word: str, pos: Optional[str] = None ) -> Iterable[Synset]:
+    def _get_synsets_by_word(self, word: str, pos: Optional[str] = None) -> Iterable[Synset]:
         return wn.synsets(word, pos=pos)
 
     def _get_sensets_by_pos(self, wn_pos: Optional[str] = None) -> Iterable[Synset]:
@@ -193,33 +193,84 @@ class EnglishWordBank(WordBank):
 
         return False
 
-    def _can_be_eventive_noun(self, noun: str) -> bool:
+    def _can_be_event_noun(self, noun: str) -> bool:
         """ Decide whether a noun can represent a event.
+
+        # We implement this function based on reference 1 and 2.
+        # We listed all the possible eventive root and then, filtered out the inappropriate ones as follows.
+
+        > root_synset_names = [
+        >     'event',
+        >     'act',
+        >     'phenomenon',
+        >     'state',
+        > ]
+        > for root_synset_name in root_synset_name:
+        >     for root_synset in wn.synsets(root_synset_name, pos=wn.NOUN):
+        >         print(root_synset, root_synset.definition())
+
+        Synset('event.n.01') something that happens at a given place and time
+        Synset('event.n.02') a special set of circumstances
+        Synset('event.n.03') a phenomenon located at a single point in space-time; the fundamental observational entity in relativity theory
+        Synset('consequence.n.01') a phenomenon that follows and is caused by some previous phenomenon
+
+        Synset('act.n.01') a legal document codifying the result of deliberations of a committee or society or legislative body
+        Synset('act.n.02') something that people do or cause to happen
+        Synset('act.n.03') a subdivision of a play or opera or ballet
+        Synset('act.n.04') a short theatrical performance that is part of a longer program
+        Synset('act.n.05') a manifestation of insincerity
+
+        Synset('phenomenon.n.01') any state or process known through the senses rather than by intuition or reasoning
+        Synset('phenomenon.n.02') a remarkable development
+
+        Synset('state.n.01') the territory occupied by one of the constituent administrative districts of a nation
+        Synset('state.n.02') the way something is with respect to its main attributes
+        Synset('state.n.03') the group of people comprising the government of a sovereign state
+        Synset('state.n.04') a politically organized body of people under a single government
+        Synset('state_of_matter.n.01') (chemistry) the three traditional states of matter are solids (fixed shape and volume) and liquids (fixed volume and shaped by the container) and gases (filling the container)
+        Synset('state.n.06') a state of depression or agitation
+        Synset('country.n.02') the territory occupied by a nation
+        Synset('department_of_state.n.01') the federal department in the United States that sets and maintains foreign policies
+
 
         References:
         1. [nlp - How to extract words based on wordnet event synset? - Stack Overflow](https://stackoverflow.com/questions/44856220/how-to-extract-words-based-on-wordnet-event-synset)
         2. [The first two levels of the WordNet 1.5 ontology of noun meanings](http://www.phmartin.info/CGKAT/ontologies/coWordNet.html)
         """
 
-        # We chose the following root synsets based on reference 1 and 2.
-        event_synset_root_names = [
-            'event.n.01',
-            'event.n.02',
-            'event.n.03',
-            'consequence.n.01',
+    def _can_be_event_noun(self, noun: str) -> bool:
+        return self._is_descendant_of(
+            noun,
+            [
+                'event.n.01',
+                'event.n.02',
+                'event.n.03',
+                'consequence.n.01',
 
-            'act.n.02',
+                'act.n.02',
 
-            'phenomenon.n.01',
+                'phenomenon.n.01',
 
-            # 'state.n.02',   # exclude this since precision is not that high
-        ]
+                # 'state.n.02',   # exclude this since precision is not that high
+            ]
+        )
 
-        event_root_synsets = [wn.synset(name) for name in event_synset_root_names]
+
+    def _can_be_entity_noun(self, noun: str) -> bool:
+        return self._is_descendant_of(
+            noun,
+            [
+                # 'entity.n.01',  # too general, e.g., it includes "then", which is a time.
+                'physical_entity.n.01',
+            ]
+        )
+
+    def _is_descendant_of(self, this_word: str, those_words: List[str]) -> bool:
+        root_synsets = [wn.synset(name) for name in those_words]
 
         return any((
-            ancestor_syn in event_root_synsets
-            for syn in self._get_synsets_by_word(noun)
+            ancestor_syn in root_synsets
+            for syn in self._get_synsets_by_word(this_word)
             for ancestor_syn in self._get_ancestor_synsets(syn)
         ))
 

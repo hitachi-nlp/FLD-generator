@@ -1,4 +1,5 @@
 # todo
+* is_agentive_noun
 * precisionを上げるため，get_synsets で一番最初のやつだけ使うべき？
 * コンポーネントを完成させていく
     * "proof tree generation"
@@ -24,6 +25,7 @@
         - 仮定の導入などを入れると，proof "graph"になるので，future work
         - not関連を入れると，背理法が必要となってしまう．
             - 背理法で導けるcontrapositionを使っているので，直観主義論理の中にとどまっている，という訳では無い．
+    * faithful inference: NLIの間を埋める
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
 
