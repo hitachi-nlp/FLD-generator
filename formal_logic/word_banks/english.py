@@ -1,16 +1,13 @@
 from typing import Optional, Iterable, Dict, List, Set
 import re
 import logging
-from itertools import chain
-from collections import defaultdict
-from functools import lru_cache
-from pathlib import Path
-import os
+import nltk
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
 from .base import WordBank, POS, VerbForm, AdjForm, NounForm
+from formal_logic.utils import starts_with_vowel_sound
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -131,6 +128,21 @@ class EnglishWordBank(WordBank):
     def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
         if form == NounForm.NORMAL:
             return noun
+        elif form == NounForm.SINGULAR:
+            return noun
+        elif form == NounForm.SINGULAR_WITH_PARTICLE:
+            """
+            We assume that all the words are countable, thus, all the words in singular form need an indefinite article, i.e., "a" or "an".
+            This approximation is because that detecting the word countability is a challenging problem.
+            See [here](https://stackoverflow.com/questions/7822922/noun-countability) for example.
+
+            For detecting "a" vs "an", we borrowed implementation from https://stackoverflow.com/questions/20336524/verify-correct-use-of-a-and-an-in-english-texts-python .
+
+            TODO: We might be able to detect the countability
+                  using existent resources like [Category:Uncountable nouns - Simple English Wiktionary](https://simple.wiktionary.org/wiki/Category:Uncountable_nouns).
+            """
+
+            return f'an {noun}' if starts_with_vowel_sound(noun) else f'a {noun}'
         else:
             raise ValueError(f'Unknown form {form}')
 
@@ -315,4 +327,3 @@ class EnglishWordBank(WordBank):
                         for postfix in negation_postfixes)):
                 negnyms.append(antonym)
         return negnyms
-

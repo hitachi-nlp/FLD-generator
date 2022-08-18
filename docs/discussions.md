@@ -47,26 +47,16 @@
 # proof tree generation
 
 ## [todo] パターン
-* [todo] 定理はどれを入れるべきか？
-    - EBでよく使われる定理は入れる．転移性能のため．
-        - syllogism等
-    - 「今回入れられなかった公理」を使わないと導けない定理は入れる．
-        - e.g.) not関連の公理を入れられなかった => contrapositionを入れる
-    - 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
 * [todo] 命題論理
-    - 公理系
-        - Ga 版に拡張するプログラム
     - 定理
         - 取りあえず，"基本的な"，すなわち，他の定理を導くときに良く使えそうな以下の定理を入れている．
             - syllogism
             - contraposition
-    * 述語論理を{A}{a}で膨らませる．
-        * {A}{a} and {B}
 * [todo] 述語論理
+    - 常識推論ルールを入れたい．
+        - Ga -> Fa
+        - Ga -> Fb
     - 公理系
-        - 命題論理の公理系を含むべき．
-            - Fa -> Gb
-                - If car crashes, human will be injured.
         - 例: & 導入
             ```
             ---- premise ----
@@ -77,9 +67,19 @@
             -----------------
             H(a)
             ```
+    * [rejected] 命題論理との混合
+        * [rejected] 工数の割に効果が小さそう．
+        * e.g.) {A}{a} and {B}
 * [todo] notの意味を表現する．
     - contraposition
     - ドモルガン
+* [todo] 定理はどれを入れるべきか？
+    - EBでよく使われる定理は入れる．転移性能のため．
+        - syllogism等
+    - 「今回入れられなかった公理」を使わないと導けない定理は入れる．
+        - e.g.) not関連の公理を入れられなかった => contrapositionを入れる
+    - 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
+
 * [pending] ->導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．
@@ -229,26 +229,42 @@
 # translation
 
 ## [todo] 事例
-* eventive noun
-    * [todo] term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
-        - eventive noun など．
-    * [todo] {A}をNOUNで表す場合，eventiveなnounに限りたい．{A}[NOUN.eventive] とかか？
-* can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
+* [todo] EntailmentBankに入っている表現を追加する．
+* [todo] can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
     - [todo] precisionを高くした後の語彙数を調べる．これが十分なのであれば，precisionを上げて良い．
     - precisionを上げる
         - Pros
             - 言語的な不自然さが無くなるので，事前学習からの悪影響が小さくなる．
         - Cons
             - 語彙を絞りすぎると，偏りが生じるので，逆に悪影響があるかもしれない．
-* [todo] EntailmentBankに入っているもの．
-* [todo] A -> B
-    - If car crashes, human will be injured.
-        - A = car crashes
-    - Storm leads to injuries.
-        - A = storm
-* [todo] "a, "an" "the", "s", 複数形, 単数形
-    - 文法チェッカーとかで簡易実装できないだろうか？
-    - [grammar-checker](https://github.com/topics/grammar-checker)
+* [pending] 複数形，単数形, 冠詞
+    - pending
+        - [pending] 文法チェッカーとかで簡易実装できないだろうか？
+    - 方針
+        - [pending] countableの一般論は複数形か不定冠詞(a/an) + 単数形
+            * [done] 不定冠詞(a/an) + 単数形
+            * [pending] 複数形
+                * 複数形を入れると，is/are [VERB.s]/[VERB.normal]のテンプレート両方を入れる必要があり，複雑化ｓる．
+                * 複数形 vs 単数形の判断は難しい
+        - [pending] uncountableの一般論は，不定冠詞を付けずに単数形
+            * [pending] 単語は全てcountableだとして近似する．多くの単語はcountable/uncountable両方で使えるのでcountableとして扱って問題が生じないこと，同様の理由でuncountable/countableの判断が難しいこと，による．
+                * [here](https://stackoverflow.com/questions/7822922/noun-countability) for example.
+            * countable / uncountableの区別を付けたいなら，適当なリソースを使うべき．
+                * [Category:Uncountable nouns - Simple English Wiktionary](https://simple.wiktionary.org/wiki/Category:Uncountable_nouns).
+    - 事例
+        * {G}{a}
+            - An apple is red.
+        * {G}x -> {F}x
+            - If something is red, then it is kind.
+        * {G}{a} -> {F}{a}
+            - If an apple is red, then it is kind.
+        * {G}{a} -> {F}{b}
+            - If a car crashes, then people is injured.
+    - 参考資料
+        * [英語で、ある名詞の一般論を述べるとき、単数形、定冠詞、複数形とでそれぞれどんなニュアンスの違いがあるのか？ - 根性による３ヶ国語学習者の日記](https://yaseteru.hatenablog.com/entry/2022/03/07/072635)
+        - 自然さでいうと，apples are red > an apple is red
+* [pending] term_mappingを先に選んでしまうと，missが発生しやすい．for loopで回したい．
+    - [pending] 今現在は，configで指定される語句と，translator.pyが使う語句を合わせているのでmissは発生しない．ただし，将来的にこれが乖離せざるを得ない状況は考えられる．
 * [rejected] {A}{a} に対して，`That {a} is {A}`というtranslationを加える．
     - [rejected] verb_clauseとほぼ同じになるので，表現を膨らませる効果が無さそう．
 * [done] 問題

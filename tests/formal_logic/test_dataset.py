@@ -22,6 +22,8 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                               allow_complication=True,
                               elim_dneg=True):
     arguments = arguments or []
+
+    config_paths = config_paths or []
     for config_path in config_paths:
         arguments.extend([Argument.from_json(json_obj)
                           for json_obj in json.load(open(config_path))
@@ -146,7 +148,7 @@ def test_original_pipeline():
     generate_dataset(dataset)
 
 
-def test_pipeline_with_minumum_arguments():
+def test_pipeline_with_minumum_PL_arguments():
     generator = load_proof_tree_generator(
         arguments=[
             Argument(
@@ -203,6 +205,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger(level=logging.INFO)
 
-    # test_simple_pipeline()
-    # test_original_pipeline()
-    test_pipeline_with_LP_arguments()
+    # test_pipeline_with_LP_arguments()
+    test_pipeline_with_minumum_PL_arguments()

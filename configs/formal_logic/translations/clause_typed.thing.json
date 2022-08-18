@@ -759,175 +759,175 @@
 
     "verb_clause": {
       "{A}": [
-        "{A}[NOUN] occurs"
+        "a {A}[NOUN] occurs"
       ],
 
       "¬{A}": [
-        "{A}[NOUN] does not occur"
+        "a {A}[NOUN] does not occur"
       ],
 
 
       "({A} & {B})": [
-          "{A}[NOUN] and {B}[NOUN] occurs"
+          "a {A}[NOUN] and a {B}[NOUN] occurs"
       ],
       "(¬{A} & {B})": [
-          "{A}[NOUN] does not occur and {B}[NOUN] occurs"
+          "a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
       ],
       "({A} & ¬{B})": [
-          "{A}[NOUN] occurs and {B}[NOUN] does not occur"
+          "a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
       ],
       "(¬{A} & ¬{B})": [
-          "{A}[NOUN] and {B}[NOUN] do not occur"
+          "a {A}[NOUN] and a {B}[NOUN] do not occur"
       ],
 
       "¬({A} & {B})": [
-        "it is not the fact that {A}[NOUN] and {B}[NOUN] occurs"
+        "it is not the fact that a {A}[NOUN] and a {B}[NOUN] occurs"
       ],
       "¬(¬{A} & {B})": [
-        "it is not the fact that {A}[NOUN] does not occur and {B}[NOUN] occurs"
+        "it is not the fact that a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
       ],
       "¬({A} & ¬{B})": [
-        "it is not the fact that {A}[NOUN] occurs and {B}[NOUN] does not occur"
+        "it is not the fact that a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
       ],
       "¬(¬{A} & ¬{B})": [
-        "it is not the fact that {A}[NOUN] and {B}[NOUN] do not occur"
+        "it is not the fact that a {A}[NOUN] and a {B}[NOUN] do not occur"
       ],
 
 
 
       "({A} v {B})": [
-          "either {A}[NOUN] occurs or {B}[NOUN] occurs or both"
+          "either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
       ],
       "(¬{A} v {B})": [
-          "either {A}[NOUN] does not occur or {B}[NOUN] occurs or both"
+          "either a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
       ],
       "({A} v ¬{B})": [
-          "either {A}[NOUN] occurs or {B}[NOUN] does not occur or both"
+          "either a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
       ],
       "(¬{A} v ¬{B})": [
-          "either {A}[NOUN] does not occur or {B}[NOUN] does not occur or both"
+          "either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
       ],
 
 
       "¬({A} v {B})": [
-          "it is not the fact that {A}[NOUN] occurs or {B}[NOUN] occurs or both"
+          "it is not the fact that a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
       ],
       "¬(¬{A} v {B})": [
-          "it is not the fact that {A}[NOUN] does not occur or {B}[NOUN] occurs or both"
+          "it is not the fact that a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
       ],
       "¬({A} v ¬{B})": [
-          "it is not the fact that {A}[NOUN] occurs or {B}[NOUN] does not occur or both"
+          "it is not the fact that a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
       ],
       "¬(¬{A} v ¬{B})": [
-          "it is not the fact that {A}[NOUN] does not occur or {B}[NOUN] does not occur or both"
+          "it is not the fact that a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
       ],
 
 
 
 
       "{A}{a}": [
-        "{a} is {A}[ADJ]",
-        "{a} {A}[VERB.s]"
+        "a {a}[NOUN] is {A}[ADJ]",
+        "a {a}[NOUN] {A}[VERB.s]"
       ],
       "¬{A}{a}": [
-        "{a} is not {A}[ADJ]",
-        "{a} is {A}[ADJ.neg]",
-        "{a} does not {A}[VERB]"
+        "a {a}[NOUN] is not {A}[ADJ]",
+        "a {a}[NOUN] is {A}[ADJ.neg]",
+        "a {a}[NOUN] does not {A}[VERB]"
       ],
 
 
       "({A}{a} & {B}{a})": [
-          "{a} is {A}[ADJ] and {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ] and {B}[ADJ]",
 
-          "{a} is {A}[ADJ] and {B}[VERB.s]",
+          "a {a}[NOUN] is {A}[ADJ] and {B}[VERB.s]",
 
-          "{a} {A}[VERB.s] and is {B}[ADJ]",
+          "a {a}[NOUN] {A}[VERB.s] and is {B}[ADJ]",
 
-          "{a} {A}[VERB.s] and {B}[VERB.s]"
+          "a {a}[NOUN] {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}{a} & {B}{a})": [
-          "{a} is not {A}[ADJ] and is {B}[ADJ]",
-          "{a} is {A}[ADJ.neg] and {B}[ADJ]",
+          "a {a}[NOUN] is not {A}[ADJ] and is {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[ADJ]",
 
-          "{a} is not {A}[ADJ] and {B}[VERB.s]",
-          "{a} is {A}[ADJ.neg] and {B}[VERB.s]",
+          "a {a}[NOUN] is not {A}[ADJ] and {B}[VERB.s]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[VERB.s]",
 
-          "{a} does not {A}[VERB] and is {B}[ADJ]",
+          "a {a}[NOUN] does not {A}[VERB] and is {B}[ADJ]",
 
-          "{a} does not {A}[VERB] and does {B}[VERB]"
+          "a {a}[NOUN] does not {A}[VERB] and does {B}[VERB]"
       ],
       "({A}{a} & ¬{B}{a})": [
-          "{a} is {A}[ADJ] and is not {B}[ADJ]",
-          "{a} is {A}[ADJ] and {B}[ADJ.neg]",
+          "a {a}[NOUN] is {A}[ADJ] and is not {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ] and {B}[ADJ.neg]",
 
-          "{a} is {A}[ADJ] and does not {B}[VERB]",
+          "a {a}[NOUN] is {A}[ADJ] and does not {B}[VERB]",
 
-          "{a} {A}[VERB.s] and is not {B}[ADJ]",
-          "{a} {A}[VERB.s] and is {B}[ADJ.neg]",
+          "a {a}[NOUN] {A}[VERB.s] and is not {B}[ADJ]",
+          "a {a}[NOUN] {A}[VERB.s] and is {B}[ADJ.neg]",
 
-          "{a} {A}[VERB.s] and does not {B}[VERB]"
+          "a {a}[NOUN] {A}[VERB.s] and does not {B}[VERB]"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
-          "{a} is not {A}[ADJ] or {B}[ADJ]",
-          "{a} is not {A}[ADJ] and is {B}[ADJ.neg]",
-          "{a} is {A}[ADJ.neg] and is not {B}[ADJ]",
-          "{a} is {A}[ADJ.neg] and {B}[ADJ.neg]",
+          "a {a}[NOUN] is not {A}[ADJ] or {B}[ADJ]",
+          "a {a}[NOUN] is not {A}[ADJ] and is {B}[ADJ.neg]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and is not {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[ADJ.neg]",
 
-          "{a} is not {A}[ADJ] and does not {B}[VERB]",
-          "{a} is {A}[ADJ.neg] and {B}[VERB.s]",
+          "a {a}[NOUN] is not {A}[ADJ] and does not {B}[VERB]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[VERB.s]",
 
-          "{a} does not {A}[VERB] and is not {B}[ADJ]",
-          "{a} does not {A}[VERB] and is {B}[ADJ.neg]",
+          "a {a}[NOUN] does not {A}[VERB] and is not {B}[ADJ]",
+          "a {a}[NOUN] does not {A}[VERB] and is {B}[ADJ.neg]",
 
-          "{a} does not {A}[VERB.s] or {B}[VERB.s]"
+          "a {a}[NOUN] does not {A}[VERB.s] or {B}[VERB.s]"
       ],
 
 
 
       "({A}{a} v {B}{a})": [
-          "{a} either is {A}[ADJ] or is {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ] or is {B}[ADJ] or both",
 
-          "{a} either is {A}[ADJ] or {B}[VERB.s] or both",
+          "a {a}[NOUN] either is {A}[ADJ] or {B}[VERB.s] or both",
 
-          "{a} either {A}[VERB.s] or is {B}[ADJ] or both",
+          "a {a}[NOUN] either {A}[VERB.s] or is {B}[ADJ] or both",
 
-          "{a} either {A}[VERB.s] or {B}[VERB.s] or both"
+          "a {a}[NOUN] either {A}[VERB.s] or {B}[VERB.s] or both"
       ],
       "(¬{A}{a} v {B}{a})": [
-          "{a} either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "{a} either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+          "a {a}[NOUN] either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or is {B}[ADJ] or both",
 
-          "{a} either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "{a} either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+          "a {a}[NOUN] either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or {B}[VERB.s] or both",
 
-          "{a} either does not {A}[VERB] or is {B}[ADJ] or both",
+          "a {a}[NOUN] either does not {A}[VERB] or is {B}[ADJ] or both",
 
-          "{a} either does not {A}[VERB] or {B}[VERB.s] or both"
+          "a {a}[NOUN] either does not {A}[VERB] or {B}[VERB.s] or both"
       ],
       "({A}{a} v ¬{B}{a})": [
-          "{a} either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "{a} either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ] or is {B}[ADJ.neg] or both",
 
-          "{a} either is {A}[ADJ] or does not {B}[VERB] or both",
+          "a {a}[NOUN] either is {A}[ADJ] or does not {B}[VERB] or both",
 
-          "{a} either {A}[VERB.s] or is not {B}[ADJ] or both",
-          "{a} either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either {A}[VERB.s] or is {B}[ADJ.neg] or both",
 
-          "{a} either {A}[VERB.s] or does not {B}[VERB] or both"
+          "a {a}[NOUN] either {A}[VERB.s] or does not {B}[VERB] or both"
       ],
       "(¬{A}{a} v ¬{B}{a})": [
-          "{a} either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "{a} either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
-          "{a} either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
-          "{a} either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
 
-          "{a} either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "{a} either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+          "a {a}[NOUN] either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or does not {B}[VERB] or both",
         
-          "{a} either does not {A}[VERB] or is not {B}[ADJ] or both",
-          "{a} either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either does not {A}[VERB] or is {B}[ADJ.neg] or both",
 
-          "{a} either does not {A}[VERB] or does not {B}[VERB] or both"
+          "a {a}[NOUN] either does not {A}[VERB] or does not {B}[VERB] or both"
       ],
 
 
@@ -1161,51 +1161,51 @@
     "noun_clause": {
 
       "{A}.subj": [
-        "{A}[NOUN]"
+        "a {A}[NOUN]"
       ],
 
       "{A}.fact": [
-        "that {A}[NOUN] occurs"
+        "that a {A}[NOUN] occurs"
       ],
 
       "¬{A}.fact": [
-        "that {A}[NOUN] does not occur"
+        "that a {A}[NOUN] does not occur"
       ],
 
 
 
 
       "({A} & {B}).subj": [
-          "{A}[NOUN] and {B}[NOUN]"
+          "a {A}[NOUN] and a {B}[NOUN]"
       ],
       "({A} & {B}).fact": [
-          "that {A}[NOUN] and {B}[NOUN] occurs"
+          "that a {A}[NOUN] and a {B}[NOUN] occurs"
       ],
       "(¬{A} & {B}).fact": [
-          "that {A}[NOUN] does not occur and {B}[NOUN] occurs"
+          "that a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
       ],
       "({A} & ¬{B}).fact": [
-          "that {A}[NOUN] occurs and {B}[NOUN] does not occur"
+          "that a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
       ],
       "(¬{A} & ¬{B}).fact": [
-          "that {A}[NOUN] and {B}[NOUN] do not occur"
+          "that a {A}[NOUN] and a {B}[NOUN] do not occur"
       ],
 
 
       "({A} v {B}).subj": [
-          "{A}[NOUN] or {B}[NOUN] or both"
+          "a {A}[NOUN] or a {B}[NOUN] or both"
       ],
       "({A} v {B}).fact": [
-          "that either {A}[NOUN] occurs or {B}[NOUN] occurs or both"
+          "that either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
       ],
       "(¬{A} v {B}).fact": [
-          "that either {A}[NOUN] does not occur or {B}[NOUN] occurs or both"
+          "that either a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
       ],
       "({A} v ¬{B}).fact": [
-          "that either {A}[NOUN] occurs or {B}[NOUN] does not occur or both"
+          "that either a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
       ],
       "(¬{A} v ¬{B}).fact": [
-          "that either {A}[NOUN] does not occur or {B}[NOUN] does not occur or both"
+          "that either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
       ],
 
 
@@ -1214,131 +1214,131 @@
 
 
       "{A}{a}.subj": [
-        "{A}[ADJ] {a}",
-        "{a} that is {A}[ADJ]",
-        "{a} that {A}[VERB.s]"
+        "a {A}[ADJ] {a}[NOUN]",
+        "a {a}[NOUN] that is {A}[ADJ]",
+        "a {a}[NOUN] that {A}[VERB.s]"
       ],
       "¬{A}{a}.subj": [
-        "{A}[ADJ.neg] {a}",
-        "{a} that is not {A}[ADJ]",
-        "{a} that does not {A}[VERB]"
+        "a {A}[ADJ.neg] {a}[NOUN]",
+        "a {a}[NOUN] that is not {A}[ADJ]",
+        "a {a}[NOUN] that does not {A}[VERB]"
       ],
 
       
       "({A}{a} & {B}{a}).subj": [
-          "{A}[ADJ] and {B}[ADJ] {a}",
-          "{A}[ADJ] {a} that is {B}[ADJ]",
-          "{B}[ADJ] {a} that is {A}[ADJ]",
-          "{a} that is {A}[ADJ] and {B}[ADJ]",
+          "a {A}[ADJ] and {B}[ADJ] {a}[NOUN]",
+          "a {A}[ADJ] {a}[NOUN] that is {B}[ADJ]",
+          "a {B}[ADJ] {a}[NOUN] that is {A}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ] and {B}[ADJ]",
 
-          "{A}[ADJ] {a} that {B}[VERB.s]",
-          "{a} that is {A}[ADJ] and {B}[VERB.s]",
+          "a {A}[ADJ] {a}[NOUN] that {B}[VERB.s]",
+          "a {a}[NOUN] that is {A}[ADJ] and {B}[VERB.s]",
 
-          "{B}[ADJ] {a} that {A}[VERB.s]",
-          "{a} that is {B}[ADJ] and {A}[VERB.s]",
+          "a {B}[ADJ] {a}[NOUN] that {A}[VERB.s]",
+          "a {a}[NOUN] that is {B}[ADJ] and {A}[VERB.s]",
 
-          "{a} that {A}[VERB.s] and {B}[VERB.s]"
+          "a {a}[NOUN] that {A}[VERB.s] and {B}[VERB.s]"
       ],
       "(¬{A}{a} & {B}{a}).subj": [
-          "{A}[ADJ.neg] and {B}[ADJ] {a}",
-          "{A}[ADJ.neg] {a} that is {B}[ADJ]",
-          "{B}[ADJ] {a} that is not {A}[ADJ]",
-          "{B}[ADJ] {a} that is {A}[ADJ.neg]",
-          "{a} that is not {A}[ADJ] and is {B}[ADJ]",
-          "{a} that is {A}[ADJ.neg] and {B}[ADJ]",
+          "a {A}[ADJ.neg] and {B}[ADJ] {a}[NOUN]",
+          "a {A}[ADJ.neg] {a}[NOUN] that is {B}[ADJ]",
+          "a {B}[ADJ] {a}[NOUN] that is not {A}[ADJ]",
+          "a {B}[ADJ] {a}[NOUN] that is {A}[ADJ.neg]",
+          "a {a}[NOUN] that is not {A}[ADJ] and is {B}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[ADJ]",
 
-          "{A}[ADJ.neg] {a} that {B}[VERB.s]",
-          "{a} that is not {A}[ADJ] and {B}[VERB.s]",
-          "{a} that is {A}[ADJ.neg] and {B}[VERB.s]",
+          "a {A}[ADJ.neg] {a}[NOUN] that {B}[VERB.s]",
+          "a {a}[NOUN] that is not {A}[ADJ] and {B}[VERB.s]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[VERB.s]",
 
-          "{B}[ADJ] {a} that does not {A}[VERB]",
-          "{a} that is {B}[ADJ] and does not {A}[VERB]",
+          "a {B}[ADJ] {a}[NOUN] that does not {A}[VERB]",
+          "a {a}[NOUN] that is {B}[ADJ] and does not {A}[VERB]",
 
-          "{a} that does not {A}[VERB.s] and does {B}[VERB.s]"
+          "a {a}[NOUN] that does not {A}[VERB.s] and does {B}[VERB.s]"
       ],
       "({A}{a} & ¬{B}{a}).subj": [
-          "{A}[ADJ] and {B}[ADJ.neg] {a}",
-          "{A}[ADJ] {a} that is not {B}[ADJ]",
-          "{A}[ADJ] {a} that is {B}[ADJ.neg]",
-          "{B}[ADJ.neg] {a} that is {A}[ADJ]",
-          "{a} that is {A}[ADJ] and is not {B}[ADJ]",
-          "{a} that is {A}[ADJ] and {B}[ADJ.neg]",
+          "a {A}[ADJ] and {B}[ADJ.neg] {a}[NOUN]",
+          "a {A}[ADJ] {a}[NOUN] that is not {B}[ADJ]",
+          "a {A}[ADJ] {a}[NOUN] that is {B}[ADJ.neg]",
+          "a {B}[ADJ.neg] {a}[NOUN] that is {A}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ] and is not {B}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ] and {B}[ADJ.neg]",
 
-          "{A}[ADJ] {a} that does not {B}[VERB]",
-          "{a} that is {A}[ADJ] and does not {B}[VERB]",
+          "a {A}[ADJ] {a}[NOUN] that does not {B}[VERB]",
+          "a {a}[NOUN] that is {A}[ADJ] and does not {B}[VERB]",
 
-          "{B}[ADJ.neg] {a} that {A}[VERB.s]",
-          "{a} that is not {B}[ADJ] and {A}[VERB.s]",
-          "{a} that is {B}[ADJ.neg] and {A}[VERB.s]",
+          "a {B}[ADJ.neg] {a}[NOUN] that {A}[VERB.s]",
+          "a {a}[NOUN] that is not {B}[ADJ] and {A}[VERB.s]",
+          "a {a}[NOUN] that is {B}[ADJ.neg] and {A}[VERB.s]",
 
-          "{a} that {A}[VERB.s] and does not {B}[VERB]"
+          "a {a}[NOUN] that {A}[VERB.s] and does not {B}[VERB]"
       ],
       "(¬{A}{a} & ¬{B}{a}).subj": [
-          "{A}[ADJ.neg] and {B}[ADJ.neg] {a}",
-          "{A}[ADJ.neg] {a} that is not {B}[ADJ]",
-          "{A}[ADJ.neg] {a} that is {B}[ADJ.neg]",
-          "{B}[ADJ.neg] {a} that is not {A}[ADJ]",
-          "{B}[ADJ.neg] {a} that is {A}[ADJ.neg]",
-          "{a} that is not {A}[ADJ] or {B}[ADJ]",
-          "{a} that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+          "a {A}[ADJ.neg] and {B}[ADJ.neg] {a}[NOUN]",
+          "a {A}[ADJ.neg] {a}[NOUN] that is not {B}[ADJ]",
+          "a {A}[ADJ.neg] {a}[NOUN] that is {B}[ADJ.neg]",
+          "a {B}[ADJ.neg] {a}[NOUN] that is not {A}[ADJ]",
+          "a {B}[ADJ.neg] {a}[NOUN] that is {A}[ADJ.neg]",
+          "a {a}[NOUN] that is not {A}[ADJ] or {B}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[ADJ.neg]",
 
-          "{A}[ADJ.neg] {a} that does not {B}[VERB]",
-          "{a} that is not {A}[ADJ] and does not {B}[VERB]",
-          "{a} that is {A}[ADJ.neg] and does not {B}[VERB]",
+          "a {A}[ADJ.neg] {a}[NOUN] that does not {B}[VERB]",
+          "a {a}[NOUN] that is not {A}[ADJ] and does not {B}[VERB]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and does not {B}[VERB]",
 
-          "{B}[ADJ.neg] {a} that does not {A}[VERB]",
-          "{a} that is not {B}[ADJ] and does not {A}[VERB]",
-          "{a} that is {B}[ADJ.neg] and does not {A}[VERB]",
+          "a {B}[ADJ.neg] {a}[NOUN] that does not {A}[VERB]",
+          "a {a}[NOUN] that is not {B}[ADJ] and does not {A}[VERB]",
+          "a {a}[NOUN] that is {B}[ADJ.neg] and does not {A}[VERB]",
 
-          "{a} that does not {A}[VERB] or {B}[VERB]"
+          "a {a}[NOUN] that does not {A}[VERB] or {B}[VERB]"
       ],
 
 
       "({A}{a} v {B}{a}).subj": [
-          "{a} that either is {A}[ADJ] or is {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ] or is {B}[ADJ] or both",
 
-          "{a} that either {A}[VERB.s] or is {B}[ADJ] or both",
+          "a {a}[NOUN] that either {A}[VERB.s] or is {B}[ADJ] or both",
 
-          "{a} that either is {A}[ADJ] or {B}[VERB.s] or both",
+          "a {a}[NOUN] that either is {A}[ADJ] or {B}[VERB.s] or both",
 
-          "{a} that either {A}[VERB.s] or {B}[VERB.s] or both"
+          "a {a}[NOUN] that either {A}[VERB.s] or {B}[VERB.s] or both"
 
       ],
       "(¬{A}{a} v {B}{a}).subj": [
-          "{a} that either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "{a} that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+          "a {a}[NOUN] that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
 
-          "{a} that either does not {A}[VERB] or is {B}[ADJ] or both",
+          "a {a}[NOUN] that either does not {A}[VERB] or is {B}[ADJ] or both",
 
-          "{a} that either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "{a} that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+          "a {a}[NOUN] that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
 
-          "{a} that either does not {A}[VERB] or {B}[VERB.s] or both"
+          "a {a}[NOUN] that either does not {A}[VERB] or {B}[VERB.s] or both"
       ],
       "({A}{a} v ¬{B}{a}).subj": [
-          "{a} that either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "{a} that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
 
-          "{a} that either {A}[VERB.s] or is not {B}[ADJ] or both",
-          "{a} that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
 
-          "{a} that either is {A}[ADJ] or does not {B}[VERB] or both",
+          "a {a}[NOUN] that either is {A}[ADJ] or does not {B}[VERB] or both",
 
-          "{a} that either {A}[VERB.s] or does not {B}[VERB] or both"
+          "a {a}[NOUN] that either {A}[VERB.s] or does not {B}[VERB] or both"
       ],
       "(¬{A}{a} v ¬{B}{a}).subj": [
-          "{a} that either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "{a} that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
-          "{a} that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
-          "{a} that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
 
-          "{a} that either does not {A}[VERB] or is not {B}[ADJ] or both",
-          "{a} that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
 
-          "{a} that either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "{a} that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+          "a {a}[NOUN] that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
 
-          "{a} that either does not {A}[VERB] or does not {B}[VERB] or both"
+          "a {a}[NOUN] that either does not {A}[VERB] or does not {B}[VERB] or both"
       ],
 
 

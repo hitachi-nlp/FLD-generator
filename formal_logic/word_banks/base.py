@@ -31,6 +31,8 @@ class AdjForm(Enum):
 
 class NounForm(Enum):
     NORMAL = 'normal'
+    SINGULAR = 's'
+    SINGULAR_WITH_PARTICLE = 'swa'
 
 
 def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
