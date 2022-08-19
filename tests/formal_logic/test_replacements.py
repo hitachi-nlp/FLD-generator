@@ -1,7 +1,7 @@
 from typing import List
 from formal_logic.replacements import (
     _expand_op,
-    generate_universal_quantifier_elimination_arguments,
+    generate_quantifier_arguments,
     formula_is_identical_to,
     argument_is_identical_to,
 )
@@ -105,13 +105,14 @@ def test_argument_is_identical_to():
     )
 
 
-def test_generate_universal_quantifier_elimination_arguments():
+def test_generate_quantifier_arguments():
 
-
-    def check_generation(formula: Formula, expected_arguments: List[Argument]):
-        generated_arguments = list(generate_universal_quantifier_elimination_arguments(formula, id_prefix='test'))
+    def check_generation(argument_type: str,
+                         formula: Formula,
+                         expected_arguments: List[Argument]):
+        generated_arguments = list(generate_quantifier_arguments(argument_type, formula, id_prefix='test'))
         print()
-        print(f'---------   universal quantified formulas for "{formula.rep}" ------')
+        print(f'--------- {argument_type} for "{formula.rep}" ------')
         for generated_argument in generated_arguments:
             print(f'{str(generated_argument)}')
 
@@ -120,9 +121,10 @@ def test_generate_universal_quantifier_elimination_arguments():
             assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_one_replacements=False)
                        for expected_argument in expected_arguments))
 
-    print('\n\n\n================= test_generate_universal_quantifier_elimination_arguments() ====================')
+    print('\n\n\n================= test_generate_quantifier_arguments() ====================')
 
     check_generation(
+        'universal_quantifier_elim',
         Formula('{F}{a} -> {G}{a}'),
         [
             Argument(
@@ -133,6 +135,7 @@ def test_generate_universal_quantifier_elimination_arguments():
     )
 
     check_generation(
+        'universal_quantifier_elim',
         Formula('({F}{a} v {G}{b}) -> {H}{c}'),
         [
             Argument(
@@ -170,6 +173,55 @@ def test_generate_universal_quantifier_elimination_arguments():
         ]
     )
 
+    check_generation(
+        'existential_quantifier_intro',
+        Formula('{F}{a} -> {G}{a}'),
+        [
+            Argument(
+                [Formula('{F}{a} -> {G}{a}')],
+                Formula('(Ex): {F}x -> {G}x'),
+            ),
+        ]
+    )
+
+    check_generation(
+        'existential_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('({F}{i} v {G}{b}) -> {H}{c}')],
+                Formula('(Ex): ({F}x v {G}{b}) -> {H}{c}'),
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{i}) -> {H}{c}')],
+                Formula('(Ex): ({F}{a} v {G}x) -> {H}{c}'),
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
+                Formula('(Ex): ({F}{a} v {G}{b}) -> {H}x'),
+            ),
+
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
+                Formula('(Ex): ({F}x v {G}x) -> {H}{c}'),
+            ),
+            Argument(
+                [Formula('({F}{i} v {G}{b}) -> {H}{i}')],
+                Formula('(Ex): ({F}x v {G}{b}) -> {H}x'),
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{i}) -> {H}{i}')],
+                Formula('(Ex): ({F}{a} v {G}x) -> {H}x'),
+            ),
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(Ex): ({F}x v {G}x) -> {H}x'),
+            ),
+
+        ]
+    )
 
 
 if __name__ == '__main__':
@@ -177,4 +229,4 @@ if __name__ == '__main__':
     test_expand_op()
     test_formula_is_identical_to()
     test_argument_is_identical_to()
-    test_generate_universal_quantifier_elimination_arguments()
+    test_generate_quantifier_arguments()

@@ -468,42 +468,22 @@ def argument_is_identical_to(this_argument: Argument,
     return False
 
 
-def generate_universal_quantifier_elimination_arguments(formula: Formula, id_prefix: Optional[str] = None) -> Iterable[Argument]:
+# TODO: existential quantifier
+def generate_quantifier_arguments(
+    argument_type: str,
+    formula: Formula,
+    id_prefix: Optional[str] = None,
+) -> Iterable[Argument]:
     """
+
     Examples:
-
-        input formula   : {F}{a} -> {G}{a}
-        output arguments :
-            [
-                Argument(
-                    premises   : [(x): {F}x -> {G}{x}]
-                    conclusion : {F}{b} -> {G}{b}
-                ),
-            ]
-
-
-        input formula   : {F}{a} v {G}{b} -> {H}{c}
-        output arguments :
-            premises   : [(x): {F}x -> {G}{x}]
-            conclusion :
-            [
-                Argument(
-                    premises   : [(x): ({F}x v {G}{b}) -> {G}{c}]
-                    conclusion : ({F}{d} v {G}{b}) -> {G}{c}
-                ),
-                Argument(
-                    premises   : [(x): ({F}{a} v {G}x) -> {G}{c}]
-                    conclusion : ({F}{a} v {G}{d}) -> {G}{c}
-                ),
-                ...
-            ]
-
+        See the test codes.
     """
     if len(formula.variables) > 0:
         raise NotImplementedError('Multiple quantifier is not supported yet.')
 
-    concluded_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
     quantified_variable = sorted(set(VARIABLES) - {v.rep for v in formula.variables})[0]
+    de_quantified_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
 
     def generate_quantifier_mappings(constants: List[Formula]) -> Iterable[Dict]:
         if len(constants) == 0:
@@ -519,16 +499,29 @@ def generate_universal_quantifier_elimination_arguments(formula: Formula, id_pre
     for i, quantifier_mapping in enumerate(generate_quantifier_mappings(formula.constants)):
         if quantified_variable not in quantifier_mapping.values():
             continue
+        de_quantified_mapping = {src: (de_quantified_constant if tgt == quantified_variable else src)
+                                 for src, tgt in quantifier_mapping.items()}
 
-        quantified_formula = Formula(f'({quantified_variable}): ' + replace_formula(formula, quantifier_mapping).rep)
+        if argument_type == 'universal_quantifier_elim':
+            quantified_formula = Formula(f'({quantified_variable}): ' + replace_formula(formula, quantifier_mapping).rep)
+            de_quantified_formula = replace_formula(formula, de_quantified_mapping)
+            argument_id = f'{id_prefix}.univ_quant_elim-{i}' if id_prefix is not None else f'univ_quant_elim-{i}'
+            argument = Argument(
+                [quantified_formula],
+                de_quantified_formula,
+                id = argument_id,
+            )
+        elif argument_type == 'existential_quantifier_intro':
+            quantified_formula = Formula(f'(E{quantified_variable}): ' + replace_formula(formula, quantifier_mapping).rep)
+            de_quantified_formula = replace_formula(formula, de_quantified_mapping)
+            argument_id = f'{id_prefix}.exist_quant_intro-{i}' if id_prefix is not None else f'exist_quant_intro-{i}'
+            argument = Argument(
+                [de_quantified_formula],
+                quantified_formula,
+                id = argument_id,
+            )
+        else:
+            raise ValueError()
 
-        conclusion_mapping = {src: (concluded_constant if tgt == quantified_variable else src)
-                              for src, tgt in quantifier_mapping.items()}
+        yield argument
 
-        conclusion_formula = replace_formula(formula, conclusion_mapping)
-
-        yield Argument(
-            [quantified_formula],
-            conclusion_formula,
-            id = f'{id_prefix}.univ_quant-{i}' if id_prefix is not None else f'univ_quant-{i}'
-        )
