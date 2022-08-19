@@ -3,9 +3,11 @@ from formal_logic.replacements import (
     _expand_op,
     generate_universal_quantifier_elimination_arguments,
     formula_is_identical_to,
+    argument_is_identical_to,
 )
 from formal_logic.proof_tree_generators import generate_replacement_mappings_from_formula
 from formal_logic.formula import Formula
+from formal_logic.argument import Argument
 
 
 # TODO: update this test code to be consistent with allow_complication=True
@@ -55,6 +57,54 @@ def test_formula_is_identical_to():
     assert not formula_is_identical_to(that, this, allow_many_to_one_replacements=False)
 
 
+def test_argument_is_identical_to():
+
+    assert argument_is_identical_to(
+        Argument(
+            [Formula('{A} v {B}'), Formula('¬{B}')],
+            Formula('{A}'),
+        ),
+        Argument(
+            [Formula('¬{Q}'), Formula('{P} v {Q}')],
+            Formula('{P}'),
+        ),
+    )
+
+    assert argument_is_identical_to(
+        Argument(
+            [Formula('{A} v {B}'), Formula('¬{B}')],
+            Formula('{C}'),
+        ),
+        Argument(
+            [Formula('¬{Q}'), Formula('{P} v {Q}')],
+            Formula('{P}'),
+        ),
+    )
+
+    assert not argument_is_identical_to(
+        Argument(
+            [Formula('{A} v {B}'), Formula('¬{B}')],
+            Formula('{C}'),
+        ),
+        Argument(
+            [Formula('¬{Q}'), Formula('{P} v {Q}')],
+            Formula('{P}'),
+        ),
+        allow_many_to_one_replacements=False,
+    )
+
+    assert not argument_is_identical_to(
+        Argument(
+            [Formula('{A} v {B}'), Formula('¬{B}')],
+            Formula('{A}'),
+        ),
+        Argument(
+            [Formula('{P}'), Formula('{P} -> {Q}')],
+            Formula('{Q}'),
+        ),
+    )
+
+
 def test_generate_universal_quantifier_elimination_arguments():
 
     def check_generation(formula: Formula, expected_formulas: List[Formula]):
@@ -72,3 +122,4 @@ if __name__ == '__main__':
     # test_replacements()
     test_expand_op()
     test_formula_is_identical_to()
+    test_argument_is_identical_to()

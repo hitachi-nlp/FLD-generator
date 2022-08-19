@@ -2,6 +2,7 @@ import re
 import random
 from typing import Dict, List, Any, Iterable, Tuple, Optional, Union
 import copy
+from itertools import permutations
 
 from .formula import (
     Formula,
@@ -129,6 +130,23 @@ def generate_replaced_formulas(src_formula: Formula,
                                                               block_shuffle=block_shuffle,
                                                               allow_replacement=allow_replacement):
         yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
+
+
+@profile
+def generate_replacement_mappings_from_argument(src_argument: Argument,
+                                                tgt_argument: Argument,
+                                                allow_complication=False,
+                                                constraints: Optional[Dict[str, str]] = None,
+                                                block_shuffle=False,
+                                                allow_replacement=True) -> Iterable[Dict[str, str]]:
+    yield from generate_replacement_mappings_from_formula(
+        src_argument.all_formulas,
+        tgt_argument.all_formulas,
+        allow_complication=allow_complication,
+        constraints=constraints,
+        block_shuffle=block_shuffle,
+        allow_replacement=allow_replacement,
+    )
 
 
 @profile
@@ -336,8 +354,8 @@ def replace_rep(rep: str,
     return replaced
 
 
-def formula_is_identical_to(this: Formula,
-                            that: Formula,
+def formula_is_identical_to(this_formula: Formula,
+                            that_formula: Formula,
                             allow_many_to_one_replacements=True,
                             allow_complication=False,
                             elim_dneg=False) -> bool:
@@ -355,23 +373,23 @@ def formula_is_identical_to(this: Formula,
         formula_is_identical_to(that, this, allow_many_to_one_replacements=False): False
     """
     if elim_dneg:
-        this = eliminate_double_negation(this)
-        that = eliminate_double_negation(that)
+        this_formula = eliminate_double_negation(this_formula)
+        that_formula = eliminate_double_negation(that_formula)
 
-    if formula_can_not_be_identical_to(this, that, allow_complication=allow_complication, elim_dneg=elim_dneg):
+    if formula_can_not_be_identical_to(this_formula, that_formula, allow_complication=allow_complication, elim_dneg=elim_dneg):
         return False
 
-    for mapping in generate_replacement_mappings_from_formula([this], [that], allow_complication=allow_complication):
+    for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], allow_complication=allow_complication):
         if not allow_many_to_one_replacements and len(set(mapping.values())) < len(mapping):
             continue
-        this_replaced = replace_formula(this, mapping)
-        if this_replaced.rep == that.rep:
+        this_replaced = replace_formula(this_formula, mapping)
+        if this_replaced.rep == that_formula.rep:
             return True
     return False
 
 
-def formula_can_not_be_identical_to(this: Formula,
-                                    that: Formula,
+def formula_can_not_be_identical_to(this_formula: Formula,
+                                    that_formula: Formula,
                                     allow_complication=False,
                                     elim_dneg=False) -> bool:
     """ Decide whether two formulas can not be identical by any mapping. Used for early rejection of is_formula_identical.
@@ -379,19 +397,73 @@ def formula_can_not_be_identical_to(this: Formula,
     NOTE that False does not mean two formulas are identical.
     """
     if elim_dneg:
-        this = eliminate_double_negation(this)
-        that = eliminate_double_negation(that)
+        this_formula = eliminate_double_negation(this_formula)
+        that_formula = eliminate_double_negation(that_formula)
     if allow_complication:
         # A little costly to implemente since the number of operators change by complication
         raise NotImplementedError()
 
-    return any([this.rep.count(symbol) != that.rep.count(symbol)
+    return any([this_formula.rep.count(symbol) != that_formula.rep.count(symbol)
                 for symbol in [AND, OR, IMPLICATION, NOT]])
 
 
+def argument_is_identical_to(this_argument: Argument,
+                             that_argument: Argument,
+                             allow_many_to_one_replacements=True,
+                             allow_complication=False,
+                             elim_dneg=False) -> bool:
 
-def is_argument_identical(this: Argument,
-                          that: Argument,
-                          allow_complication=False,
-                          elim_dneg=False) -> bool:
-    raise NotImplementedError()
+    def _formula_can_not_be_identical_to(this_formula: Formula, that_formula: Formula) -> bool:
+        return formula_can_not_be_identical_to(this_formula, that_formula,
+                                               allow_complication=allow_complication,
+                                               elim_dneg=elim_dneg)
+
+    # early rejections by conclusion
+    if _formula_can_not_be_identical_to(this_argument.conclusion, that_argument.conclusion):
+        return False
+
+    # early rejections by premises
+    if len(this_argument.premises) != len(that_argument.premises):
+        return False
+    if any(
+        all(_formula_can_not_be_identical_to(this_premise, that_premise)
+            for that_premise in that_argument.premises)
+        for this_premise in this_argument.premises
+    ):
+        return False
+
+    def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
+        return this_argument.conclusion.rep == that_argument.conclusion.rep
+
+    def is_premises_same(this_argument: Argument, that_argument: Argument) -> bool:
+        is_premises_same = False
+        for that_premises_permutated in permutations(that_argument.premises):
+            if all(this_premise.rep == that_premise.rep
+                   for this_premise, that_premise, in zip(this_argument.premises, that_premises_permutated)):
+                   is_premises_same = True
+                   break
+        return is_premises_same
+
+    # check the exact identification condition.
+    for mapping in generate_replacement_mappings_from_argument(this_argument,
+                                                               that_argument,
+                                                               allow_complication=allow_complication):
+        if not allow_many_to_one_replacements and len(set(mapping.values())) < len(mapping):
+            continue
+
+        this_argument_replaced = replace_argument(this_argument, mapping, elim_dneg=elim_dneg)
+
+        if is_conclusion_same(this_argument_replaced, that_argument)\
+                and is_premises_same(this_argument_replaced, that_argument):
+            return True
+        else:
+            False
+
+    # It is possible that no mappings are found (e.g. when no predicate and constants are in arguments)
+    # but the arguments are the same from the beggining
+    if is_conclusion_same(this_argument, that_argument)\
+            and is_premises_same(this_argument, that_argument):
+        return True
+
+    return False
+

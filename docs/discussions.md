@@ -1,4 +1,6 @@
 # todo
+* allow_many_to_one_replacementsの場所．mappingnに実装してしまうこともできる．
+* elim_dnegをどこでやるか？
 * num_terms => generality
 * コンポーネントを完成させていく
     * "proof tree generation"
