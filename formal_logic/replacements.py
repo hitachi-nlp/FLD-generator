@@ -314,7 +314,7 @@ def replace_argument(arg: Argument,
 def replace_formula(formula: Formula,
                     replacements: Dict[str, str],
                     elim_dneg=False) -> Formula:
-    return _expand_op(Formula(replace_rep(formula.rep, replacements, elim_dneg=elim_dneg)))
+    return _expand_op(Formula(_replace_rep(formula.rep, replacements, elim_dneg=elim_dneg)))
 
 
 _expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
@@ -339,9 +339,9 @@ def _expand_op(formula: Formula) -> Formula:
     return Formula(rep)
 
 
-def replace_rep(rep: str,
-                replacements: Dict[str, str],
-                elim_dneg=False) -> str:
+def _replace_rep(rep: str,
+                 replacements: Dict[str, str],
+                 elim_dneg=False) -> str:
     replaced = rep
 
     if len(replacements) >= 1:
@@ -380,7 +380,7 @@ def formula_is_identical_to(this_formula: Formula,
         return False
 
     for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], allow_complication=allow_complication, allow_many_to_one_replacement=allow_many_to_one_replacementg):
-        this_replaced = replace_formula(this_formula, mapping)
+        this_replaced = replace_formula(this_formula, mapping, elim_dneg=elim_dneg)
         if this_replaced.rep == that_formula.rep:
             return True
     return False
@@ -438,8 +438,8 @@ def argument_is_identical_to(this_argument: Argument,
         for that_premises_permutated in permutations(that_argument.premises):
             if all(this_premise.rep == that_premise.rep
                    for this_premise, that_premise, in zip(this_argument.premises, that_premises_permutated)):
-                   is_premises_same = True
-                   break
+                is_premises_same = True
+                break
         return is_premises_same
 
     # check the exact identification condition.

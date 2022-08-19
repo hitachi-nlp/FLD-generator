@@ -1,5 +1,4 @@
 # todo
-* elim_dnegをどこでやるか？
 * num_terms => generality
 
 * コンポーネントを完成させていく
