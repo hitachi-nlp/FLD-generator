@@ -1,0 +1,17 @@
+[
+  {
+      "id": "contraposition",
+      "premises": [
+          "{A}{a} -> {B}{b}"
+      ],
+      "conclusion": "¬{B}{b} -> ¬{A}{a}"
+  },
+  {
+      "id": "syllogism_0",
+      "premises": [
+          "{A}{a} -> {B}{b}",
+          "{B}{b} -> {C}{c}"
+      ],
+      "conclusion": "{A}{a} -> {C}{c}"
+  }
+]
