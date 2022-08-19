@@ -105,14 +105,14 @@ def generate_replaced_arguments(src_arg: Argument,
                                 allow_complication=False,
                                 constraints: Optional[Dict[str, str]] = None,
                                 block_shuffle=False,
-                                allow_replacement=True,
+                                allow_many_to_one_replacement=True,
                                 elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
                                                               tgt_arg.premises + [tgt_arg.conclusion],
                                                               allow_complication=allow_complication,
                                                               constraints=constraints,
                                                               block_shuffle=block_shuffle,
-                                                              allow_replacement=allow_replacement):
+                                                              allow_many_to_one_replacement=allow_many_to_one_replacement):
         yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
 
@@ -121,14 +121,14 @@ def generate_replaced_formulas(src_formula: Formula,
                                allow_complication=False,
                                constraints: Optional[Dict[str, str]] = None,
                                block_shuffle=False,
-                               allow_replacement=True,
+                               allow_many_to_one_replacement=True,
                                elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula([src_formula],
                                                               [tgt_formula],
                                                               allow_complication=allow_complication,
                                                               constraints=constraints,
                                                               block_shuffle=block_shuffle,
-                                                              allow_replacement=allow_replacement):
+                                                              allow_many_to_one_replacement=allow_many_to_one_replacement):
         yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
@@ -138,14 +138,14 @@ def generate_replacement_mappings_from_argument(src_argument: Argument,
                                                 allow_complication=False,
                                                 constraints: Optional[Dict[str, str]] = None,
                                                 block_shuffle=False,
-                                                allow_replacement=True) -> Iterable[Dict[str, str]]:
+                                                allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
     yield from generate_replacement_mappings_from_formula(
         src_argument.all_formulas,
         tgt_argument.all_formulas,
         allow_complication=allow_complication,
         constraints=constraints,
         block_shuffle=block_shuffle,
-        allow_replacement=allow_replacement,
+        allow_many_to_one_replacement=allow_many_to_one_replacement,
     )
 
 
@@ -155,7 +155,7 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                allow_complication=False,
                                                constraints: Optional[Dict[str, str]] = None,
                                                block_shuffle=False,
-                                               allow_replacement=True) -> Iterable[Dict[str, str]]:
+                                               allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
     if allow_complication:
         complication_mappings = generate_complication_mappings_from_formula(src_formulas)
     else:
@@ -181,7 +181,7 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                             tgt_constants,
                                                             constraints=constraints,
                                                             block_shuffle=block_shuffle,
-                                                            allow_replacement=allow_replacement)
+                                                            allow_many_to_one_replacement=allow_many_to_one_replacement)
 
 
 @profile
@@ -191,13 +191,13 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
                                              tgt_constants: List[str],
                                              constraints: Optional[Dict[str, str]] = None,
                                              block_shuffle=False,
-                                             allow_replacement=True) -> Iterable[Dict[str, str]]:
+                                             allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
     get_pred_replacements = lambda: _generate_replacement_mappings(
         src_predicates,
         tgt_predicates,
         constraints=constraints,
         block_shuffle=block_shuffle,
-        allow_replacement=allow_replacement,
+        allow_many_to_one_replacement=allow_many_to_one_replacement,
     )
 
     get_const_replacements = lambda: _generate_replacement_mappings(
@@ -205,7 +205,7 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
         tgt_constants,
         constraints=constraints,
         block_shuffle=block_shuffle,
-        allow_replacement=allow_replacement,
+        allow_many_to_one_replacement=allow_many_to_one_replacement,
     )
 
     for pred_replacements in get_pred_replacements():
@@ -223,7 +223,7 @@ def _generate_replacement_mappings(src_objs: List[Any],
                                    tgt_objs: List[Any],
                                    constraints: Optional[Dict[Any, Any]] = None,
                                    block_shuffle=False,
-                                   allow_replacement=True) -> Iterable[Optional[Dict[Any, Any]]]:
+                                   allow_many_to_one_replacement=True) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError('Elements in src_objs are not unique: {src_objs}')
     if len(set(tgt_objs)) != len(tgt_objs):
@@ -240,7 +240,7 @@ def _generate_replacement_mappings(src_objs: List[Any],
                                                   len(src_objs),
                                                   constraints=idx_constraints,
                                                   block_shuffle=block_shuffle,
-                                                  allow_replacement=allow_replacement):
+                                                  allow_many_to_one_replacement=allow_many_to_one_replacement):
             yield {
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
@@ -259,7 +259,7 @@ def _make_permutations(objs: List[Any],
                        src_idx=0,
                        constraints: Optional[Dict[int, Any]] = None,
                        block_shuffle=False,
-                       allow_replacement=True) -> Iterable[List[Any]]:
+                       allow_many_to_one_replacement=True) -> Iterable[List[Any]]:
     """
 
     block_shuffle=Trueであって，完全にblock_shuffleできるわけではない．
@@ -283,7 +283,7 @@ def _make_permutations(objs: List[Any],
         else:
             heads = objs
         for head in heads:
-            if allow_replacement:
+            if allow_many_to_one_replacement:
                 tail_objs = objs
             else:
                 tail_objs = objs.copy()
@@ -294,7 +294,7 @@ def _make_permutations(objs: List[Any],
                                            src_idx=src_idx + 1,
                                            constraints=constraints,
                                            block_shuffle=block_shuffle,
-                                           allow_replacement=allow_replacement):
+                                           allow_many_to_one_replacement=allow_many_to_one_replacement):
                 yield [head] + tail
 
 
@@ -356,21 +356,21 @@ def replace_rep(rep: str,
 
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
-                            allow_many_to_one_replacements=True,
+                            allow_many_to_one_replacementg=True,
                             allow_complication=False,
                             elim_dneg=False) -> bool:
     """ Check whether this formula can be the same as that formula by any replacement mapping.
 
-    Note that this and that is not symmetrical, unless allow_many_to_one_replacements=False.
+    Note that this and that is not symmetrical, unless allow_many_to_one_replacementg=False.
     For example:
         this: {A}{a} -> {B}{b}
         that: {A}{a} -> {A}{a}
 
-        formula_is_identical_to(this, that, allow_many_to_one_replacements=True): True
-        formula_is_identical_to(that, this, allow_many_to_one_replacements=True): False
+        formula_is_identical_to(this, that, allow_many_to_one_replacementg=True): True
+        formula_is_identical_to(that, this, allow_many_to_one_replacementg=True): False
 
-        formula_is_identical_to(this, that, allow_many_to_one_replacements=False): False
-        formula_is_identical_to(that, this, allow_many_to_one_replacements=False): False
+        formula_is_identical_to(this, that, allow_many_to_one_replacementg=False): False
+        formula_is_identical_to(that, this, allow_many_to_one_replacementg=False): False
     """
     if elim_dneg:
         this_formula = eliminate_double_negation(this_formula)
@@ -379,9 +379,7 @@ def formula_is_identical_to(this_formula: Formula,
     if formula_can_not_be_identical_to(this_formula, that_formula, allow_complication=allow_complication, elim_dneg=elim_dneg):
         return False
 
-    for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], allow_complication=allow_complication):
-        if not allow_many_to_one_replacements and len(set(mapping.values())) < len(mapping):
-            continue
+    for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], allow_complication=allow_complication, allow_many_to_one_replacement=allow_many_to_one_replacementg):
         this_replaced = replace_formula(this_formula, mapping)
         if this_replaced.rep == that_formula.rep:
             return True
@@ -409,7 +407,7 @@ def formula_can_not_be_identical_to(this_formula: Formula,
 
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
-                             allow_many_to_one_replacements=True,
+                             allow_many_to_one_replacementg=True,
                              allow_complication=False,
                              elim_dneg=False) -> bool:
 
@@ -447,10 +445,8 @@ def argument_is_identical_to(this_argument: Argument,
     # check the exact identification condition.
     for mapping in generate_replacement_mappings_from_argument(this_argument,
                                                                that_argument,
-                                                               allow_complication=allow_complication):
-        if not allow_many_to_one_replacements and len(set(mapping.values())) < len(mapping):
-            continue
-
+                                                               allow_complication=allow_complication,
+                                                               allow_many_to_one_replacement=allow_many_to_one_replacementg):
         this_argument_replaced = replace_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
         if is_conclusion_same(this_argument_replaced, that_argument)\
@@ -525,4 +521,3 @@ def generate_quantifier_arguments(
             raise ValueError()
 
         yield argument
-

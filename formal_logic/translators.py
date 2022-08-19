@@ -358,7 +358,7 @@ class ClauseTypedTranslator(Translator):
                 random.sample(self._event_nouns, len(zeroary_predicates) * 3),
                 [],
                 block_shuffle=True,
-                allow_replacement=False,
+                allow_many_to_one_replacement=False,
             )
         )
 
@@ -370,7 +370,7 @@ class ClauseTypedTranslator(Translator):
                 random.sample(self._adj_and_verbs, len(unary_predicates) * 3),
                 random.sample(self._entity_nouns, len(constants) * 3),
                 block_shuffle=True,
-                allow_replacement=False,
+                allow_many_to_one_replacement=False,
             )
         )
 

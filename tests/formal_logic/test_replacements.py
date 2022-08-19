@@ -50,11 +50,11 @@ def test_formula_is_identical_to():
     this = Formula('{A}{a} -> {B}{b}')
     that = Formula('{A}{a} -> {A}{a}')
 
-    assert formula_is_identical_to(this, that, allow_many_to_one_replacements=True)
-    assert not formula_is_identical_to(that, this, allow_many_to_one_replacements=True)
+    assert formula_is_identical_to(this, that, allow_many_to_one_replacementg=True)
+    assert not formula_is_identical_to(that, this, allow_many_to_one_replacementg=True)
 
-    assert not formula_is_identical_to(this, that, allow_many_to_one_replacements=False)
-    assert not formula_is_identical_to(that, this, allow_many_to_one_replacements=False)
+    assert not formula_is_identical_to(this, that, allow_many_to_one_replacementg=False)
+    assert not formula_is_identical_to(that, this, allow_many_to_one_replacementg=False)
 
 
 def test_argument_is_identical_to():
@@ -90,7 +90,7 @@ def test_argument_is_identical_to():
             [Formula('¬{Q}'), Formula('{P} v {Q}')],
             Formula('{P}'),
         ),
-        allow_many_to_one_replacements=False,
+        allow_many_to_one_replacementg=False,
     )
 
     assert not argument_is_identical_to(
@@ -120,7 +120,7 @@ def test_generate_quantifier_arguments():
 
         assert(len(generated_arguments) == len(expected_arguments))
         for generated_argument in generated_arguments:
-            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_one_replacements=False)
+            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_one_replacementg=False)
                        for expected_argument in expected_arguments))
 
     print('\n\n\n================= test_generate_quantifier_arguments() ====================')

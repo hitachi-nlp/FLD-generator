@@ -1,5 +1,4 @@
 # todo
-* allow_many_to_one_replacementsの場所．mappingに実装してしまうこともできる．
 * elim_dnegをどこでやるか？
 * num_terms => generality
 
