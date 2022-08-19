@@ -32,6 +32,16 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
+def calc_formula_specificity(formula: Formula) -> float:
+    """ Caluculate the specificity of the formula.
+
+    Examples:
+        {F}{a} -> {G}{a} is more specific than {F}{a} -> {G}{b},
+        since the former is constrained version of the latter as {a}={b}
+    """
+    return - float(len(formula.predicates) + len(formula.constants))
+
+
 class TranslationNotFoundError(FormalLogicExceptionBase):
     pass
 
@@ -58,8 +68,10 @@ class SentenceWiseTranslator(Translator):
             return len(formula.predicates) + len(formula.constants) + len(formula.variables)
 
         self._sentence_translations = OrderedDict()
-        for formula, translations in sorted(sentence_translations.items(),
-                                            key=lambda formula_trans: num_terms(formula_trans[0])):
+        for formula, translations in sorted(
+            sentence_translations.items(),
+            key=lambda formula_trans: (calc_formula_specificity(Formula(formula_trans[0]), formula_trans[0]))
+        )[::-1]:
             # sort by "complexity" of the formulas
             # We want first match to simple = constrained formulas first.
             # e.g.) We want matched to "Fa & Fb" first, rather than general "Fa & Gb"
@@ -175,14 +187,12 @@ class ClauseTypedTranslator(Translator):
                  translate_terms=True,
                  ):
 
-        def num_terms(formula_rep: str) -> int:
-            formula = Formula(formula_rep)
-            return len(formula.predicates) + len(formula.constants) + len(formula.variables)
-
-        self._translations = OrderedDict([
-            (rep, translations)
-            for rep, translations in sorted(config_json['translations'].items(), key=lambda rep_trans: num_terms(rep_trans[0]))
-        ][::-1])
+        self._translations = OrderedDict(
+            [
+                (rep, translations)
+                for rep, translations in sorted(config_json['translations'].items(), key=lambda rep_trans: (calc_formula_specificity(Formula(rep_trans[0])), rep_trans[0]))
+            ][::-1]
+        )
 
         self._clause_translations = {
             f'{clause_type}.{terms_rep}': pos_typed_translations

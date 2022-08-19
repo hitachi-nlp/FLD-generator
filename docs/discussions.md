@@ -1,6 +1,4 @@
 # todo
-* num_terms => generality
-
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
