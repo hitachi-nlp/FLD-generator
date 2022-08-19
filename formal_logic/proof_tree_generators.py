@@ -21,8 +21,7 @@ from .replacements import (
     generate_complicated_arguments,
     replace_formula,
     replace_argument,
-    is_formula_identical,
-    is_argument_identical,
+    formula_is_identical_to,
 )
 from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
@@ -185,7 +184,7 @@ def _generate_stem(arguments: List[Argument],
             # Choose next argument
             chainable_args = [
                 arg for arg in arguments
-                if any((is_formula_identical(premise, cur_conclusion)
+                if any((formula_is_identical_to(premise, cur_conclusion)
                         for premise in arg.premises))
             ]
             if len(chainable_args) == 0:
@@ -317,7 +316,7 @@ def _extend_braches(proof_tree: ProofTree,
             # Choose next argument
             chainable_args = [
                 arg for arg in arguments
-                if is_formula_identical(arg.conclusion, leaf_node.formula)
+                if formula_is_identical_to(arg.conclusion, leaf_node.formula)
             ]
             if len(chainable_args) == 0:
                 # logger.info('_extend_braches() retry since no chainable arguments found ...')

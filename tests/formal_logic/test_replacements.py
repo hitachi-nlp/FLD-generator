@@ -1,4 +1,9 @@
-from formal_logic.replacements import _expand_op
+from typing import List
+from formal_logic.replacements import (
+    _expand_op,
+    generate_universal_quantifier_elimination_arguments,
+    formula_is_identical_to,
+)
 from formal_logic.proof_tree_generators import generate_replacement_mappings_from_formula
 from formal_logic.formula import Formula
 
@@ -39,6 +44,31 @@ def test_expand_op():
     assert _expand_op(Formula('({P} v ¬{Q}){a} -> ({R} v ¬{S}){b}')).rep == '({P}{a} v ¬{Q}{a}) -> ({R}{b} v ¬{S}{b})'
 
 
+def test_formula_is_identical_to():
+    this = Formula('{A}{a} -> {B}{b}')
+    that = Formula('{A}{a} -> {A}{a}')
+
+    assert formula_is_identical_to(this, that, allow_many_to_one_replacements=True)
+    assert not formula_is_identical_to(that, this, allow_many_to_one_replacements=True)
+
+    assert not formula_is_identical_to(this, that, allow_many_to_one_replacements=False)
+    assert not formula_is_identical_to(that, this, allow_many_to_one_replacements=False)
+
+
+def test_generate_universal_quantifier_elimination_arguments():
+
+    def check_generation(formula: Formula, expected_formulas: List[Formula]):
+        generated_formulas = list(generate_universal_quantifier_elimination_arguments(formula))
+        print('input formula:')
+        print(f'    {formula.rep}')
+        print('output formula:')
+        for generated_formula in generated_formulas:
+            print(f'    {generated_formula.rep}')
+
+        assert(len(generated_formula) == len(expected_formulas))
+
+
 if __name__ == '__main__':
     # test_replacements()
     test_expand_op()
+    test_formula_is_identical_to()

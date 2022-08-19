@@ -22,7 +22,7 @@ from .replacements import (
     generate_replacement_mappings_from_formula,
     generate_replacement_mappings_from_terms,
     replace_formula,
-    can_not_be_identical_formula,
+    formula_can_not_be_identical_to,
 )
 from .word_banks import POS, VerbForm, AdjForm, NounForm
 from .exception import FormalLogicExceptionBase
@@ -306,7 +306,7 @@ class ClauseTypedTranslator(Translator):
                 )
             )
 
-        translations = [self._correct_indefinite_article(translation)
+        translations = [(self._correct_indefinite_article(translation) if translation is not None else None)
                         for translation in translations]
 
         return list(zip(translation_names, translations)), count_stats
@@ -392,7 +392,7 @@ class ClauseTypedTranslator(Translator):
             if len(clause_templated_translations) == 0:
                 continue
 
-            if can_not_be_identical_formula(Formula(_translation_formula_rep), formula):  # early rejection for speed
+            if formula_can_not_be_identical_to(Formula(_translation_formula_rep), formula):  # early rejection for speed
                 continue
 
             _translation_formula = Formula(_translation_formula_rep)

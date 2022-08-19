@@ -49,9 +49,9 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
     identity_mapping = {pred: pred for pred in predicates}
     identity_mapping.update({const: const for const in constants})
 
-    unknown_predicates = list(set(PREDICATES) - set(predicates))
-    unk_pred0 = sorted(unknown_predicates)[0]
-    unk_pred1 = sorted(unknown_predicates)[1]
+    unused_predicates = list(set(PREDICATES) - set(predicates))
+    unk_pred0 = sorted(unused_predicates)[0]
+    unk_pred1 = sorted(unused_predicates)[1]
 
     def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
         if len(predicates) == 1:
@@ -142,7 +142,9 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
         complication_mappings = generate_complication_mappings_from_formula(src_formulas)
     else:
         complication_mappings = [
-            {p.rep: p.rep for formula in src_formulas for p in formula.predicates}  # identity mapping
+            {p.rep: p.rep
+             for formula in src_formulas
+             for p in formula.predicates}  # identity mapping
         ]
 
     for complication_mapping in complication_mappings:
@@ -334,26 +336,55 @@ def replace_rep(rep: str,
     return replaced
 
 
-def is_formula_identical(this: Formula,
-                         that: Formula,
-                         allow_complication=False,
-                         elim_dneg=False) -> bool:
-    if can_not_be_identical_formula(this, that):
+def formula_is_identical_to(this: Formula,
+                            that: Formula,
+                            allow_many_to_one_replacements=True,
+                            allow_complication=False,
+                            elim_dneg=False) -> bool:
+    """ Check whether this formula can be the same as that formula by any replacement mapping.
+
+    Note that this and that is not symmetrical, unless allow_many_to_one_replacements=False.
+    For example:
+        this: {A}{a} -> {B}{b}
+        that: {A}{a} -> {A}{a}
+
+        formula_is_identical_to(this, that, allow_many_to_one_replacements=True): True
+        formula_is_identical_to(that, this, allow_many_to_one_replacements=True): False
+
+        formula_is_identical_to(this, that, allow_many_to_one_replacements=False): False
+        formula_is_identical_to(that, this, allow_many_to_one_replacements=False): False
+    """
+    if elim_dneg:
+        this = eliminate_double_negation(this)
+        that = eliminate_double_negation(that)
+
+    if formula_can_not_be_identical_to(this, that, allow_complication=allow_complication, elim_dneg=elim_dneg):
         return False
-    return any((
-        this.rep == that_replaced.rep
-        for that_replaced, _ in generate_replaced_formulas(that,
-                                                           this,
-                                                           allow_complication=allow_complication,
-                                                           elim_dneg=elim_dneg)
-    ))
+
+    for mapping in generate_replacement_mappings_from_formula([this], [that], allow_complication=allow_complication):
+        if not allow_many_to_one_replacements and len(set(mapping.values())) < len(mapping):
+            continue
+        this_replaced = replace_formula(this, mapping)
+        if this_replaced.rep == that.rep:
+            return True
+    return False
 
 
-def can_not_be_identical_formula(this: Formula, that: Formula) -> bool:
-    """ Decide whether two formulas can not be identical by any term. Used for early rejection of is_formula_identical.
+def formula_can_not_be_identical_to(this: Formula,
+                                    that: Formula,
+                                    allow_complication=False,
+                                    elim_dneg=False) -> bool:
+    """ Decide whether two formulas can not be identical by any mapping. Used for early rejection of is_formula_identical.
 
     NOTE that False does not mean two formulas are identical.
     """
+    if elim_dneg:
+        this = eliminate_double_negation(this)
+        that = eliminate_double_negation(that)
+    if allow_complication:
+        # A little costly to implemente since the number of operators change by complication
+        raise NotImplementedError()
+
     return any([this.rep.count(symbol) != that.rep.count(symbol)
                 for symbol in [AND, OR, IMPLICATION, NOT]])
 

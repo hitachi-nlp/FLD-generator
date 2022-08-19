@@ -1,7 +1,7 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Iterable
 import json
 
-from .formula import Formula
+from .formula import Formula, CONSTANTS, VARIABLES
 
 
 class Argument:

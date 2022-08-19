@@ -23,11 +23,11 @@ class UnknownFactDistractor(FormalLogicDistractor):
             for formula in formulas
             for pred in formula.zeroary_predicates
         })
-        unknown_predicates = sorted(set(PREDICATES) - set(known_zeroary_predicates))
-        random.shuffle(unknown_predicates)
+        unused_predicates = sorted(set(PREDICATES) - set(known_zeroary_predicates))
+        random.shuffle(unused_predicates)
 
         num_zeroary_distractors = len(known_zeroary_predicates) * self.num_distractor_factor
-        distractor_zeroary_predicates = unknown_predicates[:int(num_zeroary_distractors)]
+        distractor_zeroary_predicates = unused_predicates[:int(num_zeroary_distractors)]
         zeroary_distractors = [Formula(f'{predicate}') for predicate in distractor_zeroary_predicates]
 
         unary_predicate_arguments = sorted({
@@ -40,35 +40,35 @@ class UnknownFactDistractor(FormalLogicDistractor):
             for formula in formulas
             for pred in formula.unary_predicates
         })
-        unknown_predicates = sorted(set(PREDICATES) - set(known_unary_predicates) - set(distractor_zeroary_predicates))
+        unused_predicates = sorted(set(PREDICATES) - set(known_unary_predicates) - set(distractor_zeroary_predicates))
 
         known_constants = sorted({
             pred.rep
             for formula in formulas
             for pred in formula.constants
         })
-        unknown_constants = sorted(set(CONSTANTS) - set(known_constants))
+        unused_constants = sorted(set(CONSTANTS) - set(known_constants))
 
-        in_domain_unknown_predicate_arguments: List[Formula] = []
+        in_domain_unused_predicate_arguments: List[Formula] = []
         for predicate in known_unary_predicates:
             for constant in known_constants:
                 fact_rep = f'{predicate}{constant}'
 
-                if all((fact_rep not in formula.rep for formula in formulas + in_domain_unknown_predicate_arguments)):
-                    in_domain_unknown_predicate_arguments.append(Formula(fact_rep))
+                if all((fact_rep not in formula.rep for formula in formulas + in_domain_unused_predicate_arguments)):
+                    in_domain_unused_predicate_arguments.append(Formula(fact_rep))
 
-        outof_domain_unknown_predicate_arguments = []
-        for predicate in unknown_predicates:
+        outof_domain_unused_predicate_arguments = []
+        for predicate in unused_predicates:
             for constant in known_constants:
-                outof_domain_unknown_predicate_arguments.append(Formula(f'{predicate}{constant}'))
+                outof_domain_unused_predicate_arguments.append(Formula(f'{predicate}{constant}'))
         for predicate in known_unary_predicates:
-            for constant in unknown_constants:
+            for constant in unused_constants:
                 fact_rep = f'{predicate}{constant}'
-                outof_domain_unknown_predicate_arguments.append(Formula(f'{predicate}{constant}'))
+                outof_domain_unused_predicate_arguments.append(Formula(f'{predicate}{constant}'))
 
-        random.shuffle(in_domain_unknown_predicate_arguments)
-        random.shuffle(outof_domain_unknown_predicate_arguments)
+        random.shuffle(in_domain_unused_predicate_arguments)
+        random.shuffle(outof_domain_unused_predicate_arguments)
         num_unary_distractors = len(unary_predicate_arguments) * self.num_distractor_factor
-        unary_distractors = (in_domain_unknown_predicate_arguments + outof_domain_unknown_predicate_arguments)[:int(num_unary_distractors)]
+        unary_distractors = (in_domain_unused_predicate_arguments + outof_domain_unused_predicate_arguments)[:int(num_unary_distractors)]
 
         return zeroary_distractors + unary_distractors

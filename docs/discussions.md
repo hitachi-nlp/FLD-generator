@@ -1,7 +1,10 @@
 # todo
+* num_terms => generality
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
+        * [todo] EntailmentBankに入っている表現を追加する．
+        * [todo] can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
     * "world assumption"
         - [todo] EBへの転移実験はlabel_true_onlyでやる．
         - [todo] それ以外の実験は，CWAでやる．
@@ -20,12 +23,17 @@
     * Transformers as Soft Reasoners over Language
         - Fig.(a) を見ると，公理系を使っているように見える．差分は大丈夫か？
     * 公理系が未完全な理由をつらつらと述べられるようにしていく．
-        - 仮定の導入などを入れると，proof "graph"になるので，future work
-        - not関連を入れると，背理法が必要となってしまう．
-            - 背理法で導けるcontrapositionを使っているので，直観主義論理の中にとどまっている，という訳では無い．
+        - 「tree構造とconsistentな公理を入れた．graphはfuture work」と言い切れないか？
+            - 仮定の導入
+            - not関連を入れると，背理法が必要となってしまう．
+                - 背理法で導けるcontrapositionを使っているので，直観主義論理の中にとどまっている，という訳では無い．
+            - (Ex)-elim
     * faithful inference: NLIの間を埋める
     * 仮説検証器
         - 「AIは人間を滅ぼすべきだ」
+    * 「示した定理は使って良い」
+        - e.g.) generalized modus ponene
+    * 本研究，完全性が無い．やはり，完全な体系でやりたい．
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
 
@@ -47,15 +55,71 @@
 # proof tree generation
 
 ## [todo] パターン
-* [todo] 命題論理
-    - 定理
-        - 取りあえず，"基本的な"，すなわち，他の定理を導くときに良く使えそうな以下の定理を入れている．
-            - syllogism
-            - contraposition
+* どれを命題論理にして，どれを述語論理にするかは，考える必要がある．
 * [todo] 述語論理
+    - generalized modus ponensは公理ではない..
+        - 事例
+            ```
+            {
+                "id": "mb0",
+                "base_scheme_group": "Modus barbara",
+                "scheme_variant": "base_scheme",
+                "premises": [
+                    "(x): {F}x -> {G}x",
+                    "{F}{a}"
+                ],
+                "conclusion": "{G}{a}"
+            },
+            ```
+            これの証明は，以下
+            ```
+            (x): {F}x -> {G}x
+            ----------------------- ()-elim
+            {F}{a} -> {G}{a}    {F}{a}
+            ----------------------- ->-elim
+            {G}{a}
+            ```
+        - 手法
+            1. ()-elimを導入する．
+                * 任意の論理式を表す必要がある．
+                    * 論理式全パターンを手で列挙
+                    * 自動でパターンを増やす．
+                        - argumentのpremise, conclusionの論理式を全て列挙して，x化すればよい．
+                        * [todo] 重複チェックが必要
+                    * 自動で制生成する．
+                * 例
+                    ```
+                    (x): {F}x -> {G}x
+                    ----------------------- ()-elim
+                    {F}{a} -> {G}{a}    {F}{a}
+                    ----------------------- ->-elim
+                    {G}{a}
+                    ```
+            2. 既存の推論ルールに関して，()版の推論ルールを作る．
+                - ここで作成する推論ルールは，1を用いて定理として示せる．よって，蛇足ではある．
+                - 例: ()- modus ponens
+                    ```
+                    (x): {F}x -> {G}x  {F}{a}
+                    ----------------------- generalized ()-elim
+                    {G}{a}
+                    ```
+                    元バージョン
+                    ```
+                    {F}{a} -> {G}{a}  {F}{a}
+                    ----------------------- ()-elim
+                    {G}{a}
+                    ```
+                - これは，先行研究と同じ手法であると言える．
     - 常識推論ルールを入れたい．
-        - Ga -> Fa
-        - Ga -> Fb
+        1. [rejected] Ga -> Fa
+            - 推論ルールにこれを入れる必要は無い．2に含まれているから．
+            - Ga -> Fa, Ga := Fa
+        2. Ga -> Fb
+            - Ga -> Fb, Ga := Fb
+    - 常識推論ルールは命題論理にも見える．重複した場合，どうするか？
+        - [pending] argumentの同一性を見て除去する．
+            - argumentの同一性判定の実装が面倒．
+        - [todo] idの同一性を見て，除去する．
     - 公理系
         - 例: & 導入
             ```
@@ -105,6 +169,11 @@
         * not(A v B) みたいのを扱う．
         * 上記のドモルガンバージョンを扱う．
     * 上記のパターンを追加した場合，consistency checking 周りも更新する必要があると思う．
+* [done] 命題論理
+    - 定理
+        - 取りあえず，"基本的な"，すなわち，他の定理を導くときに良く使えそうな以下の定理を入れている．
+            - syllogism
+            - contraposition
 * [rejected] 個別の事実も入れたい．
     * 「Aa & Ba -> Ca」
     * ベースラインには，全称量化子しか含まれていない．
@@ -229,6 +298,7 @@
 # translation
 
 ## [todo] 事例
+* Ga -> Fa, Ga -> Fb を別の翻訳にする．
 * [todo] EntailmentBankに入っている表現を追加する．
 * [todo] can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
     - [todo] precisionを高くした後の語彙数を調べる．これが十分なのであれば，precisionを上げて良い．

@@ -17,6 +17,9 @@ from logger_setup import setup as setup_logger
 logger = logging.getLogger(__name__)
 
 
+RAISE_IF_TRANSLATION_NOT_FOUND = True
+
+
 def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                               config_paths: Optional[List[str]] = None,
                               allow_complication=True,
@@ -143,7 +146,29 @@ def test_original_pipeline():
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
                               num_distractor_factor=2,
-                              raise_if_translation_not_found=True)
+                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
+
+    generate_dataset(dataset)
+
+
+def test_pipeline_with_LP_arguments():
+    generator = load_proof_tree_generator(
+        config_paths=[
+            './configs/formal_logic/arguments/LP.axiom.json',
+            './configs/formal_logic/arguments/LP.theorem.json',
+        ],
+    )
+
+    distractor = UnknownFactDistractor()
+
+    translator = load_translator('clause_typed_translator', 'config')
+
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
+
+    dataset = NLProofSDataset(pipeline, 'CWA',
+                              depth=5,
+                              num_distractor_factor=5,
+                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
 
@@ -174,16 +199,20 @@ def test_pipeline_with_minumum_PL_arguments():
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
                               num_distractor_factor=5,
-                              raise_if_translation_not_found=True)
+                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
 
 
-def test_pipeline_with_LP_arguments():
+def test_pipeline_with_PL_arguments():
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/formal_logic/arguments/LP.axiom.json',
             './configs/formal_logic/arguments/LP.theorem.json',
+
+            './configs/formal_logic/arguments/PL.axiom.json',
+            './configs/formal_logic/arguments/PL.theorem.json',
+
         ],
     )
 
@@ -196,7 +225,7 @@ def test_pipeline_with_LP_arguments():
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
                               num_distractor_factor=5,
-                              raise_if_translation_not_found=True)
+                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
 
@@ -205,5 +234,8 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger(level=logging.INFO)
 
+    RAISE_IF_TRANSLATION_NOT_FOUND = False
+
     # test_pipeline_with_LP_arguments()
-    test_pipeline_with_minumum_PL_arguments()
+    # test_pipeline_with_minumum_PL_arguments()
+    test_pipeline_with_PL_arguments()
