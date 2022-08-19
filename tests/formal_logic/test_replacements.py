@@ -107,15 +107,69 @@ def test_argument_is_identical_to():
 
 def test_generate_universal_quantifier_elimination_arguments():
 
-    def check_generation(formula: Formula, expected_formulas: List[Formula]):
-        generated_formulas = list(generate_universal_quantifier_elimination_arguments(formula))
-        print('input formula:')
-        print(f'    {formula.rep}')
-        print('output formula:')
-        for generated_formula in generated_formulas:
-            print(f'    {generated_formula.rep}')
 
-        assert(len(generated_formula) == len(expected_formulas))
+    def check_generation(formula: Formula, expected_arguments: List[Argument]):
+        generated_arguments = list(generate_universal_quantifier_elimination_arguments(formula, id_prefix='test'))
+        print()
+        print(f'---------   universal quantified formulas for "{formula.rep}" ------')
+        for generated_argument in generated_arguments:
+            print(f'{str(generated_argument)}')
+
+        assert(len(generated_arguments) == len(expected_arguments))
+        for generated_argument in generated_arguments:
+            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_one_replacements=False)
+                       for expected_argument in expected_arguments))
+
+    print('\n\n\n================= test_generate_universal_quantifier_elimination_arguments() ====================')
+
+    check_generation(
+        Formula('{F}{a} -> {G}{a}'),
+        [
+            Argument(
+                [Formula('(x): {F}x -> {G}x')],
+                Formula('{F}{a} -> {G}{a}'),
+            ),
+        ]
+    )
+
+    check_generation(
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('(x): ({F}x v {G}{b}) -> {H}{c}')],
+                Formula('({F}{i} v {G}{b}) -> {H}{c}'),
+            ),
+            Argument(
+                [Formula('(x): ({F}{a} v {G}x) -> {H}{c}')],
+                Formula('({F}{a} v {G}{i}) -> {H}{c}'),
+            ),
+            Argument(
+                [Formula('(x): ({F}{a} v {G}{b}) -> {H}x')],
+                Formula('({F}{a} v {G}{b}) -> {H}{i}'),
+            ),
+
+
+            Argument(
+                [Formula('(x): ({F}x v {G}x) -> {H}{c}')],
+                Formula('({F}{i} v {G}{i}) -> {H}{c}'),
+            ),
+            Argument(
+                [Formula('(x): ({F}x v {G}{b}) -> {H}x')],
+                Formula('({F}{i} v {G}{b}) -> {H}{i}'),
+            ),
+            Argument(
+                [Formula('(x): ({F}{a} v {G}x) -> {H}x')],
+                Formula('({F}{a} v {G}{i}) -> {H}{i}'),
+            ),
+
+            Argument(
+                [Formula('(x): ({F}x v {G}x) -> {H}x')],
+                Formula('({F}{i} v {G}{i}) -> {H}{i}'),
+            ),
+
+        ]
+    )
+
 
 
 if __name__ == '__main__':
@@ -123,3 +177,4 @@ if __name__ == '__main__':
     test_expand_op()
     test_formula_is_identical_to()
     test_argument_is_identical_to()
+    test_generate_universal_quantifier_elimination_arguments()
