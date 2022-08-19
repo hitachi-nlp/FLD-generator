@@ -468,11 +468,11 @@ def argument_is_identical_to(this_argument: Argument,
     return False
 
 
-# TODO: existential quantifier
 def generate_quantifier_arguments(
     argument_type: str,
     formula: Formula,
     id_prefix: Optional[str] = None,
+    quantify_all_at_once=False,
 ) -> Iterable[Argument]:
     """
 
@@ -491,7 +491,8 @@ def generate_quantifier_arguments(
             return
 
         src_constant = constants[0]
-        for tgt_constant_rep in [src_constant.rep, quantified_variable]:
+        tgt_constant_reps = [quantified_variable] if quantify_all_at_once else [src_constant.rep, quantified_variable]
+        for tgt_constant_rep in tgt_constant_reps:
             for mapping in generate_quantifier_mappings(constants[1:]):
                 mapping[src_constant.rep] = tgt_constant_rep
                 yield mapping

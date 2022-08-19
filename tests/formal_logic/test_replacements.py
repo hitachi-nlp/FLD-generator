@@ -109,10 +109,12 @@ def test_generate_quantifier_arguments():
 
     def check_generation(argument_type: str,
                          formula: Formula,
-                         expected_arguments: List[Argument]):
-        generated_arguments = list(generate_quantifier_arguments(argument_type, formula, id_prefix='test'))
+                         expected_arguments: List[Argument],
+                         quantify_all_at_once=False):
+        generated_arguments = list(
+            generate_quantifier_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once))
         print()
-        print(f'--------- {argument_type} for "{formula.rep}" ------')
+        print(f'--------- {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
         for generated_argument in generated_arguments:
             print(f'{str(generated_argument)}')
 
@@ -123,6 +125,7 @@ def test_generate_quantifier_arguments():
 
     print('\n\n\n================= test_generate_quantifier_arguments() ====================')
 
+    # ----------- universal_quantifier_elim --------------
     check_generation(
         'universal_quantifier_elim',
         Formula('{F}{a} -> {G}{a}'),
@@ -174,6 +177,20 @@ def test_generate_quantifier_arguments():
     )
 
     check_generation(
+        'universal_quantifier_elim',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('(x): ({F}x v {G}x) -> {H}x')],
+                Formula('({F}{i} v {G}{i}) -> {H}{i}'),
+            ),
+
+        ],
+        quantify_all_at_once=True
+    )
+
+    # ----------- existential_quantifier_intro --------------
+    check_generation(
         'existential_quantifier_intro',
         Formula('{F}{a} -> {G}{a}'),
         [
@@ -221,6 +238,18 @@ def test_generate_quantifier_arguments():
             ),
 
         ]
+    )
+
+    check_generation(
+        'existential_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(Ex): ({F}x v {G}x) -> {H}x'),
+            ),
+        ],
+        quantify_all_at_once=True,
     )
 
 
