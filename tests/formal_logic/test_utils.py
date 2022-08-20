@@ -1,7 +1,7 @@
 from typing import List
 from pprint import pprint
 from collections import defaultdict
-from formal_logic.utils import weighted_sampling, weighted_samplings_wo_replacement
+from formal_logic.utils import weighted_sampling, weighted_shuffle
 
 
 def test_weighted_sampling():
@@ -27,7 +27,7 @@ def test_weighted_sampling():
     stochastic_test([1.0, 1.0, 1.0])
 
 
-def test_weighted_samplings_wo_replacement():
+def test_weighted_shuffle():
 
     print('\n\n\n ======== test_weighted_samplings_wo_replacement() ========')
 
@@ -38,7 +38,7 @@ def test_weighted_samplings_wo_replacement():
         non_zero_weight_idxs = [i_weight for i_weight, weight in enumerate(weights) if weight != 0.0]
         counts = defaultdict(int)
         for _ in range(trial):
-            sampled_idxs = [sampled_idx for sampled_idx in weighted_samplings_wo_replacement(weights)]
+            sampled_idxs = [sampled_idx for sampled_idx in weighted_shuffle(weights)]
 
             assert(len(sampled_idxs) == len(non_zero_weight_idxs))
             assert(set(sampled_idxs) == set(non_zero_weight_idxs))
@@ -59,4 +59,4 @@ def test_weighted_samplings_wo_replacement():
 
 if __name__ == '__main__':
     test_weighted_sampling()
-    test_weighted_samplings_wo_replacement()
+    test_weighted_shuffle()
