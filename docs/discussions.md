@@ -40,9 +40,9 @@
 
 
 # know issues
-* allow_complication=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．
+* add_complicated_arguments=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．
     1. and_introのconclusionは ({A} & {B}) という形をしている．
-    2. allow_complication=Falseでは，前提が({A} & {B})の形なのは，& elimだけである．
+    2. add_complicated_arguments=Falseでは，前提が({A} & {B})の形なのは，& elimだけである．
     3. & elimのconclusionは{A}もしくは{B}であるが，これは1のant_introの前提としてtreeに既に入っている．よって，`_is_formula_new() = False`となるので，& elimの利用は却下される．
     対処療法として，retryを大きくしている．
 
@@ -54,7 +54,6 @@
 # proof tree generation
 
 ## [todo] パターン
-* どれを命題論理にして，どれを述語論理にするかは，考える必要がある．
 * [todo] 述語論理
     - generalized modus ponensは公理ではない..
         - 事例
@@ -133,16 +132,16 @@
     * [rejected] 命題論理との混合
         * [rejected] 工数の割に効果が小さそう．
         * e.g.) {A}{a} and {B}
+* [todo] どれを命題論理にして，どれを述語論理にするかは，考える必要がある．
 * [todo] notの意味を表現する．
-    - contraposition
+    - [done] contraposition
     - ドモルガン
 * [todo] 定理はどれを入れるべきか？
-    - EBでよく使われる定理は入れる．転移性能のため．
+    - [todo] EBでよく使われる定理は入れる．転移性能のため．
         - syllogism等
-    - 「今回入れられなかった公理」を使わないと導けない定理は入れる．
+    - [todo] 「今回入れられなかった公理」を使わないと導けない定理は入れる．
         - e.g.) not関連の公理を入れられなかった => contrapositionを入れる
-    - 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
-
+    - [todo] 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
 * [pending] ->導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．

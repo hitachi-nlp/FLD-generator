@@ -10,7 +10,7 @@ from formal_logic.formula import Formula
 from formal_logic.argument import Argument
 
 
-# TODO: update this test code to be consistent with allow_complication=True
+# TODO: update this test code to be consistent with add_complicated_arguments=True
 # def test_replacements():
 # 
 #     formula = Formula('(x): {F}x {G}{a} {G}{b} -> {H}x')
@@ -25,7 +25,7 @@ from formal_logic.argument import Argument
 # 
 #     replaced_formulas = list(generate_replacement_mappings_from_formula([formula],
 #                                                                         [other_formula],
-#                                                                         allow_complication=True))
+#                                                                         add_complicated_arguments=True))
 #     # print('-------------------- replacements --------------------')
 #     # for replacements in replaced_formlas:
 #     #     print('')
@@ -102,6 +102,18 @@ def test_argument_is_identical_to():
             [Formula('{P}'), Formula('{P} -> {Q}')],
             Formula('{Q}'),
         ),
+    )
+
+    assert not argument_is_identical_to(
+        Argument(
+            [Formula('(x): {A}x -> {B}x'), Formula('¬{B}')],
+            Formula('{A}'),
+        ),
+        Argument(
+            [Formula('{P}'), Formula('{P} -> {Q}')],
+            Formula('{Q}'),
+        ),
+
     )
 
 

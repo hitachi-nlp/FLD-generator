@@ -102,14 +102,14 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
 
 def generate_replaced_arguments(src_arg: Argument,
                                 tgt_arg: Argument,
-                                allow_complication=False,
+                                add_complicated_arguments=False,
                                 constraints: Optional[Dict[str, str]] = None,
                                 block_shuffle=False,
                                 allow_many_to_one_replacement=True,
                                 elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
                                                               tgt_arg.premises + [tgt_arg.conclusion],
-                                                              allow_complication=allow_complication,
+                                                              add_complicated_arguments=add_complicated_arguments,
                                                               constraints=constraints,
                                                               block_shuffle=block_shuffle,
                                                               allow_many_to_one_replacement=allow_many_to_one_replacement):
@@ -118,14 +118,14 @@ def generate_replaced_arguments(src_arg: Argument,
 
 def generate_replaced_formulas(src_formula: Formula,
                                tgt_formula: Formula,
-                               allow_complication=False,
+                               add_complicated_arguments=False,
                                constraints: Optional[Dict[str, str]] = None,
                                block_shuffle=False,
                                allow_many_to_one_replacement=True,
                                elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
     for mapping in generate_replacement_mappings_from_formula([src_formula],
                                                               [tgt_formula],
-                                                              allow_complication=allow_complication,
+                                                              add_complicated_arguments=add_complicated_arguments,
                                                               constraints=constraints,
                                                               block_shuffle=block_shuffle,
                                                               allow_many_to_one_replacement=allow_many_to_one_replacement):
@@ -135,14 +135,14 @@ def generate_replaced_formulas(src_formula: Formula,
 @profile
 def generate_replacement_mappings_from_argument(src_argument: Argument,
                                                 tgt_argument: Argument,
-                                                allow_complication=False,
+                                                add_complicated_arguments=False,
                                                 constraints: Optional[Dict[str, str]] = None,
                                                 block_shuffle=False,
                                                 allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
     yield from generate_replacement_mappings_from_formula(
         src_argument.all_formulas,
         tgt_argument.all_formulas,
-        allow_complication=allow_complication,
+        add_complicated_arguments=add_complicated_arguments,
         constraints=constraints,
         block_shuffle=block_shuffle,
         allow_many_to_one_replacement=allow_many_to_one_replacement,
@@ -152,11 +152,11 @@ def generate_replacement_mappings_from_argument(src_argument: Argument,
 @profile
 def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
                                                tgt_formulas: List[Formula],
-                                               allow_complication=False,
+                                               add_complicated_arguments=False,
                                                constraints: Optional[Dict[str, str]] = None,
                                                block_shuffle=False,
                                                allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
-    if allow_complication:
+    if add_complicated_arguments:
         complication_mappings = generate_complication_mappings_from_formula(src_formulas)
     else:
         complication_mappings = [
@@ -357,7 +357,7 @@ def _replace_rep(rep: str,
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
                             allow_many_to_one_replacementg=True,
-                            allow_complication=False,
+                            add_complicated_arguments=False,
                             elim_dneg=False) -> bool:
     """ Check whether this formula can be the same as that formula by any replacement mapping.
 
@@ -376,10 +376,10 @@ def formula_is_identical_to(this_formula: Formula,
         this_formula = eliminate_double_negation(this_formula)
         that_formula = eliminate_double_negation(that_formula)
 
-    if formula_can_not_be_identical_to(this_formula, that_formula, allow_complication=allow_complication, elim_dneg=elim_dneg):
+    if formula_can_not_be_identical_to(this_formula, that_formula, add_complicated_arguments=add_complicated_arguments, elim_dneg=elim_dneg):
         return False
 
-    for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], allow_complication=allow_complication, allow_many_to_one_replacement=allow_many_to_one_replacementg):
+    for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one_replacement=allow_many_to_one_replacementg):
         this_replaced = replace_formula(this_formula, mapping, elim_dneg=elim_dneg)
         if this_replaced.rep == that_formula.rep:
             return True
@@ -388,7 +388,7 @@ def formula_is_identical_to(this_formula: Formula,
 
 def formula_can_not_be_identical_to(this_formula: Formula,
                                     that_formula: Formula,
-                                    allow_complication=False,
+                                    add_complicated_arguments=False,
                                     elim_dneg=False) -> bool:
     """ Decide whether two formulas can not be identical by any mapping. Used for early rejection of is_formula_identical.
 
@@ -397,7 +397,7 @@ def formula_can_not_be_identical_to(this_formula: Formula,
     if elim_dneg:
         this_formula = eliminate_double_negation(this_formula)
         that_formula = eliminate_double_negation(that_formula)
-    if allow_complication:
+    if add_complicated_arguments:
         # A little costly to implemente since the number of operators change by complication
         raise NotImplementedError()
 
@@ -408,12 +408,12 @@ def formula_can_not_be_identical_to(this_formula: Formula,
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
                              allow_many_to_one_replacementg=True,
-                             allow_complication=False,
+                             add_complicated_arguments=False,
                              elim_dneg=False) -> bool:
 
     def _formula_can_not_be_identical_to(this_formula: Formula, that_formula: Formula) -> bool:
         return formula_can_not_be_identical_to(this_formula, that_formula,
-                                               allow_complication=allow_complication,
+                                               add_complicated_arguments=add_complicated_arguments,
                                                elim_dneg=elim_dneg)
 
     # early rejections by conclusion
@@ -445,7 +445,7 @@ def argument_is_identical_to(this_argument: Argument,
     # check the exact identification condition.
     for mapping in generate_replacement_mappings_from_argument(this_argument,
                                                                that_argument,
-                                                               allow_complication=allow_complication,
+                                                               add_complicated_arguments=add_complicated_arguments,
                                                                allow_many_to_one_replacement=allow_many_to_one_replacementg):
         this_argument_replaced = replace_argument(this_argument, mapping, elim_dneg=elim_dneg)
 

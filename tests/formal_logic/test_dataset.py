@@ -22,7 +22,8 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                               config_paths: Optional[List[str]] = None,
-                              allow_complication=True,
+                              complicated_arguments_weight=0.3,
+                              quantified_arguments_weight=0.1,
                               elim_dneg=True):
     arguments = arguments or []
 
@@ -34,7 +35,8 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
 
     return ProofTreeGenerator(arguments,
                               elim_dneg=elim_dneg,
-                              allow_complication=allow_complication)
+                              complicated_arguments_weight=complicated_arguments_weight,
+                              quantified_arguments_weight=quantified_arguments_weight)
 
 
 def load_translator(type_: str,
@@ -135,7 +137,10 @@ def generate_dataset(dataset: NLProofSDataset,
 def test_original_pipeline():
     generator = load_proof_tree_generator(
         config_paths=['./configs/formal_logic/arguments/syllogistic_corpus-02.json'],
-        allow_complication=False,  # the config already includes the complicated arguments
+
+        # the config already includes the complicated and quantified arguments
+        complicated_arguments_weight=0.0,
+        quantified_arguments_weight=0.0,
     )
 
     distractor = UnknownFactDistractor()
@@ -212,7 +217,6 @@ def test_pipeline_with_PL_arguments():
 
             './configs/formal_logic/arguments/PL_minus_LP.axiom.json',
             './configs/formal_logic/arguments/PL_minus_LP.theorem.json',
-
         ],
     )
 

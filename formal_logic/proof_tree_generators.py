@@ -1,6 +1,6 @@
 import random
 import logging
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Iterable, Tuple, Dict
 
 from timeout_timer import timeout as timeout_context
 
@@ -22,9 +22,12 @@ from .replacements import (
     replace_formula,
     replace_argument,
     formula_is_identical_to,
+    argument_is_identical_to,
+    generate_quantifier_arguments,
 )
 from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
+from .utils import weighted_shuffle
 
 from .formula import (
     IMPLICATION,
@@ -48,72 +51,117 @@ class ProofTreeGenerator:
 
     def __init__(self,
                  arguments: List[Argument],
-                 allow_complication=False,
-                 complicated_arguments_ratio=0.5,
+                 complicated_arguments_weight=0.0,
+                 quantified_arguments_weight=0.0,
+                 quantify_all_at_once=True,
                  elim_dneg=False,
                  timeout: Optional[int] = 30):
-        self.allow_complication = allow_complication
         self.elim_dneg = elim_dneg
         self.timeout = timeout
 
-        if allow_complication:
-            original_arguments = []
-            complicated_arguments = []
-            complication_extended_arguments = []
+        self._arguments, self._argument_weights = self._load_arguments(
+            arguments,
+            complicated_arguments_weight=complicated_arguments_weight,
+            quantified_arguments_weight=quantified_arguments_weight,
+            quantify_all_at_once=quantify_all_at_once,
+            elim_dneg=elim_dneg,
+        )
+
+    def _load_arguments(self,
+                        arguments: List[Argument],
+                        complicated_arguments_weight: float,
+                        quantified_arguments_weight: float,
+                        quantify_all_at_once: bool,
+                        elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
+        logger.info('loading arguments ....')
+
+        def is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
+            is_already_added = False
+            for existent_argument in arguments:
+                if argument_is_identical_to(argument, existent_argument):
+                    logger.info('-- Argument is identical to the already added argument. Will be skipped. --')
+                    logger.info('tried to add  : %s', str(argument))
+                    logger.info('already added : %s', str(existent_argument))
+                    is_already_added = True
+                    break
+            return not is_already_added
+
+        complicated_arguments: List[Argument] = []
+        if complicated_arguments_weight > 0.0:
             for argment in arguments:
-                original_arguments.append(argment)
-                complication_extended_arguments.append(argment)
-
                 for complicated_argument, _, name in generate_complicated_arguments(argment, elim_dneg=elim_dneg, get_name=True):
-                    complicated_argument.id += f'.{name}'
-                    complicated_arguments.append(complicated_argument)
-                    complication_extended_arguments.append(complicated_argument)
+                    if is_argument_new(complicated_argument, arguments + complicated_arguments):
+                        complicated_argument.id += f'.{name}'
+                        complicated_arguments.append(complicated_argument)
 
-            self._original_arguments = original_arguments
-            self._complicated_arguments = complicated_arguments
-            self._complication_extended_arguments = complication_extended_arguments
-            self._weight_extended_arguments = self._make_rough_weight_extended_arguments(self._original_arguments,
-                                                                                         self._complicated_arguments,
-                                                                                         1 - complicated_arguments_ratio)
-        else:
-            self._original_arguments = arguments
-            self._complicated_arguments = []
-            self._complication_extended_arguments = arguments
-            self._weight_extended_arguments = arguments
+        quantified_arguments: List[Argument] = []
+        if quantified_arguments_weight > 0.0:
+            unique_formulas: List[Formula] = []
+            for argument in arguments + complicated_arguments:
+                for formula in argument.all_formulas:
+                    if all(not formula_is_identical_to(formula, existent_formula) for existent_formula in unique_formulas):
+                        unique_formulas.append(formula)
 
-        logger.info('============ complication extented arguments for generation (NOTE that actual arguments used are further extended list in order to weight arguments) ============')
-        for argument in sorted(self._complication_extended_arguments, key=lambda arg: arg.id):
-            logger.info(argument)
+            for argument_type in ['universal_quantifier_elim', 'existential_quantifier_intro']:
+                for i_formula, formula in enumerate(unique_formulas):
+                    for quantified_argument in generate_quantifier_arguments(argument_type, formula, id_prefix=f'fomula-{i_formula}', quantify_all_at_once=quantify_all_at_once):
+                        if is_argument_new(quantified_argument, arguments + complicated_arguments + quantified_arguments):
+                            quantified_arguments.append(quantified_argument)
 
-    def _make_rough_weight_extended_arguments(self,
-                                              this_arguments: List[Argument],
-                                              that_arguments: List[Argument],
-                                              this_ratio: float) -> List[Argument]:
-        """
-        this_ratio = len(this_arguments) * n / (len(this_arguments) * n + len(that_arguments))
-        => n = this_ratio * len(that_arguments) / ( len(this_arguments) - len(this_arguments) * this_ratio )
-             = ( this_ratio / (1 - this_ratio) ) * ( len(that_arguments) / len(this_arguments) )
-        """
-        if this_ratio == 1.0:
-            return this_arguments
-        elif this_ratio >= 0.99:
-            logger.warning('we do not include that_arguments since the this_ratio is so high (>= 0.99)')
-            return this_arguments
+        def calc_argument_weight(argument: Argument) -> float:
+            if argument in arguments:
+                return 1 / len(arguments) * (1 - complicated_arguments_weight - quantified_arguments_weight) if len(arguments) > 0 else None
+            elif argument in complicated_arguments:
+                return 1 / len(complicated_arguments) * complicated_arguments_weight if len(arguments) > 0 else None
+            elif argument in quantified_arguments:
+                return 1 / len(quantified_arguments) * complicated_arguments_weight if len(arguments) > 0 else None
+            else:
+                raise NotImplementedError()
 
-        this_multiplier = int(this_ratio / (1 - this_ratio) * (len(that_arguments) / len(this_arguments)))
-        if this_multiplier == 0:  # down sampling
-            raise NotImplementedError()
+        _arguments = arguments + complicated_arguments + quantified_arguments
+        _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
-        weight_extended_this_arguments = []
-        for _ in range(0, this_multiplier):
-            weight_extended_this_arguments.extend(this_arguments)
+        # TODO: check sum of weights
 
-        return weight_extended_this_arguments + that_arguments
+        logger.info('================================================     loaded arguments     ================================================')
+        # for argument in sorted(_arguments, key=lambda arg: arg.id):
+        for argument in _arguments:
+            logger.info('weight: %f    %s', _argument_weights[argument], str(argument))
 
-    def generate_tree(self, depth=3, max_retry=100) -> Optional[ProofTree]:
+        return _arguments, _argument_weights
+
+    # def _make_rough_weight_extended_arguments(self,
+    #                                           this_arguments: List[Argument],
+    #                                           that_arguments: List[Argument],
+    #                                           this_weight: float) -> List[Argument]:
+    #     """
+    #     this_weight = len(this_arguments) * n / (len(this_arguments) * n + len(that_arguments))
+    #     => n = this_weight * len(that_arguments) / ( len(this_arguments) - len(this_arguments) * this_weight )
+    #          = ( this_weight / (1 - this_weight) ) * ( len(that_arguments) / len(this_arguments) )
+    #     """
+    #     if this_weight == 1.0:
+    #         return this_arguments
+    #     elif this_weight >= 0.99:
+    #         logger.warning('we do not include that_arguments since the this_weight is so high (>= 0.99)')
+    #         return this_arguments
+
+    #     this_multiplier = int(this_weight / (1 - this_weight) * (len(that_arguments) / len(this_arguments)))
+    #     if this_multiplier == 0:  # down sampling
+    #         raise NotImplementedError()
+
+    #     weight_extended_this_arguments = []
+    #     for _ in range(0, this_multiplier):
+    #         weight_extended_this_arguments.extend(this_arguments)
+
+    #     return weight_extended_this_arguments + that_arguments
+
+    def generate_tree(self,
+                      depth=3,
+                      max_retry=100) -> Optional[ProofTree]:
         for _ in range(0, max_retry):
             try:
-                proof_tree = _generate_tree(self._weight_extended_arguments,
+                proof_tree = _generate_tree(self._arguments,
+                                            argument_weights=self._argument_weights,
                                             depth=depth,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
@@ -127,14 +175,15 @@ class ProofTreeGenerator:
 
 @profile
 def _generate_tree(arguments: List[Argument],
+                   argument_weights: Optional[Dict[Argument, float]] = None,
                    depth=1,
                    elim_dneg=False,
                    timeout: Optional[int] = None) -> Optional[ProofTree]:
 
     timeout = timeout or 99999999
     with timeout_context(timeout, exception=TimeoutError):
-        proof_tree = _generate_stem(arguments, depth, PREDICATES, CONSTANTS, elim_dneg=elim_dneg)
-        _extend_braches(proof_tree, arguments, depth, PREDICATES, CONSTANTS, elim_dneg=elim_dneg)
+        proof_tree = _generate_stem(arguments, depth, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
+        _extend_braches(proof_tree, arguments, depth, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
 
     return proof_tree
 
@@ -144,6 +193,7 @@ def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
                    constant_pool: List[str],
+                   argument_weights: Optional[Dict[Argument, float]] = None,
                    elim_dneg=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
@@ -165,7 +215,7 @@ def _generate_stem(arguments: List[Argument],
         for node in premise_nodes + [conclusion_node]:
             proof_tree.add_node(node)
 
-    for cur_arg in _shuffle(arguments):
+    for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
         cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
@@ -192,7 +242,7 @@ def _generate_stem(arguments: List[Argument],
 
             is_arg_done = False
             next_arg_replaced = None
-            for next_arg_unreplaced in _shuffle(chainable_args):
+            for next_arg_unreplaced in _shuffle_arguments(chainable_args, argument_weights):
                 if is_arg_done:
                     break
 
@@ -206,7 +256,6 @@ def _generate_stem(arguments: List[Argument],
                         [premise],
                         # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [cur_conclusion],
-                        allow_complication=False,
                         block_shuffle=True,
                     ):
                         if is_arg_done:
@@ -225,7 +274,6 @@ def _generate_stem(arguments: List[Argument],
                             next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
                             [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
-                            allow_complication=False,
                             block_shuffle=True,
                         ):
                             if is_arg_done:
@@ -282,6 +330,7 @@ def _extend_braches(proof_tree: ProofTree,
                     max_steps: int,
                     predicate_pool: List[str],
                     constant_pool: List[str],
+                    argument_weights: Optional[Dict[Argument, float]] = None,
                     elim_dneg=False) -> None:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
@@ -322,7 +371,7 @@ def _extend_braches(proof_tree: ProofTree,
                 # logger.info('_extend_braches() retry since no chainable arguments found ...')
                 continue
 
-            for next_arg_unreplaced in _shuffle(chainable_args):
+            for next_arg_unreplaced in _shuffle_arguments(chainable_args, weights=argument_weights):
                 if is_leaf_node_done:
                     break
 
@@ -334,7 +383,6 @@ def _extend_braches(proof_tree: ProofTree,
                         [next_arg_unreplaced.conclusion],
                         # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
-                        allow_complication=False,
                         block_shuffle=True,
                 ):
                     if is_leaf_node_done:
@@ -353,7 +401,6 @@ def _extend_braches(proof_tree: ProofTree,
                         next_arg_unreplaced.all_formulas,
                         [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         constraints=conclusion_mapping,
-                        allow_complication=False,
                         block_shuffle=True,
                     ):
                         next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
@@ -415,5 +462,22 @@ def _search_formula(formula: Formula,
     ]
 
 
-def _shuffle(elems: List[Any]) -> List[Any]:
-    return random.sample(elems, len(elems))
+# def _weighted_shuffle(weighted_elems: List[Tuple[float, Any]]) -> Iterable[Any]:
+#     weights = [weight for weight, _ in weighted_elems]
+#     for idx in weighted_shuffle(weights):
+#         yield weighted_elems[idx]
+
+
+def _shuffle(elems: List[Any],
+             weights: Optional[List[float]] = None) -> Iterable[Any]:
+    if weights is None:
+        yield from random.sample(elems, len(elems))
+    else:
+        for idx in weighted_shuffle(weights):
+            yield elems[idx]
+
+
+def _shuffle_arguments(arguments: List[Argument],
+                       weights: Optional[Dict[Argument, float]] = None) -> Iterable[Argument]:
+    _weights = [weights[argument] for argument in arguments] if weights is not None else None
+    yield from _shuffle(arguments, weights=_weights)
