@@ -210,8 +210,8 @@ def test_pipeline_with_PL_arguments():
             './configs/formal_logic/arguments/LP.axiom.json',
             './configs/formal_logic/arguments/LP.theorem.json',
 
-            './configs/formal_logic/arguments/PL.axiom.json',
-            './configs/formal_logic/arguments/PL.theorem.json',
+            './configs/formal_logic/arguments/PL_minus_LP.axiom.json',
+            './configs/formal_logic/arguments/PL_minus_LP.theorem.json',
 
         ],
     )
