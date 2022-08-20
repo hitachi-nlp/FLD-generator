@@ -429,155 +429,155 @@
 
 
     "(x): {A}x -> {B}x": [
-      "if {verb_clause.{A}x}, then {verb_clause.{B}it}",
+      "if {verb_clause.{A}x}, then {verb_clause.{B}{b}}",
       "{noun_clause.{A}x.subj} is {noun_clause.{B}the_thing.subj}"
     ],
     "(x): ¬{A}x -> {B}x": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.{B}it}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.{B}{b}}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.{B}the_thing.subj}"
     ],
     "(x): {A}x -> ¬{B}x": [
-      "if {verb_clause.{A}x}, then {verb_clause.¬{B}it}",
+      "if {verb_clause.{A}x}, then {verb_clause.¬{B}{b}}",
       "{noun_clause.{A}x.subj} is {noun_clause.¬{B}the_thing.subj}"
     ],
     "(x): ¬{A}x -> ¬{B}x": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.¬{B}it}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.¬{B}{b}}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.¬{B}the_thing.subj}"
     ],
 
 
     "(x): ({A}x & {B}x) -> {C}x": [
-      "if {verb_clause.({A}x & {B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}x & {B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}x & {B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): (¬{A}x & {B}x) -> {C}x": [
-      "if {verb_clause.(¬{A}x & {B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}x & {B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}x & {B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): ({A}x & ¬{B}x) -> {C}x": [
-      "if {verb_clause.({A}x & ¬{B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}x & ¬{B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}x & ¬{B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): ({A}x & {B}x) -> ¬{C}x": [
-      "if {verb_clause.({A}x & {B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}x & {B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}x & {B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}x": [
-      "if {verb_clause.(¬{A}x & ¬{B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}x & ¬{B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}x & ¬{B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}x": [
-      "if {verb_clause.(¬{A}x & {B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}x & {B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}x & {B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
-      "if {verb_clause.({A}x & ¬{B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}x & ¬{B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}x & ¬{B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "if {verb_clause.(¬{A}x & ¬{B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}x & ¬{B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}x & ¬{B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
 
 
     "(x): {A}x -> ({B}x & {C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.({B}it & {C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.({B}{b} & {C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.({B}the_thing & {C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> ({B}x & {C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.({B}it & {C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.({B}{b} & {C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.({B}the_thing & {C}the_thing).subj}"
     ],
     "(x): {A}x -> (¬{B}x & {C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it & {C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}{b} & {C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.(¬{B}the_thing & {C}the_thing).subj}"
     ],
     "(x): {A}x -> ({B}x & ¬{C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.({B}it & ¬{C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.({B}{b} & ¬{C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.({B}the_thing & ¬{C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> (¬{B}x & {C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it & {C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}{b} & {C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.(¬{B}the_thing & {C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.({B}it & ¬{C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.({B}{b} & ¬{C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.({B}the_thing & ¬{C}the_thing).subj}"
     ],
     "(x): {A}x -> (¬{B}x & ¬{C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it & ¬{C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}{b} & ¬{C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.(¬{B}the_thing & ¬{C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it & ¬{C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}{b} & ¬{C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.(¬{B}the_thing & ¬{C}the_thing).subj}"
     ],
 
 
     "(x): ({A}x v {B}x) -> {C}x": [
-      "if {verb_clause.({A}x v {B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}x v {B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}x v {B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
-      "if {verb_clause.(¬{A}x v {B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}x v {B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}x v {B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
-      "if {verb_clause.({A}x v ¬{B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}x v ¬{B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}x v ¬{B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
-      "if {verb_clause.({A}x v {B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}x v {B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}x v {B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
-      "if {verb_clause.(¬{A}x v ¬{B}x)}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}x v ¬{B}x)}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}x v ¬{B}x).subj} is {noun_clause.{C}the_thing.subj}"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
-      "if {verb_clause.(¬{A}x v {B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}x v {B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}x v {B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
-      "if {verb_clause.({A}x v ¬{B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}x v ¬{B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}x v ¬{B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "if {verb_clause.(¬{A}x v ¬{B}x)}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}x v ¬{B}x)}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}x v ¬{B}x).subj} is {noun_clause.¬{C}the_thing.subj}"
     ],
 
 
     "(x): {A}x -> ({B}x v {C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.({B}it v {C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.({B}{b} v {C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.({B}the_thing v {C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> ({B}x v {C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.({B}it v {C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.({B}{b} v {C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.({B}the_thing v {C}the_thing).subj}"
     ],
     "(x): {A}x -> (¬{B}x v {C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it v {C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}{b} v {C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.(¬{B}the_thing v {C}the_thing).subj}"
     ],
     "(x): {A}x -> ({B}x v ¬{C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.({B}it v ¬{C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.({B}{b} v ¬{C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.({B}the_thing v ¬{C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> (¬{B}x v {C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it v {C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}{b} v {C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.(¬{B}the_thing v {C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.({B}it v ¬{C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.({B}{b} v ¬{C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.({B}the_thing v ¬{C}the_thing).subj}"
     ],
     "(x): {A}x -> (¬{B}x v ¬{C}x)": [
-      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}it v ¬{C}it)}",
+      "if {verb_clause.{A}x}, then {verb_clause.(¬{B}{b} v ¬{C}{c})}",
       "{noun_clause.{A}x.subj} is {noun_clause.(¬{B}the_thing v ¬{C}the_thing).subj}"
     ],
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
-      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}it v ¬{C}it)}",
+      "if {verb_clause.¬{A}x}, then {verb_clause.(¬{B}{b} v ¬{C}{c})}",
       "{noun_clause.¬{A}x.subj} is {noun_clause.(¬{B}the_thing v ¬{C}the_thing).subj}"
     ],
 
@@ -587,155 +587,155 @@
 
 
     "{A}{a} -> {B}{b}": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.{B}it}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.{B}{b}}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.{B}the_thing.subj}"
     ],
     "¬{A}{a} -> {B}{b}": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.{B}it}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.{B}{b}}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.{B}the_thing.subj}"
     ],
     "{A}{a} -> ¬{B}{b}": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.¬{B}it}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.¬{B}{b}}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.¬{B}the_thing.subj}"
     ],
     "¬{A}{a} -> ¬{B}{b}": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.¬{B}it}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.¬{B}{b}}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.¬{B}the_thing.subj}"
     ],
 
 
     "({A}{a} & {B}{b}) -> {C}{c}": [
-      "if {verb_clause.({A}{a} & {B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}{a} & {B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}{a} & {B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "(¬{A}{a} & {B}{b}) -> {C}{c}": [
-      "if {verb_clause.(¬{A}{a} & {B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}{a} & {B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}{a} & {B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "({A}{a} & ¬{B}{b}) -> {C}{c}": [
-      "if {verb_clause.({A}{a} & ¬{B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}{a} & ¬{B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}{a} & ¬{B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "({A}{a} & {B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.({A}{a} & {B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}{a} & {B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}{a} & {B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
     "(¬{A}{a} & ¬{B}{b}) -> {C}{c}": [
-      "if {verb_clause.(¬{A}{a} & ¬{B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}{a} & ¬{B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}{a} & ¬{B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "(¬{A}{a} & {B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.(¬{A}{a} & {B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}{a} & {B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}{a} & {B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
     "({A}{a} & ¬{B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.({A}{a} & ¬{B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}{a} & ¬{B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}{a} & ¬{B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
     "(¬{A}{a} & ¬{B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.(¬{A}{a} & ¬{B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}{a} & ¬{B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}{a} & ¬{B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
 
 
     "{A}{a} -> ({B}{b} & {C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.({B}it & {C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.({B}{b} & {C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.({B}the_thing & {C}the_thing).subj}"
     ],
     "¬{A}{a} -> ({B}{b} & {C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}it & {C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}{b} & {C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.({B}the_thing & {C}the_thing).subj}"
     ],
     "{A}{a} -> (¬{B}{b} & {C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}it & {C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}{b} & {C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing & {C}the_thing).subj}"
     ],
     "{A}{a} -> ({B}{b} & ¬{C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.({B}it & ¬{C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.({B}{b} & ¬{C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.({B}the_thing & ¬{C}the_thing).subj}"
     ],
     "¬{A}{a} -> (¬{B}{b} & {C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}it & {C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}{b} & {C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing & {C}the_thing).subj}"
     ],
     "¬{A}{a} -> ({B}{b} & ¬{C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}it & ¬{C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}{b} & ¬{C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.({B}the_thing & ¬{C}the_thing).subj}"
     ],
     "{A}{a} -> (¬{B}{b} & ¬{C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}it & ¬{C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}{b} & ¬{C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing & ¬{C}the_thing).subj}"
     ],
     "¬{A}{a} -> (¬{B}{b} & ¬{C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}it & ¬{C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}{b} & ¬{C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing & ¬{C}the_thing).subj}"
     ],
 
 
     "({A}{a} v {B}{b}) -> {C}{c}": [
-      "if {verb_clause.({A}{a} v {B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}{a} v {B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}{a} v {B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "(¬{A}{a} v {B}{b}) -> {C}{c}": [
-      "if {verb_clause.(¬{A}{a} v {B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}{a} v {B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}{a} v {B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "({A}{a} v ¬{B}{b}) -> {C}{c}": [
-      "if {verb_clause.({A}{a} v ¬{B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.({A}{a} v ¬{B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.({A}{a} v ¬{B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "({A}{a} v {B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.({A}{a} v {B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}{a} v {B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}{a} v {B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
     "(¬{A}{a} v ¬{B}{b}) -> {C}{c}": [
-      "if {verb_clause.(¬{A}{a} v ¬{B}{b})}, then {verb_clause.{C}it}",
+      "if {verb_clause.(¬{A}{a} v ¬{B}{b})}, then {verb_clause.{C}{c}}",
       "{noun_clause.(¬{A}{a} v ¬{B}{b}).subj} leads to {noun_clause.{C}the_thing.subj}"
     ],
     "(¬{A}{a} v {B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.(¬{A}{a} v {B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}{a} v {B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}{a} v {B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
     "({A}{a} v ¬{B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.({A}{a} v ¬{B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.({A}{a} v ¬{B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.({A}{a} v ¬{B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
     "(¬{A}{a} v ¬{B}{b}) -> ¬{C}{c}": [
-      "if {verb_clause.(¬{A}{a} v ¬{B}{b})}, then {verb_clause.¬{C}it}",
+      "if {verb_clause.(¬{A}{a} v ¬{B}{b})}, then {verb_clause.¬{C}{c}}",
       "{noun_clause.(¬{A}{a} v ¬{B}{b}).subj} leads to {noun_clause.¬{C}the_thing.subj}"
     ],
 
 
     "{A}{a} -> ({B}{b} v {C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.({B}it v {C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.({B}{b} v {C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.({B}the_thing v {C}the_thing).subj}"
     ],
     "¬{A}{a} -> ({B}{b} v {C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}it v {C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}{b} v {C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.({B}the_thing v {C}the_thing).subj}"
     ],
     "{A}{a} -> (¬{B}{b} v {C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}it v {C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}{b} v {C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing v {C}the_thing).subj}"
     ],
     "{A}{a} -> ({B}{b} v ¬{C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.({B}it v ¬{C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.({B}{b} v ¬{C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.({B}the_thing v ¬{C}the_thing).subj}"
     ],
     "¬{A}{a} -> (¬{B}{b} v {C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}it v {C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}{b} v {C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing v {C}the_thing).subj}"
     ],
     "¬{A}{a} -> ({B}{b} v ¬{C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}it v ¬{C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.({B}{b} v ¬{C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.({B}the_thing v ¬{C}the_thing).subj}"
     ],
     "{A}{a} -> (¬{B}{b} v ¬{C}{c})": [
-      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}it v ¬{C}it)}",
+      "if {verb_clause.{A}{a}}, then {verb_clause.(¬{B}{b} v ¬{C}{c})}",
       "{noun_clause.{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing v ¬{C}the_thing).subj}"
     ],
     "¬{A}{a} -> (¬{B}{b} v ¬{C}{c})": [
-      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}it v ¬{C}it)}",
+      "if {verb_clause.¬{A}{a}}, then {verb_clause.(¬{B}{b} v ¬{C}{c})}",
       "{noun_clause.¬{A}{a}.subj} leads to {noun_clause.(¬{B}the_thing v ¬{C}the_thing).subj}"
     ]
 
