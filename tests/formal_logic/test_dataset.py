@@ -135,6 +135,9 @@ def generate_dataset(dataset: NLProofSDataset,
 
 
 def test_original_pipeline():
+    translator = load_translator('sentence_wise_translator', 'config')
+    distractor = UnknownFactDistractor()
+
     generator = load_proof_tree_generator(
         config_paths=['./configs/formal_logic/arguments/syllogistic_corpus-02.json'],
 
@@ -143,9 +146,6 @@ def test_original_pipeline():
         quantified_arguments_weight=0.0,
     )
 
-    distractor = UnknownFactDistractor()
-
-    translator = load_translator('sentence_wise_translator', 'config')
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline, 'CWA',
@@ -157,16 +157,15 @@ def test_original_pipeline():
 
 
 def test_pipeline_with_LP_arguments():
+    translator = load_translator('clause_typed_translator', 'config')
+    distractor = UnknownFactDistractor()
+
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/formal_logic/arguments/LP.axiom.json',
             './configs/formal_logic/arguments/LP.theorem.json',
         ],
     )
-
-    distractor = UnknownFactDistractor()
-
-    translator = load_translator('clause_typed_translator', 'config')
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
@@ -179,6 +178,9 @@ def test_pipeline_with_LP_arguments():
 
 
 def test_pipeline_with_minumum_PL_arguments():
+    translator = load_translator('clause_typed_translator', 'config')
+    distractor = UnknownFactDistractor()
+
     generator = load_proof_tree_generator(
         arguments=[
             Argument(
@@ -195,10 +197,6 @@ def test_pipeline_with_minumum_PL_arguments():
         ]
     )
 
-    distractor = UnknownFactDistractor()
-
-    translator = load_translator('clause_typed_translator', 'config')
-
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline, 'CWA',
@@ -210,6 +208,9 @@ def test_pipeline_with_minumum_PL_arguments():
 
 
 def test_pipeline_with_PL_arguments():
+    translator = load_translator('clause_typed_translator', 'config')
+    distractor = UnknownFactDistractor()
+
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/formal_logic/arguments/LP.axiom.json',
@@ -219,10 +220,6 @@ def test_pipeline_with_PL_arguments():
             './configs/formal_logic/arguments/PL_minus_LP.theorem.json',
         ],
     )
-
-    distractor = UnknownFactDistractor()
-
-    translator = load_translator('clause_typed_translator', 'config')
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
@@ -238,7 +235,7 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger(level=logging.INFO)
 
-    RAISE_IF_TRANSLATION_NOT_FOUND = True
+    RAISE_IF_TRANSLATION_NOT_FOUND = False
 
     # test_pipeline_with_LP_arguments()
     # test_pipeline_with_minumum_PL_arguments()
