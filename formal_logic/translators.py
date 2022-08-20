@@ -287,7 +287,15 @@ class ClauseTypedTranslator(Translator):
             )
             if term_templated_translation_replaced is None:
                 if raise_if_translation_not_found:
-                    raise TranslationNotFoundError(f'translation may not be complete for "{term_templated_translation_replaced}"')
+                    # import pudb; pudb.set_trace()
+                    # # XXX remove followings
+                    # term_templated_translation_replaced = self._replace_clause_templates(
+                    #     formula,
+                    #     clause_templated_translation_replaced,
+                    #     term_mapping,
+                    # )
+
+                    raise TranslationNotFoundError(f'translation not found for {formula.rep}')
                 else:
                     translations.append(None)
                     translation_names.append(None)
@@ -435,6 +443,13 @@ class ClauseTypedTranslator(Translator):
         while has_clause_replacement:
             has_clause_replacement = False
             for clause_template, pos_typed_translations in self._clause_translations.items():
+
+                # if clause_template == 'verb_clause.¬{A}{a}':
+                #     print('!!!!!!!!!!!!!!!!!!!!!')
+                #     print(clause_template_replaced)
+                #     print(term_templated_translation_replaced)
+                #     print(term_templated_translation_replaced.find(f'{{{clause_template_replaced}}}') >= 0)
+
                 for clause_template_mapping in generate_replacement_mappings_from_formula([Formula(clause_template)],
                                                                                           [formula]):
                     clause_template_replaced = replace_formula(Formula(clause_template), clause_template_mapping).rep
