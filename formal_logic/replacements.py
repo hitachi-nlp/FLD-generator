@@ -192,26 +192,32 @@ def generate_replacement_mappings_from_terms(src_predicates: List[str],
                                              constraints: Optional[Dict[str, str]] = None,
                                              block_shuffle=False,
                                              allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
-    get_pred_replacements = lambda: _generate_replacement_mappings(
-        src_predicates,
-        tgt_predicates,
-        constraints=constraints,
-        block_shuffle=block_shuffle,
-        allow_many_to_one_replacement=allow_many_to_one_replacement,
-    )
+    if len(src_predicates) == 0 or len(tgt_predicates) == 0:
+        # identity mapping for formulas that do not have predicates.
+        get_pred_replacements = lambda : [{}]
+    else:
+        get_pred_replacements = lambda: _generate_replacement_mappings(
+            src_predicates,
+            tgt_predicates,
+            constraints=constraints,
+            block_shuffle=block_shuffle,
+            allow_many_to_one_replacement=allow_many_to_one_replacement,
+        )
 
-    get_const_replacements = lambda: _generate_replacement_mappings(
-        src_constants,
-        tgt_constants,
-        constraints=constraints,
-        block_shuffle=block_shuffle,
-        allow_many_to_one_replacement=allow_many_to_one_replacement,
-    )
+    if len(src_constants) == 0 or len(tgt_constants) == 0:
+        # identity mapping for formulas that do not have constants.
+        get_const_replacements = lambda: [{}]
+    else:
+        get_const_replacements = lambda: _generate_replacement_mappings(
+            src_constants,
+            tgt_constants,
+            constraints=constraints,
+            block_shuffle=block_shuffle,
+            allow_many_to_one_replacement=allow_many_to_one_replacement,
+        )
 
     for pred_replacements in get_pred_replacements():
         for const_replacements in get_const_replacements():
-            if pred_replacements is None or const_replacements is None:
-                continue
             replacements = copy.copy(pred_replacements)
             replacements.update(const_replacements)
 
@@ -245,12 +251,14 @@ def _generate_replacement_mappings(src_objs: List[Any],
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
             }
-    elif len(src_objs) == 0 and len(tgt_objs) == 0:
-        yield {}
-    elif len(src_objs) == 0 and len(tgt_objs) > 0:
-        yield {}
+    # elif len(src_objs) == 0 and len(tgt_objs) == 0:
+    #     yield {}
+    # elif len(src_objs) == 0 and len(tgt_objs) > 0:
+    #     yield {}
+    # else:
+    #     yield None
     else:
-        yield None
+        raise ValueError()
 
 
 @profile
