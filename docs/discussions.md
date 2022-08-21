@@ -1,5 +1,4 @@
 # todo
-* resolveはlru_cache
 * {a=it}
 * コンポーネントを完成させていく
     * "proof tree generation"
