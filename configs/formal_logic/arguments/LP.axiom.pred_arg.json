@@ -1,6 +1,6 @@
 [
   {
-      "id": "implication_intro",
+      "id": "implication_intro.pred_arg",
       "premises": [
           "{A}{a} -> {B}{b}",
           "{A}{a}"
@@ -8,12 +8,12 @@
       "conclusion": "{B}{b}"
   },
   {
-      "id": "__implication_elim"
+      "id": "__implication_elim.pred_arg"
   },
 
 
   {
-      "id": "and_intro",
+      "id": "and_intro.pred_arg",
       "premises": [
           "{A}{a}",
           "{B}{b}"
@@ -21,14 +21,14 @@
       "conclusion": "({A}{a} & {B}{b})"
   },
   {
-      "id": "and_elim_0",
+      "id": "and_elim_0.pred_arg",
       "premises": [
           "({A}{a} & {B}{b})"
       ],
       "conclusion": "{A}{a}"
   },
   {
-      "id": "and_elim_1",
+      "id": "and_elim_1.pred_arg",
       "premises": [
           "({A}{a} & {B}{b})"
       ],
@@ -37,20 +37,20 @@
 
 
   {
-      "id": "or_intro_0",
+      "id": "or_intro_0.pred_arg",
       "premises": [
           "{A}{a}"
       ],
       "conclusion": "({A}{a} v {B}{b})"
   },
   {
-      "id": "or_intro_1",
+      "id": "or_intro_1.pred_arg",
       "premises": [
           "{B}{b}"
       ],
       "conclusion": "({A}{a} v {B}{b})"
   },
   {
-      "id": "__or_elim"
+      "id": "__or_elim.pred_arg"
   }
 ]

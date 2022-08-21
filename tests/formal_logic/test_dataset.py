@@ -22,8 +22,8 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                               config_paths: Optional[List[str]] = None,
-                              complicated_arguments_weight=0.3,
-                              quantified_arguments_weight=0.1,
+                              complicated_arguments_weight=0.0,
+                              quantified_arguments_weight=0.0,
                               elim_dneg=True):
     arguments = arguments or []
 
@@ -134,7 +134,7 @@ def generate_dataset(dataset: NLProofSDataset,
         logger.info('=================== generating proof tree =========================')
 
 
-def test_original_pipeline():
+def test_original():
     translator = load_translator('sentence_wise_translator', 'config')
     distractor = UnknownFactDistractor()
 
@@ -156,15 +156,17 @@ def test_original_pipeline():
     generate_dataset(dataset)
 
 
-def test_pipeline_with_LP_arguments():
+def test_LP_pred():
     translator = load_translator('clause_typed_translator', 'config')
     distractor = UnknownFactDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.json',
-            './configs/formal_logic/arguments/LP.theorem.json',
+            './configs/formal_logic/arguments/LP.axiom.pred.json',
+            './configs/formal_logic/arguments/LP.theorem.pred.json',
         ],
+        complicated_arguments_weight=0.3,
+        quantified_arguments_weight=0.0,
     )
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
@@ -177,7 +179,7 @@ def test_pipeline_with_LP_arguments():
     generate_dataset(dataset)
 
 
-def test_pipeline_with_minumum_PL_arguments():
+def test_minimum_PL():
     translator = load_translator('clause_typed_translator', 'config')
     distractor = UnknownFactDistractor()
 
@@ -194,7 +196,9 @@ def test_pipeline_with_minumum_PL_arguments():
                 id='MPL.syllogism',
             ),
 
-        ]
+        ],
+        complicated_arguments_weight=0.3,
+        quantified_arguments_weight=0.0,
     )
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
@@ -207,18 +211,46 @@ def test_pipeline_with_minumum_PL_arguments():
     generate_dataset(dataset)
 
 
-def test_pipeline_with_PL_arguments():
+def test_LP_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
     distractor = UnknownFactDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.json',
-            './configs/formal_logic/arguments/LP.theorem.json',
+            './configs/formal_logic/arguments/LP.axiom.pred.json',
+            './configs/formal_logic/arguments/LP.theorem.pred.json',
 
-            './configs/formal_logic/arguments/PL_minus_LP.axiom.json',
-            './configs/formal_logic/arguments/PL_minus_LP.theorem.json',
+            './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
+            './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
         ],
+        complicated_arguments_weight=0.3,
+        quantified_arguments_weight=0.0,
+    )
+
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
+
+    dataset = NLProofSDataset(pipeline, 'CWA',
+                              depth=5,
+                              num_distractor_factor=5,
+                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
+
+    generate_dataset(dataset)
+
+
+def test_PL_pred_arg():
+    translator = load_translator('clause_typed_translator', 'config')
+    distractor = UnknownFactDistractor()
+
+    generator = load_proof_tree_generator(
+        config_paths=[
+            './configs/formal_logic/arguments/LP.axiom.pred.json',
+            './configs/formal_logic/arguments/LP.theorem.pred.json',
+
+            './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
+            './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
+        ],
+        complicated_arguments_weight=0.3,
+        quantified_arguments_weight=0.3,
     )
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
@@ -237,6 +269,7 @@ if __name__ == '__main__':
 
     RAISE_IF_TRANSLATION_NOT_FOUND = False
 
-    # test_pipeline_with_LP_arguments()
-    # test_pipeline_with_minumum_PL_arguments()
-    test_pipeline_with_PL_arguments()
+    # test_LP_pred()
+    # test_LP_pred_arg()
+    # test_minimum_PL()
+    test_PL_pred_arg()
