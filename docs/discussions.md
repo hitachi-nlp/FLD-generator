@@ -1,6 +1,5 @@
 # todo
 * 命名
-    - term
     - pred_arg
 * コンポーネントを完成させていく
     * "distractor"
@@ -37,6 +36,8 @@
     * 「示した定理は使って良い」
         - e.g.) generalized modus ponene
     * 本研究，完全性が無い．やはり，完全な体系でやりたい．
+    * contextの生成からやらせれば，fact => 証明 すべてを自分でできる．これが目指す最終形態．
+    * 背理法 x 自然言語 できれば絶対に面白い．
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
 
@@ -61,6 +62,8 @@
 # proof tree generation
 
 ## [todo] パターン
+* [todo] GaとGが同時に出てくることを防ぐ機構があるか？
+    - formula.validate
 * [todo] notの意味を表現する．
     - [done] contraposition
     - ドモルガン
@@ -624,7 +627,16 @@
 
 
 # others
-* [First-order logic - Wikipedia](https://en.wikipedia.org/wiki/First-order_logic#Terms)
-
-
-
+* 命名
+    * [論理学の命名規則](https://en.wikipedia.org/wiki/Atomic_formula#Atomic_formula_in_first-order_logic)
+        - term = constant + variables + predicate(constant, variable)
+        - formula = more complicated ones built by the system's inductive rules.
+        - atomic formula = predicate(constant, variable)
+    * 論理学を作る (P138)
+        - interprete = to map a formula to another formula given a mapping
+        - an interpretation ~ a mapping
+        - a model ~ an interpretation
+    * ours
+        - interprand = symbols to be interpreted = predicates + constants
+        - pullled formula = a formula which is interpreted by a mapping from that space to this space
+        - pushed formula = inverse of pulled formula

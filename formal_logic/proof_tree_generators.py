@@ -15,12 +15,12 @@ from .formula_checkers import (
 )
 from .argument import Argument
 from .argument_checkers import is_argument_nonsense
-from .replacements import (
-    generate_replacement_mappings_from_formula,
-    generate_replaced_formulas,
+from .interpretation import (
+    generate_mappings_from_formula,
+    generate_formulas_in_target_space,
     generate_complicated_arguments,
-    replace_formula,
-    replace_argument,
+    interprete_formula,
+    interprete_argument,
     formula_is_identical_to,
     argument_is_identical_to,
     generate_quantifier_arguments,
@@ -241,18 +241,18 @@ def _generate_stem(arguments: List[Argument],
                 break
 
             is_arg_done = False
-            next_arg_replaced = None
-            for next_arg_unreplaced in _shuffle_arguments(chainable_args, argument_weights):
+            next_arg_pulled = None
+            for next_arg in _shuffle_arguments(chainable_args, argument_weights):
                 if is_arg_done:
                     break
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
-                for premise in _shuffle(next_arg_unreplaced.premises):
+                for premise in _shuffle(next_arg.premises):
                     if is_arg_done:
                         break
 
-                    for premise_mapping in generate_replacement_mappings_from_formula(
+                    for premise_mapping in generate_mappings_from_formula(
                         [premise],
                         # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [cur_conclusion],
@@ -261,17 +261,17 @@ def _generate_stem(arguments: List[Argument],
                         if is_arg_done:
                             break
 
-                        premise_replaced = replace_formula(premise, premise_mapping, elim_dneg=elim_dneg)
+                        premise_pulled = interprete_formula(premise, premise_mapping, elim_dneg=elim_dneg)
 
-                        if premise_replaced.rep != cur_conclusion.rep:  # chainable or not
+                        if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
                             continue
 
                         # for early rejection
-                        if is_formula_set_nonsense([premise_replaced] + formulas_in_tree):
+                        if is_formula_set_nonsense([premise_pulled] + formulas_in_tree):
                             continue
 
-                        for mapping in generate_replacement_mappings_from_formula(
-                            next_arg_unreplaced.premises + [next_arg_unreplaced.conclusion],
+                        for mapping in generate_mappings_from_formula(
+                            next_arg.premises + [next_arg.conclusion],
                             [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
                             block_shuffle=True,
@@ -279,18 +279,18 @@ def _generate_stem(arguments: List[Argument],
                             if is_arg_done:
                                 break
 
-                            next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
+                            next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            if is_argument_nonsense(next_arg_replaced):
+                            if is_argument_nonsense(next_arg_pulled):
                                 continue
 
-                            if is_formula_set_nonsense(next_arg_replaced.all_formulas + formulas_in_tree):
+                            if is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree):
                                 continue
 
-                            if not _is_formula_new(next_arg_replaced.conclusion, formulas_in_tree):
+                            if not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
                                 continue
 
-                            other_premises = [premise for premise in next_arg_replaced.premises
+                            other_premises = [premise for premise in next_arg_pulled.premises
                                               if premise.rep != cur_conclusion.rep]
                             if not _is_formulas_new(other_premises, formulas_in_tree):
                                 # If any of other premises already exists in the tree, it will lead to a loop.
@@ -302,16 +302,16 @@ def _generate_stem(arguments: List[Argument],
 
             if is_arg_done:
                 # Update
-                for i_premise, premise in enumerate(next_arg_replaced.premises):
+                for i_premise, premise in enumerate(next_arg_pulled.premises):
                     if premise.rep == cur_conclusion.rep:
-                        next_arg_replaced.premises[i_premise] = cur_conclusion  # refer to the unique object.
-                next_conclusion_node = ProofNode(next_arg_replaced.conclusion)
-                next_conclusion_node.argument = next_arg_replaced
+                        next_arg_pulled.premises[i_premise] = cur_conclusion  # refer to the unique object.
+                next_conclusion_node = ProofNode(next_arg_pulled.conclusion)
+                next_conclusion_node.argument = next_arg_pulled
                 next_premise_nodes = [
                     cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
-                    for premise in next_arg_replaced.premises
+                    for premise in next_arg_pulled.premises
                 ]
-                update(next_premise_nodes, next_conclusion_node, next_arg_replaced, proof_tree)
+                update(next_premise_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
@@ -354,7 +354,7 @@ def _extend_braches(proof_tree: ProofTree,
             return
 
         is_leaf_node_done = False
-        next_arg_replaced = None
+        next_arg_pulled = None
         target_leaf_node = None
         for leaf_node in _shuffle(leaf_nodes):
             if is_leaf_node_done:
@@ -371,7 +371,7 @@ def _extend_braches(proof_tree: ProofTree,
                 # logger.info('_extend_braches() retry since no chainable arguments found ...')
                 continue
 
-            for next_arg_unreplaced in _shuffle_arguments(chainable_args, weights=argument_weights):
+            for next_arg in _shuffle_arguments(chainable_args, weights=argument_weights):
                 if is_leaf_node_done:
                     break
 
@@ -379,8 +379,8 @@ def _extend_braches(proof_tree: ProofTree,
                 # The following two nested loop is for speedup:
                 # 1. First, we generate the small number of mappings by using small number of symbols. Then, we find appropriate sub-mappings
                 # 2. Second, we generate full number of mappings, using the sub-mappings as filters.
-                for conclusion_mapping in generate_replacement_mappings_from_formula(
-                        [next_arg_unreplaced.conclusion],
+                for conclusion_mapping in generate_mappings_from_formula(
+                        [next_arg.conclusion],
                         # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
                         block_shuffle=True,
@@ -388,30 +388,30 @@ def _extend_braches(proof_tree: ProofTree,
                     if is_leaf_node_done:
                         break
 
-                    conclusion_replaced = replace_formula(next_arg_unreplaced.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
+                    conclusion_pulled = interprete_formula(next_arg.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
 
-                    if conclusion_replaced.rep != leaf_node.formula.rep:
+                    if conclusion_pulled.rep != leaf_node.formula.rep:
                         continue
 
                     # for early rejection
-                    if is_formula_set_nonsense([conclusion_replaced] + formulas_in_tree):
+                    if is_formula_set_nonsense([conclusion_pulled] + formulas_in_tree):
                         continue
 
-                    for mapping in generate_replacement_mappings_from_formula(
-                        next_arg_unreplaced.all_formulas,
+                    for mapping in generate_mappings_from_formula(
+                        next_arg.all_formulas,
                         [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         constraints=conclusion_mapping,
                         block_shuffle=True,
                     ):
-                        next_arg_replaced = replace_argument(next_arg_unreplaced, mapping, elim_dneg=elim_dneg)
+                        next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                        if is_argument_nonsense(next_arg_replaced):
+                        if is_argument_nonsense(next_arg_pulled):
                             continue
 
-                        if is_formula_set_nonsense(next_arg_replaced.all_formulas + formulas_in_tree):
+                        if is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree):
                             continue
 
-                        if not _is_formulas_new(next_arg_replaced.premises, formulas_in_tree):
+                        if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
                             continue
@@ -421,10 +421,10 @@ def _extend_braches(proof_tree: ProofTree,
 
         if is_leaf_node_done:
             # Upate tree
-            next_arg_replaced.conclusion = target_leaf_node.formula  # refer to the sampe object
-            target_leaf_node.argument = next_arg_replaced
+            next_arg_pulled.conclusion = target_leaf_node.formula  # refer to the sampe object
+            target_leaf_node.argument = next_arg_pulled
             next_premise_nodes = [ProofNode(premise)
-                                  for premise in next_arg_replaced.premises]
+                                  for premise in next_arg_pulled.premises]
             for premise_node in next_premise_nodes:
                 proof_tree.add_node(premise_node)
                 target_leaf_node.add_child(premise_node)

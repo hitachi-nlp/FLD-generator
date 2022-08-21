@@ -23,22 +23,22 @@ def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
                                    get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
     for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion], get_name=True):
-        replaced_argument = replace_argument(src_arg, mapping, elim_dneg=elim_dneg)
+        complicated_argument = interprete_argument(src_arg, mapping, elim_dneg=elim_dneg)
         if get_name:
-            yield replaced_argument, mapping, name
+            yield complicated_argument, mapping, name
         else:
-            yield replaced_argument, mapping
+            yield complicated_argument, mapping
 
 
 def generate_complicated_formulas(src_formula: Formula,
                                   elim_dneg=False,
                                   get_name=False) -> Union[Iterable[Tuple[Formula, Dict[str, str]]], Iterable[Tuple[Formula, Dict[str, str], str]]]:
     for mapping, name in generate_complication_mappings_from_formula([src_formula], get_name=True):
-        replaced_formula = replace_formula(src_formula, mapping, elim_dneg=elim_dneg)
+        complicated_formula = interprete_formula(src_formula, mapping, elim_dneg=elim_dneg)
         if get_name:
-            yield replaced_formula, mapping, name
+            yield complicated_formula, mapping, name
         else:
-            yield replaced_formula, mapping
+            yield complicated_formula, mapping
 
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],
@@ -100,62 +100,62 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                         yield mapping
 
 
-def generate_replaced_arguments(src_arg: Argument,
-                                tgt_arg: Argument,
-                                add_complicated_arguments=False,
-                                constraints: Optional[Dict[str, str]] = None,
-                                block_shuffle=False,
-                                allow_many_to_one_replacement=True,
-                                elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_replacement_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
-                                                              tgt_arg.premises + [tgt_arg.conclusion],
-                                                              add_complicated_arguments=add_complicated_arguments,
-                                                              constraints=constraints,
-                                                              block_shuffle=block_shuffle,
-                                                              allow_many_to_one_replacement=allow_many_to_one_replacement):
-        yield replace_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
+def generate_arguments_in_target_space(src_arg: Argument,
+                                       tgt_arg: Argument,
+                                       add_complicated_arguments=False,
+                                       constraints: Optional[Dict[str, str]] = None,
+                                       block_shuffle=False,
+                                       allow_many_to_one=True,
+                                       elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
+    for mapping in generate_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
+                                                  tgt_arg.premises + [tgt_arg.conclusion],
+                                                  add_complicated_arguments=add_complicated_arguments,
+                                                  constraints=constraints,
+                                                  block_shuffle=block_shuffle,
+                                                  allow_many_to_one=allow_many_to_one):
+        yield interprete_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
 
-def generate_replaced_formulas(src_formula: Formula,
-                               tgt_formula: Formula,
-                               add_complicated_arguments=False,
-                               constraints: Optional[Dict[str, str]] = None,
-                               block_shuffle=False,
-                               allow_many_to_one_replacement=True,
-                               elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for mapping in generate_replacement_mappings_from_formula([src_formula],
-                                                              [tgt_formula],
-                                                              add_complicated_arguments=add_complicated_arguments,
-                                                              constraints=constraints,
-                                                              block_shuffle=block_shuffle,
-                                                              allow_many_to_one_replacement=allow_many_to_one_replacement):
-        yield replace_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
+def generate_formulas_in_target_space(src_formula: Formula,
+                                      tgt_formula: Formula,
+                                      add_complicated_arguments=False,
+                                      constraints: Optional[Dict[str, str]] = None,
+                                      block_shuffle=False,
+                                      allow_many_to_one=True,
+                                      elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+    for mapping in generate_mappings_from_formula([src_formula],
+                                                  [tgt_formula],
+                                                  add_complicated_arguments=add_complicated_arguments,
+                                                  constraints=constraints,
+                                                  block_shuffle=block_shuffle,
+                                                  allow_many_to_one=allow_many_to_one):
+        yield interprete_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
 @profile
-def generate_replacement_mappings_from_argument(src_argument: Argument,
-                                                tgt_argument: Argument,
-                                                add_complicated_arguments=False,
-                                                constraints: Optional[Dict[str, str]] = None,
-                                                block_shuffle=False,
-                                                allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
-    yield from generate_replacement_mappings_from_formula(
+def generate_mappings_from_argument(src_argument: Argument,
+                                    tgt_argument: Argument,
+                                    add_complicated_arguments=False,
+                                    constraints: Optional[Dict[str, str]] = None,
+                                    block_shuffle=False,
+                                    allow_many_to_one=True) -> Iterable[Dict[str, str]]:
+    yield from generate_mappings_from_formula(
         src_argument.all_formulas,
         tgt_argument.all_formulas,
         add_complicated_arguments=add_complicated_arguments,
         constraints=constraints,
         block_shuffle=block_shuffle,
-        allow_many_to_one_replacement=allow_many_to_one_replacement,
+        allow_many_to_one=allow_many_to_one,
     )
 
 
 @profile
-def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
-                                               tgt_formulas: List[Formula],
-                                               add_complicated_arguments=False,
-                                               constraints: Optional[Dict[str, str]] = None,
-                                               block_shuffle=False,
-                                               allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
+def generate_mappings_from_formula(src_formulas: List[Formula],
+                                   tgt_formulas: List[Formula],
+                                   add_complicated_arguments=False,
+                                   constraints: Optional[Dict[str, str]] = None,
+                                   block_shuffle=False,
+                                   allow_many_to_one=True) -> Iterable[Dict[str, str]]:
     if add_complicated_arguments:
         complication_mappings = generate_complication_mappings_from_formula(src_formulas)
     else:
@@ -166,7 +166,7 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
         ]
 
     for complication_mapping in complication_mappings:
-        complicated_formulas = [replace_formula(formula, complication_mapping)
+        complicated_formulas = [interprete_formula(formula, complication_mapping)
                                 for formula in src_formulas]
 
         # Use "sorted" to eliminate randomness here.
@@ -175,61 +175,61 @@ def generate_replacement_mappings_from_formula(src_formulas: List[Formula],
 
         src_constants = sorted(set([c.rep for src_formula in complicated_formulas for c in src_formula.constants]))
         tgt_constants = sorted(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
-        yield from generate_replacement_mappings_from_terms(src_predicates,
-                                                            src_constants,
-                                                            tgt_predicates,
-                                                            tgt_constants,
-                                                            constraints=constraints,
-                                                            block_shuffle=block_shuffle,
-                                                            allow_many_to_one_replacement=allow_many_to_one_replacement)
+        yield from generate_mappings_from_predicates_and_constants(src_predicates,
+                                                                   src_constants,
+                                                                   tgt_predicates,
+                                                                   tgt_constants,
+                                                                   constraints=constraints,
+                                                                   block_shuffle=block_shuffle,
+                                                                   allow_many_to_one=allow_many_to_one)
 
 
 @profile
-def generate_replacement_mappings_from_terms(src_predicates: List[str],
-                                             src_constants: List[str],
-                                             tgt_predicates: List[str],
-                                             tgt_constants: List[str],
-                                             constraints: Optional[Dict[str, str]] = None,
-                                             block_shuffle=False,
-                                             allow_many_to_one_replacement=True) -> Iterable[Dict[str, str]]:
+def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
+                                                    src_constants: List[str],
+                                                    tgt_predicates: List[str],
+                                                    tgt_constants: List[str],
+                                                    constraints: Optional[Dict[str, str]] = None,
+                                                    block_shuffle=False,
+                                                    allow_many_to_one=True) -> Iterable[Dict[str, str]]:
     if len(src_predicates) == 0 or len(tgt_predicates) == 0:
         # identity mapping for formulas that do not have predicates.
-        get_pred_replacements = lambda : [{}]
+        get_pred_mappings = lambda : [{}]
     else:
-        get_pred_replacements = lambda: _generate_replacement_mappings(
+        get_pred_mappings = lambda: _generate_mappings(
             src_predicates,
             tgt_predicates,
             constraints=constraints,
             block_shuffle=block_shuffle,
-            allow_many_to_one_replacement=allow_many_to_one_replacement,
+            allow_many_to_one=allow_many_to_one,
         )
 
     if len(src_constants) == 0 or len(tgt_constants) == 0:
         # identity mapping for formulas that do not have constants.
-        get_const_replacements = lambda: [{}]
+        get_const_mappings = lambda: [{}]
     else:
-        get_const_replacements = lambda: _generate_replacement_mappings(
+        get_const_mappings = lambda: _generate_mappings(
             src_constants,
             tgt_constants,
             constraints=constraints,
             block_shuffle=block_shuffle,
-            allow_many_to_one_replacement=allow_many_to_one_replacement,
+            allow_many_to_one=allow_many_to_one,
         )
 
-    for pred_replacements in get_pred_replacements():
-        for const_replacements in get_const_replacements():
-            replacements = copy.copy(pred_replacements)
-            replacements.update(const_replacements)
+    for pred_mappings in get_pred_mappings():
+        for const_mappings in get_const_mappings():
+            mappings = copy.copy(pred_mappings)
+            mappings.update(const_mappings)
 
-            yield replacements
+            yield mappings
 
 
 @profile
-def _generate_replacement_mappings(src_objs: List[Any],
-                                   tgt_objs: List[Any],
-                                   constraints: Optional[Dict[Any, Any]] = None,
-                                   block_shuffle=False,
-                                   allow_many_to_one_replacement=True) -> Iterable[Optional[Dict[Any, Any]]]:
+def _generate_mappings(src_objs: List[Any],
+                       tgt_objs: List[Any],
+                       constraints: Optional[Dict[Any, Any]] = None,
+                       block_shuffle=False,
+                       allow_many_to_one=True) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError('Elements in src_objs are not unique: {src_objs}')
     if len(set(tgt_objs)) != len(tgt_objs):
@@ -246,7 +246,7 @@ def _generate_replacement_mappings(src_objs: List[Any],
                                                   len(src_objs),
                                                   constraints=idx_constraints,
                                                   block_shuffle=block_shuffle,
-                                                  allow_many_to_one_replacement=allow_many_to_one_replacement):
+                                                  allow_many_to_one=allow_many_to_one):
             yield {
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
@@ -267,7 +267,7 @@ def _make_permutations(objs: List[Any],
                        src_idx=0,
                        constraints: Optional[Dict[int, Any]] = None,
                        block_shuffle=False,
-                       allow_many_to_one_replacement=True) -> Iterable[List[Any]]:
+                       allow_many_to_one=True) -> Iterable[List[Any]]:
     """
 
     block_shuffle=Trueであって，完全にblock_shuffleできるわけではない．
@@ -291,7 +291,7 @@ def _make_permutations(objs: List[Any],
         else:
             heads = objs
         for head in heads:
-            if allow_many_to_one_replacement:
+            if allow_many_to_one:
                 tail_objs = objs
             else:
                 tail_objs = objs.copy()
@@ -302,27 +302,27 @@ def _make_permutations(objs: List[Any],
                                            src_idx=src_idx + 1,
                                            constraints=constraints,
                                            block_shuffle=block_shuffle,
-                                           allow_many_to_one_replacement=allow_many_to_one_replacement):
+                                           allow_many_to_one=allow_many_to_one):
                 yield [head] + tail
 
 
-def replace_argument(arg: Argument,
-                     replacements: Dict[str, str],
-                     elim_dneg=False) -> Argument:
-    replaced_premises = [replace_formula(formula, replacements, elim_dneg=elim_dneg)
+def interprete_argument(arg: Argument,
+                        mapping: Dict[str, str],
+                        elim_dneg=False) -> Argument:
+    interpretedd_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
                          for formula in arg.premises]
-    replaced_conclusion = replace_formula(arg.conclusion, replacements, elim_dneg=elim_dneg)
-    return Argument(replaced_premises,
-                    replaced_conclusion,
+    interpretedd_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
+    return Argument(interpretedd_premises,
+                    interpretedd_conclusion,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
 
 
-def replace_formula(formula: Formula,
-                    replacements: Dict[str, str],
-                    elim_dneg=False) -> Formula:
-    return _expand_op(Formula(_replace_rep(formula.rep, replacements, elim_dneg=elim_dneg)))
+def interprete_formula(formula: Formula,
+                       mapping: Dict[str, str],
+                       elim_dneg=False) -> Formula:
+    return _expand_op(Formula(_interprete_rep(formula.rep, mapping, elim_dneg=elim_dneg)))
 
 
 _expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
@@ -347,38 +347,38 @@ def _expand_op(formula: Formula) -> Formula:
     return Formula(rep)
 
 
-def _replace_rep(rep: str,
-                 replacements: Dict[str, str],
-                 elim_dneg=False) -> str:
-    replaced = rep
+def _interprete_rep(rep: str,
+                    mapping: Dict[str, str],
+                    elim_dneg=False) -> str:
+    interpreted_rep = rep
 
-    if len(replacements) >= 1:
-        pattern = re.compile("|".join(replacements.keys()))
-        replaced = pattern.sub(lambda m: replacements[m.group(0)], rep)
+    if len(mapping) >= 1:
+        pattern = re.compile("|".join(mapping.keys()))
+        interpreted_rep = pattern.sub(lambda m: mapping[m.group(0)], rep)
 
     if elim_dneg:
-        replaced = eliminate_double_negation(Formula(replaced)).rep
+        interpreted_rep = eliminate_double_negation(Formula(interpreted_rep)).rep
 
-    return replaced
+    return interpreted_rep
 
 
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
-                            allow_many_to_one_replacementg=True,
+                            allow_many_to_oneg=True,
                             add_complicated_arguments=False,
                             elim_dneg=False) -> bool:
-    """ Check whether this formula can be the same as that formula by any replacement mapping.
+    """ Check whether this formula can be the same as that formula by any mapping.
 
-    Note that this and that is not symmetrical, unless allow_many_to_one_replacementg=False.
+    Note that this and that is not symmetrical, unless allow_many_to_oneg=False.
     For example:
         this: {A}{a} -> {B}{b}
         that: {A}{a} -> {A}{a}
 
-        formula_is_identical_to(this, that, allow_many_to_one_replacementg=True): True
-        formula_is_identical_to(that, this, allow_many_to_one_replacementg=True): False
+        formula_is_identical_to(this, that, allow_many_to_oneg=True): True
+        formula_is_identical_to(that, this, allow_many_to_oneg=True): False
 
-        formula_is_identical_to(this, that, allow_many_to_one_replacementg=False): False
-        formula_is_identical_to(that, this, allow_many_to_one_replacementg=False): False
+        formula_is_identical_to(this, that, allow_many_to_oneg=False): False
+        formula_is_identical_to(that, this, allow_many_to_oneg=False): False
     """
     if elim_dneg:
         this_formula = eliminate_double_negation(this_formula)
@@ -387,9 +387,9 @@ def formula_is_identical_to(this_formula: Formula,
     if formula_can_not_be_identical_to(this_formula, that_formula, add_complicated_arguments=add_complicated_arguments, elim_dneg=elim_dneg):
         return False
 
-    for mapping in generate_replacement_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one_replacement=allow_many_to_one_replacementg):
-        this_replaced = replace_formula(this_formula, mapping, elim_dneg=elim_dneg)
-        if this_replaced.rep == that_formula.rep:
+    for mapping in generate_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one=allow_many_to_oneg):
+        this_interpreted = interprete_formula(this_formula, mapping, elim_dneg=elim_dneg)
+        if this_interpreted.rep == that_formula.rep:
             return True
     return False
 
@@ -415,7 +415,7 @@ def formula_can_not_be_identical_to(this_formula: Formula,
 
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
-                             allow_many_to_one_replacementg=True,
+                             allow_many_to_oneg=True,
                              add_complicated_arguments=False,
                              elim_dneg=False) -> bool:
 
@@ -451,14 +451,14 @@ def argument_is_identical_to(this_argument: Argument,
         return is_premises_same
 
     # check the exact identification condition.
-    for mapping in generate_replacement_mappings_from_argument(this_argument,
-                                                               that_argument,
-                                                               add_complicated_arguments=add_complicated_arguments,
-                                                               allow_many_to_one_replacement=allow_many_to_one_replacementg):
-        this_argument_replaced = replace_argument(this_argument, mapping, elim_dneg=elim_dneg)
+    for mapping in generate_mappings_from_argument(this_argument,
+                                                   that_argument,
+                                                   add_complicated_arguments=add_complicated_arguments,
+                                                   allow_many_to_one=allow_many_to_oneg):
+        this_argument_interpreted = interprete_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
-        if is_conclusion_same(this_argument_replaced, that_argument)\
-                and is_premises_same(this_argument_replaced, that_argument):
+        if is_conclusion_same(this_argument_interpreted, that_argument)\
+                and is_premises_same(this_argument_interpreted, that_argument):
             return True
         else:
             False
@@ -508,8 +508,8 @@ def generate_quantifier_arguments(
                                  for src, tgt in quantifier_mapping.items()}
 
         if argument_type == 'universal_quantifier_elim':
-            quantified_formula = Formula(f'({quantified_variable}): ' + replace_formula(formula, quantifier_mapping).rep)
-            de_quantified_formula = replace_formula(formula, de_quantified_mapping)
+            quantified_formula = Formula(f'({quantified_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
+            de_quantified_formula = interprete_formula(formula, de_quantified_mapping)
             argument_id = f'{id_prefix}.univ_quant_elim-{i}' if id_prefix is not None else f'univ_quant_elim-{i}'
             argument = Argument(
                 [quantified_formula],
@@ -517,8 +517,8 @@ def generate_quantifier_arguments(
                 id = argument_id,
             )
         elif argument_type == 'existential_quantifier_intro':
-            quantified_formula = Formula(f'(E{quantified_variable}): ' + replace_formula(formula, quantifier_mapping).rep)
-            de_quantified_formula = replace_formula(formula, de_quantified_mapping)
+            quantified_formula = Formula(f'(E{quantified_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
+            de_quantified_formula = interprete_formula(formula, de_quantified_mapping)
             argument_id = f'{id_prefix}.exist_quant_intro-{i}' if id_prefix is not None else f'exist_quant_intro-{i}'
             argument = Argument(
                 [de_quantified_formula],

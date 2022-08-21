@@ -159,6 +159,11 @@ class Formula:
     def wo_quantifier(self) -> 'Formula':
         return Formula(self.rep.split(': ')[-1])
 
+    @property
+    def interprands(self) -> 'Formula':
+        return self.predicates + self.constants
+
+
 
 def eliminate_double_negation(formula: Formula) -> Formula:
     return Formula(re.sub(f'{NOT}{NOT}', '', formula.rep))

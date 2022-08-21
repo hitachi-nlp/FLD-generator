@@ -29,7 +29,7 @@ def test_weighted_sampling():
 
 def test_weighted_shuffle():
 
-    print('\n\n\n ======== test_weighted_samplings_wo_replacement() ========')
+    print('\n\n\n ======== test_weighted_shuffle() ========')
 
     def stochastic_test(weights: List[float], trial=10000):
         print('\n\n') 

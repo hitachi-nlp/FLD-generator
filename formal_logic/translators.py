@@ -19,10 +19,10 @@ from .formula import (
     NOT,
 )
 from .word_banks.base import WordBank, ATTR
-from .replacements import (
-    generate_replacement_mappings_from_formula,
-    generate_replacement_mappings_from_terms,
-    replace_formula,
+from .interpretation import (
+    generate_mappings_from_formula,
+    generate_mappings_from_predicates_and_constants,
+    interprete_formula,
     formula_can_not_be_identical_to,
 )
 from .word_banks import POS, VerbForm, AdjForm, NounForm
@@ -62,11 +62,7 @@ class SentenceWiseTranslator(Translator):
                  sentence_translations: Dict[str, List[str]],
                  predicate_translations: Optional[List[str]] = None,
                  constant_translations: Optional[List[str]] = None,
-                 translate_terms=True):
-
-        def num_terms(formula_rep: str) -> int:
-            formula = Formula(formula_rep)
-            return len(formula.predicates) + len(formula.constants) + len(formula.variables)
+                 do_interpret=True):
 
         self._sentence_translations = OrderedDict()
         for formula, translations in sorted(
@@ -79,7 +75,7 @@ class SentenceWiseTranslator(Translator):
             self._sentence_translations[formula] = translations
         self.predicate_translations = predicate_translations
         self.constant_translations = constant_translations
-        self.translate_terms = translate_terms
+        self.do_interpret = do_interpret
 
     def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
                                                                                                Dict[str, int]]:
@@ -94,11 +90,11 @@ class SentenceWiseTranslator(Translator):
                     continue
 
                 trans_formula = Formula(trans_formula_rep)
-                for mapping in generate_replacement_mappings_from_formula([trans_formula], [formula]):
-                    trans_formula_replaced = replace_formula(trans_formula, mapping)
-                    if trans_formula_replaced.rep == formula.rep:
+                for mapping in generate_mappings_from_formula([trans_formula], [formula]):
+                    trans_formula_pulled = interprete_formula(trans_formula, mapping)
+                    if trans_formula_pulled.rep == formula.rep:
                         trans_nl = random.choice(trans_nls)
-                        translations.append(replace_formula(Formula(trans_nl), mapping).rep)
+                        translations.append(interprete_formula(Formula(trans_nl), mapping).rep)
                         done_translation = True
 
             if not done_translation:
@@ -108,19 +104,18 @@ class SentenceWiseTranslator(Translator):
                     logger.warning('translation not found for "%s"', formula.rep)
                     translations.append(None)
 
-        # term translation
-        if self.translate_terms:
-            term_mappings = generate_replacement_mappings_from_terms(
+        if self.do_interpret:
+            interp_mappings = generate_mappings_from_predicates_and_constants(
                 list(set([predicate.rep for formula in formulas for predicate in formula.predicates])),
                 list(set([constant.rep for formula in formulas for constant in formula.constants])),
                 self.predicate_translations,
                 self.constant_translations,
                 block_shuffle=True,
             )
-            term_mapping = next(term_mappings)
+            interp_mapping = next(interp_mappings)
             for i_formula, (formula, translation) in enumerate(zip(formulas, translations)):
                 if translation is not None:
-                    translations[i_formula] = replace_formula(Formula(translation), term_mapping).rep
+                    translations[i_formula] = interprete_formula(Formula(translation), interp_mapping).rep
 
         return [(None, translation) for translation in translations], {}
 
@@ -165,9 +160,9 @@ class IterativeRegexpTranslator(Translator):
                     src_formula = Formula(src_rep)
                     tgt_formula = Formula(tgt_rep)
 
-                    for mapping in generate_replacement_mappings_from_formula([src_formula], [formula]):
-                        src_formula_replaced = replace_formula(src_formula, mapping)
-                        tgt_formula_replaced = replace_formula(tgt_formula, mapping)
+                    for mapping in generate_mappings_from_formula([src_formula], [formula]):
+                        src_formula_replaced = interprete_formula(src_formula, mapping)
+                        tgt_formula_replaced = interprete_formula(tgt_formula, mapping)
                         if re.search(src_formula_replaced.rep, translated_formula.rep) is not None:
                             translated_formula = Formula(re.sub(src_formula_replaced.rep, tgt_formula_replaced.rep, translated_formula.rep))
                             has_translation = True
@@ -184,7 +179,7 @@ class ClauseTypedTranslator(Translator):
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
-                 translate_terms=True,
+                 do_interpret=True,
                  ):
 
         two_layered_config = self._build_two_layered_config(config_json)
@@ -214,7 +209,7 @@ class ClauseTypedTranslator(Translator):
         self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
         self._wb = word_bank
 
-        self._translate_terms = translate_terms
+        self._do_interpret = do_interpret
 
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[str]]]:
         two_layered_config = self._completely_flatten_config(config)
@@ -262,11 +257,11 @@ class ClauseTypedTranslator(Translator):
                     transl_key_formula = Formula(transl_key)
                     if formula_can_not_be_identical_to(transl_key_formula, template_key_formula):
                         continue
-                    for mapping in generate_replacement_mappings_from_formula([transl_key_formula],
-                                                                              [template_key_formula]):
-                        key_formula_replaced = replace_formula(transl_key_formula, mapping)
-                        if key_formula_replaced.rep == template_key_formula.rep:
-                            template_nls = [replace_formula(Formula(transl_nl), mapping).rep for transl_nl in transl_nls]
+                    for mapping in generate_mappings_from_formula([transl_key_formula],
+                                                                  [template_key_formula]):
+                        key_formula_pulled = interprete_formula(transl_key_formula, mapping)
+                        if key_formula_pulled.rep == template_key_formula.rep:
+                            template_nls = [interprete_formula(Formula(transl_nl), mapping).rep for transl_nl in transl_nls]
                             template_is_found = True
                     if template_is_found:
                         break
@@ -291,11 +286,7 @@ class ClauseTypedTranslator(Translator):
         return resolved_nls
 
     def _extract_transl_templates(self, nl: str) -> Iterable[str]:
-        terms_masked_nl = nl
-        for term in Formula(nl).predicates + Formula(nl).constants:
-            terms_masked_nl = terms_masked_nl.replace(term.rep, '*' * len(term.rep))
-
-        for match in re.finditer(r'<[^>]*>', terms_masked_nl):
+        for match in re.finditer(r'<[^>]*>', nl):
             yield nl[match.span()[0] + 1 : match.span()[1] - 1]
 
     def _load_words(self,
@@ -348,11 +339,11 @@ class ClauseTypedTranslator(Translator):
         translation_names = []
         count_stats = {'inflation': defaultdict(int)}
 
-        term_mapping = self._choose_term_mapping(formulas)
+        interp_mapping = self._choose_interp_mapping(formulas)
 
         for formula in formulas:
             # Chose translations which is consistent with the formula.
-            sentence_key, sentence_nls, sentence_nls_replaced = self._find_sentence_consistent_translation(formula)
+            sentence_key, sentence_nls, sentence_nls_pulled = self._find_sentence_consistent_translation(formula)
             if sentence_nls is None or len(sentence_nls) == 0:
                 if sentence_nls is None:
                     raise_or_warn(f'sentence translation not found for "{formula.rep}"')
@@ -360,26 +351,26 @@ class ClauseTypedTranslator(Translator):
                     assert(len(sentence_nls) == 0)
                     raise_or_warn(f'sentence translation for "{formula.rep}" is found (key="{sentence_key}"), but it has empty list. This can be caused by that translation templates could not be resolved for that translations.')
 
-                sentence_key, sentence_nls, sentence_nls_replaced = self._find_sentence_consistent_translation(formula)
+                sentence_key, sentence_nls, sentence_nls_pulled = self._find_sentence_consistent_translation(formula)
                 translations.append(None)
                 translation_names.append(None)
                 continue
 
-            # Chose translations the pos and inflations of which are consistent with the term mapping.
-            term_mapping_consisntent_nls_replaced = self._find_term_mapping_consistent_translations(
-                sentence_nls_replaced,
-                term_mapping,
+            # Chose translations the pos and inflations of which are consistent with the interpretation mapping.
+            interp_mapping_consisntent_nls_pulled = self._find_interp_mapping_consistent_translations(
+                sentence_nls_pulled,
+                interp_mapping,
             )
-            term_mapping_consisntent_nls = [
+            interp_mapping_consisntent_nls = [
                 sentence_nl
-                for sentence_nl, sentence_nl_replaced in zip(sentence_nls, sentence_nls_replaced)
-                if sentence_nl_replaced in term_mapping_consisntent_nls_replaced
+                for sentence_nl, sentence_nl_pulled in zip(sentence_nls, sentence_nls_pulled)
+                if sentence_nl_pulled in interp_mapping_consisntent_nls_pulled
             ]
-            if len(term_mapping_consisntent_nls) == 0:
+            if len(interp_mapping_consisntent_nls) == 0:
                 msgs = [
-                    f'translation not found for "{formula.rep}" the pos and word inflations of which are consistent with the following chosen term mapping.',
-                    'The tried translations are:\n{"\n".join(term_mapping_consisntent_nls_replaced)}',
-                    'The term_mapping is:{pformat(term_mapping)}',
+                    f'translation not found for "{formula.rep}" the pos and word inflations of which are consistent with the following chosen interpretation mapping.',
+                    'The tried translations are:\n{"\n".join(interp_mapping_consisntent_nls_pulled)}',
+                    'The interp_mapping is:{pformat(interp_mapping)}',
                 ]
                 raise_or_warn('\n'.join(msgs))
                 translations.append(None)
@@ -387,33 +378,25 @@ class ClauseTypedTranslator(Translator):
                 continue
 
             # Choose a translation
-            _idx = random.choice(range(len(term_mapping_consisntent_nls_replaced)))
-            chosen_nl = term_mapping_consisntent_nls[_idx]
-            chosen_nl_replaced = term_mapping_consisntent_nls_replaced[_idx]
+            _idx = random.choice(range(len(interp_mapping_consisntent_nls_pulled)))
+            chosen_nl = interp_mapping_consisntent_nls[_idx]
+            chosen_nl_pulled = interp_mapping_consisntent_nls_pulled[_idx]
 
             # Generate word inflated mapping.
-            inflated_mapping, _inflation_stats = self._make_inflated_mapping(term_mapping, chosen_nl_replaced)
+            inflated_mapping, _inflation_stats = self._make_word_inflated_interp_mapping(interp_mapping, chosen_nl_pulled)
             for inflation_type, count in _inflation_stats.items():
                 count_stats['inflation'][f'{inflation_type}'] = count
 
-            term_templated_translation_replaced_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_replaced)
+            interp_templated_translation_pulled_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pulled)
 
-            # Replace terms.
-            if self._translate_terms:
-                translation = replace_formula(Formula(term_templated_translation_replaced_wo_info), inflated_mapping).rep
+            # do interpretation using predicates and constants using interp_mapping
+            if self._do_interpret:
+                translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info), inflated_mapping).rep
             else:
-                translation = term_templated_translation_replaced_wo_info
+                translation = interp_templated_translation_pulled_wo_info
 
             translations.append(translation)
-            translation_names.append(
-                '____'.join([sentence_key, chosen_nl])
-                # self._make_translation_name(
-                #     sentence_transl_key,
-                #     term_templated_translation,
-                #     term_templated_translation_replaced,
-                #     predicate_symbol_mapping
-                # )
-            )
+            translation_names.append('____'.join([sentence_key, chosen_nl]))
 
         translations = [
             (self._correct_indefinite_article(translation) if translation is not None else None)
@@ -425,50 +408,50 @@ class ClauseTypedTranslator(Translator):
     def _find_sentence_consistent_translation(self, formula: Formula) -> Union[Tuple[str, List[str], List[str]], Tuple[None, None, None]]:
         transl_key = None
         transl_nls = None
-        transl_nls_replaced = None
+        transl_nls_pulled = None
         transl_is_found = False
         for _transl_key, _transl_nls in self._translations.items():
             if formula_can_not_be_identical_to(Formula(_transl_key), formula):  # early rejection
                 continue
 
-            for mapping in generate_replacement_mappings_from_formula([Formula(_transl_key)], [formula]):
-                transl_key_replaced = replace_formula(Formula(_transl_key), mapping).rep
-                if transl_key_replaced == formula.rep:
+            for mapping in generate_mappings_from_formula([Formula(_transl_key)], [formula]):
+                transl_key_pulled = interprete_formula(Formula(_transl_key), mapping).rep
+                if transl_key_pulled == formula.rep:
                     transl_key = _transl_key
                     transl_nls = _transl_nls
-                    transl_nls_replaced = [replace_formula(Formula(transl_nl), mapping).rep for transl_nl in transl_nls]
+                    transl_nls_pulled = [interprete_formula(Formula(transl_nl), mapping).rep for transl_nl in transl_nls]
                     transl_is_found = True
                     break
             if transl_is_found:
                 break
-        return transl_key, transl_nls, transl_nls_replaced
+        return transl_key, transl_nls, transl_nls_pulled
 
-    def _find_term_mapping_consistent_translations(self,
-                                                   sentence_transl_nls_replaced: List[str],
-                                                   term_mapping: Dict[str, str]) -> List[str]:
-        """ Find translations the pos and word inflations of which are consistent with term_mapping """
+    def _find_interp_mapping_consistent_translations(self,
+                                                     sentence_transl_nls_pulled: List[str],
+                                                     interp_mapping: Dict[str, str]) -> List[str]:
+        """ Find translations the pos and word inflations of which are consistent with interp_mapping """
         consistent_nls = []
-        for sentence_transl_nl_replaced in sentence_transl_nls_replaced:
-            sentence_transl_replaced_formula = Formula(sentence_transl_nl_replaced)
+        for sentence_transl_nl_pulled in sentence_transl_nls_pulled:
+            sentence_transl_pulled_formula = Formula(sentence_transl_nl_pulled)
 
-            term_mapping_is_consisntent = False
-            for term in sentence_transl_replaced_formula.predicates + sentence_transl_replaced_formula.constants:
-                word = term_mapping[term.rep]
+            interp_mapping_is_consisntent = False
+            for interprand in sentence_transl_pulled_formula.predicates + sentence_transl_pulled_formula.constants:
+                word = interp_mapping[interprand.rep]
 
-                pos, form = self._get_term_info_from_template(term.rep, sentence_transl_replaced_formula.rep)
+                pos, form = self._get_interprand_info_from_template(interprand.rep, sentence_transl_pulled_formula.rep)
                 if pos not in self._wb.get_pos(word):
-                    term_mapping_is_consisntent = False
+                    interp_mapping_is_consisntent = False
                     break
 
                 inflated_word = self._get_inflated_word(word, pos, form)
 
                 if inflated_word is not None:
-                    term_mapping_is_consisntent = True
+                    interp_mapping_is_consisntent = True
                 else:
-                    term_mapping_is_consisntent = False
+                    interp_mapping_is_consisntent = False
                     break
-            if term_mapping_is_consisntent:
-                consistent_nls.append(sentence_transl_nl_replaced)
+            if interp_mapping_is_consisntent:
+                consistent_nls.append(sentence_transl_nl_pulled)
         return consistent_nls
 
     def _correct_indefinite_article(self, sentence: str) -> str:
@@ -489,7 +472,7 @@ class ClauseTypedTranslator(Translator):
         return ' '.join(corrected_words)
 
     @profile
-    def _choose_term_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
+    def _choose_interp_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
                                    for predicate in formula.zeroary_predicates})
@@ -500,182 +483,59 @@ class ClauseTypedTranslator(Translator):
 
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
-            generate_replacement_mappings_from_terms(
+            generate_mappings_from_predicates_and_constants(
                 zeroary_predicates,
                 [],
                 random.sample(self._event_nouns, len(zeroary_predicates) * 3),
                 [],
                 block_shuffle=True,
-                allow_many_to_one_replacement=False,
+                allow_many_to_one=False,
             )
         )
 
         # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
         unary_mapping = next(
-            generate_replacement_mappings_from_terms(
+            generate_mappings_from_predicates_and_constants(
                 unary_predicates,
                 constants,
                 random.sample(self._adj_and_verbs, len(unary_predicates) * 3),
                 random.sample(self._entity_nouns, len(constants) * 3),
                 block_shuffle=True,
-                allow_many_to_one_replacement=False,
+                allow_many_to_one=False,
             )
         )
 
-        term_mapping = zeroary_mapping.copy()
-        term_mapping.update(unary_mapping)
+        interp_mapping = zeroary_mapping.copy()
+        interp_mapping.update(unary_mapping)
 
-        return term_mapping
+        return interp_mapping
 
-    @profile
-    def _choose_clause_templated_translation(self, formula: Formula) -> Tuple[Optional[Dict[str, str]],
-                                                                              Optional[str],
-                                                                              Optional[str],
-                                                                              Optional[str]]:
-        mapping = None
-        clause_templated_translation_key = None
-        clause_templated_translation = None
-        clause_templated_translation_replaced = None
-        for _translation_formula_rep, clause_templated_translations in self._translations.items():
-            if len(clause_templated_translations) == 0:
-                continue
-
-            if formula_can_not_be_identical_to(Formula(_translation_formula_rep), formula):  # early rejection for speed
-                continue
-
-            _translation_formula = Formula(_translation_formula_rep)
-            for _mapping in generate_replacement_mappings_from_formula([_translation_formula], [formula]):
-                trans_formula_replaced = replace_formula(_translation_formula, _mapping)
-                if trans_formula_replaced.rep == formula.rep:
-                    mapping = _mapping
-                    clause_templated_translation = random.choice(clause_templated_translations)
-                    clause_templated_translation_replaced = replace_formula(
-                        Formula(clause_templated_translation),
-                        _mapping
-                    ).rep
-                    clause_templated_translation_key = _translation_formula.rep
-                    break
-
-        if clause_templated_translation_key is None:
-            logger.warning('clause templated translation not found for "%s"', formula.rep)
-
-        return mapping, clause_templated_translation_key, clause_templated_translation, clause_templated_translation_replaced
-
-    @profile
-    def _replace_clause_templates(self,
-                                  formula: Formula,
-                                  clause_templated_translation_replaced: str,
-                                  term_mapping: Dict[str, str]) -> Optional[str]:
-
-        term_templated_translation_replaced = clause_templated_translation_replaced
-
-        has_clause_replacement = True
-        while has_clause_replacement:
-            has_clause_replacement = False
-            for clause_template, pos_typed_translations in self._clause_translations.items():
-
-                for clause_template_mapping in generate_replacement_mappings_from_formula([Formula(clause_template)],
-                                                                                          [formula]):
-                    clause_template_replaced = replace_formula(Formula(clause_template), clause_template_mapping).rep
-
-                    if term_templated_translation_replaced.find(f'{{{clause_template_replaced}}}') < 0:
-                        continue
-
-                    _term_templated_translation_replaced = None
-                    term_reps = [
-                        term.rep
-                        for term in Formula(clause_template_replaced).predicates + Formula(clause_template_replaced).constants
-                    ]
-
-                    possible_term_templated_translations = []
-                    possible_term_templated_translations_replaced = []
-                    for pos_typed_translation in pos_typed_translations:
-                        pos_typed_translation_replaced = replace_formula(Formula(pos_typed_translation), clause_template_mapping).rep
-                        pos_typed_term_found = False
-                        for term_symbol in term_reps:
-                            word = term_mapping[term_symbol]
-
-                            pos, form = self._get_term_info_from_template(term_symbol, pos_typed_translation_replaced)
-                            if pos not in self._wb.get_pos(word):
-                                pos_typed_term_found = False
-                                break
-
-                            inflated_word = self._get_inflated_word(word, pos, form)
-
-                            if inflated_word is not None:
-                                pos_typed_term_found = True
-                            else:
-                                pos_typed_term_found = False
-                                break
-                        if pos_typed_term_found:
-                            possible_term_templated_translations.append(pos_typed_translation)
-                            possible_term_templated_translations_replaced.append(pos_typed_translation_replaced)
-                    if len(possible_term_templated_translations_replaced) == 0:
-                        possible_term_templated_translations = []
-                        possible_term_templated_translations_replaced = []
-
-                        raise ValueError(f'We could not find any clause replacement for "{clause_template_replaced}, where pos and word-inflation are consistent with the given term mapping:\n{pformat(term_mapping)}')
-
-                    _idx = random.choice(range(len(possible_term_templated_translations_replaced)))
-                    _term_templated_translation_replaced = possible_term_templated_translations_replaced[_idx]
-
-                    possible_term_templated_translations_replaced = []
-                    for pos_typed_translation in pos_typed_translations:
-                        pos_typed_translation_replaced = replace_formula(Formula(pos_typed_translation), clause_template_mapping).rep
-                        pos_typed_term_found = None
-                        for term_symbol in term_reps:
-                            word = term_mapping[term_symbol]
-
-                            pos_typed_term_found = False
-                            for pos in self._wb.get_pos(word):
-                                if pos_typed_translation_replaced.find(f'{term_symbol}[{pos.value}') >= 0:
-                                    pos_typed_term_found = True
-                                    break
-                            if not pos_typed_term_found:
-                                break
-                        if pos_typed_term_found:
-                            possible_term_templated_translations_replaced.append(pos_typed_translation_replaced)
-
-                    term_templated_translation_replaced = term_templated_translation_replaced.replace(f'{{{clause_template_replaced}}}', _term_templated_translation_replaced)
-                    has_clause_replacement = True
-                    break
-                if has_clause_replacement:
-                    break
-
-        if term_templated_translation_replaced.find('verb_clause') >= 0\
-                or term_templated_translation_replaced.find('noun_clause') >= 0:
-            logger.warning('Clause template replacement could not be completed for "%s"', term_templated_translation_replaced)
-            return None
-        else:
-            return term_templated_translation_replaced
-
-    def _make_inflated_mapping(self,
-                               term_mapping: Dict[str, str],
-                               term_templated_translation_replaced: str) -> Tuple[Dict[str, str], Dict[str, int]]:
+    def _make_word_inflated_interp_mapping(self,
+                                           interp_mapping: Dict[str, str],
+                                           interprand_templated_translation_pulled: str) -> Tuple[Dict[str, str], Dict[str, int]]:
         inflated_mapping = {}
         stats = defaultdict(int)
 
-        for term_formula in Formula(term_templated_translation_replaced).predicates\
-                + Formula(term_templated_translation_replaced).constants:
-            term_rep = term_formula.rep
-            if term_templated_translation_replaced.find(f'{term_rep}[') >= 0:
-                word = term_mapping[term_rep]
-                pos, form = self._get_term_info_from_template(term_rep, term_templated_translation_replaced)
+        for interprand_formula in Formula(interprand_templated_translation_pulled).predicates\
+                + Formula(interprand_templated_translation_pulled).constants:
+            interprand_rep = interprand_formula.rep
+            if interprand_templated_translation_pulled.find(f'{interprand_rep}[') >= 0:
+                word = interp_mapping[interprand_rep]
+                pos, form = self._get_interprand_info_from_template(interprand_rep, interprand_templated_translation_pulled)
                 stats[f'{pos.value}.{form.value}'] += 1
                 inflated_word = self._get_inflated_word(word, pos, form)
                 assert(inflated_word is not None)
             else:
-                # inflated_word = term_mapping[term]
                 raise Exception(
-                    f'Something wrong. Since we have checked in self._replace_clause_templates() that the translation indeed exists, this program must not pass this block.  The problematic translation is "{term_templated_translation_replaced}" and unfound string is "{term_rep}["',
+                    f'Something wrong. Since we have checked in that the translation indeed exists, this program must not pass this block.  The problematic translation is "{interprand_templated_translation_pulled}" and unfound string is "{interprand_rep}["',
                 )
-            inflated_mapping[term_rep] = inflated_word
+            inflated_mapping[interprand_rep] = inflated_word
         return inflated_mapping, stats
 
-    def _get_term_info_from_template(self, term: str, rep: str) -> Tuple[POS, Union[AdjForm, VerbForm, NounForm]]:
-        if not re.match(f'.*{term}\[([^\]]*)\].*', rep):
-            raise Exception(f'Information for "{term}" can not be extracted from "{rep}".')
-        info = re.sub(f'.*{term}\[([^\]]*)\].*', r'\g<1>', rep)
+    def _get_interprand_info_from_template(self, interprand: str, rep: str) -> Tuple[POS, Union[AdjForm, VerbForm, NounForm]]:
+        if not re.match(f'.*{interprand}\[([^\]]*)\].*', rep):
+            raise Exception(f'Information for "{interprand}" can not be extracted from "{rep}".')
+        info = re.sub(f'.*{interprand}\[([^\]]*)\].*', r'\g<1>', rep)
 
         if len(info.split('.')) >= 2:
             pos_str, form_str = info.split('.')
