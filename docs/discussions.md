@@ -1,6 +1,5 @@
 # todo
 * コンポーネントを完成させていく
-    * "distractor"
     * "proof tree generation"
     * "translation"
         * [todo] EntailmentBankに入っている表現を追加する．
@@ -60,6 +59,8 @@
 # proof tree generation
 
 ## [todo] パターン
+* [todo] 現状，pred_argの頻度が小さい．なぜ？
+* [todo] generator で，失敗したときのlogを出す．特定のパターンで常に失敗していたらいやなので．
 * [todo] GaとGが同時に出てくることを防ぐ機構があるか？
     - formula.validate
 * [todo] notの意味を表現する．
@@ -302,27 +303,24 @@
 
 
 
-# [todo] distractor
-* todo
-    * いろいろなパターンの式の追加
-        - complicated
-        - quantified
-* 方針
-    - [done] 翻訳にテンプレート文を使う場合は，手法1をやる．
-    - [pending] 翻訳に自然文を使う場合は，手法2も検討する．
-* 手法
-    1. Ga がtreeに合ったときに，GbやHaを加える．
-        - Pros
-            * 述語論理にとって，hard-negativeになる．
-            * 実装が容易．
-        - Cons
-            * テンプレート文しか使えない．
-                * もちろん，proofの文がテンプレート文なら，distractorがテンプレート文であっても問題無い．
-    2. 表層が似ている自然文をコーパスから取ってきて追加する．
-        - Pros
-            * proofの文が自然文の場合は，良いnegativeになる．
-        - Cons
-            * proofの文がテンプレート文の場合は，negativeにはならない．テンプレート的かどうかで判断できてしまうため．
+# [done] distractor
+
+## 手法
+1. [done] Ga がtreeに合ったときに，GbやHaを加える． (UnkownPASDistractor)
+    - Pros
+        * 述語論理にとって，hard-negativeになる．
+        * 実装が容易．
+    - Cons
+        * テンプレート文しか使えない．
+            * もちろん，proofの文がテンプレート文なら，distractorがテンプレート文であっても問題無い．
+2. [done] SameFormUnkownInterprandsDistractor
+3. [rejected] 表層が似ている自然文をコーパスから取ってきて追加する．
+    - [rejected] easy negativeであること，コストがかかること．
+    - Pros
+        * proofの文が自然文の場合は，hard negativeになる．
+    - Cons
+        * proofの文がテンプレート文の場合は，easy negativeになってしまう．"テンプレート的"かどうかで判断できてしまうため．
+        * 外部リソースが必要となるので，若干コストがかかる．
 
 
 

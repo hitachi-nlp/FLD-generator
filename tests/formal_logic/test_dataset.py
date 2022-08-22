@@ -7,7 +7,7 @@ from pprint import pformat
 from formal_logic.formula import Formula
 from formal_logic.argument import Argument
 from formal_logic.proof_tree_generators import ProofTreeGenerator
-from formal_logic.distractors import UnkownPASDistractor
+from formal_logic.distractors import UnkownPASDistractor, SameFormUnkownInterprandsDistractor
 from formal_logic.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
 from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from formal_logic.datasets import NLProofSDataset
@@ -115,20 +115,20 @@ def generate_dataset(dataset: NLProofSDataset,
         logger.info('--------------- tree --------------')
 
         logger.info('\n')
-        logger.info(proof_tree.format_str)
+        logger.info('\n' + proof_tree.format_str)
 
         logger.info('\n')
         logger.info('--------------- distractors --------------')
-        logger.info(distractors)
+        logger.info('\n' + pformat(distractors))
 
         logger.info('\n')
         logger.info('--------------- NLProofs json --------------')
-        logger.info(pformat(nlproof_json))
+        logger.info('\n' + pformat(nlproof_json))
 
         logger.info('\n')
         logger.info('--------------- stats --------------')
         # logger.info(dict(stats))
-        logger.info(pformat(stats))
+        logger.info('\n' + pformat(stats))
 
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -136,7 +136,9 @@ def generate_dataset(dataset: NLProofSDataset,
 
 def test_original():
     translator = load_translator('sentence_wise_translator', 'config')
-    distractor = UnkownPASDistractor()
+
+    # distractor = UnkownPASDistractor()
+    distractor = SameFormUnkownInterprandsDistractor(2)
 
     generator = load_proof_tree_generator(
         config_paths=['./configs/formal_logic/arguments/syllogistic_corpus-02.json'],
@@ -150,7 +152,6 @@ def test_original():
 
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
-                              num_distractor_factor=2,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -158,7 +159,9 @@ def test_original():
 
 def test_LP_pred_only():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnkownPASDistractor()
+
+    # distractor = UnkownPASDistractor()
+    distractor = SameFormUnkownInterprandsDistractor(2)
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -173,7 +176,6 @@ def test_LP_pred_only():
 
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
-                              num_distractor_factor=5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -181,7 +183,9 @@ def test_LP_pred_only():
 
 def test_minimum_PL():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnkownPASDistractor()
+
+    # distractor = UnkownPASDistractor()
+    distractor = SameFormUnkownInterprandsDistractor(2)
 
     generator = load_proof_tree_generator(
         arguments=[
@@ -205,7 +209,6 @@ def test_minimum_PL():
 
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
-                              num_distractor_factor=5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -213,7 +216,9 @@ def test_minimum_PL():
 
 def test_LP_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnkownPASDistractor()
+
+    # distractor = UnkownPASDistractor()
+    distractor = SameFormUnkownInterprandsDistractor(2)
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -231,7 +236,6 @@ def test_LP_pred_arg():
 
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
-                              num_distractor_factor=5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -239,7 +243,9 @@ def test_LP_pred_arg():
 
 def test_PL_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnkownPASDistractor()
+    
+    # distractor = UnkownPASDistractor()
+    distractor = SameFormUnkownInterprandsDistractor(2)
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -257,7 +263,6 @@ def test_PL_pred_arg():
 
     dataset = NLProofSDataset(pipeline, 'CWA',
                               depth=5,
-                              num_distractor_factor=5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

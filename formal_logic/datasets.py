@@ -24,7 +24,6 @@ class NLProofSDataset:
                  pipeline: ProofTreeGenerationPipeline,
                  world_assump: str,
                  depth: int = 5,
-                 num_distractor_factor: int = 5,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
         self.world_assump = world_assump

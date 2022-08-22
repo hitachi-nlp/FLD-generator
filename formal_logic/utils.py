@@ -21,6 +21,10 @@ def flatten_dict(dic: Dict[str, Any]) -> Dict[str, Any]:
     return flat_dic
 
 
+def shuffle(elems: List[Any]) -> List[Any]:
+    return random.sample(elems, len(elems))
+
+
 def weighted_shuffle(weights: List[float]) -> Iterable[int]:
     """ Weighted shuffle = sampling elements in accordance with the their weights. The sampling sequence is made without replacement.   """
     done_indexes = set()
