@@ -23,6 +23,9 @@ class ProofTreeGenerationPipeline:
         self.distractor = distractor
         self.translator = translator
 
+        self._empty_argument_stat = {arg.id: 0 for arg in self.generator.arguments}
+        self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
+
     @profile
     def run(self,
             depth: int = 5,
@@ -53,16 +56,19 @@ class ProofTreeGenerationPipeline:
                    proof_tree: ProofTree,
                    translator_stats: Dict[str, int]) -> Dict[str, int]:
         stats = {
-            'arguments': defaultdict(int),
+            'arguments': self._empty_argument_stat,
             'translation': {
-                'names': defaultdict(int),
+                'names': self._empty_translation_stat,
                 'others': defaultdict(int),
             },
         }
         for node in proof_tree.nodes:
             if node.argument is not None:
                 stats['arguments'][node.argument.id] += 1
+
             translation_name = node.formula.translation_name if node.formula.translation_name is not None else '<no_name>'
+            if translation_name not in stats['translation']['names']:
+                stats['translation']['names'][translation_name] = 0
             stats['translation']['names'][translation_name] += 1
 
         for key, val in flatten_dict(translator_stats).items():

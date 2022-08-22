@@ -59,7 +59,7 @@ class ProofTreeGenerator:
         self.elim_dneg = elim_dneg
         self.timeout = timeout
 
-        self._arguments, self._argument_weights = self._load_arguments(
+        self.arguments, self.argument_weights = self._load_arguments(
             arguments,
             complicated_arguments_weight=complicated_arguments_weight,
             quantified_arguments_weight=quantified_arguments_weight,
@@ -121,8 +121,6 @@ class ProofTreeGenerator:
         _arguments = arguments + complicated_arguments + quantified_arguments
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
-        # TODO: check sum of weights
-
         logger.info('================================================     loaded arguments     ================================================')
         # for argument in sorted(_arguments, key=lambda arg: arg.id):
         for argument in _arguments:
@@ -130,46 +128,22 @@ class ProofTreeGenerator:
 
         return _arguments, _argument_weights
 
-    # def _make_rough_weight_extended_arguments(self,
-    #                                           this_arguments: List[Argument],
-    #                                           that_arguments: List[Argument],
-    #                                           this_weight: float) -> List[Argument]:
-    #     """
-    #     this_weight = len(this_arguments) * n / (len(this_arguments) * n + len(that_arguments))
-    #     => n = this_weight * len(that_arguments) / ( len(this_arguments) - len(this_arguments) * this_weight )
-    #          = ( this_weight / (1 - this_weight) ) * ( len(that_arguments) / len(this_arguments) )
-    #     """
-    #     if this_weight == 1.0:
-    #         return this_arguments
-    #     elif this_weight >= 0.99:
-    #         logger.warning('we do not include that_arguments since the this_weight is so high (>= 0.99)')
-    #         return this_arguments
-
-    #     this_multiplier = int(this_weight / (1 - this_weight) * (len(that_arguments) / len(this_arguments)))
-    #     if this_multiplier == 0:  # down sampling
-    #         raise NotImplementedError()
-
-    #     weight_extended_this_arguments = []
-    #     for _ in range(0, this_multiplier):
-    #         weight_extended_this_arguments.extend(this_arguments)
-
-    #     return weight_extended_this_arguments + that_arguments
-
     def generate_tree(self,
                       depth=3,
-                      max_retry=100) -> Optional[ProofTree]:
+                      max_retry=1) -> Optional[ProofTree]:
         for _ in range(0, max_retry):
             try:
-                proof_tree = _generate_tree(self._arguments,
-                                            argument_weights=self._argument_weights,
+                proof_tree = _generate_tree(self.arguments,
+                                            argument_weights=self.argument_weights,
                                             depth=depth,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
                 return proof_tree
             except ProofTreeGenerationFailure as e:
-                logger.info('Generation failed with message "%s" Will retry', str(e))
+                logger.info('Generation failed with message "%s"', str(e))
             except TimeoutError:
-                logger.info('Generation failed with TimeoutError(). Will retry')
+                logger.info('Generation failed with TimeoutError()')
+            logger.info('Will retry generation')
         raise ProofTreeGenerationFailure(f'generate_tree() failed with max_retry={max_retry}.')
 
 
@@ -215,7 +189,7 @@ def _generate_stem(arguments: List[Argument],
         for node in premise_nodes + [conclusion_node]:
             proof_tree.add_node(node)
 
-    for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):
+    for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):  # try all the argument as starting point
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
         cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
@@ -316,7 +290,11 @@ def _generate_stem(arguments: List[Argument],
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
             else:
-                raise ProofTreeGenerationFailure('_generate_stem() failed.')
+                msg = '\n'.join([
+                    '_generate_stem() failed. The statistics are the followings:',
+                    f'cur_arg:    {cur_arg}',
+                ])
+                raise ProofTreeGenerationFailure(msg)
 
         if is_tree_done:
             return proof_tree
@@ -430,7 +408,12 @@ def _extend_braches(proof_tree: ProofTree,
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
         else:
-            raise ProofTreeGenerationFailure('_extend_braches failed.')
+            msg = '\n'.join([
+                '_extend_braches() failed. The statistics are the followings:',
+                f'leaf_node:    {leaf_node}'
+            ])
+            raise ProofTreeGenerationFailure(msg)
+
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:

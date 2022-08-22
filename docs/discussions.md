@@ -2,11 +2,7 @@
 * コンポーネントを完成させていく
     * "proof tree generation"
     * "translation"
-        * [todo] EntailmentBankに入っている表現を追加する．
-        * [todo] can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
     * "world assumption"
-        - [todo] EBへの転移実験はlabel_true_onlyでやる．
-        - [todo] それ以外の実験は，CWAでやる．
 * 学習の高速化
     - bp16
     - maxlen
@@ -42,9 +38,22 @@
 
 
 
-
-
-# know issues
+# general
+* generatorのデバッグには，line-profilerを使うと良い．どこで止まっているか分かるから．
+* 命名規則
+    * [論理学の命名規則](https://en.wikipedia.org/wiki/Atomic_formula#Atomic_formula_in_first-order_logic)
+        - term = constant + variables + predicate(constant, variable)
+        - formula = more complicated ones built by the system's inductive rules.
+        - atomic formula = predicate(constant, variable)
+    * 論理学を作る (P138)
+        - interprete = to map a formula to another formula given a mapping
+        - an interpretation ~ a mapping
+        - a model ~ an interpretation
+    * ours
+        - interprand = symbols to be interpreted = predicates + constants
+        - pullled formula = a formula which is interpreted by a mapping from that space to this space
+        - pushed formula = inverse of pulled formula
+## know issues
 * add_complicated_arguments=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．
     1. and_introのconclusionは ({A} & {B}) という形をしている．
     2. add_complicated_arguments=Falseでは，前提が({A} & {B})の形なのは，& elimだけである．
@@ -60,7 +69,6 @@
 
 ## [todo] パターン
 * [todo] 現状，pred_argの頻度が小さい．なぜ？
-* [todo] generator で，失敗したときのlogを出す．特定のパターンで常に失敗していたらいやなので．
 * [todo] GaとGが同時に出てくることを防ぐ機構があるか？
     - formula.validate
 * [todo] notの意味を表現する．
@@ -75,6 +83,7 @@
 * [todo]
     - きちんと良い定理が導けているか，デバッグしたい．
 
+* [done] generator で，失敗したときのlogを出す．特定のパターンで常に失敗していたらいやなので．
 * [pending] ->導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．
@@ -622,17 +631,3 @@
 
 
 
-# others
-* 命名
-    * [論理学の命名規則](https://en.wikipedia.org/wiki/Atomic_formula#Atomic_formula_in_first-order_logic)
-        - term = constant + variables + predicate(constant, variable)
-        - formula = more complicated ones built by the system's inductive rules.
-        - atomic formula = predicate(constant, variable)
-    * 論理学を作る (P138)
-        - interprete = to map a formula to another formula given a mapping
-        - an interpretation ~ a mapping
-        - a model ~ an interpretation
-    * ours
-        - interprand = symbols to be interpreted = predicates + constants
-        - pullled formula = a formula which is interpreted by a mapping from that space to this space
-        - pushed formula = inverse of pulled formula

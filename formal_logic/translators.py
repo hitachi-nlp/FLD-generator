@@ -49,6 +49,11 @@ class TranslationNotFoundError(FormalLogicExceptionBase):
 
 class Translator(ABC):
 
+    @property
+    @abstractmethod
+    def translation_names(self) -> List[str]:
+        pass
+
     @abstractmethod
     def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
                                                                                                Dict[str, int]]:
@@ -324,6 +329,15 @@ class ClauseTypedTranslator(Translator):
                 continue
             yield word
 
+    @property
+    def translation_names(self) -> List[str]:
+        return [self._translation_name(sentence_key, nl)
+                for sentence_key, nls in self._translations.items()
+                for nl in nls]
+
+    def _translation_name(self, sentence_key: str, nl: str) -> str:
+        return '____'.join([sentence_key, nl])
+
     @profile
     def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]], Dict[str, int]]:
 
@@ -396,7 +410,7 @@ class ClauseTypedTranslator(Translator):
                 translation = interp_templated_translation_pulled_wo_info
 
             translations.append(translation)
-            translation_names.append('____'.join([sentence_key, chosen_nl]))
+            translation_names.append(self._translation_name(sentence_key, chosen_nl))
 
         translations = [
             (self._correct_indefinite_article(translation) if translation is not None else None)
