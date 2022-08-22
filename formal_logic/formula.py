@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Set
+from typing import List, Optional
 
 IMPLICATION = '->'
 AND = '&'
@@ -72,34 +72,25 @@ class Formula:
 
     @property
     def premise(self) -> Optional['Formula']:
-        if self._find_premise_rep(self.rep) is not None:
-            return Formula(self._find_premise_rep(self.rep))
+        if self.rep.find(IMPLICATION) < 0:
+            return None
         else:
-            return None
-
-    def _find_premise_rep(self, rep) -> Optional[str]:
-        if rep.find(IMPLICATION) < 0:
-            return None
-        return f' {IMPLICATION} '.join(rep.split(f' {IMPLICATION} ')[:-1])
+            return Formula(f' {IMPLICATION} '.join(self.rep.split(f' {IMPLICATION} ')[:-1]))
 
     @property
     def conclusion(self) -> Optional['Formula']:
-        if self._find_conclusion_rep(self.rep) is not None:
-            return Formula(self._find_conclusion_rep(self.rep))
+        if self.rep.find(IMPLICATION) < 0:
+            return None
         else:
-            return None
+            return Formula(self.rep.split(f' {IMPLICATION} ')[-1])
 
-    def _find_conclusion_rep(self, rep) -> Optional[str]:
-        if rep.find(IMPLICATION) < 0:
-            return None
-        return rep.split(f' {IMPLICATION} ')[-1]
+    @property
+    def wo_quantifier(self) -> 'Formula':
+        return Formula(self.rep.split(': ')[-1])
 
     @property
     def predicates(self) -> List['Formula']:
-        return [Formula(rep) for rep in self._find_predicate_reps(self.rep)]
-
-    def _find_predicate_reps(self, rep: str) -> List[str]:
-        return sorted(set(_PREDICATE_REGEXP.findall(rep)))
+        return [Formula(rep) for rep in self._find(_PREDICATE_REGEXP)]
 
     @property
     def zeroary_predicates(self) -> List['Formula']:
@@ -113,17 +104,27 @@ class Formula:
 
     @property
     def constants(self) -> List['Formula']:
-        return [Formula(rep) for rep in self._find_constant_reps(self.rep)]
+        return [Formula(rep) for rep in self._find(_CONSTANT_REGEXP)]
 
-    def _find_constant_reps(self, rep: str) -> List[str]:
-        return sorted(set(_CONSTANT_REGEXP.findall(rep)))
+    @property
+    def interprands(self) -> List['Formula']:
+        return self.predicates + self.constants
+
+    @property
+    def variables(self) -> List['Formula']:
+        return [Formula(rep) for rep in self._find(_VARIABLE_REGEXP)]
+
+    @property
+    def existential_variables(self) -> List['Formula']:
+        return [Formula(rep[2:-1]) for rep in self._find(_EXISTENTIAL_QUENTIFIER_REGEXP)]
+
+    @property
+    def universal_variables(self) -> List['Formula']:
+        return [Formula(rep[1:-1]) for rep in self._find(_UNIVERSAL_QUENTIFIER_REGEXP)]
 
     @property
     def PASs(self) -> List['Formula']:
-        return [Formula(rep) for rep in self._find_PAS_reps(self.rep)]
-
-    def _find_PAS_reps(self, rep: str) -> List[str]:
-        return sorted(set(_PREDICATE_ARGUMENT_REGEXP.findall(rep)))
+        return [Formula(rep) for rep in self._find(_PREDICATE_ARGUMENT_REGEXP)]
 
     @property
     def zeroary_PASs(self) -> List['Formula']:
@@ -148,35 +149,8 @@ class Formula:
         return [PAS for PAS in self.unary_PASs
                 if len(PAS.variables) == 0]
 
-    @property
-    def variables(self) -> List['Formula']:
-        return [Formula(rep) for rep in self._find_variable_reps(self.rep)]
-
-    def _find_variable_reps(self, rep: str) -> List[str]:
-        return sorted(set(_VARIABLE_REGEXP.findall(rep)))
-
-    @property
-    def existential_variables(self) -> List['Formula']:
-        return [Formula(rep[2:-1]) for rep in self._find_existential_quantifier_reps(self.rep)]
-
-    def _find_existential_quantifier_reps(self, rep: str) -> List[str]:
-        return sorted(set(_EXISTENTIAL_QUENTIFIER_REGEXP.findall(rep)))
-
-    @property
-    def universal_variables(self) -> List['Formula']:
-        return [Formula(rep[1:-1]) for rep in self._find_universal_quantifier_reps(self.rep)]
-
-    def _find_universal_quantifier_reps(self, rep: str) -> List[str]:
-        return sorted(set(_UNIVERSAL_QUENTIFIER_REGEXP.findall(rep)))
-
-    @property
-    def wo_quantifier(self) -> 'Formula':
-        return Formula(self.rep.split(': ')[-1])
-
-    @property
-    def interprands(self) -> List['Formula']:
-        return self.predicates + self.constants
-
+    def _find(self, regexp) -> List[str]:
+        return sorted(set(regexp.findall(self.rep)))
 
 
 def eliminate_double_negation(formula: Formula) -> Formula:
