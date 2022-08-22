@@ -8,7 +8,7 @@ import click
 from tqdm import tqdm
 from formal_logic.argument import Argument
 from formal_logic.generators import FormalLogicGenerator
-from formal_logic.distractors import UnknownFactDistractor
+from formal_logic.distractors import UnkownPASDistractor
 from formal_logic.translators import SentenceWiseTranslator
 from formal_logic.tree_pipeline import TreePipeline
 from formal_logic.dataset import NLProofSDataset
@@ -36,7 +36,7 @@ def main(output_path, argument_config, translation_config, size, depth, num_dist
     arguments = [Argument.from_json(json_obj) for json_obj in json.load(open(argument_config))]
     generator = FormalLogicGenerator(arguments, elim_dneg=elim_dneg)
 
-    distractor = UnknownFactDistractor()
+    distractor = UnkownPASDistractor()
 
     sentence_translations = json.load(open(translation_config))
     translator = SentenceWiseTranslator(sentence_translations)

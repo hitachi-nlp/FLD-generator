@@ -7,7 +7,7 @@ from pprint import pformat
 from formal_logic.formula import Formula
 from formal_logic.argument import Argument
 from formal_logic.proof_tree_generators import ProofTreeGenerator
-from formal_logic.distractors import UnknownFactDistractor
+from formal_logic.distractors import UnkownPASDistractor
 from formal_logic.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
 from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from formal_logic.datasets import NLProofSDataset
@@ -136,7 +136,7 @@ def generate_dataset(dataset: NLProofSDataset,
 
 def test_original():
     translator = load_translator('sentence_wise_translator', 'config')
-    distractor = UnknownFactDistractor()
+    distractor = UnkownPASDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=['./configs/formal_logic/arguments/syllogistic_corpus-02.json'],
@@ -158,7 +158,7 @@ def test_original():
 
 def test_LP_pred_only():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnknownFactDistractor()
+    distractor = UnkownPASDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -181,7 +181,7 @@ def test_LP_pred_only():
 
 def test_minimum_PL():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnknownFactDistractor()
+    distractor = UnkownPASDistractor()
 
     generator = load_proof_tree_generator(
         arguments=[
@@ -213,7 +213,7 @@ def test_minimum_PL():
 
 def test_LP_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnknownFactDistractor()
+    distractor = UnkownPASDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -239,7 +239,7 @@ def test_LP_pred_arg():
 
 def test_PL_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
-    distractor = UnknownFactDistractor()
+    distractor = UnkownPASDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=[

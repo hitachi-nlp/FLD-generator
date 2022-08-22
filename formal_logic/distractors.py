@@ -12,7 +12,7 @@ class FormalLogicDistractor(ABC):
         pass
 
 
-class UnknownFactDistractor(FormalLogicDistractor):
+class UnkownPASDistractor(FormalLogicDistractor):
 
     def __init__(self, num_distractor_factor: float = 1.0):
         self.num_distractor_factor = num_distractor_factor
