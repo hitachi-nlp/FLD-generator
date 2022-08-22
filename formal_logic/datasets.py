@@ -50,7 +50,7 @@ class NLProofSDataset:
         stats = defaultdict(int)
 
         for i_sample in range(size):
-            proof_tree, distractors, pipeline_stats = self.pipeline.run(
+            proof_tree, distractor_formulas, pipeline_stats = self.pipeline.run(
                 depth=self.depth,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
@@ -78,7 +78,7 @@ class NLProofSDataset:
             hypothesis = _get_sent(proof_tree.root_node)
 
             all_nodes: List[Union[ProofNode, _DistractorNode]] = list(proof_tree.nodes)\
-                + [_DistractorNode(distractor) for distractor in distractors]
+                + [_DistractorNode(distractor) for distractor in distractor_formulas]
 
             i_sent = 1
             node2id = {}
@@ -154,4 +154,4 @@ class NLProofSDataset:
                 'depth': proof_tree.depth,
             }
 
-            yield dataset_json, proof_tree, distractors, stats
+            yield dataset_json, proof_tree, distractor_formulas, stats

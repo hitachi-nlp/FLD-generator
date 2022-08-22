@@ -138,7 +138,7 @@ def test_original():
     translator = load_translator('sentence_wise_translator', 'config')
 
     # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(2)
+    distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
         config_paths=['./configs/formal_logic/arguments/syllogistic_corpus-02.json'],
@@ -161,7 +161,7 @@ def test_LP_pred_only():
     translator = load_translator('clause_typed_translator', 'config')
 
     # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(2)
+    distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -185,7 +185,7 @@ def test_minimum_PL():
     translator = load_translator('clause_typed_translator', 'config')
 
     # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(2)
+    distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
         arguments=[
@@ -218,7 +218,7 @@ def test_LP_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
 
     # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(2)
+    distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -245,7 +245,7 @@ def test_PL_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
     
     # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(2)
+    distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
         config_paths=[

@@ -35,19 +35,19 @@ class ProofTreeGenerationPipeline:
                 continue
 
             if self.distractor is not None:
-                distractors = self.distractor.generate([node.formula for node in proof_tree.nodes])
+                distractor_formulas = self.distractor.generate(proof_tree)
             else:
-                distractors = []
+                distractor_formulas = []
 
             if self.translator is not None:
-                named_translations, translator_stats = self.translator.translate([node.formula for node in proof_tree.nodes] + distractors,
+                named_translations, translator_stats = self.translator.translate([node.formula for node in proof_tree.nodes] + distractor_formulas,
                                                                                  raise_if_translation_not_found=raise_if_translation_not_found)
                 for i_node, node in enumerate(proof_tree.nodes):
                     node.formula.translation_name, node.formula.translation = named_translations[i_node]
-                for i_distractor, distractor_formula in enumerate(distractors):
+                for i_distractor, distractor_formula in enumerate(distractor_formulas):
                     distractor_formula.translation_name, distractor_formula.translation = named_translations[len(proof_tree.nodes) + i_distractor]
 
-            return proof_tree, distractors, self._get_stats(proof_tree, translator_stats)
+            return proof_tree, distractor_formulas, self._get_stats(proof_tree, translator_stats)
 
     def _get_stats(self,
                    proof_tree: ProofTree,

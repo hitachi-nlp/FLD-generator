@@ -9,13 +9,15 @@ from .utils import shuffle
 from .interpretation import generate_mappings_from_predicates_and_constants, interprete_formula
 from .formula_checkers import is_formula_set_nonsense
 
+import kern_profiler
+
 logger = logging.getLogger(__name__)
 
 
 class FormalLogicDistractor(ABC):
 
     @abstractmethod
-    def generate(self, formulas: List[Formula]) -> List[Formula]:
+    def generate(self, proof_tree: ProofTree) -> List[Formula]:
         pass
 
 
@@ -24,10 +26,13 @@ class UnkownPASDistractor(FormalLogicDistractor):
     def __init__(self, num_distractor_factor: float = 1.0):
         self.num_distractor_factor = num_distractor_factor
 
-    def generate(self, formulas: List[Formula]) -> List[Formula]:
+    def generate(self, proof_tree: ProofTree) -> List[Formula]:
+        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+        all_formulas = [node.formula for node in proof_tree.nodes]
+
         known_zeroary_predicates = sorted({
             pred.rep
-            for formula in formulas
+            for formula in leaf_formulas
             for pred in formula.zeroary_predicates
         })
         unused_predicates = shuffle(list(set(PREDICATES) - set(known_zeroary_predicates)))
@@ -38,19 +43,19 @@ class UnkownPASDistractor(FormalLogicDistractor):
 
         unary_PASs = sorted({
             PAS.rep
-            for formula in formulas
+            for formula in leaf_formulas
             for PAS in formula.unary_interprand_PASs
         })
         known_unary_predicates = sorted({
             pred.rep
-            for formula in formulas
+            for formula in leaf_formulas
             for pred in formula.unary_predicates
         })
         unused_predicates = sorted(set(PREDICATES) - set(known_unary_predicates) - set(distractor_zeroary_predicates))
 
         known_constants = sorted({
             pred.rep
-            for formula in formulas
+            for formula in leaf_formulas
             for pred in formula.constants
         })
         unused_constants = sorted(set(CONSTANTS) - set(known_constants))
@@ -60,7 +65,7 @@ class UnkownPASDistractor(FormalLogicDistractor):
             for constant in known_constants:
                 fact_rep = f'{predicate}{constant}'
 
-                if all((fact_rep not in formula.rep for formula in formulas + in_domain_unused_PASs)):
+                if all((fact_rep not in formula.rep for formula in leaf_formulas + in_domain_unused_PASs)):
                     in_domain_unused_PASs.append(Formula(fact_rep))
 
         outof_domain_unused_PASs = []
@@ -89,10 +94,14 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         self.num_distractor_factor = num_distractor_factor
         self.max_retry = max_retry
 
-    def generate(self, formulas: List[Formula]) -> List[Formula]:
-        num_distractors = int(len(formulas) * self.num_distractor_factor)
+    @profile
+    def generate(self, proof_tree: ProofTree) -> List[Formula]:
+        formulas_in_tree = [node.formula for node in proof_tree.nodes]
+        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
 
-        formulas = shuffle(formulas)
+        num_distractors = int(len(leaf_formulas) * self.num_distractor_factor)
+
+        leaf_formulas = shuffle(leaf_formulas)
         distractor_formulas: List[Formula] = []
 
         # TODO: constが変わるのに偏りすぎる
@@ -110,7 +119,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
             if len(distractor_formulas) >= num_distractors:
                 break
 
-            src_formula = formulas[trial % len(formulas)]
+            src_formula = leaf_formulas[trial % len(leaf_formulas)]
 
             used_predicates = list({pred.rep for pred in src_formula.predicates})
             used_constants = list({pred.rep for pred in src_formula.constants})
@@ -150,11 +159,11 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 ):
                     transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
 
-                    if is_formula_set_nonsense([transformed_formula] + distractor_formulas + formulas):
+                    if is_formula_set_nonsense([transformed_formula] + distractor_formulas + formulas_in_tree):
                         continue
 
                     if any(transformed_formula.rep == existent_formula
-                           for existent_formula in distractor_formulas + formulas):
+                           for existent_formula in distractor_formulas + formulas_in_tree):
                         # is not new
                         continue
 
