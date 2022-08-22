@@ -156,14 +156,14 @@ def test_original():
     generate_dataset(dataset)
 
 
-def test_LP_pred():
+def test_LP_pred_only():
     translator = load_translator('clause_typed_translator', 'config')
     distractor = UnknownFactDistractor()
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.pred.json',
-            './configs/formal_logic/arguments/LP.theorem.pred.json',
+            './configs/formal_logic/arguments/LP.axiom.pred_only.json',
+            './configs/formal_logic/arguments/LP.theorem.pred_only.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
@@ -217,8 +217,8 @@ def test_LP_pred_arg():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.pred.json',
-            './configs/formal_logic/arguments/LP.theorem.pred.json',
+            './configs/formal_logic/arguments/LP.axiom.pred_only.json',
+            './configs/formal_logic/arguments/LP.theorem.pred_only.json',
 
             './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
             './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
@@ -243,8 +243,8 @@ def test_PL_pred_arg():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.pred.json',
-            './configs/formal_logic/arguments/LP.theorem.pred.json',
+            './configs/formal_logic/arguments/LP.axiom.pred_only.json',
+            './configs/formal_logic/arguments/LP.theorem.pred_only.json',
 
             './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
             './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
@@ -269,7 +269,7 @@ if __name__ == '__main__':
 
     RAISE_IF_TRANSLATION_NOT_FOUND = False
 
-    # test_LP_pred()
+    # test_LP_pred_only()
     # test_LP_pred_arg()
     # test_minimum_PL()
     test_PL_pred_arg()

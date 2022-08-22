@@ -119,34 +119,34 @@ class Formula:
         return sorted(set(_CONSTANT_REGEXP.findall(rep)))
 
     @property
-    def predicate_arguments(self) -> List['Formula']:
-        return [Formula(rep) for rep in self._find_predicate_argument_reps(self.rep)]
+    def PASs(self) -> List['Formula']:
+        return [Formula(rep) for rep in self._find_PAS_reps(self.rep)]
 
-    def _find_predicate_argument_reps(self, rep: str) -> List[str]:
+    def _find_PAS_reps(self, rep: str) -> List[str]:
         return sorted(set(_PREDICATE_ARGUMENT_REGEXP.findall(rep)))
 
     @property
-    def zeroary_predicate_arguments(self) -> List['Formula']:
+    def zeroary_PASs(self) -> List['Formula']:
         return self.zeroary_predicates
 
     @property
-    def unary_predicate_arguments(self) -> List['Formula']:
-        return [pred_arg for pred_arg in self.predicate_arguments
-                if pred_arg not in self.zeroary_predicates]
+    def unary_PASs(self) -> List['Formula']:
+        return [PAS for PAS in self.PASs
+                if PAS not in self.zeroary_predicates]
 
     @property
-    def interprand_predicate_arguments(self) -> List['Formula']:
-        return [pred_arg for pred_arg in self.predicate_arguments
-                if len(pred_arg.variables) == 0]
+    def interprand_PASs(self) -> List['Formula']:
+        return [PAS for PAS in self.PASs
+                if len(PAS.variables) == 0]
 
     @property
-    def zeroary_interprand_predicate_arguments(self) -> List['Formula']:
+    def zeroary_interprand_PASs(self) -> List['Formula']:
         return self.zeroary_predicates
 
     @property
-    def unary_interprand_predicate_arguments(self) -> List['Formula']:
-        return [pred_arg for pred_arg in self.unary_predicate_arguments
-                if len(pred_arg.variables) == 0]
+    def unary_interprand_PASs(self) -> List['Formula']:
+        return [PAS for PAS in self.unary_PASs
+                if len(PAS.variables) == 0]
 
     @property
     def variables(self) -> List['Formula']:

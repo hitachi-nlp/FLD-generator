@@ -30,10 +30,10 @@ class UnknownFactDistractor(FormalLogicDistractor):
         distractor_zeroary_predicates = unused_predicates[:int(num_zeroary_distractors)]
         zeroary_distractors = [Formula(f'{predicate}') for predicate in distractor_zeroary_predicates]
 
-        unary_predicate_arguments = sorted({
-            pred_arg.rep
+        unary_PASs = sorted({
+            PAS.rep
             for formula in formulas
-            for pred_arg in formula.unary_interprand_predicate_arguments
+            for PAS in formula.unary_interprand_PASs
         })
         known_unary_predicates = sorted({
             pred.rep
@@ -49,26 +49,26 @@ class UnknownFactDistractor(FormalLogicDistractor):
         })
         unused_constants = sorted(set(CONSTANTS) - set(known_constants))
 
-        in_domain_unused_predicate_arguments: List[Formula] = []
+        in_domain_unused_PASs: List[Formula] = []
         for predicate in known_unary_predicates:
             for constant in known_constants:
                 fact_rep = f'{predicate}{constant}'
 
-                if all((fact_rep not in formula.rep for formula in formulas + in_domain_unused_predicate_arguments)):
-                    in_domain_unused_predicate_arguments.append(Formula(fact_rep))
+                if all((fact_rep not in formula.rep for formula in formulas + in_domain_unused_PASs)):
+                    in_domain_unused_PASs.append(Formula(fact_rep))
 
-        outof_domain_unused_predicate_arguments = []
+        outof_domain_unused_PASs = []
         for predicate in unused_predicates:
             for constant in known_constants:
-                outof_domain_unused_predicate_arguments.append(Formula(f'{predicate}{constant}'))
+                outof_domain_unused_PASs.append(Formula(f'{predicate}{constant}'))
         for predicate in known_unary_predicates:
             for constant in unused_constants:
                 fact_rep = f'{predicate}{constant}'
-                outof_domain_unused_predicate_arguments.append(Formula(f'{predicate}{constant}'))
+                outof_domain_unused_PASs.append(Formula(f'{predicate}{constant}'))
 
-        random.shuffle(in_domain_unused_predicate_arguments)
-        random.shuffle(outof_domain_unused_predicate_arguments)
-        num_unary_distractors = len(unary_predicate_arguments) * self.num_distractor_factor
-        unary_distractors = (in_domain_unused_predicate_arguments + outof_domain_unused_predicate_arguments)[:int(num_unary_distractors)]
+        random.shuffle(in_domain_unused_PASs)
+        random.shuffle(outof_domain_unused_PASs)
+        num_unary_distractors = len(unary_PASs) * self.num_distractor_factor
+        unary_distractors = (in_domain_unused_PASs + outof_domain_unused_PASs)[:int(num_unary_distractors)]
 
         return zeroary_distractors + unary_distractors

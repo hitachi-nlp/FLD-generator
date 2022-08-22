@@ -338,11 +338,11 @@ def _expand_op(formula: Formula) -> Formula:
         if match is None:
             break
 
-        op_pred_arg = match.group()
-        op_pred, constant = op_pred_arg.lstrip('(').split(')')
+        op_PAS = match.group()
+        op_pred, constant = op_PAS.lstrip('(').split(')')
         left_pred, op, right_pred = op_pred.split(' ')
-        expanded_op_pred_arg = f'({left_pred}{constant} {op} {right_pred}{constant})'
-        rep = rep.replace(f'{op_pred_arg}', f'{expanded_op_pred_arg}')
+        expanded_op_PAS = f'({left_pred}{constant} {op} {right_pred}{constant})'
+        rep = rep.replace(f'{op_PAS}', f'{expanded_op_PAS}')
 
     return Formula(rep)
 

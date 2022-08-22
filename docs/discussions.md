@@ -1,6 +1,4 @@
 # todo
-* 命名
-    - pred_arg
 * コンポーネントを完成させていく
     * "distractor"
     * "proof tree generation"

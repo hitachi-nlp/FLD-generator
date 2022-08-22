@@ -44,19 +44,19 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     if any((is_single_formula_inconsistent(formula) for formula in formulas)):
         return True
 
-    # Check whether some predicate_argument (like "Ga") appear both as true and as false in formulas.
+    # Check whether some PAS (like "Ga") appear both as true and as false in formulas.
     formulas_wo_implication = [formula for formula in formulas
                                if formula.premise is None]
-    pred_args_wo_variables = {
-        pred_arg
+    PASs_wo_variables = {
+        PAS
         for formula in formulas_wo_implication
-        for pred_arg in formula.interprand_predicate_arguments
+        for PAS in formula.interprand_PASs
     }
-    for pred_arg in pred_args_wo_variables:
+    for PAS in PASs_wo_variables:
         for i_this, this_formula in enumerate(formulas_wo_implication):
             for that_formula in formulas_wo_implication[i_this + 1:]:
-                this_bools = _get_boolean_values(this_formula, pred_arg)
-                that_bools = _get_boolean_values(that_formula, pred_arg)
+                this_bools = _get_boolean_values(this_formula, PAS)
+                that_bools = _get_boolean_values(that_formula, PAS)
                 if ('T' in this_bools and 'F' in that_bools)\
                         or ('F' in this_bools and 'T' in that_bools):
                     if len(this_formula.variables) == 0:
@@ -95,7 +95,7 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
         return False
     return any((
         PAS
-        for PAS in formula.interprand_predicate_arguments
+        for PAS in formula.interprand_PASs
         if 'T' in _get_boolean_values(formula, PAS) and 'F' in _get_boolean_values(formula, PAS)
     ))
 
@@ -142,9 +142,9 @@ def is_single_formula_nonsense(formula: Formula) -> bool:
     # detect fromulas like: {A} -> ¬{A}
     if formula.premise is not None:
         premise, conclusion = formula.premise, formula.conclusion
-        for pred_arg in conclusion.interprand_predicate_arguments:
-            bool_in_conclusion = _get_boolean_values(conclusion, pred_arg)
-            bool_in_premise = _get_boolean_values(premise, pred_arg)
+        for PAS in conclusion.interprand_PASs:
+            bool_in_conclusion = _get_boolean_values(conclusion, PAS)
+            bool_in_premise = _get_boolean_values(premise, PAS)
             if ('T' in bool_in_conclusion and 'F' in bool_in_premise)\
                     or ('F' in bool_in_conclusion and 'T' in bool_in_premise):
                 # this block means "contradiction getween premise and conclusion"
@@ -168,8 +168,8 @@ def is_single_formula_nonsense(formula: Formula) -> bool:
     return False
 
 
-def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[str]:
-    """ Detect the boolean value of predicate_arguments which is neccesary for the given formula to be true.
+def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
+    """ Detect the boolean value of PASs which is neccesary for the given formula to be true.
 
     See the test code for example usecases.
     Note that this function is valid only for our tiny set of formula patterns.
@@ -178,70 +178,70 @@ def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[st
     """
     formula = eliminate_double_negation(formula)
 
-    pred_arg_rep = predicate_argument.rep
+    PAS_rep = PAS.rep
 
     if formula.premise is not None:
         raise ValueError(f'The boolean appearance of formulas can not be determined for formula of type A -> B: input is "{formula.rep}"')
-    if pred_arg_rep not in [_pa.rep
-                            for _pa in formula.predicate_arguments]:
+    if PAS_rep not in [_pa.rep
+                            for _pa in formula.PASs]:
         return {}
 
     values = set()
 
     rep = formula.wo_quantifier.rep
     if rep.find(AND) >= 0:
-        if re.match(f'^\({pred_arg_rep} {AND} .*\)$', rep):
+        if re.match(f'^\({PAS_rep} {AND} .*\)$', rep):
             values.add('T')
-        elif re.match(f'^\({NOT}{pred_arg_rep} {AND} .*\)$', rep):
+        elif re.match(f'^\({NOT}{PAS_rep} {AND} .*\)$', rep):
             values.add('F')
-        if re.match(f'^\(.* {AND} {pred_arg_rep}\)$', rep):
+        if re.match(f'^\(.* {AND} {PAS_rep}\)$', rep):
             values.add('T')
-        elif re.match(f'^\(.* {AND} {NOT}{pred_arg_rep}\)$', rep):
+        elif re.match(f'^\(.* {AND} {NOT}{PAS_rep}\)$', rep):
             values.add('F')
 
         # AND with is converted to OR by DeMorgan, thus it is undecidable.
-        elif re.match(f'^{NOT}\({pred_arg_rep} {AND} .*\)$', rep):
+        elif re.match(f'^{NOT}\({PAS_rep} {AND} .*\)$', rep):
             values.add('Unknown')
-        elif re.match(f'^{NOT}\({NOT}{pred_arg_rep} {AND} .*\)$', rep):
+        elif re.match(f'^{NOT}\({NOT}{PAS_rep} {AND} .*\)$', rep):
             values.add('Unknown')
-        if re.match(f'^{NOT}\(.* {AND} {pred_arg_rep}\)$', rep):
+        if re.match(f'^{NOT}\(.* {AND} {PAS_rep}\)$', rep):
             values.add('Unknown')
-        elif re.match(f'^{NOT}\(.* {AND} {NOT}{pred_arg_rep}\)$', rep):
+        elif re.match(f'^{NOT}\(.* {AND} {NOT}{PAS_rep}\)$', rep):
             values.add('Unknown')
 
     elif rep.find(OR) >= 0:
         is_decidable_or = False
-        if re.match(f'^\({pred_arg_rep} {OR} {pred_arg_rep}\)$', rep):
+        if re.match(f'^\({PAS_rep} {OR} {PAS_rep}\)$', rep):
             values.add('T')
             is_decidable_or = True
-        elif re.match(f'^\({NOT}{pred_arg_rep} {OR} {NOT}{pred_arg_rep}\)$', rep):
+        elif re.match(f'^\({NOT}{PAS_rep} {OR} {NOT}{PAS_rep}\)$', rep):
             values.add('F')
             is_decidable_or = True
 
-        if re.match(f'^{NOT}\({pred_arg_rep} {OR} .*\)$', rep):
+        if re.match(f'^{NOT}\({PAS_rep} {OR} .*\)$', rep):
             values.add('F')
             is_decidable_or = True
-        elif re.match(f'^{NOT}\({NOT}{pred_arg_rep} {OR} .*\)$', rep):
+        elif re.match(f'^{NOT}\({NOT}{PAS_rep} {OR} .*\)$', rep):
             values.add('T')
             is_decidable_or = True
-        if re.match(f'^{NOT}\(.* {OR} {pred_arg_rep}\)$', rep):
+        if re.match(f'^{NOT}\(.* {OR} {PAS_rep}\)$', rep):
             values.add('F')
             is_decidable_or = True
-        elif re.match(f'^{NOT}\(.* {OR} {NOT}{pred_arg_rep}\)$', rep):
+        elif re.match(f'^{NOT}\(.* {OR} {NOT}{PAS_rep}\)$', rep):
             values.add('T')
             is_decidable_or = True
 
         if not is_decidable_or:
             values.add('Unknown')
     else:
-        if re.match(f'^{pred_arg_rep}$', rep):
+        if re.match(f'^{PAS_rep}$', rep):
             values.add('T')
-        elif re.match(f'^{NOT}{pred_arg_rep}$', rep):
+        elif re.match(f'^{NOT}{PAS_rep}$', rep):
             values.add('F')
 
     if len(values) == 0:
         logger.warning('Could not determine the boolean appearance of "%s" in "%s". Please implement logic to handle the pattern.',
-                       pred_arg_rep,
+                       PAS_rep,
                        rep)
         # raise NotImplementedError(f'Please add patterns to handle {rep}')
 
