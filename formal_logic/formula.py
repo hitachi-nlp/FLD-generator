@@ -135,6 +135,20 @@ class Formula:
                 if pred_arg not in self.zeroary_predicates]
 
     @property
+    def interprand_predicate_arguments(self) -> List['Formula']:
+        return [pred_arg for pred_arg in self.predicate_arguments
+                if len(pred_arg.variables) == 0]
+
+    @property
+    def zeroary_interprand_predicate_arguments(self) -> List['Formula']:
+        return self.zeroary_predicates
+
+    @property
+    def unary_interprand_predicate_arguments(self) -> List['Formula']:
+        return [pred_arg for pred_arg in self.unary_predicate_arguments
+                if len(pred_arg.variables) == 0]
+
+    @property
     def variables(self) -> List['Formula']:
         return [Formula(rep) for rep in self._find_variable_reps(self.rep)]
 
@@ -160,7 +174,7 @@ class Formula:
         return Formula(self.rep.split(': ')[-1])
 
     @property
-    def interprands(self) -> 'Formula':
+    def interprands(self) -> List['Formula']:
         return self.predicates + self.constants
 
 

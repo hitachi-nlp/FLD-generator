@@ -33,7 +33,7 @@ class UnknownFactDistractor(FormalLogicDistractor):
         unary_predicate_arguments = sorted({
             pred_arg.rep
             for formula in formulas
-            for pred_arg in formula.unary_predicate_arguments
+            for pred_arg in formula.unary_interprand_predicate_arguments
         })
         known_unary_predicates = sorted({
             pred.rep

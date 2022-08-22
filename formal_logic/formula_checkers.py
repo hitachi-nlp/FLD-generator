@@ -32,6 +32,7 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
         (i) The detection algorithm is specific for our small patterns of formulas. If we extend the pattern, we also have to update the algorithm.
         (ii) The current version can not detect the inconsistency between formulas with implications,
         such as {A -> ¬A, ¬A -> A}. We guess this is not that problematic, since such formulas are rare.
+        (iii) We can not handle quantified variables.
 
     TODO:
         We must update this function if we extend formula patterns.
@@ -46,12 +47,12 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     # Check whether some predicate_argument (like "Ga") appear both as true and as false in formulas.
     formulas_wo_implication = [formula for formula in formulas
                                if formula.premise is None]
-    pred_args = set(
-        (pred_arg
-         for formula in formulas_wo_implication
-         for pred_arg in formula.predicate_arguments)
-    )
-    for pred_arg in pred_args:
+    pred_args_wo_variables = {
+        pred_arg
+        for formula in formulas_wo_implication
+        for pred_arg in formula.interprand_predicate_arguments
+    }
+    for pred_arg in pred_args_wo_variables:
         for i_this, this_formula in enumerate(formulas_wo_implication):
             for that_formula in formulas_wo_implication[i_this + 1:]:
                 this_bools = _get_boolean_values(this_formula, pred_arg)
@@ -93,35 +94,10 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
     if formula.premise is not None:
         return False
     return any((
-        pa for pa in formula.predicate_arguments
-        if 'T' in _get_boolean_values(formula, pa) and 'F' in _get_boolean_values(formula, pa)
+        PAS
+        for PAS in formula.interprand_predicate_arguments
+        if 'T' in _get_boolean_values(formula, PAS) and 'F' in _get_boolean_values(formula, PAS)
     ))
-
-
-# def _search_inconsistent_subformula(formula: Formula) -> Optional[re.Match]:
-#     # TODO: If we extend formula patterns more, we must extend this function too.
-#     # In that case, it might be better to use consistency detection tools like tableau generator,
-#     # instead of the current hand-made program.
-#     """Seach for inconsistent part of formula.
-#
-#     Currently, we detect the following patterns, which is enough for current formula patterns:
-#         ({A}{a} & ¬{A}{a})
-#         ({A}x & ¬{A}x)
-#         ({A} & ¬{A})
-#
-#     """
-#     formula = eliminate_double_negation(formula)
-#
-#     pred_args = formula.predicate_arguments
-#     for pa in pred_args:
-#         for pattern in [f'\({NOT}{pa.rep} {AND} {pa.rep}\)',
-#                         f'\({pa.rep} {AND} {NOT}{pa.rep}\)',
-#                         f'\({NOT}{pa.rep} {AND} {pa.rep}\)',
-#                         f'\({pa.rep} {AND} {NOT}{pa.rep}\)']:
-#             match = re.search(pattern, formula.rep)
-#             if match is not None:
-#                 return match
-#     return None
 
 
 def is_formula_set_senseful(formulas: List[Formula]) -> bool:
@@ -166,7 +142,7 @@ def is_single_formula_nonsense(formula: Formula) -> bool:
     # detect fromulas like: {A} -> ¬{A}
     if formula.premise is not None:
         premise, conclusion = formula.premise, formula.conclusion
-        for pred_arg in conclusion.predicate_arguments:
+        for pred_arg in conclusion.interprand_predicate_arguments:
             bool_in_conclusion = _get_boolean_values(conclusion, pred_arg)
             bool_in_premise = _get_boolean_values(premise, pred_arg)
             if ('T' in bool_in_conclusion and 'F' in bool_in_premise)\
@@ -270,49 +246,3 @@ def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[st
         # raise NotImplementedError(f'Please add patterns to handle {rep}')
 
     return values
-
-
-# def _get_boolean_values(formula: Formula, predicate_argument: Formula) -> Set[str]:
-#     """ Detect boolean appearance of pred_arg.
-#
-#     For example for predicate_argument {A},
-#         {A} & {B} -> "T"
-#         ¬{A} & {B} -> "F"
-#
-#         {A} v {B} -> "Unkown"
-#         ¬{A} v {B} -> "Unkown"
-#
-#         {A} -> "T"
-#         ¬{A} -> "F"
-#
-#     This function is valid only for our tiny formula patterns.
-#     """
-#     formula = eliminate_double_negation(formula)
-#
-#     if formula.premise is not None:
-#         raise ValueError('The boolean appearance of formulas can not be determined for formula of type A -> B')
-#     if predicate_argument.rep not in [_predicate_argument.rep
-#                                       for _predicate_argument in formula.predicate_arguments]:
-#         raise ValueError('Predicate-argument "{predicate_argument.rep}" not in "{formula.rep}".')
-#
-#     boolean_values = []
-#     for match in re.finditer(f'{predicate_argument.rep}', formula.rep):
-#         if formula.rep[match.span()[0] - len(NOT): match.span()[1]] == f'{NOT}{match.group()}':
-#             span = match.span()[0] - len(NOT), match.span()[1]
-#             with_not = True
-#         else:
-#             span = match.span()
-#             with_not = False
-#
-#         if formula.rep[span[0] - 1 - len(AND): span[0] - 1] == AND or formula.rep[span[1] + 1: span[1] + 1 + len(AND)] == AND:
-#             # ".. ({A} & {B}) ..." or " ({C} & {A})"
-#             boolean_appearance = 'F' if with_not else 'T'
-#         elif formula.rep[span[0] - 1 - len(OR): span[0] - 1] == OR or formula.rep[span[1] + 1: span[1] + 1 + len(OR)] == OR:
-#             # ".. ({A} v {B}) ..." or " ({C} v {A})"
-#             boolean_appearance = 'Unknown'
-#         else:
-#             # "{A}"
-#             boolean_appearance = 'F' if with_not else 'T'
-#
-#         boolean_values.append(boolean_appearance)
-#     return set(boolean_values)
