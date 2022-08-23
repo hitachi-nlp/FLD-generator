@@ -16,23 +16,23 @@
       "id": "and_intro.pred_arg",
       "premises": [
           "{A}{a}",
-          "{B}{b}"
+          "{B}{a}"
       ],
-      "conclusion": "({A}{a} & {B}{b})"
+      "conclusion": "({A}{a} & {B}{a})"
   },
   {
       "id": "and_elim_0.pred_arg",
       "premises": [
-          "({A}{a} & {B}{b})"
+          "({A}{a} & {B}{a})"
       ],
       "conclusion": "{A}{a}"
   },
   {
       "id": "and_elim_1.pred_arg",
       "premises": [
-          "({A}{a} & {B}{b})"
+          "({A}{a} & {B}{a})"
       ],
-      "conclusion": "{B}{b}"
+      "conclusion": "{B}{a}"
   },
 
 
@@ -41,14 +41,14 @@
       "premises": [
           "{A}{a}"
       ],
-      "conclusion": "({A}{a} v {B}{b})"
+      "conclusion": "({A}{a} v {B}{a})"
   },
   {
       "id": "or_intro_1.pred_arg",
       "premises": [
-          "{B}{b}"
+          "{B}{a}"
       ],
-      "conclusion": "({A}{a} v {B}{b})"
+      "conclusion": "({A}{a} v {B}{a})"
   },
   {
       "id": "__or_elim.pred_arg"

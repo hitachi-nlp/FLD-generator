@@ -270,7 +270,7 @@ def test_PL_pred_arg():
 
 if __name__ == '__main__':
     random.seed(0)
-    setup_logger(level=logging.INFO)
+    setup_logger(level=logging.DEBUG)
 
     RAISE_IF_TRANSLATION_NOT_FOUND = False
 

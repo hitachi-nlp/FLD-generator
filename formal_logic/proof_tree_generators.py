@@ -1,6 +1,8 @@
 import random
 import logging
+from collections import defaultdict
 from typing import List, Optional, Any, Iterable, Tuple, Dict
+from pprint import pformat
 
 from timeout_timer import timeout as timeout_context
 
@@ -102,7 +104,12 @@ class ProofTreeGenerator:
                     if all(not formula_is_identical_to(formula, existent_formula) for existent_formula in unique_formulas):
                         unique_formulas.append(formula)
 
-            for argument_type in ['universal_quantifier_elim', 'existential_quantifier_intro']:
+            for argument_type in [
+                    'universal_quantifier_elim',
+
+                    # we do not use existential_quantifier_intro since it has no chainable_args unless existential_quantifier_elim, which is not implemented yet.
+                    # 'existential_quantifier_intro',
+            ]:
                 for i_formula, formula in enumerate(unique_formulas):
                     for quantified_argument in generate_quantifier_arguments(argument_type, formula, id_prefix=f'fomula-{i_formula}', quantify_all_at_once=quantify_all_at_once):
                         if is_argument_new(quantified_argument, arguments + complicated_arguments + quantified_arguments):
@@ -130,7 +137,7 @@ class ProofTreeGenerator:
 
     def generate_tree(self,
                       depth=3,
-                      max_retry=1) -> Optional[ProofTree]:
+                      max_retry=100) -> Optional[ProofTree]:
         for _ in range(0, max_retry):
             try:
                 proof_tree = _generate_tree(self.arguments,
@@ -140,10 +147,11 @@ class ProofTreeGenerator:
                                             timeout=self.timeout)
                 return proof_tree
             except ProofTreeGenerationFailure as e:
-                logger.info('Generation failed with message "%s"', str(e))
+                logger.info('Generation failed. The message is the followings:')
+                logger.info('%s', str(e))
             except TimeoutError:
                 logger.info('Generation failed with TimeoutError()')
-            logger.info('Will retry generation')
+            logger.info('Retry generation')
         raise ProofTreeGenerationFailure(f'generate_tree() failed with max_retry={max_retry}.')
 
 
@@ -190,6 +198,7 @@ def _generate_stem(arguments: List[Argument],
             proof_tree.add_node(node)
 
     for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):  # try all the argument as starting point
+        start_arg = cur_arg
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
         cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
@@ -197,6 +206,9 @@ def _generate_stem(arguments: List[Argument],
 
         is_tree_done = False
         while True:
+            log_traces = []
+            rejection_stats = defaultdict(int)
+
             if proof_tree.depth >= depth:
                 is_tree_done = True
                 break
@@ -204,6 +216,7 @@ def _generate_stem(arguments: List[Argument],
             formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
             cur_conclusion = cur_conclusion_node.formula
+            log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
             # Choose next argument
             chainable_args = [
@@ -212,19 +225,21 @@ def _generate_stem(arguments: List[Argument],
                         for premise in arg.premises))
             ]
             if len(chainable_args) == 0:
-                break
+                rejection_stats['len(chainable_args) == 0'] += 1
 
             is_arg_done = False
             next_arg_pulled = None
             for next_arg in _shuffle_arguments(chainable_args, argument_weights):
                 if is_arg_done:
                     break
+                log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
                 for premise in _shuffle(next_arg.premises):
                     if is_arg_done:
                         break
+                    log_traces.append(f'   |   |   | premise {premise}')
 
                     for premise_mapping in generate_mappings_from_formula(
                         [premise],
@@ -234,14 +249,16 @@ def _generate_stem(arguments: List[Argument],
                     ):
                         if is_arg_done:
                             break
-
                         premise_pulled = interprete_formula(premise, premise_mapping, elim_dneg=elim_dneg)
+                        log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
 
                         if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
+                            rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
                             continue
 
                         # for early rejection
                         if is_formula_set_nonsense([premise_pulled] + formulas_in_tree):
+                            rejection_stats['is_formula_set_nonsense([premise_pulled] + formulas_in_tree)'] += 1
                             continue
 
                         for mapping in generate_mappings_from_formula(
@@ -256,12 +273,15 @@ def _generate_stem(arguments: List[Argument],
                             next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
                             if is_argument_nonsense(next_arg_pulled):
+                                rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                                 continue
 
                             if is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree):
+                                rejection_stats['is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                                 continue
 
                             if not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
+                                rejection_stats['not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree)'] += 1
                                 continue
 
                             other_premises = [premise for premise in next_arg_pulled.premises
@@ -269,6 +289,7 @@ def _generate_stem(arguments: List[Argument],
                             if not _is_formulas_new(other_premises, formulas_in_tree):
                                 # If any of other premises already exists in the tree, it will lead to a loop.
                                 # We want to avoid a loop.
+                                rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
                                 continue
 
                             is_arg_done = True
@@ -290,9 +311,19 @@ def _generate_stem(arguments: List[Argument],
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
             else:
+                rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
+                log_traces_msg = '\n'.join(log_traces)
                 msg = '\n'.join([
                     '_generate_stem() failed. The statistics are the followings:',
-                    f'cur_arg:    {cur_arg}',
+                    # f'start_arg          :    {start_arg}',  # start_arg is not that informative
+                    f'cur_premise_nodes    :    {cur_premise_nodes}',
+                    f'cur_conclusion_node  :    {cur_conclusion_node}',
+
+                    'log trace:        :',
+                    log_traces_msg,
+
+                    'rejection stats   :',
+                    rejection_stats_msg,
                 ])
                 raise ProofTreeGenerationFailure(msg)
 
@@ -335,6 +366,11 @@ def _extend_braches(proof_tree: ProofTree,
         next_arg_pulled = None
         target_leaf_node = None
         for leaf_node in _shuffle(leaf_nodes):
+            log_traces = []
+            rejection_stats = defaultdict(int)
+
+            log_traces.append(f'   | leaf_node {leaf_node}')
+
             if is_leaf_node_done:
                 break
 
@@ -346,12 +382,12 @@ def _extend_braches(proof_tree: ProofTree,
                 if formula_is_identical_to(arg.conclusion, leaf_node.formula)
             ]
             if len(chainable_args) == 0:
-                # logger.info('_extend_braches() retry since no chainable arguments found ...')
-                continue
+                rejection_stats['len(chainable_args) == 0'] += 1
 
             for next_arg in _shuffle_arguments(chainable_args, weights=argument_weights):
                 if is_leaf_node_done:
                     break
+                log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
                 # The following two nested loop is for speedup:
@@ -367,12 +403,15 @@ def _extend_braches(proof_tree: ProofTree,
                         break
 
                     conclusion_pulled = interprete_formula(next_arg.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
+                    log_traces.append(f'   |   |   | conclusion_pulled {conclusion_pulled}')
 
                     if conclusion_pulled.rep != leaf_node.formula.rep:
+                        rejection_stats['conclusion_pulled.rep != leaf_node.formula.rep'] += 1
                         continue
 
                     # for early rejection
                     if is_formula_set_nonsense([conclusion_pulled] + formulas_in_tree):
+                        rejection_stats['is_formula_set_nonsense([conclusion_pulled] + formulas_in_tree)'] += 1
                         continue
 
                     for mapping in generate_mappings_from_formula(
@@ -384,14 +423,17 @@ def _extend_braches(proof_tree: ProofTree,
                         next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
                         if is_argument_nonsense(next_arg_pulled):
+                            rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                             continue
 
                         if is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree):
+                            rejection_stats['is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
+                            rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
                         is_leaf_node_done = True
@@ -408,12 +450,20 @@ def _extend_braches(proof_tree: ProofTree,
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
         else:
+            rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
+            log_traces_msg = '\n'.join(log_traces)
             msg = '\n'.join([
                 '_extend_braches() failed. The statistics are the followings:',
-                f'leaf_node:    {leaf_node}'
+                f'leaf_node:    {leaf_node}',
+
+                'log trace:        :',
+                log_traces_msg,
+
+                'rejection stats   :',
+                rejection_stats_msg,
+
             ])
             raise ProofTreeGenerationFailure(msg)
-
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:

@@ -93,11 +93,12 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                     + predicates[i_predicate_to_expand + 1:]
                 for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
                     mapping = copy.deepcopy(not_enhanced_mapping)
-                    mapping[predicate_to_expand] = f'({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
-                    if get_name:
-                        yield mapping, f'{op}-{i_predicate_to_expand}.not-{i_not}'
-                    else:
-                        yield mapping
+                    for brace_not_prefix in ['', NOT]:
+                        mapping[predicate_to_expand] = f'{brace_not_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
+                        if get_name:
+                            yield mapping, f'{op}-{i_predicate_to_expand}.not-{i_not}'
+                        else:
+                            yield mapping
 
 
 def generate_arguments_in_target_space(src_arg: Argument,

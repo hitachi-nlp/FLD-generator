@@ -79,6 +79,11 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     return False
 
 
+def is_predicate_arities_consistent(formula: Formula) -> bool:
+    # TODO
+    raise NotImplementedError()
+
+
 def is_single_formula_consistent(formula: Formula) -> bool:
     return not is_single_formula_inconsistent(formula)
 
@@ -90,6 +95,9 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
 
     Limitation:
         Currently, we can not determine the inconsistency of formula with implications like A -> (B v C)
+
+    TODO:
+        use external consistency checkers to guarantee the correctness of this tool.
     """
     if formula.premise is not None:
         return False
@@ -107,8 +115,8 @@ def is_formula_set_senseful(formulas: List[Formula]) -> bool:
 def is_formula_set_nonsense(formulas: List[Formula]) -> bool:
     if is_formulas_inconsistent(formulas):
         return True
-    return any((is_single_formula_nonsense(formula)
-                for formula in formulas))
+    return any(is_single_formula_nonsense(formula)
+               for formula in formulas)
 
 
 def is_single_formula_senseful(formula: Formula) -> bool:
