@@ -13,5 +13,22 @@
           "{B}{b} -> {C}{c}"
       ],
       "conclusion": "{A}{a} -> {C}{c}"
+  },
+
+
+  {
+      "id": "De_Morgan_0.pred_arg",
+      "premises": [
+          "¬({A}{a} & {B}{a})"
+      ],
+      "conclusion": "(¬{A}{a} v ¬{B}{a})"
+  },
+  {
+      "id": "De_Morgan_1.pred_arg",
+      "premises": [
+          "¬({A}{a} v {B}{a})"
+      ],
+      "conclusion": "(¬{A}{a} & ¬{B}{a})"
   }
+
 ]
