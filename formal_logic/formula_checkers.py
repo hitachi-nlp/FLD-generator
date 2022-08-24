@@ -9,6 +9,7 @@ from .formula import (
     AND,
     OR,
     NOT,
+    CONSTANTS,
 )
 
 logger = logging.getLogger(__name__)
@@ -77,22 +78,23 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
                 that_bools = _get_boolean_values(that_formula, PAS)
                 if ('T' in this_bools and 'F' in that_bools)\
                         or ('F' in this_bools and 'T' in that_bools):
-                    if len(this_formula.variables) == 0:
-                        # The formulas are composed of constants like: "{G}{a}", "¬{G}{a}"
-                        return True
-                    else:
-                        # The formulas are composed of variables like: "(x): {G}x", "(x): ¬{G}x"
-                        assert len(this_formula.variables) == 1
-                        assert this_formula.variables[0].rep == that_formula.variables[0].rep
-                        variable = this_formula.variables[0]
-                        if variable.rep in [v.rep for v in this_formula.universal_variables]\
-                                or [v.rep for v in that_formula.universal_variables]:
-                            # this and that are like:
-                            #     "(x): {G}x",   "(x): ¬{G}x"
-                            #     "(Ex): {G}x",  "(x): ¬{G}x"
-                            #     "(x): {G}x",   "(Ex): ¬{G}x"
-                            # not that "(Ex)" ¬{G}x and "(Ex)" {G}x are consistent.
-                            return True
+                    return True
+                    # if len(this_formula.variables) == 0:
+                    #     # The formulas are composed of constants like: "{G}{a}", "¬{G}{a}"
+                    #     return True
+                    # else:
+                    #     # The formulas are composed of variables like: "(x): {G}x", "(x): ¬{G}x"
+                    #     assert len(this_formula.variables) == 1
+                    #     assert this_formula.variables[0].rep == that_formula.variables[0].rep
+                    #     variable = this_formula.variables[0]
+                    #     if variable.rep in [v.rep for v in this_formula.universal_variables]\
+                    #             or [v.rep for v in that_formula.universal_variables]:
+                    #         # this and that are like:
+                    #         #     "(x): {G}x",   "(x): ¬{G}x"
+                    #         #     "(Ex): {G}x",  "(x): ¬{G}x"
+                    #         #     "(x): {G}x",   "(Ex): ¬{G}x"
+                    #         # not that "(Ex)" ¬{G}x and "(Ex)" {G}x are consistent.
+                    #         return True
 
     return False
 
@@ -203,17 +205,36 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
         * When we extend formula patterns, we must update this function
         * It might be more robust to use external solvers like tableau generators.
     """
-    formula = eliminate_double_negation(formula)
+    if len(PAS.predicates) != 1:
+        raise ValueError(f'PAS must have exactly one predicate. actual: {PAS}')
 
-    PAS_rep = PAS.rep
+    formula = eliminate_double_negation(formula)
 
     if formula.premise is not None:
         raise ValueError(f'The boolean appearance of formulas can not be determined for formula of type A -> B: input is "{formula.rep}"')
-    if PAS_rep not in [_pa.rep for _pa in formula.PASs]:
+
+    # e.g.) formula: "(x): ^{A}x"    PAS: "{A}{a}"
+    if len(formula.universal_variables) == 1:
+        variable = formula.universal_variables[0]
+        for constant in CONSTANTS:
+            bound_formula = Formula(formula.wo_quantifier.rep.replace(variable.rep, constant))
+            bound_PAS = Formula(PAS.rep.replace(variable.rep, constant))
+            booleans_on_bound_formula = _get_boolean_values(bound_formula, bound_PAS)
+            if len(booleans_on_bound_formula) >= 1:
+                return booleans_on_bound_formula
         return {}
 
-    values = set()
+    # e.g.) formula: "(Ex): {B}x -> {A}x"     PAS: "{A}x"
+    if len(formula.existential_variables) == 1 and PAS.variables[0].rep in [v.rep for v in formula.existential_variables]:
+        # We can not determine 
+        # since we regard "x" without quantification denotes all the constants.
+        return {}
 
+    if PAS.rep not in [_pa.rep for _pa in formula.PASs]:
+        return set()
+
+    values = set()
+    PAS_rep = PAS.rep
     rep = formula.wo_quantifier.rep
     if rep.find(AND) >= 0:
         if re.match(f'^\({PAS_rep} {AND} .*\)$', rep):
