@@ -70,10 +70,9 @@
 # proof tree generation
 
 ## [todo]
-* [todo] is_formulas_consistent, is_argument
-    * Exはunknownにすべきでは？
-* [todo] GaとGが同時に出てくることを防ぐ機構があるか？
-    - is_nonsense系列
+* formulas -> formula_set
+* is はどちらか一方だけにする．
+
 * [todo] notの意味を表現する．
     - [done] contraposition
     - ドモルガン

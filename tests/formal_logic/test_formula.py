@@ -1,13 +1,5 @@
 from typing import List
 from formal_logic.formula import Formula
-from formal_logic.formula_checker import (
-    # _search_inconsistent_subformula,
-    _get_boolean_values,
-
-    is_single_formula_inconsistent,
-    is_formulas_inconsistent,
-    is_single_formula_nonsense,
-)
 
 
 def test_formula():

@@ -57,7 +57,7 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     formulas = [eliminate_double_negation(formula) for formula in formulas]
 
     # Check whether any of formulas are inconsistent by itself.
-    if any((is_single_formula_inconsistent(formula) for formula in formulas)):
+    if any((_is_single_formula_inconsistent(formula) for formula in formulas)):
         return True
 
     # Check whether some PAS (like "Ga") appear both as true and as false in formulas.
@@ -65,7 +65,7 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
                                if formula.premise is None]
     # Here, we only check PAS with constants,
     # since it is possible that variable PASs can be consistent between different formulas
-    # even surfacecally 
+    # even surfacecally
     PASs = {
         PAS
         for formula in formulas_wo_implication
@@ -79,38 +79,17 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
                 if ('T' in this_bools and 'F' in that_bools)\
                         or ('F' in this_bools and 'T' in that_bools):
                     return True
-                    # if len(this_formula.variables) == 0:
-                    #     # The formulas are composed of constants like: "{G}{a}", "¬{G}{a}"
-                    #     return True
-                    # else:
-                    #     # The formulas are composed of variables like: "(x): {G}x", "(x): ¬{G}x"
-                    #     assert len(this_formula.variables) == 1
-                    #     assert this_formula.variables[0].rep == that_formula.variables[0].rep
-                    #     variable = this_formula.variables[0]
-                    #     if variable.rep in [v.rep for v in this_formula.universal_variables]\
-                    #             or [v.rep for v in that_formula.universal_variables]:
-                    #         # this and that are like:
-                    #         #     "(x): {G}x",   "(x): ¬{G}x"
-                    #         #     "(Ex): {G}x",  "(x): ¬{G}x"
-                    #         #     "(x): {G}x",   "(Ex): ¬{G}x"
-                    #         # not that "(Ex)" ¬{G}x and "(Ex)" {G}x are consistent.
-                    #         return True
 
     return False
 
 
-def is_predicate_arities_consistent(formula: Formula) -> bool:
-    # TODO
-    raise NotImplementedError()
+def _is_single_formula_consistent(formula: Formula) -> bool:
+    return not _is_single_formula_inconsistent(formula)
 
 
-def is_single_formula_consistent(formula: Formula) -> bool:
-    return not is_single_formula_inconsistent(formula)
-
-
-def is_single_formula_inconsistent(formula: Formula) -> bool:
+def _is_single_formula_inconsistent(formula: Formula) -> bool:
     """ A formula is inconsistent if for any interpretation it can not be true.
-   
+
     See the test code for example usecases.
 
     Limitation:
@@ -128,6 +107,16 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
     ))
 
 
+def is_predicate_arity_consistent(formulas: List[Formula]) -> bool:
+    unary_predicates = {pred.rep
+                        for formula in formulas
+                        for pred in formula.unary_predicates}
+    zeroary_predicates = {pred.rep
+                          for formula in formulas
+                          for pred in formula.zeroary_predicates}
+    return len(unary_predicates.intersection(zeroary_predicates)) == 0
+
+
 def is_formula_set_senseful(formulas: List[Formula]) -> bool:
     return not is_formula_set_nonsense(formulas)
 
@@ -135,15 +124,17 @@ def is_formula_set_senseful(formulas: List[Formula]) -> bool:
 def is_formula_set_nonsense(formulas: List[Formula]) -> bool:
     if is_formulas_inconsistent(formulas):
         return True
-    return any(is_single_formula_nonsense(formula)
+    if not is_predicate_arity_consistent(formulas):
+        return True
+    return any(_is_single_formula_nonsense(formula)
                for formula in formulas)
 
 
-def is_single_formula_senseful(formula: Formula) -> bool:
-    return not is_single_formula_nonsense(formula)
+def _is_single_formula_senseful(formula: Formula) -> bool:
+    return not _is_single_formula_nonsense(formula)
 
 
-def is_single_formula_nonsense(formula: Formula) -> bool:
+def _is_single_formula_nonsense(formula: Formula) -> bool:
     """ Detect fomula which is nonsense.
 
     "Nonsense" means that, in the sense of human commonsense of natural language, the formula is not that useful.
@@ -226,7 +217,7 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
 
     # e.g.) formula: "(Ex): {B}x -> {A}x"     PAS: "{A}x"
     if len(formula.existential_variables) == 1 and PAS.variables[0].rep in [v.rep for v in formula.existential_variables]:
-        # We can not determine 
+        # We can not determine
         # since we regard "x" without quantification denotes all the constants.
         return {}
 
