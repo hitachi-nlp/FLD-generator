@@ -103,8 +103,6 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         leaf_formulas = shuffle(leaf_formulas)
         distractor_formulas: List[Formula] = []
 
-        # TODO: constが変わるのに偏りすぎる
-
         trial = 0
         while True:
             if trial >= self.max_retry:

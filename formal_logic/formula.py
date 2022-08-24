@@ -33,12 +33,22 @@ _CONSTANT_REGEXP = re.compile('|'.join(CONSTANTS))
 VARIABLES = ['x', 'y', 'z']  # do not use 'v' = OR
 _VARIABLE_REGEXP = re.compile('|'.join(VARIABLES))
 
-PREDICATE_ARGUMENTS = [
+PASs = [
     f'{pred}{arg}'
     for pred in PREDICATES
     for arg in CONSTANTS + VARIABLES + ['']
 ]
-_PREDICATE_ARGUMENT_REGEXP = re.compile('|'.join(PREDICATE_ARGUMENTS))
+_PAS_REGEXP = re.compile('|'.join(PASs))
+
+_UNARY_PAS_REGEXPs = {
+    f'{pred}': re.compile(
+        '|'.join([
+            f'{pred}{arg}'
+            for arg in CONSTANTS + VARIABLES
+        ])
+    )
+    for pred in PREDICATES
+}
 
 _UNIVERSAL_QUENTIFIER_REGEXP = re.compile(
     '|'.join([f'\({variable}\)' for variable in VARIABLES])
@@ -94,13 +104,16 @@ class Formula:
 
     @property
     def zeroary_predicates(self) -> List['Formula']:
+        unary_predicate_reps = {predicate.rep for predicate in self.unary_predicates}
         return [predicate for predicate in self.predicates
-                if all((f'{predicate.rep}{argument}' not in self.rep for argument in VARIABLES + CONSTANTS))]
+                if predicate.rep not in unary_predicate_reps]
+        # return [predicate for predicate in self.predicates
+        #         if all((f'{predicate.rep}{argument}' not in self.rep for argument in VARIABLES + CONSTANTS))]
 
     @property
     def unary_predicates(self) -> List['Formula']:
         return [predicate for predicate in self.predicates
-                if any((f'{predicate.rep}{argument}' in self.rep for argument in VARIABLES + CONSTANTS))]
+                if _UNARY_PAS_REGEXPs[predicate.rep].search(self.rep)]
 
     @property
     def constants(self) -> List['Formula']:
@@ -124,7 +137,7 @@ class Formula:
 
     @property
     def PASs(self) -> List['Formula']:
-        return [Formula(rep) for rep in self._find(_PREDICATE_ARGUMENT_REGEXP)]
+        return [Formula(rep) for rep in self._find(_PAS_REGEXP)]
 
     @property
     def zeroary_PASs(self) -> List['Formula']:

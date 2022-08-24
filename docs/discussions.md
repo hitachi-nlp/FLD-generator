@@ -70,20 +70,6 @@
 # proof tree generation
 
 ## [todo]
-* formulas -> formula_set
-* is はどちらか一方だけにする．
-
-* [todo] notの意味を表現する．
-    - [done] contraposition
-    - ドモルガン
-* [todo] 定理はどれを入れるべきか？
-    - [todo] EBでよく使われる定理は入れる．転移性能のため．
-        - syllogism等
-    - [todo] 「今回入れられなかった公理」を使わないと導けない定理は入れる．
-        - e.g.) not関連の公理を入れられなかった => contrapositionを入れる
-    - [todo] 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
-* [todo] Aa -> B 
-    - これが実装されていないことによって，pred_argなtreeとpredなtreeが完全に分かれてしまっている．
 * [todo]
     - きちんと良い定理が導けているか，デバッグしたい．
 * [done] 現状，pred_argの頻度が小さい．
@@ -199,22 +185,32 @@
     * ベースラインには，全称量化子しか含まれていない．
 
 ## [todo] パターン
-* [pending]
-    - [pending] 主語違いパターン
-        - [pending] 少し工数が高いこと．自然言語で頻繁に発生するパターンでは無さそうであること，による．
-        - e.g.) Aa v Bb
-        - c.f.) Aa v Ba (今現在あるやつら)
-        - 実装のための作業
-            1. argument configに，主語違いパターンを書き入れる
-            2. generate_complicated_argumentsで，主語違いパターンを生み出す
-                - これをやらないと，主語違いパターンを持ったargumentが少なくなり，chainable_args=0が発生する．
-            3. translation configに主語違いパターンの翻訳を書き込む．
-                - 工数が大きい．
-    - [pending] pred_arg + pred パターン
-        - [pending] 少し工数が高いこと．自然言語で頻繁に発生するパターンでは無さそうであること，による．
-        - e.g.) Aa v B
-        - "主語違いパターン" と同様の作業が発生する．
-* [pending] ->導入
+* [todo] ルール導入の方針
+    * [todo] 定理はどれを入れるべきか？
+        - [todo] EBでよく使われる定理は入れる．転移性能のため．
+            - syllogism等
+        - [todo] 「今回入れられなかった公理」を使わないと導けない定理は入れる．
+            - e.g.) not関連の公理を入れられなかった => contraposition, ドモルガンを入れる
+        - [todo] 論文用に雰囲気を出すため(だけ)に，いろいろと入れる．
+* [todo] notの意味を表現する．
+    - [done] contraposition
+    - ドモルガン
+- [pending] 主語違いパターン
+    - [pending] 少し工数が高いこと．自然言語で頻繁に発生するパターンでは無さそうであること，による．
+    - e.g.) Aa v Bb
+    - c.f.) Aa v Ba (今現在あるやつら)
+    - 実装のための作業
+        1. argument configに，主語違いパターンを書き入れる
+        2. generate_complicated_argumentsで，主語違いパターンを生み出す
+            - これをやらないと，主語違いパターンを持ったargumentが少なくなり，chainable_args=0が発生する．
+        3. translation configに主語違いパターンの翻訳を書き込む．
+            - 工数が大きい．
+- [pending] pred_arg + pred パターン
+    - [pending] 少し工数が高いこと．自然言語で頻繁に発生するパターンでは無さそうであること，による．
+    - e.g.) Aa v B
+    - "主語違いパターン" と同様の作業が発生する．
+    - これが実装されていないことによって，pred_argのみでできたtree，もしくはpredのみでできたtreeの2種類に限られてしまい，pred_argとpredの混ざったtreeが作成できていない．
+* [pending] -> 導入
     - 仮定の除去が必要になるので，現行のFWの延長では実現できない．
     - e.g.) syllogismをmodus ponensから導出する．
         ```

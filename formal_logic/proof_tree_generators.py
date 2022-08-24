@@ -66,7 +66,6 @@ class ProofTreeGenerator:
             quantify_all_at_once=quantify_all_at_once,
             elim_dneg=elim_dneg,
         )
-        raise
 
     @profile
     def _load_arguments(self,

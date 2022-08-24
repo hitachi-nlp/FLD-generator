@@ -320,15 +320,21 @@ def interprete_argument(arg: Argument,
                     scheme_variant=arg.scheme_variant)
 
 
+@profile
 def interprete_formula(formula: Formula,
                        mapping: Dict[str, str],
                        elim_dneg=False) -> Formula:
-    return _expand_op(Formula(_interprete_rep(formula.rep, mapping, elim_dneg=elim_dneg)))
+    return _expand_op(
+        Formula(
+            _interprete_rep(formula.rep, mapping, elim_dneg=elim_dneg)
+        )
+    )
 
 
 _expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
 
 
+@profile
 def _expand_op(formula: Formula) -> Formula:
     rep = formula.rep
 
@@ -348,6 +354,7 @@ def _expand_op(formula: Formula) -> Formula:
     return Formula(rep)
 
 
+@profile
 def _interprete_rep(rep: str,
                     mapping: Dict[str, str],
                     elim_dneg=False) -> str:
@@ -464,13 +471,17 @@ def formula_can_not_be_identical_to(this_formula: Formula,
     return False
 
 
+@profile
 def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     # Calculate the appearance  of formulas in formula
     # e.g.)
     #   formulas: ['{A}', '{B}']
     #   tgt_formula: '{A} & {B} -> {A}'
     #   return 3
-    return sum([tgt_formula.rep.count(formula.rep) for formula in formulas] or [0])
+    return sum(
+        [tgt_formula.rep.count(formula.rep) for formula in formulas]\
+        or [0]
+    )
 
 
 @profile
