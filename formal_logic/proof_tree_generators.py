@@ -79,7 +79,10 @@ class ProofTreeGenerator:
         complicated_arguments: List[Argument] = []
         if complicated_arguments_weight > 0.0:
             for argment in arguments:
-                for complicated_argument, _, name in generate_complicated_arguments(argment, elim_dneg=elim_dneg, get_name=True):
+                for complicated_argument, _, name in generate_complicated_arguments(argment,
+                                                                                    elim_dneg=elim_dneg,
+                                                                                    suppress_op_expansion_if_exists=True,
+                                                                                    get_name=True):
                     if _is_argument_new(complicated_argument, arguments + complicated_arguments):
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)

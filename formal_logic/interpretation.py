@@ -21,8 +21,11 @@ import kern_profiler
 
 def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
+                                   suppress_op_expansion_if_exists=False,
                                    get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
-    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion], get_name=True):
+    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
+                                                                     suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
+                                                                     get_name=True):
         complicated_argument = interprete_argument(src_arg, mapping, elim_dneg=elim_dneg)
         if get_name:
             yield complicated_argument, mapping, name
@@ -32,8 +35,11 @@ def generate_complicated_arguments(src_arg: Argument,
 
 def generate_complicated_formulas(src_formula: Formula,
                                   elim_dneg=False,
+                                  suppress_op_expansion_if_exists=False,
                                   get_name=False) -> Union[Iterable[Tuple[Formula, Dict[str, str]]], Iterable[Tuple[Formula, Dict[str, str], str]]]:
-    for mapping, name in generate_complication_mappings_from_formula([src_formula], get_name=True):
+    for mapping, name in generate_complication_mappings_from_formula([src_formula],
+                                                                     suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
+                                                                     get_name=True):
         complicated_formula = interprete_formula(src_formula, mapping, elim_dneg=elim_dneg)
         if get_name:
             yield complicated_formula, mapping, name
@@ -42,8 +48,8 @@ def generate_complicated_formulas(src_formula: Formula,
 
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],
-                                                get_name=False,
-                                                suppress_op_expansion_if_exists=True) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
+                                                suppress_op_expansion_if_exists=False,
+                                                get_name=False) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
     predicates = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
     constants = sorted(set([p.rep for formula in formulas for p in formula.constants]))
 
@@ -156,9 +162,13 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                    add_complicated_arguments=False,
                                    constraints: Optional[Dict[str, str]] = None,
                                    block_shuffle=False,
-                                   allow_many_to_one=True) -> Iterable[Dict[str, str]]:
+                                   allow_many_to_one=True,
+                                   suppress_op_expansion_if_exists=False) -> Iterable[Dict[str, str]]:
     if add_complicated_arguments:
-        complication_mappings = generate_complication_mappings_from_formula(src_formulas)
+        complication_mappings = generate_complication_mappings_from_formula(
+            src_formulas,
+            suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
+        )
     else:
         complication_mappings = [
             {p.rep: p.rep
