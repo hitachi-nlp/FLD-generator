@@ -29,14 +29,29 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     See the test code for example usecases.
 
     Limitations:
-        (i) The detection algorithm is specific for our small patterns of formulas. If we extend the pattern, we also have to update the algorithm.
-        (ii) The current version can not detect the inconsistency between formulas with implications,
-        such as {A -> ¬A, ¬A -> A}. We guess this is not that problematic, since such formulas are rare.
-        (iii) We can not handle quantified variables.
+        The current algorithm is stepped as:
+            1. We decide the boolean values of PASs in each formula assuming each formula is True.
+            2. We conclude formulas are inconsistent if for any pair of formulas, any PAS is True and False.
+        As seen, this algorithm does not implement the definition of inconsistency directly (see TODO),
+        and thus, produces false negatives, e.g.:
+            (i) Regarding 1, we can not decide boolean values of A or B in formula "(A v B)" nor "A -> B" (this is limitation of _get_boolean_values()).
+                Thus, we can not detect the inconsistency between formulas like {"A v B", '^A', '^B'} or {"A -> B", "^B", "A"}
+            (ii) Regarding 2, we only check pairwise inconsistency. Thus, again, we can not detect the inconsistency between multi-way formulas like {"A v B", '^A', '^B'}.
+
+        Further, since the detection algorithm is specific for our small patterns of formulas, we also have to update the algorithm when we extend the patterns.
+
+        We think, despite these incompletenesses, this function works well in our pipeline.
+        This is because, since we randomly choose formulas from large predicates/constants space, it is rare that formulas share the same predicates/constants,
+        and thus it is rare that formulas are inconsistent.
 
     TODO:
-        We must update this function if we extend formula patterns.
-        It might be better to use external library like tableau generator.
+        * If we extend formula patterns, we must update this function accordingly.
+        * Complete the function. We have mainly two directions:
+            (i). Use external library like rableau generator
+            (ii). Implement by ourselves. It might be better to use the other algorithm which folllow the definition of the inconsistency directry as:
+                (a). We generate all the possible boolean assignments on predicate-argument.
+                (b). We decide all the boolean values of formulas and check they are True at the same time.
+        * It might be better to use external library like tableau generator for completeness and easiness of implementations.
     """
     formulas = [eliminate_double_negation(formula) for formula in formulas]
 
@@ -47,12 +62,15 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     # Check whether some PAS (like "Ga") appear both as true and as false in formulas.
     formulas_wo_implication = [formula for formula in formulas
                                if formula.premise is None]
-    PASs_wo_variables = {
+    # Here, we only check PAS with constants,
+    # since it is possible that variable PASs can be consistent between different formulas
+    # even surfacecally 
+    PASs = {
         PAS
         for formula in formulas_wo_implication
-        for PAS in formula.interprand_PASs
+        for PAS in formula.PASs
     }
-    for PAS in PASs_wo_variables:
+    for PAS in PASs:
         for i_this, this_formula in enumerate(formulas_wo_implication):
             for that_formula in formulas_wo_implication[i_this + 1:]:
                 this_bools = _get_boolean_values(this_formula, PAS)
@@ -103,7 +121,7 @@ def is_single_formula_inconsistent(formula: Formula) -> bool:
         return False
     return any((
         PAS
-        for PAS in formula.interprand_PASs
+        for PAS in formula.PASs
         if 'T' in _get_boolean_values(formula, PAS) and 'F' in _get_boolean_values(formula, PAS)
     ))
 
@@ -126,8 +144,8 @@ def is_single_formula_senseful(formula: Formula) -> bool:
 def is_single_formula_nonsense(formula: Formula) -> bool:
     """ Detect fomula which is nonsense.
 
-    "Nonsense" means that, in the sense of human commonsense for natural language, the formula is not that useful.
-    In addition to the inconsistent formulas, following types of formulas are nonsense:
+    "Nonsense" means that, in the sense of human commonsense of natural language, the formula is not that useful.
+    The nonsense formulas includes the inconsistent formulas plus following types of formulas:
         {A} -> ¬{A},
         ¬{A} -> {A}
 
@@ -139,8 +157,6 @@ def is_single_formula_nonsense(formula: Formula) -> bool:
 
         ({A} -> {A})
         (¬{A} -> ¬{A})
-
-    Note that these formulas are still consistent.
     """
     formula = eliminate_double_negation(formula)
 
@@ -150,7 +166,7 @@ def is_single_formula_nonsense(formula: Formula) -> bool:
     # detect fromulas like: {A} -> ¬{A}
     if formula.premise is not None:
         premise, conclusion = formula.premise, formula.conclusion
-        for PAS in conclusion.interprand_PASs:
+        for PAS in conclusion.PASs:
             bool_in_conclusion = _get_boolean_values(conclusion, PAS)
             bool_in_premise = _get_boolean_values(premise, PAS)
             if ('T' in bool_in_conclusion and 'F' in bool_in_premise)\
@@ -177,12 +193,15 @@ def is_single_formula_nonsense(formula: Formula) -> bool:
 
 
 def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
-    """ Detect the boolean value of PASs which is neccesary for the given formula to be true.
+    """ Detect the boolean values of PASs which is neccesary for the given formula to be true.
 
     See the test code for example usecases.
+
     Note that this function is valid only for our tiny set of formula patterns.
 
-    TODO: We must update this function if we extend formula patterns.
+    TODO:
+        * When we extend formula patterns, we must update this function
+        * It might be more robust to use external solvers like tableau generators.
     """
     formula = eliminate_double_negation(formula)
 
@@ -190,8 +209,7 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
 
     if formula.premise is not None:
         raise ValueError(f'The boolean appearance of formulas can not be determined for formula of type A -> B: input is "{formula.rep}"')
-    if PAS_rep not in [_pa.rep
-                            for _pa in formula.PASs]:
+    if PAS_rep not in [_pa.rep for _pa in formula.PASs]:
         return {}
 
     values = set()

@@ -45,6 +45,8 @@ def test_get_boolean_values():
     assert _get_boolean_values(Formula('({A} v {B})'), Formula('{B}')) == {'Unknown'}
     assert _get_boolean_values(Formula('({A} v ¬{B})'), Formula('{B}')) == {'Unknown'}
 
+    assert _get_boolean_values(Formula('({A} & ¬{A})'), Formula('{A}')) == {'T', 'F'}
+
     # assert _get_boolean_values(Formula('{C} or ({A} & ¬{B})'), Formula('{A}')) == {'Unknown'}
 
 
