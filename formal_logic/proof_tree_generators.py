@@ -135,11 +135,11 @@ class ProofTreeGenerator:
                                             timeout=self.timeout)
                 return proof_tree
             except ProofTreeGenerationFailure as e:
-                logger.info('Generation failed. The message is the followings:')
-                logger.info('%s', str(e))
+                logger.warning('Generation failed. The message is the followings:')
+                logger.warning('%s', str(e))
             except TimeoutError:
-                logger.info('Generation failed with TimeoutError()')
-            logger.info('Retry generation')
+                logger.warning('Generation failed with TimeoutError()')
+            logger.warning('Retry generation')
         raise ProofTreeGenerationFailure(f'generate_tree() failed with max_retry={max_retry}.')
 
 
