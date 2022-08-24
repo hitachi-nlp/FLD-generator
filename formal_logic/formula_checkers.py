@@ -15,16 +15,74 @@ from .formula import (
 logger = logging.getLogger(__name__)
 
 
-def is_tautology(formula: Formula) -> bool:
-    raise NotImplementedError()
+def is_consistent(formula: Formula) -> bool:
+    return not _is_inconsistent(formula)
 
 
-def is_formulas_consistent(formulas: List[Formula]) -> bool:
+def is_consistent_set(formulas: List[Formula]) -> bool:
     """ consistent = satisfiable in formal meaning. """
-    return not is_formulas_inconsistent(formulas)
+    return not _is_inconsistent_set(formulas)
 
 
-def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
+def is_predicate_arity_consistent(formula: Formula) -> bool:
+    return is_predicate_arity_consistent_set([formula])
+
+
+def is_predicate_arity_consistent_set(formulas: List[Formula]) -> bool:
+    unary_predicates = {pred.rep
+                        for formula in formulas
+                        for pred in formula.unary_predicates}
+    zeroary_predicates = {pred.rep
+                          for formula in formulas
+                          for pred in formula.zeroary_predicates}
+    return len(unary_predicates.intersection(zeroary_predicates)) == 0
+
+
+def is_senseful(formula: Formula) -> bool:
+    return not _is_nonsense(formula)
+
+
+def is_senseful_set(formulas: List[Formula]) -> bool:
+    return all(is_senseful(formula) for formula in formulas)
+
+
+def is_ok(formula: Formula) -> bool:
+    return all([
+        is_consistent(formula),
+        is_predicate_arity_consistent(formula),
+        is_senseful(formula)
+    ])
+
+
+def is_ok_set(formulas: List[Formula]) -> bool:
+    return all([
+        is_consistent_set(formulas),
+        is_predicate_arity_consistent_set(formulas),
+        is_senseful_set(formulas)
+    ])
+
+
+def _is_inconsistent(formula: Formula) -> bool:
+    """ A formula is inconsistent if for any interpretation it can not be true.
+
+    See the test code for example usecases.
+
+    Limitation:
+        Currently, we can not determine the inconsistency of formula with implications like A -> (B v C)
+
+    TODO:
+        use external consistency checkers to guarantee the correctness of this tool.
+    """
+    if formula.premise is not None:
+        return False
+    return any((
+        PAS
+        for PAS in formula.PASs
+        if 'T' in _get_boolean_values(formula, PAS) and 'F' in _get_boolean_values(formula, PAS)
+    ))
+
+
+def _is_inconsistent_set(formulas: List[Formula]) -> bool:
     """ Detect whether a set of formulas is inconsistent, i.e., whether, for any interpretation, they can not be true at the same time.
 
     See the test code for example usecases.
@@ -57,7 +115,7 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     formulas = [eliminate_double_negation(formula) for formula in formulas]
 
     # Check whether any of formulas are inconsistent by itself.
-    if any((_is_single_formula_inconsistent(formula) for formula in formulas)):
+    if any((_is_inconsistent(formula) for formula in formulas)):
         return True
 
     # Check whether some PAS (like "Ga") appear both as true and as false in formulas.
@@ -83,58 +141,7 @@ def is_formulas_inconsistent(formulas: List[Formula]) -> bool:
     return False
 
 
-def _is_single_formula_consistent(formula: Formula) -> bool:
-    return not _is_single_formula_inconsistent(formula)
-
-
-def _is_single_formula_inconsistent(formula: Formula) -> bool:
-    """ A formula is inconsistent if for any interpretation it can not be true.
-
-    See the test code for example usecases.
-
-    Limitation:
-        Currently, we can not determine the inconsistency of formula with implications like A -> (B v C)
-
-    TODO:
-        use external consistency checkers to guarantee the correctness of this tool.
-    """
-    if formula.premise is not None:
-        return False
-    return any((
-        PAS
-        for PAS in formula.PASs
-        if 'T' in _get_boolean_values(formula, PAS) and 'F' in _get_boolean_values(formula, PAS)
-    ))
-
-
-def is_predicate_arity_consistent(formulas: List[Formula]) -> bool:
-    unary_predicates = {pred.rep
-                        for formula in formulas
-                        for pred in formula.unary_predicates}
-    zeroary_predicates = {pred.rep
-                          for formula in formulas
-                          for pred in formula.zeroary_predicates}
-    return len(unary_predicates.intersection(zeroary_predicates)) == 0
-
-
-def is_formula_set_senseful(formulas: List[Formula]) -> bool:
-    return not is_formula_set_nonsense(formulas)
-
-
-def is_formula_set_nonsense(formulas: List[Formula]) -> bool:
-    if is_formulas_inconsistent(formulas):
-        return True
-    if not is_predicate_arity_consistent(formulas):
-        return True
-    return any(_is_single_formula_nonsense(formula)
-               for formula in formulas)
-
-
-def _is_single_formula_senseful(formula: Formula) -> bool:
-    return not _is_single_formula_nonsense(formula)
-
-
-def _is_single_formula_nonsense(formula: Formula) -> bool:
+def _is_nonsense(formula: Formula) -> bool:
     """ Detect fomula which is nonsense.
 
     "Nonsense" means that, in the sense of human commonsense of natural language, the formula is not that useful.
@@ -153,7 +160,7 @@ def _is_single_formula_nonsense(formula: Formula) -> bool:
     """
     formula = eliminate_double_negation(formula)
 
-    if formula.premise is None and is_formulas_inconsistent([formula]):
+    if formula.premise is None and _is_inconsistent_set([formula]):
         return True
 
     # detect fromulas like: {A} -> ¬{A}

@@ -5,6 +5,7 @@ from formal_logic.interpretation import (
     formula_is_identical_to,
     argument_is_identical_to,
     interprete_formula,
+    formula_can_not_be_identical_to
 )
 from formal_logic.proof_tree_generators import generate_mappings_from_formula
 from formal_logic.formula import Formula
@@ -45,6 +46,44 @@ from formal_logic.argument import Argument
 def test_expand_op():
     assert _expand_op(Formula('(x): ({P} v ¬{Q})x -> ({R} v ¬{S})x')).rep == '(x): ({P}x v ¬{Q}x) -> ({R}x v ¬{S}x)'
     assert _expand_op(Formula('({P} v ¬{Q}){a} -> ({R} v ¬{S}){b}')).rep == '({P}{a} v ¬{Q}{a}) -> ({R}{b} v ¬{S}{b})'
+
+
+def test_formula_can_not_be_identical_to():
+    assert not formula_can_not_be_identical_to(
+        Formula('{A}'),
+        Formula('{B}'),
+    )
+
+    assert not formula_can_not_be_identical_to(
+        Formula('{A}{a}'),
+        Formula('{B}{b}'),
+    )
+
+    assert not formula_can_not_be_identical_to(
+        Formula('(x): {A}x'),
+        Formula('(x): {B}x'),
+    )
+
+
+    assert formula_can_not_be_identical_to(
+        Formula('{A}'),
+        Formula('{B} {C}'),
+    )
+
+    assert formula_can_not_be_identical_to(
+        Formula('{A}'),
+        Formula('{B}{b}'),
+    )
+
+    assert formula_can_not_be_identical_to(
+        Formula('(x): {A}x'),
+        Formula('(Ex): {A}x'),
+    )
+
+    assert formula_can_not_be_identical_to(
+        Formula('{A}{a}'),
+        Formula('{A}{b} {c}'),
+    )
 
 
 def test_formula_is_identical_to():
@@ -270,5 +309,6 @@ if __name__ == '__main__':
     # test_interpretation()
     test_expand_op()
     test_formula_is_identical_to()
+    test_formula_can_not_be_identical_to()
     test_argument_is_identical_to()
     test_generate_quantifier_arguments()

@@ -12,11 +12,9 @@ from .formula import (
     CONSTANTS,
     Formula,
 )
-from .formula_checkers import (
-    is_formula_set_nonsense,
-)
+from .formula_checkers import is_ok_set as is_ok_formula_set
 from .argument import Argument
-from .argument_checkers import is_argument_nonsense
+from .argument_checkers import is_senseful as is_argument_senseful
 from .interpretation import (
     generate_mappings_from_formula,
     generate_formulas_in_target_space,
@@ -68,7 +66,9 @@ class ProofTreeGenerator:
             quantify_all_at_once=quantify_all_at_once,
             elim_dneg=elim_dneg,
         )
+        raise
 
+    @profile
     def _load_arguments(self,
                         arguments: List[Argument],
                         complicated_arguments_weight: float,
@@ -77,22 +77,11 @@ class ProofTreeGenerator:
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
         logger.info('loading arguments ....')
 
-        def is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
-            is_already_added = False
-            for existent_argument in arguments:
-                if argument_is_identical_to(argument, existent_argument):
-                    logger.info('-- Argument is identical to the already added argument. Will be skipped. --')
-                    logger.info('tried to add  : %s', str(argument))
-                    logger.info('already added : %s', str(existent_argument))
-                    is_already_added = True
-                    break
-            return not is_already_added
-
         complicated_arguments: List[Argument] = []
         if complicated_arguments_weight > 0.0:
             for argment in arguments:
                 for complicated_argument, _, name in generate_complicated_arguments(argment, elim_dneg=elim_dneg, get_name=True):
-                    if is_argument_new(complicated_argument, arguments + complicated_arguments):
+                    if _is_argument_new(complicated_argument, arguments + complicated_arguments):
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
 
@@ -112,7 +101,7 @@ class ProofTreeGenerator:
             ]:
                 for i_formula, formula in enumerate(unique_formulas):
                     for quantified_argument in generate_quantifier_arguments(argument_type, formula, id_prefix=f'fomula-{i_formula}', quantify_all_at_once=quantify_all_at_once):
-                        if is_argument_new(quantified_argument, arguments + complicated_arguments + quantified_arguments):
+                        if _is_argument_new(quantified_argument, arguments + complicated_arguments + quantified_arguments):
                             quantified_arguments.append(quantified_argument)
 
         def calc_argument_weight(argument: Argument) -> float:
@@ -257,8 +246,8 @@ def _generate_stem(arguments: List[Argument],
                             continue
 
                         # for early rejection
-                        if is_formula_set_nonsense([premise_pulled] + formulas_in_tree):
-                            rejection_stats['is_formula_set_nonsense([premise_pulled] + formulas_in_tree)'] += 1
+                        if not is_ok_formula_set([premise_pulled] + formulas_in_tree):
+                            rejection_stats['not is_ok_formula_set([premise_pulled] + formulas_in_tree)'] += 1
                             continue
 
                         for mapping in generate_mappings_from_formula(
@@ -272,12 +261,12 @@ def _generate_stem(arguments: List[Argument],
 
                             next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            if is_argument_nonsense(next_arg_pulled):
-                                rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
+                            if not is_argument_senseful(next_arg_pulled):
+                                rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
                                 continue
 
-                            if is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree):
-                                rejection_stats['is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
+                            if not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree):
+                                rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                                 continue
 
                             if not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
@@ -410,8 +399,8 @@ def _extend_braches(proof_tree: ProofTree,
                         continue
 
                     # for early rejection
-                    if is_formula_set_nonsense([conclusion_pulled] + formulas_in_tree):
-                        rejection_stats['is_formula_set_nonsense([conclusion_pulled] + formulas_in_tree)'] += 1
+                    if not is_ok_formula_set([conclusion_pulled] + formulas_in_tree):
+                        rejection_stats['not is_ok_formula_set([conclusion_pulled] + formulas_in_tree)'] += 1
                         continue
 
                     for mapping in generate_mappings_from_formula(
@@ -422,12 +411,12 @@ def _extend_braches(proof_tree: ProofTree,
                     ):
                         next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                        if is_argument_nonsense(next_arg_pulled):
+                        if not is_argument_senseful(next_arg_pulled):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                             continue
 
-                        if is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree):
-                            rejection_stats['is_formula_set_nonsense(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
+                        if not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree):
+                            rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree):
@@ -464,6 +453,19 @@ def _extend_braches(proof_tree: ProofTree,
 
             ])
             raise ProofTreeGenerationFailure(msg)
+
+
+@profile
+def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
+    is_already_added = False
+    for existent_argument in arguments:
+        if argument_is_identical_to(argument, existent_argument):
+            logger.info('-- Argument is identical to the already added argument. Will be skipped. --')
+            logger.info('tried to add  : %s', str(argument))
+            logger.info('already added : %s', str(existent_argument))
+            is_already_added = True
+            break
+    return not is_already_added
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:
@@ -514,3 +516,5 @@ def _shuffle_arguments(arguments: List[Argument],
                        weights: Optional[Dict[Argument, float]] = None) -> Iterable[Argument]:
     _weights = [weights[argument] for argument in arguments] if weights is not None else None
     yield from _shuffle(arguments, weights=_weights)
+
+

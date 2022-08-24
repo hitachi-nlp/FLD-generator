@@ -311,7 +311,7 @@ def interprete_argument(arg: Argument,
                         mapping: Dict[str, str],
                         elim_dneg=False) -> Argument:
     interpretedd_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
-                         for formula in arg.premises]
+                             for formula in arg.premises]
     interpretedd_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
     return Argument(interpretedd_premises,
                     interpretedd_conclusion,
@@ -363,6 +363,7 @@ def _interprete_rep(rep: str,
     return interpreted_rep
 
 
+@profile
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
                             allow_many_to_oneg=True,
@@ -395,6 +396,7 @@ def formula_is_identical_to(this_formula: Formula,
     return False
 
 
+@profile
 def formula_can_not_be_identical_to(this_formula: Formula,
                                     that_formula: Formula,
                                     add_complicated_arguments=False,
@@ -410,10 +412,68 @@ def formula_can_not_be_identical_to(this_formula: Formula,
         # A little costly to implemente since the number of operators change by complication
         raise NotImplementedError()
 
-    return any([this_formula.rep.count(symbol) != that_formula.rep.count(symbol)
-                for symbol in [AND, OR, IMPLICATION, NOT]])
+    if (this_formula.premise is None) is not (that_formula.premise is None):
+        return True
+    elif this_formula.premise is not None:
+        if formula_can_not_be_identical_to(this_formula.premise,
+                                           that_formula.premise,
+                                           add_complicated_arguments=add_complicated_arguments,
+                                           elim_dneg=elim_dneg):
+            return True
+        elif formula_can_not_be_identical_to(this_formula.conclusion,
+                                             that_formula.conclusion,
+                                             add_complicated_arguments=add_complicated_arguments,
+                                             elim_dneg=elim_dneg):
+            return True
+
+    if len(this_formula.universal_variables) != len(that_formula.universal_variables):
+        return True
+
+    if len(this_formula.existential_variables) != len(that_formula.existential_variables):
+        return True
+
+    this_zeroary_pred_cnt = _get_appearance_cnt(this_formula.zeroary_predicates, this_formula)
+    that_zeroary_pred_cnt = _get_appearance_cnt(that_formula.zeroary_predicates, that_formula)
+    if this_zeroary_pred_cnt != that_zeroary_pred_cnt:
+        return True
+
+    this_unary_pred_cnt = _get_appearance_cnt(this_formula.unary_predicates, this_formula)
+    that_unary_pred_cnt = _get_appearance_cnt(that_formula.unary_predicates, that_formula)
+    if this_unary_pred_cnt != that_unary_pred_cnt:
+        return True
+
+    this_constant_cnt = _get_appearance_cnt(this_formula.constants, this_formula)
+    that_constant_cnt = _get_appearance_cnt(that_formula.constants, that_formula)
+    if this_constant_cnt != that_constant_cnt:
+        return True
+
+    this_univ_variable_cnt = _get_appearance_cnt(this_formula.universal_variables, this_formula)
+    that_univ_variable_cnt = _get_appearance_cnt(that_formula.universal_variables, that_formula)
+    if this_univ_variable_cnt != that_univ_variable_cnt:
+        return True
+
+    this_exist_variable_cnt = _get_appearance_cnt(this_formula.existential_variables, this_formula)
+    that_exist_variable_cnt = _get_appearance_cnt(that_formula.existential_variables, that_formula)
+    if this_exist_variable_cnt != that_exist_variable_cnt:
+        return True
+
+    if any([this_formula.rep.count(symbol) != that_formula.rep.count(symbol)
+            for symbol in [AND, OR, IMPLICATION, NOT]]):
+        return True
+
+    return False
 
 
+def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
+    # Calculate the appearance  of formulas in formula
+    # e.g.)
+    #   formulas: ['{A}', '{B}']
+    #   tgt_formula: '{A} & {B} -> {A}'
+    #   return 3
+    return sum([tgt_formula.rep.count(formula.rep) for formula in formulas] or [0])
+
+
+@profile
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
                              allow_many_to_oneg=True,
@@ -456,6 +516,9 @@ def argument_is_identical_to(this_argument: Argument,
                                                    that_argument,
                                                    add_complicated_arguments=add_complicated_arguments,
                                                    allow_many_to_one=allow_many_to_oneg):
+        # print('----------------------')
+        # print(this_argument)
+        # print(that_argument)
         this_argument_interpreted = interprete_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
         if is_conclusion_same(this_argument_interpreted, that_argument)\

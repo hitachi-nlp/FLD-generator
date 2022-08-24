@@ -4,10 +4,10 @@ from formal_logic.formula_checkers import (
     # _search_inconsistent_subformula,
     _get_boolean_values,
 
-    _is_single_formula_inconsistent,
-    is_formulas_inconsistent,
-    is_predicate_arity_consistent,
-    _is_single_formula_nonsense,
+    is_consistent,
+    is_consistent_set,
+    is_predicate_arity_consistent_set,
+    is_ok,
 )
 from logger_setup import setup as setup_logger
 
@@ -36,120 +36,120 @@ def test_get_boolean_values():
 
 
 def test_is_single_formula_inconsistent():
-    assert _is_single_formula_inconsistent(Formula('({A} & ¬{A})'))
-    assert _is_single_formula_inconsistent(Formula('({A}{a} & ¬{A}{a})'))
+    assert not is_consistent(Formula('({A} & ¬{A})'))
+    assert not is_consistent(Formula('({A}{a} & ¬{A}{a})'))
 
-    assert _is_single_formula_inconsistent(Formula('(x): ({A}x & ¬{A}x)'))
+    assert not is_consistent(Formula('(x): ({A}x & ¬{A}x)'))
 
     # The following formula is inconsistent but we can not detect it,
     # since we do not determine the boolean values of predicate-arguments which include existential variables.
-    assert not _is_single_formula_inconsistent(Formula('(Ex): ({A}x & ¬{A}x)'))
+    assert is_consistent(Formula('(Ex): ({A}x & ¬{A}x)'))
 
     # assert not _single_formula_is_inconsistent(Formula('{B} v ({A}x & ¬{A}x)'))
 
 
-def test_is_formulas_inconsistent():
-    assert not is_formulas_inconsistent([
+def test_is_consistent_set():
+    assert is_consistent_set([
         Formula('{A}{a}'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('{B}{b}'),
     ])
 
 
-    assert is_formulas_inconsistent([
+    assert not is_consistent_set([
         Formula('{A}{a}'),
         Formula('¬{A}{a}'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('¬{A}{b}'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('¬{B}{b}'),
     ])
 
 
-    assert is_formulas_inconsistent([
+    assert not is_consistent_set([
         Formula('{A}{a}'),
         Formula('(¬{A}{a} & {B}{a})'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('({A}{a} & {B}{a})'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('({B}{a} & {C}{a})'),
     ])
 
 
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('(¬{A}{a} v {B}{a})'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('({A}{a} v {B}{a})'),
     ])
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('{A}{a}'),
         Formula('({B}{a} v {C}{a})'),
     ])
 
-    assert is_formulas_inconsistent([
+    assert not is_consistent_set([
         Formula('(x): ¬{A}x'),
         Formula('{A}{a}'),
     ])
 
-    assert is_formulas_inconsistent([
+    assert not is_consistent_set([
         Formula('(x): {A}x'),
         Formula('(x): (¬{A}x & {B}x)'),
     ])
 
     # The following formulas are inconsistent
     # but we can not detect since we can not say nothing about (Ex) for technical reasons.
-    # assert is_formulas_inconsistent([
+    # assert not is_consistent_set([
     #     Formula('(x): {A}x'),
     #     Formula('(Ex): (¬{A}x & {B}x)'),
     # ])
 
-    assert not is_formulas_inconsistent([
+    assert is_consistent_set([
         Formula('(Ex): {A}x'),
         Formula('(Ex): (¬{A}x & {B}x)'),
     ])
 
 
 def test_is_predicate_arity_consistent():
-    assert is_predicate_arity_consistent(
+    assert is_predicate_arity_consistent_set(
         [Formula('{A}{a} v {B}{b}'), Formula('{C}')]
     )
 
-    assert not is_predicate_arity_consistent(
+    assert not is_predicate_arity_consistent_set(
         [Formula('{A}{a} v {B}{b}'), Formula('{A}')]
     )
 
 
-def test_is_single_formula_nonsense():
-    assert _is_single_formula_nonsense(Formula('{A}{a} -> ¬{A}{a}'))
-    assert _is_single_formula_nonsense(Formula('¬{A}{a} -> {A}{a}'))
-    assert not _is_single_formula_nonsense(Formula('¬{A}{a} -> {A}{b}'))
+def test_is_ok():
+    assert not is_ok(Formula('{A}{a} -> ¬{A}{a}'))
+    assert not is_ok(Formula('¬{A}{a} -> {A}{a}'))
+    assert is_ok(Formula('¬{A}{a} -> {A}{b}'))
 
-    assert _is_single_formula_nonsense(Formula('(x): {A}x -> ¬{A}x'))
-    assert _is_single_formula_nonsense(Formula('(x): ¬{A}x -> {A}x'))
-    assert not _is_single_formula_nonsense(Formula('(x): ¬{A}x -> {B}x'))
+    assert not is_ok(Formula('(x): {A}x -> ¬{A}x'))
+    assert not is_ok(Formula('(x): ¬{A}x -> {A}x'))
+    assert is_ok(Formula('(x): ¬{A}x -> {B}x'))
 
-    assert _is_single_formula_nonsense(Formula('({A}{a} & {B}{b}) -> ¬{A}{a}'))
-    assert _is_single_formula_nonsense(Formula('(¬{A}{a} & {B}{b}) -> {A}{a}'))
+    assert not is_ok(Formula('({A}{a} & {B}{b}) -> ¬{A}{a}'))
+    assert not is_ok(Formula('(¬{A}{a} & {B}{b}) -> {A}{a}'))
 
-    assert not _is_single_formula_nonsense(Formula('({A}{a} v {B}{b}) -> ¬{A}{a}'))
-    assert not _is_single_formula_nonsense(Formula('(¬{A}{a} v {B}{b}) -> {A}{a}'))
+    assert is_ok(Formula('({A}{a} v {B}{b}) -> ¬{A}{a}'))
+    assert is_ok(Formula('(¬{A}{a} v {B}{b}) -> {A}{a}'))
 
-    assert _is_single_formula_nonsense(Formula('{A}{a} -> {A}{a}'))
-    assert _is_single_formula_nonsense(Formula('({A}{a} & {A}{a})'))
-    assert _is_single_formula_nonsense(Formula('({A}{a} v {A}{a})'))
+    assert not is_ok(Formula('{A}{a} -> {A}{a}'))
+    assert not is_ok(Formula('({A}{a} & {A}{a})'))
+    assert not is_ok(Formula('({A}{a} v {A}{a})'))
 
 
 if __name__ == '__main__':
@@ -157,6 +157,6 @@ if __name__ == '__main__':
 
     test_is_single_formula_inconsistent()
     test_get_boolean_values()
-    test_is_formulas_inconsistent()
+    test_is_consistent_set()
     test_is_predicate_arity_consistent()
-    test_is_single_formula_nonsense()
+    test_is_ok()

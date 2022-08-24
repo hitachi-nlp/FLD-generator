@@ -7,7 +7,7 @@ from .proof import ProofTree
 from .formula import Formula, PREDICATES, CONSTANTS
 from .utils import shuffle
 from .interpretation import generate_mappings_from_predicates_and_constants, interprete_formula
-from .formula_checkers import is_formula_set_nonsense
+from .formula_checkers import is_ok_set as is_ok_formula_set
 
 import kern_profiler
 
@@ -28,7 +28,6 @@ class UnkownPASDistractor(FormalLogicDistractor):
 
     def generate(self, proof_tree: ProofTree) -> List[Formula]:
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-        all_formulas = [node.formula for node in proof_tree.nodes]
 
         known_zeroary_predicates = sorted({
             pred.rep
@@ -159,7 +158,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 ):
                     transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
 
-                    if is_formula_set_nonsense([transformed_formula] + distractor_formulas + formulas_in_tree):
+                    if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):
                         continue
 
                     if any(transformed_formula.rep == existent_formula
