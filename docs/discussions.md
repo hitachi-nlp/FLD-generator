@@ -372,8 +372,8 @@
 # translation
 
 ## [todo] 事例
-* `_do_interpret` は変
-* [todo] the, it, a などの整合性
+* it はプログラムでやれば？
+    - is
 * [todo] warningが出ないことを確認する．
 * [todo] 表現の追加
     - EntailmentBank
@@ -477,7 +477,7 @@
     - 中身が間違っている．
 * [done] Ga -> Fa, Ga -> Fb を別の翻訳にする．
     - プログラムで"a" -> "the"と変えるようにした．
-
+* [done] the, it, a などの整合性
 
 
 ## [pending] その他
