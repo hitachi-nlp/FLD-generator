@@ -56,9 +56,9 @@ class ProofTreeGenerationPipeline:
                    proof_tree: ProofTree,
                    translator_stats: Dict[str, int]) -> Dict[str, int]:
         stats = {
-            'arguments': self._empty_argument_stat,
+            'arguments': self._empty_argument_stat.copy(),
             'translation': {
-                'names': self._empty_translation_stat,
+                'names': self._empty_translation_stat.copy(),
                 'others': defaultdict(int),
             },
         }
