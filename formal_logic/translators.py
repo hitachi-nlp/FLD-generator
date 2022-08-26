@@ -209,6 +209,11 @@ class ClauseTypedTranslator(Translator):
             )
 
         self._translations: Dict[str, List[str]] = _resolved_translations_sorted['sentence']
+        logger.info('---- loaded translations ----')
+        for key, nls in self._translations.items():
+            logger.info(key)
+            for nl in nls:
+                logger.info('    ' + nl)
 
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
@@ -275,7 +280,6 @@ class ClauseTypedTranslator(Translator):
                     break
             if not template_is_found:
                 logger.warning(f'Template "{template}" not found, which appeared in "{nl}"')
-                # return resolved_nls
                 return []
 
             resolved_template_nls = [
@@ -406,7 +410,8 @@ class ClauseTypedTranslator(Translator):
 
             # do interpretation using predicates and constants using interp_mapping
             if self._do_interpret:
-                translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info), inflated_mapping).rep
+                interp_templated_translation_pulled_wo_info_definite_article_induced = self._replace_indefinite_with_definite_articles(interp_templated_translation_pulled_wo_info)
+                translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info_definite_article_induced), inflated_mapping).rep
             else:
                 translation = interp_templated_translation_pulled_wo_info
 
@@ -414,7 +419,7 @@ class ClauseTypedTranslator(Translator):
             translation_names.append(self._translation_name(sentence_key, chosen_nl))
 
         translations = [
-            (self._correct_indefinite_article(translation) if translation is not None else None)
+            (self._correct_indefinite_articles(translation) if translation is not None else None)
             for translation in translations
         ]
 
@@ -469,8 +474,34 @@ class ClauseTypedTranslator(Translator):
                 consistent_nls.append(sentence_transl_nl_pulled)
         return consistent_nls
 
-    def _correct_indefinite_article(self, sentence: str) -> str:
-        words = sentence.split(' ')
+    def _replace_indefinite_with_definite_articles(self, sentence_with_templates: str) -> str:
+        constants = [c.rep for c in Formula(sentence_with_templates).constants]
+
+        with_definite = sentence_with_templates
+        for constant in constants:
+            if with_definite.count(constant) < 2:
+                continue
+
+            first_pos = with_definite.find(constant)
+
+            until_first = with_definite[:first_pos + len(constant)]
+            from_second = with_definite[first_pos + len(constant):]
+
+            from_second_with_definite = re.sub(
+                f'(.*)a (.*){constant}',
+                f'\g<1>the \g<2>{constant}',
+                from_second,
+            )
+            with_definite = until_first + from_second_with_definite
+        if sentence_with_templates != with_definite:
+            logger.info('articles "a" are modified to "the" as:    "%s"    ->    "%s"',
+                        sentence_with_templates,
+                        with_definite)
+            # print(f'"{sentence_with_templates}"    ->    "{with_definite}"')
+        return with_definite
+
+    def _correct_indefinite_articles(self, sentence_wo_templates: str) -> str:
+        words = sentence_wo_templates.split(' ')
         corrected_words = []
         for i_word, word in enumerate(words):
             if word.lower() in ['a', 'an']:

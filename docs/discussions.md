@@ -8,6 +8,7 @@
     - maxlen
     - A100 8並列
 * 研究計画を立てる．
+    * introで「axiomを使うので，汎化する．」 => case studyで定理
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
     * ablation
         - which scheme useful
@@ -72,7 +73,7 @@
 # proof tree generation
 
 ## todo
-* [todo] 凄く遅い．
+* [done] 凄く遅い．
 * [pending] quantが選ばれる頻度が，頻度重みから想定されるよりも，低い．おそらく，何らかの条件において，排除される確率が高くなっている．
     - [pending] ただ，低すぎて出てこないという訳でもない．よって保留．
 * [done]
@@ -190,7 +191,7 @@
     * 「Aa & Ba -> Ca」
     * ベースラインには，全称量化子しか含まれていない．
 
-## パターン
+## 論証(推論ルール)
 * [todo] ルール導入の方針
     * 定理はどれを入れるべきか？
         - EBでよく使われる定理は入れる．転移性能のため．
@@ -371,7 +372,7 @@
 # translation
 
 ## [todo] 事例
-* [todo] Ga -> Fa, Ga -> Fb を別の翻訳にする．
+* `_do_interpret` は変
 * [todo] the, it, a などの整合性
 * [todo] warningが出ないことを確認する．
 * [todo] 表現の追加
@@ -474,6 +475,8 @@
 * [done] {A}{a} & {B}{b} => {A}{a} & {B}{a}
 * [done] {A}{a} -> (¬{B}{b} v {C}{b})
     - 中身が間違っている．
+* [done] Ga -> Fa, Ga -> Fb を別の翻訳にする．
+    - プログラムで"a" -> "the"と変えるようにした．
 
 
 
