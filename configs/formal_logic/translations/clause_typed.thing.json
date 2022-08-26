@@ -2,6 +2,7 @@
 
   "sentence": {
 
+
     "{A}": [
       "<clause::verb::{A}>"
     ],
@@ -264,6 +265,8 @@
       "<clause::noun::({A} v {B}).fact> <phrase::cause_verb> <clause::noun::¬{C}.fact>",
       "<clause::noun::({A} v {B}).subj> <phrase::cause_verb> <clause::noun::¬{C}.fact>"
     ],
+
+
     "(¬{A} v ¬{B}) -> {C}": [
       "if <clause::verb::(¬{A} v ¬{B})>, then <clause::verb::{C}>",
 
@@ -313,6 +316,8 @@
       "<clause::noun::{A}.fact> <phrase::cause_verb> <clause::noun::({B} v ¬{C}).fact>",
       "<clause::noun::{A}.subj> <phrase::cause_verb> <clause::noun::({B} v ¬{C}).fact>"
     ],
+
+
     "¬{A} -> (¬{B} v {C})": [
       "if <clause::verb::¬{A}>, then <clause::verb::(¬{B} v {C})>",
 
@@ -415,6 +420,19 @@
       "<clause::verb::(¬{A}{a} & ¬{B}{a})>"
     ],
 
+    "¬({A}{a} & {B}{a})": [
+      "<clause::verb::¬({A}{a} & {B}{a})>"
+    ],
+    "¬(¬{A}{a} & {B}{a})": [
+      "<clause::verb::¬(¬{A}{a} & {B}{a})>"
+    ],
+    "¬({A}{a} & ¬{B}{a})": [
+      "<clause::verb::¬({A}{a} & ¬{B}{a})>"
+    ],
+    "¬(¬{A}{a} & ¬{B}{a})": [
+      "<clause::verb::¬(¬{A}{a} & ¬{B}{a})>"
+    ],
+
 
     "({A}{a} v {B}{a})": [
       "<clause::verb::({A}{a} v {B}{a})>"
@@ -427,6 +445,20 @@
     ],
     "(¬{A}{a} v ¬{B}{a})": [
       "<clause::verb::(¬{A}{a} v ¬{B}{a})>"
+    ],
+
+
+    "¬({A}{a} v {B}{a})": [
+      "<clause::verb::¬({A}{a} v {B}{a})>"
+    ],
+    "¬(¬{A}{a} v {B}{a})": [
+      "<clause::verb::¬(¬{A}{a} v {B}{a})>"
+    ],
+    "¬({A}{a} v ¬{B}{a})": [
+      "<clause::verb::¬({A}{a} v ¬{B}{a})>"
+    ],
+    "¬(¬{A}{a} v ¬{B}{a})": [
+      "<clause::verb::¬(¬{A}{a} v ¬{B}{a})>"
     ],
 
 
@@ -516,6 +548,58 @@
     ],
 
 
+    "¬({A}{a} & {B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬({A}{a} & {B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬(¬{A}{a} & {B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} & {B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬({A}{a} & ¬{B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬({A}{a} & ¬{B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬({A}{a} & {B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬({A}{a} & {B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+    "¬(¬{A}{a} & ¬{B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} & ¬{B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬(¬{A}{a} & {B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} & {B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+    "¬({A}{a} & ¬{B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬({A}{a} & ¬{B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+    "¬(¬{A}{a} & ¬{B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} & ¬{B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+
+
+    "{A}{a} -> ¬({B}{b} & {C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬({B}{b} & {C}{c})>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} & {C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬({B}{b} & {C}{c})>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} & {C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬(¬{B}{b} & {C}{c})>"
+    ],
+    "{A}{a} -> ¬({B}{b} & ¬{C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬({B}{b} & ¬{C}{c})>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} & {C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬(¬{B}{b} & {C}{c})>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} & ¬{C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬({B}{b} & ¬{C}{c})>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} & ¬{C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬(¬{B}{b} & ¬{C}{c})>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} & ¬{C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬(¬{B}{b} & ¬{C}{c})>"
+    ],
+
+
     "({A}{a} v {B}{b}) -> {C}{c}": [
       "if <clause::verb::({A}{a} v {B}{b})>, then <clause::verb::{C}{c}>",
       "<clause::noun::({A}{a} v {B}{b}).subj> <phrase::cause_verb> <clause::noun::{C}the_thing.subj>"
@@ -584,6 +668,64 @@
     ],
 
 
+    "¬({A}{a} v {B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬({A}{a} v {B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬(¬{A}{a} v {B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} v {B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬({A}{a} v ¬{B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬({A}{a} v ¬{B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬({A}{a} v {B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬({A}{a} v {B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+    "¬(¬{A}{a} v ¬{B}{b}) -> {C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} v ¬{B}{b})>, then <clause::verb::{C}{c}>"
+    ],
+    "¬(¬{A}{a} v {B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} v {B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+    "¬({A}{a} v ¬{B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬({A}{a} v ¬{B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+    "¬(¬{A}{a} v ¬{B}{b}) -> ¬{C}{c}": [
+      "if <clause::verb::¬(¬{A}{a} v ¬{B}{b})>, then <clause::verb::¬{C}{c}>"
+    ],
+
+
+    "{A}{a} -> ¬({B}{b} v {C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬({B}{b} v {C}{c})>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} v {C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬({B}{b} v {C}{c})>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} v {C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬(¬{B}{b} v {C}{c})>"
+    ],
+    "{A}{a} -> ¬({B}{b} v ¬{C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬({B}{b} v ¬{C}{c})>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} v {C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬(¬{B}{b} v {C}{c})>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} v ¬{C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬({B}{b} v ¬{C}{c})>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} v ¬{C}{c})": [
+      "if <clause::verb::{A}{a}>, then <clause::verb::¬(¬{B}{b} v ¬{C}{c})>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} v ¬{C}{c})": [
+      "if <clause::verb::¬{A}{a}>, then <clause::verb::¬(¬{B}{b} v ¬{C}{c})>"
+    ],
+
+
+
+
+
+
+
+
     "(x): {A}x": [
       "<clause::verb::{A}x>"
     ],
@@ -606,6 +748,20 @@
     ],
 
 
+    "(x): ¬({A}x & {B}x)": [
+      "<clause::verb::¬({A}x & {B}x)>"
+    ],
+    "(x): ¬(¬{A}x & {B}x)": [
+      "<clause::verb::¬(¬{A}x & {B}x)>"
+    ],
+    "(x): ¬({A}x & ¬{B}x)": [
+      "<clause::verb::¬({A}x & ¬{B}x)>"
+    ],
+    "(x): ¬(¬{A}x & ¬{B}x)": [
+      "<clause::verb::¬(¬{A}x & ¬{B}x)>"
+    ],
+
+
     "(x): ({A}x v {B}x)": [
       "<clause::verb::({A}x v {B}x)>"
     ],
@@ -617,6 +773,20 @@
     ],
     "(x): (¬{A}x v ¬{B}x)": [
       "<clause::verb::(¬{A}x v ¬{B}x)>"
+    ],
+
+
+    "(x): ¬({A}x v {B}x)": [
+      "<clause::verb::¬({A}x v {B}x)>"
+    ],
+    "(x): ¬(¬{A}x v {B}x)": [
+      "<clause::verb::¬(¬{A}x v {B}x)>"
+    ],
+    "(x): ¬({A}x v ¬{B}x)": [
+      "<clause::verb::¬({A}x v ¬{B}x)>"
+    ],
+    "(x): ¬(¬{A}x v ¬{B}x)": [
+      "<clause::verb::¬(¬{A}x v ¬{B}x)>"
     ],
 
 
@@ -706,6 +876,59 @@
     ],
 
 
+    "(x): ¬({A}x & {B}x) -> {C}x": [
+      "if <clause::verb::¬({A}x & {B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬(¬{A}x & {B}x) -> {C}x": [
+      "if <clause::verb::¬(¬{A}x & {B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬({A}x & ¬{B}x) -> {C}x": [
+      "if <clause::verb::¬({A}x & ¬{B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬({A}x & {B}x) -> ¬{C}x": [
+      "if <clause::verb::¬({A}x & {B}x)>, then <clause::verb::¬{C}x>"
+    ],
+    "(x): ¬(¬{A}x & ¬{B}x) -> {C}x": [
+      "if <clause::verb::¬(¬{A}x & ¬{B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬(¬{A}x & {B}x) -> ¬{C}x": [
+      "if <clause::verb::¬(¬{A}x & {B}x)>, then <clause::verb::¬{C}x>"
+    ],
+    "(x): ¬({A}x & ¬{B}x) -> ¬{C}x": [
+      "if <clause::verb::¬({A}x & ¬{B}x)>, then <clause::verb::¬{C}x>"
+    ],
+    "(x): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
+      "if <clause::verb::¬(¬{A}x & ¬{B}x)>, then <clause::verb::¬{C}x>"
+    ],
+
+
+    "(x): {A}x -> ¬({B}x & {C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬({B}x & {C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x & {C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬({B}x & {C}x)>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x & {C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬(¬{B}x & {C}x)>"
+    ],
+    "(x): {A}x -> ¬({B}x & ¬{C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬({B}x & ¬{C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x & {C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬(¬{B}x & {C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x & ¬{C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬({B}x & ¬{C}x)>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x & ¬{C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬(¬{B}x & ¬{C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬(¬{B}x & ¬{C}x)>"
+    ],
+
+
+
     "(x): ({A}x v {B}x) -> {C}x": [
       "if <clause::verb::({A}x v {B}x)>, then <clause::verb::{C}x>",
       "<clause::noun::({A}x v {B}x).subj> is <clause::noun::{C}the_thing.subj>"
@@ -771,7 +994,60 @@
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
       "if <clause::verb::¬{A}x>, then <clause::verb::(¬{B}x v ¬{C}x)>",
       "<clause::noun::¬{A}x.subj> is <clause::noun::(¬{B}the_thing v ¬{C}the_thing).subj>"
+    ],
+
+
+    "(x): ¬({A}x v {B}x) -> {C}x": [
+      "if <clause::verb::¬({A}x v {B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬(¬{A}x v {B}x) -> {C}x": [
+      "if <clause::verb::¬(¬{A}x v {B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬({A}x v ¬{B}x) -> {C}x": [
+      "if <clause::verb::¬({A}x v ¬{B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬({A}x v {B}x) -> ¬{C}x": [
+      "if <clause::verb::¬({A}x v {B}x)>, then <clause::verb::¬{C}x>"
+    ],
+    "(x): ¬(¬{A}x v ¬{B}x) -> {C}x": [
+      "if <clause::verb::¬(¬{A}x v ¬{B}x)>, then <clause::verb::{C}x>"
+    ],
+    "(x): ¬(¬{A}x v {B}x) -> ¬{C}x": [
+      "if <clause::verb::¬(¬{A}x v {B}x)>, then <clause::verb::¬{C}x>"
+    ],
+    "(x): ¬({A}x v ¬{B}x) -> ¬{C}x": [
+      "if <clause::verb::¬({A}x v ¬{B}x)>, then <clause::verb::¬{C}x>"
+    ],
+    "(x): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
+      "if <clause::verb::¬(¬{A}x v ¬{B}x)>, then <clause::verb::¬{C}x>"
+    ],
+
+
+    "(x): {A}x -> ¬({B}x v {C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬({B}x v {C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x v {C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬({B}x v {C}x)>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x v {C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬(¬{B}x v {C}x)>"
+    ],
+    "(x): {A}x -> ¬({B}x v ¬{C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬({B}x v ¬{C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x v {C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬(¬{B}x v {C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x v ¬{C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬({B}x v ¬{C}x)>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x v ¬{C}x)": [
+      "if <clause::verb::{A}x>, then <clause::verb::¬(¬{B}x v ¬{C}x)>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
+      "if <clause::verb::¬{A}x>, then <clause::verb::¬(¬{B}x v ¬{C}x)>"
     ]
+
 
 
 
@@ -794,12 +1070,14 @@
 
 
     "verb": {
+
       "{A}": [
         "a {A}[NOUN] occurs"
       ],
 
       "¬{A}": [
-        "a {A}[NOUN] does not occur"
+        "a {A}[NOUN] does not occur",
+        "<phrase::not_fact_intro> <clause::verb::{A}>"
       ],
 
 
@@ -816,17 +1094,18 @@
           "a {A}[NOUN] and a {B}[NOUN] do not occur"
       ],
 
+
       "¬({A} & {B})": [
-        "it is not the fact that a {A}[NOUN] and a {B}[NOUN] occurs"
+        "<phrase::not_fact_intro> <clause::verb::({A} & {B})>"
       ],
       "¬(¬{A} & {B})": [
-        "it is not the fact that a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
+        "<phrase::not_fact_intro> <clause::verb::(¬{A} & {B})>"
       ],
       "¬({A} & ¬{B})": [
-        "it is not the fact that a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
+        "<phrase::not_fact_intro> <clause::verb::({A} & ¬{B})>"
       ],
       "¬(¬{A} & ¬{B})": [
-        "it is not the fact that a {A}[NOUN] and a {B}[NOUN] do not occur"
+        "<phrase::not_fact_intro> <clause::verb::(¬{A} & ¬{B})>"
       ],
 
 
@@ -846,16 +1125,16 @@
 
 
       "¬({A} v {B})": [
-          "it is not the fact that a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
+          "<phrase::not_fact_intro> <clause::verb::({A} v {B})>"
       ],
       "¬(¬{A} v {B})": [
-          "it is not the fact that a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
+          "<phrase::not_fact_intro> <clause::verb::(¬{A} v {B})>"
       ],
       "¬({A} v ¬{B})": [
-          "it is not the fact that a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
+          "<phrase::not_fact_intro> <clause::verb::({A} v ¬{B})>"
       ],
       "¬(¬{A} v ¬{B})": [
-          "it is not the fact that a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
+          "<phrase::not_fact_intro> <clause::verb::(¬{A} v ¬{B})>"
       ],
 
 
@@ -919,6 +1198,20 @@
       ],
 
 
+      "¬({A}{a} & {B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::({A}{a} & {B}{a})>"
+      ],
+      "¬(¬{A}{a} & {B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} & {B}{a})>"
+      ],
+      "¬({A}{a} & ¬{B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::({A}{a} & ¬{B}{a})>"
+      ],
+      "¬(¬{A}{a} & ¬{B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} & ¬{B}{a})>"
+      ],
+
+
       "({A}{a} v {B}{a})": [
           "a {a}[NOUN] either is {A}[ADJ] or is {B}[ADJ] or both",
 
@@ -966,6 +1259,23 @@
       ],
 
 
+      "¬({A}{a} v {B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::({A}{a} v {B}{a})>"
+      ],
+      "¬(¬{A}{a} v {B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} v {B}{a})>"
+      ],
+      "¬({A}{a} v ¬{B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::({A}{a} v ¬{B}{a})>"
+      ],
+      "¬(¬{A}{a} v ¬{B}{a})": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} v ¬{B}{a})>"
+      ],
+
+
+
+
+
 
 
 
@@ -976,7 +1286,8 @@
       "¬{A}x": [
         "something is not {A}[ADJ]",
         "something is {A}[ADJ.neg]",
-        "something does not {A}[VERB]"
+        "something does not {A}[VERB]",
+        "<phrase::not_fact_intro> <clause::verb::{A}x>"
       ],
 
 
@@ -1027,6 +1338,20 @@
       ],
 
 
+      "¬({A}x & {B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}x & {B}x)>"
+      ],
+      "¬(¬{A}x & {B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}x & {B}x)>"
+      ],
+      "¬({A}x & ¬{B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}x & ¬{B}x)>"
+      ],
+      "¬(¬{A}x & ¬{B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}x & ¬{B}x)>"
+      ],
+
+
 
       "({A}x v {B}x)": [
           "something either is {A}[ADJ] or is {B}[ADJ] or both",
@@ -1074,6 +1399,21 @@
           "something either does not {A}[VERB] or does not {B}[VERB] or both"
       ],
 
+      "¬({A}x v {B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}x v {B}x)>"
+      ],
+      "¬(¬{A}x v {B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}x v {B}x)>"
+      ],
+      "¬({A}x v ¬{B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}x v ¬{B}x)>"
+      ],
+      "¬(¬{A}x v ¬{B}x)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}x v ¬{B}x)>"
+      ],
+
+
+
 
 
 
@@ -1086,7 +1426,8 @@
       "¬{A}it": [
         "it is not {A}[ADJ]",
         "it is {A}[ADJ.neg]",
-        "it does not {A}[VERB]"
+        "it does not {A}[VERB]",
+        "<phrase::not_fact_intro> <clause::verb::{A}it>"
       ],
 
 
@@ -1137,6 +1478,21 @@
       ],
 
 
+      "¬({A}it & {B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}it & {B}it)>"
+      ],
+      "¬(¬{A}it & {B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}it & {B}it)>"
+      ],
+      "¬({A}it & ¬{B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}it & ¬{B}it)>"
+      ],
+      "¬(¬{A}it & ¬{B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}it & ¬{B}it)>"
+      ],
+
+
+
 
       "({A}it v {B}it)": [
           "it either is {A}[ADJ] or is {B}[ADJ] or both",
@@ -1182,12 +1538,34 @@
           "it either does not {A}[VERB] or is {B}[ADJ.neg] or both",
 
           "it either does not {A}[VERB] or does not {B}[VERB] or both"
+      ],
+
+
+      "¬({A}it v {B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}it v {B}it)>"
+      ],
+      "¬(¬{A}it v {B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}it v {B}it)>"
+      ],
+      "¬({A}it v ¬{B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::({A}it v ¬{B}it)>"
+      ],
+      "¬(¬{A}it v ¬{B}it)": [
+        "<phrase::not_fact_intro> <clause::verb::(¬{A}it v ¬{B}it)>"
       ]
+
 
     },
 
 
+
+
+
+
+
+
     "noun": {
+
 
       "{A}.subj": [
         "a {A}[NOUN]"
@@ -1196,17 +1574,17 @@
       "{A}.fact": [
         "that a {A}[NOUN] occurs"
       ],
-
       "¬{A}.fact": [
-        "that a {A}[NOUN] does not occur"
+        "that a {A}[NOUN] does not occur",
+        "<phrase::not_fact_intro> <clause::noun::{A}.fact>"
       ],
-
-
 
 
       "({A} & {B}).subj": [
-          "a {A}[NOUN] and a {B}[NOUN]"
+        "a {A}[NOUN] and a {B}[NOUN]"
       ],
+
+
       "({A} & {B}).fact": [
           "that a {A}[NOUN] and a {B}[NOUN] occurs"
       ],
@@ -1220,10 +1598,26 @@
           "that a {A}[NOUN] and a {B}[NOUN] do not occur"
       ],
 
+      "¬({A} & {B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::({A} & {B}).fact>"
+      ],
+      "¬(¬{A} & {B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::(¬{A} & {B}).fact>"
+      ],
+      "¬({A} & ¬{B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::({A} & ¬{B}).fact>"
+      ],
+      "¬(¬{A} & ¬{B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::(¬{A} & ¬{B}).fact>"
+      ],
+
+
 
       "({A} v {B}).subj": [
           "a {A}[NOUN] or a {B}[NOUN] or both"
       ],
+
+
       "({A} v {B}).fact": [
           "that either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
       ],
@@ -1236,6 +1630,21 @@
       "(¬{A} v ¬{B}).fact": [
           "that either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
       ],
+
+      "¬({A} v {B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::({A} v {B}).fact>"
+      ],
+      "¬(¬{A} v {B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::(¬{A} v {B}).fact>"
+      ],
+      "¬({A} v ¬{B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::({A} v ¬{B}).fact>"
+      ],
+      "¬(¬{A} v ¬{B}).fact": [
+          "<phrase::not_fact_intro> <clause::noun::(¬{A} v ¬{B}).fact>"
+      ],
+
+
 
 
 
@@ -1369,6 +1778,7 @@
 
           "a {a}[NOUN] that either does not {A}[VERB] or does not {B}[VERB] or both"
       ],
+
 
 
 
@@ -1644,10 +2054,19 @@
 
 
 
+
+
+
+
   "phrase": {
     "cause_verb": [
       "leads to"
+    ],
+    "not_fact_intro": [
+      "it is not the fact that"
     ]
   }
+
+
 
 }

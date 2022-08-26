@@ -370,21 +370,13 @@
 # translation
 
 ## [todo] 事例
-* not the fact が入っていない．
-* できるだけテンプレートを使う．
-* {A}{a} & {B}{b} => {A}{a} & {B}{a}
-* ./log.txt
-    - translation Ax -> Bx のヒットが少ない．
-        * {A}x はotherに入っている？
-            * [todo] (x): {A}x がtranslationに存在しない
-                - というか，implicationが無い(x): .. が全て存在しない．
-        * [done] Ax -> Bxが少ないのは？
-            - 単にそれらのargumentが当たる頻度が少ないだけであることを確認した．translationのせいでは無い．
-        * [rejected] generalized modus ponensが無いから？
-            * generalized modus ponensは定理としてしか導けから？
-                - これは違う．(x)-elimだけあれば，利用されるはず．
+* [todo] not the fact が入っていない．
+* [todo] {A}{a} & {B}{b} => {A}{a} & {B}{a}
+* [todo] warningを消すまでやる
 * [todo] Ga -> Fa, Ga -> Fb を別の翻訳にする．
-* [todo] EntailmentBankに入っている表現を追加する．
+* [todo] 表現の追加
+    - EntailmentBank
+    - cause verb
 * [todo] can_be系の precisionを上げるため，anyによる判定は辞めて，get_synsetsで一番最初のやつ(=最も蓋然性が高いやつ？)だけ使うべき？
     - [todo] precisionを高くした後の語彙数を調べる．これが十分なのであれば，precisionを上げて良い．
     - precisionを上げる
@@ -468,6 +460,17 @@
 * [done] (x): ({A}x & {B}x) -> {C}x
     * "If someone is a {A} and a {B}, then they are a {C}. "
     * small and smart person is always kind.
+* [done] ./log.txt
+    - translation Ax -> Bx のヒットが少ない．
+        * {A}x はotherに入っている？
+            * [todo] (x): {A}x がtranslationに存在しない
+                - というか，implicationが無い(x): .. が全て存在しない．
+        * [done] Ax -> Bxが少ないのは？
+            - 単にそれらのargumentが当たる頻度が少ないだけであることを確認した．translationのせいでは無い．
+        * [rejected] generalized modus ponensが無いから？
+            * generalized modus ponensは定理としてしか導けから？
+                - これは違う．(x)-elimだけあれば，利用されるはず．
+
 
 ## [pending] その他
 * [pending] wordnetの類義語によって，言語表現を膨らませられるか？
