@@ -55,7 +55,7 @@ class ProofTreeGenerator:
                  quantified_arguments_weight=0.0,
                  quantify_all_at_once=True,
                  elim_dneg=False,
-                 timeout: Optional[int] = 30):
+                 timeout: Optional[int] = 10):
         self.elim_dneg = elim_dneg
         self.timeout = timeout
 

@@ -72,6 +72,7 @@
 # proof tree generation
 
 ## todo
+* [todo] 凄く遅い．
 * [pending] quantが選ばれる頻度が，頻度重みから想定されるよりも，低い．おそらく，何らかの条件において，排除される確率が高くなっている．
     - [pending] ただ，低すぎて出てこないという訳でもない．よって保留．
 * [done]
@@ -370,10 +371,10 @@
 # translation
 
 ## [todo] 事例
-* [todo] not the fact が入っていない．
-* [todo] {A}{a} & {B}{b} => {A}{a} & {B}{a}
-* [todo] warningを消すまでやる
+* [todo] {B}the_thing.subj が入ってる．
+    - しかも，warningも出ていない．
 * [todo] Ga -> Fa, Ga -> Fb を別の翻訳にする．
+* [todo] warningが出ないことを確認する．
 * [todo] 表現の追加
     - EntailmentBank
     - cause verb
@@ -470,6 +471,8 @@
         * [rejected] generalized modus ponensが無いから？
             * generalized modus ponensは定理としてしか導けから？
                 - これは違う．(x)-elimだけあれば，利用されるはず．
+* [done] not the fact が入っていない．
+* [done] {A}{a} & {B}{b} => {A}{a} & {B}{a}
 
 
 ## [pending] その他
