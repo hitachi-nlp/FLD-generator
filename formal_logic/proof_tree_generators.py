@@ -102,7 +102,7 @@ class ProofTreeGenerator:
                     # 'existential_quantifier_intro',
             ]:
                 for i_formula, formula in enumerate(unique_formulas):
-                    for quantified_argument in generate_quantifier_arguments(argument_type, formula, id_prefix=f'fomula-{i_formula}', quantify_all_at_once=quantify_all_at_once):
+                    for quantified_argument in generate_quantifier_arguments(argument_type, formula, id_prefix=f'fomula-{str(i_formula).zfill(6)}', quantify_all_at_once=quantify_all_at_once):
                         if _is_argument_new(quantified_argument, arguments + complicated_arguments + quantified_arguments):
                             quantified_arguments.append(quantified_argument)
 

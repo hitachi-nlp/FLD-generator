@@ -81,9 +81,12 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                 mapping[original_predicate] = predicate_with_not
             yield mapping
 
+    def filled_str(no: int) -> str:
+        return str(no).zfill(6)
+
     for i_not, mapping in enumerate(generate_not_enhanced_mappings(predicates)):
         if get_name:
-            yield mapping, f'not-{i_not}'
+            yield mapping, f'not-{filled_str(i_not)}'
         else:
             yield mapping
 
@@ -102,7 +105,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                     for brace_not_prefix in ['', NOT]:
                         mapping[predicate_to_expand] = f'{brace_not_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
                         if get_name:
-                            yield mapping, f'{op}-{i_predicate_to_expand}.not-{i_not}'
+                            yield mapping, f'{op}-{filled_str(i_predicate_to_expand)}.not-{filled_str(i_not)}'
                         else:
                             yield mapping
 
