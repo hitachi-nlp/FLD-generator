@@ -31,24 +31,30 @@ class ProofTreeGenerationPipeline:
             depth: int = 5,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]], Dict[str, int]]:
         while True:
+            logger.info('========================== generating proof tree... ============================')
             proof_tree = self.generator.generate_tree(depth=depth)
+            logger.info('========================== generating proof tree done! ============================')
 
             if proof_tree is None:
                 logger.info('tree not generated. Will retry.')
                 continue
 
+            logger.info('========================== generating distractor... ============================')
             if self.distractor is not None:
                 distractor_formulas = self.distractor.generate(proof_tree)
             else:
                 distractor_formulas = []
+            logger.info('========================== generating distractor done! ============================')
 
             if self.translator is not None:
+                logger.info('========================== translating... ============================')
                 named_translations, translator_stats = self.translator.translate([node.formula for node in proof_tree.nodes] + distractor_formulas,
                                                                                  raise_if_translation_not_found=raise_if_translation_not_found)
                 for i_node, node in enumerate(proof_tree.nodes):
                     node.formula.translation_name, node.formula.translation = named_translations[i_node]
                 for i_distractor, distractor_formula in enumerate(distractor_formulas):
                     distractor_formula.translation_name, distractor_formula.translation = named_translations[len(proof_tree.nodes) + i_distractor]
+                logger.info('========================== translating done! ============================')
 
             return proof_tree, distractor_formulas, self._get_stats(proof_tree, translator_stats)
 

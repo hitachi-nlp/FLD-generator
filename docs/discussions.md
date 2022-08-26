@@ -371,9 +371,8 @@
 # translation
 
 ## [todo] 事例
-* [todo] {B}the_thing.subj が入ってる．
-    - しかも，warningも出ていない．
 * [todo] Ga -> Fa, Ga -> Fb を別の翻訳にする．
+* [todo] the, it, a などの整合性
 * [todo] warningが出ないことを確認する．
 * [todo] 表現の追加
     - EntailmentBank
@@ -473,6 +472,9 @@
                 - これは違う．(x)-elimだけあれば，利用されるはず．
 * [done] not the fact が入っていない．
 * [done] {A}{a} & {B}{b} => {A}{a} & {B}{a}
+* [done] {A}{a} -> (¬{B}{b} v {C}{b})
+    - 中身が間違っている．
+
 
 
 ## [pending] その他

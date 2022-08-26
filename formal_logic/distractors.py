@@ -156,7 +156,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 ):
                     transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
 
-                    if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):
+                    if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
                         continue
 
                     if any(transformed_formula.rep == existent_formula

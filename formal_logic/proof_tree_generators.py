@@ -1,8 +1,9 @@
 import random
 import logging
 from collections import defaultdict
-from typing import List, Optional, Any, Iterable, Tuple, Dict
+from typing import List, Optional, Any, Iterable, Tuple, Dict, Union
 from pprint import pformat
+import logging
 
 from timeout_timer import timeout as timeout_context
 
@@ -40,7 +41,74 @@ from .formula import (
 )
 import kern_profiler
 
+# _LOG_ONLY_WHEN_FAILED = True
 logger = logging.getLogger(__name__)
+
+
+class DelayedLogger:
+
+    _level_strs = {
+        logging.DEBUG: 'DEBUG',
+        logging.INFO: 'INFO',
+        logging.WARNING: 'WARNING',
+        logging.FATAL: 'FATAL',
+    }
+
+    def __init__(self,
+                 logger,
+                 delayed=True):
+        self._logger = logger
+        self._delayed = delayed
+        self._traces = defaultdict(list)
+
+    def debug(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.DEBUG)
+
+    def flush_debug(self) -> None:
+        self._log_and_flush(logging.DEBUG)
+
+    def info(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.INFO)
+
+    def flush_info(self) -> None:
+        self._log_and_flush(logging.INFO)
+
+    def warning(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.WARNING)
+
+    def flush_warning(self) -> None:
+        self._log_and_flush(logging.WARNING)
+
+    def fatal(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.FATAL)
+
+    def flush_fatal(self) -> None:
+        self._log_and_flush(logging.FATAL)
+
+    def _log_or_cache(self,
+                      msg: str,
+                      level: int) -> None:
+        if self._delayed:
+            self._traces[level].append(msg)
+        else:
+            self._get_logging_func(level)
+
+    def _log_and_flush(self,
+                       level: int) -> None:
+        for msg in self._traces[level]:
+            self._get_logging_func(level)(msg)
+        self._traces[level] = []
+
+    def _get_logging_func(self, level: int):
+        if level == logging.DEBUG:
+            logging_fn = logger.debug
+        elif level == logging.info:
+            logging_fn = logger.info
+        elif level == logging.WARNING:
+            logging_fn = logger.warning
+        elif level == logging.FATAL:
+            logging_fn = logger.fatal
+        return logging_fn
 
 
 class ProofTreeGenerationFailure(FormalLogicExceptionBase):
@@ -74,7 +142,7 @@ class ProofTreeGenerator:
                         quantified_arguments_weight: float,
                         quantify_all_at_once: bool,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
-        logger.info('loading arguments ....')
+        logger.info('-- loading arguments ....')
 
         complicated_arguments: List[Argument] = []
         if complicated_arguments_weight > 0.0:
@@ -119,7 +187,7 @@ class ProofTreeGenerator:
         _arguments = arguments + complicated_arguments + quantified_arguments
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
-        logger.info('================================================     loaded arguments     ================================================')
+        logger.info('------- loaded arguments ------')
         # for argument in sorted(_arguments, key=lambda arg: arg.id):
         for argument in _arguments:
             logger.info('weight: %f    %s', _argument_weights[argument], str(argument))
@@ -129,20 +197,21 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth=3,
                       max_retry=100) -> Optional[ProofTree]:
-        for _ in range(0, max_retry):
+        for i_trial in range(0, max_retry):
+            logger.info('-- generate_tree() trial=%d', i_trial)
             try:
                 proof_tree = _generate_tree(self.arguments,
                                             argument_weights=self.argument_weights,
                                             depth=depth,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
+                logger.info('-- generate_tree() succeeded!')
                 return proof_tree
             except ProofTreeGenerationFailure as e:
                 logger.warning('Generation failed. The message is the followings:')
                 logger.warning('%s', str(e))
             except TimeoutError:
-                logger.warning('Generation failed with TimeoutError()')
-            logger.warning('Retry generation')
+                logger.warning('Generation failed with TimeoutError() with timeout = %d', self.timeout)
         raise ProofTreeGenerationFailure(f'generate_tree() failed with max_retry={max_retry}.')
 
 
@@ -199,6 +268,7 @@ def _generate_stem(arguments: List[Argument],
         while True:
             log_traces = []
             rejection_stats = defaultdict(int)
+            # delayed_logger = DelayedLogger(logger, delayed=_LOG_ONLY_WHEN_FAILED)
 
             if proof_tree.depth >= depth:
                 is_tree_done = True

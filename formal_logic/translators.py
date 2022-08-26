@@ -18,6 +18,7 @@ from .formula import (
     IMPLICATION,
     NOT,
 )
+
 from .word_banks.base import WordBank, ATTR
 from .interpretation import (
     generate_mappings_from_formula,
