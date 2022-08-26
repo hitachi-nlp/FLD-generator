@@ -370,6 +370,9 @@
 # translation
 
 ## [todo] 事例
+* not the fact が入っていない．
+* できるだけテンプレートを使う．
+* {A}{a} & {B}{b} => {A}{a} & {B}{a}
 * ./log.txt
     - translation Ax -> Bx のヒットが少ない．
         * {A}x はotherに入っている？
