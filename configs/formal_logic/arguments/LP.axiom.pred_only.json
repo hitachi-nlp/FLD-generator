@@ -1,6 +1,6 @@
 [
   {
-      "id": "implication_intro.pred_only",
+      "id": "implication_elim.pred_only",
       "premises": [
           "{A} -> {B}",
           "{A}"
