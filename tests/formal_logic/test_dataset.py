@@ -41,7 +41,7 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
 
 def load_translator(type_: str,
                     from_: str,
-                    do_interpret=True):
+                    do_translate_to_nl=True):
     if type_ == 'sentence_wise_translator':
         if from_ == 'config':
             sentence_translations_config_path = './configs/formal_logic/translations/syllogistic_corpus-02.json'
@@ -52,7 +52,7 @@ def load_translator(type_: str,
                 sentence_translations,
                 predicate_translations=predicate_translations,
                 constant_translations=constant_translations,
-                do_interpret=do_interpret,
+                do_translate_to_nl=do_translate_to_nl,
             )
         elif from_ == 'minimum':
             sentence_translations = {
@@ -78,7 +78,7 @@ def load_translator(type_: str,
                 sentence_translations,
                 predicate_translations=predicate_translations,
                 constant_translations=constant_translations,
-                do_interpret=do_interpret,
+                do_translate_to_nl=do_translate_to_nl,
             )
         else:
             raise ValueError()
@@ -88,7 +88,7 @@ def load_translator(type_: str,
             return ClauseTypedTranslator(
                 json.load(open('./configs/formal_logic/translations/clause_typed.thing.json')),
                 EnglishWordBank(),
-                do_interpret=do_interpret,
+                do_translate_to_nl=do_translate_to_nl,
             )
         elif from_ == 'minimum':
             raise ValueError()

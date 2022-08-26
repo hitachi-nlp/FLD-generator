@@ -68,7 +68,7 @@ class SentenceWiseTranslator(Translator):
                  sentence_translations: Dict[str, List[str]],
                  predicate_translations: Optional[List[str]] = None,
                  constant_translations: Optional[List[str]] = None,
-                 do_interpret=True):
+                 do_translate_to_nl=True):
 
         self._sentence_translations = OrderedDict()
         for formula, translations in sorted(
@@ -81,7 +81,7 @@ class SentenceWiseTranslator(Translator):
             self._sentence_translations[formula] = translations
         self.predicate_translations = predicate_translations
         self.constant_translations = constant_translations
-        self.do_interpret = do_interpret
+        self.do_translate_to_nl = do_translate_to_nl
 
     def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
                                                                                                Dict[str, int]]:
@@ -110,7 +110,7 @@ class SentenceWiseTranslator(Translator):
                     logger.warning('translation not found for "%s"', formula.rep)
                     translations.append(None)
 
-        if self.do_interpret:
+        if self.do_translate_to_nl:
             interp_mappings = generate_mappings_from_predicates_and_constants(
                 list(set([predicate.rep for formula in formulas for predicate in formula.predicates])),
                 list(set([constant.rep for formula in formulas for constant in formula.constants])),
@@ -185,7 +185,7 @@ class ClauseTypedTranslator(Translator):
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
-                 do_interpret=True,
+                 do_translate_to_nl=True,
                  ):
 
         two_layered_config = self._build_two_layered_config(config_json)
@@ -220,7 +220,7 @@ class ClauseTypedTranslator(Translator):
         self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
         self._wb = word_bank
 
-        self._do_interpret = do_interpret
+        self._do_translate_to_nl = do_translate_to_nl
 
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[str]]]:
         two_layered_config = self._completely_flatten_config(config)
@@ -409,7 +409,7 @@ class ClauseTypedTranslator(Translator):
             interp_templated_translation_pulled_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pulled)
 
             # do interpretation using predicates and constants using interp_mapping
-            if self._do_interpret:
+            if self._do_translate_to_nl:
                 interp_templated_translation_pulled_wo_info_definite_article_induced = self._replace_indefinite_with_definite_articles(interp_templated_translation_pulled_wo_info)
                 translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info_definite_article_induced), inflated_mapping).rep
             else:
