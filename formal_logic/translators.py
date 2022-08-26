@@ -107,7 +107,7 @@ class SentenceWiseTranslator(Translator):
                 if raise_if_translation_not_found:
                     raise TranslationNotFoundError(f'translation not found for "{formula.rep}"')
                 else:
-                    logger.warning('translation not found for "%s"', formula.rep)
+                    logger.info('translation not found for "%s"', formula.rep)
                     translations.append(None)
 
         if self.do_translate_to_nl:
@@ -211,9 +211,9 @@ class ClauseTypedTranslator(Translator):
         self._translations: Dict[str, List[str]] = _resolved_translations_sorted['sentence']
         logger.info('---- loaded translations ----')
         for key, nls in self._translations.items():
-            logger.info(key)
+            logger.info('translation key = "%s"', key)
             for nl in nls:
-                logger.info('    ' + nl)
+                logger.info('    "%s"', nl)
 
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
@@ -410,8 +410,8 @@ class ClauseTypedTranslator(Translator):
 
             # do interpretation using predicates and constants using interp_mapping
             if self._do_translate_to_nl:
-                interp_templated_translation_pulled_wo_info_definite_article_induced = self._replace_indefinite_with_definite_articles(interp_templated_translation_pulled_wo_info)
-                translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info_definite_article_induced), inflated_mapping).rep
+                interp_templated_translation_pulled_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pulled_wo_info)
+                translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info_with_the_or_it), inflated_mapping).rep
             else:
                 translation = interp_templated_translation_pulled_wo_info
 
@@ -474,7 +474,7 @@ class ClauseTypedTranslator(Translator):
                 consistent_nls.append(sentence_transl_nl_pulled)
         return consistent_nls
 
-    def _replace_indefinite_with_definite_articles(self, sentence_with_templates: str) -> str:
+    def _replace_following_constants_with_the_or_it(self, sentence_with_templates: str) -> str:
         constants = [c.rep for c in Formula(sentence_with_templates).constants]
 
         with_definite = sentence_with_templates
@@ -487,16 +487,29 @@ class ClauseTypedTranslator(Translator):
             until_first = with_definite[:first_pos + len(constant)]
             from_second = with_definite[first_pos + len(constant):]
 
-            from_second_with_definite = re.sub(
-                f'(.*)a (.*){constant}',
-                f'\g<1>the \g<2>{constant}',
-                from_second,
-            )
+            if re.match(f'.*a {constant} is.*', from_second):
+                replace_with_it = random.random() >= 0.5
+            else:
+                replace_with_it = False
+
+            if replace_with_it:
+                from_second_with_definite = re.sub(
+                    f'a {constant} is',
+                    'it is',
+                    from_second,
+                )
+            else:
+                from_second_with_definite = re.sub(
+                    f'(.*)a (.*){constant}',
+                    f'\g<1>the \g<2>{constant}',
+                    from_second,
+                )
             with_definite = until_first + from_second_with_definite
         if sentence_with_templates != with_definite:
-            logger.info('articles "a" are modified to "the" as:    "%s"    ->    "%s"',
-                        sentence_with_templates,
-                        with_definite)
+            logger.warning('articles "a (...) %s" are modified as:    "%s"    ->    "%s"',
+                           constant,
+                           sentence_with_templates,
+                           with_definite)
             # print(f'"{sentence_with_templates}"    ->    "{with_definite}"')
         return with_definite
 

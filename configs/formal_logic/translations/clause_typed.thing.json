@@ -1410,8 +1410,8 @@
       ],
       "¬(¬{A}x v ¬{B}x)": [
         "<phrase::not_fact_intro> <clause::verb::(¬{A}x v ¬{B}x)>"
-      ],
-
+      ]
+    },
 
 
 
@@ -1901,7 +1901,6 @@
 
           "the thing that either does not {A}[VERB] or does not {B}[VERB] or both"
       ]
-
 
     }
   },
