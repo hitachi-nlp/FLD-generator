@@ -506,10 +506,10 @@ class ClauseTypedTranslator(Translator):
                 )
             with_definite = until_first + from_second_with_definite
         if sentence_with_templates != with_definite:
-            logger.warning('articles "a (...) %s" are modified as:    "%s"    ->    "%s"',
-                           constant,
-                           sentence_with_templates,
-                           with_definite)
+            logger.info('articles "a (...) %s" are modified as:    "%s"    ->    "%s"',
+                        constant,
+                        sentence_with_templates,
+                        with_definite)
             # print(f'"{sentence_with_templates}"    ->    "{with_definite}"')
         return with_definite
 

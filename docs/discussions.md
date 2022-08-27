@@ -1,9 +1,6 @@
 # todo
-* 学習の高速化
-    - bp16
-    - maxlen
-    - A100 8並列
 * 研究計画を立てる．
+    * FLNL (Formal Logic Natural Language) Corpus
     * introで「axiomを使うので，汎化する．」 => case studyで定理
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
     * ablation

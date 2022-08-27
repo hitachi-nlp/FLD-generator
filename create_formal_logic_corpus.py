@@ -1,69 +1,118 @@
 import random
 import json
+from typing import List
 from pathlib import Path
-import logging
 from pprint import pformat
+import logging
 
 import click
 from tqdm import tqdm
+
+from formal_logic.translators import ClauseTypedTranslator
+from formal_logic.word_banks import EnglishWordBank
+from formal_logic.distractors import SameFormUnkownInterprandsDistractor
 from formal_logic.argument import Argument
-from formal_logic.generators import FormalLogicGenerator
-from formal_logic.distractors import UnkownPASDistractor
-from formal_logic.translators import SentenceWiseTranslator
-from formal_logic.tree_pipeline import TreePipeline
-from formal_logic.dataset import NLProofSDataset
+from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from formal_logic.proof_tree_generators import ProofTreeGenerator
+from formal_logic.datasets import NLProofSDataset
+
 from logger_setup import setup as setup_logger
+
 
 logger = logging.getLogger(__name__)
 
 
+def load_arguments(config_paths: List[str]) -> List[Argument]:
+    arguments = []
+    for config_path in config_paths:
+        arguments.extend([Argument.from_json(json_obj)
+                          for json_obj in json.load(open(config_path))
+                          if not json_obj['id'].startswith('__')])
+    return arguments
+
+
 @click.command()
 @click.argument('output-path')
-@click.argument('argument-config')
-@click.argument('translation-config')
 @click.argument('size', type=int)
+@click.option('--argument-config', '--ac',
+              multiple=True, default=[])
+@click.option('--translation-config', '--tc',
+              multiple=True, 
+              default=['./configs/formal_logic/translations/clause_typed.thing.json'])
 @click.option('--depth', type=int, default=5)
-@click.option('--num-distractors', type=int, default=5)
+@click.option('--complication', type=float, default=0.0)
+@click.option('--quantification', type=float, default=0.0)
+@click.option('--keep-dneg', is_flag=True, default=False)
+@click.option('--distractor-factor', type=float, default=1.0)
 @click.option('--world-assump', default='CWA')
-@click.option('--elim-dneg', is_flag=True, default=False)
-def main(output_path, argument_config, translation_config, size, depth, num_distractors, world_assump, elim_dneg):
+def main(output_path,
+         argument_config,
+         translation_config,
+         size,
+         depth,
+         complication,
+         quantification,
+         keep_dneg,
+         distractor_factor,
+         world_assump):
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(0)
+    if len(argument_config) == 0:
+        raise ValueError()
 
     output_path = Path(output_path)
     output_path.parent.mkdir(exist_ok=True, parents=True)
 
-    arguments = [Argument.from_json(json_obj) for json_obj in json.load(open(argument_config))]
-    generator = FormalLogicGenerator(arguments, elim_dneg=elim_dneg)
+    arguments = load_arguments(argument_config)
+    generator = ProofTreeGenerator(
+        arguments,
+        elim_dneg=not keep_dneg,
+        complicated_arguments_weight=complication,
+        quantified_arguments_weight=quantification,
+    )
 
-    distractor = UnkownPASDistractor()
+    distractor = SameFormUnkownInterprandsDistractor(distractor_factor)
 
-    sentence_translations = json.load(open(translation_config))
-    translator = SentenceWiseTranslator(sentence_translations)
+    print(translation_config)
+    translator = ClauseTypedTranslator(
+        {key: value
+         for config_path in translation_config
+         for key, value in json.load(open(config_path)).items()},
+        EnglishWordBank(),
+        do_translate_to_nl=True,
+    )
 
-    tree_pipeline = TreePipeline(generator, distractor=distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(tree_pipeline, world_assump,
-                              depth=depth, num_distractors=num_distractors)
+    dataset = NLProofSDataset(pipeline, world_assump, depth=depth)
 
     with open(output_path, 'w') as f_out:
-        for nlproof_json, proof_tree, distractors in tqdm(dataset.generate(size)):
-            logger.info('')
-            logger.info('')
-            logger.info('')
-            logger.info('=================== generating proof tree =========================')
+        logger.info('\n\n')
+        logger.info('=================== generating proof tree =========================')
 
-            logger.info('')
+        for nlproof_json, proof_tree, distractors, stats in tqdm(dataset.generate(size)):
+
+            logger.info('\n')
             logger.info('--------------- tree --------------')
-            logger.info(proof_tree.format_str)
 
-            logger.info('')
+            logger.info('\n')
+            logger.info('\n' + proof_tree.format_str)
+
+            logger.info('\n')
             logger.info('--------------- distractors --------------')
-            logger.info(str(distractors))
+            logger.info('\n' + pformat(distractors))
 
-            logger.info('')
+            logger.info('\n')
             logger.info('--------------- NLProofs json --------------')
-            logger.info(pformat(nlproof_json))
+            logger.info('\n' + pformat(nlproof_json))
+
+            logger.info('\n')
+            logger.info('--------------- stats --------------')
+            # logger.info(dict(stats))
+            logger.info('\n' + pformat(stats))
+
+            logger.info('\n\n')
+            logger.info('=================== generating proof tree =========================')
 
             print(json.dumps(nlproof_json), file=f_out)
 

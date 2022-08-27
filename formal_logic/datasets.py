@@ -1,4 +1,5 @@
 import random
+from statistics import mean
 from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
 import logging
 import copy
@@ -48,6 +49,9 @@ class NLProofSDataset:
             return node.formula.translation or node.formula.rep
 
         stats = defaultdict(int)
+        hypothesis_lengths = []
+        context_lengths = []
+        mean_proof_lengths = []
 
         for i_sample in range(size):
             proof_tree, distractor_formulas, pipeline_stats = self.pipeline.run(
@@ -76,6 +80,7 @@ class NLProofSDataset:
                 raise ValueError()
 
             hypothesis = _get_sent(proof_tree.root_node)
+            hypothesis_lengths.append(len(hypothesis.split(' ')))
 
             all_nodes: List[Union[ProofNode, _DistractorNode]] = list(proof_tree.nodes)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
@@ -113,8 +118,9 @@ class NLProofSDataset:
                 for id_, node in id2node.items()
                 if id_.startswith('sent') and node not in unproven_leaf_nodes
             ])
+            context_lengths.append(len(context.split(' ')))
 
-            proof_strs = []
+            proof_elems = []
             unproven_nodes = copy.copy(unproven_leaf_nodes)
             for node in proof_tree.depth_first_traverse():
                 if is_root(node):
@@ -124,7 +130,7 @@ class NLProofSDataset:
 
                     child_ids = [node2id[child] for child in node.children]
                     proof_str = ' & '.join(child_ids) + ' -> hypothesis'
-                    proof_strs.append(proof_str)
+                    proof_elems.append(proof_str)
 
                 elif is_leaf(node):
                     continue
@@ -137,21 +143,29 @@ class NLProofSDataset:
                     node_id = node2id[node]
                     child_ids = [node2id[child] for child in node.children]
                     proof_str = ' & '.join(child_ids) + f' -> {node_id}: {_get_sent(node)}'
-                    proof_strs.append(proof_str)
+                    proof_elems.append(proof_str)
 
                 elif is_distractor(node):
                     continue
 
                 else:
                     raise Exception()
-            proof_str = '; '.join(proof_strs) + ';'
+            proof_str = '; '.join(proof_elems) + ';'
+            proof_strs = [proof_str]  # only one proof in our dataset
+            mean_proof_lengths.append(mean([len(proof_str.split(' ')) for proof_str in proof_strs]))
 
             dataset_json = {
                 'hypothesis': hypothesis,
                 'context': context,
-                'proofs': [proof_str],
+                'proofs': proof_strs,
                 'answer': label,
                 'depth': proof_tree.depth,
+            }
+
+            stats['length'] = {
+                'hypothesis': mean(hypothesis_lengths),
+                'context': mean(context_lengths),
+                'proof': mean(mean_proof_lengths),
             }
 
             yield dataset_json, proof_tree, distractor_formulas, stats
