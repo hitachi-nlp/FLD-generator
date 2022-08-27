@@ -162,10 +162,10 @@ class NLProofSDataset:
                 'depth': proof_tree.depth,
             }
 
-            stats['length'] = {
-                'hypothesis': mean(hypothesis_lengths),
-                'context': mean(context_lengths),
-                'proof': mean(mean_proof_lengths),
-            }
+            stats.update({
+                'length.hypothesis': mean(hypothesis_lengths),
+                'length.context': mean(context_lengths),
+                'length.proof': mean(mean_proof_lengths),
+            })
 
-            yield dataset_json, proof_tree, distractor_formulas, stats
+            yield dataset_json, proof_tree, distractor_formulas, stats.copy()

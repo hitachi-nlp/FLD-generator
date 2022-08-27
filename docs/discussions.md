@@ -1,4 +1,5 @@
 # todo
+* 同じサンプルが出てきていないかチェック
 * 研究計画を立てる．
     * FLNL (Formal Logic Natural Language) Corpus
     * introで「axiomを使うので，汎化する．」 => case studyで定理
@@ -29,6 +30,8 @@
     * 先行研究は (x) のargumentしか無いので，Aa -> Bb などの常識知識は表せていない．
     * デモペーパーを出す
         * 仮説検証マシン
+
+## future
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
     - 完全性など．
 
@@ -198,6 +201,17 @@
 
 
 # translation
+
+## [todo]
+* [todo] 変な表現
+    * [todo] データセット公開時には，2のconfigを分けることにより，この表現を除く．
+    * 例: ProofNode(Formula("{OU}{a} -> ({IP}{a} v ¬{TN}{a})", transl="a servile aminomethane leads to the aminomethane that either is anamnestic or is not unsexy or both"))
+    * なぜこれが起こるか？
+        1. {A}{a} -> {B}{b} = {A}{a} leads to {B}{b} は自然．
+        2. {A}{a} -> {B}{a} = {A}{a} leads to {B}{b} は不自然． {A}{a} is {B} が自然．
+            - e.g.) red apple is tasty
+        * 2の翻訳を1で代用していることに起因する問題．
+            - 2を1で代用するのは，config発散を防ぐため．
 
 ## [todo] 事例
 * [todo] 表現の追加
