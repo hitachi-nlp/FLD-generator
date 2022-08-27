@@ -57,6 +57,7 @@ def main(output_path,
          world_assump):
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(0)
+
     if len(argument_config) == 0:
         raise ValueError()
 

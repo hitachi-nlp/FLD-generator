@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+from typing import List
 from pathlib import Path
 
 import click
@@ -10,15 +11,30 @@ from lab import build_dir
 logger = logging.getLogger(__name__)
 
 
+def _make_multiple_value_option(option: str, values: List[str]) -> str:
+    return ' '.join([
+        f'{option} {value}'
+        for value in values
+    ])
+
+
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
 
-    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220802.minumum')
+    # corpus_name = '20220827.trial'
+    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220827.trial')
 
-    argument_config = './configs/formal_logic/arguments/minumum.json'
-    translation_config = './configs/formal_logic/sentence_translations/syllogistic_corpus-02.json'
-    corpus_name = 'minumum'
+    argument_configs = [
+        './configs/formal_logic/arguments/LP.axiom.pred_only.json',
+        './configs/formal_logic/arguments/LP.theorem.pred_only.json',
+
+        './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
+        './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
+    ]
+    translation_configs = [
+        './configs/formal_logic/translations/clause_typed.thing.json'
+    ]
 
     split_sizes = {
         'train': 100,
@@ -26,9 +42,10 @@ def main():
         'test': 10,
     }
     depth = 3
-    num_distractors = 3
+    complication = 0.3
+    quantification = 0.2
+    distractor_factor = 3
     world_assump = 'label_true_only'
-    elim_dneg = True
 
     # engine = QsubEngine('ABCI', 'rt_AG.small')
     engine = SubprocessEngine()
@@ -38,47 +55,53 @@ def main():
     for split, size in split_sizes.items():
 
         settings = {
-            'corpus_name': corpus_name,
-
-            'argument_config': argument_config,
-            'translation_config': translation_config,
-
+            # 'corpus_name': corpus_name,
             'split': split,
+
             'size': size,
+
+            'argument_configs': argument_configs,
+            'translation_configs': translation_configs,
+
             'depth': depth,
-            'num_distractors': num_distractors,
+            'complication': complication,
+            'quantification': quantification,
+            'distractor_factor': distractor_factor,
             'world_assump': world_assump,
-            'elim_dneg': elim_dneg,
         }
 
         output_dir = build_dir(
             settings,
-            top_dir=str(output_top_dir / settings["corpus_name"]),
+            # top_dir=str(output_top_dir / settings["corpus_name"]),
+            top_dir=str(output_top_dir),
             short=True,
             dirname_exclude_params=[
-                'argument_config',
-                'translation_config',
-
                 'corpus_name',
                 'split',
+
+                'argument_configs',
+                'translation_configs',
+                'size',
             ],
             save_params=True
         )
         output_path = output_dir / f'{split}.jsonl'
-        log_path = output_dir / 'log.txt'
+        log_path = output_dir / f'log.{split}txt'
 
         command = ' '.join([
             'python ./create_formal_logic_corpus.py',
 
             f'{output_path}',
-            f'{settings["argument_config"]}',
-            f'{settings["translation_config"]}',
             f'{settings["size"]}',
 
+            _make_multiple_value_option('--ac', settings['argument_configs']),
+            _make_multiple_value_option('--tc', settings['translation_configs']),
+
             f'--depth {settings["depth"]}',
-            f'--num-distractors {settings["num_distractors"]}',
+            f'--complication {settings["complication"]}',
+            f'--quantification {settings["quantification"]}',
+            f'--distractor-factor {settings["distractor_factor"]}',
             f'--world-assump {settings["world_assump"]}',
-            '--elim-dneg' if settings["elim_dneg"] else '',
             f'1>{str(log_path)} 2>&1',
         ])
 
@@ -95,10 +118,11 @@ def main():
             command,
             stdout=stdout,
             stderr=stderr,
-            options={'l_opts': ['h_rt=3:00:00']},
+            options={'l_opts': ['h_rt=12:00:00']},
             dry_run=dry_run,
             wait_until_finish=wait_until_finish,
         )
+    logger.info('10.create_formal_logic_corpus.py done!')
 
 
 if __name__ == '__main__':
