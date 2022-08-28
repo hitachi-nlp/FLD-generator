@@ -419,7 +419,7 @@ class ClauseTypedTranslator(Translator):
             translation_names.append(self._translation_name(sentence_key, chosen_nl))
 
         translations = [
-            (self._correct_indefinite_articles(translation) if translation is not None else None)
+            (self._correct_indefinite_particles(translation) if translation is not None else None)
             for translation in translations
         ]
 
@@ -506,14 +506,14 @@ class ClauseTypedTranslator(Translator):
                 )
             with_definite = until_first + from_second_with_definite
         if sentence_with_templates != with_definite:
-            logger.info('articles "a (...) %s" are modified as:    "%s"    ->    "%s"',
+            logger.info('particles "a (...) %s" are modified as:    "%s"    ->    "%s"',
                         constant,
                         sentence_with_templates,
                         with_definite)
             # print(f'"{sentence_with_templates}"    ->    "{with_definite}"')
         return with_definite
 
-    def _correct_indefinite_articles(self, sentence_wo_templates: str) -> str:
+    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
         words = sentence_wo_templates.split(' ')
         corrected_words = []
         for i_word, word in enumerate(words):
@@ -525,7 +525,7 @@ class ClauseTypedTranslator(Translator):
                     else:
                         corrected_words.append('a')
                 else:
-                    raise ValueError('Sentence ends with article: {sentence}')
+                    raise ValueError('Sentence ends with particle: {sentence}')
             else:
                 corrected_words.append(word)
         return ' '.join(corrected_words)

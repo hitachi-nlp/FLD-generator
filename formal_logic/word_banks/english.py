@@ -132,7 +132,7 @@ class EnglishWordBank(WordBank):
             return noun
         elif form == NounForm.SINGULAR_WITH_PARTICLE:
             """
-            We assume that all the words are countable, thus, all the words in singular form need an indefinite article, i.e., "a" or "an".
+            We assume that all the words are countable, thus, all the words in singular form need an indefinite particle, i.e., "a" or "an".
             This approximation is because that detecting the word countability is a challenging problem.
             See [here](https://stackoverflow.com/questions/7822922/noun-countability) for example.
 
