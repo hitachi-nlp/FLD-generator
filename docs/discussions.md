@@ -1,5 +1,4 @@
 # todo
-* 同じサンプルが出てきていないかチェック
 * 研究計画を立てる．
     * FLNL (Formal Logic Natural Language) Corpus
     * introで「axiomを使うので，汎化する．」 => case studyで定理
@@ -30,6 +29,23 @@
     * 先行研究は (x) のargumentしか無いので，Aa -> Bb などの常識知識は表せていない．
     * デモペーパーを出す
         * 仮説検証マシン
+    * ./learning_to_reason/ideas.dataset.md
+        * 既存研究との比較
+            * ours
+                - task
+                    * deduction
+                - 推論ルール
+                    - **Critical Thinkingよりも増やす．and導入など．**
+                    - "推論ルールの拡充"を参考にすること．
+                - 複合命題(e.g., A->B)の証明
+                    - **yesにする．RuleTakerではできていなかった．**
+                - [done] マルチステップ推論
+                    - **yesにする．Critical Thinkingではできていなかった．**
+                - 言語
+                    - 形式主義学習などで多様にする．
+                - verified on NL dataset: no
+                - 公理系
+                    * predicate logic
 
 ## future
 * n項述語のn=1, n=0 を合わせた体系は，意味のある体系になっているのだろうか？
@@ -39,24 +55,10 @@
 
 
 
-# 目標
-* ./learning_to_reason/ideas.dataset.md
-    * 既存研究との比較
-        * ours
-            - task
-                * deduction
-            - 推論ルール
-                - **Critical Thinkingよりも増やす．and導入など．**
-                - "推論ルールの拡充"を参考にすること．
-            - 複合命題(e.g., A->B)の証明
-                - **yesにする．RuleTakerではできていなかった．**
-            - [done] マルチステップ推論
-                - **yesにする．Critical Thinkingではできていなかった．**
-            - 言語
-                - 形式主義学習などで多様にする．
-            - verified on NL dataset: no
-            - 公理系
-                * predicate logic
+
+
+
+
 
 
 
@@ -80,13 +82,24 @@
         - interprand = symbols to be interpreted = predicates + constants
         - pullled formula = a formula which is interpreted by a mapping from that space to this space
         - pushed formula = inverse of pulled formula
+* 実行速度
+    - 1sec / (1 tree * 1 process)
 
-## know issues
+## Known issues
 * add_complicated_arguments=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．
     1. and_introのconclusionは ({A} & {B}) という形をしている．
     2. add_complicated_arguments=Falseでは，前提が({A} & {B})の形なのは，& elimだけである．
     3. & elimのconclusionは{A}もしくは{B}であるが，これは1のant_introの前提としてtreeに既に入っている．よって，`_is_formula_new() = False`となるので，& elimの利用は却下される．
     対処療法として，retryを大きくしている．
+* ./10.create_formal_logic_corpus.py で投げたジョブの一部が永遠に終わらない．
+    - 原因
+        - ./create_formal_logic_corpus.py の logger.info('[pass or not checking for finding the cause of hangups] 02')の前で止まっている．
+            - while Trueに迷い込んだ？
+            - メモリやCPUなどの使用量が大きすぎて終わらない？
+            - qsubの問題？
+    - 対策
+        - 現状， ./10.create_formal_logic_corpus.py でtimeoutすることによって，対処している．
+        - [todo] もちろんこれは対処療法に過ぎないので，時間があるときに根本原因を探したい．
 
 
 

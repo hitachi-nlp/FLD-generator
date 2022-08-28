@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+import math
 import random
 import json
 from typing import List, Dict
@@ -68,15 +70,18 @@ def load_dataset(argument_config: str,
 
 def generate_instances(size: int, *args):
     # logger = logging.getLogger(__name__)
+    logger.info('[pass or not checking for finding the cause of hangups] 00')  # HONOKA: we pass here
 
-    dataset = load_dataset(*args)
+    dataset = load_dataset(*args)  # HONOKA: we pass here
+    logger.info('[pass or not checking for finding the cause of hangups] 01')
 
     data = []
     _final_stats = None
-    for nlproof_json, proof_tree, distractors, stats in tqdm(dataset.generate(size)):
+    for nlproof_json, proof_tree, distractors, stats in tqdm(dataset.generate(size)):  # HONOKA: we can't pass here
         data.append((nlproof_json, proof_tree, distractors))
         _final_stats = stats
         log(logger, nlproof_json, proof_tree, distractors)
+    logger.info('[pass or not checking for finding the cause of hangups] 02')
     return data, _final_stats
 
 
@@ -114,7 +119,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--distractor-factor', type=float, default=1.0)
 @click.option('--world-assump', default='CWA')
 @click.option('--num-workers', type=int, default=1)
-@click.option('--batch-size-per-worker', type=int, default=10)
+@click.option('--batch-size-per-worker', type=int, default=300)
 @click.option('--seed', type=int, default=0)
 def main(output_path,
          argument_config,
@@ -138,13 +143,13 @@ def main(output_path,
     output_path = Path(output_path)
     output_path.parent.mkdir(exist_ok=True, parents=True)
 
-    size_per_worker = max(int(size / num_workers), 1)
-    batch_size_per_worker = min(batch_size_per_worker, size_per_worker)
-    num_batches = max(int(size_per_worker / batch_size_per_worker), 1)
+    size_per_worker = math.ceil(size / num_workers)
+    _batch_size_per_worker = min(batch_size_per_worker, size_per_worker)
+    num_batches = math.ceil(size_per_worker / _batch_size_per_worker)
 
     logger.info('num_workers: %d', num_workers)
     logger.info('size_per_worker: %d', size_per_worker)
-    logger.info('batch_size_per_worker: %d', batch_size_per_worker)
+    logger.info('batch_size_per_worker: %d', _batch_size_per_worker)
     logger.info('num_batches: %d', num_batches)
 
     with open(output_path, 'w') as f_out:
@@ -155,7 +160,7 @@ def main(output_path,
             for _ in range(num_workers):
                 jobs.append(
                     delayed(generate_instances)(
-                        batch_size_per_worker,
+                        _batch_size_per_worker,
                         argument_config,
                         translation_config,
                         complication,
@@ -167,13 +172,25 @@ def main(output_path,
                     )
                 )
 
+            logger.info('[pass or not checking for finding the cause of hangups] 0')  # HONOKA: we pass here
             instances_list = Parallel(n_jobs=num_workers, backend='multiprocessing')(jobs)
+            logger.info('[pass or not checking for finding the cause of hangups] 1')  # HONOKA: we can't pass here
 
+            cnt = 0
+            is_done = False
             for instances, stats in instances_list:
+                if is_done:
+                    break
+
                 for nlproof_json, proof_tree, distractors in instances:
+                    if cnt >= size:
+                        is_done = True
+                        break
                     f_out.write(json.dumps(nlproof_json) + '\n')
+                    cnt += 1
                 for name, count in stats.items():
                     gathered_stats[name] += count
+            logger.info('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
 
             logger.info('=========================== gathered stats (batch=%d) ============================',
                         i_batch)
