@@ -1,7 +1,75 @@
+import logging
+from collections import defaultdict
 from typing import Dict, Any, Tuple, List, Iterable
 import random
 
 from nltk.corpus import cmudict
+
+
+class DelayedLogger:
+
+    _level_strs = {
+        logging.DEBUG: 'DEBUG',
+        logging.INFO: 'INFO',
+        logging.WARNING: 'WARNING',
+        logging.FATAL: 'FATAL',
+    }
+
+    def __init__(self,
+                 logger,
+                 delayed=True):
+        self._logger = logger
+        self._delayed = delayed
+        self._traces = defaultdict(list)
+
+    def debug(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.DEBUG)
+
+    def flush_debug(self) -> None:
+        self._log_and_flush(logging.DEBUG)
+
+    def info(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.INFO)
+
+    def flush_info(self) -> None:
+        self._log_and_flush(logging.INFO)
+
+    def warning(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.WARNING)
+
+    def flush_warning(self) -> None:
+        self._log_and_flush(logging.WARNING)
+
+    def fatal(self, msg: str) -> None:
+        self._log_or_cache(msg, logging.FATAL)
+
+    def flush_fatal(self) -> None:
+        self._log_and_flush(logging.FATAL)
+
+    def _log_or_cache(self,
+                      msg: str,
+                      level: int) -> None:
+        if self._delayed:
+            self._traces[level].append(msg)
+        else:
+            self._get_logging_func(level)
+
+    def _log_and_flush(self,
+                       level: int) -> None:
+        for msg in self._traces[level]:
+            self._get_logging_func(level)(msg)
+        self._traces[level] = []
+
+    def _get_logging_func(self, level: int):
+        if level == logging.DEBUG:
+            logging_fn = self._logger.debug
+        elif level == logging.info:
+            logging_fn = self._logger.info
+        elif level == logging.WARNING:
+            logging_fn = self._logger.warning
+        elif level == logging.FATAL:
+            logging_fn = self._logger.fatal
+        return logging_fn
 
 
 def starts_with_vowel_sound(word, pronunciations=cmudict.dict()):

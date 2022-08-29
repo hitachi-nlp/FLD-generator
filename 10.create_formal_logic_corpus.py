@@ -49,6 +49,13 @@ def main():
         'valid': 1000,
         'test': 1000,
     }
+    """
+    - depth
+    - leafs
+    - distractors
+    - rule
+    """
+
     depth = 5
     complication = 0.3
     quantification = 0.2

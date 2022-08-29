@@ -1,4 +1,13 @@
 # todo
+* 初期実験
+    - 目的: 我々の手法で，きちんと学習ができることを確認する．
+    - todo
+        - BLEUの表示
+        - 簡単なデータセットで学習してみる．
+            - depth
+            - leafs
+            - distractors
+            - rule
 * 研究計画を立てる．
     * FLNL (Formal Logic Natural Language) Corpus
     * introで「axiomを使うので，汎化する．」 => case studyで定理
