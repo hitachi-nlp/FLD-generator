@@ -356,7 +356,7 @@ class ClauseTypedTranslator(Translator):
 
         translations = []
         translation_names = []
-        count_stats = {'inflation': defaultdict(int)}
+        count_stats = {'inflation_stats': defaultdict(int)}
 
         interp_mapping = self._choose_interp_mapping(formulas)
 
@@ -404,7 +404,7 @@ class ClauseTypedTranslator(Translator):
             # Generate word inflated mapping.
             inflated_mapping, _inflation_stats = self._make_word_inflated_interp_mapping(interp_mapping, chosen_nl_pulled)
             for inflation_type, count in _inflation_stats.items():
-                count_stats['inflation'][f'{inflation_type}'] = count
+                count_stats['inflation_stats'][f'{inflation_type}'] = count
 
             interp_templated_translation_pulled_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pulled)
 

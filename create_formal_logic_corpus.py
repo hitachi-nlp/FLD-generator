@@ -119,6 +119,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor-factor', type=float, default=1.0)
+@click.option('--proof-types', type=str, default=json.dumps(['proof', 'disproof']))
 @click.option('--world-assump', default='CWA')
 @click.option('--num-workers', type=int, default=1)
 @click.option('--batch-size-per-worker', type=int, default=300)
@@ -133,12 +134,14 @@ def main(output_path,
          quantification,
          keep_dneg,
          distractor_factor,
+         proof_types,
          world_assump,
          num_workers,
          batch_size_per_worker,
          seed):
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(seed)
+    proof_types = json.loads(proof_types)
 
     if len(argument_config) == 0:
         raise ValueError()

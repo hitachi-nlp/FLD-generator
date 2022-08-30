@@ -1,6 +1,20 @@
 # todo
-* 反証可能な事例
+* 反証可能な事例を作る．
+    - hypothesis type
+        - provable
+        - disprovable
+        - undecidable
+    - world_assump
+        - CWA
+            - provable -> true
+            - disprovable, undecidable -> false
+        - OWA
+            - provable -> true
+            - disprovable -> false
+            - undecidable -> 'UNK'
 * レベル分け実験
+    - max_lenが長すぎないようにする．
+    - statsがいい感じになっていることを確認する．
     - そもそもきちんと学習できるのか？を確認する．
 * translationを豊富にする．
     - causal verb

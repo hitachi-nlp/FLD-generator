@@ -179,6 +179,7 @@ def test_LP_pred_only():
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
+                              ['proof'],
                               'CWA',
                               5,
                               5,
@@ -214,6 +215,7 @@ def test_minimum_PL():
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
+                              ['proof'],
                               'CWA',
                               5,
                               5,
@@ -243,6 +245,7 @@ def test_LP_pred_arg():
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
+                              ['proof'],
                               'CWA',
                               5,
                               5,
@@ -278,7 +281,8 @@ def test_PL_pred_arg():
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
-                              'CWA',
+                              ['proof', 'disproof', 'incomplete'],
+                              'OWA',
                               5,
                               5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)

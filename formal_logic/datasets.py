@@ -1,4 +1,5 @@
 import random
+from enum import Enum
 from statistics import mean
 from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
 import logging
@@ -13,6 +14,40 @@ from formal_logic.utils import flatten_dict
 logger = logging.getLogger(__name__)
 
 
+class ProofType(Enum):
+    PROOF = 'proof'
+    DISPROOF = 'disproof'
+    INCOMPLETE = 'incomplete'
+
+
+class WorldAssumption(Enum):
+    CWA = 'CWA'
+    OWA = 'OWA'
+
+
+def _make_instance_label(proof_type: ProofType, world_assump: WorldAssumption) -> Union[bool, str]:
+    if world_assump == WorldAssumption.CWA:
+        if proof_type == ProofType.PROOF:
+            return True
+        elif proof_type == ProofType.DISPROOF:
+            return False
+        elif proof_type == ProofType.INCOMPLETE:
+            return False
+        else:
+            raise ValueError()
+    elif world_assump == WorldAssumption.OWA:
+        if proof_type == ProofType.PROOF:
+            return True
+        elif proof_type == ProofType.DISPROOF:
+            return False
+        elif proof_type == ProofType.INCOMPLETE:
+            return 'Unknown'
+        else:
+            raise ValueError()
+    else:
+        raise ValueError()
+
+
 class _DistractorNode:
 
     def __init__(self, distractor: Formula):
@@ -23,12 +58,16 @@ class NLProofSDataset:
 
     def __init__(self,
                  pipeline: ProofTreeGenerationPipeline,
+                 proof_types: List[str],
                  world_assump: str,
                  depth: int,
                  max_leaf_extensions: int,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
-        self.world_assump = world_assump
+
+        self.proof_types = [ProofType(proof_type) for proof_type in proof_types]
+        self.world_assump = WorldAssumption(world_assump)
+
         self.depth = depth
         self.max_leaf_extensions = max_leaf_extensions
         self.raise_if_translation_not_found = raise_if_translation_not_found
@@ -47,45 +86,34 @@ class NLProofSDataset:
         def is_distractor(node: Union[ProofNode, _DistractorNode]) -> bool:
             return isinstance(node, _DistractorNode)
 
-        def _get_sent(node: Union[ProofNode, _DistractorNode]) -> str:
+        def _get_sent_from_node(node: Union[ProofNode, _DistractorNode]) -> str:
             return node.formula.translation or node.formula.rep
 
-        sum_stats = defaultdict(int)
-        hypothesis_lengths = []
-        context_lengths = []
-        mean_proof_lengths = []
+        def _get_sent_from_formula(formula: Formula) -> str:
+            return formula.translation or formula.rep
 
+        cum_stats = defaultdict(int)
         for i_sample in range(size):
-            proof_tree, distractor_formulas, pipeline_stats = self.pipeline.run(
+            proof_tree, root_negation_formula, distractor_formulas, pipeline_stats = self.pipeline.run(
                 self.depth,
                 self.max_leaf_extensions,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
-            sum_stats['trees'] += 1
-            for key, count in flatten_dict(pipeline_stats).items():
-                sum_stats[key] += count
 
-            sum_stats['distractor_formulas'] += len(distractor_formulas)
-
-            if self.world_assump == 'label_true_only':
-                label = True
-                unproven_leaf_nodes = []
-            elif self.world_assump == 'CWA':
-                if i_sample % 2 == 0:
-                    label = True
-                    unproven_leaf_nodes = []
-                else:
-                    label = False
-                    unproven_leaf_nodes = random.sample(proof_tree.leaf_nodes,
-                                                        max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
-            elif self.world_assump == 'OWA':
-                raise NotImplementedError()
+            proof_type = self.proof_types[i_sample % len(self.proof_types)]
+            if proof_type == ProofType.PROOF:
+                hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
+                missing_leaf_nodes = []
+            elif proof_type == ProofType.DISPROOF:
+                hypothesis = _get_sent_from_formula(root_negation_formula)
+                missing_leaf_nodes = []
+            elif proof_type == ProofType.INCOMPLETE:
+                hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
+                missing_leaf_nodes = random.sample(proof_tree.leaf_nodes,
+                                                   max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
             else:
                 raise ValueError()
-
-            hypothesis = _get_sent(proof_tree.root_node)
-            hypothesis_lengths.append(len(hypothesis.split(' ')))
 
             all_nodes: List[Union[ProofNode, _DistractorNode]] = list(proof_tree.nodes)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
@@ -119,18 +147,17 @@ class NLProofSDataset:
                     id2node[id_] = node
 
             context = ' '.join([
-                f'{id_}: {_get_sent(node)}'
+                f'{id_}: {_get_sent_from_node(node)}'
                 for id_, node in id2node.items()
-                if id_.startswith('sent') and node not in unproven_leaf_nodes
+                if id_.startswith('sent') and node not in missing_leaf_nodes
             ])
-            context_lengths.append(len(context.split(' ')))
 
             proof_elems = []
-            unproven_nodes = copy.copy(unproven_leaf_nodes)
+            missing_nodes = copy.copy(missing_leaf_nodes)
             for node in proof_tree.depth_first_traverse():
                 if is_root(node):
-                    if any((child in unproven_nodes for child in node.children)):
-                        unproven_nodes.append(node)
+                    if any((child in missing_nodes for child in node.children)):
+                        missing_nodes.append(node)
                         continue
 
                     child_ids = [node2id[child] for child in node.children]
@@ -141,13 +168,13 @@ class NLProofSDataset:
                     continue
 
                 elif is_int(node):
-                    if any((child in unproven_nodes for child in node.children)):
-                        unproven_nodes.append(node)
+                    if any((child in missing_nodes for child in node.children)):
+                        missing_nodes.append(node)
                         continue
 
                     node_id = node2id[node]
                     child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(child_ids) + f' -> {node_id}: {_get_sent(node)}'
+                    proof_str = ' & '.join(child_ids) + f' -> {node_id}: {_get_sent_from_node(node)}'
                     proof_elems.append(proof_str)
 
                 elif is_distractor(node):
@@ -157,27 +184,28 @@ class NLProofSDataset:
                     raise Exception()
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
-            mean_proof_lengths.append(mean([len(proof_str.split(' ')) for proof_str in proof_strs]))
 
             dataset_json = {
                 'hypothesis': hypothesis,
                 'context': context,
                 'proofs': proof_strs,
-                'answer': label,
+                'proof_type': proof_type.value,
+                'answer': _make_instance_label(proof_type, self.world_assump),
                 'depth': proof_tree.depth,
             }
 
+            for key, count in flatten_dict(pipeline_stats).items():
+                cum_stats[key] += count
+            cum_stats['length_hypothesis'] += len(hypothesis.split(' '))
+            cum_stats['length_context'] += len(context.split(' '))
+            cum_stats['length_proof'] += mean([len(proof_str.split(' ')) for proof_str in proof_strs])
+            cum_stats['tree'] += 1
+
             ave_stats = {}
-            for name, count in sum_stats.items():
-                if name.startswith('tree.'):
-                    ave_stats[name] = count / sum_stats['trees']
-                else:
+            for name, count in cum_stats.items():
+                if name == 'tree':
                     ave_stats[name] = count
+                else:
+                    ave_stats[name] = count / cum_stats['tree']
 
-            ave_stats.update({
-                'length.hypothesis': mean(hypothesis_lengths),
-                'length.context': mean(context_lengths),
-                'length.proof': mean(mean_proof_lengths),
-            })
-
-            yield dataset_json, proof_tree, distractor_formulas, ave_stats
+            yield dataset_json, proof_tree, distractor_formulas, flatten_dict({'cum': cum_stats, 'ave': ave_stats})
