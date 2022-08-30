@@ -1,9 +1,9 @@
-from typing import List, Optional, Tuple, Dict, Any
+from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
 
 from formal_logic.formula import Formula
-from formal_logic.proof import ProofTree
+from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.proof_tree_generators import ProofTreeGenerator
 from formal_logic.distractors import FormalLogicDistractor
 from formal_logic.translators import Translator
@@ -69,6 +69,45 @@ class ProofTreeGenerationPipeline:
                 'others': defaultdict(int),
             },
         }
+
+        # tree stats
+        def get_node_formulas(node: Optional[ProofNode]) -> Set[Formula]:
+            formulas = set([])
+
+            if node is None:
+                pass
+            else:
+                formulas.add(node.formula)
+                if node.argument is None:
+                    pass
+                else:
+                    formulas = formulas.union(set(node.argument.all_formulas))
+            return formulas
+
+        num_formulas = len({
+            formula
+            for node in proof_tree.nodes
+            for formula in list(get_node_formulas(node))
+        })
+        num_leaf_formulas = len({
+            formula
+            for node in proof_tree.leaf_nodes
+            for formula in list(get_node_formulas(node))
+        })
+        tree_stats = {
+            'nodes': len(proof_tree.nodes),
+            'nodes_leaf': len(proof_tree.leaf_nodes),
+            'nodes_non_leaf': len(proof_tree.nodes) - len(proof_tree.leaf_nodes),
+
+            'formulas': num_formulas,
+            'formulas_leaf': num_leaf_formulas,
+            'formulas_non_leaf': num_formulas - num_leaf_formulas,
+
+            'depth': proof_tree.depth,
+        }
+        stats['tree'] = tree_stats
+
+        # argument & translation stats
         for node in proof_tree.nodes:
             if node.argument is not None:
                 stats['arguments'][node.argument.id] += 1

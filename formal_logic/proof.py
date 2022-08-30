@@ -81,10 +81,19 @@ class ProofTree:
 
     @property
     def depth(self) -> int:
+        """ The depth of a binary tree is the total number of edges from the root node to the most distant leaf node.
+
+        See https://www.baeldung.com/cs/binary-tree-height#definition.
+        """
+
         return max([self.get_node_depth(leaf_node)
                     for leaf_node in self.leaf_nodes])
 
     def get_node_depth(self, node: ProofNode) -> int:
+        """ The depth of a node in a binary tree is the total number of edges from the root node to the target node.
+
+        See https://www.baeldung.com/cs/binary-tree-height#definition.
+        """
         depth = 0
         cur_node = node
         while cur_node.parent is not None:
@@ -112,9 +121,10 @@ class ProofTree:
         rep = ''
         # rep = 'ProofTree(\n'
         for node, depth in self.depth_first_traverse(get_depth=True):
+            rep += ''.join([f'{_depth}    ' for _depth in range(0, 10)]) + '\n'
             rep += ''.join(['|    '] * 10) + '\n'
-            rep += '|    ' + '|    ' * depth + f'|  {node.argument}\n'
-            rep += '|    ' + '|    ' * depth + f'|{node}\n'
+            rep += '|    ' * depth + f'|  {node.argument}\n'
+            rep += '|    ' * depth + f'|{node}\n'
             rep += ''.join(['|    '] * 10) + '\n'
         # rep += '\n)'
         return rep

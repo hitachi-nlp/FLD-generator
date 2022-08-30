@@ -1,13 +1,7 @@
 # todo
-* depth
-    - 定義をきちんとする．
-    - 0も含める？
-* 系列が長い．何が効いている見る．
-    * pretty printがdepthをきちんと表すようにしたい．
-        - depthの数もきちんと定義する．
-* not A に it is not the factを追加する
 * 初期実験の設定チューニング
     - 系列を短くするように．
+* not A に it is not the factを追加する
 * 初期実験
     - 目的: 我々の手法で，きちんと学習ができることを確認する．
     - todo
@@ -107,10 +101,15 @@
         - pushed formula = inverse of pulled formula
 * 実行速度
     - 1sec / (1 tree * 1 process)
-* depthの定義は soft reasoner 3.1 overviewに従う
-    ```
-    The facts, rules, and questions are then expressed in (synthetic) English using simple natural language templates. We generate five datasets, each constrained by the maximum depth of inference required to prove the facts used in its questions (up to depths D=0, D≤1, D≤2, D≤3 and D≤5 respectively). Depth D=0 means the true facts can be “proved” by simple lookup in the context (no inference)
-    ```
+* depthの定義 
+    - RuleTaker (soft reasoner 3.1 overview)
+        ```
+        The facts, rules, and questions are then expressed in (synthetic) English using simple natural language templates. We generate five datasets, each constrained by the maximum depth of inference required to prove the facts used in its questions (up to depths D=0, D≤1, D≤2, D≤3 and D≤5 respectively). Depth D=0 means the true facts can be “proved” by simple lookup in the context (no inference)
+        ```
+    - ProofTree
+        - いわゆるtreeのdepth
+        - ./formal_logic/proof.py: ProofTree
+    両者の定義は一致している．
 
 ## Known issues
 * add_complicated_arguments=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．

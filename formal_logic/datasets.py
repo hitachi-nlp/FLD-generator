@@ -50,7 +50,7 @@ class NLProofSDataset:
         def _get_sent(node: Union[ProofNode, _DistractorNode]) -> str:
             return node.formula.translation or node.formula.rep
 
-        stats = defaultdict(int)
+        sum_stats = defaultdict(int)
         hypothesis_lengths = []
         context_lengths = []
         mean_proof_lengths = []
@@ -62,9 +62,11 @@ class NLProofSDataset:
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
-            stats['trees'] += 1
+            sum_stats['trees'] += 1
             for key, count in flatten_dict(pipeline_stats).items():
-                stats[key] += count
+                sum_stats[key] += count
+
+            sum_stats['distractor_formulas'] += len(distractor_formulas)
 
             if self.world_assump == 'label_true_only':
                 label = True
@@ -165,10 +167,17 @@ class NLProofSDataset:
                 'depth': proof_tree.depth,
             }
 
-            stats.update({
+            ave_stats = {}
+            for name, count in sum_stats.items():
+                if name.startswith('tree.'):
+                    ave_stats[name] = count / sum_stats['trees']
+                else:
+                    ave_stats[name] = count
+
+            ave_stats.update({
                 'length.hypothesis': mean(hypothesis_lengths),
                 'length.context': mean(context_lengths),
                 'length.proof': mean(mean_proof_lengths),
             })
 
-            yield dataset_json, proof_tree, distractor_formulas, stats.copy()
+            yield dataset_json, proof_tree, distractor_formulas, ave_stats

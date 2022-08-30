@@ -155,9 +155,9 @@ def main(output_path,
     logger.info('batch_size_per_worker: %d', _batch_size_per_worker)
     logger.info('num_batches: %d', num_batches)
 
+    gathered_stats = defaultdict(int)
     with open(output_path, 'w') as f_out:
 
-        gathered_stats = defaultdict(int)
         for i_batch in range(num_batches):
             jobs = []
             for _ in range(num_workers):
@@ -199,6 +199,10 @@ def main(output_path,
             logger.info('=========================== gathered stats (batch=%d) ============================',
                         i_batch)
             logger.info('\n' + pformat(gathered_stats))
+
+    with open(str(output_path) + '.stats.json', 'w') as f_out:
+        json.dump(dict(gathered_stats), f_out,
+                  ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
 
 
 

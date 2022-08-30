@@ -196,7 +196,6 @@ def _generate_stem(arguments: List[Argument],
             proof_tree.add_node(node)
 
     for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):  # try all the argument as starting point
-        start_arg = cur_arg
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
         cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
