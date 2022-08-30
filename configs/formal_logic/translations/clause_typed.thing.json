@@ -1076,8 +1076,9 @@
       ],
 
       "¬{A}": [
-        "a {A}[NOUN] does not occur",
-        "<phrase::not_fact_intro> <clause::verb::{A}>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::{A}>",
+
+        "a {A}[NOUN] does not occur"
       ],
 
 
@@ -1096,16 +1097,16 @@
 
 
       "¬({A} & {B})": [
-        "<phrase::not_fact_intro> <clause::verb::({A} & {B})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A} & {B})>"
       ],
       "¬(¬{A} & {B})": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A} & {B})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A} & {B})>"
       ],
       "¬({A} & ¬{B})": [
-        "<phrase::not_fact_intro> <clause::verb::({A} & ¬{B})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A} & ¬{B})>"
       ],
       "¬(¬{A} & ¬{B})": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A} & ¬{B})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A} & ¬{B})>"
       ],
 
 
@@ -1125,16 +1126,16 @@
 
 
       "¬({A} v {B})": [
-          "<phrase::not_fact_intro> <clause::verb::({A} v {B})>"
+          "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A} v {B})>"
       ],
       "¬(¬{A} v {B})": [
-          "<phrase::not_fact_intro> <clause::verb::(¬{A} v {B})>"
+          "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A} v {B})>"
       ],
       "¬({A} v ¬{B})": [
-          "<phrase::not_fact_intro> <clause::verb::({A} v ¬{B})>"
+          "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A} v ¬{B})>"
       ],
       "¬(¬{A} v ¬{B})": [
-          "<phrase::not_fact_intro> <clause::verb::(¬{A} v ¬{B})>"
+          "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A} v ¬{B})>"
       ],
 
 
@@ -1145,6 +1146,8 @@
         "a {a}[NOUN] {A}[VERB.s]"
       ],
       "¬{A}{a}": [
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::{A}{a}>",
+
         "a {a}[NOUN] is not {A}[ADJ]",
         "a {a}[NOUN] is {A}[ADJ.neg]",
         "a {a}[NOUN] does not {A}[VERB]"
@@ -1199,16 +1202,16 @@
 
 
       "¬({A}{a} & {B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::({A}{a} & {B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}{a} & {B}{a})>"
       ],
       "¬(¬{A}{a} & {B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} & {B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}{a} & {B}{a})>"
       ],
       "¬({A}{a} & ¬{B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::({A}{a} & ¬{B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}{a} & ¬{B}{a})>"
       ],
       "¬(¬{A}{a} & ¬{B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} & ¬{B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}{a} & ¬{B}{a})>"
       ],
 
 
@@ -1260,16 +1263,16 @@
 
 
       "¬({A}{a} v {B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::({A}{a} v {B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}{a} v {B}{a})>"
       ],
       "¬(¬{A}{a} v {B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} v {B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}{a} v {B}{a})>"
       ],
       "¬({A}{a} v ¬{B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::({A}{a} v ¬{B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}{a} v ¬{B}{a})>"
       ],
       "¬(¬{A}{a} v ¬{B}{a})": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}{a} v ¬{B}{a})>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}{a} v ¬{B}{a})>"
       ],
 
 
@@ -1284,10 +1287,11 @@
         "something {A}[VERB.s]"
       ],
       "¬{A}x": [
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::{A}x>",
+
         "something is not {A}[ADJ]",
         "something is {A}[ADJ.neg]",
-        "something does not {A}[VERB]",
-        "<phrase::not_fact_intro> <clause::verb::{A}x>"
+        "something does not {A}[VERB]"
       ],
 
 
@@ -1339,16 +1343,16 @@
 
 
       "¬({A}x & {B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::({A}x & {B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}x & {B}x)>"
       ],
       "¬(¬{A}x & {B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}x & {B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}x & {B}x)>"
       ],
       "¬({A}x & ¬{B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::({A}x & ¬{B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}x & ¬{B}x)>"
       ],
       "¬(¬{A}x & ¬{B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}x & ¬{B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}x & ¬{B}x)>"
       ],
 
 
@@ -1400,16 +1404,16 @@
       ],
 
       "¬({A}x v {B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::({A}x v {B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}x v {B}x)>"
       ],
       "¬(¬{A}x v {B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}x v {B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}x v {B}x)>"
       ],
       "¬({A}x v ¬{B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::({A}x v ¬{B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::({A}x v ¬{B}x)>"
       ],
       "¬(¬{A}x v ¬{B}x)": [
-        "<phrase::not_fact_intro> <clause::verb::(¬{A}x v ¬{B}x)>"
+        "<phrase::not_prefix.verb_clause_to_verb_clause> <clause::verb::(¬{A}x v ¬{B}x)>"
       ]
     },
 
@@ -1430,8 +1434,9 @@
         "that a {A}[NOUN] occurs"
       ],
       "¬{A}.fact": [
-        "that a {A}[NOUN] does not occur",
-        "<phrase::not_fact_intro> <clause::noun::{A}.fact>"
+        "that <clause::noun::{A}.fact> <phrase::not_postfix.noun_clause_to_verb_clause>",
+
+        "that a {A}[NOUN] does not occur"
       ],
 
 
@@ -1454,16 +1459,16 @@
       ],
 
       "¬({A} & {B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::({A} & {B}).fact>"
+          "that <clause::noun::({A} & {B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
       "¬(¬{A} & {B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::(¬{A} & {B}).fact>"
+          "that <clause::noun::(¬{A} & {B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
       "¬({A} & ¬{B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::({A} & ¬{B}).fact>"
+          "that <clause::noun::({A} & ¬{B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
       "¬(¬{A} & ¬{B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::(¬{A} & ¬{B}).fact>"
+          "that <clause::noun::(¬{A} & ¬{B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
 
 
@@ -1487,16 +1492,16 @@
       ],
 
       "¬({A} v {B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::({A} v {B}).fact>"
+          "that <clause::noun::({A} v {B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
       "¬(¬{A} v {B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::(¬{A} v {B}).fact>"
+          "that <clause::noun::(¬{A} v {B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
       "¬({A} v ¬{B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::({A} v ¬{B}).fact>"
+          "that <clause::noun::({A} v ¬{B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
       "¬(¬{A} v ¬{B}).fact": [
-          "<phrase::not_fact_intro> <clause::noun::(¬{A} v ¬{B}).fact>"
+          "that <clause::noun::(¬{A} v ¬{B}).fact> <phrase::not_postfix.noun_clause_to_verb_clause>"
       ],
 
 
@@ -1914,10 +1919,19 @@
 
   "phrase": {
     "cause_verb": [
-      "leads to"
+      "leads to",
+      "causes",
+      "results in"
     ],
-    "not_fact_intro": [
-      "it is not the fact that"
+    "not_prefix.verb_clause_to_verb_clause": [
+      "it is wrong that",
+      "it is not the fact that",
+      "it is not true that"
+    ],
+    "not_postfix.noun_clause_to_verb_clause": [
+      "is wrong",
+      "is not the fact",
+      "is not true"
     ]
   }
 

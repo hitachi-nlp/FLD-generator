@@ -525,7 +525,8 @@ class ClauseTypedTranslator(Translator):
                     else:
                         corrected_words.append('a')
                 else:
-                    raise ValueError('Sentence ends with particle: {sentence}')
+                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
+                    corrected_words.append(word)
             else:
                 corrected_words.append(word)
         return ' '.join(corrected_words)

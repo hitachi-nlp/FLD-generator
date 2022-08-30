@@ -1,16 +1,10 @@
 # todo
-* 初期実験の設定チューニング
-    - 系列を短くするように．
-* not A に it is not the factを追加する
-* 初期実験
-    - 目的: 我々の手法で，きちんと学習ができることを確認する．
-    - todo
-        - 反証可能な事例
-        - 簡単なデータセットで学習してみる．
-            - depth
-            - leafs
-            - distractors
-            - rule
+* 反証可能な事例
+* レベル分け実験
+    - そもそもきちんと学習できるのか？を確認する．
+* translationを豊富にする．
+    - causal verb
+    - if then vs "because"
 * 研究計画を立てる．
     * backward
         * [pending] 元の問題より簡単か，自明で無い．

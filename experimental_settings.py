@@ -121,6 +121,95 @@ _DATASET_SETTINGS = {
     },
 
 
+    '20220830.depth-3': {
+        'world_assump': 'label_true_only',
+
+        'argument_configs': [
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/axiom.pred_arg.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/formal_logic/arguments/theorem.pred_only.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/theorem.pred_arg.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 3,
+        'max_leaf_extensions': 3,
+        'distractor_factor': 0.0,
+
+        'translation_configs': [
+            './configs/formal_logic/translations/clause_typed.thing.json'
+        ],
+    },
+
+
+    '20220830.distractor': {
+        'world_assump': 'label_true_only',
+
+        'argument_configs': [
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/axiom.pred_arg.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/formal_logic/arguments/theorem.pred_only.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/theorem.pred_arg.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 3,
+        'max_leaf_extensions': 3,
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/formal_logic/translations/clause_typed.thing.json'
+        ],
+    },
+
+
+    '20220830.depth-5': {
+        'world_assump': 'label_true_only',
+
+        'argument_configs': [
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/axiom.pred_arg.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/formal_logic/arguments/theorem.pred_only.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/theorem.pred_arg.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 5,
+        'max_leaf_extensions': 5,
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/formal_logic/translations/clause_typed.thing.json'
+        ],
+    },
+
 }
 
 
