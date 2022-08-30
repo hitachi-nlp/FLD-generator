@@ -1,18 +1,5 @@
 [
   {
-      "id": "implication_elim.pred_arg",
-      "premises": [
-          "{A}{a} -> {B}{b}",
-          "{A}{a}"
-      ],
-      "conclusion": "{B}{b}"
-  },
-  {
-      "id": "__implication_elim.pred_arg"
-  },
-
-
-  {
       "id": "and_intro.pred_arg",
       "premises": [
           "{A}{a}",

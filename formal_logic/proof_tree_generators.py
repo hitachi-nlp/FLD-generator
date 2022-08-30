@@ -130,14 +130,16 @@ class ProofTreeGenerator:
         return _arguments, _argument_weights
 
     def generate_tree(self,
-                      depth=3,
+                      depth: int,
+                      max_leaf_extensions: int,
                       max_retry=100) -> Optional[ProofTree]:
         for i_trial in range(0, max_retry):
             logger.info('-- generate_tree() trial=%d', i_trial)
             try:
                 proof_tree = _generate_tree(self.arguments,
+                                            depth,
+                                            max_leaf_extensions,
                                             argument_weights=self.argument_weights,
-                                            depth=depth,
                                             elim_dneg=self.elim_dneg,
                                             timeout=self.timeout)
                 logger.info('-- generate_tree() succeeded!')
@@ -152,15 +154,16 @@ class ProofTreeGenerator:
 
 @profile
 def _generate_tree(arguments: List[Argument],
+                   depth: int, 
+                   max_leaf_extensions: int,
                    argument_weights: Optional[Dict[Argument, float]] = None,
-                   depth=1,
                    elim_dneg=False,
                    timeout: Optional[int] = None) -> Optional[ProofTree]:
 
     timeout = timeout or 99999999
     with timeout_context(timeout, exception=TimeoutError):
         proof_tree = _generate_stem(arguments, depth, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
-        _extend_braches(proof_tree, arguments, depth, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
+        _extend_braches(proof_tree, arguments, max_leaf_extensions, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
 
     return proof_tree
 
@@ -332,7 +335,7 @@ def _generate_stem(arguments: List[Argument],
 @profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
-                    max_steps: int,
+                    num_max_extensions: int,
                     predicate_pool: List[str],
                     constant_pool: List[str],
                     argument_weights: Optional[Dict[Argument, float]] = None,
@@ -348,7 +351,7 @@ def _extend_braches(proof_tree: ProofTree,
 
     cur_step = 0
     while True:
-        if cur_step >= max_steps:
+        if cur_step >= num_max_extensions:
             break
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]

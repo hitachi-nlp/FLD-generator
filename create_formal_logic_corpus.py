@@ -44,7 +44,8 @@ def load_dataset(argument_config: str,
                  keep_dneg: bool,
                  distractor_factor: float,
                  world_assump: str,
-                 depth: int):
+                 depth: int,
+                 max_leaf_extensions: int):
     arguments = load_arguments(argument_config)
     generator = ProofTreeGenerator(
         arguments,
@@ -65,7 +66,7 @@ def load_dataset(argument_config: str,
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    return NLProofSDataset(pipeline, world_assump, depth=depth)
+    return NLProofSDataset(pipeline, world_assump, depth, max_leaf_extensions)
 
 
 def generate_instances(size: int, *args):
@@ -113,6 +114,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
               multiple=True,
               default=['./configs/formal_logic/translations/clause_typed.thing.json'])
 @click.option('--depth', type=int, default=5)
+@click.option('--max-leaf-extensions', type=int, default=5)
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--keep-dneg', is_flag=True, default=False)
@@ -126,6 +128,7 @@ def main(output_path,
          translation_config,
          size,
          depth,
+         max_leaf_extensions,
          complication,
          quantification,
          keep_dneg,
@@ -169,6 +172,7 @@ def main(output_path,
                         distractor_factor,
                         world_assump,
                         depth,
+                        max_leaf_extensions,
                     )
                 )
 

@@ -1,0 +1,16 @@
+[
+  {
+      "id": "De_Morgan_0.pred_only",
+      "premises": [
+          "¬({A} & {B})"
+      ],
+      "conclusion": "(¬{A} v ¬{B})"
+  },
+  {
+      "id": "De_Morgan_1.pred_only",
+      "premises": [
+          "¬({A} v {B})"
+      ],
+      "conclusion": "(¬{A} & ¬{B})"
+  }
+]

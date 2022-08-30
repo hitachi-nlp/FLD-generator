@@ -28,11 +28,12 @@ class ProofTreeGenerationPipeline:
 
     @profile
     def run(self,
-            depth: int = 5,
+            depth: int,
+            max_leaf_extensions: int,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Optional[List[Formula]], Dict[str, int]]:
         while True:
             logger.info('========================== generating proof tree... ============================')
-            proof_tree = self.generator.generate_tree(depth=depth)
+            proof_tree = self.generator.generate_tree(depth, max_leaf_extensions)
             logger.info('========================== generating proof tree done! ============================')
 
             if proof_tree is None:

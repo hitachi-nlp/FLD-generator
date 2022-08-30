@@ -1,4 +1,6 @@
 import json
+
+
 import random
 from typing import List, Optional
 import logging
@@ -44,7 +46,7 @@ def load_translator(type_: str,
                     do_translate_to_nl=True):
     if type_ == 'sentence_wise_translator':
         if from_ == 'config':
-            sentence_translations_config_path = './configs/formal_logic/translations/syllogistic_corpus-02.json'
+            sentence_translations_config_path = './configs/formal_logic/translations/old/syllogistic_corpus-02.json'
             sentence_translations = json.load(open(sentence_translations_config_path))
             predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
             constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
@@ -141,7 +143,7 @@ def test_original():
     distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
-        config_paths=['./configs/formal_logic/arguments/syllogistic_corpus-02.json'],
+        config_paths=['./configs/formal_logic/arguments/old/syllogistic_corpus-02.json'],
 
         # the config already includes the complicated and quantified arguments
         complicated_arguments_weight=0.0,
@@ -150,8 +152,10 @@ def test_original():
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(pipeline, 'CWA',
-                              depth=5,
+    dataset = NLProofSDataset(pipeline,
+                              'CWA',
+                              5,
+                              5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -165,8 +169,8 @@ def test_LP_pred_only():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.pred_only.json',
-            './configs/formal_logic/arguments/LP.theorem.pred_only.json',
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            './configs/formal_logic/arguments/theorem.pred_only.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
@@ -174,8 +178,10 @@ def test_LP_pred_only():
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(pipeline, 'CWA',
-                              depth=5,
+    dataset = NLProofSDataset(pipeline,
+                              'CWA',
+                              5,
+                              5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -207,8 +213,10 @@ def test_minimum_PL():
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(pipeline, 'CWA',
-                              depth=5,
+    dataset = NLProofSDataset(pipeline,
+                              'CWA',
+                              5,
+                              5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -222,11 +230,11 @@ def test_LP_pred_arg():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.pred_only.json',
-            './configs/formal_logic/arguments/LP.theorem.pred_only.json',
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            './configs/formal_logic/arguments/theorem.pred_only.json',
 
-            './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
-            './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
+            './configs/formal_logic/arguments/axiom.pred_arg.json',
+            './configs/formal_logic/arguments/theorem.pred_arg.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
@@ -234,8 +242,10 @@ def test_LP_pred_arg():
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(pipeline, 'CWA',
-                              depth=5,
+    dataset = NLProofSDataset(pipeline,
+                              'CWA',
+                              5,
+                              5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -249,11 +259,17 @@ def test_PL_pred_arg():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/LP.axiom.pred_only.json',
-            './configs/formal_logic/arguments/LP.theorem.pred_only.json',
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
-            './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
+            './configs/formal_logic/arguments/axiom.pred_arg.json',
+            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/formal_logic/arguments/theorem.pred_only.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+
+            './configs/formal_logic/arguments/theorem.pred_arg.json',
+            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.3,
@@ -261,8 +277,10 @@ def test_PL_pred_arg():
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    dataset = NLProofSDataset(pipeline, 'CWA',
-                              depth=5,
+    dataset = NLProofSDataset(pipeline,
+                              'CWA',
+                              5,
+                              5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

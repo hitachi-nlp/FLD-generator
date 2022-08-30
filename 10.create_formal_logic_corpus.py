@@ -10,6 +10,7 @@ from script_engine import QsubEngine, SubprocessEngine
 from logger_setup import setup as setup_logger, create_file_handler
 from lab import build_dir, save_params
 from joblib import Parallel, delayed
+from .experimental_settings import get_dataset_setting
 
 logger = logging.getLogger(__name__)
 
@@ -26,41 +27,19 @@ def main():
     setup_logger(level=logging.INFO)
     logger.info('============================== [10.create_formal_logic_corpus.py] start! ============================')
 
-    # corpus_name = '20220827.trial'
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220827.trial')
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/debug')
 
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220828.size--100')
     output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220828.size--100000')
 
-    argument_configs = [
-        './configs/formal_logic/arguments/LP.axiom.pred_only.json',
-        './configs/formal_logic/arguments/LP.theorem.pred_only.json',
-
-        './configs/formal_logic/arguments/LP.axiom.pred_arg.json',
-        './configs/formal_logic/arguments/LP.theorem.pred_arg.json',
-    ]
-    translation_configs = [
-        './configs/formal_logic/translations/clause_typed.thing.json'
-    ]
+    dataset_name = '20220828.size--100000'
 
     split_sizes = {
         'train': 100000,
         'valid': 1000,
         'test': 1000,
     }
-    """
-    - depth
-    - leafs
-    - distractors
-    - rule
-    """
-
-    depth = 5
-    complication = 0.3
-    quantification = 0.2
-    distractor_factor = 1
-    world_assump = 'label_true_only'
 
     engine = QsubEngine('ABCI', 'rt_C.small')
     # engine = SubprocessEngine()
@@ -73,26 +52,17 @@ def main():
 
     # -- fixed --
     settings = {
-        # 'corpus_name': corpus_name,
-        'argument_configs': argument_configs,
-        'translation_configs': translation_configs,
-
-        'depth': depth,
-        'complication': complication,
-        'quantification': quantification,
-        'distractor_factor': distractor_factor,
-        'world_assump': world_assump,
-
+        'dataset_name': dataset_name,
         'num_workers_per_job': num_workers_per_job,
     }
+    settings.update(get_dataset_setting(dataset_name))
 
     output_dir = build_dir(
         settings,
-        # top_dir=str(output_top_dir / settings["corpus_name"]),
-        top_dir=str(output_top_dir),
+        top_dir=str(output_top_dir / f'dataset_name={dataset_name}'),
         short=True,
         dirname_exclude_params=[
-            'corpus_name',
+            'dataset_name',
 
             'argument_configs',
             'translation_configs',
@@ -146,6 +116,7 @@ def main():
                 _make_multiple_value_option('--tc', job_settings['translation_configs']),
 
                 f'--depth {job_settings["depth"]}',
+                f'--max_leaf_extensions {job_settings["max_leaf_extensions"]}',
                 f'--complication {job_settings["complication"]}',
                 f'--quantification {job_settings["quantification"]}',
                 f'--distractor-factor {job_settings["distractor_factor"]}',

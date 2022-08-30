@@ -24,11 +24,13 @@ class NLProofSDataset:
     def __init__(self,
                  pipeline: ProofTreeGenerationPipeline,
                  world_assump: str,
-                 depth: int = 5,
+                 depth: int,
+                 max_leaf_extensions: int,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
         self.world_assump = world_assump
         self.depth = depth
+        self.max_leaf_extensions = max_leaf_extensions
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
     def generate(self, size: int) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
@@ -55,7 +57,8 @@ class NLProofSDataset:
 
         for i_sample in range(size):
             proof_tree, distractor_formulas, pipeline_stats = self.pipeline.run(
-                depth=self.depth,
+                self.depth,
+                self.max_leaf_extensions,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 

@@ -1,14 +1,28 @@
 # todo
+* depth
+    - 定義をきちんとする．
+    - 0も含める？
+* 系列が長い．何が効いている見る．
+    * pretty printがdepthをきちんと表すようにしたい．
+        - depthの数もきちんと定義する．
+* not A に it is not the factを追加する
+* 初期実験の設定チューニング
+    - 系列を短くするように．
 * 初期実験
     - 目的: 我々の手法で，きちんと学習ができることを確認する．
     - todo
-        - BLEUの表示
+        - 反証可能な事例
         - 簡単なデータセットで学習してみる．
             - depth
             - leafs
             - distractors
             - rule
 * 研究計画を立てる．
+    * backward
+        * [pending] 元の問題より簡単か，自明で無い．
+        * depth firstではなく，子供(=premise)は同時に生成すべきなのでは？
+        * merge
+        * 取りあえず，元の問題より簡単か = lossが小さくなるか，を見てみる．
     * FLNL (Formal Logic Natural Language) Corpus
     * introで「axiomを使うので，汎化する．」 => case studyで定理
     * EBでlow-resource実験をやる．事前学習の重要性が増すので，勝ちが確定する．
@@ -93,6 +107,10 @@
         - pushed formula = inverse of pulled formula
 * 実行速度
     - 1sec / (1 tree * 1 process)
+* depthの定義は soft reasoner 3.1 overviewに従う
+    ```
+    The facts, rules, and questions are then expressed in (synthetic) English using simple natural language templates. We generate five datasets, each constrained by the maximum depth of inference required to prove the facts used in its questions (up to depths D=0, D≤1, D≤2, D≤3 and D≤5 respectively). Depth D=0 means the true facts can be “proved” by simple lookup in the context (no inference)
+    ```
 
 ## Known issues
 * add_complicated_arguments=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．
