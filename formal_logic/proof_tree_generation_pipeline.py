@@ -31,6 +31,7 @@ class ProofTreeGenerationPipeline:
             depth: int,
             max_leaf_extensions: int,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], Dict[str, int]]:
+
         while True:
             logger.info('========================== generating proof tree... ============================')
             proof_tree = self.generator.generate_tree(depth, max_leaf_extensions)

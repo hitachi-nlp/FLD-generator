@@ -6,6 +6,7 @@ timeout-timer
 nltk
 pyinflect
 joblib
+transformers
 
 script_engine@git+https://github.com/HonoMi/script-engine.git@master
 lab@git+https://github.com/HonoMi/lab.git@master

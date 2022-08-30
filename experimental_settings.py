@@ -2,8 +2,10 @@ from typing import Dict
 import copy
 
 _DATASET_SETTINGS = {
+
     '20220828.size--100000': {
-        'world_assump': 'label_true_only',
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',
@@ -32,7 +34,8 @@ _DATASET_SETTINGS = {
     },
 
     '20220830.basic': {
-        'world_assump': 'label_true_only',
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',
@@ -62,7 +65,8 @@ _DATASET_SETTINGS = {
 
 
     '20220830.pred_arg': {
-        'world_assump': 'label_true_only',
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',
@@ -91,8 +95,9 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.and_or_not_quant': {
-        'world_assump': 'label_true_only',
+    '20220830.pred_arg.and_or_not_quant': {
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',
@@ -122,7 +127,8 @@ _DATASET_SETTINGS = {
 
 
     '20220830.depth-3': {
-        'world_assump': 'label_true_only',
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',
@@ -152,7 +158,8 @@ _DATASET_SETTINGS = {
 
 
     '20220830.distractor': {
-        'world_assump': 'label_true_only',
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',
@@ -182,7 +189,8 @@ _DATASET_SETTINGS = {
 
 
     '20220830.depth-5': {
-        'world_assump': 'label_true_only',
+        'world_assump': 'OWA',
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/formal_logic/arguments/axiom.pred_only.json',

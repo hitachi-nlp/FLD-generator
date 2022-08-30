@@ -185,27 +185,32 @@ class NLProofSDataset:
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
 
+            label = _make_instance_label(proof_type, self.world_assump)
             dataset_json = {
                 'hypothesis': hypothesis,
                 'context': context,
                 'proofs': proof_strs,
+
                 'proof_type': proof_type.value,
-                'answer': _make_instance_label(proof_type, self.world_assump),
+                'answer': label,
+
                 'depth': proof_tree.depth,
             }
 
             for key, count in flatten_dict(pipeline_stats).items():
                 cum_stats[key] += count
+            cum_stats[f'answer.{label}'] += 1
+            cum_stats[f'proof_type.{proof_type.value}'] += 1
             cum_stats['length_hypothesis'] += len(hypothesis.split(' '))
             cum_stats['length_context'] += len(context.split(' '))
             cum_stats['length_proof'] += mean([len(proof_str.split(' ')) for proof_str in proof_strs])
             cum_stats['tree'] += 1
 
-            ave_stats = {}
+            avg_stats = {}
             for name, count in cum_stats.items():
                 if name == 'tree':
-                    ave_stats[name] = count
+                    avg_stats[name] = count
                 else:
-                    ave_stats[name] = count / cum_stats['tree']
+                    avg_stats[name] = count / cum_stats['tree']
 
-            yield dataset_json, proof_tree, distractor_formulas, flatten_dict({'cum': cum_stats, 'ave': ave_stats})
+            yield dataset_json, proof_tree, distractor_formulas, flatten_dict({'cum': cum_stats, 'avg': avg_stats})

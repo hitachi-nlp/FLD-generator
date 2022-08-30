@@ -43,6 +43,7 @@ def load_dataset(argument_config: str,
                  quantification: float,
                  keep_dneg: bool,
                  distractor_factor: float,
+                 proof_types: List[str],
                  world_assump: str,
                  depth: int,
                  max_leaf_extensions: int):
@@ -66,7 +67,7 @@ def load_dataset(argument_config: str,
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    return NLProofSDataset(pipeline, world_assump, depth, max_leaf_extensions)
+    return NLProofSDataset(pipeline, proof_types, world_assump, depth, max_leaf_extensions)
 
 
 def generate_instances(size: int, *args):
@@ -173,6 +174,7 @@ def main(output_path,
                         quantification,
                         keep_dneg,
                         distractor_factor,
+                        proof_types,
                         world_assump,
                         depth,
                         max_leaf_extensions,
@@ -185,6 +187,7 @@ def main(output_path,
 
             cnt = 0
             is_done = False
+            num_used_jobs = 0
             for instances, stats in instances_list:
                 if is_done:
                     break
@@ -195,8 +198,16 @@ def main(output_path,
                         break
                     f_out.write(json.dumps(nlproof_json) + '\n')
                     cnt += 1
+
                 for name, count in stats.items():
                     gathered_stats[name] += count
+
+                num_used_jobs += 1
+
+            for name, count in stats.items():
+                if name.startswith('avg.'):
+                    gathered_stats[name] = gathered_stats[name] / num_used_jobs
+
             logger.info('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
 
             logger.info('=========================== gathered stats (batch=%d) ============================',
