@@ -1,6 +1,6 @@
 import random
 from enum import Enum
-from statistics import mean
+from statistics import mean, stdev
 from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
 import logging
 import copy
@@ -10,6 +10,7 @@ from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipel
 from formal_logic.formula import Formula
 from formal_logic.proof import ProofTree, ProofNode
 from formal_logic.utils import flatten_dict
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +73,7 @@ class NLProofSDataset:
         self.max_leaf_extensions = max_leaf_extensions
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
+    @profile
     def generate(self, size: int) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
 
         def is_root(node: Union[ProofNode, _DistractorNode]) -> bool:
@@ -92,7 +94,8 @@ class NLProofSDataset:
         def _get_sent_from_formula(formula: Formula) -> str:
             return formula.translation or formula.rep
 
-        cum_stats = defaultdict(int)
+        sample_cum_stats = defaultdict(int)
+        all_sample_stats = defaultdict(list)
         for i_sample in range(size):
             proof_tree, root_negation_formula, distractor_formulas, pipeline_stats = self.pipeline.run(
                 self.depth,
@@ -197,20 +200,36 @@ class NLProofSDataset:
                 'depth': proof_tree.depth,
             }
 
-            for key, count in flatten_dict(pipeline_stats).items():
-                cum_stats[key] += count
-            cum_stats[f'answer.{label}'] += 1
-            cum_stats[f'proof_type.{proof_type.value}'] += 1
-            cum_stats['length_hypothesis'] += len(hypothesis.split(' '))
-            cum_stats['length_context'] += len(context.split(' '))
-            cum_stats['length_proof'] += mean([len(proof_str.split(' ')) for proof_str in proof_strs])
-            cum_stats['tree'] += 1
+            # Update statistics
+            sample_stats = flatten_dict(pipeline_stats)
+            sample_stats[f'answer.{label}'] = 1
+            sample_stats[f'proof_type.{proof_type.value}'] = 1
+            sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
+            sample_stats['word_count_context'] = len(context.split(' '))
+            sample_stats['word_count_proof'] = mean([len(proof_str.split(' ')) for proof_str in proof_strs])
+            sample_stats['word_count_all'] = sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']
+            sample_stats['tree'] = 1
 
-            avg_stats = {}
-            for name, count in cum_stats.items():
-                if name == 'tree':
-                    avg_stats[name] = count
-                else:
-                    avg_stats[name] = count / cum_stats['tree']
+            for name, count in sample_stats.items():
+                sample_cum_stats[name] += count
 
-            yield dataset_json, proof_tree, distractor_formulas, flatten_dict({'cum': cum_stats, 'avg': avg_stats})
+            for name, count in sample_stats.items():
+                if name.find('argument') >= 0 or name.find('translation') >= 0:
+                    continue
+                all_sample_stats[name].append(count)
+
+            sample_avg_stats = {
+                name: count / sample_cum_stats['tree']
+                for name, count in sample_cum_stats.items()
+                if name != 'tree'
+            }
+
+            sample_std_stats = {
+                name: stdev(count_list) if len(count_list) >= 2 else None
+                for name, count_list in all_sample_stats.items()
+            }
+
+            yield dataset_json,\
+                proof_tree,\
+                distractor_formulas,\
+                flatten_dict({'cum': sample_cum_stats, 'avg': sample_avg_stats, 'std': sample_std_stats})

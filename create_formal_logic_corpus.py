@@ -72,10 +72,10 @@ def load_dataset(argument_config: str,
 
 def generate_instances(size: int, *args):
     # logger = logging.getLogger(__name__)
-    logger.info('[pass or not checking for finding the cause of hangups] 00')  # HONOKA: we pass here
+    logger.debug('[pass or not checking for finding the cause of hangups] 00')  # HONOKA: we pass here
 
     dataset = load_dataset(*args)  # HONOKA: we pass here
-    logger.info('[pass or not checking for finding the cause of hangups] 01')
+    logger.debug('[pass or not checking for finding the cause of hangups] 01')
 
     data = []
     _final_stats = None
@@ -83,7 +83,7 @@ def generate_instances(size: int, *args):
         data.append((nlproof_json, proof_tree, distractors))
         _final_stats = stats
         log(logger, nlproof_json, proof_tree, distractors)
-    logger.info('[pass or not checking for finding the cause of hangups] 02')
+    logger.debug('[pass or not checking for finding the cause of hangups] 02')
     return data, _final_stats
 
 
@@ -181,9 +181,9 @@ def main(output_path,
                     )
                 )
 
-            logger.info('[pass or not checking for finding the cause of hangups] 0')  # HONOKA: we pass here
+            logger.debug('[pass or not checking for finding the cause of hangups] 0')  # HONOKA: we pass here
             instances_list = Parallel(n_jobs=num_workers, backend='multiprocessing')(jobs)
-            logger.info('[pass or not checking for finding the cause of hangups] 1')  # HONOKA: we can't pass here
+            logger.debug('[pass or not checking for finding the cause of hangups] 1')  # HONOKA: we can't pass here
 
             cnt = 0
             is_done = False
@@ -205,10 +205,10 @@ def main(output_path,
                 num_used_jobs += 1
 
             for name, count in stats.items():
-                if name.startswith('avg.'):
+                if not name.startswith('cum.'):
                     gathered_stats[name] = gathered_stats[name] / num_used_jobs
 
-            logger.info('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
+            logger.debug('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
 
             logger.info('=========================== gathered stats (batch=%d) ============================',
                         i_batch)

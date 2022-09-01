@@ -33,17 +33,21 @@ def main():
 
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220828.size--100')
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220828.size--100000')
-    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220830.various_datasets.trial')
+    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220830.various_datasets.trial')
+    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220831.various_datasets.trial')
 
     dataset_names = [
-        # '20220828.size--100000',
-
-        '20220830.basic',
-        '20220830.pred_arg',
-        '20220830.and_or_not_quant',
-        '20220830.depth-3',
-        '20220830.distractor',
         '20220830.depth-5',
+
+        '20220830.depth-3.distractor',
+
+        '20220830.depth-3',
+
+        '20220830.pred_arg.and_or_not_quant',
+
+        '20220830.pred_arg',
+
+        '20220830.minimal',
     ]
 
     split_sizes = {

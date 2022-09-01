@@ -1,19 +1,10 @@
 # todo
 * レベル分け実験
-    - 目的: そもそもきちんと学習できるのか？を確認する．
-    - 名前をイケてるのにする．
-    - statsがいい感じになっていることを確認する．
-        - [doing] max_lenが長すぎないようにする．
-            * T5長くする
-                * [T5 Model : What is maximum sequence length that can be used with   pretrained T5 (3b model) checkpoint? · Issue #5204 · huggingface/transformers](https://github.com/huggingface/transformers/issues/5204)
-            * dataset側を短くする
-                - warningは出したい
-                - また，stdも出したい
-        - leaf vs distractors を良いあんばいにする．
 * translationを豊富にする．
     - causal verb
     - if then vs "because"
 * 研究計画を立てる．
+    * intro: 命題は帰納的に構築する．今回の場合は，(A v B)など．
     * ruletakerによる転移効果との比較
     * backward
         * [pending] 元の問題より簡単か，自明で無い．
@@ -113,12 +104,6 @@
         - いわゆるtreeのdepth
         - ./formal_logic/proof.py: ProofTree
     両者の定義は一致している．
-* max_len問題
-    - T5の場合，tokenization後に2倍ちょいの単語数になると見れば良い．
-        - ./show_tokenization_stats.py
-            ```
-            number of tokens before and after tokenization ratio:  1.7156897319083344 +- 0.2075041853259545
-            ```
 
 ## Known issues
 * add_complicated_arguments=False でProofTreeを生成すると，失敗(retry)になりやすい．これは，argumentとしてand_introを選んだ後に，続けられるargumentが無いためである．

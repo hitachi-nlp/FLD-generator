@@ -104,7 +104,7 @@ class ProofTreeGenerationPipeline:
             for node in proof_tree.leaf_nodes
             for formula in list(get_node_formulas(node))
         })
-        tree_stats = {
+        stats['tree'] = {
             'node': len(proof_tree.nodes),
             'node_leaf': len(proof_tree.leaf_nodes),
             'node_non_leaf': len(proof_tree.nodes) - len(proof_tree.leaf_nodes),
@@ -115,7 +115,6 @@ class ProofTreeGenerationPipeline:
 
             'depth': proof_tree.depth,
         }
-        stats['tree'] = tree_stats
 
         # arguments
         for node in proof_tree.nodes:

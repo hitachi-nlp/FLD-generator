@@ -2,6 +2,7 @@ from typing import Dict
 import copy
 
 _DATASET_SETTINGS = {
+    # XXX: Be cared about the max length not to be too large, when you edit the setting.
 
     '20220828.size--100000': {
         'world_assump': 'OWA',
@@ -33,7 +34,7 @@ _DATASET_SETTINGS = {
         ],
     },
 
-    '20220830.basic': {
+    '20220830.minimal': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -157,7 +158,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.distractor': {
+    '20220830.depth-3.distractor': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -210,7 +211,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 5,
-        'max_leaf_extensions': 5,
+        'max_leaf_extensions': 3,
         'distractor_factor': 0.5,
 
         'translation_configs': [
