@@ -34,7 +34,7 @@ _DATASET_SETTINGS = {
         ],
     },
 
-    '20220830.minimal': {
+    '20220901.atmf-P.arg-basic.dpth-1.dstrct-off': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -65,7 +65,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.pred_arg': {
+    '20220901.atmf-PA.arg-basic.dpth-1.dstrct-off': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -96,7 +96,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.pred_arg.and_or_not_quant': {
+    '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -127,7 +127,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.depth-3': {
+    '20220901.atmf-PA.arg-compl.dpth-3.dstrct-off': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -158,7 +158,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.depth-3.distractor': {
+    '20220901.atmf-PA.arg-compl.dpth-3.dstrct-on': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 
@@ -189,7 +189,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220830.depth-5': {
+    '20220901.atmf-PA.arg-compl.dpth-5.dstrct-on': {
         'world_assump': 'OWA',
         'proof_types': ['proof', 'disproof'],
 

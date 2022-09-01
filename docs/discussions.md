@@ -1,5 +1,7 @@
 # todo
 * レベル分け実験
+* translation 1通りにするオプションが欲しい
+    - 1通りにすると，POSが合わない失敗が多発しそう．ここをなんとかする．
 * translationを豊富にする．
     - causal verb
     - if then vs "because"
