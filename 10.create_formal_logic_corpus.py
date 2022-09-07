@@ -36,19 +36,23 @@ def main():
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220830.various_datasets.trial')
     # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220831.various_datasets.trial')
 
-    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220901.various_datasets.trial')
+    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220901.various_datasets.trial')
+    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220902.disproof-off')
 
     dataset_names = [
-        '20220901.atmf-P.arg-basic.dpth-1.dstrct-off',
-        '20220901.atmf-PA.arg-basic.dpth-1.dstrct-off',
-        '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off',
-        '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off',
-        '20220901.atmf-PA.arg-compl.dpth-3.dstrct-on',
-        '20220901.atmf-PA.arg-compl.dpth-5.dstrct-on',
+        # '20220901.atmf-PA.arg-basic.dpth-1.dstrct-off',
+        # '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off',
+        # '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off',
+        # '20220901.atmf-PA.arg-compl.dpth-3.dstrct-on',
+        # '20220901.atmf-PA.arg-compl.dpth-5.dstrct-on',
+
+        '20220902.atmf-P.arg-basic.dpth-1.dstrct-off.disproof-off',
     ]
 
     split_sizes = {
         'train': 500,
+        'valid': 100,
+        'test': 100,
 
         # 'train': 100000,
         # 'valid': 1000,

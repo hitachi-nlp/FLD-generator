@@ -219,6 +219,37 @@ _DATASET_SETTINGS = {
         ],
     },
 
+    '20220902.atmf-P.arg-basic.dpth-1.dstrct-off.disproof-off': {
+        'world_assump': 'OWA',
+        'proof_types': ['proof'],
+
+        'argument_configs': [
+            './configs/formal_logic/arguments/axiom.pred_only.json',
+            # './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+
+            # './configs/formal_logic/arguments/axiom.pred_arg.json',
+            # './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/formal_logic/arguments/theorem.pred_only.json',
+            # './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+
+            # './configs/formal_logic/arguments/theorem.pred_arg.json',
+            # './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.0,
+        'quantification': 0.0,
+
+        'depth': 1,
+        'max_leaf_extensions': 0,
+        'distractor_factor': 0.0,
+
+        'translation_configs': [
+            './configs/formal_logic/translations/clause_typed.thing.json'
+        ],
+    },
+
+
 }
 
 
