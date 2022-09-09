@@ -12,14 +12,14 @@ import click
 from tqdm import tqdm
 import dill
 
-from formal_logic.translators import ClauseTypedTranslator
-from formal_logic.word_banks import EnglishWordBank
-from formal_logic.distractors import SameFormUnkownInterprandsDistractor, FormalLogicDistractor
-from formal_logic.argument import Argument
-from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from formal_logic.proof_tree_generators import ProofTreeGenerator
-from formal_logic.datasets import NLProofSDataset
-from formal_logic.proof import ProofTree
+from FLNL.translators import ClauseTypedTranslator
+from FLNL.word_banks import EnglishWordBank
+from FLNL.distractors import SameFormUnkownInterprandsDistractor, FormalLogicDistractor
+from FLNL.argument import Argument
+from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLNL.proof_tree_generators import ProofTreeGenerator
+from FLNL.datasets import NLProofSDataset
+from FLNL.proof import ProofTree
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -113,7 +113,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
               multiple=True, default=[])
 @click.option('--translation-config', '--tc',
               multiple=True,
-              default=['./configs/formal_logic/translations/clause_typed.thing.json'])
+              default=['./configs/FLNL/translations/clause_typed.thing.json'])
 @click.option('--depth', type=int, default=5)
 @click.option('--max-leaf-extensions', type=int, default=5)
 @click.option('--complication', type=float, default=0.0)

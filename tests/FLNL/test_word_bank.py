@@ -1,6 +1,6 @@
 from typing import List, Optional, Iterable
 
-from formal_logic.word_banks import EnglishWordBank, POS, ATTR, get_form_types
+from FLNL.word_banks import EnglishWordBank, POS, ATTR, get_form_types
 import logging
 
 from logger_setup import setup as setup_logger

@@ -9,17 +9,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -30,7 +30,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -39,17 +39,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            # './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            # './configs/formal_logic/arguments/axiom.pred_arg.json',
-            # './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            # './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            # './configs/formal_logic/arguments/theorem.pred_arg.json',
-            # './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -60,7 +60,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -70,17 +70,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            # './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            # './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            # './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            # './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -91,7 +91,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -101,17 +101,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -122,7 +122,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -132,17 +132,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -153,7 +153,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -163,17 +163,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -184,7 +184,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -194,17 +194,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -215,7 +215,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 
@@ -224,17 +224,17 @@ _DATASET_SETTINGS = {
         'proof_types': ['proof'],
 
         'argument_configs': [
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            # './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            # './configs/formal_logic/arguments/axiom.pred_arg.json',
-            # './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            # './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            # './configs/formal_logic/arguments/theorem.pred_arg.json',
-            # './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -245,7 +245,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/formal_logic/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json'
         ],
     },
 

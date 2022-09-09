@@ -62,7 +62,7 @@ class Translator(ABC):
 
 
 class SentenceWiseTranslator(Translator):
-    """Translator compatible with ./configs/formal_logic/sentence_translations/syllogistic_corpus-02.json"""
+    """Translator compatible with ./configs/FLNL/sentence_translations/syllogistic_corpus-02.json"""
 
     def __init__(self,
                  sentence_translations: Dict[str, List[str]],

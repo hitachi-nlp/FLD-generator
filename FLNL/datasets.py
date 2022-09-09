@@ -6,10 +6,10 @@ import logging
 import copy
 from collections import defaultdict
 
-from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from formal_logic.formula import Formula
-from formal_logic.proof import ProofTree, ProofNode
-from formal_logic.utils import flatten_dict
+from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLNL.formula import Formula
+from FLNL.proof import ProofTree, ProofNode
+from FLNL.utils import flatten_dict
 import kern_profiler
 
 logger = logging.getLogger(__name__)

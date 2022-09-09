@@ -6,14 +6,14 @@ from typing import List, Optional
 import logging
 from pprint import pformat
 
-from formal_logic.formula import Formula
-from formal_logic.argument import Argument
-from formal_logic.proof_tree_generators import ProofTreeGenerator
-from formal_logic.distractors import UnkownPASDistractor, SameFormUnkownInterprandsDistractor
-from formal_logic.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
-from formal_logic.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from formal_logic.datasets import NLProofSDataset
-from formal_logic.word_banks import EnglishWordBank
+from FLNL.formula import Formula
+from FLNL.argument import Argument
+from FLNL.proof_tree_generators import ProofTreeGenerator
+from FLNL.distractors import UnkownPASDistractor, SameFormUnkownInterprandsDistractor
+from FLNL.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
+from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLNL.datasets import NLProofSDataset
+from FLNL.word_banks import EnglishWordBank
 from logger_setup import setup as setup_logger
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def load_translator(type_: str,
                     do_translate_to_nl=True):
     if type_ == 'sentence_wise_translator':
         if from_ == 'config':
-            sentence_translations_config_path = './configs/formal_logic/translations/old/syllogistic_corpus-02.json'
+            sentence_translations_config_path = './configs/FLNL/translations/old/syllogistic_corpus-02.json'
             sentence_translations = json.load(open(sentence_translations_config_path))
             predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
             constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
@@ -88,7 +88,7 @@ def load_translator(type_: str,
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
             return ClauseTypedTranslator(
-                json.load(open('./configs/formal_logic/translations/clause_typed.thing.json')),
+                json.load(open('./configs/FLNL/translations/clause_typed.thing.json')),
                 EnglishWordBank(),
                 do_translate_to_nl=do_translate_to_nl,
             )
@@ -143,7 +143,7 @@ def test_original():
     distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
-        config_paths=['./configs/formal_logic/arguments/old/syllogistic_corpus-02.json'],
+        config_paths=['./configs/FLNL/arguments/old/syllogistic_corpus-02.json'],
 
         # the config already includes the complicated and quantified arguments
         complicated_arguments_weight=0.0,
@@ -169,8 +169,8 @@ def test_LP_pred_only():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
@@ -232,11 +232,11 @@ def test_LP_pred_arg():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
@@ -262,17 +262,17 @@ def test_PL_pred_arg():
 
     generator = load_proof_tree_generator(
         config_paths=[
-            './configs/formal_logic/arguments/axiom.pred_only.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/axiom.pred_arg.json',
-            './configs/formal_logic/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
-            './configs/formal_logic/arguments/theorem.pred_only.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/formal_logic/arguments/theorem.pred_arg.json',
-            './configs/formal_logic/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.3,

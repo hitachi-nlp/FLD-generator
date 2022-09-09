@@ -26,20 +26,20 @@ def _make_multiple_value_option(option: str, values: List[str]) -> str:
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
-    logger.info('============================== [10.create_formal_logic_corpus.py] start! ============================')
+    logger.info('============================== [10.create_FLNL_corpus.py] start! ============================')
 
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220827.trial')
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/debug')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220827.trial')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
 
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220828.size--100')
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220828.size--100000')
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220830.various_datasets.trial')
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220831.various_datasets.trial')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220828.size--100')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220828.size--100000')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220830.various_datasets.trial')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220831.various_datasets.trial')
 
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220901.various_datasets.trial')
-    # output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220902.disproof-off')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220901.various_datasets.trial')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220902.disproof-off')
 
-    output_top_dir = Path('./outputs/10.create_formal_logic_corpus/20220909.various_levels')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220909.various_levels')
 
     dataset_names = [
         '20220901.atmf-PA.arg-basic.dpth-1.dstrct-off',
@@ -115,7 +115,7 @@ def main():
                 _num_jobs = num_jobs
             size_per_job = math.ceil(size_with_margin / _num_jobs)
 
-            logger.info('============================== [10.create_formal_logic_corpus.py] Generating dataset for %s split ============================', split)
+            logger.info('============================== [10.create_FLNL_corpus.py] Generating dataset for %s split ============================', split)
             logger.info('size: %d', size)
             logger.info('size_with_margin: %d', size_with_margin)
             logger.info('num_jobs: %d', _num_jobs)
@@ -136,7 +136,7 @@ def main():
                 save_params(job_settings, job_output_dir)
 
                 command = ' '.join([
-                    'python ./create_formal_logic_corpus.py',
+                    'python ./create_FLNL_corpus.py',
 
                     f'{job_output_path}',
                     str(int(size_per_job)),
@@ -195,7 +195,7 @@ def main():
                         f_out.write(line)
                         cnt += 1
 
-    logger.info('============================== [10.create_formal_logic_corpus.py] done! ============================')
+    logger.info('============================== [10.create_FLNL_corpus.py] done! ============================')
 
 
 if __name__ == '__main__':

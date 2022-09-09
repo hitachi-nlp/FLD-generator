@@ -7,7 +7,7 @@ from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
 from .base import WordBank, POS, VerbForm, AdjForm, NounForm
-from formal_logic.utils import starts_with_vowel_sound
+from FLNL.utils import starts_with_vowel_sound
 import kern_profiler
 
 logger = logging.getLogger(__name__)

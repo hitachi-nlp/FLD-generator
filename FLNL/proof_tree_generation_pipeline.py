@@ -2,12 +2,12 @@ from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
 
-from formal_logic.formula import Formula, NOT, eliminate_double_negation
-from formal_logic.proof import ProofTree, ProofNode
-from formal_logic.proof_tree_generators import ProofTreeGenerator
-from formal_logic.distractors import FormalLogicDistractor
-from formal_logic.translators import Translator
-from formal_logic.utils import flatten_dict
+from FLNL.formula import Formula, NOT, eliminate_double_negation
+from FLNL.proof import ProofTree, ProofNode
+from FLNL.proof_tree_generators import ProofTreeGenerator
+from FLNL.distractors import FormalLogicDistractor
+from FLNL.translators import Translator
+from FLNL.utils import flatten_dict
 import kern_profiler
 
 logger = logging.getLogger(__name__)

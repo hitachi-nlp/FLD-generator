@@ -1,5 +1,5 @@
 from typing import List, Set
-from formal_logic.formula import Formula
+from FLNL.formula import Formula
 
 
 def test_formula():

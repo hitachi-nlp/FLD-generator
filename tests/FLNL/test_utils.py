@@ -1,7 +1,7 @@
 from typing import List
 from pprint import pprint
 from collections import defaultdict
-from formal_logic.utils import weighted_sampling, weighted_shuffle
+from FLNL.utils import weighted_sampling, weighted_shuffle
 
 
 def test_weighted_sampling():

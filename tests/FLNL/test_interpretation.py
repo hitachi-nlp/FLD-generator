@@ -1,5 +1,5 @@
 from typing import List
-from formal_logic.interpretation import (
+from FLNL.interpretation import (
     _expand_op,
     generate_quantifier_arguments,
     formula_is_identical_to,
@@ -7,9 +7,9 @@ from formal_logic.interpretation import (
     interprete_formula,
     formula_can_not_be_identical_to
 )
-from formal_logic.proof_tree_generators import generate_mappings_from_formula
-from formal_logic.formula import Formula
-from formal_logic.argument import Argument
+from FLNL.proof_tree_generators import generate_mappings_from_formula
+from FLNL.formula import Formula
+from FLNL.argument import Argument
 
 
 # TODO: update this test code to be consistent with add_complicated_arguments=True
