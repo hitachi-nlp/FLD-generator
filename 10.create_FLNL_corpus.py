@@ -42,11 +42,11 @@ def main():
     output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220909.various_levels')
 
     dataset_names = [
-        '20220901.atmf-PA.arg-basic.dpth-1.dstrct-off',
-        # '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off',
-        # '20220901.atmf-PA.arg-compl.dpth-1.dstrct-off',
-        # '20220901.atmf-PA.arg-compl.dpth-3.dstrct-on',
-        # '20220901.atmf-PA.arg-compl.dpth-5.dstrct-on',
+        '20220901.atmf-PA.arg-basic.dpth-1',
+        # '20220901.atmf-PA.arg-basic.dpth-1',
+        # '20220901.atmf-PA.arg-compl.dpth-1',
+        # '20220901.atmf-PA.arg-compl.dpth-3',
+        # '20220901.atmf-PA.arg-compl.dpth-5',
     ]
 
     split_sizes = {
