@@ -61,7 +61,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
@@ -93,7 +93,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
@@ -125,7 +125,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
@@ -157,7 +157,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
@@ -188,7 +188,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
@@ -219,7 +219,7 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
