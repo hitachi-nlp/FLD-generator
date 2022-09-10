@@ -6,7 +6,7 @@ _DATASET_SETTINGS = {
 
     '20220828.size--100000': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -37,7 +37,7 @@ _DATASET_SETTINGS = {
 
     '20220901.atmf-P.arg-basic.dpth-1': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -69,7 +69,7 @@ _DATASET_SETTINGS = {
 
     '20220901.atmf-PA.arg-basic.dpth-1': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -101,7 +101,7 @@ _DATASET_SETTINGS = {
 
     '20220901.atmf-PA.arg-compl.dpth-1': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -133,7 +133,7 @@ _DATASET_SETTINGS = {
 
     '20220901.atmf-PA.arg-compl.dpth-3': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -164,7 +164,7 @@ _DATASET_SETTINGS = {
 
     '20220901.atmf-PA.arg-compl.dpth-5': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -195,7 +195,7 @@ _DATASET_SETTINGS = {
 
     '20220902.atmf-P.arg-basic.dpth-1.disproof-off': {
         'world_assump': 'OWA',
-        'proof_types': ['proof'],
+        'proof_types': ['proof', 'disproof'],
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',

@@ -40,7 +40,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220902.disproof-off')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220909.various_levels')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.wo_disproof')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.wo_disproof')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof')
 
     dataset_names = [
         '20220901.atmf-PA.arg-basic.dpth-1',
