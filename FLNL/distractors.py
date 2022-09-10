@@ -88,7 +88,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
     """ Generate the same form formula with unknown predicates or constants """
 
     def __init__(self,
-                 num_distractor_factor: int,
+                 num_distractor_factor: float,
                  max_retry: int = 100):
         self.num_distractor_factor = num_distractor_factor
         self.max_retry = max_retry

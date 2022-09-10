@@ -1,7 +1,7 @@
 from typing import List
 from pprint import pprint
 from collections import defaultdict
-from FLNL.utils import weighted_sampling, weighted_shuffle
+from FLNL.utils import weighted_sampling, weighted_shuffle, nested_merge
 
 
 def test_weighted_sampling():
@@ -57,6 +57,33 @@ def test_weighted_shuffle():
     stochastic_test([1.0, 1.0, 1.0])
 
 
+def test_nested_merge():
+
+    this = {
+        'A': {
+            'a': [0, 1]
+        },
+        'B': {
+            'a': [0, 1],
+        },
+    }
+    that = {
+        'A': {
+            'a': [2, 3]
+        },
+        'B': {
+            'a': [2, 3],
+            'b': [2, 3],
+        },
+    }
+    merged = nested_merge(this, that)
+
+    assert merged['A']['a'] == [0, 1, 2, 3]
+    assert merged['B']['a'] == [0, 1, 2, 3]
+    assert merged['B']['b'] == [2, 3]
+
+
 if __name__ == '__main__':
     test_weighted_sampling()
     test_weighted_shuffle()
+    test_nested_merge()

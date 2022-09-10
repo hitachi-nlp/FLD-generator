@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from collections import defaultdict
 from typing import Dict, Any, Tuple, List, Iterable
 import random
@@ -130,3 +131,26 @@ def weighted_sampling(weights: List[float]) -> int:
         if cum >= r:
             return idx
     raise Exception()
+
+
+def nested_merge(this: Any, that: Any) -> Any:
+    if type(this) is not type(that):
+        ValueError(f'type(this) {type(this)} does not match type(that){type(that)}')
+
+    if isinstance(this, dict):
+        updated = {}
+        for this_key, this_val in this.items():
+            if this_key in that:
+                that_val = that[this_key]
+                updated_val = nested_merge(this_val, that_val)
+                updated[this_key] = updated_val
+            else:
+                updated[this_key] = this_val
+        for that_key, that_val in that.items():
+            if that_key not in updated:
+                updated[that_key] = that_val
+        return updated
+    elif isinstance(this, list):
+        return this + that
+    else:
+        raise ValueError(f'this and that are not containers. Thus, we can not append that to this.\nThis: {str(this)}\nThat: {str(that)}')

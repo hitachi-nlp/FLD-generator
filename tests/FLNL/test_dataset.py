@@ -14,6 +14,7 @@ from FLNL.translators import SentenceWiseTranslator, IterativeRegexpTranslator, 
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.datasets import NLProofSDataset
 from FLNL.word_banks import EnglishWordBank
+from FLNL.utils import nested_merge
 from logger_setup import setup as setup_logger
 
 logger = logging.getLogger(__name__)
@@ -87,8 +88,12 @@ def load_translator(type_: str,
 
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
-            return ClauseTypedTranslator(
+            config_json = nested_merge(
                 json.load(open('./configs/FLNL/translations/clause_typed.thing.json')),
+                json.load(open('./configs/FLNL/translations/clause_typed.thing.sentence_negation.json')),
+            )
+            return ClauseTypedTranslator(
+                config_json,
                 EnglishWordBank(),
                 do_translate_to_nl=do_translate_to_nl,
             )

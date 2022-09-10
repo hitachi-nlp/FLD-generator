@@ -20,6 +20,7 @@ from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.proof_tree_generators import ProofTreeGenerator
 from FLNL.datasets import NLProofSDataset
 from FLNL.proof import ProofTree
+from FLNL.utils import nested_merge
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -57,10 +58,12 @@ def load_dataset(argument_config: str,
 
     distractor = SameFormUnkownInterprandsDistractor(distractor_factor)
 
+    merged_config_json = {}
+    for config_path in translation_config:
+        merged_config_json = nested_merge(merged_config_json,
+                                          json.load(open(config_path)))
     translator = ClauseTypedTranslator(
-        {key: value
-         for config_path in translation_config
-         for key, value in json.load(open(config_path)).items()},
+        merged_config_json,
         EnglishWordBank(),
         do_translate_to_nl=True,
     )

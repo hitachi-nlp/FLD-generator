@@ -181,6 +181,8 @@ class IterativeRegexpTranslator(Translator):
 
 class ClauseTypedTranslator(Translator):
 
+    _TEMPLATE_BRACES = ['<<', '>>']
+
     @profile
     def __init__(self,
                  config_json: Dict[str, Dict],
@@ -289,15 +291,17 @@ class ClauseTypedTranslator(Translator):
             ]
 
             resolved_nls = [
-                transl_nl.replace(f'<{template}>', resolved_template_nl)
+                transl_nl.replace(f'{self._TEMPLATE_BRACES[0]}{template}{self._TEMPLATE_BRACES[1]}', resolved_template_nl)
                 for transl_nl in resolved_nls
                 for resolved_template_nl in resolved_template_nls
             ]
+
         return resolved_nls
 
     def _extract_transl_templates(self, nl: str) -> Iterable[str]:
-        for match in re.finditer(r'<[^>]*>', nl):
-            yield nl[match.span()[0] + 1 : match.span()[1] - 1]
+        for match in re.finditer(f'{self._TEMPLATE_BRACES[0]}((?!{self._TEMPLATE_BRACES[1]}).)*{self._TEMPLATE_BRACES[1]}', nl):
+            template = nl[match.span()[0] + len(self._TEMPLATE_BRACES[0]) : match.span()[1] - len(self._TEMPLATE_BRACES[1])]
+            yield template
 
     def _load_words(self,
                     word_bank: WordBank):
@@ -348,8 +352,6 @@ class ClauseTypedTranslator(Translator):
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
-                # import pudb; pudb.set_trace()
-                # XXX: remove comment out
                 raise TranslationNotFoundError(msg)
             else:
                 logger.warning(msg)
@@ -380,6 +382,7 @@ class ClauseTypedTranslator(Translator):
                 sentence_nls_pulled,
                 interp_mapping,
             )
+
             interp_mapping_consisntent_nls = [
                 sentence_nl
                 for sentence_nl, sentence_nl_pulled in zip(sentence_nls, sentence_nls_pulled)
@@ -510,7 +513,6 @@ class ClauseTypedTranslator(Translator):
                         constant,
                         sentence_with_templates,
                         with_definite)
-            # print(f'"{sentence_with_templates}"    ->    "{with_definite}"')
         return with_definite
 
     def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:

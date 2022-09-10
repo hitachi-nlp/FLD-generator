@@ -48,7 +48,7 @@ class ProofTreeGenerationPipeline:
                 distractor_formulas = []
             logger.info('========================== generating distractor done! ============================')
 
-            root_negation_formula = Formula(f'{NOT}{proof_tree.root_node.formula.rep}')
+            root_negation_formula = Formula(f'{NOT}({proof_tree.root_node.formula.rep})')
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 
