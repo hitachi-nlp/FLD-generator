@@ -30,7 +30,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
@@ -61,6 +62,7 @@ _DATASET_SETTINGS = {
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
@@ -92,6 +94,7 @@ _DATASET_SETTINGS = {
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
@@ -123,6 +126,7 @@ _DATASET_SETTINGS = {
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
@@ -154,6 +158,7 @@ _DATASET_SETTINGS = {
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
@@ -184,6 +189,7 @@ _DATASET_SETTINGS = {
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
@@ -214,6 +220,7 @@ _DATASET_SETTINGS = {
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json'
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
     },
 
