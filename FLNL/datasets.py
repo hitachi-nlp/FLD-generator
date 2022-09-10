@@ -166,11 +166,11 @@ class NLProofSDataset:
                     child_ids = [node2id[child] for child in node.children]
 
                     if proof_type == ProofType.PROOF:
-                        hypothesis_postfix = 'hypothesis [PROVED]'
+                        hypothesis_postfix = 'hypothesis'
                     elif proof_type == ProofType.DISPROOF:
-                        hypothesis_postfix = 'hypothesis [DISPROVED]'
+                        hypothesis_postfix = 'hypothesis'
                     elif proof_type == ProofType.UNCLEAR:
-                        hypothesis_postfix = 'hypothesis [UNCLEAR]'
+                        hypothesis_postfix = 'hypothesis'
 
                     proof_str = ' & '.join(child_ids) + f' -> {hypothesis_postfix}'
                     proof_elems.append(proof_str)
