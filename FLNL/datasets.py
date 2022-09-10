@@ -164,7 +164,15 @@ class NLProofSDataset:
                         continue
 
                     child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(child_ids) + ' -> hypothesis'
+
+                    if proof_type == ProofType.PROOF:
+                        hypothesis_postfix = '[PROVED] hypothesis'
+                    elif proof_type == ProofType.DISPROOF:
+                        hypothesis_postfix = '[DISPROVED] hypothesis'
+                    elif proof_type == ProofType.INCOMPLETE:
+                        hypothesis_postfix = '[UNCLEAR] hypothesis'
+
+                    proof_str = ' & '.join(child_ids) + f' -> {hypothesis_postfix}'
                     proof_elems.append(proof_str)
 
                 elif is_leaf(node):
