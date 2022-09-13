@@ -12,6 +12,7 @@ import kern_profiler
 
 logger = logging.getLogger(__name__)
 
+_LANGUAGE = 'eng'
 
 class EnglishWordBank(WordBank):
 
@@ -38,7 +39,7 @@ class EnglishWordBank(WordBank):
     def _load_words_once(self) -> Iterable[str]:
         logger.info('loading words from WordNet ...')
         done_lemmas = set()
-        for s in wn.all_synsets():
+        for s in wn.all_synsets(lang=_LANGUAGE):
             for lemma in self._get_standard_lemmas(s):
                 lemma_str = lemma.name()
                 if lemma_str in done_lemmas:
@@ -153,23 +154,23 @@ class EnglishWordBank(WordBank):
 
     @profile
     def _get_synsets_by_word(self, word: str, pos: Optional[str] = None) -> Iterable[Synset]:
-        return wn.synsets(word, pos=pos)
+        return wn.synsets(word, pos=pos, lang=_LANGUAGE)
 
     @profile
-    def _get_standard_lemmas(self, s: Synset) -> Iterable[Lemma]:
+    def _get_standard_lemmas(self, syn: Synset) -> Iterable[Lemma]:
         # exclude words like "drawing_card"
-        for lemma in s.lemmas():
+        for lemma in syn.lemmas(lang=_LANGUAGE):
             if lemma.name().find('_') < 0:
                 yield lemma
 
     @profile
-    def _can_be_transitive_verb_synset(self, s: Synset) -> bool:
-        if s.pos() != wn.VERB:
+    def _can_be_transitive_verb_synset(self, syn: Synset) -> bool:
+        if syn.pos() != wn.VERB:
             return False
 
         # Transitive verb if the verb details is like "Someone eat something"
         if any([re.match('.*Some.*some.*', verb_info) is None
-                for lemma in self._get_standard_lemmas(s)
+                for lemma in self._get_standard_lemmas(syn)
                 for verb_info in lemma.frame_strings()]):
             return True
 
@@ -292,8 +293,8 @@ class EnglishWordBank(WordBank):
     @profile
     def get_synonyms(self, word: str) -> List[str]:
         synonyms = []
-        for syn in wn.synsets(word):
-            for lemma in syn.lemmas():
+        for syn in wn.synsets(word, lang=_LANGUAGE):
+            for lemma in self._get_standard_lemmas(syn):
                 if "_" not in lemma.name() and "-" not in lemma.name():
                     if lemma.name() not in synonyms:
                         synonyms.append(lemma.name())
@@ -302,8 +303,8 @@ class EnglishWordBank(WordBank):
     @profile
     def get_antonyms(self, word: str) -> List[str]:
         antonyms = []
-        for syn in wn.synsets(word):
-            for lemma in syn.lemmas():
+        for syn in wn.synsets(word, lang=_LANGUAGE):
+            for lemma in self._get_standard_lemmas(syn):
                 for antonym in lemma.antonyms():
                     if antonym.name() not in antonyms:
                         antonyms.append(antonym.name())
