@@ -41,14 +41,15 @@ def main():
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220909.various_levels')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.wo_disproof')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof.wo_marker')
 
     dataset_names = [
-        '20220901.atmf-PA.arg-basic.dpth-1',
+        '20220901.atmf-P.arg-basic.dpth-1',
         # '20220901.atmf-PA.arg-basic.dpth-1',
-        # '20220901.atmf-PA.arg-compl.dpth-1',
-        # '20220901.atmf-PA.arg-compl.dpth-3',
-        # '20220901.atmf-PA.arg-compl.dpth-5',
+        '20220901.atmf-PA.arg-compl.dpth-1',
+        '20220901.atmf-PA.arg-compl.dpth-3',
+        '20220901.atmf-PA.arg-compl.dpth-5',
     ]
 
     split_sizes = {
