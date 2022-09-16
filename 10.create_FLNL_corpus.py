@@ -56,9 +56,11 @@ def main():
     ]
 
     split_sizes = {
+        'test': 1000,
+
         # 'train': 500,
         # 'valid': 100,
-        'test': 100,
+        # 'test': 100,
 
         # 'train': 100000,
         # 'valid': 1000,
