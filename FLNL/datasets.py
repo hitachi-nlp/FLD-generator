@@ -59,6 +59,9 @@ class _DistractorNode:
         return []
 
 
+Node = Union[ProofNode, _DistractorNode]
+
+
 class NLProofSDataset:
 
     def __init__(self,
@@ -82,19 +85,19 @@ class NLProofSDataset:
                  size: int,
                  conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
 
-        def is_root(node: Union[ProofNode, _DistractorNode]) -> bool:
+        def is_root(node: Node) -> bool:
             return isinstance(node, ProofNode) and node == proof_tree.root_node
 
-        def is_leaf(node: Union[ProofNode, _DistractorNode]) -> bool:
+        def is_leaf(node: Node) -> bool:
             return isinstance(node, ProofNode) and node in proof_tree.leaf_nodes
 
-        def is_int(node: Union[ProofNode, _DistractorNode]) -> bool:
+        def is_int(node: Node) -> bool:
             return isinstance(node, ProofNode) and (not is_root(node) and not is_leaf(node))
 
-        def is_distractor(node: Union[ProofNode, _DistractorNode]) -> bool:
+        def is_distractor(node: Node) -> bool:
             return isinstance(node, _DistractorNode)
 
-        def _get_sent_from_node(node: Union[ProofNode, _DistractorNode]) -> str:
+        def _get_sent_from_node(node: Node) -> str:
             return node.formula.translation or node.formula.rep
 
         def _get_sent_from_formula(formula: Formula) -> str:
@@ -123,7 +126,7 @@ class NLProofSDataset:
             else:
                 raise ValueError()
 
-            all_nodes: List[Union[ProofNode, _DistractorNode]] = list(proof_tree.nodes)\
+            all_nodes: List[Node] = list(proof_tree.nodes)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
 
             i_sent = 1
@@ -162,7 +165,7 @@ class NLProofSDataset:
 
             proof_elems = []
             missing_nodes = copy.copy(missing_leaf_nodes)
-            nodes_in_proof: List[Union[ProofNode, _DistractorNode]] = []
+            nodes_in_proof: List[Node] = []
             for node in proof_tree.depth_first_traverse():
                 if is_root(node):
                     if any((child in missing_nodes for child in node.children)):
@@ -195,7 +198,7 @@ class NLProofSDataset:
                 nodes_in_proof.append(node)
 
             if proof_stance == ProofStance.UNKNOWN and conclude_hypothesis_from_subtree_roots_if_proof_is_unknown:
-                subtree_root_nodes: List[Union[ProofNode, _DistractorNode]] = []
+                subtree_root_nodes: List[Node] = []
                 for node in nodes_in_proof:
                     _is_root = True
 

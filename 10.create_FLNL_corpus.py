@@ -56,25 +56,23 @@ def main():
     ]
 
     split_sizes = {
-        'test': 1000,
-
-        # 'train': 500,
-        # 'valid': 100,
-        # 'test': 100,
+        'train': 500,
+        'valid': 100,
+        'test': 100,
 
         # 'train': 100000,
         # 'valid': 1000,
         # 'test': 1000,
     }
 
-    engine = SubprocessEngine()
-    # engine = QsubEngine('ABCI', 'rt_C.small')
+    # engine = SubprocessEngine()
+    engine = QsubEngine('ABCI', 'rt_C.small')
 
-    num_jobs = 1
-    # num_jobs = 100
+    # num_jobs = 1
+    num_jobs = 100
 
-    num_workers_per_job = 1
-    # num_workers_per_job = 5
+    # num_workers_per_job = 1
+    num_workers_per_job = 5
 
     timeout_per_job = 600  # for the case some jobs hangs
     dry_run = False
