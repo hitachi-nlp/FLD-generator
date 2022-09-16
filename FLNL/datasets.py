@@ -126,9 +126,31 @@ class NLProofSDataset:
             else:
                 raise ValueError()
 
-            all_nodes: List[Node] = list(proof_tree.nodes)\
+            # indentify nodes in proof
+            nodes_in_proof: List[Node] = []
+            missing_nodes = copy.copy(missing_leaf_nodes)
+            for node in proof_tree.depth_first_traverse():
+                if is_root(node):
+                    if any((child in missing_nodes for child in node.children)):
+                        missing_nodes.append(node)
+                        continue
+                elif is_leaf(node):
+                    continue
+                elif is_int(node):
+                    if any((child in missing_nodes for child in node.children)):
+                        missing_nodes.append(node)
+                        continue
+                elif is_distractor(node):
+                    continue
+                else:
+                    raise Exception()
+                nodes_in_proof.extend(node.children)
+                nodes_in_proof.append(node)
+
+            all_nodes: List[Node] = list(nodes_in_proof)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
 
+            # build node ids
             i_sent = 1
             node2id = {}
             id2node = {}
@@ -148,7 +170,6 @@ class NLProofSDataset:
                 node2id[node] = id_
                 id2node[id_] = node
 
-            # add int node with depth first order.
             i_int = 1
             for node in proof_tree.depth_first_traverse():
                 if is_int(node):
@@ -163,39 +184,27 @@ class NLProofSDataset:
                 if id_.startswith('sent') and node not in missing_leaf_nodes
             ])
 
+            # make proof string
             proof_elems = []
-            missing_nodes = copy.copy(missing_leaf_nodes)
-            nodes_in_proof: List[Node] = []
             for node in proof_tree.depth_first_traverse():
-                if is_root(node):
-                    if any((child in missing_nodes for child in node.children)):
-                        missing_nodes.append(node)
-                        continue
-
-                    child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(child_ids) + ' -> hypothesis'
-
-                elif is_leaf(node):
+                if node not in all_nodes:
                     continue
 
+                if is_root(node):
+                    child_ids = [node2id[child] for child in node.children]
+                    proof_str = ' & '.join(child_ids) + ' -> hypothesis'
+                elif is_leaf(node):
+                    continue
                 elif is_int(node):
-                    if any((child in missing_nodes for child in node.children)):
-                        missing_nodes.append(node)
-                        continue
-
                     node_id = node2id[node]
                     child_ids = [node2id[child] for child in node.children]
                     proof_str = ' & '.join(child_ids) + f' -> {node_id}: {_get_sent_from_node(node)}'
-
                 elif is_distractor(node):
                     continue
-
                 else:
                     raise Exception()
 
                 proof_elems.append(proof_str)
-                nodes_in_proof.extend(node.children)
-                nodes_in_proof.append(node)
 
             if proof_stance == ProofStance.UNKNOWN and conclude_hypothesis_from_subtree_roots_if_proof_is_unknown:
                 subtree_root_nodes: List[Node] = []
@@ -219,7 +228,7 @@ class NLProofSDataset:
 
                 if len(subtree_root_nodes_wo_leaf) == 0:
                     # rare case but possible when all the subtrees are leaf
-                    node_ids = ['sent0']
+                    node_ids = ['sent1']
                 else:
                     node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]
                 proof_elems.append(' & '.join(node_ids) + ' -> hypothesis')
@@ -227,6 +236,7 @@ class NLProofSDataset:
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
 
+            # make output json
             label = _make_instance_label(proof_stance, self.world_assump)
             dataset_json = {
                 'hypothesis': hypothesis,
