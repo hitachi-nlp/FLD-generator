@@ -15,10 +15,10 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
-class ProofType(Enum):
-    PROOF = 'proof'
-    DISPROOF = 'disproof'
-    UNKNOWN = 'Unknown'
+class ProofStance(Enum):
+    PROOF = 'PROOF'
+    DISPROOF = 'DISPROOF'
+    UNKNOWN = 'UNKNOWN'
 
 
 class WorldAssumption(Enum):
@@ -26,22 +26,22 @@ class WorldAssumption(Enum):
     OWA = 'OWA'
 
 
-def _make_instance_label(proof_type: ProofType, world_assump: WorldAssumption) -> Union[bool, str]:
+def _make_instance_label(proof_stance: ProofStance, world_assump: WorldAssumption) -> Union[bool, str]:
     if world_assump == WorldAssumption.CWA:
-        if proof_type == ProofType.PROOF:
+        if proof_stance == ProofStance.PROOF:
             return True
-        elif proof_type == ProofType.DISPROOF:
+        elif proof_stance == ProofStance.DISPROOF:
             return False
-        elif proof_type == ProofType.UNKNOWN:
+        elif proof_stance == ProofStance.UNKNOWN:
             return False
         else:
             raise ValueError()
     elif world_assump == WorldAssumption.OWA:
-        if proof_type == ProofType.PROOF:
+        if proof_stance == ProofStance.PROOF:
             return True
-        elif proof_type == ProofType.DISPROOF:
+        elif proof_stance == ProofStance.DISPROOF:
             return False
-        elif proof_type == ProofType.UNKNOWN:
+        elif proof_stance == ProofStance.UNKNOWN:
             return 'Unknown'
         else:
             raise ValueError()
@@ -59,14 +59,14 @@ class NLProofSDataset:
 
     def __init__(self,
                  pipeline: ProofTreeGenerationPipeline,
-                 proof_types: List[str],
+                 proof_stances: List[str],
                  world_assump: str,
                  depth: int,
                  max_leaf_extensions: int,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 
-        self.proof_types = [ProofType(proof_type) for proof_type in proof_types]
+        self.proof_stances = [ProofStance(proof_stance) for proof_stance in proof_stances]
         self.world_assump = WorldAssumption(world_assump)
 
         self.depth = depth
@@ -103,14 +103,14 @@ class NLProofSDataset:
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
-            proof_type = self.proof_types[i_sample % len(self.proof_types)]
-            if proof_type == ProofType.PROOF:
+            proof_stance = self.proof_stances[i_sample % len(self.proof_stances)]
+            if proof_stance == ProofStance.PROOF:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
                 missing_leaf_nodes = []
-            elif proof_type == ProofType.DISPROOF:
+            elif proof_stance == ProofStance.DISPROOF:
                 hypothesis = _get_sent_from_formula(root_negation_formula)
                 missing_leaf_nodes = []
-            elif proof_type == ProofType.UNKNOWN:
+            elif proof_stance == ProofStance.UNKNOWN:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
                 missing_leaf_nodes = random.sample(proof_tree.leaf_nodes,
                                                    max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
@@ -164,11 +164,11 @@ class NLProofSDataset:
 
                     child_ids = [node2id[child] for child in node.children]
 
-                    if proof_type == ProofType.PROOF:
+                    if proof_stance == ProofStance.PROOF:
                         hypothesis_postfix = 'hypothesis'
-                    elif proof_type == ProofType.DISPROOF:
+                    elif proof_stance == ProofStance.DISPROOF:
                         hypothesis_postfix = 'hypothesis'
-                    elif proof_type == ProofType.UNKNOWN:
+                    elif proof_stance == ProofStance.UNKNOWN:
                         hypothesis_postfix = 'hypothesis'
 
                     proof_str = ' & '.join(child_ids) + f' -> {hypothesis_postfix}'
@@ -197,25 +197,25 @@ class NLProofSDataset:
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
 
-            label = _make_instance_label(proof_type, self.world_assump)
+            label = _make_instance_label(proof_stance, self.world_assump)
             dataset_json = {
                 'hypothesis': hypothesis,
                 'context': context,
                 'proofs': proof_strs,
 
-                'proof_type': proof_type.value,
+                'proof_stance': proof_stance.value,
                 'answer': label,
 
                 'original_tree_depth': proof_tree.depth,
 
                 # I have no idea how to define depth from the root when proof is incomplete.
-                'depth': None if proof_type == ProofType.UNKNOWN else proof_tree.depth,
+                'depth': None if proof_stance == ProofStance.UNKNOWN else proof_tree.depth,
             }
 
             # Update statistics
             sample_stats = flatten_dict(pipeline_stats)
             sample_stats[f'answer.{label}'] = 1
-            sample_stats[f'proof_type.{proof_type.value}'] = 1
+            sample_stats[f'proof_stance.{proof_stance.value}'] = 1
             sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
             sample_stats['word_count_context'] = len(context.split(' '))
             sample_stats['word_count_proof'] = mean([len(proof_str.split(' ')) for proof_str in proof_strs])

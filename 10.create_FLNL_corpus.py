@@ -91,7 +91,7 @@ def main():
             short=True,
             dirname_exclude_params=[
                 'dataset_name',
-                'proof_types',
+                'proof_stances',
 
                 'argument_configs',
 
@@ -157,7 +157,7 @@ def main():
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',
                     f'--distractor-factor {job_settings["distractor_factor"]}',
-                    f'--proof-types \'{json.dumps(job_settings["proof_types"])}\'',
+                    f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',
                     f'--num-workers {job_settings["num_workers_per_job"]}',
                     f'--seed {job_settings["seed"]}',
