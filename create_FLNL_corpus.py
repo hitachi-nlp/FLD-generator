@@ -123,7 +123,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor-factor', type=float, default=1.0)
-@click.option('--proof-types', type=str, default=json.dumps(['proof', 'disproof', 'unknown']))
+@click.option('--proof-types', type=str, default=json.dumps(['proof', 'disproof', 'Unknown']))
 @click.option('--world-assump', default='CWA')
 @click.option('--num-workers', type=int, default=1)
 @click.option('--batch-size-per-worker', type=int, default=300)

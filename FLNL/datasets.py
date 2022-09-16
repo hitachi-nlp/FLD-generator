@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class ProofType(Enum):
     PROOF = 'proof'
     DISPROOF = 'disproof'
-    UNKNOWN = 'unknown'
+    UNKNOWN = 'Unknown'
 
 
 class WorldAssumption(Enum):
