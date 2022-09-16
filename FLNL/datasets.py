@@ -103,7 +103,6 @@ class NLProofSDataset:
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
-
             proof_type = self.proof_types[i_sample % len(self.proof_types)]
             if proof_type == ProofType.PROOF:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
@@ -173,11 +172,11 @@ class NLProofSDataset:
                         hypothesis_postfix = 'hypothesis'
 
                     proof_str = ' & '.join(child_ids) + f' -> {hypothesis_postfix}'
+
                     proof_elems.append(proof_str)
 
                 elif is_leaf(node):
                     continue
-
                 elif is_int(node):
                     if any((child in missing_nodes for child in node.children)):
                         missing_nodes.append(node)
@@ -186,13 +185,15 @@ class NLProofSDataset:
                     node_id = node2id[node]
                     child_ids = [node2id[child] for child in node.children]
                     proof_str = ' & '.join(child_ids) + f' -> {node_id}: {_get_sent_from_node(node)}'
+
                     proof_elems.append(proof_str)
 
                 elif is_distractor(node):
-                    continue
+                    pass
 
                 else:
                     raise Exception()
+
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
 
@@ -205,7 +206,10 @@ class NLProofSDataset:
                 'proof_type': proof_type.value,
                 'answer': label,
 
-                'depth': proof_tree.depth,
+                'original_tree_depth': proof_tree.depth,
+
+                # I have no idea how to define depth from the root when proof is incomplete.
+                'depth': None if proof_type == ProofType.UNKNOWN else proof_tree.depth,
             }
 
             # Update statistics

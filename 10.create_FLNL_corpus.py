@@ -42,33 +42,38 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220909.various_levels')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.wo_disproof')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof.wo_marker')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof.wo_marker')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.unknown.trial')
 
     dataset_names = [
-        '20220901.atmf-P.arg-basic.dpth-1',
+        # '20220901.atmf-P.arg-basic.dpth-1',
         # '20220901.atmf-PA.arg-basic.dpth-1',
-        '20220901.atmf-PA.arg-compl.dpth-1',
-        '20220901.atmf-PA.arg-compl.dpth-3',
-        '20220901.atmf-PA.arg-compl.dpth-5',
+        # '20220901.atmf-PA.arg-compl.dpth-1',
+        # '20220901.atmf-PA.arg-compl.dpth-3',
+        # '20220901.atmf-PA.arg-compl.dpth-5',
+
+        '20220916.atmf-PA.arg-compl.dpth-3',
     ]
 
     split_sizes = {
         # 'train': 500,
         # 'valid': 100,
-        # 'test': 100,
+        'test': 100,
 
-        'train': 100000,
-        'valid': 1000,
-        'test': 1000,
+        # 'train': 100000,
+        # 'valid': 1000,
+        # 'test': 1000,
     }
 
-    # engine = SubprocessEngine()
-    engine = QsubEngine('ABCI', 'rt_C.small')
+    engine = SubprocessEngine()
+    # engine = QsubEngine('ABCI', 'rt_C.small')
 
-    # num_jobs = 1
-    num_jobs = 100
+    num_jobs = 1
+    # num_jobs = 100
 
-    num_workers_per_job = 5
+    num_workers_per_job = 1
+    # num_workers_per_job = 5
+
     timeout_per_job = 600  # for the case some jobs hangs
     dry_run = False
 
