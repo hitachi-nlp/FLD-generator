@@ -286,7 +286,7 @@ def test_PL_pred_arg():
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
-                              ['proof', 'disproof', 'unclear'],
+                              ['proof', 'disproof', 'unknown'],
                               'OWA',
                               5,
                               5,

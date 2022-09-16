@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class ProofType(Enum):
     PROOF = 'proof'
     DISPROOF = 'disproof'
-    UNCLEAR = 'unclear'
+    UNKNOWN = 'unknown'
 
 
 class WorldAssumption(Enum):
@@ -32,7 +32,7 @@ def _make_instance_label(proof_type: ProofType, world_assump: WorldAssumption) -
             return True
         elif proof_type == ProofType.DISPROOF:
             return False
-        elif proof_type == ProofType.UNCLEAR:
+        elif proof_type == ProofType.UNKNOWN:
             return False
         else:
             raise ValueError()
@@ -41,7 +41,7 @@ def _make_instance_label(proof_type: ProofType, world_assump: WorldAssumption) -
             return True
         elif proof_type == ProofType.DISPROOF:
             return False
-        elif proof_type == ProofType.UNCLEAR:
+        elif proof_type == ProofType.UNKNOWN:
             return 'Unknown'
         else:
             raise ValueError()
@@ -111,7 +111,7 @@ class NLProofSDataset:
             elif proof_type == ProofType.DISPROOF:
                 hypothesis = _get_sent_from_formula(root_negation_formula)
                 missing_leaf_nodes = []
-            elif proof_type == ProofType.UNCLEAR:
+            elif proof_type == ProofType.UNKNOWN:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
                 missing_leaf_nodes = random.sample(proof_tree.leaf_nodes,
                                                    max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
@@ -169,7 +169,7 @@ class NLProofSDataset:
                         hypothesis_postfix = 'hypothesis'
                     elif proof_type == ProofType.DISPROOF:
                         hypothesis_postfix = 'hypothesis'
-                    elif proof_type == ProofType.UNCLEAR:
+                    elif proof_type == ProofType.UNKNOWN:
                         hypothesis_postfix = 'hypothesis'
 
                     proof_str = ' & '.join(child_ids) + f' -> {hypothesis_postfix}'
