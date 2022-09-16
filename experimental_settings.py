@@ -225,7 +225,103 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20220916.atmf-PA.arg-compl.dpth-3': {
+    '20220916.atmf-P.arg-basic.dpth-1.UNKNOWN': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.0,
+        'quantification': 0.0,
+
+        'depth': 1,
+        'max_leaf_extensions': 0,
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
+
+
+    '20220916.atmf-PA.arg-basic.dpth-1.UNKNOWN': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.0,
+        'quantification': 0.0,
+
+        'depth': 1,
+        'max_leaf_extensions': 0,
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
+
+
+    '20220916.atmf-PA.arg-compl.dpth-1.UNKNOWN': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 1,
+        'max_leaf_extensions': 0,
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
+
+
+    '20220916.atmf-PA.arg-compl.dpth-3.UNKNOWN': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
@@ -256,6 +352,36 @@ _DATASET_SETTINGS = {
         ],
     },
 
+    '20220916.atmf-PA.arg-compl.dpth-5.UNKNOWN': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 5,
+        'max_leaf_extensions': 3,
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
 }
 
 
