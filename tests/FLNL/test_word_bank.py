@@ -51,5 +51,5 @@ def _test_word_bank(wb):
 
 
 if __name__ == '__main__':
-    # test_english_word_bank()
-    test_japanese_word_bank()
+    test_english_word_bank()
+    # test_japanese_word_bank()

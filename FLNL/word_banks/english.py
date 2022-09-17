@@ -9,6 +9,7 @@ from .wordnet import WordNetWordBank
 
 logger = logging.getLogger(__name__)
 
+
 class EnglishWordBank(WordNetWordBank):
 
     _verb_inflation_mapping = {

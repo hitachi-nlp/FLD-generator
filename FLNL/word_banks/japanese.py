@@ -8,7 +8,7 @@ from .wordnet import WordNetWordBank
 logger = logging.getLogger(__name__)
 
 
-class JapaneseWordBank():
+class JapaneseWordBank(WordNetWordBank):
 
     @property
     def language(self) -> str:
