@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Iterable, Dict, List, Set
+from collections import defaultdict
+from typing import Optional, Iterable, Dict, List, Set, Tuple
 import re
 import logging
 import nltk
@@ -24,10 +25,15 @@ class WordNetWordBank(WordBank):
         POS.ADJ: wn.ADJ,
     }
 
-    def __init__(self) -> Iterable[str]:
+    def __init__(self):
         self._pos_wn_to_wb = {val: key for key, val in self._pos_wb_to_wn.items()}
 
-        self._cached_word_set = {word for word in self._load_words_once()}
+        self._cached_word_set: Set[str] = set()
+        self._cached_word_to_wn_pos: Dict[str, List[str]] = defaultdict(list)
+        for word, wn_pos in self._load_words_once():
+            self._cached_word_set.add(word)
+            self._cached_word_to_wn_pos[word].append(wn_pos)
+
         self._cached_event_noun_synsets = None
         self._cached_entity_noun_synsets = None
 
@@ -36,17 +42,17 @@ class WordNetWordBank(WordBank):
     def language(self) -> str:
         pass
 
-    def _load_words_once(self) -> Iterable[str]:
+    def _load_words_once(self) -> Iterable[Tuple[str, str]]:
         logger.info('loading words from WordNet ...')
-        done_lemmas = set()
-        for s in wn.all_synsets(lang=self.language):
-            for lemma in self._get_standard_lemmas(s):
+        # done_lemmas = set()
+        for syn in wn.all_synsets(lang=self.language):
+            for lemma in self._get_standard_lemmas(syn):
                 lemma_str = lemma.name()
-                if lemma_str in done_lemmas:
-                    continue
+                # if lemma_str in done_lemmas:
+                #     continue
 
-                yield lemma_str
-                done_lemmas.add(lemma_str)
+                yield lemma_str, syn.pos()
+                # done_lemmas.add(lemma_str)
                 break
         logger.info('loading words from WordNet done!')
 
@@ -58,7 +64,7 @@ class WordNetWordBank(WordBank):
     def get_pos(self, word: str) -> List[POS]:
         return list({
             (self._pos_wn_to_wb[syn.pos()] if syn.pos() in self._pos_wn_to_wb else POS.UNK)
-            for syn in self._get_synsets_by_word(word)
+            for syn in self._get_synsets(word)
         })
 
     @abstractmethod
@@ -74,11 +80,8 @@ class WordNetWordBank(WordBank):
         pass
 
     def _can_be_intransitive_verb(self, verb: str) -> bool:
-        return any((self._can_be_transitive_verb_synset(s)
-                    for s in self._get_synsets_by_word(verb)))
-
-    def _get_synsets_by_word(self, word: str, pos: Optional[str] = None) -> Iterable[Synset]:
-        return wn.synsets(word, pos=pos, lang=self.language)
+        return any((self._can_be_transitive_verb_synset(syn)
+                    for syn in self._get_synsets(verb)))
 
     def _get_standard_lemmas(self, syn: Synset) -> Iterable[Lemma]:
         # exclude words like "drawing_card"
@@ -160,13 +163,13 @@ class WordNetWordBank(WordBank):
             logger.info('loading event nouns ...')
             self._cached_event_noun_synsets = set()
             for root_synset_name in root_synset_names:
-                root_synset = wn.synset(root_synset_name)
+                root_synset = self._get_synset(root_synset_name)
                 self._cached_event_noun_synsets = self._cached_event_noun_synsets.union(
                     self._get_descendant_synsets(root_synset))
             logger.info('loading event nouns done!')
 
         return any((syn in self._cached_event_noun_synsets
-                    for syn in self._get_synsets_by_word(noun)))
+                    for syn in self._get_synsets(noun)))
 
     def _can_be_entity_noun(self, noun: str) -> bool:
         root_synset_names = [
@@ -178,13 +181,13 @@ class WordNetWordBank(WordBank):
             logger.info('loading entity nouns ...')
             self._cached_entity_noun_synsets = set()
             for root_synset_name in root_synset_names:
-                root_synset = wn.synset(root_synset_name)
+                root_synset = self._get_synset(root_synset_name)
                 self._cached_entity_noun_synsets = self._cached_entity_noun_synsets.union(
                     self._get_descendant_synsets(root_synset))
             logger.info('loading entity nouns ... done!')
 
         return any((syn in self._cached_entity_noun_synsets
-                    for syn in self._get_synsets_by_word(noun)))
+                    for syn in self._get_synsets(noun)))
 
     def _get_ancestor_synsets(self, syn: Synset) -> Set[Synset]:
         ancestors = set()
@@ -210,7 +213,7 @@ class WordNetWordBank(WordBank):
 
     def get_synonyms(self, word: str) -> List[str]:
         synonyms = []
-        for syn in wn.synsets(word, lang=self.language):
+        for syn in self._get_synsets(word):
             for lemma in self._get_standard_lemmas(syn):
                 if "_" not in lemma.name() and "-" not in lemma.name():
                     if lemma.name() not in synonyms:
@@ -219,7 +222,7 @@ class WordNetWordBank(WordBank):
 
     def get_antonyms(self, word: str) -> List[str]:
         antonyms = []
-        for syn in wn.synsets(word, lang=self.language):
+        for syn in self._get_synsets(word):
             for lemma in self._get_standard_lemmas(syn):
                 for antonym in lemma.antonyms():
                     if antonym.name() not in antonyms:
@@ -229,3 +232,13 @@ class WordNetWordBank(WordBank):
     @abstractmethod
     def get_negnyms(self, word) -> List[str]:
         pass
+
+    def _get_synsets(self, word: str) -> Iterable[Synset]:
+        # if word == 'brush':
+        #     import pudb; pudb.set_trace()
+        for wn_pos in self._cached_word_to_wn_pos[word]:
+            for syn in wn.synsets(word, pos=wn_pos, lang=self.language):
+                yield syn
+
+    def _get_synset(self, word: str) -> Synset:
+        return wn.synset(word)
