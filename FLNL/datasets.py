@@ -10,6 +10,7 @@ from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.formula import Formula
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.utils import flatten_dict
+from FLNL.translators import Translator
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -24,6 +25,15 @@ class ProofStance(Enum):
 class WorldAssumption(Enum):
     CWA = 'CWA'
     OWA = 'OWA'
+
+
+def _generate_random_sentence(translator: Translator):
+    acceptable_formula_reps = translator.acceptable_formulas
+    for formula_rep in random.sample(acceptable_formula_reps, len(acceptable_formula_reps)):
+        nls, _ = translator.translate([Formula(formula_rep)])
+        if nls[0][1] is not None:
+            return nls[0][1]
+    return 'Love Love LoveLive!'
 
 
 def _make_instance_label(proof_stance: ProofStance, world_assump: WorldAssumption) -> Union[bool, str]:
@@ -83,7 +93,12 @@ class NLProofSDataset:
     @profile
     def generate(self,
                  size: int,
-                 conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
+                 conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True,
+                 add_randome_sentence_if_context_is_null=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], Dict[str, Any]]]:
+        """ Generate dataset
+
+        See discussions.md for the options.
+        """
 
         def is_root(node: Node) -> bool:
             return isinstance(node, ProofNode) and node == proof_tree.root_node
@@ -106,6 +121,7 @@ class NLProofSDataset:
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
         for i_sample in range(size):
+            # generate a proof tree
             proof_tree, root_negation_formula, distractor_formulas, pipeline_stats = self.pipeline.run(
                 self.depth,
                 self.max_leaf_extensions,
@@ -149,6 +165,13 @@ class NLProofSDataset:
 
             all_nodes: List[Node] = list(nodes_in_proof)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
+            if len(all_nodes) == 0:
+                if add_randome_sentence_if_context_is_null:
+                    random_sentence = _generate_random_sentence(self.pipeline.translator)
+                    all_nodes = [_DistractorNode(Formula(random_sentence))]
+                    logger.info('Adding a random sentence into context since context have no sentence. The randome sentence is: "%s"', random_sentence)
+                else:
+                    raise NotImplementedError('We must add something to context since null context will lead to error in NLProofS learning.')
 
             # build node ids
             i_sent = 1

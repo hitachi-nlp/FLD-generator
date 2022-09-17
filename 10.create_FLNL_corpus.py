@@ -44,7 +44,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof.wo_marker')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.unknown.trial')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.UNKNOWN')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.UNKNOWN')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220917.UNKNOWN')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',

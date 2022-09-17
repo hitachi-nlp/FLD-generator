@@ -52,6 +52,11 @@ class Translator(ABC):
 
     @property
     @abstractmethod
+    def acceptable_formulas(self) -> List[str]:
+        pass
+
+    @property
+    @abstractmethod
     def translation_names(self) -> List[str]:
         pass
 
@@ -337,6 +342,10 @@ class ClauseTypedTranslator(Translator):
                     for attr in attrs)):
                 continue
             yield word
+
+    @property
+    def acceptable_formulas(self) -> List[str]:
+        return list(self._translations.keys())
 
     @property
     def translation_names(self) -> List[str]:
