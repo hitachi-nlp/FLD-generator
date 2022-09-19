@@ -23,7 +23,7 @@ def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
                                    suppress_op_expansion_if_exists=False,
                                    get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
-    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
+    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion] + [ancestor for ancestor in src_arg.premise_ancestors if ancestor is not None],
                                                                      suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
                                                                      get_name=True):
         complicated_argument = interprete_argument(src_arg, mapping, elim_dneg=elim_dneg)
@@ -117,8 +117,8 @@ def generate_arguments_in_target_space(src_arg: Argument,
                                        block_shuffle=False,
                                        allow_many_to_one=True,
                                        elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
-                                                  tgt_arg.premises + [tgt_arg.conclusion],
+    for mapping in generate_mappings_from_formula(src_arg.premises + [src_arg.conclusion] + [ancestor for ancestor in src_arg.premise_ancestors if ancestor is not None],
+                                                  tgt_arg.premises + [tgt_arg.conclusion] + [ancestor for ancestor in src_arg.premise_ancestors if ancestor is not None],
                                                   add_complicated_arguments=add_complicated_arguments,
                                                   constraints=constraints,
                                                   block_shuffle=block_shuffle,
@@ -323,11 +323,14 @@ def _make_permutations(objs: List[Any],
 def interprete_argument(arg: Argument,
                         mapping: Dict[str, str],
                         elim_dneg=False) -> Argument:
-    interpretedd_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
-                             for formula in arg.premises]
-    interpretedd_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
-    return Argument(interpretedd_premises,
-                    interpretedd_conclusion,
+    interpreted_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
+                            for formula in arg.premises]
+    interpreted_premise_ancestors = [interprete_formula(ancestor, mapping, elim_dneg=elim_dneg) if ancestor is not None else None
+                                     for ancestor in arg.premise_ancestors]
+    interpreted_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
+    return Argument(interpreted_premises,
+                    interpreted_conclusion,
+                    premise_ancestors=interpreted_premise_ancestors,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -492,7 +495,7 @@ def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     #   tgt_formula: '{A} & {B} -> {A}'
     #   return 3
     return sum(
-        [tgt_formula.rep.count(formula.rep) for formula in formulas]\
+        [tgt_formula.rep.count(formula.rep) for formula in formulas]
         or [0]
     )
 
@@ -522,27 +525,32 @@ def argument_is_identical_to(this_argument: Argument,
         for this_premise in this_argument.premises
     ):
         return False
+    for this_premise_ancestor in this_argument.premise_ancestors:
+        if all(
+            ((this_premise_ancestor is None) != (that_premise_ancestor is None))
+            or (this_premise_ancestor is not None and _formula_can_not_be_identical_to(this_premise_ancestor, that_premise_ancestor))
+                for that_premise_ancestor in that_argument.premise_ancestors):
+            return False
 
     def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
         return this_argument.conclusion.rep == that_argument.conclusion.rep
 
     def is_premises_same(this_argument: Argument, that_argument: Argument) -> bool:
-        is_premises_same = False
-        for that_premises_permutated in permutations(that_argument.premises):
+        _is_premises_same = False
+        for that_premises_permutated, that_premise_ancestor_permuted in permutations(zip(that_argument.premises, that_argument.premise_ancestors)):
             if all(this_premise.rep == that_premise.rep
-                   for this_premise, that_premise, in zip(this_argument.premises, that_premises_permutated)):
-                is_premises_same = True
+                   or (this_premise_ancestor is None and that_premise_ancestor is None)
+                   or (this_premise_ancestor is not None and that_premise_ancestor is not None and this_premise_ancestor.rep == that_premise_ancestor.rep)
+                   for this_premise, this_premise_ancestor, that_premise, that_premise_ancestor, in zip(this_argument.premises, this_argument.premise_ancestors, that_premises_permutated, that_premise_ancestor_permuted)):
+                _is_premises_same = True
                 break
-        return is_premises_same
+        return _is_premises_same
 
     # check the exact identification condition.
     for mapping in generate_mappings_from_argument(this_argument,
                                                    that_argument,
                                                    add_complicated_arguments=add_complicated_arguments,
                                                    allow_many_to_one=allow_many_to_oneg):
-        # print('----------------------')
-        # print(this_argument)
-        # print(that_argument)
         this_argument_interpreted = interprete_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
         if is_conclusion_same(this_argument_interpreted, that_argument)\
