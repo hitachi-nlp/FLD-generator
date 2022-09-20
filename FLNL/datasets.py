@@ -195,6 +195,9 @@ class NLProofSDataset:
 
             i_int = 1
             for node in proof_tree.depth_first_traverse():
+                if node not in all_nodes:
+                    continue
+
                 if is_int(node):
                     id_ = f'int{i_int}'
                     i_int += 1
