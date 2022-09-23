@@ -537,11 +537,14 @@ def argument_is_identical_to(this_argument: Argument,
 
     def is_premises_same(this_argument: Argument, that_argument: Argument) -> bool:
         _is_premises_same = False
-        for that_premises_permutated, that_premise_ancestor_permuted in permutations(zip(that_argument.premises, that_argument.premise_ancestors)):
+        for premise_indexes in permutations(range(len(that_argument.premises))):
+            that_premises_permuted = [that_argument.premises[i] for i in premise_indexes]
+            that_premise_ancestor_permuted = [that_argument.premise_ancestors[i] for i in premise_indexes]
+        # for that_premises_permuted, that_premise_ancestor_permuted in permutations(zip(that_argument.premises, that_argument.premise_ancestors)):
             if all(this_premise.rep == that_premise.rep
                    or (this_premise_ancestor is None and that_premise_ancestor is None)
                    or (this_premise_ancestor is not None and that_premise_ancestor is not None and this_premise_ancestor.rep == that_premise_ancestor.rep)
-                   for this_premise, this_premise_ancestor, that_premise, that_premise_ancestor, in zip(this_argument.premises, this_argument.premise_ancestors, that_premises_permutated, that_premise_ancestor_permuted)):
+                   for this_premise, this_premise_ancestor, that_premise, that_premise_ancestor, in zip(this_argument.premises, this_argument.premise_ancestors, that_premises_permuted, that_premise_ancestor_permuted)):
                 _is_premises_same = True
                 break
         return _is_premises_same

@@ -217,11 +217,17 @@ def _generate_stem(arguments: List[Argument],
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
             # Choose next argument
-            chainable_args = [
-                arg for arg in arguments
-                if any((formula_is_identical_to(premise, cur_conclusion)
-                        for premise in arg.premises))
-            ]
+            chainable_args = []
+            for arg in arguments:
+                one_premise_matched = False
+                for premise, premise_ancestor in zip(arg.premises, arg.premise_ancestors):
+                    # TODO: check ancestor
+                    if formula_is_identical_to(premise, cur_conclusion):
+                        one_premise_matched = True
+                        break
+                if one_premise_matched:
+                    chainable_args.append(arg)
+
             if len(chainable_args) == 0:
                 rejection_stats['len(chainable_args) == 0'] += 1
 

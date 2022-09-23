@@ -16,29 +16,82 @@ class ProofNode:
     def __init__(self, formula: Formula):
         self.formula = formula
         self.argument: Optional[Argument] = None
-        self.parent: Optional[ProofNode] = None
+
+        self._parent: Optional[ProofNode] = None
         self._children: List['ProofNode'] = []
-        # self._tree: Optional['ProofTree'] = None
+
+        self._ref_parent: Optional[ProofNode] = None
+        self._ref_children: List['ProofNode'] = []
+
+    @property
+    def parent(self):
+        return self._parent
+
+    def set_parent(self, node: 'ProofNode') -> None:
+        self._parent = node
+        if self not in node.children:
+            node.add_child(self)
+
+    def delete_parent(self) -> None:
+        if self._parent is not None:
+            self._parent.delete_child(self)
+        self._parent = None
+
+    @property
+    def children(self):
+        return self._children
 
     def add_child(self, node: 'ProofNode') -> None:
         if node.parent is not None:
             raise MultipleParentError('Can\'t add child since it already has a parent.')
 
-        node.parent = self
         if node not in self._children:
             self._children.append(node)
+        node.set_parent(self)
 
     def delete_child(self, node: 'ProofNode') -> None:
         for _node in self._children:
             if _node  == node:
-                self._children.remove(node)
+                self._children.remove(_node)
+                _node.delete_parent()
                 break
         if len(self._children) == 0:
             self.argument = None
 
     @property
-    def children(self):
-        return self._children
+    def ref_parent(self):
+        return self._ref_parent
+
+    def set_ref_parent(self, node: 'ProofNode') -> None:
+        self._ref_parent = node
+        if self not in node.ref_children:
+            node.add_ref_child(self)
+
+    def delete_ref_parent(self) -> None:
+        if self._ref_parent is not None:
+            self._ref_parent.delete_ref_child(self)
+        self._ref_parent = None
+
+    @property
+    def ref_children(self):
+        return self._ref_children
+
+    def add_ref_child(self, node: 'ProofNode') -> None:
+        if node.ref_parent is not None:
+            raise MultipleParentError('Can\'t add ref_child since it already has a ref_parent.')
+
+        if node not in self._ref_children:
+            self._ref_children.append(node)
+        node.set_ref_parent(self)
+
+    def delete_ref_child(self, node: 'ProofNode') -> None:
+        for _node in self._ref_children:
+            if _node  == node:
+                self._ref_children.remove(_node)
+                _node.delete_ref_parent()
+                break
+        if len(self._ref_children) == 0:
+            self.argument = None
 
     def __str__(self) -> str:
         return f'ProofNode({self.formula})'
@@ -59,11 +112,22 @@ class ProofTree:
 
     def delete_node(self, node: ProofNode) -> None:
         self._nodes.remove(node)
-        # node._tree = None
-        for _node in self._nodes:
-            if _node.parent == node:
-                _node.parent = None
-            _node.delete_child(node)
+
+        for node_in_tree in self._nodes:
+            if node.parent == node_in_tree:
+                node.delete_parent()
+            if node.ref_parent == node_in_tree:
+                node.delete_ref_parent()
+            node.delete_child(node_in_tree)
+            node.delete_ref_child(node_in_tree)
+
+        # for node_in_tree in self._nodes:
+        #     if node_in_tree.parent == node:
+        #         node_in_tree.delete_parent()
+        #     if node_in_tree.ref_parent == node:
+        #         node_in_tree.delete_ref_parent()
+        #     node_in_tree.delete_child(node)
+        #     node_in_tree.delete_ref_child(node)
 
     @property
     def nodes(self) -> List[ProofNode]:
