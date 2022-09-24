@@ -23,7 +23,7 @@ def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
                                    suppress_op_expansion_if_exists=False,
                                    get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
-    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion] + [ancestor for ancestor in src_arg.premise_ancestors if ancestor is not None],
+    for mapping, name in generate_complication_mappings_from_formula(src_arg.all_formulas,
                                                                      suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
                                                                      get_name=True):
         complicated_argument = interprete_argument(src_arg, mapping, elim_dneg=elim_dneg)
@@ -117,8 +117,8 @@ def generate_arguments_in_target_space(src_arg: Argument,
                                        block_shuffle=False,
                                        allow_many_to_one=True,
                                        elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula(src_arg.premises + [src_arg.conclusion] + [ancestor for ancestor in src_arg.premise_ancestors if ancestor is not None],
-                                                  tgt_arg.premises + [tgt_arg.conclusion] + [ancestor for ancestor in src_arg.premise_ancestors if ancestor is not None],
+    for mapping in generate_mappings_from_formula(src_arg.all_formulas,
+                                                  tgt_arg.all_formulas,
                                                   add_complicated_arguments=add_complicated_arguments,
                                                   constraints=constraints,
                                                   block_shuffle=block_shuffle,
@@ -325,12 +325,12 @@ def interprete_argument(arg: Argument,
                         elim_dneg=False) -> Argument:
     interpreted_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
                             for formula in arg.premises]
-    interpreted_premise_ancestors = [interprete_formula(ancestor, mapping, elim_dneg=elim_dneg) if ancestor is not None else None
-                                     for ancestor in arg.premise_ancestors]
+    interpreted_premise_descendants = [interprete_formula(descendant, mapping, elim_dneg=elim_dneg) if descendant is not None else None
+                                       for descendant in arg.premise_descendants]
     interpreted_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
-                    premise_ancestors=interpreted_premise_ancestors,
+                    premise_descendants=interpreted_premise_descendants,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -525,11 +525,11 @@ def argument_is_identical_to(this_argument: Argument,
         for this_premise in this_argument.premises
     ):
         return False
-    for this_premise_ancestor in this_argument.premise_ancestors:
+    for this_premise_descendant in this_argument.premise_descendants:
         if all(
-            ((this_premise_ancestor is None) != (that_premise_ancestor is None))
-            or (this_premise_ancestor is not None and _formula_can_not_be_identical_to(this_premise_ancestor, that_premise_ancestor))
-                for that_premise_ancestor in that_argument.premise_ancestors):
+            ((this_premise_descendant is None) != (that_premise_descendant is None))
+            or (this_premise_descendant is not None and _formula_can_not_be_identical_to(this_premise_descendant, that_premise_descendant))
+                for that_premise_descendant in that_argument.premise_descendants):
             return False
 
     def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
@@ -539,12 +539,16 @@ def argument_is_identical_to(this_argument: Argument,
         _is_premises_same = False
         for premise_indexes in permutations(range(len(that_argument.premises))):
             that_premises_permuted = [that_argument.premises[i] for i in premise_indexes]
-            that_premise_ancestor_permuted = [that_argument.premise_ancestors[i] for i in premise_indexes]
-        # for that_premises_permuted, that_premise_ancestor_permuted in permutations(zip(that_argument.premises, that_argument.premise_ancestors)):
-            if all(this_premise.rep == that_premise.rep
-                   or (this_premise_ancestor is None and that_premise_ancestor is None)
-                   or (this_premise_ancestor is not None and that_premise_ancestor is not None and this_premise_ancestor.rep == that_premise_ancestor.rep)
-                   for this_premise, this_premise_ancestor, that_premise, that_premise_ancestor, in zip(this_argument.premises, this_argument.premise_ancestors, that_premises_permuted, that_premise_ancestor_permuted)):
+            that_premise_descendant_permuted = [that_argument.premise_descendants[i] for i in premise_indexes]
+        # for that_premises_permuted, that_premise_descendant_permuted in permutations(zip(that_argument.premises, that_argument.premise_descendants)):
+            if all(
+                this_premise.rep == that_premise.rep
+                and (
+                    (this_premise_descendant is None and that_premise_descendant is None)
+                    or (this_premise_descendant is not None and that_premise_descendant is not None and this_premise_descendant.rep == that_premise_descendant.rep)
+                )
+                for this_premise, this_premise_descendant, that_premise, that_premise_descendant, in zip(this_argument.premises, this_argument.premise_descendants, that_premises_permuted, that_premise_descendant_permuted)
+            ):
                 _is_premises_same = True
                 break
         return _is_premises_same

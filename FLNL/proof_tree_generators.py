@@ -186,20 +186,29 @@ def _generate_stem(arguments: List[Argument],
     """
 
     def update(premise_nodes: List[ProofNode],
+               descendant_nodes: List[Optional[ProofNode]],
                conclusion_node: ProofNode,
                argument: Argument,
                proof_tree: ProofTree):
+
         for premise_node in premise_nodes:
             conclusion_node.add_child(premise_node)
+
+        for descendant_node in descendant_nodes:
+            conclusion_node.add_ref_child(descendant_node)
+
         conclusion_node.argument = argument
-        for node in premise_nodes + [conclusion_node]:
+
+        for node in premise_nodes\
+                + [node for node in descendant_nodes if node is not None]\
+                + [conclusion_node]:
             proof_tree.add_node(node)
 
     for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):  # try all the argument as starting point
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
         cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
-        update(cur_premise_nodes, cur_conclusion_node, cur_arg, proof_tree)
+        update(cur_premise_nodes, [], cur_conclusion_node, cur_arg, proof_tree)
 
         is_tree_done = False
         while True:
@@ -220,11 +229,15 @@ def _generate_stem(arguments: List[Argument],
             chainable_args = []
             for arg in arguments:
                 one_premise_matched = False
-                for premise, premise_ancestor in zip(arg.premises, arg.premise_ancestors):
-                    # TODO: check ancestor
-                    if formula_is_identical_to(premise, cur_conclusion):
-                        one_premise_matched = True
-                        break
+                for premise, premise_descendant in zip(arg.premises, arg.premise_descendants):
+                    if not formula_is_identical_to(premise, cur_conclusion):
+                        continue
+                    if premise_descendant is not None\
+                            and not any(formula_is_identical_to(descendant_node.formula, premise_descendant) and descendant_node.is_leaf
+                                        for descendant_node in cur_conclusion_node.descendants):
+                        continue
+                    one_premise_matched = True
+                    break
                 if one_premise_matched:
                     chainable_args.append(arg)
 
@@ -240,13 +253,13 @@ def _generate_stem(arguments: List[Argument],
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
-                for premise in _shuffle(next_arg.premises):
+                for premise, premise_descendant in _shuffle(list(zip(next_arg.premises, next_arg.premise_descendants))):
                     if is_arg_done:
                         break
                     log_traces.append(f'   |   |   | premise {premise}')
 
                     for premise_mapping in generate_mappings_from_formula(
-                        [premise],
+                        [premise] + ([premise_descendant] if premise_descendant is not None else []),
                         # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [cur_conclusion],
                         block_shuffle=True,
@@ -254,10 +267,15 @@ def _generate_stem(arguments: List[Argument],
                         if is_arg_done:
                             break
                         premise_pulled = interprete_formula(premise, premise_mapping, elim_dneg=elim_dneg)
+                        premise_descendant_pulled = interprete_formula(premise_descendant, premise_mapping, elim_dneg=elim_dneg) if premise_descendant is not None else None
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
+                        log_traces.append(f'   |   |   | premise_descendant_pulled {premise_descendant_pulled}')
 
                         if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
+                            continue
+                        if premise_descendant_pulled is not None and all((premise_descendant_pulled.rep != descendant_node.formula.rep and descendant_node.is_leaf) for descendant_node in cur_conclusion_node.descendants):
+                            rejection_stats['premise_descendant_pulled.rep != descendant_node.formula.rep'] += 1
                             continue
 
                         # for early rejection
@@ -301,16 +319,23 @@ def _generate_stem(arguments: List[Argument],
 
             if is_arg_done:
                 # Update
-                for i_premise, premise in enumerate(next_arg_pulled.premises):
+                descendant_nodes = []
+                for i_premise, (premise, premise_descendant) in enumerate(zip(next_arg_pulled.premises, next_arg_pulled.premise_descendants)):
                     if premise.rep == cur_conclusion.rep:
                         next_arg_pulled.premises[i_premise] = cur_conclusion  # refer to the unique object.
+                    if premise_descendant is not None:
+                        for descendant_node in cur_conclusion_node.descendants:
+                            if premise_descendant.rep == descendant_node.formula.rep and descendant_node.is_leaf:
+                                next_arg_pulled.premise_descendants[i_premise] = descendant_node.formula  # refer to the unique object.
+                                descendant_nodes.append(descendant_node)
                 next_conclusion_node = ProofNode(next_arg_pulled.conclusion)
                 next_conclusion_node.argument = next_arg_pulled
                 next_premise_nodes = [
                     cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
                     for premise in next_arg_pulled.premises
                 ]
-                update(next_premise_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
+                # update(next_premise_nodes, descendant_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
+                update(next_premise_nodes, descendant_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes

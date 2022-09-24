@@ -38,6 +38,13 @@ class ProofNode:
         self._parent = None
 
     @property
+    def ancestors(self) -> List['ProofNode']:
+        if self.parent is None:
+            return []
+        else:
+            return [self.parent] + self.parent.ancestors
+
+    @property
     def children(self):
         return self._children
 
@@ -57,6 +64,13 @@ class ProofNode:
                 break
         if len(self._children) == 0:
             self.argument = None
+
+    @property
+    def descendants(self) -> List['ProofNode']:
+        descendants = self.children
+        for child in self.children:
+            descendants += child.descendants
+        return descendants
 
     @property
     def ref_parent(self):
@@ -92,6 +106,10 @@ class ProofNode:
                 break
         if len(self._ref_children) == 0:
             self.argument = None
+
+    @property
+    def is_leaf(self) -> bool:
+        return self.parent is None
 
     def __str__(self) -> str:
         return f'ProofNode({self.formula})'
