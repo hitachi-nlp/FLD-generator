@@ -39,7 +39,8 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
     return ProofTreeGenerator(arguments,
                               elim_dneg=elim_dneg,
                               complicated_arguments_weight=complicated_arguments_weight,
-                              quantified_arguments_weight=quantified_arguments_weight)
+                              quantified_arguments_weight=quantified_arguments_weight,
+                              timeout=None)
 
 
 def load_translator(type_: str,
@@ -113,7 +114,7 @@ def load_translator(type_: str,
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 1000) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
@@ -132,10 +133,9 @@ def generate_dataset(dataset: NLProofSDataset,
         logger.info('--------------- NLProofs json --------------')
         logger.info('\n' + pformat(nlproof_json))
 
-        logger.info('\n')
-        logger.info('--------------- stats --------------')
-        # logger.info(dict(stats))
-        logger.info('\n' + pformat(stats))
+        # logger.info('\n')
+        # logger.info('--------------- stats --------------')
+        # logger.info('\n' + pformat(stats))
 
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -268,18 +268,18 @@ def test_PL_pred_arg():
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
-            # './configs/FLNL/arguments/axioms.with_assumption.json',
+            './configs/FLNL/arguments/axioms.with_assumption.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.3,

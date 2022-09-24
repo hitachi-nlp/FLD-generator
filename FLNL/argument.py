@@ -53,7 +53,7 @@ class Argument:
     @classmethod
     def _parse_premise(self, rep: str) -> Tuple[str, Optional[str]]:
         if rep.find(f' {PROVE} ') >= 0:
-            premise, descendant = rep.split(f' {PROVE} ')
+            descendant, premise = rep.split(f' {PROVE} ')
             return (premise, descendant)
         else:
             return rep, None

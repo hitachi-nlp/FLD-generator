@@ -205,6 +205,9 @@ def _generate_stem(arguments: List[Argument],
             proof_tree.add_node(node)
 
     for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):  # try all the argument as starting point
+        if any(premise_descendant is not None for premise_descendant in cur_arg.premise_descendants):
+            continue
+
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
         cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
@@ -260,8 +263,7 @@ def _generate_stem(arguments: List[Argument],
 
                     for premise_mapping in generate_mappings_from_formula(
                         [premise] + ([premise_descendant] if premise_descendant is not None else []),
-                        # [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
-                        [cur_conclusion],
+                        [cur_conclusion] + [node.formula for node in cur_conclusion_node.descendants if node.is_leaf],
                         block_shuffle=True,
                     ):
                         if is_arg_done:
@@ -274,9 +276,14 @@ def _generate_stem(arguments: List[Argument],
                         if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
                             continue
-                        if premise_descendant_pulled is not None and all((premise_descendant_pulled.rep != descendant_node.formula.rep and descendant_node.is_leaf) for descendant_node in cur_conclusion_node.descendants):
-                            rejection_stats['premise_descendant_pulled.rep != descendant_node.formula.rep'] += 1
-                            continue
+
+                        if premise_descendant_pulled is not None:
+                            # print(0)
+                            if all(premise_descendant_pulled.rep != descendant_node.formula.rep
+                                   for descendant_node in cur_conclusion_node.descendants
+                                   if descendant_node.is_leaf):
+                                rejection_stats['premise_descendant_pulled.rep != descendant_node.formula.rep'] += 1
+                                continue
 
                         # for early rejection
                         if not is_ok_formula_set([premise_pulled] + formulas_in_tree):
@@ -284,7 +291,7 @@ def _generate_stem(arguments: List[Argument],
                             continue
 
                         for mapping in generate_mappings_from_formula(
-                            next_arg.premises + [next_arg.conclusion],
+                            next_arg.all_formulas,
                             [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
                             block_shuffle=True,
@@ -334,7 +341,6 @@ def _generate_stem(arguments: List[Argument],
                     cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
                     for premise in next_arg_pulled.premises
                 ]
-                # update(next_premise_nodes, descendant_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
                 update(next_premise_nodes, descendant_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
@@ -387,7 +393,7 @@ def _extend_braches(proof_tree: ProofTree,
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
         leaf_nodes = [node for node in proof_tree.leaf_nodes
-                      if proof_tree.get_node_depth(node) < proof_tree.depth]
+                      if proof_tree.get_node_depth(node) < proof_tree.depth and node.ref_parent is None]
         if len(leaf_nodes) == 0:
             return
 
@@ -409,6 +415,7 @@ def _extend_braches(proof_tree: ProofTree,
             chainable_args = [
                 arg for arg in arguments
                 if formula_is_identical_to(arg.conclusion, leaf_node.formula)
+                and all(premise_descendant is None for premise_descendant in arg.premise_descendants)  # by it's logic, the argument with premise descendants can not be applied in branch extension
             ]
             if len(chainable_args) == 0:
                 rejection_stats['len(chainable_args) == 0'] += 1

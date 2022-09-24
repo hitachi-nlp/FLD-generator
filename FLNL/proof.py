@@ -1,4 +1,5 @@
 from typing import List, Tuple, Optional, Iterable, Union
+from copy import copy
 from .formula import Formula
 from .argument import Argument
 from .exception import FormalLogicExceptionBase
@@ -67,7 +68,7 @@ class ProofNode:
 
     @property
     def descendants(self) -> List['ProofNode']:
-        descendants = self.children
+        descendants = copy(self.children)
         for child in self.children:
             descendants += child.descendants
         return descendants
@@ -109,7 +110,7 @@ class ProofNode:
 
     @property
     def is_leaf(self) -> bool:
-        return self.parent is None
+        return len(self.children) == 0
 
     def __str__(self) -> str:
         return f'ProofNode({self.formula})'

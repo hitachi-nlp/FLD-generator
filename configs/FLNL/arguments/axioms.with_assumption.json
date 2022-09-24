@@ -1,0 +1,18 @@
+[
+  {
+      "id": "implication_intro.pred_only",
+      "premises": [
+          "{A} ⊢ {B}"
+      ],
+      "conclusion": "{A} -> {B}"
+  },
+  {
+      "id": "__or_elim.pred_only",
+      "premises": [
+          "{A} ⊢ {C}",
+          "{B} ⊢ {C}",
+          "({A} v {B})"
+      ],
+      "conclusion": "{C}"
+  }
+]
