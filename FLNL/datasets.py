@@ -237,8 +237,8 @@ class NLProofSDataset:
                     for other_node in nodes_in_proof:
                         if other_node == node:
                             continue
-                        descendants_of_other_node = list(proof_tree.depth_first_traverse(other_node))
-                        if node in descendants_of_other_node:
+                        # descendants_of_other_node = list(proof_tree.depth_first_traverse(other_node))
+                        if node in other_node.descendants:
                             _is_root = False
                             break
 

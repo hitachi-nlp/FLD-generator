@@ -154,7 +154,7 @@ class ProofTreeGenerator:
 
 @profile
 def _generate_tree(arguments: List[Argument],
-                   depth: int, 
+                   depth: int,
                    max_leaf_extensions: int,
                    argument_weights: Optional[Dict[Argument, float]] = None,
                    elim_dneg=False,
@@ -186,7 +186,7 @@ def _generate_stem(arguments: List[Argument],
     """
 
     def update(premise_nodes: List[ProofNode],
-               descendant_nodes: List[Optional[ProofNode]],
+               assumption_nodes: List[Optional[ProofNode]],
                conclusion_node: ProofNode,
                argument: Argument,
                proof_tree: ProofTree):
@@ -194,18 +194,19 @@ def _generate_stem(arguments: List[Argument],
         for premise_node in premise_nodes:
             conclusion_node.add_child(premise_node)
 
-        for descendant_node in descendant_nodes:
-            conclusion_node.add_sub_child(descendant_node)
+        for assumption_node in assumption_nodes:
+            conclusion_node.add_sub_child(assumption_node)
 
         conclusion_node.argument = argument
 
         for node in premise_nodes\
-                + [node for node in descendant_nodes if node is not None]\
+                + [node for node in assumption_nodes if node is not None]\
                 + [conclusion_node]:
             proof_tree.add_node(node)
 
     for cur_arg in _shuffle_arguments(arguments, weights=argument_weights):  # try all the argument as starting point
-        if any(premise_descendant is not None for premise_descendant in cur_arg.premise_descendants):
+        if len(cur_arg.assumptions) > 0:
+            # the node with assumptions can not be used as the first node.
             continue
 
         proof_tree = ProofTree()
@@ -226,21 +227,26 @@ def _generate_stem(arguments: List[Argument],
             formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
             cur_conclusion = cur_conclusion_node.formula
+            cur_assumption_nodes = [node for node in cur_conclusion_node.descendants if node.is_leaf]
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
             # Choose next argument
             chainable_args = []
             for arg in arguments:
                 one_premise_matched = False
-                for premise, premise_descendant in zip(arg.premises, arg.premise_descendants):
+                for premise in arg.premises:
                     if not formula_is_identical_to(premise, cur_conclusion):
                         continue
-                    if premise_descendant is not None\
-                            and not any(formula_is_identical_to(descendant_node.formula, premise_descendant) and descendant_node.is_leaf
-                                        for descendant_node in cur_conclusion_node.descendants):
-                        continue
+
+                    if premise in arg.assumptions:
+                        assumption = arg.assumptions[premise]
+                        if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
+                                   for cur_assumption_node in cur_assumption_nodes):
+                            continue
+
                     one_premise_matched = True
                     break
+
                 if one_premise_matched:
                     chainable_args.append(arg)
 
@@ -256,33 +262,33 @@ def _generate_stem(arguments: List[Argument],
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
-                for premise, premise_descendant in _shuffle(list(zip(next_arg.premises, next_arg.premise_descendants))):
+                for premise in _shuffle(next_arg.premises):
                     if is_arg_done:
                         break
                     log_traces.append(f'   |   |   | premise {premise}')
 
+                    assumption = next_arg.assumptions.get(premise, None)
                     for premise_mapping in generate_mappings_from_formula(
-                        [premise] + ([premise_descendant] if premise_descendant is not None else []),
-                        [cur_conclusion] + [node.formula for node in cur_conclusion_node.descendants if node.is_leaf],
+                        [premise] + ([assumption] if assumption is not None else []),
+                        [cur_conclusion] + [node.formula for node in cur_assumption_nodes],
                         block_shuffle=True,
                     ):
                         if is_arg_done:
                             break
                         premise_pulled = interprete_formula(premise, premise_mapping, elim_dneg=elim_dneg)
-                        premise_descendant_pulled = interprete_formula(premise_descendant, premise_mapping, elim_dneg=elim_dneg) if premise_descendant is not None else None
+                        assumption_pulled = interprete_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
-                        log_traces.append(f'   |   |   | premise_descendant_pulled {premise_descendant_pulled}')
+                        log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
 
                         if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
                             continue
 
-                        if premise_descendant_pulled is not None:
+                        if assumption_pulled is not None:
                             # print(0)
-                            if all(premise_descendant_pulled.rep != descendant_node.formula.rep
-                                   for descendant_node in cur_conclusion_node.descendants
-                                   if descendant_node.is_leaf):
-                                rejection_stats['premise_descendant_pulled.rep != descendant_node.formula.rep'] += 1
+                            if all(assumption_pulled.rep != cur_assumption_node.formula.rep
+                                   for cur_assumption_node in cur_assumption_nodes):
+                                rejection_stats['assumption_pulled.rep != cur_assumption_node.formula.rep'] += 1
                                 continue
 
                         # for early rejection
@@ -326,22 +332,24 @@ def _generate_stem(arguments: List[Argument],
 
             if is_arg_done:
                 # Update
-                descendant_nodes = []
-                for i_premise, (premise, premise_descendant) in enumerate(zip(next_arg_pulled.premises, next_arg_pulled.premise_descendants)):
+                next_assumption_nodes = []
+                for i_premise, premise in enumerate(next_arg_pulled.premises):
                     if premise.rep == cur_conclusion.rep:
                         next_arg_pulled.premises[i_premise] = cur_conclusion  # refer to the unique object.
-                    if premise_descendant is not None:
-                        for descendant_node in cur_conclusion_node.descendants:
-                            if premise_descendant.rep == descendant_node.formula.rep and descendant_node.is_leaf:
-                                next_arg_pulled.premise_descendants[i_premise] = descendant_node.formula  # refer to the unique object.
-                                descendant_nodes.append(descendant_node)
+                    if premise in next_arg_pulled.assumptions:
+                        assumption = next_arg_pulled.assumptions[premise]
+                        for cur_assumption_node in cur_assumption_nodes:
+                            if assumption.rep == cur_assumption_node.formula.rep:
+                                next_arg_pulled.assumptions[premise] = cur_assumption_node.formula  # refer to the unique object.
+                                next_assumption_nodes.append(cur_assumption_node)
+
                 next_conclusion_node = ProofNode(next_arg_pulled.conclusion)
                 next_conclusion_node.argument = next_arg_pulled
                 next_premise_nodes = [
                     cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
                     for premise in next_arg_pulled.premises
                 ]
-                update(next_premise_nodes, descendant_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
+                update(next_premise_nodes, next_assumption_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
@@ -418,7 +426,7 @@ def _extend_braches(proof_tree: ProofTree,
             chainable_args = [
                 arg for arg in arguments
                 if formula_is_identical_to(arg.conclusion, leaf_node.formula)
-                and all(premise_descendant is None for premise_descendant in arg.premise_descendants)  # by it's logic, the argument with premise descendants can not be applied in branch extension
+                and len(arg.assumptions) == 0  # by it's logic, the argument with premise assumptions can not be applied in branch extension
             ]
             if len(chainable_args) == 0:
                 rejection_stats['len(chainable_args) == 0'] += 1
@@ -566,5 +574,3 @@ def _shuffle_arguments(arguments: List[Argument],
                        weights: Optional[Dict[Argument, float]] = None) -> Iterable[Argument]:
     _weights = [weights[argument] for argument in arguments] if weights is not None else None
     yield from _shuffle(arguments, weights=_weights)
-
-

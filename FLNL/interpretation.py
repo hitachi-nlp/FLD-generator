@@ -325,12 +325,15 @@ def interprete_argument(arg: Argument,
                         elim_dneg=False) -> Argument:
     interpreted_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
                             for formula in arg.premises]
-    interpreted_premise_descendants = [interprete_formula(descendant, mapping, elim_dneg=elim_dneg) if descendant is not None else None
-                                       for descendant in arg.premise_descendants]
+    interpreted_assumptions = {
+        interpreted_premise: interprete_formula(arg.assumptions[premise], mapping, elim_dneg=elim_dneg)
+        for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
+        if premise in arg.assumptions
+    }
     interpreted_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
-                    premise_descendants=interpreted_premise_descendants,
+                    interpreted_assumptions,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -525,11 +528,17 @@ def argument_is_identical_to(this_argument: Argument,
         for this_premise in this_argument.premises
     ):
         return False
-    for this_premise_descendant in this_argument.premise_descendants:
-        if all(
-            ((this_premise_descendant is None) != (that_premise_descendant is None))
-            or (this_premise_descendant is not None and _formula_can_not_be_identical_to(this_premise_descendant, that_premise_descendant))
-                for that_premise_descendant in that_argument.premise_descendants):
+    for this_premise in this_argument.premises:
+        if this_premise not in this_argument.assumptions:
+            continue
+
+        this_assumption = this_argument.assumptions[this_premise]
+
+        that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
+                            if that_premise in that_argument.assumptions]
+        
+        if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
+                   for that_assumption in that_assumptions):
             return False
 
     def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
@@ -539,18 +548,22 @@ def argument_is_identical_to(this_argument: Argument,
         _is_premises_same = False
         for premise_indexes in permutations(range(len(that_argument.premises))):
             that_premises_permuted = [that_argument.premises[i] for i in premise_indexes]
-            that_premise_descendant_permuted = [that_argument.premise_descendants[i] for i in premise_indexes]
-        # for that_premises_permuted, that_premise_descendant_permuted in permutations(zip(that_argument.premises, that_argument.premise_descendants)):
-            if all(
-                this_premise.rep == that_premise.rep
-                and (
-                    (this_premise_descendant is None and that_premise_descendant is None)
-                    or (this_premise_descendant is not None and that_premise_descendant is not None and this_premise_descendant.rep == that_premise_descendant.rep)
-                )
-                for this_premise, this_premise_descendant, that_premise, that_premise_descendant, in zip(this_argument.premises, this_argument.premise_descendants, that_premises_permuted, that_premise_descendant_permuted)
-            ):
-                _is_premises_same = True
-                break
+            for this_premise, that_premise in zip(this_argument.premises, that_premises_permuted):
+                if this_premise.rep != that_premise.rep:
+                    continue
+
+                this_assumption = this_argument.assumptions[this_premise]
+                that_assumption = that_argument.assumptions[that_premise]
+
+                if this_assumption is None and that_assumption is None:
+                    _is_premises_same = True
+                    break
+                elif this_assumption is not None and that_assumption is not None:
+                    if this_assumption.rep == that_assumption.rep:
+                        _is_premises_same = True
+                        break
+                else:
+                    continue
         return _is_premises_same
 
     # check the exact identification condition.

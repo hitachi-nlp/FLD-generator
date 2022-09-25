@@ -5,7 +5,7 @@ IMPLICATION = '->'
 AND = '&'
 OR = 'v'
 NOT = '¬'
-PROVE = '⊢'
+DERIVE = '⊢'
 
 _PREDICATE_ALPHABETS = [
     'A', 'B', 'C', 'D', 'E',
