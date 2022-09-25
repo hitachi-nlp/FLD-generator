@@ -57,11 +57,16 @@ class ProofTreeGenerationPipeline:
             if self.translator is not None:
                 logger.info('========================== translating... ============================')
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + distractor_formulas
+                assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
                 named_translations, translator_stats = self.translator.translate(all_formulas,
                                                                                  raise_if_translation_not_found=raise_if_translation_not_found)
-                for formula, (translation_name, translation) in zip(all_formulas, named_translations):
+                for i_formula, (formula, (translation_name, translation)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
-                    formula.translation = translation
+                    if i_formula in assump_formula_indices:
+                        translation_prefix = 'let\' assume that '
+                    else:
+                        translation_prefix = ''
+                    formula.translation = translation_prefix + translation
                 logger.info('========================== translating done! ============================')
 
             return proof_tree, root_negation_formula, distractor_formulas, self._get_stats(proof_tree,
