@@ -195,7 +195,7 @@ def _generate_stem(arguments: List[Argument],
             conclusion_node.add_child(premise_node)
 
         for assumption_node in assumption_nodes:
-            conclusion_node.add_sub_child(assumption_node)
+            conclusion_node.add_assump_child(assumption_node)
 
         conclusion_node.argument = argument
 
@@ -403,7 +403,7 @@ def _extend_braches(proof_tree: ProofTree,
         leaf_nodes = [
             node for node in proof_tree.leaf_nodes
             if proof_tree.get_node_depth(node) < proof_tree.depth
-            and node.sub_parent is None  # assumptions shoud keep beeing leaf
+            and node.assump_parent is None  # assumptions shoud keep beeing leaf
         ]
         if len(leaf_nodes) == 0:
             return

@@ -21,8 +21,8 @@ class ProofNode:
         self._parent: Optional[ProofNode] = None
         self._children: List['ProofNode'] = []
 
-        self._sub_parent: Optional[ProofNode] = None
-        self._sub_children: List['ProofNode'] = []
+        self._assump_parent: Optional[ProofNode] = None
+        self._assump_children: List['ProofNode'] = []
 
     @property
     def parent(self):
@@ -74,38 +74,38 @@ class ProofNode:
         return descendants
 
     @property
-    def sub_parent(self):
-        return self._sub_parent
+    def assump_parent(self):
+        return self._assump_parent
 
-    def set_sub_parent(self, node: 'ProofNode') -> None:
-        self._sub_parent = node
-        if self not in node.sub_children:
-            node.add_sub_child(self)
+    def set_assump_parent(self, node: 'ProofNode') -> None:
+        self._assump_parent = node
+        if self not in node.assump_children:
+            node.add_assump_child(self)
 
-    def delete_sub_parent(self) -> None:
-        if self._sub_parent is not None:
-            self._sub_parent.delete_sub_child(self)
-        self._sub_parent = None
+    def delete_assump_parent(self) -> None:
+        if self._assump_parent is not None:
+            self._assump_parent.delete_assump_child(self)
+        self._assump_parent = None
 
     @property
-    def sub_children(self):
-        return self._sub_children
+    def assump_children(self):
+        return self._assump_children
 
-    def add_sub_child(self, node: 'ProofNode') -> None:
-        if node.sub_parent is not None:
-            raise MultipleParentError('Can\'t add sub_child since it already has a sub_parent.')
+    def add_assump_child(self, node: 'ProofNode') -> None:
+        if node.assump_parent is not None:
+            raise MultipleParentError('Can\'t add assump_child since it already has a assump_parent.')
 
-        if node not in self._sub_children:
-            self._sub_children.append(node)
-        node.set_sub_parent(self)
+        if node not in self._assump_children:
+            self._assump_children.append(node)
+        node.set_assump_parent(self)
 
-    def delete_sub_child(self, node: 'ProofNode') -> None:
-        for _node in self._sub_children:
+    def delete_assump_child(self, node: 'ProofNode') -> None:
+        for _node in self._assump_children:
             if _node  == node:
-                self._sub_children.remove(_node)
-                _node.delete_sub_parent()
+                self._assump_children.remove(_node)
+                _node.delete_assump_parent()
                 break
-        if len(self._sub_children) == 0:
+        if len(self._assump_children) == 0:
             self.argument = None
 
     @property
@@ -135,18 +135,18 @@ class ProofTree:
         for node_in_tree in self._nodes:
             if node.parent == node_in_tree:
                 node.delete_parent()
-            if node.sub_parent == node_in_tree:
-                node.delete_sub_parent()
+            if node.assump_parent == node_in_tree:
+                node.delete_assump_parent()
             node.delete_child(node_in_tree)
-            node.delete_sub_child(node_in_tree)
+            node.delete_assump_child(node_in_tree)
 
         # for node_in_tree in self._nodes:
         #     if node_in_tree.parent == node:
         #         node_in_tree.delete_parent()
-        #     if node_in_tree.sub_parent == node:
-        #         node_in_tree.delete_sub_parent()
+        #     if node_in_tree.assump_parent == node:
+        #         node_in_tree.delete_assump_parent()
         #     node_in_tree.delete_child(node)
-        #     node_in_tree.delete_sub_child(node)
+        #     node_in_tree.delete_assump_child(node)
 
     @property
     def nodes(self) -> List[ProofNode]:

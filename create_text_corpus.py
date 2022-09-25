@@ -24,7 +24,7 @@ def get_text_mixer(num_jsonl_files: int, type_: str):
         logging.info('Length News Corpus: %s', reuters_length)
 
         # SPGutenberg paragraphs
-        file1 = open('corpora/spgutenberg/sub_pgcorpus_split-20200814.txt', 'r')
+        file1 = open('corpora/spgutenberg/assump_pgcorpus_split-20200814.txt', 'r')
         parlist = file1.readlines()
         file1.close()
         logger.info('Length PGut Corpus: %s', len(parlist))
