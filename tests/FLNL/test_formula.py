@@ -1,5 +1,5 @@
 from typing import List, Set
-from FLNL.formula import Formula
+from FLNL.formula import Formula, negate
 
 
 def test_formula():
@@ -19,5 +19,28 @@ def test_formula():
     assert check_reps(Formula('(Ex): {A}x -> {B}x').existential_variables, {'x'})
 
 
+def test_negate():
+
+    def _test_negate(rep: str, gold: str) -> bool:
+        return negate(Formula(rep)).rep == gold
+
+    assert _test_negate('{A}', '¬{A}')
+    assert _test_negate('{A}{a}', '¬{A}{a}')
+    assert _test_negate('({A})', '¬({A})')
+
+    assert _test_negate('{A} v {B}', '¬({A} v {B})')
+    assert _test_negate('({A} v {B})', '¬({A} v {B})')
+    assert _test_negate('({A} v {B}) -> {C}', '¬(({A} v {B}) -> {C})')
+    assert _test_negate('({A} v {B}) -> ({C} v {D})', '¬(({A} v {B}) -> ({C} v {D}))')
+    assert _test_negate('({A} v {B}) -> ({C} v {D})', '¬(({A} v {B}) -> ({C} v {D}))')
+        
+    assert _test_negate('¬{A}', '¬¬{A}')
+    assert _test_negate('¬{A}{a}', '¬¬{A}{a}')
+    assert _test_negate('¬({A})', '¬¬({A})')
+    assert _test_negate('¬({A} v {B})', '¬¬({A} v {B})')
+    assert _test_negate('¬({A} v {B}) -> {C}', '¬(¬({A} v {B}) -> {C})')
+
+
 if __name__ == '__main__':
     test_formula()
+    test_negate()
