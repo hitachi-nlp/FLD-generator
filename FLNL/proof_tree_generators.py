@@ -129,7 +129,7 @@ class ProofTreeGenerator:
 
     def generate_tree(self,
                       depth: int,
-                      max_leaf_extensions: int,
+                      branch_extension_steps: int,
                       max_retry=100,
                       timeout=5) -> Optional[ProofTree]:
 
@@ -139,7 +139,7 @@ class ProofTreeGenerator:
             timeout,
             self._generate_tree,
             depth,
-            max_leaf_extensions,
+            branch_extension_steps,
         )
 
     def generate_stem(self,
@@ -156,7 +156,8 @@ class ProofTreeGenerator:
 
     def extend_braches(self,
                        proof_tree: ProofTree,
-                       max_leaf_extensions: int,
+                       branch_extension_steps: int,
+                       depth_limit: Optional[int] = None,
                        max_retry=100,
                        timeout=5) -> Optional[ProofTree]:
         return self._run(
@@ -165,7 +166,8 @@ class ProofTreeGenerator:
             timeout,
             self._extend_braches,
             proof_tree,
-            max_leaf_extensions,
+            branch_extension_steps,
+            depth_limit=depth_limit,
         )
 
     def _run(self,
@@ -193,9 +195,9 @@ class ProofTreeGenerator:
                 logger.warning('-- %s failed with TimeoutError(timeout=%d)', log_name, timeout)
         raise ProofTreeGenerationFailure(f'-- %s failed with max_retry={max_retry}.', log_name)
 
-    def _generate_tree(self, depth: int, max_leaf_extensions: int) -> Optional[ProofTree]:
+    def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)
-        self._extend_braches(proof_tree, max_leaf_extensions)
+        self._extend_braches(proof_tree, branch_extension_steps, depth_limit=proof_tree.depth)
         return proof_tree
 
     def _generate_stem(self, depth: int) -> ProofTree:
@@ -206,12 +208,16 @@ class ProofTreeGenerator:
                               argument_weights=self.argument_weights,
                               elim_dneg=self.elim_dneg)
 
-    def _extend_braches(self, proof_tree: ProofTree, max_leaf_extensions: int) -> None:
+    def _extend_braches(self,
+                        proof_tree: ProofTree,
+                        branch_extension_steps: int,
+                        depth_limit: Optional[int] = None) -> None:
         return _extend_braches(proof_tree,
                                self.arguments,
-                               max_leaf_extensions,
+                               branch_extension_steps,
                                PREDICATES,
                                CONSTANTS,
+                               depth_limit=depth_limit,
                                argument_weights=self.argument_weights,
                                elim_dneg=self.elim_dneg)
 
@@ -382,10 +388,11 @@ def _generate_stem(arguments: List[Argument],
 @profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
-                    num_max_extensions: int,
+                    num_steps: int,
                     predicate_pool: List[str],
                     constant_pool: List[str],
                     argument_weights: Optional[Dict[Argument, float]] = None,
+                    depth_limit: Optional[int] = None,
                     elim_dneg=False) -> None:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
@@ -398,13 +405,14 @@ def _extend_braches(proof_tree: ProofTree,
 
     cur_step = 0
     while True:
-        if cur_step >= num_max_extensions:
+        if cur_step >= num_steps:
             break
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
-        leaf_nodes = [node for node in proof_tree.leaf_nodes
-                      if proof_tree.get_node_depth(node) < proof_tree.depth]
+        leaf_nodes = [node for node in proof_tree.leaf_nodes]
+        if depth_limit is not None:
+            leaf_nodes = [node for node in leaf_nodes if proof_tree.get_node_depth(node) < depth_limit]
         if len(leaf_nodes) == 0:
             return
 

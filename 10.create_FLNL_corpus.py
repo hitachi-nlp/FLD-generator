@@ -106,7 +106,7 @@ def main():
                 'quantification',
 
                 'depth',
-                'max_leaf_extensions',
+                'branch_extension_steps',
                 'distractor_factor',
 
                 'translation_configs',
@@ -160,7 +160,7 @@ def main():
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
 
                     f'--depth {job_settings["depth"]}',
-                    f'--max-leaf-extensions {job_settings["max_leaf_extensions"]}',
+                    f'--max-leaf-extensions {job_settings["branch_extension_steps"]}',
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',
                     f'--distractor-factor {job_settings["distractor_factor"]}',

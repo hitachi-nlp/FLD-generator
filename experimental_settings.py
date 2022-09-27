@@ -26,7 +26,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 5,
-        'max_leaf_extensions': 5,
+        'branch_extension_steps': 5,
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -57,7 +57,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.0,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -89,7 +89,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.0,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -121,7 +121,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -153,7 +153,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 3,
-        'max_leaf_extensions': 3,
+        'branch_extension_steps': 3,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -184,7 +184,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 5,
-        'max_leaf_extensions': 3,
+        'branch_extension_steps': 3,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -215,7 +215,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.0,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.0,
 
         'translation_configs': [
@@ -247,7 +247,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.0,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -279,7 +279,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.0,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -311,7 +311,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 1,
-        'max_leaf_extensions': 0,
+        'branch_extension_steps': 0,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -343,7 +343,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 3,
-        'max_leaf_extensions': 3,
+        'branch_extension_steps': 3,
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -374,7 +374,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
         'depth': 5,
-        'max_leaf_extensions': 3,
+        'branch_extension_steps': 3,
         'distractor_factor': 0.5,
 
         'translation_configs': [

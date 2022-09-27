@@ -47,7 +47,7 @@ def load_dataset(argument_config: str,
                  proof_stances: List[str],
                  world_assump: str,
                  depth: int,
-                 max_leaf_extensions: int):
+                 branch_extension_steps: int):
     arguments = load_arguments(argument_config)
     generator = ProofTreeGenerator(
         arguments,
@@ -70,7 +70,7 @@ def load_dataset(argument_config: str,
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    return NLProofSDataset(pipeline, proof_stances, world_assump, depth, max_leaf_extensions)
+    return NLProofSDataset(pipeline, proof_stances, world_assump, depth, branch_extension_steps)
 
 
 def generate_instances(size: int, *args):
@@ -133,7 +133,7 @@ def main(output_path,
          translation_config,
          size,
          depth,
-         max_leaf_extensions,
+         branch_extension_steps,
          complication,
          quantification,
          keep_dneg,
@@ -180,7 +180,7 @@ def main(output_path,
                         proof_stances,
                         world_assump,
                         depth,
-                        max_leaf_extensions,
+                        branch_extension_steps,
                     )
                 )
 
