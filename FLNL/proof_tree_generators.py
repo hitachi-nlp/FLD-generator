@@ -1,7 +1,7 @@
 import random
 import logging
 from collections import defaultdict
-from typing import List, Optional, Any, Iterable, Tuple, Dict, Union
+from typing import List, Optional, Any, Iterable, Tuple, Dict, Union, Callable
 from pprint import pformat
 import logging
 
@@ -57,10 +57,8 @@ class ProofTreeGenerator:
                  complicated_arguments_weight=0.0,
                  quantified_arguments_weight=0.0,
                  quantify_all_at_once=True,
-                 elim_dneg=False,
-                 timeout: Optional[int] = 10):
+                 elim_dneg=False):
         self.elim_dneg = elim_dneg
-        self.timeout = timeout
 
         self.arguments, self.argument_weights = self._load_arguments(
             arguments,
@@ -132,40 +130,90 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth: int,
                       max_leaf_extensions: int,
-                      max_retry=100) -> Optional[ProofTree]:
+                      max_retry=100,
+                      timeout=5) -> Optional[ProofTree]:
+
+        return self._run(
+            'generate_tree()',
+            max_retry,
+            timeout,
+            self._generate_tree,
+            depth,
+            max_leaf_extensions,
+        )
+
+    def generate_stem(self,
+                      depth: int,
+                      max_retry=100,
+                      timeout=5) -> Optional[ProofTree]:
+        return self._run(
+            'generate_stem()',
+            max_retry,
+            timeout,
+            self._generate_stem,
+            depth,
+        )
+
+    def extend_braches(self,
+                       proof_tree: ProofTree,
+                       max_leaf_extensions: int,
+                       max_retry=100,
+                       timeout=5) -> Optional[ProofTree]:
+        return self._run(
+            'extend_braches()',
+            max_retry,
+            timeout,
+            self._extend_braches,
+            proof_tree,
+            max_leaf_extensions,
+        )
+
+    def _run(self,
+             log_name: str,
+             max_retry: Optional[int],
+             timeout: Optional[int],
+             func: Callable,
+             *args,
+             **kwargs) -> Any:
+
+        max_retry = max_retry or 9999
+        timeout = timeout or 9999
+
         for i_trial in range(0, max_retry):
-            logger.info('-- generate_tree() trial=%d', i_trial)
+            logger.info('------------ %s trial=%d --------------', log_name, i_trial)
             try:
-                proof_tree = _generate_tree(self.arguments,
-                                            depth,
-                                            max_leaf_extensions,
-                                            argument_weights=self.argument_weights,
-                                            elim_dneg=self.elim_dneg,
-                                            timeout=self.timeout)
-                logger.info('-- generate_tree() succeeded!')
-                return proof_tree
+                with timeout_context(timeout, exception=TimeoutError):
+                    result = func(*args, **kwargs)
+                logger.info('-- %s succeeded!', log_name)
+                return result
             except ProofTreeGenerationFailure as e:
-                logger.warning('Generation failed. The message is the followings:')
+                logger.warning('-- %s failed. The message is the followings:', log_name)
                 logger.warning('%s', str(e))
             except TimeoutError:
-                logger.warning('Generation failed with TimeoutError() with timeout = %d', self.timeout)
-        raise ProofTreeGenerationFailure(f'generate_tree() failed with max_retry={max_retry}.')
+                logger.warning('-- %s failed with TimeoutError(timeout=%d)', log_name, timeout)
+        raise ProofTreeGenerationFailure(f'-- %s failed with max_retry={max_retry}.', log_name)
 
+    def _generate_tree(self, depth: int, max_leaf_extensions: int) -> Optional[ProofTree]:
+        proof_tree = self._generate_stem(depth)
+        self._extend_braches(proof_tree, max_leaf_extensions)
+        return proof_tree
 
-@profile
-def _generate_tree(arguments: List[Argument],
-                   depth: int, 
-                   max_leaf_extensions: int,
-                   argument_weights: Optional[Dict[Argument, float]] = None,
-                   elim_dneg=False,
-                   timeout: Optional[int] = None) -> Optional[ProofTree]:
+    def _generate_stem(self, depth: int) -> ProofTree:
+        return _generate_stem(self.arguments,
+                              depth,
+                              PREDICATES,
+                              CONSTANTS,
+                              argument_weights=self.argument_weights,
+                              elim_dneg=self.elim_dneg)
 
-    timeout = timeout or 99999999
-    with timeout_context(timeout, exception=TimeoutError):
-        proof_tree = _generate_stem(arguments, depth, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
-        _extend_braches(proof_tree, arguments, max_leaf_extensions, PREDICATES, CONSTANTS, argument_weights=argument_weights, elim_dneg=elim_dneg)
-
-    return proof_tree
+    def _extend_braches(self, proof_tree: ProofTree, max_leaf_extensions: int) -> None:
+        return _extend_braches(proof_tree,
+                               self.arguments,
+                               max_leaf_extensions,
+                               PREDICATES,
+                               CONSTANTS,
+                               argument_weights=self.argument_weights,
+                               elim_dneg=self.elim_dneg)
 
 
 @profile
@@ -525,5 +573,3 @@ def _shuffle_arguments(arguments: List[Argument],
                        weights: Optional[Dict[Argument, float]] = None) -> Iterable[Argument]:
     _weights = [weights[argument] for argument in arguments] if weights is not None else None
     yield from _shuffle(arguments, weights=_weights)
-
-
