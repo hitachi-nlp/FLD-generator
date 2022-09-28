@@ -4,7 +4,7 @@ from typing import List, Optional
 IMPLICATION = '->'
 AND = '&'
 OR = 'v'
-NOT = '¬'
+NEGATION = '¬'
 
 _PREDICATE_ALPHABETS = [
     'A', 'B', 'C', 'D', 'E',
@@ -167,7 +167,7 @@ class Formula:
 
 
 def eliminate_double_negation(formula: Formula) -> Formula:
-    return Formula(re.sub(f'{NOT}{NOT}', '', formula.rep))
+    return Formula(re.sub(f'{NEGATION}{NEGATION}', '', formula.rep))
 
 
 def negate(formula: Formula) -> Formula:
@@ -195,14 +195,14 @@ def negate(formula: Formula) -> Formula:
             # '({A} v {B})'
             return False
 
-        elif formula.rep.startswith(NOT):
+        elif formula.rep.startswith(NEGATION):
             # ^^({A} v {B}) -> {C}
             # ^^({A} v {B})
-            return require_outer_brace(Formula(formula.rep.lstrip(NOT)))
+            return require_outer_brace(Formula(formula.rep.lstrip(NEGATION)))
         else:
             return True
 
     if require_outer_brace(formula):
-        return Formula(NOT + '(' + formula.rep + ')')
+        return Formula(NEGATION + '(' + formula.rep + ')')
     else:
-        return Formula(NOT + formula.rep)
+        return Formula(NEGATION + formula.rep)

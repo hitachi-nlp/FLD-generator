@@ -8,7 +8,7 @@ from .formula import (
     IMPLICATION,
     AND,
     OR,
-    NOT,
+    NEGATION,
     CONSTANTS,
 )
 import kern_profiler
@@ -250,21 +250,21 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
     if rep.find(AND) >= 0:
         if re.match(f'^\({PAS_rep} {AND} .*\)$', rep):
             values.add('T')
-        elif re.match(f'^\({NOT}{PAS_rep} {AND} .*\)$', rep):
+        elif re.match(f'^\({NEGATION}{PAS_rep} {AND} .*\)$', rep):
             values.add('F')
         if re.match(f'^\(.* {AND} {PAS_rep}\)$', rep):
             values.add('T')
-        elif re.match(f'^\(.* {AND} {NOT}{PAS_rep}\)$', rep):
+        elif re.match(f'^\(.* {AND} {NEGATION}{PAS_rep}\)$', rep):
             values.add('F')
 
         # AND with is converted to OR by DeMorgan, thus it is undecidable.
-        elif re.match(f'^{NOT}\({PAS_rep} {AND} .*\)$', rep):
+        elif re.match(f'^{NEGATION}\({PAS_rep} {AND} .*\)$', rep):
             values.add('Unknown')
-        elif re.match(f'^{NOT}\({NOT}{PAS_rep} {AND} .*\)$', rep):
+        elif re.match(f'^{NEGATION}\({NEGATION}{PAS_rep} {AND} .*\)$', rep):
             values.add('Unknown')
-        if re.match(f'^{NOT}\(.* {AND} {PAS_rep}\)$', rep):
+        if re.match(f'^{NEGATION}\(.* {AND} {PAS_rep}\)$', rep):
             values.add('Unknown')
-        elif re.match(f'^{NOT}\(.* {AND} {NOT}{PAS_rep}\)$', rep):
+        elif re.match(f'^{NEGATION}\(.* {AND} {NEGATION}{PAS_rep}\)$', rep):
             values.add('Unknown')
 
     elif rep.find(OR) >= 0:
@@ -272,20 +272,20 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
         if re.match(f'^\({PAS_rep} {OR} {PAS_rep}\)$', rep):
             values.add('T')
             is_decidable_or = True
-        elif re.match(f'^\({NOT}{PAS_rep} {OR} {NOT}{PAS_rep}\)$', rep):
+        elif re.match(f'^\({NEGATION}{PAS_rep} {OR} {NEGATION}{PAS_rep}\)$', rep):
             values.add('F')
             is_decidable_or = True
 
-        if re.match(f'^{NOT}\({PAS_rep} {OR} .*\)$', rep):
+        if re.match(f'^{NEGATION}\({PAS_rep} {OR} .*\)$', rep):
             values.add('F')
             is_decidable_or = True
-        elif re.match(f'^{NOT}\({NOT}{PAS_rep} {OR} .*\)$', rep):
+        elif re.match(f'^{NEGATION}\({NEGATION}{PAS_rep} {OR} .*\)$', rep):
             values.add('T')
             is_decidable_or = True
-        if re.match(f'^{NOT}\(.* {OR} {PAS_rep}\)$', rep):
+        if re.match(f'^{NEGATION}\(.* {OR} {PAS_rep}\)$', rep):
             values.add('F')
             is_decidable_or = True
-        elif re.match(f'^{NOT}\(.* {OR} {NOT}{PAS_rep}\)$', rep):
+        elif re.match(f'^{NEGATION}\(.* {OR} {NEGATION}{PAS_rep}\)$', rep):
             values.add('T')
             is_decidable_or = True
 
@@ -294,7 +294,7 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
     else:
         if re.match(f'^{PAS_rep}$', rep):
             values.add('T')
-        elif re.match(f'^{NOT}{PAS_rep}$', rep):
+        elif re.match(f'^{NEGATION}{PAS_rep}$', rep):
             values.add('F')
 
     if len(values) == 0:

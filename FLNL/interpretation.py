@@ -6,7 +6,7 @@ from itertools import permutations
 
 from .formula import (
     Formula,
-    NOT,
+    NEGATION,
     OR,
     AND,
     IMPLICATION,
@@ -77,11 +77,11 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
     def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
         if len(predicates) == 1:
             predicate = predicates[0]
-            for prefix in ['', f'{NOT}']:
+            for prefix in ['', f'{NEGATION}']:
                 yield [f'{prefix}{predicate}']
         else:
             predicate = predicates[0]
-            for prefix in ['', f'{NOT}']:
+            for prefix in ['', f'{NEGATION}']:
                 for tail in not_enhance(predicates[1:]):
                     yield [f'{prefix}{predicate}'] + tail
 
@@ -91,7 +91,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                 continue
             mapping = copy.deepcopy(identity_mapping)
             for predicate_with_not in predicates_with_not:
-                original_predicate = predicate_with_not.lstrip(f'{NOT}')
+                original_predicate = predicate_with_not.lstrip(f'{NEGATION}')
                 mapping[original_predicate] = predicate_with_not
             yield mapping
 
@@ -116,7 +116,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                     + predicates[i_predicate_to_expand + 1:]
                 for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
                     mapping = copy.deepcopy(not_enhanced_mapping)
-                    for i_total_negation, total_negation_prefix in enumerate(['', NOT]):
+                    for i_total_negation, total_negation_prefix in enumerate(['', NEGATION]):
                         mapping[predicate_to_expand] = f'{total_negation_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
                         not_name_id = i_not * 2 + i_total_negation
                         if get_name:
@@ -483,7 +483,7 @@ def formula_can_not_be_identical_to(this_formula: Formula,
         return True
 
     if any([this_formula.rep.count(symbol) != that_formula.rep.count(symbol)
-            for symbol in [AND, OR, IMPLICATION, NOT]]):
+            for symbol in [AND, OR, IMPLICATION, NEGATION]]):
         return True
 
     return False

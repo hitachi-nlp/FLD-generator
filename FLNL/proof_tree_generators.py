@@ -35,7 +35,7 @@ from .formula import (
     IMPLICATION,
     AND,
     OR,
-    NOT,
+    NEGATION,
     PREDICATES,
     CONSTANTS,
     VARIABLES,
@@ -198,7 +198,7 @@ class ProofTreeGenerator:
         timeout = timeout or 9999
 
         for i_trial in range(0, max_retry):
-            logger.info('------------ %s trial=%d --------------', log_name, i_trial)
+            logger.info('---- %s trial=%d ----', log_name, i_trial)
             try:
                 with timeout_context(timeout, exception=TimeoutError):
                     result = func(*args, **kwargs)
@@ -209,7 +209,7 @@ class ProofTreeGenerator:
                 logger.warning('%s', str(e))
             except TimeoutError:
                 logger.warning('-- %s the LAST trial failed with TimeoutError(timeout=%d)', log_name, timeout)
-        raise ProofTreeGenerationFailure(f'-- %s failed with max_retry={max_retry}.', log_name)
+        raise ProofTreeGenerationFailure(f'-- {log_name} failed with max_retry={max_retry}.')
 
     def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)

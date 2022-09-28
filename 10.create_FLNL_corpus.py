@@ -46,7 +46,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.unknown.trial')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.UNKNOWN')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220917.UNKNOWN')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -55,21 +56,28 @@ def main():
         # '20220901.atmf-PA.arg-compl.dpth-3',
         # '20220901.atmf-PA.arg-compl.dpth-5',
 
-        '20220916.atmf-P.arg-basic.dpth-1.UNKNOWN',
-        '20220916.atmf-PA.arg-basic.dpth-1.UNKNOWN',
-        '20220916.atmf-PA.arg-compl.dpth-1.UNKNOWN',
-        '20220916.atmf-PA.arg-compl.dpth-3.UNKNOWN',
-        '20220916.atmf-PA.arg-compl.dpth-5.UNKNOWN',
+        # '20220916.atmf-P.arg-basic.dpth-1.UNKNOWN',
+        # '20220916.atmf-PA.arg-basic.dpth-1.UNKNOWN',
+        # '20220916.atmf-PA.arg-compl.dpth-1.UNKNOWN',
+        # '20220916.atmf-PA.arg-compl.dpth-3.UNKNOWN',
+        # '20220916.atmf-PA.arg-compl.dpth-5.UNKNOWN',
+
+
+        # '20220928.atmf-P.arg-basic.dpth-1.neg_tree_distractor',
+        # '20220928.atmf-PA.arg-basic.dpth-1.neg_tree_distractor',
+        # '20220928.atmf-PA.arg-compl.dpth-1.neg_tree_distractor',
+        # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
+        '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
     ]
 
     split_sizes = {
         # 'train': 500,
         # 'valid': 100,
-        # 'test': 100,
+        'test': 100,
 
-        'train': 100000,
-        'valid': 1000,
-        'test': 1000,
+        # 'train': 100000,
+        # 'valid': 1000,
+        # 'test': 1000,
     }
 
     # engine = SubprocessEngine()
@@ -107,11 +115,14 @@ def main():
 
                 'depth',
                 'branch_extension_steps',
+                'distractor',
                 'distractor_factor',
 
                 'translation_configs',
 
                 'num_workers_per_job',
+
+                'world_assump',
             ],
             save_params=True
         )
@@ -160,9 +171,10 @@ def main():
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
 
                     f'--depth {job_settings["depth"]}',
-                    f'--max-leaf-extensions {job_settings["branch_extension_steps"]}',
+                    f'--branch-extension-steps {job_settings["branch_extension_steps"]}',
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',
+                    f'--distractor {job_settings["distractor"]}',
                     f'--distractor-factor {job_settings["distractor_factor"]}',
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',

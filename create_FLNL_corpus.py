@@ -21,6 +21,7 @@ from FLNL.proof_tree_generators import ProofTreeGenerator
 from FLNL.datasets import NLProofSDataset
 from FLNL.proof import ProofTree
 from FLNL.utils import nested_merge
+from FLNL.distractors import AVAILABLE_DISTRACTORS, build as build_distractor
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -43,6 +44,7 @@ def load_dataset(argument_config: str,
                  complication: float,
                  quantification: float,
                  keep_dneg: bool,
+                 distractor: str,
                  distractor_factor: float,
                  proof_stances: List[str],
                  world_assump: str,
@@ -56,7 +58,7 @@ def load_dataset(argument_config: str,
         quantified_arguments_weight=quantification,
     )
 
-    distractor = SameFormUnkownInterprandsDistractor(distractor_factor)
+    distractor = build_distractor(distractor, distractor_factor, generator=generator)
 
     merged_config_json = {}
     for config_path in translation_config:
@@ -118,10 +120,11 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
               multiple=True,
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
 @click.option('--depth', type=int, default=5)
-@click.option('--max-leaf-extensions', type=int, default=5)
+@click.option('--branch-extension-steps', type=int, default=5)
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--keep-dneg', is_flag=True, default=False)
+@click.option('--distractor', type=click.Choice(AVAILABLE_DISTRACTORS), default='unknown_interprands')
 @click.option('--distractor-factor', type=float, default=1.0)
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
@@ -137,6 +140,7 @@ def main(output_path,
          complication,
          quantification,
          keep_dneg,
+         distractor,
          distractor_factor,
          proof_stances,
          world_assump,
@@ -176,6 +180,7 @@ def main(output_path,
                         complication,
                         quantification,
                         keep_dneg,
+                        distractor,
                         distractor_factor,
                         proof_stances,
                         world_assump,
