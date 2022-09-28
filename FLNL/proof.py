@@ -49,8 +49,8 @@ class ProofNode:
 
 class ProofTree:
 
-    def __init__(self):
-        self._nodes: List[ProofNode] = []
+    def __init__(self, nodes: Optional[List[ProofNode]] = None):
+        self._nodes: List[ProofNode] = nodes or []
 
     def add_node(self, node: ProofNode) -> None:
         if node not in self._nodes:
@@ -75,9 +75,18 @@ class ProofTree:
                 if len(node.children) == 0]
 
     @property
-    def root_node(self) -> ProofNode:
-        return [node for node in self._nodes
-                if node.parent is None][0]
+    def root_node(self) -> Optional[ProofNode]:
+        if len(self._nodes) == 0:
+            return None
+
+        nodes_wo_parent = [node for node in self._nodes
+                           if node.parent is None]
+        if len(nodes_wo_parent) == 0:
+            return None
+        elif len(nodes_wo_parent) == 1:
+            return nodes_wo_parent[0]
+        else:
+            raise Exception()
 
     @property
     def depth(self) -> int:
@@ -105,6 +114,9 @@ class ProofTree:
                              start_node: Optional[ProofNode] = None,
                              depth=0,
                              get_depth=False) -> Iterable[Union[ProofNode, Tuple[ProofNode, int]]]:
+        if len(self._nodes) == 0:
+            return None
+
         start_node = start_node or self.root_node
         for child_node in start_node.children:
             yield from self.depth_first_traverse(start_node=child_node, depth=depth + 1, get_depth=get_depth)

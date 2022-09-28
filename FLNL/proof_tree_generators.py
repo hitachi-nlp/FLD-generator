@@ -60,15 +60,19 @@ class ProofTreeGenerator:
                  elim_dneg=False):
         self.elim_dneg = elim_dneg
 
+        self._complicated_arguments_weight = complicated_arguments_weight
         self.arguments, self.argument_weights = self._load_arguments(
             arguments,
-            complicated_arguments_weight=complicated_arguments_weight,
+            complicated_arguments_weight=self._complicated_arguments_weight,
             quantified_arguments_weight=quantified_arguments_weight,
             quantify_all_at_once=quantify_all_at_once,
             elim_dneg=elim_dneg,
         )
 
-    @profile
+    @property
+    def complicated_arguments_weight(self):
+        return self._complicated_arguments_weight
+
     def _load_arguments(self,
                         arguments: List[Argument],
                         complicated_arguments_weight: float,
@@ -121,7 +125,6 @@ class ProofTreeGenerator:
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
         logger.info('------- loaded arguments ------')
-        # for argument in sorted(_arguments, key=lambda arg: arg.id):
         for argument in _arguments:
             logger.info('weight: %f    %s', _argument_weights[argument], str(argument))
 
@@ -155,17 +158,30 @@ class ProofTreeGenerator:
         )
 
     def extend_braches(self,
-                       proof_tree: ProofTree,
+                       generate_initial_tree_fn: Callable[[], ProofTree],
+                       # proof_tree: ProofTree,
                        branch_extension_steps: int,
                        depth_limit: Optional[int] = None,
                        max_retry=100,
-                       timeout=5) -> Optional[ProofTree]:
+                       timeout=5) -> ProofTree:
+        """ extend branches of the tree
+
+        Please make sure that generate_initial_tree_fn generate a completely new tree each time it is called.
+        The reason is the following:
+        (i) The current implementation of _extend_braches modifies the original tree.
+        (ii) We try _extend_braches() multiple times if failed. Each trial needs a new tree.
+
+        This is just the limiation of implications.
+        For example we can omit generate_initial_tree_fn and use proof_tree as the argument,
+        if we implement proof_tree.copy().
+        However, the implementation of proof_tree.copy() cost a little and for now, we decided to bypass that.
+        """
         return self._run(
             'extend_braches()',
             max_retry,
             timeout,
             self._extend_braches,
-            proof_tree,
+            generate_initial_tree_fn,
             branch_extension_steps,
             depth_limit=depth_limit,
         )
@@ -189,15 +205,15 @@ class ProofTreeGenerator:
                 logger.info('-- %s succeeded!', log_name)
                 return result
             except ProofTreeGenerationFailure as e:
-                logger.warning('-- %s failed. The message is the followings:', log_name)
+                logger.warning('-- %s failed. The message of the LAST trial is the followings:', log_name)
                 logger.warning('%s', str(e))
             except TimeoutError:
-                logger.warning('-- %s failed with TimeoutError(timeout=%d)', log_name, timeout)
+                logger.warning('-- %s the LAST trial failed with TimeoutError(timeout=%d)', log_name, timeout)
         raise ProofTreeGenerationFailure(f'-- %s failed with max_retry={max_retry}.', log_name)
 
     def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)
-        self._extend_braches(proof_tree, branch_extension_steps, depth_limit=proof_tree.depth)
+        proof_tree = self._extend_braches(lambda : proof_tree, branch_extension_steps, depth_limit=proof_tree.depth)
         return proof_tree
 
     def _generate_stem(self, depth: int) -> ProofTree:
@@ -209,10 +225,10 @@ class ProofTreeGenerator:
                               elim_dneg=self.elim_dneg)
 
     def _extend_braches(self,
-                        proof_tree: ProofTree,
+                        generate_initial_tree_fn: Callable[[], ProofTree],
                         branch_extension_steps: int,
-                        depth_limit: Optional[int] = None) -> None:
-        return _extend_braches(proof_tree,
+                        depth_limit: Optional[int] = None) -> ProofTree:
+        return _extend_braches(generate_initial_tree_fn(),
                                self.arguments,
                                branch_extension_steps,
                                PREDICATES,
@@ -222,7 +238,6 @@ class ProofTreeGenerator:
                                elim_dneg=self.elim_dneg)
 
 
-@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    predicate_pool: List[str],
@@ -385,7 +400,6 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
-@profile
 def _extend_braches(proof_tree: ProofTree,
                     arguments: List[Argument],
                     num_steps: int,
@@ -393,7 +407,7 @@ def _extend_braches(proof_tree: ProofTree,
                     constant_pool: List[str],
                     argument_weights: Optional[Dict[Argument, float]] = None,
                     depth_limit: Optional[int] = None,
-                    elim_dneg=False) -> None:
+                    elim_dneg=False) -> ProofTree:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
     The steps are:
@@ -412,9 +426,11 @@ def _extend_braches(proof_tree: ProofTree,
 
         leaf_nodes = [node for node in proof_tree.leaf_nodes]
         if depth_limit is not None:
-            leaf_nodes = [node for node in leaf_nodes if proof_tree.get_node_depth(node) < depth_limit]
+            leaf_nodes = [node for node in leaf_nodes
+                          if proof_tree.get_node_depth(node) < depth_limit]
         if len(leaf_nodes) == 0:
-            return
+            logger.warning('Couldn\'t extend branch since the tree have no leaf nodes.')
+            return proof_tree
 
         is_leaf_node_done = False
         next_arg_pulled = None
@@ -431,14 +447,15 @@ def _extend_braches(proof_tree: ProofTree,
             target_leaf_node = leaf_node
 
             # Choose next argument
-            chainable_args = [
-                arg for arg in arguments
-                if formula_is_identical_to(arg.conclusion, leaf_node.formula)
-            ]
+            chainable_args = []
+            for arg in arguments:
+                if formula_is_identical_to(arg.conclusion, leaf_node.formula):
+                    chainable_args.append(arg)
             if len(chainable_args) == 0:
                 rejection_stats['len(chainable_args) == 0'] += 1
 
             for next_arg in _shuffle_arguments(chainable_args, weights=argument_weights):
+
                 if is_leaf_node_done:
                     break
                 log_traces.append(f'   |   | next_arg {next_arg}')
@@ -519,8 +536,9 @@ def _extend_braches(proof_tree: ProofTree,
             ])
             raise ProofTreeGenerationFailure(msg)
 
+    return proof_tree
 
-@profile
+
 def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
     is_already_added = False
     for existent_argument in arguments:

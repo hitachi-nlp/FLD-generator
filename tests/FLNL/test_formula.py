@@ -40,6 +40,8 @@ def test_negate():
     assert _test_negate('¬({A} v {B})', '¬¬({A} v {B})')
     assert _test_negate('¬({A} v {B}) -> {C}', '¬(¬({A} v {B}) -> {C})')
 
+    assert _test_negate('(x): ¬(¬{A}x v {B}x)', '¬((x): ¬(¬{A}x v {B}x))')
+
 
 if __name__ == '__main__':
     test_formula()
