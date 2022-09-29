@@ -7,6 +7,7 @@ from pathlib import Path
 import copy
 
 import click
+from pprint import pprint
 from script_engine import QsubEngine, SubprocessEngine
 from logger_setup import setup as setup_logger, create_file_handler
 from lab import build_dir, save_params
@@ -71,7 +72,7 @@ def main():
     ]
 
     split_sizes = {
-        # 'train': 500,
+        # 'train': 100,
         # 'valid': 100,
         # 'test': 100,
 
