@@ -68,6 +68,18 @@ class _DistractorNode:
     def children(self):
         return []
 
+    @property
+    def assump_children(self):
+        return []
+
+    @property
+    def parent(self):
+        return None
+
+    @property
+    def assump_parent(self):
+        return None
+
 
 Node = Union[ProofNode, _DistractorNode]
 
@@ -105,6 +117,9 @@ class NLProofSDataset:
 
         def is_leaf(node: Node) -> bool:
             return isinstance(node, ProofNode) and node in proof_tree.leaf_nodes
+
+        def is_assump(node: Node) -> bool:
+            return node.assump_parent is not None
 
         def is_int(node: Node) -> bool:
             return isinstance(node, ProofNode) and (not is_root(node) and not is_leaf(node))
@@ -175,14 +190,19 @@ class NLProofSDataset:
 
             # build node ids
             i_sent = 1
+            i_assump = 1
             node2id = {}
             id2node = {}
             for node in random.sample(all_nodes, len(all_nodes)):
                 if is_root(node):
                     id_ = 'hypothesis'
                 elif is_leaf(node):
-                    id_ = f'sent{i_sent}'
-                    i_sent += 1
+                    if is_assump(node):
+                        id_ = f'assump{i_assump}'
+                        i_assump += 1
+                    else:
+                        id_ = f'sent{i_sent}'
+                        i_sent += 1
                 elif is_int(node):
                     continue
                 elif is_distractor(node):
@@ -214,14 +234,20 @@ class NLProofSDataset:
                     continue
 
                 if is_root(node):
+                    assump_ids = [node2id[assump_child] for assump_child in node.assump_children]
                     child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(child_ids) + ' -> hypothesis'
+                    proof_str = ' & '.join(assump_ids + child_ids) + ' -> hypothesis'
                 elif is_leaf(node):
-                    continue
+                    if is_assump(node):
+                        assump_id = node2id[node]
+                        proof_str = f' -> {assump_id}: {_get_sent_from_node(node)}'
+                    else:
+                        continue
                 elif is_int(node):
                     node_id = node2id[node]
+                    assump_ids = [node2id[assump_child] for assump_child in node.assump_children]
                     child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(child_ids) + f' -> {node_id}: {_get_sent_from_node(node)}'
+                    proof_str = ' & '.join(assump_ids + child_ids) + f' -> {node_id}: {_get_sent_from_node(node)}'
                 elif is_distractor(node):
                     continue
                 else:
@@ -237,7 +263,7 @@ class NLProofSDataset:
                     for other_node in nodes_in_proof:
                         if other_node == node:
                             continue
-                        # descendants_of_other_node = list(proof_tree.depth_first_traverse(other_node))
+
                         if node in other_node.descendants:
                             _is_root = False
                             break
@@ -255,6 +281,7 @@ class NLProofSDataset:
                 else:
                     node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]
                 proof_elems.append(' & '.join(node_ids) + ' -> hypothesis')
+
 
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
