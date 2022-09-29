@@ -270,16 +270,16 @@ def test_PL_pred_arg():
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            # './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            # './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/axioms.with_assumption.json',
         ],
