@@ -91,7 +91,7 @@ class NLProofSDataset:
                  proof_stances: List[str],
                  world_assump: str,
                  depth: int,
-                 max_leaf_extensions: int,
+                 branch_extension_steps: int,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 
@@ -99,7 +99,7 @@ class NLProofSDataset:
         self.world_assump = WorldAssumption(world_assump)
 
         self.depth = depth
-        self.max_leaf_extensions = max_leaf_extensions
+        self.branch_extension_steps = branch_extension_steps
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
     @profile
@@ -139,7 +139,7 @@ class NLProofSDataset:
             # generate a proof tree
             proof_tree, root_negation_formula, distractor_formulas, pipeline_stats = self.pipeline.run(
                 self.depth,
-                self.max_leaf_extensions,
+                self.branch_extension_steps,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
@@ -215,6 +215,9 @@ class NLProofSDataset:
 
             i_int = 1
             for node in proof_tree.depth_first_traverse():
+                if node not in all_nodes:
+                    continue
+
                 if is_int(node):
                     id_ = f'int{i_int}'
                     i_int += 1

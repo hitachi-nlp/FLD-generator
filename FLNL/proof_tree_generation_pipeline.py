@@ -2,7 +2,7 @@ from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
 
-from FLNL.formula import Formula, NOT, eliminate_double_negation
+from FLNL.formula import Formula, NEGATION, eliminate_double_negation
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.proof_tree_generators import ProofTreeGenerator
 from FLNL.distractors import FormalLogicDistractor
@@ -29,14 +29,14 @@ class ProofTreeGenerationPipeline:
     @profile
     def run(self,
             depth: int,
-            max_leaf_extensions: int,
+            branch_extension_steps: int,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], Dict[str, int]]:
         if depth < 1:
             raise ValueError('depth must be >= 1')
 
         while True:
             logger.info('========================== generating proof tree... ============================')
-            proof_tree = self.generator.generate_tree(depth, max_leaf_extensions)
+            proof_tree = self.generator.generate_tree(depth, branch_extension_steps)
             logger.info('========================== generating proof tree done! ============================')
 
             if proof_tree is None:
@@ -50,7 +50,7 @@ class ProofTreeGenerationPipeline:
                 distractor_formulas = []
             logger.info('========================== generating distractor done! ============================')
 
-            root_negation_formula = Formula(f'{NOT}({proof_tree.root_node.formula.rep})')
+            root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 

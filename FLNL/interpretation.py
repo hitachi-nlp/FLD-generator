@@ -1,12 +1,12 @@
 import re
 import random
-from typing import Dict, List, Any, Iterable, Tuple, Optional, Union
+from typing import Dict, List, Any, Iterable, Tuple, Optional, Union, Set
 import copy
 from itertools import permutations
 
 from .formula import (
     Formula,
-    NOT,
+    NEGATION,
     OR,
     AND,
     IMPLICATION,
@@ -14,9 +14,9 @@ from .formula import (
     CONSTANTS,
     VARIABLES,
     eliminate_double_negation,
+    negate,
 )
 from .argument import Argument
-import kern_profiler
 
 
 def generate_complicated_arguments(src_arg: Argument,
@@ -37,14 +37,28 @@ def generate_complicated_formulas(src_formula: Formula,
                                   elim_dneg=False,
                                   suppress_op_expansion_if_exists=False,
                                   get_name=False) -> Union[Iterable[Tuple[Formula, Dict[str, str]]], Iterable[Tuple[Formula, Dict[str, str], str]]]:
+    done_reps: Dict[str, str] = {}
     for mapping, name in generate_complication_mappings_from_formula([src_formula],
                                                                      suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
                                                                      get_name=True):
         complicated_formula = interprete_formula(src_formula, mapping, elim_dneg=elim_dneg)
+        done_reps[complicated_formula.rep] = name
         if get_name:
             yield complicated_formula, mapping, name
         else:
             yield complicated_formula, mapping
+
+    # for rep, name in done_reps.items():  # negate all the formula
+    #     formula_org = Formula(rep)
+    #     formula_neg = negate(formula_org)
+    #     if eliminate_double_negation:
+    #         formula_neg = eliminate_double_negation(formula_neg)
+
+    #     if formula_neg.rep not in done_reps:
+    #         if get_name:
+    #             yield formula_neg, None, 'nagated.' + name
+    #         else:
+    #             yield formula_neg, None
 
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],
@@ -63,11 +77,11 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
     def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
         if len(predicates) == 1:
             predicate = predicates[0]
-            for prefix in ['', f'{NOT}']:
+            for prefix in ['', f'{NEGATION}']:
                 yield [f'{prefix}{predicate}']
         else:
             predicate = predicates[0]
-            for prefix in ['', f'{NOT}']:
+            for prefix in ['', f'{NEGATION}']:
                 for tail in not_enhance(predicates[1:]):
                     yield [f'{prefix}{predicate}'] + tail
 
@@ -77,7 +91,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                 continue
             mapping = copy.deepcopy(identity_mapping)
             for predicate_with_not in predicates_with_not:
-                original_predicate = predicate_with_not.lstrip(f'{NOT}')
+                original_predicate = predicate_with_not.lstrip(f'{NEGATION}')
                 mapping[original_predicate] = predicate_with_not
             yield mapping
 
@@ -102,10 +116,11 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                     + predicates[i_predicate_to_expand + 1:]
                 for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
                     mapping = copy.deepcopy(not_enhanced_mapping)
-                    for brace_not_prefix in ['', NOT]:
-                        mapping[predicate_to_expand] = f'{brace_not_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
+                    for i_total_negation, total_negation_prefix in enumerate(['', NEGATION]):
+                        mapping[predicate_to_expand] = f'{total_negation_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
+                        not_name_id = i_not * 2 + i_total_negation
                         if get_name:
-                            yield mapping, f'{op}-{filled_str(i_predicate_to_expand)}.not-{filled_str(i_not)}'
+                            yield mapping, f'{op}-{filled_str(i_predicate_to_expand)}.not-{filled_str(not_name_id)}'
                         else:
                             yield mapping
 
@@ -142,7 +157,6 @@ def generate_formulas_in_target_space(src_formula: Formula,
         yield interprete_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
-@profile
 def generate_mappings_from_argument(src_argument: Argument,
                                     tgt_argument: Argument,
                                     add_complicated_arguments=False,
@@ -159,7 +173,6 @@ def generate_mappings_from_argument(src_argument: Argument,
     )
 
 
-@profile
 def generate_mappings_from_formula(src_formulas: List[Formula],
                                    tgt_formulas: List[Formula],
                                    add_complicated_arguments=False,
@@ -198,7 +211,6 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                                                    allow_many_to_one=allow_many_to_one)
 
 
-@profile
 def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
                                                     src_constants: List[str],
                                                     tgt_predicates: List[str],
@@ -238,7 +250,6 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
             yield mappings
 
 
-@profile
 def _generate_mappings(src_objs: List[Any],
                        tgt_objs: List[Any],
                        constraints: Optional[Dict[Any, Any]] = None,
@@ -275,7 +286,6 @@ def _generate_mappings(src_objs: List[Any],
         raise ValueError()
 
 
-@profile
 def _make_permutations(objs: List[Any],
                        length: int,
                        src_idx=0,
@@ -339,7 +349,6 @@ def interprete_argument(arg: Argument,
                     scheme_variant=arg.scheme_variant)
 
 
-@profile
 def interprete_formula(formula: Formula,
                        mapping: Dict[str, str],
                        elim_dneg=False) -> Formula:
@@ -353,7 +362,6 @@ def interprete_formula(formula: Formula,
 _expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
 
 
-@profile
 def _expand_op(formula: Formula) -> Formula:
     rep = formula.rep
 
@@ -373,7 +381,6 @@ def _expand_op(formula: Formula) -> Formula:
     return Formula(rep)
 
 
-@profile
 def _interprete_rep(rep: str,
                     mapping: Dict[str, str],
                     elim_dneg=False) -> str:
@@ -389,7 +396,6 @@ def _interprete_rep(rep: str,
     return interpreted_rep
 
 
-@profile
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
                             allow_many_to_oneg=True,
@@ -422,7 +428,6 @@ def formula_is_identical_to(this_formula: Formula,
     return False
 
 
-@profile
 def formula_can_not_be_identical_to(this_formula: Formula,
                                     that_formula: Formula,
                                     add_complicated_arguments=False,
@@ -484,13 +489,12 @@ def formula_can_not_be_identical_to(this_formula: Formula,
         return True
 
     if any([this_formula.rep.count(symbol) != that_formula.rep.count(symbol)
-            for symbol in [AND, OR, IMPLICATION, NOT]]):
+            for symbol in [AND, OR, IMPLICATION, NEGATION]]):
         return True
 
     return False
 
 
-@profile
 def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     # Calculate the appearance  of formulas in formula
     # e.g.)
@@ -503,7 +507,6 @@ def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     )
 
 
-@profile
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
                              allow_many_to_oneg=True,

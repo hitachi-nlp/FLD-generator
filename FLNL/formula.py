@@ -5,6 +5,7 @@ IMPLICATION = '->'
 AND = '&'
 OR = 'v'
 NOT = '¬'
+NEGATION = '¬'
 DERIVE = '⊢'
 
 _PREDICATE_ALPHABETS = [
@@ -168,4 +169,42 @@ class Formula:
 
 
 def eliminate_double_negation(formula: Formula) -> Formula:
-    return Formula(re.sub(f'{NOT}{NOT}', '', formula.rep))
+    return Formula(re.sub(f'{NEGATION}{NEGATION}', '', formula.rep))
+
+
+def negate(formula: Formula) -> Formula:
+    # '({A} v {B})'
+    # '({A} v {B}) -> {C}'
+
+    def require_outer_brace(formula: Formula) -> bool:
+        if len(formula.PASs) == 1:
+            # '{A}'
+            # '{A}{a}'
+            return False
+        elif formula.rep.startswith('(') and formula.rep.endswith(')'):
+            level = 1
+            for char in formula.rep[1:]:
+                if level == 0:
+                    # '({A} v {B}) -> ({C} v {D})'
+                    return True
+
+                if char == '(':
+                    level += 1
+                elif char == ')':
+                    level -= 1
+
+            assert(level == 0)
+            # '({A} v {B})'
+            return False
+
+        elif formula.rep.startswith(NEGATION):
+            # ^^({A} v {B}) -> {C}
+            # ^^({A} v {B})
+            return require_outer_brace(Formula(formula.rep.lstrip(NEGATION)))
+        else:
+            return True
+
+    if require_outer_brace(formula):
+        return Formula(NEGATION + '(' + formula.rep + ')')
+    else:
+        return Formula(NEGATION + formula.rep)

@@ -9,7 +9,7 @@ from pprint import pformat
 from FLNL.formula import Formula
 from FLNL.argument import Argument
 from FLNL.proof_tree_generators import ProofTreeGenerator
-from FLNL.distractors import UnkownPASDistractor, SameFormUnkownInterprandsDistractor
+from FLNL.distractors import build as build_distractor, FormalLogicDistractor
 from FLNL.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.datasets import NLProofSDataset
@@ -113,6 +113,13 @@ def load_translator(type_: str,
         raise ValueError()
 
 
+def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
+    # distractor = build_distractor('unknown_interprands', 1, generator=generator)
+    # distractor = build_distractor('negated_hypothesis_tree', 1, generator=generator)
+    distractor = build_distractor('fallback.negated_hypothesis_tree.unknown_interprands', 1, generator=generator)
+    return distractor
+
+
 def generate_dataset(dataset: NLProofSDataset,
                      num_dataset: int = 1000) -> None:
     logger.info('\n\n')
@@ -135,6 +142,7 @@ def generate_dataset(dataset: NLProofSDataset,
 
         # logger.info('\n')
         # logger.info('--------------- stats --------------')
+        # logger.info(dict(stats))
         # logger.info('\n' + pformat(stats))
 
         logger.info('\n\n')
@@ -144,9 +152,6 @@ def generate_dataset(dataset: NLProofSDataset,
 def test_original():
     translator = load_translator('sentence_wise_translator', 'config')
 
-    # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(1)
-
     generator = load_proof_tree_generator(
         config_paths=['./configs/FLNL/arguments/old/syllogistic_corpus-02.json'],
 
@@ -155,9 +160,12 @@ def test_original():
         quantified_arguments_weight=0.0,
     )
 
+    distractor = load_distractor(generator)
+
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
+                              ['proof'],
                               'CWA',
                               5,
                               5,
@@ -169,9 +177,6 @@ def test_original():
 def test_LP_pred_only():
     translator = load_translator('clause_typed_translator', 'config')
 
-    # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(1)
-
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -180,6 +185,8 @@ def test_LP_pred_only():
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
     )
+
+    distractor = load_distractor(generator)
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
@@ -195,9 +202,6 @@ def test_LP_pred_only():
 
 def test_minimum_PL():
     translator = load_translator('clause_typed_translator', 'config')
-
-    # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(1)
 
     generator = load_proof_tree_generator(
         arguments=[
@@ -217,6 +221,8 @@ def test_minimum_PL():
         quantified_arguments_weight=0.0,
     )
 
+    distractor = load_distractor(generator)
+
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
     dataset = NLProofSDataset(pipeline,
@@ -232,9 +238,6 @@ def test_minimum_PL():
 def test_LP_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
 
-    # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(1)
-
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -246,6 +249,8 @@ def test_LP_pred_arg():
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.0,
     )
+
+    distractor = load_distractor(generator)
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
@@ -262,9 +267,6 @@ def test_LP_pred_arg():
 def test_PL_pred_arg():
     translator = load_translator('clause_typed_translator', 'config')
     
-    # distractor = UnkownPASDistractor()
-    distractor = SameFormUnkownInterprandsDistractor(1)
-
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -284,6 +286,8 @@ def test_PL_pred_arg():
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.3,
     )
+
+    distractor = load_distractor(generator)
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 

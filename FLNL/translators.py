@@ -16,7 +16,7 @@ from .formula import (
     AND,
     OR,
     IMPLICATION,
-    NOT,
+    NEGATION,
 )
 
 from .word_banks.base import WordBank, ATTR
