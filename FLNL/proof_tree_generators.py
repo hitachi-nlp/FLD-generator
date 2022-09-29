@@ -469,18 +469,14 @@ def _extend_braches(proof_tree: ProofTree,
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
-<<<<<<< HEAD
         leaf_nodes = [
             node for node in proof_tree.leaf_nodes
             if proof_tree.get_node_depth(node) < proof_tree.depth
             and node.assump_parent is None  # assumptions shoud keep beeing leaf
         ]
-=======
-        leaf_nodes = [node for node in proof_tree.leaf_nodes]
         if depth_limit is not None:
             leaf_nodes = [node for node in leaf_nodes
                           if proof_tree.get_node_depth(node) < depth_limit]
->>>>>>> honoka-dev
         if len(leaf_nodes) == 0:
             logger.warning('Couldn\'t extend branch since the tree have no leaf nodes.')
             return proof_tree
@@ -500,18 +496,11 @@ def _extend_braches(proof_tree: ProofTree,
             target_leaf_node = leaf_node
 
             # Choose next argument
-<<<<<<< HEAD
             chainable_args = [
                 arg for arg in arguments
                 if formula_is_identical_to(arg.conclusion, leaf_node.formula)
                 and len(arg.assumptions) == 0  # by it's logic, the argument with premise assumptions can not be applied in branch extension
             ]
-=======
-            chainable_args = []
-            for arg in arguments:
-                if formula_is_identical_to(arg.conclusion, leaf_node.formula):
-                    chainable_args.append(arg)
->>>>>>> honoka-dev
             if len(chainable_args) == 0:
                 rejection_stats['len(chainable_args) == 0'] += 1
 
