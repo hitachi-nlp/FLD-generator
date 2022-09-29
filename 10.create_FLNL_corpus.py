@@ -7,6 +7,7 @@ from pathlib import Path
 import copy
 
 import click
+from pprint import pprint
 from script_engine import QsubEngine, SubprocessEngine
 from logger_setup import setup as setup_logger, create_file_handler
 from lab import build_dir, save_params
@@ -71,20 +72,20 @@ def main():
     ]
 
     split_sizes = {
-        # 'train': 500,
+        'train': 100,
         # 'valid': 100,
-        'test': 100,
+        # 'test': 100,
 
         # 'train': 100000,
         # 'valid': 1000,
         # 'test': 1000,
     }
 
-    # engine = SubprocessEngine()
-    engine = QsubEngine('ABCI', 'rt_C.small')
+    engine = SubprocessEngine()
+    # engine = QsubEngine('ABCI', 'rt_C.small')
 
-    # num_jobs = 1
-    num_jobs = 100
+    num_jobs = 1
+    # num_jobs = 100
 
     # num_workers_per_job = 1
     num_workers_per_job = 5
