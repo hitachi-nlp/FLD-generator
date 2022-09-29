@@ -633,6 +633,7 @@ def generate_quantifier_arguments(
             argument = Argument(
                 [quantified_formula],
                 de_quantified_formula,
+                {},
                 id = argument_id,
             )
         elif argument_type == 'existential_quantifier_intro':
@@ -642,6 +643,7 @@ def generate_quantifier_arguments(
             argument = Argument(
                 [de_quantified_formula],
                 quantified_formula,
+                {},
                 id = argument_id,
             )
         else:

@@ -39,8 +39,7 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
     return ProofTreeGenerator(arguments,
                               elim_dneg=elim_dneg,
                               complicated_arguments_weight=complicated_arguments_weight,
-                              quantified_arguments_weight=quantified_arguments_weight,
-                              timeout=None)
+                              quantified_arguments_weight=quantified_arguments_weight)
 
 
 def load_translator(type_: str,
@@ -281,7 +280,7 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/theorem.pred_arg.json',
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axioms.with_assumption.json',
+            # './configs/FLNL/arguments/axioms.with_assumption.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.3,
