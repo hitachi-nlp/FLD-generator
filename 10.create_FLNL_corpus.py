@@ -67,25 +67,25 @@ def main():
         # '20220928.atmf-P.arg-basic.dpth-1.neg_tree_distractor',
         # '20220928.atmf-PA.arg-basic.dpth-1.neg_tree_distractor',
         # '20220928.atmf-PA.arg-compl.dpth-1.neg_tree_distractor',
-        # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
+        '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
         '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
     ]
 
     split_sizes = {
-        'train': 100,
+        # 'train': 100,
         # 'valid': 100,
         # 'test': 100,
 
-        # 'train': 100000,
-        # 'valid': 1000,
-        # 'test': 1000,
+        'train': 100000,
+        'valid': 1000,
+        'test': 1000,
     }
 
-    engine = SubprocessEngine()
-    # engine = QsubEngine('ABCI', 'rt_C.small')
+    # engine = SubprocessEngine()
+    engine = QsubEngine('ABCI', 'rt_C.small')
 
-    num_jobs = 1
-    # num_jobs = 100
+    # num_jobs = 1
+    num_jobs = 100
 
     # num_workers_per_job = 1
     num_workers_per_job = 5
