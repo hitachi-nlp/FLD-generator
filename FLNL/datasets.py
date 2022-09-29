@@ -285,7 +285,6 @@ class NLProofSDataset:
                     node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]
                 proof_elems.append(' & '.join(node_ids) + ' -> hypothesis')
 
-
             proof_str = '; '.join(proof_elems) + ';'
             proof_strs = [proof_str]  # only one proof in our dataset
 

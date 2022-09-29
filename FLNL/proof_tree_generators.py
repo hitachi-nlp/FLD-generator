@@ -471,8 +471,7 @@ def _extend_braches(proof_tree: ProofTree,
 
         leaf_nodes = [
             node for node in proof_tree.leaf_nodes
-            if proof_tree.get_node_depth(node) < proof_tree.depth
-            and node.assump_parent is None  # assumptions shoud keep beeing leaf
+            if node.assump_parent is None  # assumptions shoud keep beeing leaf
         ]
         if depth_limit is not None:
             leaf_nodes = [node for node in leaf_nodes
