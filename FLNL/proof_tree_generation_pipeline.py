@@ -63,7 +63,7 @@ class ProofTreeGenerationPipeline:
                 for i_formula, (formula, (translation_name, translation)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
                     if i_formula in assump_formula_indices:
-                        translation_prefix = 'let\' assume that '
+                        translation_prefix = 'let\'s assume that '
                     else:
                         translation_prefix = ''
                     formula.translation = translation_prefix + translation

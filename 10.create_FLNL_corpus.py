@@ -48,7 +48,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220917.UNKNOWN')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',

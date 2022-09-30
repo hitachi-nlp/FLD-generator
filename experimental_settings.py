@@ -583,14 +583,14 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom--and_or.pred_only.json',
 
-            './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem--and_or.pred_only.json',
 
-            './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/axioms.with_assumption.json',
         ],

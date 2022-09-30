@@ -243,7 +243,7 @@ class NLProofSDataset:
                 elif is_leaf(node):
                     if is_assump(node):
                         assump_id = node2id[node]
-                        proof_str = f' -> {assump_id}: {_get_sent_from_node(node)}'
+                        proof_str = f'void -> {assump_id}: {_get_sent_from_node(node)}'
                     else:
                         continue
                 elif is_int(node):
