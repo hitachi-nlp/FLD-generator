@@ -610,6 +610,78 @@ _DATASET_SETTINGS = {
     },
 
 
+    '20220929.atmf-PA.arg-compl.dpth-3.20221001.assump.void': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axioms.with_assumption.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 3,
+        'branch_extension_steps': 3,
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
+
+
+    '20220929.atmf-PA.arg-compl.dpth-5.20221001.assump.void': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axioms.with_assumption.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depth': 5,
+        'branch_extension_steps': 3,
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor_factor': 0.5,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
+
+
+
+
 }
 
 

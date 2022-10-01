@@ -49,7 +49,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221001.assump.void.large')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -71,17 +72,20 @@ def main():
         # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
         # '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
 
-        '20220929.atmf-PA.arg-compl.dpth-3.20220929.assump.debug',
+        # '20220929.atmf-PA.arg-compl.dpth-3.20220929.assump.debug',
+
+        '20220929.atmf-PA.arg-compl.dpth-3.20221001.assump.void',
+        '20220929.atmf-PA.arg-compl.dpth-5.20221001.assump.void',
     ]
 
     split_sizes = {
-        'train': 100,
-        'valid': 100,
-        'test': 100,
+        # 'train': 100,
+        # 'valid': 100,
+        # 'test': 100,
 
-        # 'train': 100000,
-        # 'valid': 1000,
-        # 'test': 1000,
+        'train': 100000,
+        'valid': 1000,
+        'test': 1000,
     }
 
     # engine = SubprocessEngine()
