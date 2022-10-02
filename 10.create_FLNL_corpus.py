@@ -48,7 +48,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.UNKNOWN')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220917.UNKNOWN')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -67,8 +68,11 @@ def main():
         # '20220928.atmf-P.arg-basic.dpth-1.neg_tree_distractor',
         # '20220928.atmf-PA.arg-basic.dpth-1.neg_tree_distractor',
         # '20220928.atmf-PA.arg-compl.dpth-1.neg_tree_distractor',
-        '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
-        '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
+        # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
+        # '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
+
+        '20221002.atmf-PA.arg-compl.dpth-3.neg_tree_distractor.more',
+        '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more',
     ]
 
     split_sizes = {

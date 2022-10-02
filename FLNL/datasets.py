@@ -5,6 +5,7 @@ from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
 import logging
 import copy
 from collections import defaultdict
+from pprint import pprint
 
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.formula import Formula
@@ -127,6 +128,9 @@ class NLProofSDataset:
                 self.branch_extension_steps,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
+            # print(f'============== i_sample: {i_sample} ================')
+            # print(proof_tree.root_node.formula)
+            # pprint(distractor_formulas)
 
             proof_stance = self.proof_stances[i_sample % len(self.proof_stances)]
             if proof_stance == ProofStance.PROOF:
