@@ -239,22 +239,26 @@ class NLProofSDataset:
                 if is_root(node):
                     assump_ids = [node2id[assump_child] for assump_child in node.assump_children]
                     child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(assump_ids + child_ids) + ' -> hypothesis'
+                    premise_str = ' & '.join([f'[{_id}]' for _id in assump_ids] + child_ids)
+                    conclusion_str = 'hypothesis'
                 elif is_leaf(node):
                     if is_assump(node):
+                        premise_str = 'void'
                         assump_id = node2id[node]
-                        proof_str = f'void -> {assump_id}: {_get_sent_from_node(node)}'
+                        conclusion_str = f'{assump_id}: {_get_sent_from_node(node)}'
                     else:
                         continue
                 elif is_int(node):
                     node_id = node2id[node]
                     assump_ids = [node2id[assump_child] for assump_child in node.assump_children]
                     child_ids = [node2id[child] for child in node.children]
-                    proof_str = ' & '.join(assump_ids + child_ids) + f' -> {node_id}: {_get_sent_from_node(node)}'
+                    premise_str = ' & '.join([f'[{_id}]' for _id in assump_ids] + child_ids)
+                    conclusion_str = f'{node_id}: {_get_sent_from_node(node)}'
                 elif is_distractor(node):
                     continue
                 else:
                     raise Exception()
+                proof_str = ' -> '.join([premise_str, conclusion_str])
 
                 proof_elems.append(proof_str)
 
@@ -280,6 +284,7 @@ class NLProofSDataset:
 
                 if len(subtree_root_nodes_wo_leaf) == 0:
                     # rare case but possible when all the subtrees are leaf
+                    # in that case, we use sent1 as a proxy.
                     node_ids = ['sent1']
                 else:
                     node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]

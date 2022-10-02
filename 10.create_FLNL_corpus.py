@@ -50,7 +50,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221001.assump.void.large')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221001.assump.void.large')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -79,13 +80,13 @@ def main():
     ]
 
     split_sizes = {
-        # 'train': 100,
-        # 'valid': 100,
-        # 'test': 100,
+        'train': 100,
+        'valid': 100,
+        'test': 100,
 
-        'train': 100000,
-        'valid': 1000,
-        'test': 1000,
+        # 'train': 100000,
+        # 'valid': 1000,
+        # 'test': 1000,
     }
 
     # engine = SubprocessEngine()
