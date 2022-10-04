@@ -48,18 +48,6 @@ def generate_complicated_formulas(src_formula: Formula,
         else:
             yield complicated_formula, mapping
 
-    # for rep, name in done_reps.items():  # negate all the formula
-    #     formula_org = Formula(rep)
-    #     formula_neg = negate(formula_org)
-    #     if eliminate_double_negation:
-    #         formula_neg = eliminate_double_negation(formula_neg)
-
-    #     if formula_neg.rep not in done_reps:
-    #         if get_name:
-    #             yield formula_neg, None, 'nagated.' + name
-    #         else:
-    #             yield formula_neg, None
-
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],
                                                 suppress_op_expansion_if_exists=False,
@@ -623,8 +611,10 @@ def generate_quantifier_arguments(
     for i, quantifier_mapping in enumerate(generate_quantifier_mappings(formula.constants)):
         if quantified_variable not in quantifier_mapping.values():
             continue
-        de_quantified_mapping = {src: (de_quantified_constant if tgt == quantified_variable else src)
-                                 for src, tgt in quantifier_mapping.items()}
+        de_quantified_mapping = {
+            src: (de_quantified_constant if tgt == quantified_variable else src)
+            for src, tgt in quantifier_mapping.items()
+        }
 
         if argument_type == 'universal_quantifier_elim':
             quantified_formula = Formula(f'({quantified_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
@@ -650,3 +640,19 @@ def generate_quantifier_arguments(
             raise ValueError()
 
         yield argument
+
+
+def generate_quantifier_mappings(formulas: List[Formula],
+                                 quantify_all_at_once=False) -> Iterable[Dict[str, str]]:
+
+    def go(constants: List[Formula]) -> Iterable[Dict]:
+        if len(constants) == 0:
+            yield {}
+            return
+
+        src_constant = constants[0]
+        tgt_constant_reps = [quantified_variable] if quantify_all_at_once else [src_constant.rep, quantified_variable]
+        for tgt_constant_rep in tgt_constant_reps:
+            for mapping in go(constants[1:]):
+                mapping[src_constant.rep] = tgt_constant_rep
+                yield mapping

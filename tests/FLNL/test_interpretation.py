@@ -103,10 +103,12 @@ def test_argument_is_identical_to():
         Argument(
             [Formula('{A} v {B}'), Formula('¬{B}')],
             Formula('{A}'),
+            {},
         ),
         Argument(
             [Formula('¬{Q}'), Formula('{P} v {Q}')],
             Formula('{P}'),
+            {},
         ),
     )
 
@@ -114,10 +116,12 @@ def test_argument_is_identical_to():
         Argument(
             [Formula('{A} v {B}'), Formula('¬{B}')],
             Formula('{C}'),
+            {},
         ),
         Argument(
             [Formula('¬{Q}'), Formula('{P} v {Q}')],
             Formula('{P}'),
+            {},
         ),
     )
 
@@ -125,10 +129,12 @@ def test_argument_is_identical_to():
         Argument(
             [Formula('{A} v {B}'), Formula('¬{B}')],
             Formula('{C}'),
+            {},
         ),
         Argument(
             [Formula('¬{Q}'), Formula('{P} v {Q}')],
             Formula('{P}'),
+            {},
         ),
         allow_many_to_oneg=False,
     )
@@ -137,10 +143,12 @@ def test_argument_is_identical_to():
         Argument(
             [Formula('{A} v {B}'), Formula('¬{B}')],
             Formula('{A}'),
+            {},
         ),
         Argument(
             [Formula('{P}'), Formula('{P} -> {Q}')],
             Formula('{Q}'),
+            {},
         ),
     )
 
@@ -148,10 +156,12 @@ def test_argument_is_identical_to():
         Argument(
             [Formula('(x): {A}x -> {B}x'), Formula('¬{B}')],
             Formula('{A}'),
+            {},
         ),
         Argument(
             [Formula('{P}'), Formula('{P} -> {Q}')],
             Formula('{Q}'),
+            {},
         ),
 
     )
@@ -185,6 +195,7 @@ def test_generate_quantifier_arguments():
             Argument(
                 [Formula('(x): {F}x -> {G}x')],
                 Formula('{F}{a} -> {G}{a}'),
+                {},
             ),
         ]
     )
@@ -196,33 +207,40 @@ def test_generate_quantifier_arguments():
             Argument(
                 [Formula('(x): ({F}x v {G}{b}) -> {H}{c}')],
                 Formula('({F}{i} v {G}{b}) -> {H}{c}'),
+                {},
             ),
             Argument(
                 [Formula('(x): ({F}{a} v {G}x) -> {H}{c}')],
                 Formula('({F}{a} v {G}{i}) -> {H}{c}'),
+                {},
             ),
             Argument(
                 [Formula('(x): ({F}{a} v {G}{b}) -> {H}x')],
                 Formula('({F}{a} v {G}{b}) -> {H}{i}'),
+                {},
             ),
 
 
             Argument(
                 [Formula('(x): ({F}x v {G}x) -> {H}{c}')],
                 Formula('({F}{i} v {G}{i}) -> {H}{c}'),
+                {},
             ),
             Argument(
                 [Formula('(x): ({F}x v {G}{b}) -> {H}x')],
                 Formula('({F}{i} v {G}{b}) -> {H}{i}'),
+                {},
             ),
             Argument(
                 [Formula('(x): ({F}{a} v {G}x) -> {H}x')],
                 Formula('({F}{a} v {G}{i}) -> {H}{i}'),
+                {},
             ),
 
             Argument(
                 [Formula('(x): ({F}x v {G}x) -> {H}x')],
                 Formula('({F}{i} v {G}{i}) -> {H}{i}'),
+                {},
             ),
 
         ]
@@ -235,6 +253,7 @@ def test_generate_quantifier_arguments():
             Argument(
                 [Formula('(x): ({F}x v {G}x) -> {H}x')],
                 Formula('({F}{i} v {G}{i}) -> {H}{i}'),
+                {},
             ),
 
         ],
@@ -249,6 +268,7 @@ def test_generate_quantifier_arguments():
             Argument(
                 [Formula('{F}{a} -> {G}{a}')],
                 Formula('(Ex): {F}x -> {G}x'),
+                {},
             ),
         ]
     )
@@ -260,33 +280,40 @@ def test_generate_quantifier_arguments():
             Argument(
                 [Formula('({F}{i} v {G}{b}) -> {H}{c}')],
                 Formula('(Ex): ({F}x v {G}{b}) -> {H}{c}'),
+                {},
             ),
             Argument(
                 [Formula('({F}{a} v {G}{i}) -> {H}{c}')],
                 Formula('(Ex): ({F}{a} v {G}x) -> {H}{c}'),
+                {},
             ),
             Argument(
                 [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
                 Formula('(Ex): ({F}{a} v {G}{b}) -> {H}x'),
+                {},
             ),
 
 
             Argument(
                 [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
                 Formula('(Ex): ({F}x v {G}x) -> {H}{c}'),
+                {},
             ),
             Argument(
                 [Formula('({F}{i} v {G}{b}) -> {H}{i}')],
                 Formula('(Ex): ({F}x v {G}{b}) -> {H}x'),
+                {},
             ),
             Argument(
                 [Formula('({F}{a} v {G}{i}) -> {H}{i}')],
                 Formula('(Ex): ({F}{a} v {G}x) -> {H}x'),
+                {},
             ),
 
             Argument(
                 [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
                 Formula('(Ex): ({F}x v {G}x) -> {H}x'),
+                {},
             ),
 
         ]
@@ -299,6 +326,7 @@ def test_generate_quantifier_arguments():
             Argument(
                 [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
                 Formula('(Ex): ({F}x v {G}x) -> {H}x'),
+                {},
             ),
         ],
         quantify_all_at_once=True,
