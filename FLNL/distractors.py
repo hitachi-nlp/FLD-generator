@@ -227,6 +227,16 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
         the_most_tree: Optional[ProofTree] = None
         max_branch_extension_factor = 3.0
         while True:
+            if n_trial >= self.max_retry:
+                logger.warning(
+                    '(NegatedHypothesisTreeDistractor) Could not generate %d distractor formulas. return only %d distractors.',
+                    num_distractors,
+                    len(the_most_distractor_formulas),
+                )
+                if the_most_tree is not None:
+                    logger.info('The negative tree is the following:\n%s', the_most_tree.format_str)
+                return the_most_distractor_formulas
+
             # gradually increase the number of extension steps to find the "just in" size tree.
             branch_extension_steps_factor = min(0.5 + 0.1 * n_trial, max_branch_extension_factor)
             branch_extension_steps = math.ceil(num_distractors * branch_extension_steps_factor)
@@ -281,21 +291,11 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                     logger.info('The negative tree is the following:\n%s', the_most_tree.format_str)
                 return the_most_distractor_formulas
             else:
-                if n_trial >= self.max_retry:
-                    logger.warning(
-                        '(NegatedHypothesisTreeDistractor) Could not generate %d distractor formulas. return only %d distractors.',
-                        num_distractors,
-                        len(the_most_distractor_formulas),
-                    )
-                    if the_most_tree is not None:
-                        logger.info('The negative tree is the following:\n%s', the_most_tree.format_str)
-                    return the_most_distractor_formulas
-                else:
-                    logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial since, only %d (< num_distractors=%d) negative leaf formulas are appropriate.',
-                                len(distractor_formulas),
-                                num_distractors)
-                    n_trial += 1
-                    continue
+                logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial since, only %d (< num_distractors=%d) negative leaf formulas are appropriate.',
+                            len(distractor_formulas),
+                            num_distractors)
+                n_trial += 1
+                continue
 
 
 class MixtureDistractor(FormalLogicDistractor):

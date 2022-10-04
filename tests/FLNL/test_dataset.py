@@ -122,7 +122,7 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 1000) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
@@ -281,6 +281,8 @@ def test_PL_pred_arg():
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axioms.with_assumption.json',
         ],
         complicated_arguments_weight=0.3,
         quantified_arguments_weight=0.3,

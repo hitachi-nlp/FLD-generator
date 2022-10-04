@@ -15,5 +15,6 @@ def _is_nonsense(arg: Argument) -> bool:
 
 
 def _is_conclusion_in_premises(arg: Argument) -> bool:
-    return any((arg.conclusion.rep == premise.rep
-                for premise in arg.premises))
+    if any(arg.conclusion.rep == premise.rep for premise in arg.premises):
+        return True
+    return False

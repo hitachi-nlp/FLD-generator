@@ -23,7 +23,7 @@ def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
                                    suppress_op_expansion_if_exists=False,
                                    get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
-    for mapping, name in generate_complication_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
+    for mapping, name in generate_complication_mappings_from_formula(src_arg.all_formulas,
                                                                      suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
                                                                      get_name=True):
         complicated_argument = interprete_argument(src_arg, mapping, elim_dneg=elim_dneg)
@@ -132,8 +132,8 @@ def generate_arguments_in_target_space(src_arg: Argument,
                                        block_shuffle=False,
                                        allow_many_to_one=True,
                                        elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula(src_arg.premises + [src_arg.conclusion],
-                                                  tgt_arg.premises + [tgt_arg.conclusion],
+    for mapping in generate_mappings_from_formula(src_arg.all_formulas,
+                                                  tgt_arg.all_formulas,
                                                   add_complicated_arguments=add_complicated_arguments,
                                                   constraints=constraints,
                                                   block_shuffle=block_shuffle,
@@ -333,11 +333,17 @@ def _make_permutations(objs: List[Any],
 def interprete_argument(arg: Argument,
                         mapping: Dict[str, str],
                         elim_dneg=False) -> Argument:
-    interpretedd_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
-                             for formula in arg.premises]
-    interpretedd_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
-    return Argument(interpretedd_premises,
-                    interpretedd_conclusion,
+    interpreted_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
+                            for formula in arg.premises]
+    interpreted_assumptions = {
+        interpreted_premise: interprete_formula(arg.assumptions[premise], mapping, elim_dneg=elim_dneg)
+        for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
+        if premise in arg.assumptions
+    }
+    interpreted_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
+    return Argument(interpreted_premises,
+                    interpreted_conclusion,
+                    interpreted_assumptions,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -496,7 +502,7 @@ def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     #   tgt_formula: '{A} & {B} -> {A}'
     #   return 3
     return sum(
-        [tgt_formula.rep.count(formula.rep) for formula in formulas]\
+        [tgt_formula.rep.count(formula.rep) for formula in formulas]
         or [0]
     )
 
@@ -525,27 +531,49 @@ def argument_is_identical_to(this_argument: Argument,
         for this_premise in this_argument.premises
     ):
         return False
+    for this_premise in this_argument.premises:
+        if this_premise not in this_argument.assumptions:
+            continue
+
+        this_assumption = this_argument.assumptions[this_premise]
+
+        that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
+                            if that_premise in that_argument.assumptions]
+        
+        if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
+                   for that_assumption in that_assumptions):
+            return False
 
     def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
         return this_argument.conclusion.rep == that_argument.conclusion.rep
 
     def is_premises_same(this_argument: Argument, that_argument: Argument) -> bool:
-        is_premises_same = False
-        for that_premises_permutated in permutations(that_argument.premises):
-            if all(this_premise.rep == that_premise.rep
-                   for this_premise, that_premise, in zip(this_argument.premises, that_premises_permutated)):
-                is_premises_same = True
-                break
-        return is_premises_same
+        _is_premises_same = False
+        for premise_indexes in permutations(range(len(that_argument.premises))):
+            that_premises_permuted = [that_argument.premises[i] for i in premise_indexes]
+            for this_premise, that_premise in zip(this_argument.premises, that_premises_permuted):
+                if this_premise.rep != that_premise.rep:
+                    continue
+
+                this_assumption = this_argument.assumptions[this_premise]
+                that_assumption = that_argument.assumptions[that_premise]
+
+                if this_assumption is None and that_assumption is None:
+                    _is_premises_same = True
+                    break
+                elif this_assumption is not None and that_assumption is not None:
+                    if this_assumption.rep == that_assumption.rep:
+                        _is_premises_same = True
+                        break
+                else:
+                    continue
+        return _is_premises_same
 
     # check the exact identification condition.
     for mapping in generate_mappings_from_argument(this_argument,
                                                    that_argument,
                                                    add_complicated_arguments=add_complicated_arguments,
                                                    allow_many_to_one=allow_many_to_oneg):
-        # print('----------------------')
-        # print(this_argument)
-        # print(that_argument)
         this_argument_interpreted = interprete_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
         if is_conclusion_same(this_argument_interpreted, that_argument)\
@@ -605,6 +633,7 @@ def generate_quantifier_arguments(
             argument = Argument(
                 [quantified_formula],
                 de_quantified_formula,
+                {},
                 id = argument_id,
             )
         elif argument_type == 'existential_quantifier_intro':
@@ -614,6 +643,7 @@ def generate_quantifier_arguments(
             argument = Argument(
                 [de_quantified_formula],
                 quantified_formula,
+                {},
                 id = argument_id,
             )
         else:

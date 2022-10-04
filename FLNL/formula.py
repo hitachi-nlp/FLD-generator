@@ -4,7 +4,9 @@ from typing import List, Optional
 IMPLICATION = '->'
 AND = '&'
 OR = 'v'
+NOT = '¬'
 NEGATION = '¬'
+DERIVE = '⊢'
 
 _PREDICATE_ALPHABETS = [
     'A', 'B', 'C', 'D', 'E',

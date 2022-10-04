@@ -1,4 +1,5 @@
 from typing import List, Tuple, Optional, Iterable, Union
+from copy import copy
 from .formula import Formula
 from .argument import Argument
 from .exception import FormalLogicExceptionBase
@@ -16,29 +17,100 @@ class ProofNode:
     def __init__(self, formula: Formula):
         self.formula = formula
         self.argument: Optional[Argument] = None
-        self.parent: Optional[ProofNode] = None
+
+        self._parent: Optional[ProofNode] = None
         self._children: List['ProofNode'] = []
-        # self._tree: Optional['ProofTree'] = None
+
+        self._assump_parent: Optional[ProofNode] = None
+        self._assump_children: List['ProofNode'] = []
+
+    @property
+    def parent(self):
+        return self._parent
+
+    def set_parent(self, node: 'ProofNode') -> None:
+        self._parent = node
+        if self not in node.children:
+            node.add_child(self)
+
+    def delete_parent(self) -> None:
+        if self._parent is not None:
+            self._parent.delete_child(self)
+        self._parent = None
+
+    @property
+    def ancestors(self) -> List['ProofNode']:
+        if self.parent is None:
+            return []
+        else:
+            return [self.parent] + self.parent.ancestors
+
+    @property
+    def children(self):
+        return self._children
 
     def add_child(self, node: 'ProofNode') -> None:
         if node.parent is not None:
             raise MultipleParentError('Can\'t add child since it already has a parent.')
 
-        node.parent = self
         if node not in self._children:
             self._children.append(node)
+        node.set_parent(self)
 
     def delete_child(self, node: 'ProofNode') -> None:
         for _node in self._children:
             if _node  == node:
-                self._children.remove(node)
+                self._children.remove(_node)
+                _node.delete_parent()
                 break
         if len(self._children) == 0:
             self.argument = None
 
     @property
-    def children(self):
-        return self._children
+    def descendants(self) -> List['ProofNode']:
+        descendants = copy(self.children)
+        for child in self.children:
+            descendants += child.descendants
+        return descendants
+
+    @property
+    def assump_parent(self):
+        return self._assump_parent
+
+    def set_assump_parent(self, node: 'ProofNode') -> None:
+        self._assump_parent = node
+        if self not in node.assump_children:
+            node.add_assump_child(self)
+
+    def delete_assump_parent(self) -> None:
+        if self._assump_parent is not None:
+            self._assump_parent.delete_assump_child(self)
+        self._assump_parent = None
+
+    @property
+    def assump_children(self):
+        return self._assump_children
+
+    def add_assump_child(self, node: 'ProofNode') -> None:
+        if node.assump_parent is not None:
+            raise MultipleParentError('Can\'t add assump_child since it already has a assump_parent.')
+
+        if node not in self._assump_children:
+            self._assump_children.append(node)
+        node.set_assump_parent(self)
+
+    def delete_assump_child(self, node: 'ProofNode') -> None:
+        for _node in self._assump_children:
+            if _node  == node:
+                self._assump_children.remove(_node)
+                _node.delete_assump_parent()
+                break
+        if len(self._assump_children) == 0:
+            self.argument = None
+
+    @property
+    def is_leaf(self) -> bool:
+        return len(self.children) == 0
 
     def __str__(self) -> str:
         return f'ProofNode({self.formula})'
@@ -59,11 +131,22 @@ class ProofTree:
 
     def delete_node(self, node: ProofNode) -> None:
         self._nodes.remove(node)
-        # node._tree = None
-        for _node in self._nodes:
-            if _node.parent == node:
-                _node.parent = None
-            _node.delete_child(node)
+
+        for node_in_tree in self._nodes:
+            if node.parent == node_in_tree:
+                node.delete_parent()
+            if node.assump_parent == node_in_tree:
+                node.delete_assump_parent()
+            node.delete_child(node_in_tree)
+            node.delete_assump_child(node_in_tree)
+
+        # for node_in_tree in self._nodes:
+        #     if node_in_tree.parent == node:
+        #         node_in_tree.delete_parent()
+        #     if node_in_tree.assump_parent == node:
+        #         node_in_tree.delete_assump_parent()
+        #     node_in_tree.delete_child(node)
+        #     node_in_tree.delete_assump_child(node)
 
     @property
     def nodes(self) -> List[ProofNode]:

@@ -7,7 +7,6 @@ from pathlib import Path
 import copy
 
 import click
-from pprint import pprint
 from script_engine import QsubEngine, SubprocessEngine
 from logger_setup import setup as setup_logger, create_file_handler
 from lab import build_dir, save_params
@@ -49,6 +48,13 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220917.UNKNOWN')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
+
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221001.assump.void.large')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace.large')
     output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
 
     dataset_names = [
@@ -70,6 +76,10 @@ def main():
         # '20220928.atmf-PA.arg-compl.dpth-1.neg_tree_distractor',
         # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
         # '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
+        # '20220929.atmf-PA.arg-compl.dpth-3.20220929.assump.debug',
+
+        '20220929.atmf-PA.arg-compl.dpth-3.20221001.assump.void',
+        '20220929.atmf-PA.arg-compl.dpth-5.20221001.assump.void',
 
         '20221002.atmf-PA.arg-compl.dpth-3.neg_tree_distractor.more',
         '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more',
