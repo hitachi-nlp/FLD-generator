@@ -543,8 +543,8 @@ def argument_is_identical_to(this_argument: Argument,
                 if this_premise.rep != that_premise.rep:
                     continue
 
-                this_assumption = this_argument.assumptions[this_premise]
-                that_assumption = that_argument.assumptions[that_premise]
+                this_assumption = this_argument.assumptions.get(this_premise, None)
+                that_assumption = that_argument.assumptions.get(that_premise, None)
 
                 if this_assumption is None and that_assumption is None:
                     _is_premises_same = True
