@@ -1,7 +1,7 @@
 from typing import List
 from FLNL.interpretation import (
     _expand_op,
-    generate_quantifier_arguments,
+    generate_quantifier_axiom_arguments,
     formula_is_identical_to,
     argument_is_identical_to,
     interprete_formula,
@@ -167,14 +167,14 @@ def test_argument_is_identical_to():
     )
 
 
-def test_generate_quantifier_arguments():
+def test_generate_quantifier_axiom_arguments():
 
     def check_generation(argument_type: str,
                          formula: Formula,
                          expected_arguments: List[Argument],
                          quantify_all_at_once=False):
         generated_arguments = list(
-            generate_quantifier_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once))
+            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once))
         print()
         print(f'--------- {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
         for generated_argument in generated_arguments:
@@ -185,7 +185,7 @@ def test_generate_quantifier_arguments():
             assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_oneg=False)
                        for expected_argument in expected_arguments))
 
-    print('\n\n\n================= test_generate_quantifier_arguments() ====================')
+    print('\n\n\n================= test_generate_quantifier_axiom_arguments() ====================')
 
     # ----------- universal_quantifier_elim --------------
     check_generation(
@@ -339,4 +339,4 @@ if __name__ == '__main__':
     # test_formula_is_identical_to()
     # test_formula_can_not_be_identical_to()
     # test_argument_is_identical_to()
-    test_generate_quantifier_arguments()
+    test_generate_quantifier_axiom_arguments()

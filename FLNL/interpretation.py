@@ -579,7 +579,7 @@ def argument_is_identical_to(this_argument: Argument,
     return False
 
 
-def generate_quantifier_arguments(
+def generate_quantifier_axiom_arguments(
     argument_type: str,
     formula: Formula,
     id_prefix: Optional[str] = None,
