@@ -593,24 +593,14 @@ def generate_quantifier_arguments(
     if len(formula.variables) > 0:
         raise NotImplementedError('Multiple quantifier is not supported yet.')
 
-    quantified_variable = sorted(set(VARIABLES) - {v.rep for v in formula.variables})[0]
     de_quantified_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
-
-    def generate_quantifier_mappings(constants: List[Formula]) -> Iterable[Dict]:
-        if len(constants) == 0:
-            yield {}
-            return
-
-        src_constant = constants[0]
-        tgt_constant_reps = [quantified_variable] if quantify_all_at_once else [src_constant.rep, quantified_variable]
-        for tgt_constant_rep in tgt_constant_reps:
-            for mapping in generate_quantifier_mappings(constants[1:]):
-                mapping[src_constant.rep] = tgt_constant_rep
-                yield mapping
-
-    for i, quantifier_mapping in enumerate(generate_quantifier_mappings(formula.constants)):
-        if quantified_variable not in quantifier_mapping.values():
+    for i, quantifier_mapping in enumerate(generate_quantifier_mappings([formula], quantify_all_at_once=quantify_all_at_once)):
+        quantified_variables = [tgt for src, tgt in quantifier_mapping.items()
+                                if src != tgt]
+        if len(quantified_variables) == 0:
             continue
+        quantified_variable = quantified_variables[0]
+
         de_quantified_mapping = {
             src: (de_quantified_constant if tgt == quantified_variable else src)
             for src, tgt in quantifier_mapping.items()
@@ -645,14 +635,22 @@ def generate_quantifier_arguments(
 def generate_quantifier_mappings(formulas: List[Formula],
                                  quantify_all_at_once=False) -> Iterable[Dict[str, str]]:
 
+    tgt_variable = sorted(
+        set(VARIABLES) - {v.rep for formula in formulas for v in formula.variables}
+    )[0]
+
     def go(constants: List[Formula]) -> Iterable[Dict]:
+
         if len(constants) == 0:
             yield {}
             return
 
         src_constant = constants[0]
-        tgt_constant_reps = [quantified_variable] if quantify_all_at_once else [src_constant.rep, quantified_variable]
+        tgt_constant_reps = [tgt_variable] if quantify_all_at_once else [src_constant.rep, tgt_variable]
         for tgt_constant_rep in tgt_constant_reps:
             for mapping in go(constants[1:]):
                 mapping[src_constant.rep] = tgt_constant_rep
                 yield mapping
+
+    constants = {c for formula in formulas for c in formula.constants}
+    return go(list(constants))
