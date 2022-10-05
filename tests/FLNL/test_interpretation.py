@@ -374,12 +374,21 @@ def test_generate_quantifier_formulas():
         ],
         quantify_all_at_once=False,
     )
+    check_generation(
+        'universal',
+        Formula('({F}{a} v {G}{b})'),
+        [
+            Formula('(x): ({F}x v {G}x)'),
+        ],
+        quantify_all_at_once=True,
+    )
+
 
 
 if __name__ == '__main__':
-    # test_expand_op()
-    # test_formula_is_identical_to()
-    # test_formula_can_not_be_identical_to()
+    test_expand_op()
+    test_formula_is_identical_to()
+    test_formula_can_not_be_identical_to()
     test_argument_is_identical_to()
-    # test_generate_quantifier_axiom_arguments()
-    # test_generate_quantifier_formulas()
+    test_generate_quantifier_axiom_arguments()
+    test_generate_quantifier_formulas()
