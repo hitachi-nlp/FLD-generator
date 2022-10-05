@@ -339,12 +339,32 @@ def interprete_argument(arg: Argument,
 
 def interprete_formula(formula: Formula,
                        mapping: Dict[str, str],
+                       quantifications: Dict[str, str] = None,
                        elim_dneg=False) -> Formula:
-    return _expand_op(
+    formula = _expand_op(
         Formula(
             _interprete_rep(formula.rep, mapping, elim_dneg=elim_dneg)
         )
     )
+    if quantifications is not None:
+        for var, type_ in quantifications.items():
+            if var not in VARIABLES:
+                raise ValueError(f'non-variable symbol {var} is specified in quantifications.')
+            cur_rep = formula.rep
+            if type_ == 'universal':
+                if cur_rep.find(':') >= 0:
+                    next_rep = f'({var})' + cur_rep
+                else:
+                    next_rep = f'({var}): ' + cur_rep
+            elif type_ == 'existential':
+                if cur_rep.find(':') >= 0:
+                    next_rep = f'(E{var})' + cur_rep
+                else:
+                    next_rep = f'(E{var}): ' + cur_rep
+            else:
+                raise ValueError(f'Unknown quantification type {type_}')
+            formula = Formula(next_rep)
+    return formula
 
 
 _expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
@@ -527,7 +547,7 @@ def argument_is_identical_to(this_argument: Argument,
 
         that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
                             if that_premise in that_argument.assumptions]
-        
+
         if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
                    for that_assumption in that_assumptions):
             return False
@@ -630,6 +650,25 @@ def generate_quantifier_axiom_arguments(
             raise ValueError()
 
         yield argument
+
+
+def generate_quantifier_formulas(src_formula: Formula,
+                                 type_: str,
+                                 quantify_all_at_once=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+    for i, quantifier_mapping in enumerate(generate_quantifier_mappings([src_formula],
+                                                                        quantify_all_at_once=quantify_all_at_once)):
+        quantified_variables = [tgt for src, tgt in quantifier_mapping.items()
+                                if src != tgt and tgt in VARIABLES]
+        if len(quantified_variables) == 0:
+            continue
+
+        quantified_formula = interprete_formula(
+            src_formula,
+            quantifier_mapping,
+            quantifications={var: type_ for var in quantified_variables}
+        )
+
+        yield quantified_formula, quantifier_mapping
 
 
 def generate_quantifier_mappings(formulas: List[Formula],

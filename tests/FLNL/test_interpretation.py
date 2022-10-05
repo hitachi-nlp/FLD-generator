@@ -5,7 +5,8 @@ from FLNL.interpretation import (
     formula_is_identical_to,
     argument_is_identical_to,
     interprete_formula,
-    formula_can_not_be_identical_to
+    formula_can_not_be_identical_to,
+    generate_quantifier_formulas,
 )
 from FLNL.proof_tree_generators import generate_mappings_from_formula
 from FLNL.formula import Formula
@@ -176,7 +177,7 @@ def test_generate_quantifier_axiom_arguments():
         generated_arguments = list(
             generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once))
         print()
-        print(f'--------- {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
+        print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
         for generated_argument in generated_arguments:
             print(f'{str(generated_argument)}')
 
@@ -333,10 +334,52 @@ def test_generate_quantifier_axiom_arguments():
     )
 
 
+def test_generate_quantifier_formulas():
+
+    def check_generation(type_: str,
+                         formula: Formula,
+                         expected_formulas: List[Formula],
+                         quantify_all_at_once=False):
+
+        quantified_formulas = [
+            formula
+            for formula, _ in generate_quantifier_formulas(formula, type_, quantify_all_at_once=quantify_all_at_once)
+        ]
+
+        print()
+        print(f'--------- quantifier_axiom_formulas {type_} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
+        for generated_formula in quantified_formulas:
+            print(f'{str(generated_formula)}')
+
+        assert(len(quantified_formulas) == len(expected_formulas))
+        for generated_formula in quantified_formulas:
+            assert(any(formula_is_identical_to(generated_formula, expected_formula, allow_many_to_oneg=False)
+                       for expected_formula in expected_formulas))
+
+    check_generation(
+        'universal',
+        Formula('{F}{a}'),
+        [
+            Formula('(x): {F}x'),
+        ],
+        quantify_all_at_once=False,
+    )
+    check_generation(
+        'universal',
+        Formula('({F}{a} v {G}{b})'),
+        [
+            Formula('(x): ({F}x v {G}{b})'),
+            Formula('(x): ({F}{a} v {G}x)'),
+            Formula('(x): ({F}x v {G}x)'),
+        ],
+        quantify_all_at_once=False,
+    )
+
+
 if __name__ == '__main__':
-    # test_interpretation()
     # test_expand_op()
     # test_formula_is_identical_to()
     # test_formula_can_not_be_identical_to()
-    # test_argument_is_identical_to()
-    test_generate_quantifier_axiom_arguments()
+    test_argument_is_identical_to()
+    # test_generate_quantifier_axiom_arguments()
+    # test_generate_quantifier_formulas()
