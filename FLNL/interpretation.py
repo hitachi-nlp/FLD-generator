@@ -587,8 +587,6 @@ def argument_is_identical_to(this_argument: Argument,
         if is_conclusion_same(this_argument_interpreted, that_argument)\
                 and is_premises_same(this_argument_interpreted, that_argument):
             return True
-        else:
-            return False
 
     # It is possible that no mappings are found (e.g. when no predicate and constants are in arguments)
     # but the arguments are the same from the beggining

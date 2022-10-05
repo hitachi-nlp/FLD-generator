@@ -100,7 +100,6 @@ def test_formula_is_identical_to():
 
 def test_argument_is_identical_to():
 
-    import pudb; pudb.set_trace()
     assert argument_is_identical_to(
         Argument(
             [Formula('{A} v {B}'), Formula('¬{B}')],
