@@ -272,9 +272,11 @@ def test_PL_pred_arg():
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
             './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem--and_or.pred_only.json',
@@ -282,7 +284,6 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/theorem.pred_arg.json',
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axioms.with_assumption.json',
         ],
         complicated_arguments_weight=0.3,
         quantifier_axiom_arguments_weight=0.3,

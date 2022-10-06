@@ -592,7 +592,7 @@ _DATASET_SETTINGS = {
             # './configs/FLNL/arguments/theorem.pred_arg.json',
             # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axioms.with_assumption.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -627,7 +627,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/theorem.pred_arg.json',
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axioms.with_assumption.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -662,7 +662,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/theorem.pred_arg.json',
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axioms.with_assumption.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
