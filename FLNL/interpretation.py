@@ -89,7 +89,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
 
     for i_not, mapping in enumerate(generate_not_enhanced_mappings(predicates)):
         if get_name:
-            yield mapping, f'not-{_fill_str(i_not)}'
+            yield mapping, f'complication.not-{_fill_str(i_not)}'
         else:
             yield mapping
 
@@ -109,7 +109,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                         mapping[predicate_to_expand] = f'{total_negation_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
                         not_name_id = i_not * 2 + i_total_negation
                         if get_name:
-                            yield mapping, f'{op}-{_fill_str(i_predicate_to_expand)}.not-{_fill_str(not_name_id)}'
+                            yield mapping, f'complication.{op}-{_fill_str(i_predicate_to_expand)}.not-{_fill_str(not_name_id)}'
                         else:
                             yield mapping
 
@@ -631,7 +631,7 @@ def generate_quantifier_axiom_arguments(
         if argument_type == 'universal_quantifier_elim':
             quantifier_formula = Formula(f'({quantifier_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interprete_formula(formula, de_quantifier_mapping)
-            argument_id = f'{id_prefix}.univ_quant_elim-{i}' if id_prefix is not None else f'univ_quant_elim-{i}'
+            argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
             argument = Argument(
                 [quantifier_formula],
                 de_quantifier_formula,
@@ -641,7 +641,7 @@ def generate_quantifier_axiom_arguments(
         elif argument_type == 'existential_quantifier_intro':
             quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interprete_formula(formula, de_quantifier_mapping)
-            argument_id = f'{id_prefix}.exist_quant_intro-{i}' if id_prefix is not None else f'exist_quant_intro-{i}'
+            argument_id = f'{id_prefix}.quantifier_axiom.existential_elim--{i}' if id_prefix is not None else f'quantifier_axiom.existential_elim--{i}'
             argument = Argument(
                 [de_quantifier_formula],
                 quantifier_formula,
@@ -706,9 +706,9 @@ def generate_quantifier_formulas(src_formula: Formula,
                                  quantifier_type: str,
                                  quantify_all_at_once=False,
                                  get_name=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for quantifier_mapping, name in generate_quantifier_mappings([src_formula],
-                                                                 quantify_all_at_once=quantify_all_at_once,
-                                                                 get_name=True):
+    for i, quantifier_mapping in enumerate(generate_quantifier_mappings([src_formula],
+                                                                        quantify_all_at_once=quantify_all_at_once,
+                                                                        get_name=True)):
         quantifier_variables = [tgt for tgt in quantifier_mapping.values()
                                 if tgt in VARIABLES]
 
@@ -719,6 +719,7 @@ def generate_quantifier_formulas(src_formula: Formula,
         )
 
         if get_name:
+            name = f'quantifier-{_fill_str(i)}'
             yield quantifier_formula, quantifier_mapping, name
         else:
             yield quantifier_formula, quantifier_mapping
