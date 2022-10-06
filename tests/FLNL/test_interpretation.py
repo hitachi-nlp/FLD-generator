@@ -7,6 +7,7 @@ from FLNL.interpretation import (
     interprete_formula,
     formula_can_not_be_identical_to,
     generate_quantifier_formulas,
+    generate_quantifier_arguments,
 )
 from FLNL.proof_tree_generators import generate_mappings_from_formula
 from FLNL.formula import Formula
@@ -178,11 +179,10 @@ def test_generate_quantifier_axiom_arguments():
             generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once))
         print()
         print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
-        for generated_argument in generated_arguments:
-            print(f'{str(generated_argument)}')
 
         assert(len(generated_arguments) == len(expected_arguments))
         for generated_argument in generated_arguments:
+            print(f'{str(generated_argument)}')
             assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_oneg=False)
                        for expected_argument in expected_arguments))
 
@@ -348,11 +348,10 @@ def test_generate_quantifier_formulas():
 
         print()
         print(f'--------- quantifier_axiom_formulas {type_} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
-        for generated_formula in quantified_formulas:
-            print(f'{str(generated_formula)}')
 
         assert(len(quantified_formulas) == len(expected_formulas))
         for generated_formula in quantified_formulas:
+            print(f'{str(generated_formula)}')
             assert(any(formula_is_identical_to(generated_formula, expected_formula, allow_many_to_oneg=False)
                        for expected_formula in expected_formulas))
 
@@ -364,6 +363,7 @@ def test_generate_quantifier_formulas():
         ],
         quantify_all_at_once=False,
     )
+
     check_generation(
         'universal',
         Formula('({F}{a} v {G}{b})'),
@@ -374,6 +374,7 @@ def test_generate_quantifier_formulas():
         ],
         quantify_all_at_once=False,
     )
+
     check_generation(
         'universal',
         Formula('({F}{a} v {G}{b})'),
@@ -383,6 +384,197 @@ def test_generate_quantifier_formulas():
         quantify_all_at_once=True,
     )
 
+    check_generation(
+        'universal',
+        Formula('{A}'),
+        [
+        ],
+        quantify_all_at_once=False,
+    )
+
+
+def test_generate_quantifier_arguments():
+
+    def check_generation(quantifier_type: str,
+                         src_arg: Argument,
+                         expected_arguments: List[Argument],
+                         quantify_all_at_once=False):
+        generated_arguments = list(
+            generate_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once)
+        )
+        print()
+        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}) ------')
+
+        assert(len(generated_arguments) == len(expected_arguments))
+        for generated_argument, _ in generated_arguments:
+            print(f'{str(generated_argument)}')
+
+            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_oneg=False)
+                       for expected_argument in expected_arguments))
+
+    print('\n\n\n================= test_generate_quantifier_arguments() ====================')
+
+    check_generation(
+        'universal',
+        Argument(
+            [Formula('{A}{a}')],
+            Formula('{B}{b}'),
+            {},
+        ),
+        [
+            Argument(
+                [Formula('(x): {A}x')],
+                Formula('{B}{b}'),
+                {},
+            ),
+
+            Argument(
+                [Formula('{A}{a}')],
+                Formula('(x): {B}x'),
+                {},
+            ),
+
+            Argument(
+                [Formula('(x): {A}x')],
+                Formula('(x): {B}x'),
+                {},
+            ),
+
+        ],
+    )
+
+    check_generation(
+        'universal',
+        Argument(
+            [Formula('({A}{a} v {B}{b})')],
+            Formula('{C}{b}'),
+            {},
+        ),
+        [
+            Argument(
+                [Formula('(x): ({A}x v {B}{b})')],
+                Formula('{C}{b}'),
+                {},
+            ),
+        ],
+    )
+
+    premise = Formula('{A}{a}')
+    quantified_premise = Formula('(x): {A}x')
+    check_generation(
+        'universal',
+        Argument(
+            [premise],
+            Formula('{B}{b}'),
+            {premise: Formula('{C}{c}')},
+        ),
+        [
+
+            Argument(
+                [quantified_premise],
+                Formula('{B}{b}'),
+                {quantified_premise: Formula('{C}{c}')},
+            ),
+
+            Argument(
+                [premise],
+                Formula('(x): {B}x'),
+                {premise: Formula('{C}{c}')},
+            ),
+
+            Argument(
+                [premise],
+                Formula('{B}{b}'),
+                {premise: Formula('(x): {C}x')},
+            ),
+
+            Argument(
+                [quantified_premise],
+                Formula('(x): {B}x'),
+                {quantified_premise: Formula('{C}{c}')},
+            ),
+
+            Argument(
+                [quantified_premise],
+                Formula('{B}{b}'),
+                {quantified_premise: Formula('(x): {C}x')},
+            ),
+
+            Argument(
+                [premise],
+                Formula('(x): {B}x'),
+                {premise: Formula('(x): {C}x')},
+            ),
+
+
+            Argument(
+                [quantified_premise],
+                Formula('(x): {B}x'),
+                {quantified_premise: Formula('(x): {C}x')},
+            ),
+        ],
+    )
+
+    premise = Formula('{A}{a}')
+    quantified_premise = Formula('(x): {A}x')
+    check_generation(
+        'universal',
+        Argument(
+            [premise],
+            Formula('{B}{b}'),
+            {premise: Formula('{C}{b}')},
+        ),
+        [
+            Argument(
+                [quantified_premise],
+                Formula('{B}{b}'),
+                {quantified_premise: Formula('{C}{b}')},
+            ),
+        ],
+    )
+
+    check_generation(
+        'universal',
+        Argument(
+            [Formula('{A}{a}')],
+            Formula('{B}{a}'),
+            {},
+        ),
+        [],
+    )
+    
+    check_generation(
+        'universal',
+        Argument(
+            [Formula('(x): {A}x')],
+            Formula('{B}{a}'),
+            {},
+        ),
+        [
+            Argument(
+                [Formula('(x): {A}x')],
+                Formula('(y): {B}y'),
+                {},
+            ),
+        ],
+    )
+
+    # # TODO: update argument_is_identical_to so that it can identify "(x): {A}x" and "(y): {B}y"
+    # check_generation(
+    #     'universal',
+    #     Argument(
+    #         [Formula('(x): {A}x')],
+    #         Formula('{B}{a}'),
+    #         {},
+    #     ),
+    #     [
+    #         Argument(
+    #             [Formula('(y): {A}y')],
+    #             Formula('(y): {B}y'),
+    #             {},
+    #         ),
+    #     ],
+    # )
 
 
 if __name__ == '__main__':
@@ -390,5 +582,8 @@ if __name__ == '__main__':
     test_formula_is_identical_to()
     test_formula_can_not_be_identical_to()
     test_argument_is_identical_to()
+
     test_generate_quantifier_axiom_arguments()
+
     test_generate_quantifier_formulas()
+    test_generate_quantifier_arguments()

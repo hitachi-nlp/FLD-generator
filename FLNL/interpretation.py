@@ -19,6 +19,10 @@ from .formula import (
 from .argument import Argument
 
 
+def _fill_str(no: int) -> str:
+    return str(no).zfill(6)
+
+
 def generate_complicated_arguments(src_arg: Argument,
                                    elim_dneg=False,
                                    suppress_op_expansion_if_exists=False,
@@ -83,12 +87,9 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                 mapping[original_predicate] = predicate_with_not
             yield mapping
 
-    def filled_str(no: int) -> str:
-        return str(no).zfill(6)
-
     for i_not, mapping in enumerate(generate_not_enhanced_mappings(predicates)):
         if get_name:
-            yield mapping, f'not-{filled_str(i_not)}'
+            yield mapping, f'not-{_fill_str(i_not)}'
         else:
             yield mapping
 
@@ -108,7 +109,7 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                         mapping[predicate_to_expand] = f'{total_negation_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
                         not_name_id = i_not * 2 + i_total_negation
                         if get_name:
-                            yield mapping, f'{op}-{filled_str(i_predicate_to_expand)}.not-{filled_str(not_name_id)}'
+                            yield mapping, f'{op}-{_fill_str(i_predicate_to_expand)}.not-{_fill_str(not_name_id)}'
                         else:
                             yield mapping
 
@@ -264,12 +265,6 @@ def _generate_mappings(src_objs: List[Any],
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
             }
-    # elif len(src_objs) == 0 and len(tgt_objs) == 0:
-    #     yield {}
-    # elif len(src_objs) == 0 and len(tgt_objs) > 0:
-    #     yield {}
-    # else:
-    #     yield None
     else:
         raise ValueError()
 
@@ -320,15 +315,19 @@ def _make_permutations(objs: List[Any],
 
 def interprete_argument(arg: Argument,
                         mapping: Dict[str, str],
+                        quantifier_types: Dict[str, str] = None,
                         elim_dneg=False) -> Argument:
-    interpreted_premises = [interprete_formula(formula, mapping, elim_dneg=elim_dneg)
+    interpreted_premises = [interprete_formula(formula, mapping,
+                                               quantifier_types=quantifier_types, elim_dneg=elim_dneg)
                             for formula in arg.premises]
     interpreted_assumptions = {
-        interpreted_premise: interprete_formula(arg.assumptions[premise], mapping, elim_dneg=elim_dneg)
+        interpreted_premise: interprete_formula(arg.assumptions[premise], mapping,
+                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
         for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
         if premise in arg.assumptions
     }
-    interpreted_conclusion = interprete_formula(arg.conclusion, mapping, elim_dneg=elim_dneg)
+    interpreted_conclusion = interprete_formula(arg.conclusion, mapping,
+                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
                     interpreted_assumptions,
@@ -339,18 +338,22 @@ def interprete_argument(arg: Argument,
 
 def interprete_formula(formula: Formula,
                        mapping: Dict[str, str],
-                       quantifications: Dict[str, str] = None,
+                       quantifier_types: Dict[str, str] = None,
                        elim_dneg=False) -> Formula:
-    formula = _expand_op(
+
+    interpreted_formula = _expand_op(
         Formula(
             _interprete_rep(formula.rep, mapping, elim_dneg=elim_dneg)
         )
     )
-    if quantifications is not None:
-        for var, type_ in quantifications.items():
+
+    if quantifier_types is not None:
+        for var, type_ in quantifier_types.items():
+            if var not in [var.rep for var in interpreted_formula.variables]:
+                continue
             if var not in VARIABLES:
-                raise ValueError(f'non-variable symbol {var} is specified in quantifications.')
-            cur_rep = formula.rep
+                raise ValueError(f'non-variable symbol {var} is specified in quantifier_types.')
+            cur_rep = interpreted_formula.rep
             if type_ == 'universal':
                 if cur_rep.find(':') >= 0:
                     next_rep = f'({var})' + cur_rep
@@ -362,9 +365,10 @@ def interprete_formula(formula: Formula,
                 else:
                     next_rep = f'(E{var}): ' + cur_rep
             else:
-                raise ValueError(f'Unknown quantification type {type_}')
-            formula = Formula(next_rep)
-    return formula
+                raise ValueError(f'Unknown quantifier type {type_}')
+            interpreted_formula = Formula(next_rep)
+
+    return interpreted_formula
 
 
 _expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
@@ -611,36 +615,36 @@ def generate_quantifier_axiom_arguments(
     if len(formula.variables) > 0:
         raise NotImplementedError('Multiple quantifier is not supported yet.')
 
-    de_quantified_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
+    de_quantifier_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
     for i, quantifier_mapping in enumerate(generate_quantifier_mappings([formula], quantify_all_at_once=quantify_all_at_once)):
-        quantified_variables = [tgt for src, tgt in quantifier_mapping.items()
+        quantifier_variables = [tgt for src, tgt in quantifier_mapping.items()
                                 if src != tgt]
-        if len(quantified_variables) == 0:
+        if len(quantifier_variables) == 0:
             continue
-        quantified_variable = quantified_variables[0]
+        quantifier_variable = quantifier_variables[0]
 
-        de_quantified_mapping = {
-            src: (de_quantified_constant if tgt == quantified_variable else src)
+        de_quantifier_mapping = {
+            src: (de_quantifier_constant if tgt == quantifier_variable else src)
             for src, tgt in quantifier_mapping.items()
         }
 
         if argument_type == 'universal_quantifier_elim':
-            quantified_formula = Formula(f'({quantified_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
-            de_quantified_formula = interprete_formula(formula, de_quantified_mapping)
+            quantifier_formula = Formula(f'({quantifier_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
+            de_quantifier_formula = interprete_formula(formula, de_quantifier_mapping)
             argument_id = f'{id_prefix}.univ_quant_elim-{i}' if id_prefix is not None else f'univ_quant_elim-{i}'
             argument = Argument(
-                [quantified_formula],
-                de_quantified_formula,
+                [quantifier_formula],
+                de_quantifier_formula,
                 {},
                 id = argument_id,
             )
         elif argument_type == 'existential_quantifier_intro':
-            quantified_formula = Formula(f'(E{quantified_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
-            de_quantified_formula = interprete_formula(formula, de_quantified_mapping)
+            quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
+            de_quantifier_formula = interprete_formula(formula, de_quantifier_mapping)
             argument_id = f'{id_prefix}.exist_quant_intro-{i}' if id_prefix is not None else f'exist_quant_intro-{i}'
             argument = Argument(
-                [de_quantified_formula],
-                quantified_formula,
+                [de_quantifier_formula],
+                quantifier_formula,
                 {},
                 id = argument_id,
             )
@@ -650,44 +654,97 @@ def generate_quantifier_axiom_arguments(
         yield argument
 
 
-def generate_quantifier_formulas(src_formula: Formula,
-                                 type_: str,
-                                 quantify_all_at_once=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for i, quantifier_mapping in enumerate(generate_quantifier_mappings([src_formula],
-                                                                        quantify_all_at_once=quantify_all_at_once)):
-        quantified_variables = [tgt for src, tgt in quantifier_mapping.items()
-                                if src != tgt and tgt in VARIABLES]
-        if len(quantified_variables) == 0:
+def generate_quantifier_arguments(src_arg: Argument,
+                                  quantifier_type: str,
+                                  elim_dneg=False,
+                                  quantify_all_at_once=False,
+                                  get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
+    for mapping, name in generate_quantifier_mappings(src_arg.all_formulas,
+                                                      quantify_all_at_once=quantify_all_at_once,
+                                                      get_name=True):
+        constants_appearing_only_in_one_formula = set()
+        for i_formula, formula in enumerate(src_arg.all_formulas):
+            other_formulas = [other_formula
+                              for other_formula in src_arg.all_formulas
+                              if other_formula != formula]
+            for constant in formula.constants:
+                if all(constant.rep not in [other_constant.rep for other_constant in other_formula.constants]
+                       for other_formula in other_formulas):
+                    constants_appearing_only_in_one_formula.add(constant.rep)
+
+        quantified_constants = [src for src, tgt in mapping.items() if tgt in VARIABLES]
+        quantified_variables = [tgt for tgt in mapping.values() if tgt in VARIABLES]
+        if not all(src_constant in constants_appearing_only_in_one_formula
+                   for src_constant in quantified_constants):
             continue
 
-        quantified_formula = interprete_formula(
-            src_formula,
-            quantifier_mapping,
-            quantifications={var: type_ for var in quantified_variables}
+        complicated_argument = interprete_argument(
+            src_arg,
+            mapping,
+            quantifier_types={tgt_var: quantifier_type for tgt_var in quantified_variables},
+            elim_dneg=elim_dneg
         )
 
-        yield quantified_formula, quantifier_mapping
+        if get_name:
+            yield complicated_argument, mapping, name
+        else:
+            yield complicated_argument, mapping
+
+
+def generate_quantifier_formulas(src_formula: Formula,
+                                 quantifier_type: str,
+                                 quantify_all_at_once=False,
+                                 get_name=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
+    for quantifier_mapping, name in generate_quantifier_mappings([src_formula],
+                                                                 quantify_all_at_once=quantify_all_at_once,
+                                                                 get_name=True):
+        quantifier_variables = [tgt for tgt in quantifier_mapping.values()
+                                if tgt in VARIABLES]
+
+        quantifier_formula = interprete_formula(
+            src_formula,
+            quantifier_mapping,
+            quantifier_types={var: quantifier_type for var in quantifier_variables}
+        )
+
+        if get_name:
+            yield quantifier_formula, quantifier_mapping, name
+        else:
+            yield quantifier_formula, quantifier_mapping
 
 
 def generate_quantifier_mappings(formulas: List[Formula],
-                                 quantify_all_at_once=False) -> Iterable[Dict[str, str]]:
+                                 quantify_all_at_once=False,
+                                 get_name=False)\
+        -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
 
     tgt_variable = sorted(
         set(VARIABLES) - {v.rep for formula in formulas for v in formula.variables}
     )[0]
 
-    def go(constants: List[Formula]) -> Iterable[Dict]:
+    def enum_all_quantifier_mappings(constants: List[str]) -> Iterable[Dict]:
 
         if len(constants) == 0:
             yield {}
             return
 
         src_constant = constants[0]
-        tgt_constant_reps = [tgt_variable] if quantify_all_at_once else [src_constant.rep, tgt_variable]
+        tgt_constant_reps = [tgt_variable] if quantify_all_at_once else [src_constant, tgt_variable]
         for tgt_constant_rep in tgt_constant_reps:
-            for mapping in go(constants[1:]):
-                mapping[src_constant.rep] = tgt_constant_rep
+            for mapping in enum_all_quantifier_mappings(constants[1:]):
+                mapping[src_constant] = tgt_constant_rep
                 yield mapping
 
-    constants = {c for formula in formulas for c in formula.constants}
-    return go(list(constants))
+    constants = {c.rep for formula in formulas for c in formula.constants}
+    i = 0
+    for mapping in enum_all_quantifier_mappings(list(constants)):
+        quantifier_variables = [tgt for src, tgt in mapping.items()
+                                if src != tgt and tgt in VARIABLES]
+        if len(quantifier_variables) == 0:
+            continue
+
+        if get_name:
+            yield mapping, f'quantifier-{_fill_str(i)}'
+        else:
+            yield mapping
+        i += 1
