@@ -25,8 +25,10 @@ def test_argument():
     for argument_json in argument_jsons:
         print('\n==========================')
         pprint(argument_json)
+
         argument = Argument.from_json(argument_json)
         print(argument)
+
         argument_dump_load = Argument.from_json(argument.to_json())
         print(argument_dump_load)
 

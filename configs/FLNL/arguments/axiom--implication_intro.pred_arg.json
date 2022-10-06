@@ -1,6 +1,6 @@
 [
   {
-      "id": "implication_intro.pred_only",
+      "id": "implication_intro.pred_arg",
       "premises": [
           "{A}{a} ⊢ {B}{b}"
       ],

@@ -41,6 +41,7 @@ from .formula import (
     PREDICATES,
     CONSTANTS,
     VARIABLES,
+    CONTRADICTION,
 )
 import kern_profiler
 
@@ -266,7 +267,8 @@ def _generate_stem(arguments: List[Argument],
                    predicate_pool: List[str],
                    constant_pool: List[str],
                    argument_weights: Optional[Dict[Argument, float]] = None,
-                   elim_dneg=False) -> Optional[ProofTree]:
+                   elim_dneg=False,
+                   disallow_contradiction_hypothesis=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -423,6 +425,7 @@ def _generate_stem(arguments: List[Argument],
                             break
 
             if is_arg_done:
+
                 # Update
                 next_assumption_nodes = []
                 for i_premise, premise in enumerate(next_arg_pulled.premises):
@@ -463,6 +466,8 @@ def _generate_stem(arguments: List[Argument],
                 raise ProofTreeGenerationFailure(msg)
 
         if is_tree_done:
+            if disallow_contradiction_hypothesis and proof_tree.root_node.formula.rep == CONTRADICTION:
+                raise ProofTreeGenerationFailure(f'Contradiction {CONTRADICTION} can not be the hypothesis is disallowed.')
             return proof_tree
 
     raise Exception('Unexpected')

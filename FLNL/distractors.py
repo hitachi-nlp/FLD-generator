@@ -6,7 +6,7 @@ import math
 import logging
 from typing import Optional
 from .proof import ProofTree, ProofNode
-from .formula import Formula, PREDICATES, CONSTANTS, negate
+from .formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError
 from .utils import shuffle
 from .interpretation import generate_mappings_from_predicates_and_constants, interprete_formula, eliminate_double_negation
 from .formula_checkers import is_ok_set as is_ok_formula_set
@@ -217,7 +217,10 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
             return []
 
         def generate_initial_negative_tree() -> ProofTree:
-            neg_hypothesis = negate(proof_tree.root_node.formula)
+            try:
+                neg_hypothesis = negate(proof_tree.root_node.formula)
+            except ContradictionNegationError as e:
+                raise ProofTreeGenerationFailure(str(e))
             if self.generator.elim_dneg:
                 neg_hypothesis = eliminate_double_negation(neg_hypothesis)
             return ProofTree([ProofNode(neg_hypothesis)])

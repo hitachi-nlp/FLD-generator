@@ -271,18 +271,22 @@ def test_PL_pred_arg():
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom--negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
         ],
         complicated_arguments_weight=0.3,
@@ -313,3 +317,4 @@ if __name__ == '__main__':
     # test_LP_pred_arg()
     # test_minimum_PL()
     test_PL_pred_arg()
+   

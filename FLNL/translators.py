@@ -400,8 +400,9 @@ class ClauseTypedTranslator(Translator):
             if len(interp_mapping_consisntent_nls) == 0:
                 msgs = [
                     f'translation not found for "{formula.rep}" the pos and word inflations of which are consistent with the following chosen interpretation mapping.',
-                    'The tried translations are:\n{"\n".join(interp_mapping_consisntent_nls_pulled)}',
-                    'The interp_mapping is:{pformat(interp_mapping)}',
+                    'The tried translations are:\n',
+                    "\n".join(interp_mapping_consisntent_nls_pulled),
+                    f'The interp_mapping is:{pformat(interp_mapping)}',
                 ]
                 raise_or_warn('\n'.join(msgs))
                 translations.append(None)
@@ -465,23 +466,27 @@ class ClauseTypedTranslator(Translator):
         consistent_nls = []
         for sentence_transl_nl_pulled in sentence_transl_nls_pulled:
             sentence_transl_pulled_formula = Formula(sentence_transl_nl_pulled)
+            interprands = sentence_transl_pulled_formula.predicates + sentence_transl_pulled_formula.constants
 
-            interp_mapping_is_consisntent = False
-            for interprand in sentence_transl_pulled_formula.predicates + sentence_transl_pulled_formula.constants:
-                word = interp_mapping[interprand.rep]
+            if len(interprands) == 0:
+                interp_mapping_is_consisntent = True
+            else:
+                interp_mapping_is_consisntent = False
+                for interprand in interprands:
+                    word = interp_mapping[interprand.rep]
 
-                pos, form = self._get_interprand_info_from_template(interprand.rep, sentence_transl_pulled_formula.rep)
-                if pos not in self._wb.get_pos(word):
-                    interp_mapping_is_consisntent = False
-                    break
+                    pos, form = self._get_interprand_info_from_template(interprand.rep, sentence_transl_pulled_formula.rep)
+                    if pos not in self._wb.get_pos(word):
+                        interp_mapping_is_consisntent = False
+                        break
 
-                inflated_word = self._get_inflated_word(word, pos, form)
+                    inflated_word = self._get_inflated_word(word, pos, form)
 
-                if inflated_word is not None:
-                    interp_mapping_is_consisntent = True
-                else:
-                    interp_mapping_is_consisntent = False
-                    break
+                    if inflated_word is not None:
+                        interp_mapping_is_consisntent = True
+                    else:
+                        interp_mapping_is_consisntent = False
+                        break
             if interp_mapping_is_consisntent:
                 consistent_nls.append(sentence_transl_nl_pulled)
         return consistent_nls

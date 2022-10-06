@@ -38,7 +38,8 @@
       "conclusion": "({A}{a} v {B}{a})"
   },
   {
-      "id": "or_elim.pred_arg",
+      "id": "__or_elim.pred_arg__",
+      "__reason_for_rejection__": "({A}{a} v {B}{b}) not in translation",
       "premises": [
           "({A}{a} v {B}{b})",
           "{A}{a} -> {C}{c}",

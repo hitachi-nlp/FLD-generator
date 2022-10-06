@@ -1,0 +1,17 @@
+[
+  {
+      "id": "negation_elim.pred_arg",
+      "premises": [
+          "{A}{a}",
+          "¬{A}{a}"
+      ],
+      "conclusion": "[F]"
+  },
+  {
+      "id": "negation_intro.pred_arg",
+      "premises": [
+          "{A}{a} ⊢ [F]"
+      ],
+      "conclusion": "¬{A}{a}"
+  }
+]

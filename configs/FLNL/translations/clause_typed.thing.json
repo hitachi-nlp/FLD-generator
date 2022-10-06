@@ -2,6 +2,9 @@
 
   "sentence": {
 
+    "[F]": [
+      "this is contradiction"
+    ],
 
     "{A}": [
       "<<clause::verb::{A}>>"

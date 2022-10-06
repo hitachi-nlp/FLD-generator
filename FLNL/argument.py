@@ -35,11 +35,11 @@ class Argument:
 
     @classmethod
     def from_json(cls, json_dict: Dict) -> 'Argument':
-        premise_reps = [cls._parse_premise(rep)[0] for rep in json_dict['premises']]
-        assumption_reps = [cls._parse_premise(rep)[1] for rep in json_dict['premises']]
+        assumption_reps = [cls._parse_premise(rep)[0] for rep in json_dict['premises']]
+        premise_reps = [cls._parse_premise(rep)[1] for rep in json_dict['premises']]
 
-        premises = [Formula(rep) for rep in premise_reps]
         assumptions = [(Formula(rep) if rep is not None else None) for rep in assumption_reps]
+        premises = [Formula(rep) for rep in premise_reps]
         return Argument(
             premises,
             Formula(json_dict['conclusion']),
@@ -51,12 +51,12 @@ class Argument:
         )
 
     @classmethod
-    def _parse_premise(self, rep: str) -> Tuple[str, Optional[str]]:
+    def _parse_premise(self, rep: str) -> Tuple[Optional[str], str]:
         if rep.find(f' {DERIVE} ') >= 0:
             assumption, premise = rep.split(f' {DERIVE} ')
-            return (premise, assumption)
+            return (assumption, premise)
         else:
-            return rep, None
+            return None, rep
 
     def to_json(self) -> Dict:
         return {
@@ -64,7 +64,7 @@ class Argument:
             'base_scheme_group': self.base_scheme_group,
             'scheme_variant': self.scheme_variant,
             'premises': [
-                (premise.rep if premise not in self.assumptions else f'{premise.rep} {DERIVE} {self.assumptions[premise].rep}')
+                (premise.rep if premise not in self.assumptions else f'{self.assumptions[premise].rep} {DERIVE} {premise.rep}')
                 for premise in self.premises
             ],
             'conclusion': self.conclusion.rep,

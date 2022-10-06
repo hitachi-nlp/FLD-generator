@@ -2,7 +2,6 @@
 
   "sentence": {
 
-
     "¬({A})": ["<<phrase::not_prefix.verb_clause_to_verb_clause>> <<sentence::{A}>>"],
     "¬(¬{A})": ["<<phrase::not_prefix.verb_clause_to_verb_clause>> <<sentence::¬{A}>>"],
 

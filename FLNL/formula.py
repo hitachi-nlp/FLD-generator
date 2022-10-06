@@ -1,12 +1,16 @@
 import re
 from typing import List, Optional
 
+from FLNL.exception import FormalLogicExceptionBase
+
+
 IMPLICATION = '->'
 AND = '&'
 OR = 'v'
 NOT = '¬'
 NEGATION = '¬'
 DERIVE = '⊢'
+CONTRADICTION = '[F]'
 
 _PREDICATE_ALPHABETS = [
     'A', 'B', 'C', 'D', 'E',
@@ -59,6 +63,10 @@ _UNIVERSAL_QUENTIFIER_REGEXP = re.compile(
 _EXISTENTIAL_QUENTIFIER_REGEXP = re.compile(
     '|'.join([f'\(E{variable}\)' for variable in VARIABLES])
 )
+
+
+class ContradictionNegationError(FormalLogicExceptionBase):
+    pass
 
 
 class Formula:
@@ -173,8 +181,8 @@ def eliminate_double_negation(formula: Formula) -> Formula:
 
 
 def negate(formula: Formula) -> Formula:
-    # '({A} v {B})'
-    # '({A} v {B}) -> {C}'
+    if formula.rep == CONTRADICTION:
+        raise ContradictionNegationError(f'Contradiction {CONTRADICTION} can not be negated.')
 
     def require_outer_brace(formula: Formula) -> bool:
         if len(formula.PASs) == 1:
