@@ -66,7 +66,8 @@ class ProofTreeGenerationPipeline:
                         translation_prefix = 'let\'s assume that '
                     else:
                         translation_prefix = ''
-                    formula.translation = translation_prefix + translation
+                    if translation is not None:
+                        formula.translation = translation_prefix + translation
                 logger.info('========================== translating done! ============================')
 
             return proof_tree, root_negation_formula, distractor_formulas, self._get_stats(proof_tree,

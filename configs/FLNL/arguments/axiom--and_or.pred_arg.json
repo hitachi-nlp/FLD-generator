@@ -38,6 +38,12 @@
       "conclusion": "({A}{a} v {B}{a})"
   },
   {
-      "id": "__or_elim.pred_arg"
+      "id": "or_elim.pred_arg",
+      "premises": [
+          "({A}{a} v {B}{b})",
+          "{A}{a} -> {C}{c}",
+          "{B}{b} -> {C}{c}"
+      ],
+      "conclusion": "{C}{c}"
   }
 ]

@@ -38,6 +38,12 @@
       "conclusion": "({A} v {B})"
   },
   {
-      "id": "__or_elim.pred_only"
+      "id": "or_elim.pred_only",
+      "premises": [
+          "({A} v {B})",
+          "{A} -> {C}",
+          "{B} -> {C}"
+      ],
+      "conclusion": "{C}"
   }
 ]
