@@ -398,12 +398,16 @@ def test_generate_quantifier_arguments():
     def check_generation(quantifier_type: str,
                          src_arg: Argument,
                          expected_arguments: List[Argument],
-                         quantify_all_at_once=False):
+                         quantify_all_at_once=False,
+                         quantify_all_at_once_in_a_formula=False):
         generated_arguments = list(
-            generate_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once)
+            generate_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
         )
         print()
-        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}) ------')
+        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}, quantify_all_at_once_in_a_formula={quantify_all_at_once_in_a_formula}) ------')
+
+        for generated_argument, _ in generated_arguments:
+            print(f'{str(generated_argument)}')
 
         assert(len(generated_arguments) == len(expected_arguments))
         for generated_argument, _ in generated_arguments:
@@ -457,6 +461,52 @@ def test_generate_quantifier_arguments():
                 {},
             ),
         ],
+    )
+
+    check_generation(
+        'universal',
+        Argument(
+            [Formula('({A}{a} v {B}{b})')],
+            Formula('{C}{c}'),
+            {},
+        ),
+        [
+            Argument(
+                [Formula('(x): ({A}x v {B}x)')],
+                Formula('(x): {C}x'),
+                {},
+            ),
+        ],
+        quantify_all_at_once=True,
+    )
+
+    check_generation(
+        'universal',
+        Argument(
+            [Formula('({A}{a} v {B}{b})')],
+            Formula('{C}{c}'),
+            {},
+        ),
+        [
+            Argument(
+                [Formula('(x): ({A}x v {B}x)')],
+                Formula('{C}{b}'),
+                {},
+            ),
+
+            Argument(
+                [Formula('({A}{a} v {B}{b})')],
+                Formula('(x): {C}x'),
+                {},
+            ),
+
+            Argument(
+                [Formula('(x): ({A}x v {B}x)')],
+                Formula('(x): {C}x'),
+                {},
+            ),
+        ],
+        quantify_all_at_once_in_a_formula=True,
     )
 
     premise = Formula('{A}{a}')

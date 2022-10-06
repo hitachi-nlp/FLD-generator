@@ -658,6 +658,7 @@ def generate_quantifier_arguments(src_arg: Argument,
                                   quantifier_type: str,
                                   elim_dneg=False,
                                   quantify_all_at_once=False,
+                                  quantify_all_at_once_in_a_formula=False,
                                   get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
     for mapping, name in generate_quantifier_mappings(src_arg.all_formulas,
                                                       quantify_all_at_once=quantify_all_at_once,
@@ -677,6 +678,16 @@ def generate_quantifier_arguments(src_arg: Argument,
         if not all(src_constant in constants_appearing_only_in_one_formula
                    for src_constant in quantified_constants):
             continue
+
+        if quantify_all_at_once_in_a_formula:
+            is_all_or_nothing = True  # In a formula, all or no constants should be converted to variable at once
+            for formula in src_arg.all_formulas:
+                constant_reps = {constant.rep for constant in formula.constants}
+                if len(constant_reps - set(quantified_constants)) not in [0, len(constant_reps)]:
+                    is_all_or_nothing = False
+                    break
+            if not is_all_or_nothing:
+                continue
 
         complicated_argument = interprete_argument(
             src_arg,
