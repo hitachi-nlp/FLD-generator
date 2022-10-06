@@ -26,7 +26,7 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                               config_paths: Optional[List[str]] = None,
                               complicated_arguments_weight=0.0,
-                              quantified_arguments_weight=0.0,
+                              quantifier_axiom_arguments_weight=0.0,
                               elim_dneg=True):
     arguments = arguments or []
 
@@ -39,7 +39,7 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
     return ProofTreeGenerator(arguments,
                               elim_dneg=elim_dneg,
                               complicated_arguments_weight=complicated_arguments_weight,
-                              quantified_arguments_weight=quantified_arguments_weight)
+                              quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight)
 
 
 def load_translator(type_: str,
@@ -156,9 +156,9 @@ def test_original():
     generator = load_proof_tree_generator(
         config_paths=['./configs/FLNL/arguments/old/syllogistic_corpus-02.json'],
 
-        # the config already includes the complicated and quantified arguments
+        # the config already includes the complicated and quantifier_axiom arguments
         complicated_arguments_weight=0.0,
-        quantified_arguments_weight=0.0,
+        quantifier_axiom_arguments_weight=0.0,
     )
 
     distractor = load_distractor(generator)
@@ -184,7 +184,7 @@ def test_LP_pred_only():
             './configs/FLNL/arguments/theorem.pred_only.json',
         ],
         complicated_arguments_weight=0.3,
-        quantified_arguments_weight=0.0,
+        quantifier_axiom_arguments_weight=0.0,
     )
 
     distractor = load_distractor(generator)
@@ -219,7 +219,7 @@ def test_minimum_PL():
 
         ],
         complicated_arguments_weight=0.3,
-        quantified_arguments_weight=0.0,
+        quantifier_axiom_arguments_weight=0.0,
     )
 
     distractor = load_distractor(generator)
@@ -248,7 +248,7 @@ def test_LP_pred_arg():
             './configs/FLNL/arguments/theorem.pred_arg.json',
         ],
         complicated_arguments_weight=0.3,
-        quantified_arguments_weight=0.0,
+        quantifier_axiom_arguments_weight=0.0,
     )
 
     distractor = load_distractor(generator)
@@ -285,7 +285,7 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/axioms.with_assumption.json',
         ],
         complicated_arguments_weight=0.3,
-        quantified_arguments_weight=0.3,
+        quantifier_axiom_arguments_weight=0.3,
     )
 
     distractor = load_distractor(generator)

@@ -55,7 +55,7 @@ class ProofTreeGenerator:
     def __init__(self,
                  arguments: List[Argument],
                  complicated_arguments_weight=0.0,
-                 quantified_arguments_weight=0.0,
+                 quantifier_axiom_arguments_weight=0.0,
                  quantify_all_at_once=True,
                  elim_dneg=False):
         self.elim_dneg = elim_dneg
@@ -64,7 +64,7 @@ class ProofTreeGenerator:
         self.arguments, self.argument_weights = self._load_arguments(
             arguments,
             complicated_arguments_weight=self._complicated_arguments_weight,
-            quantified_arguments_weight=quantified_arguments_weight,
+            quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
             quantify_all_at_once=quantify_all_at_once,
             elim_dneg=elim_dneg,
         )
@@ -76,7 +76,7 @@ class ProofTreeGenerator:
     def _load_arguments(self,
                         arguments: List[Argument],
                         complicated_arguments_weight: float,
-                        quantified_arguments_weight: float,
+                        quantifier_axiom_arguments_weight: float,
                         quantify_all_at_once: bool,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
         logger.info('-- loading arguments ....')
@@ -92,8 +92,8 @@ class ProofTreeGenerator:
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
 
-        quantified_arguments: List[Argument] = []
-        if quantified_arguments_weight > 0.0:
+        quantifier_axiom_arguments: List[Argument] = []
+        if quantifier_axiom_arguments_weight > 0.0:
             unique_formulas: List[Formula] = []
             for argument in arguments + complicated_arguments:
                 for formula in argument.all_formulas:
@@ -107,21 +107,21 @@ class ProofTreeGenerator:
                     # 'existential_quantifier_intro',
             ]:
                 for i_formula, formula in enumerate(unique_formulas):
-                    for quantified_argument in generate_quantifier_axiom_arguments(argument_type, formula, id_prefix=f'fomula-{str(i_formula).zfill(6)}', quantify_all_at_once=quantify_all_at_once):
-                        if _is_argument_new(quantified_argument, arguments + complicated_arguments + quantified_arguments):
-                            quantified_arguments.append(quantified_argument)
+                    for quantifier_axiom_argument in generate_quantifier_axiom_arguments(argument_type, formula, id_prefix=f'fomula-{str(i_formula).zfill(6)}', quantify_all_at_once=quantify_all_at_once):
+                        if _is_argument_new(quantifier_axiom_argument, arguments + complicated_arguments + quantifier_axiom_arguments):
+                            quantifier_axiom_arguments.append(quantifier_axiom_argument)
 
         def calc_argument_weight(argument: Argument) -> float:
             if argument in arguments:
-                return 1 / len(arguments) * (1 - complicated_arguments_weight - quantified_arguments_weight) if len(arguments) > 0 else None
+                return 1 / len(arguments) * (1 - complicated_arguments_weight - quantifier_axiom_arguments_weight) if len(arguments) > 0 else None
             elif argument in complicated_arguments:
                 return 1 / len(complicated_arguments) * complicated_arguments_weight if len(arguments) > 0 else None
-            elif argument in quantified_arguments:
-                return 1 / len(quantified_arguments) * complicated_arguments_weight if len(arguments) > 0 else None
+            elif argument in quantifier_axiom_arguments:
+                return 1 / len(quantifier_axiom_arguments) * complicated_arguments_weight if len(arguments) > 0 else None
             else:
                 raise NotImplementedError()
 
-        _arguments = arguments + complicated_arguments + quantified_arguments
+        _arguments = arguments + complicated_arguments + quantifier_axiom_arguments
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
         logger.info('------- loaded arguments ------')

@@ -55,7 +55,7 @@ def load_dataset(argument_config: str,
         arguments,
         elim_dneg=not keep_dneg,
         complicated_arguments_weight=complication,
-        quantified_arguments_weight=quantification,
+        quantifier_axiom_arguments_weight=quantification,
     )
 
     distractor = build_distractor(distractor, distractor_factor, generator=generator)
