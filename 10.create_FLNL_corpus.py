@@ -52,10 +52,12 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221001.assump.void.large')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace.large')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace.large')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -71,8 +73,8 @@ def main():
         # '20220916.atmf-PA.arg-compl.dpth-5.UNKNOWN',
 
         # '20220929.atmf-PA.arg-compl.dpth-3.20220929.assump.debug',
-        '20220929.atmf-PA.arg-compl.dpth-3.20221001.assump.void',
-        '20220929.atmf-PA.arg-compl.dpth-5.20221001.assump.void',
+        # '20220929.atmf-PA.arg-compl.dpth-3.20221001.assump.void',
+        # '20220929.atmf-PA.arg-compl.dpth-5.20221001.assump.void',
 
         # '20220928.atmf-P.arg-basic.dpth-1.neg_tree_distractor',
         # '20220928.atmf-PA.arg-basic.dpth-1.neg_tree_distractor',
@@ -80,8 +82,12 @@ def main():
         # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
         # '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
 
-        '20221002.atmf-PA.arg-compl.dpth-3.neg_tree_distractor.more',
-        '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more',
+        # '20221002.atmf-PA.arg-compl.dpth-3.neg_tree_distractor.more',
+        # '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more',
+
+        '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
+        '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems',
+        '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
     ]
 
     split_sizes = {
