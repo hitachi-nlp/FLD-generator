@@ -5,12 +5,12 @@
           "{A}",
           "¬{A}"
       ],
-      "conclusion": "[F]"
+      "conclusion": "#F#"
   },
   {
       "id": "negation_intro.pred_only",
       "premises": [
-          "{A} ⊢ [F]"
+          "{A} ⊢ #F#"
       ],
       "conclusion": "¬{A}"
   }

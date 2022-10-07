@@ -10,7 +10,7 @@ OR = 'v'
 NOT = '¬'
 NEGATION = '¬'
 DERIVE = '⊢'
-CONTRADICTION = '[F]'
+CONTRADICTION = '#F#'
 
 _PREDICATE_ALPHABETS = [
     'A', 'B', 'C', 'D', 'E',
