@@ -112,7 +112,6 @@ class NLProofSDataset:
 
         See discussions.md for the options.
         """
-
         def is_root(node: Node) -> bool:
             return isinstance(node, ProofNode) and node == proof_tree.root_node
 

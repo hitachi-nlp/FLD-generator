@@ -31,6 +31,10 @@ class ProofTreeGenerationPipeline:
             depth: int,
             branch_extension_steps: int,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], Dict[str, int]]:
+
+        if not self.generator.disallow_contradiction_as_hypothesis:
+            raise ValueError('generator.disallow_contradiction_as_hypothesis must be "Ture" since we need the negated hypothesis for ')
+
         if depth < 1:
             raise ValueError('depth must be >= 1')
 
