@@ -327,7 +327,7 @@ def _generate_stem(arguments: List[Argument],
             cur_conclusion = cur_conclusion_node.formula
             cur_possible_assumption_nodes = [node
                                              for node in cur_conclusion_node.descendants
-                                             if node.is_leaf]
+                                             if node.is_leaf and node.assump_parent is None]
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
             # Choose next argument
