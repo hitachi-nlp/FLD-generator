@@ -122,31 +122,34 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 def generate_dataset(dataset: NLProofSDataset,
                      num_dataset: int = 100) -> None:
-    logger.info('\n\n')
-    logger.info('=================== generating proof tree =========================')
-    for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
-
-        logger.info('\n')
-        logger.info('--------------- tree --------------')
-
-        logger.info('\n')
-        logger.info('\n' + proof_tree.format_str)
-
-        logger.info('\n')
-        logger.info('--------------- distractors --------------')
-        logger.info('\n' + pformat(distractors))
-
-        logger.info('\n')
-        logger.info('--------------- NLProofs json --------------')
-        logger.info('\n' + pformat(nlproof_json))
-
-        # logger.info('\n')
-        # logger.info('--------------- stats --------------')
-        # logger.info(dict(stats))
-        # logger.info('\n' + pformat(stats))
-
+    with open('test_dataset.output.json', 'w') as f_out:
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
+        for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
+
+            logger.info('\n')
+            logger.info('--------------- tree --------------')
+
+            logger.info('\n')
+            logger.info('\n' + proof_tree.format_str)
+
+            logger.info('\n')
+            logger.info('--------------- distractors --------------')
+            logger.info('\n' + pformat(distractors))
+
+            logger.info('\n')
+            logger.info('--------------- NLProofs json --------------')
+            logger.info('\n' + pformat(nlproof_json))
+
+            # logger.info('\n')
+            # logger.info('--------------- stats --------------')
+            # logger.info(dict(stats))
+            # logger.info('\n' + pformat(stats))
+
+            logger.info('\n\n')
+            logger.info('=================== generating proof tree =========================')
+
+            f_out.write(json.dumps(nlproof_json) + '\n')
 
 
 def test_original():
@@ -270,22 +273,22 @@ def test_PL_pred_arg():
     generator = load_proof_tree_generator(
         config_paths=[
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom.pred_arg.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
 
             './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            # './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
 
             './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            # './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem.pred_arg.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
 
             './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
         ],
         complicated_arguments_weight=0.3,
