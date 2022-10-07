@@ -93,7 +93,7 @@ class ProofNode:
 
     def add_assump_child(self, node: 'ProofNode') -> None:
         if node.assump_parent is not None:
-            raise MultipleParentError('Can\'t add assump_child since it already has a assump_parent.')
+            raise MultipleParentError('Can\'t add assump_child since the added child already has a assump_parent.')
 
         if node not in self._assump_children:
             self._assump_children.append(node)

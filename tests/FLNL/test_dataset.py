@@ -1,6 +1,5 @@
 import json
 
-
 import random
 from typing import List, Optional
 import logging
@@ -122,7 +121,7 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 1000) -> None:
+                     num_dataset: int = 100) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
@@ -317,4 +316,3 @@ if __name__ == '__main__':
     # test_LP_pred_arg()
     # test_minimum_PL()
     test_PL_pred_arg()
-   

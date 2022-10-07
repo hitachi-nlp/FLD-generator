@@ -14,7 +14,10 @@ from .formula import (
     CONSTANTS,
     Formula,
 )
-from .formula_checkers import is_ok_set as is_ok_formula_set
+from .formula_checkers import (
+    is_ok_set as is_ok_formula_set,
+    is_consistent_set as is_consistent_formula_set,
+)
 from .argument import Argument
 from .argument_checkers import is_senseful as is_argument_senseful
 from .interpretation import (
@@ -319,9 +322,12 @@ def _generate_stem(arguments: List[Argument],
                 break
 
             formulas_in_tree = [node.formula for node in proof_tree.nodes]
+            leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
             cur_conclusion = cur_conclusion_node.formula
-            cur_assumption_nodes = [node for node in cur_conclusion_node.descendants if node.is_leaf]
+            cur_possible_assumption_nodes = [node
+                                             for node in cur_conclusion_node.descendants
+                                             if node.is_leaf]
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
             # Choose next argument
@@ -335,7 +341,7 @@ def _generate_stem(arguments: List[Argument],
                     if premise in arg.assumptions:
                         assumption = arg.assumptions[premise]
                         if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
-                                   for cur_assumption_node in cur_assumption_nodes):
+                                   for cur_assumption_node in cur_possible_assumption_nodes):
                             continue
 
                     one_premise_matched = True
@@ -364,7 +370,7 @@ def _generate_stem(arguments: List[Argument],
                     assumption = next_arg.assumptions.get(premise, None)
                     for premise_mapping in generate_mappings_from_formula(
                         [premise] + ([assumption] if assumption is not None else []),
-                        [cur_conclusion] + [node.formula for node in cur_assumption_nodes],
+                        [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
                         block_shuffle=True,
                     ):
                         if is_arg_done:
@@ -379,9 +385,8 @@ def _generate_stem(arguments: List[Argument],
                             continue
 
                         if assumption_pulled is not None:
-                            # print(0)
                             if all(assumption_pulled.rep != cur_assumption_node.formula.rep
-                                   for cur_assumption_node in cur_assumption_nodes):
+                                   for cur_assumption_node in cur_possible_assumption_nodes):
                                 rejection_stats['assumption_pulled.rep != cur_assumption_node.formula.rep'] += 1
                                 continue
 
@@ -410,6 +415,8 @@ def _generate_stem(arguments: List[Argument],
                                 continue
 
                             if not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
+                                # if next_arg_pulled.id.startswith('negation_intro.pred_only'):  # HONOKA
+                                #     import pudb; pudb.set_trace()
                                 rejection_stats['not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree)'] += 1
                                 continue
 
@@ -419,6 +426,14 @@ def _generate_stem(arguments: List[Argument],
                                 # If any of other premises already exists in the tree, it will lead to a loop.
                                 # We want to avoid a loop.
                                 rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
+                                continue
+
+                            if not is_consistent_formula_set(other_premises + leaf_formulas_in_tree):
+                                # other_premises can be the leaf of the tree.
+                                # We reject tree with inconsistent formulas.
+                                # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
+                                # Notice that we stil allow inconsistency between non-leaf nodes
+                                rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
                                 continue
 
                             is_arg_done = True
@@ -433,7 +448,7 @@ def _generate_stem(arguments: List[Argument],
                         next_arg_pulled.premises[i_premise] = cur_conclusion  # refer to the unique object.
                     if premise in next_arg_pulled.assumptions:
                         assumption = next_arg_pulled.assumptions[premise]
-                        for cur_assumption_node in cur_assumption_nodes:
+                        for cur_assumption_node in cur_possible_assumption_nodes:
                             if assumption.rep == cur_assumption_node.formula.rep:
                                 next_arg_pulled.assumptions[premise] = cur_assumption_node.formula  # refer to the unique object.
                                 next_assumption_nodes.append(cur_assumption_node)
@@ -466,8 +481,12 @@ def _generate_stem(arguments: List[Argument],
                 raise ProofTreeGenerationFailure(msg)
 
         if is_tree_done:
+
             if disallow_contradiction_hypothesis and proof_tree.root_node.formula.rep == CONTRADICTION:
                 raise ProofTreeGenerationFailure(f'Contradiction {CONTRADICTION} can not be the hypothesis is disallowed.')
+
+            _check_leaf_consistency(proof_tree)
+
             return proof_tree
 
     raise Exception('Unexpected')
@@ -496,6 +515,7 @@ def _extend_braches(proof_tree: ProofTree,
             break
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
+        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
         leaf_nodes = [
             node for node in proof_tree.leaf_nodes
@@ -506,6 +526,7 @@ def _extend_braches(proof_tree: ProofTree,
                           if proof_tree.get_node_depth(node) < depth_limit]
         if len(leaf_nodes) == 0:
             logger.warning('Couldn\'t extend branch since the tree have no leaf nodes.')
+            _check_leaf_consistency(proof_tree)
             return proof_tree
 
         is_leaf_node_done = False
@@ -578,6 +599,13 @@ def _extend_braches(proof_tree: ProofTree,
                             rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
+                        if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
+                            # We reject tree with inconsistent leaf nodes.
+                            # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
+                            # Notice that we stil allow inconsistency between non-leaf nodes
+                            rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
+                            continue
+
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
@@ -613,6 +641,7 @@ def _extend_braches(proof_tree: ProofTree,
             ])
             raise ProofTreeGenerationFailure(msg)
 
+    _check_leaf_consistency(proof_tree)
     return proof_tree
 
 
@@ -676,3 +705,8 @@ def _shuffle_arguments(arguments: List[Argument],
                        weights: Optional[Dict[Argument, float]] = None) -> Iterable[Argument]:
     _weights = [weights[argument] for argument in arguments] if weights is not None else None
     yield from _shuffle(arguments, weights=_weights)
+
+
+def _check_leaf_consistency(proof_tree: ProofTree) -> None:
+    # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
+    assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])

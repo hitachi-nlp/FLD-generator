@@ -9,7 +9,10 @@ from .proof import ProofTree, ProofNode
 from .formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError
 from .utils import shuffle
 from .interpretation import generate_mappings_from_predicates_and_constants, interprete_formula, eliminate_double_negation
-from .formula_checkers import is_ok_set as is_ok_formula_set
+from .formula_checkers import (
+    is_ok_set as is_ok_formula_set,
+    is_consistent_set as is_consistent_formula_set,
+)
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure
@@ -103,6 +106,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
     def generate(self, proof_tree: ProofTree) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
         num_distractors = _get_num_distractors(proof_tree, self.num_distractor_factor)
         logger.info('==== (SameFormUnkownInterprandsDistractor) Try to generate %d distractors ====', num_distractors)
@@ -169,6 +173,14 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
                         continue
 
+                    if not is_consistent_formula_set([transformed_formula] + distractor_formulas):
+                        continue
+
+                    # The tree will become inconsistent by ADDING distractor formulas.
+                    if original_tree_is_consistent and\
+                            not is_consistent_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):
+                        continue
+
                     if any(transformed_formula.rep == existent_formula
                            for existent_formula in distractor_formulas + formulas_in_tree):
                         # is not new
@@ -209,6 +221,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
 
     def generate(self, proof_tree: ProofTree) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
+        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
         num_distractors = _get_num_distractors(proof_tree, self.num_distractor_factor)
         logger.info('==== (NegatedHypothesisTreeDistractor) Try to generate %d distractors ====', num_distractors)
@@ -276,6 +289,16 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                     break
 
                 if not is_ok_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
+                    continue
+
+                # We do not check the consistency between distractor_formulas.
+                # They must be consistent since they comes from the leaf nodes of the generated tree, which guarantee the consistency.
+
+                # We check the formulas become inconsistent by ADDING distractor_formulas to the original tree.
+                # This logic have false negative, the case where the original tree is inconsistent AND adding distractors yields another inconsistency.
+                # Since the detection of such logic is complicated and such case is rare, we abandon the detection.
+                if original_tree_is_consistent and\
+                        not is_consistent_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
                     continue
 
                 if any(distractor_formula.rep == existent_formula

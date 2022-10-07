@@ -56,7 +56,7 @@ def is_senseful_set(formulas: List[Formula]) -> bool:
 @profile
 def is_ok(formula: Formula) -> bool:
     return all([
-        is_consistent(formula),
+        # is_consistent(formula),  # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
         is_predicate_arity_consistent(formula),
         is_senseful(formula)
     ])
@@ -64,8 +64,9 @@ def is_ok(formula: Formula) -> bool:
 
 @profile
 def is_ok_set(formulas: List[Formula]) -> bool:
+
     return all([
-        is_consistent_set(formulas),
+        # is_consistent_set(formulas),    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
         is_predicate_arity_consistent_set(formulas),
         is_senseful_set(formulas)
     ])
