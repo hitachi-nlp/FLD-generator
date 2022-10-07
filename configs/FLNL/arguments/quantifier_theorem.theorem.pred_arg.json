@@ -1,0 +1,36 @@
+[
+  {
+      "id": "quantifier_theorem.universal.contraposition.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x"
+      ],
+      "conclusion": "(x): ¬{B}x -> ¬{A}x"
+  },
+  {
+      "id": "quantifier_theorem.universal.syllogism_0.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "(x): {B}x -> {C}x"
+      ],
+      "conclusion": "(x): {A}x -> {C}x"
+  },
+
+  {
+      "id": "__quantifier_theorem.existential.contraposition.pred_arg__",
+      "__reason_for_rejection__": "uninteresting",
+      "premises": [
+          "(Ex): {A}x -> {B}x"
+      ],
+      "conclusion": "(Ex): ¬{B}x -> ¬{A}x"
+  },
+  {
+      "id": "__quantifier_theorem.existential.syllogism_0.pred_arg__",
+      "__reason_for_rejection__": "wrong",
+      "premises": [
+          "(Ex): {A}x -> {B}x",
+          "(Ex): {B}x -> {C}x"
+      ],
+      "conclusion": "(Ex): {A}x -> {C}x"
+  }
+
+]
