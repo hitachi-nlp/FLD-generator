@@ -34,6 +34,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20220901.atmf-P.arg-basic.dpth-1': {
@@ -66,6 +67,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -99,6 +101,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -132,6 +135,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -165,6 +169,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20220901.atmf-PA.arg-compl.dpth-5': {
@@ -197,6 +202,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20220902.atmf-P.arg-basic.dpth-1.disproof-off': {
@@ -229,6 +235,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -271,6 +278,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -304,6 +312,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -337,6 +346,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -370,6 +380,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20220916.atmf-PA.arg-compl.dpth-5.UNKNOWN': {
@@ -402,6 +413,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -442,6 +454,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -475,6 +488,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -508,6 +522,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -541,6 +556,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor': {
@@ -573,6 +589,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20220929.atmf-PA.arg-compl.dpth-3.20220929.assump.debug': {
@@ -607,6 +624,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -642,6 +660,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -677,6 +696,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -710,6 +730,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more': {
@@ -742,6 +763,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -781,6 +803,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
     '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems': {
@@ -819,6 +842,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -858,6 +882,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 
@@ -897,6 +922,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
+        'limit_vocab_size_per_type': None,
     },
 
 }

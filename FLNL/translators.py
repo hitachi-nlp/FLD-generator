@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Optional, Tuple, Union, Iterable
+from typing import List, Dict, Optional, Tuple, Union, Iterable, Any
 from abc import abstractmethod, ABC
 from collections import OrderedDict, defaultdict
 import random
@@ -192,6 +192,7 @@ class ClauseTypedTranslator(Translator):
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
+                 limit_vocab_size_per_type: Optional[int] = None,
                  do_translate_to_nl=True,
                  ):
 
@@ -225,6 +226,10 @@ class ClauseTypedTranslator(Translator):
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
         self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
+        if limit_vocab_size_per_type is not None:
+            self._adj_and_verbs = self._sample(self._adj_and_verbs, limit_vocab_size_per_type)
+            self._entity_nouns = self._sample(self._entity_nouns, limit_vocab_size_per_type)
+            self._event_nouns = self._sample(self._event_nouns, limit_vocab_size_per_type)
         self._wb = word_bank
 
         self._do_translate_to_nl = do_translate_to_nl
@@ -309,7 +314,7 @@ class ClauseTypedTranslator(Translator):
             yield template
 
     def _load_words(self,
-                    word_bank: WordBank):
+                    word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
         logger.info('loading words from WordBank ...')
         _adj_set = set(self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ))
         _intransitive_verb_set = {
@@ -562,7 +567,7 @@ class ClauseTypedTranslator(Translator):
             generate_mappings_from_predicates_and_constants(
                 zeroary_predicates,
                 [],
-                random.sample(self._event_nouns, len(zeroary_predicates) * 3),
+                self._sample(self._event_nouns, len(zeroary_predicates) * 3),
                 [],
                 block_shuffle=True,
                 allow_many_to_one=False,
@@ -574,8 +579,8 @@ class ClauseTypedTranslator(Translator):
             generate_mappings_from_predicates_and_constants(
                 unary_predicates,
                 constants,
-                random.sample(self._adj_and_verbs, len(unary_predicates) * 3),
-                random.sample(self._entity_nouns, len(constants) * 3),
+                self._sample(self._adj_and_verbs, len(unary_predicates) * 3),
+                self._sample(self._entity_nouns, len(constants) * 3),
                 block_shuffle=True,
                 allow_many_to_one=False,
             )
@@ -585,6 +590,15 @@ class ClauseTypedTranslator(Translator):
         interp_mapping.update(unary_mapping)
 
         return interp_mapping
+
+    def _sample(self, elems: List[Any], size: int) -> List[Any]:
+        if len(elems) < size:
+            logger.warning('Can\'t sample %d elements. Will sample only %d elements.',
+                           size,
+                           len(elems))
+            return random.sample(elems, len(elems))
+        else:
+            return random.sample(elems, size)
 
     def _make_word_inflated_interp_mapping(self,
                                            interp_mapping: Dict[str, str],

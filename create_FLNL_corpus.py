@@ -2,7 +2,7 @@
 import math
 import random
 import json
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pathlib import Path
 from pprint import pformat
 import logging
@@ -41,6 +41,7 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
 
 def load_dataset(argument_config: str,
                  translation_config: str,
+                 limit_vocab_size_per_type: Optional[int],
                  complication: float,
                  quantification: float,
                  keep_dneg: bool,
@@ -67,6 +68,7 @@ def load_dataset(argument_config: str,
     translator = ClauseTypedTranslator(
         merged_config_json,
         build_wordnet_wordbank('eng'),
+        limit_vocab_size_per_type=limit_vocab_size_per_type,
         do_translate_to_nl=True,
     )
 
@@ -119,6 +121,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
+@click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--depths', type=str, default=json.dumps([5]))
 @click.option('--branch-extension-steps', type=int, default=5)
 @click.option('--complication', type=float, default=0.0)
@@ -134,6 +137,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 def main(output_path,
          argument_config,
          translation_config,
+         limit_vocab_size_per_type,
          size,
          depths,
          branch_extension_steps,
@@ -178,6 +182,7 @@ def main(output_path,
                         _batch_size_per_worker,
                         argument_config,
                         translation_config,
+                        limit_vocab_size_per_type,
                         complication,
                         quantification,
                         keep_dneg,

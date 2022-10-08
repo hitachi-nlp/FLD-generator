@@ -57,7 +57,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -96,19 +97,19 @@ def main():
         # 'valid': 100,
         # 'test': 100,
 
-        'train': 100000,
-        'valid': 1000,
-        'test': 1000,
+        # 'train': 100000,
+        # 'valid': 1000,
+        # 'test': 1000,
     }
 
-    # engine = SubprocessEngine()
-    engine = QsubEngine('ABCI', 'rt_C.small')
+    engine = SubprocessEngine()
+    # engine = QsubEngine('ABCI', 'rt_C.small')
 
-    # num_jobs = 1
-    num_jobs = 100
+    num_jobs = 1
+    # num_jobs = 100
 
-    # num_workers_per_job = 1
-    num_workers_per_job = 5
+    num_workers_per_job = 1
+    # num_workers_per_job = 5
 
     timeout_per_job = 600  # for the case some jobs hangs
     dry_run = False
@@ -140,6 +141,7 @@ def main():
                 'distractor_factor',
 
                 'translation_configs',
+                'limit_vocab_size_per_type',
 
                 'num_workers_per_job',
 
@@ -190,6 +192,7 @@ def main():
 
                     _make_multiple_value_option('--ac', job_settings['argument_configs']),
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
+                    f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
 
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
                     f'--branch-extension-steps {job_settings["branch_extension_steps"]}',
