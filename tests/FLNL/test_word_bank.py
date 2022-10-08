@@ -1,6 +1,6 @@
-from typing import List, Optional, Iterable
+from typing import List, Optional, Iterable, Dict
 
-from FLNL.word_banks import EnglishWordBank, JapaneseWordBank, POS, ATTR, get_form_types
+from FLNL.word_banks import build_wordnet_wordbank, POS, ATTR, get_form_types
 import logging
 
 from logger_setup import setup as setup_logger
@@ -8,16 +8,10 @@ from logger_setup import setup as setup_logger
 setup_logger(level=logging.INFO)
 
 
-def test_english_word_bank():
-    wb = EnglishWordBank()
+def test_word_bank(lang: str,
+                   vocab_restrictions: Optional[Dict[POS, List[str]]] = None):
+    wb = build_wordnet_wordbank(lang, vocab_restrictions=vocab_restrictions)
     _test_word_bank(wb)
-
-
-def test_japanese_word_bank():
-    wb = JapaneseWordBank()
-    _test_word_bank(wb)
-    # for word in wb.get_words():
-    #     print(word)
 
 
 def _test_word_bank(wb):
@@ -51,5 +45,17 @@ def _test_word_bank(wb):
 
 
 if __name__ == '__main__':
-    test_english_word_bank()
-    # test_japanese_word_bank()
+    test_word_bank('eng')
+
+    # restricted vocab
+    test_word_bank(
+        'eng',
+        vocab_restrictions={
+            POS.VERB: ['walk', 'run'],
+            POS.NOUN: ['apple', 'banana'],
+            POS.ADJ: ['tasty', 'beautiful'],
+            POS.ADJ_SAT: ['red', 'green'],
+        }
+    )
+
+    test_word_bank('jpn')

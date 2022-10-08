@@ -3,24 +3,22 @@ import re
 import logging
 
 from pyinflect import getInflection
-from .base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from FLNL.utils import starts_with_vowel_sound
-from .wordnet import WordNetWordBank
+from .base import WordNetWordBank
 
 logger = logging.getLogger(__name__)
 
 
 class EnglishWordBank(WordNetWordBank):
 
+    language = 'eng'
+
     _verb_inflation_mapping = {
         VerbForm.NORMAL: 'VB',
         VerbForm.ING: 'VBG',
         VerbForm.S: 'VBZ',
     }
-
-    @property
-    def language(self) -> str:
-        return 'eng'
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         # see https://github.com/bjascob/pyInflect for available forms

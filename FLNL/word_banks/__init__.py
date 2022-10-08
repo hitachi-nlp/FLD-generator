@@ -1,3 +1,2 @@
 from .base import POS, ATTR, VerbForm, AdjForm, NounForm, get_form_types
-from .english import EnglishWordBank
-from .japanese import JapaneseWordBank
+from .wordnet import build as build_wordnet_wordbank

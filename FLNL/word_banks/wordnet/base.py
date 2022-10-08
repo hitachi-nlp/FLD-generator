@@ -8,7 +8,7 @@ import nltk
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
-from .base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from FLNL.utils import starts_with_vowel_sound
 import kern_profiler
 
@@ -17,30 +17,34 @@ logger = logging.getLogger(__name__)
 
 class WordNetWordBank(WordBank):
 
-    _LANGUAGE = 'eng'
+    language: str = '__THIS_IS_BASE_CLASS__'
 
     _pos_wb_to_wn = {
         POS.VERB: wn.VERB,
         POS.NOUN: wn.NOUN,
         POS.ADJ: wn.ADJ,
+        POS.ADJ_SAT: wn.ADJ_SAT,
     }
 
-    def __init__(self):
+    def __init__(self, vocab_restrictions: Optional[Dict[POS, List[str]]] = None):
         self._pos_wn_to_wb = {val: key for key, val in self._pos_wb_to_wn.items()}
 
         self._cached_word_set: Set[str] = set()
         self._cached_word_to_wn_pos: Dict[str, List[str]] = defaultdict(list)
+
+        if vocab_restrictions is not None:
+            logger.info('use restrected vocabulary')
+        self.vocab_restrictions = vocab_restrictions
         for word, wn_pos in self._load_words_once():
+            if vocab_restrictions is not None:
+                wb_POS = self._pos_wn_to_wb.get(wn_pos, None)  # XXX None is OK?
+                if wb_POS in vocab_restrictions and word not in vocab_restrictions[wb_POS]:
+                    continue
             self._cached_word_set.add(word)
             self._cached_word_to_wn_pos[word].append(wn_pos)
 
         self._cached_event_noun_synsets = None
         self._cached_entity_noun_synsets = None
-
-    @property
-    @abstractmethod
-    def language(self) -> str:
-        pass
 
     def _load_words_once(self) -> Iterable[Tuple[str, str]]:
         logger.info('loading words from WordNet ...')
@@ -48,11 +52,7 @@ class WordNetWordBank(WordBank):
         for syn in wn.all_synsets(lang=self.language):
             for lemma in self._get_standard_lemmas(syn):
                 lemma_str = lemma.name()
-                # if lemma_str in done_lemmas:
-                #     continue
-
                 yield lemma_str, syn.pos()
-                # done_lemmas.add(lemma_str)
                 break
         logger.info('loading words from WordNet done!')
 
@@ -62,10 +62,17 @@ class WordNetWordBank(WordBank):
 
     @profile
     def get_pos(self, word: str) -> List[POS]:
-        return list({
+        wb_POSs = {
             (self._pos_wn_to_wb[syn.pos()] if syn.pos() in self._pos_wn_to_wb else POS.UNK)
             for syn in self._get_synsets(word)
-        })
+        }
+        if self.vocab_restrictions is not None:
+            wb_POSs = {
+                wb_POS for wb_POS in wb_POSs
+                if wb_POS not in self.vocab_restrictions or word in self.vocab_restrictions[wb_POS]
+            }
+        
+        return list(wb_POSs)
 
     @abstractmethod
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:

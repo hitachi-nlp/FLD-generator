@@ -12,7 +12,7 @@ from FLNL.distractors import build as build_distractor, FormalLogicDistractor
 from FLNL.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.datasets import NLProofSDataset
-from FLNL.word_banks import EnglishWordBank
+from FLNL.word_banks import build_wordnet_wordbank
 from FLNL.utils import nested_merge
 from logger_setup import setup as setup_logger
 
@@ -93,7 +93,7 @@ def load_translator(type_: str,
             )
             return ClauseTypedTranslator(
                 config_json,
-                EnglishWordBank(),
+                build_wordnet_wordbank('eng'),
                 do_translate_to_nl=do_translate_to_nl,
             )
         elif from_ == 'minimum':

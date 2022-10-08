@@ -13,7 +13,7 @@ from tqdm import tqdm
 import dill
 
 from FLNL.translators import ClauseTypedTranslator
-from FLNL.word_banks import EnglishWordBank
+from FLNL.word_banks import build_wordnet_wordbank
 from FLNL.distractors import SameFormUnkownInterprandsDistractor, FormalLogicDistractor
 from FLNL.argument import Argument
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
@@ -66,7 +66,7 @@ def load_dataset(argument_config: str,
                                           json.load(open(config_path)))
     translator = ClauseTypedTranslator(
         merged_config_json,
-        EnglishWordBank(),
+        build_wordnet_wordbank('eng'),
         do_translate_to_nl=True,
     )
 

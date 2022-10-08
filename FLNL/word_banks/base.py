@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, List, Dict, Union
+from typing import Optional, Iterable, List, Union
 from enum import Enum
 from abc import ABC, abstractmethod
 
@@ -7,6 +7,7 @@ class POS(Enum):
     VERB = 'VERB'
     NOUN = 'NOUN'
     ADJ = 'ADJ'
+    ADJ_SAT = 'ADJ_SAT'
     UNK = 'UNK'
 
 
@@ -38,7 +39,7 @@ class NounForm(Enum):
 def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
     if pos == POS.VERB:
         return VerbForm
-    elif pos == POS.ADJ:
+    elif pos in [POS.ADJ, POS.ADJ_SAT]:
         return AdjForm
     elif pos == POS.NOUN:
         return NounForm
@@ -67,7 +68,7 @@ class WordBank(ABC):
                 raise ValueError(f'The pos of the form ({str(form)}) is Verb. The word {word} does not have this pos.')
             return self._change_verb_form(word, form, force=force)
         elif form in AdjForm:
-            if POS.ADJ not in self.get_pos(word):
+            if POS.ADJ not in self.get_pos(word) and POS.ADJ_SAT not in self.get_pos(word):
                 raise ValueError(f'The pos of the form ({str(form)}) is Adj. The word {word} does not have this pos.')
             return self._change_adj_form(word, form, force=force)
         elif form in NounForm:
