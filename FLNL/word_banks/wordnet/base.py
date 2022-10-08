@@ -37,7 +37,7 @@ class WordNetWordBank(WordBank):
         self.vocab_restrictions = vocab_restrictions
         for word, wn_pos in self._load_words_once():
             if vocab_restrictions is not None:
-                wb_POS = self._pos_wn_to_wb.get(wn_pos, None)  # XXX None is OK?
+                wb_POS = self._pos_wn_to_wb.get(wn_pos, None)
                 if wb_POS in vocab_restrictions and word not in vocab_restrictions[wb_POS]:
                     continue
             self._cached_word_set.add(word)

@@ -43,6 +43,7 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
 
 def load_translator(type_: str,
                     from_: str,
+                    word_bank_vocab: Optional[str] = None,
                     do_translate_to_nl=True):
     if type_ == 'sentence_wise_translator':
         if from_ == 'config':
@@ -93,7 +94,10 @@ def load_translator(type_: str,
             )
             return ClauseTypedTranslator(
                 config_json,
-                build_wordnet_wordbank('eng'),
+                build_wordnet_wordbank(
+                    'eng',
+                    vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None
+                ),
                 do_translate_to_nl=do_translate_to_nl,
             )
         elif from_ == 'minimum':
@@ -268,7 +272,11 @@ def test_LP_pred_arg():
 
 
 def test_PL_pred_arg():
-    translator = load_translator('clause_typed_translator', 'config')
+    translator = load_translator(
+        'clause_typed_translator',
+        'config',
+        # word_bank_vocab='./configs/FLNL/vocab/proofwriter-dataset-V2020.12.3.preprocessed_OWA.depth-3ext.json',
+    )
     
     generator = load_proof_tree_generator(
         config_paths=[
