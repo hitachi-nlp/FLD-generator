@@ -234,8 +234,6 @@ class WordNetWordBank(WordBank):
         pass
 
     def _get_synsets(self, word: str) -> Iterable[Synset]:
-        # if word == 'brush':
-        #     import pudb; pudb.set_trace()
         for wn_pos in self._cached_word_to_wn_pos[word]:
             for syn in wn.synsets(word, pos=wn_pos, lang=self.language):
                 yield syn

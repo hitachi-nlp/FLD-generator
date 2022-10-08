@@ -92,13 +92,13 @@ def main():
     ]
 
     split_sizes = {
-        'train': 100,
+        # 'train': 100,
         # 'valid': 100,
         # 'test': 100,
 
-        # 'train': 100000,
-        # 'valid': 1000,
-        # 'test': 1000,
+        'train': 100000,
+        'valid': 1000,
+        'test': 1000,
     }
 
     # engine = SubprocessEngine()

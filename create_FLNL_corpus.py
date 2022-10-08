@@ -149,8 +149,8 @@ def main(output_path,
          seed):
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(seed)
-    proof_stances = json.loads(proof_stances)
     depths = json.loads(depths)
+    proof_stances = json.loads(proof_stances)
 
     if len(argument_config) == 0:
         raise ValueError()
