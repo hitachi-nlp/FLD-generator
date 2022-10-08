@@ -85,19 +85,20 @@ def main():
         # '20221002.atmf-PA.arg-compl.dpth-3.neg_tree_distractor.more',
         # '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more',
 
-        '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
-        '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems',
-        '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
+        # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
+        # '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems',
+        # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
+        '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems',
     ]
 
     split_sizes = {
-        # 'train': 100,
+        'train': 100,
         # 'valid': 100,
         # 'test': 100,
 
-        'train': 100000,
-        'valid': 1000,
-        'test': 1000,
+        # 'train': 100000,
+        # 'valid': 1000,
+        # 'test': 1000,
     }
 
     # engine = SubprocessEngine()
@@ -133,7 +134,7 @@ def main():
                 'complication',
                 'quantification',
 
-                'depth',
+                'depths',
                 'branch_extension_steps',
                 'distractor',
                 'distractor_factor',
@@ -190,7 +191,7 @@ def main():
                     _make_multiple_value_option('--ac', job_settings['argument_configs']),
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
 
-                    f'--depth {job_settings["depth"]}',
+                    f'--depths \'{json.dumps(job_settings["depths"])}\'',
                     f'--branch-extension-steps {job_settings["branch_extension_steps"]}',
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',

@@ -302,7 +302,7 @@ def test_PL_pred_arg():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              5,
+                              [3, 5],
                               5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 

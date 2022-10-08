@@ -91,7 +91,7 @@ class NLProofSDataset:
                  pipeline: ProofTreeGenerationPipeline,
                  proof_stances: List[str],
                  world_assump: str,
-                 depth: int,
+                 depths: List[int],
                  branch_extension_steps: int,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
@@ -99,7 +99,10 @@ class NLProofSDataset:
         self.proof_stances = [ProofStance(proof_stance) for proof_stance in proof_stances]
         self.world_assump = WorldAssumption(world_assump)
 
-        self.depth = depth
+        if len(depths) == 0:
+            raise ValueError()
+        self.depths = depths
+
         self.branch_extension_steps = branch_extension_steps
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
@@ -136,9 +139,10 @@ class NLProofSDataset:
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
         for i_sample in range(size):
+            depth = self.depths[i_sample % len(self.depths)]
             # generate a proof tree
             proof_tree, root_negation_formula, distractor_formulas, pipeline_stats = self.pipeline.run(
-                self.depth,
+                depth,
                 self.branch_extension_steps,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
@@ -146,7 +150,7 @@ class NLProofSDataset:
             # print(proof_tree.root_node.formula)
             # pprint(distractor_formulas)
 
-            proof_stance = self.proof_stances[i_sample % len(self.proof_stances)]
+            proof_stance = self.proof_stances[int(i_sample / len(self.depths)) % len(self.proof_stances)]
             if proof_stance == ProofStance.PROOF:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
                 missing_leaf_nodes = []

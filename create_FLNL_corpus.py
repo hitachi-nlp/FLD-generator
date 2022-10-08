@@ -48,7 +48,7 @@ def load_dataset(argument_config: str,
                  distractor_factor: float,
                  proof_stances: List[str],
                  world_assump: str,
-                 depth: int,
+                 depths: List[int],
                  branch_extension_steps: int):
     arguments = load_arguments(argument_config)
     generator = ProofTreeGenerator(
@@ -72,7 +72,7 @@ def load_dataset(argument_config: str,
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
 
-    return NLProofSDataset(pipeline, proof_stances, world_assump, depth, branch_extension_steps)
+    return NLProofSDataset(pipeline, proof_stances, world_assump, depths, branch_extension_steps)
 
 
 def generate_instances(size: int, *args):
@@ -119,7 +119,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
-@click.option('--depth', type=int, default=5)
+@click.option('--depths', type=str, default=json.dumps([5]))
 @click.option('--branch-extension-steps', type=int, default=5)
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
@@ -135,7 +135,7 @@ def main(output_path,
          argument_config,
          translation_config,
          size,
-         depth,
+         depths,
          branch_extension_steps,
          complication,
          quantification,
@@ -150,6 +150,7 @@ def main(output_path,
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(seed)
     proof_stances = json.loads(proof_stances)
+    depths = json.loads(depths)
 
     if len(argument_config) == 0:
         raise ValueError()
@@ -184,7 +185,7 @@ def main(output_path,
                         distractor_factor,
                         proof_stances,
                         world_assump,
-                        depth,
+                        depths,
                         branch_extension_steps,
                     )
                 )

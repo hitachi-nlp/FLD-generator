@@ -25,7 +25,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 5,
         'distractor': 'unknown_interprands',
         'distractor_factor': 1.0,
@@ -57,7 +57,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -90,7 +90,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -123,7 +123,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -156,7 +156,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -188,7 +188,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 3,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -220,7 +220,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.0,
@@ -262,7 +262,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -295,7 +295,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -328,7 +328,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -361,7 +361,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -393,7 +393,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 3,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -433,7 +433,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -466,7 +466,7 @@ _DATASET_SETTINGS = {
         'complication': 0.0,
         'quantification': 0.0,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
@@ -499,7 +499,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 1,
+        'depths': [1],
         'branch_extension_steps': 0,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 0.5,
@@ -532,7 +532,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 0.5,
@@ -564,7 +564,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 0.5,
@@ -598,7 +598,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 0.5,
@@ -633,7 +633,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 0.5,
@@ -668,7 +668,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 0.5,
@@ -701,7 +701,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 1.0,
@@ -733,7 +733,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 1.0,
@@ -772,7 +772,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 3,
+        'depths': [3],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 1.0,
@@ -810,7 +810,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 5,
+        'depths': [5],
         'branch_extension_steps': 3,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 1.0,
@@ -849,7 +849,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depth': 10,
+        'depths': [10],
         'branch_extension_steps': 5,
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
         'distractor_factor': 1.0,
@@ -861,6 +861,43 @@ _DATASET_SETTINGS = {
     },
 
 
+    '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': [1, 2, 3],
+        'branch_extension_steps': 3,
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor_factor': 1.0,
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+    },
 
 }
 
