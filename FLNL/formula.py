@@ -25,15 +25,28 @@ PREDICATES = [
     f'{{{char0}{char1}}}'
     for char0 in _PREDICATE_ALPHABETS
     for char1 in _PREDICATE_ALPHABETS
-]
+][:200]
 _PREDICATE_REGEXP = re.compile('|'.join(PREDICATES))
 
+# XXX: do not use 'v', which is reserved for OR.
+# XXX: The number of symbols of constants must be similar to that of predicates
+# to make sure that when we sample symbols from constants + predicates, it is unique.
+# for example we sample symbols in distractors.UnkownPASDistractor or distractors.SameFormUnkownInterprandsDistractor
+_CONSTANT_ALPHABETS = [
+    'a', 'b', 'c', 'd', 'e',
+    'f', 'g', 'h', 'i', 'j',
+    'k', 'l', 'm', 'n', 'o',
+    'p', 'q', 'r', 's', 't', 'u',
+]
 CONSTANTS = [
-    '{a}', '{b}', '{c}', '{d}', '{e}',
-    '{f}', '{g}', '{h}', '{i}', '{j}',
-    '{k}', '{l}', '{m}', '{n}', '{o}',
-    '{p}', '{q}', '{r}', '{s}', '{t}', '{u}',
-]  # do not use 'v' = OR
+    f'{{{char}}}'
+    for char in _CONSTANT_ALPHABETS
+] + [
+    f'{{{char0}{char1}}}'
+    for char0 in _CONSTANT_ALPHABETS
+    for char1 in _CONSTANT_ALPHABETS
+][:200]
+
 _CONSTANT_REGEXP = re.compile('|'.join(CONSTANTS))
 
 VARIABLES = ['x', 'y', 'z']  # do not use 'v' = OR

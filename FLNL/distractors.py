@@ -8,7 +8,11 @@ from typing import Optional
 from .proof import ProofTree, ProofNode
 from .formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError
 from .utils import shuffle
-from .interpretation import generate_mappings_from_predicates_and_constants, interprete_formula, eliminate_double_negation
+from .interpretation import (
+    generate_mappings_from_predicates_and_constants,
+    interprete_formula,
+    eliminate_double_negation,
+)
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
     is_consistent_set as is_consistent_formula_set,
@@ -39,14 +43,14 @@ class UnkownPASDistractor(FormalLogicDistractor):
     def generate(self, proof_tree: ProofTree) -> List[Formula]:
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
 
-        known_zeroary_predicates = sorted({
+        used_zeroary_predicates = sorted({
             pred.rep
             for formula in leaf_formulas
             for pred in formula.zeroary_predicates
         })
-        unused_predicates = shuffle(list(set(PREDICATES) - set(known_zeroary_predicates)))
+        unused_predicates = shuffle(list(set(PREDICATES) - set(used_zeroary_predicates)))
 
-        num_zeroary_distractors = len(known_zeroary_predicates) * self.num_distractor_factor
+        num_zeroary_distractors = len(used_zeroary_predicates) * self.num_distractor_factor
         distractor_zeroary_predicates = unused_predicates[:int(num_zeroary_distractors)]
         zeroary_distractors = [Formula(f'{predicate}') for predicate in distractor_zeroary_predicates]
 
@@ -55,47 +59,51 @@ class UnkownPASDistractor(FormalLogicDistractor):
             for formula in leaf_formulas
             for PAS in formula.unary_interprand_PASs
         })
-        known_unary_predicates = sorted({
+        used_unary_predicates = sorted({
             pred.rep
             for formula in leaf_formulas
             for pred in formula.unary_predicates
         })
-        unused_predicates = sorted(set(PREDICATES) - set(known_unary_predicates) - set(distractor_zeroary_predicates))
+        unused_predicates = sorted(set(PREDICATES) - set(used_unary_predicates) - set(distractor_zeroary_predicates))
 
-        known_constants = sorted({
+        used_constants = sorted({
             pred.rep
             for formula in leaf_formulas
             for pred in formula.constants
         })
-        unused_constants = sorted(set(CONSTANTS) - set(known_constants))
+        unused_constants = sorted(set(CONSTANTS) - set(used_constants))
 
         in_domain_unused_PASs: List[Formula] = []
-        for predicate in known_unary_predicates:
-            for constant in known_constants:
+        for predicate in used_unary_predicates:
+            for constant in used_constants:
                 fact_rep = f'{predicate}{constant}'
 
                 if all((fact_rep not in formula.rep for formula in leaf_formulas + in_domain_unused_PASs)):
                     in_domain_unused_PASs.append(Formula(fact_rep))
 
-        outof_domain_unused_PASs = []
+        out_of_domain_unused_PASs = []
         for predicate in unused_predicates:
-            for constant in known_constants:
-                outof_domain_unused_PASs.append(Formula(f'{predicate}{constant}'))
-        for predicate in known_unary_predicates:
+            for constant in used_constants:
+                out_of_domain_unused_PASs.append(Formula(f'{predicate}{constant}'))
+        for predicate in used_unary_predicates:
             for constant in unused_constants:
                 fact_rep = f'{predicate}{constant}'
-                outof_domain_unused_PASs.append(Formula(f'{predicate}{constant}'))
+                out_of_domain_unused_PASs.append(Formula(f'{predicate}{constant}'))
 
         in_domain_unused_PASs = shuffle(in_domain_unused_PASs)
-        outof_domain_unused_PASs = shuffle(outof_domain_unused_PASs)
+        out_of_domain_unused_PASs = shuffle(out_of_domain_unused_PASs)
         num_unary_distractors = len(unary_PASs) * self.num_distractor_factor
-        unary_distractors = (in_domain_unused_PASs + outof_domain_unused_PASs)[:int(num_unary_distractors)]
+        unary_distractors = (in_domain_unused_PASs + out_of_domain_unused_PASs)[:int(num_unary_distractors)]
 
         return zeroary_distractors + unary_distractors
 
 
 class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
-    """ Generate the same form formula with unknown predicates or constants """
+    """ Generate the same form formula with unknown predicates or constants injected.
+
+
+    This class is superior to UnkownPASDistractor, which does not consider the similarity of the formu of formulas.
+    """
 
     def __init__(self,
                  num_distractor_factor: float,
@@ -145,7 +153,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
             if trial % 3 in [0, 1]:
                 # We guess (unused_predicates, used_constants) pair, that produces the formula of the known object plus unknown predicate,
                 # is more distractive than the inverse pair.
-                # We sample it more often than the inverseed pair,
+                # Thus, we sample it more often than the inverseed pair,
                 tgt_space = [
                     (unused_predicates, used_constants),
                     (used_predicates, unused_constants),
