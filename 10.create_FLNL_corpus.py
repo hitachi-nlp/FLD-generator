@@ -57,8 +57,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -91,10 +91,12 @@ def main():
         # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
         # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems',
 
-        '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems.limit_vocab',
-        '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems.limit_vocab',
-        # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
-        '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
+        # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems.limit_vocab',
+        # '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems.limit_vocab',
+        # # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
+        # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
+
+        '20221011.debug'
     ]
 
     split_sizes = {
@@ -107,11 +109,11 @@ def main():
         'test': 1000,
     }
 
-    # engine = SubprocessEngine()
-    engine = QsubEngine('ABCI', 'rt_C.small')
+    engine = SubprocessEngine()
+    # engine = QsubEngine('ABCI', 'rt_C.small')
 
-    # num_jobs = 1
-    num_jobs = 100
+    num_jobs = 1
+    # num_jobs = 100
 
     # num_workers_per_job = 1
     num_workers_per_job = 5
@@ -143,7 +145,8 @@ def main():
                 'depths',
                 'branch_extension_steps',
                 'distractor',
-                'distractor_factor',
+                # 'distractor_factor',
+                'num_distractors',
 
                 'translation_configs',
                 'limit_vocab_size_per_type',
@@ -200,11 +203,11 @@ def main():
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
 
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
-                    f'--branch-extension-steps {job_settings["branch_extension_steps"]}',
+                    f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',
                     f'--distractor {job_settings["distractor"]}',
-                    f'--distractor-factor {job_settings["distractor_factor"]}',
+                    f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',
                     f'--num-workers {job_settings["num_workers_per_job"]}',

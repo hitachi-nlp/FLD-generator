@@ -123,7 +123,6 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
     # distractor = build_distractor('unknown_interprands', 1, generator=generator)
     # distractor = build_distractor('negated_hypothesis_tree', 1, generator=generator)
     distractor = build_distractor('fallback.negated_hypothesis_tree.unknown_interprands',
-                                  1,
                                   generator=generator)
     return distractor
 
@@ -178,8 +177,9 @@ def test_original():
     dataset = NLProofSDataset(pipeline,
                               ['proof'],
                               'CWA',
-                              5,
-                              5,
+                              [3, 5],
+                              [3, 5],
+                              num_distractors=[3, 5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -204,8 +204,9 @@ def test_LP_pred_only():
     dataset = NLProofSDataset(pipeline,
                               ['proof'],
                               'CWA',
-                              5,
-                              5,
+                              [3, 5],
+                              [3, 5],
+                              num_distractors=[3, 5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -241,8 +242,9 @@ def test_minimum_PL():
     dataset = NLProofSDataset(pipeline,
                               ['proof'],
                               'CWA',
-                              5,
-                              5,
+                              [3, 5],
+                              [3, 5],
+                              num_distractors=[3, 5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -270,8 +272,9 @@ def test_LP_pred_arg():
     dataset = NLProofSDataset(pipeline,
                               ['proof'],
                               'CWA',
-                              5,
-                              5,
+                              [3, 5],
+                              [3, 5],
+                              num_distractors=[3, 5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)
@@ -317,9 +320,9 @@ def test_PL_pred_arg():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              [3, 4, 5],
-                              # [1],
-                              5,
+                              [3, 5],
+                              [3, 5],
+                              num_distractors=[3, 5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

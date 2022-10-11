@@ -46,11 +46,11 @@ def load_dataset(argument_config: List[str],
                  quantification: float,
                  keep_dneg: bool,
                  distractor: str,
-                 distractor_factor: float,
+                 num_distractors: List[int],
                  proof_stances: List[str],
                  world_assump: str,
                  depths: List[int],
-                 branch_extension_steps: int):
+                 branch_extension_steps: List[int]):
     arguments = load_arguments(argument_config)
     generator = ProofTreeGenerator(
         arguments,
@@ -59,14 +59,19 @@ def load_dataset(argument_config: List[str],
         quantifier_axiom_arguments_weight=quantification,
     )
 
-    _distractor = build_distractor(distractor, distractor_factor, generator=generator)
+    _distractor = build_distractor(distractor, generator=generator)
     translator = build_translator(translation_config,
                                   build_wordnet_wordbank('eng'),
                                   limit_vocab_size_per_type=limit_vocab_size_per_type)
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=_distractor, translator=translator)
 
-    return NLProofSDataset(pipeline, proof_stances, world_assump, depths, branch_extension_steps)
+    return NLProofSDataset(pipeline,
+                           proof_stances,
+                           world_assump,
+                           depths,
+                           branch_extension_steps,
+                           num_distractors=num_distractors)
 
 
 def generate_instances(size: int, *args):
@@ -115,12 +120,12 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--depths', type=str, default=json.dumps([5]))
-@click.option('--branch-extension-steps', type=int, default=5)
+@click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor', type=click.Choice(AVAILABLE_DISTRACTORS), default='unknown_interprands')
-@click.option('--distractor-factor', type=float, default=1.0)
+@click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
 @click.option('--num-workers', type=int, default=1)
@@ -137,7 +142,7 @@ def main(output_path,
          quantification,
          keep_dneg,
          distractor,
-         distractor_factor,
+         num_distractors,
          proof_stances,
          world_assump,
          num_workers,
@@ -146,6 +151,8 @@ def main(output_path,
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(seed)
     depths = json.loads(depths)
+    branch_extension_steps = json.loads(branch_extension_steps)
+    num_distractors = json.loads(num_distractors)
     proof_stances = json.loads(proof_stances)
 
     if len(argument_config) == 0:
@@ -179,7 +186,7 @@ def main(output_path,
                         quantification,
                         keep_dneg,
                         distractor,
-                        distractor_factor,
+                        num_distractors,
                         proof_stances,
                         world_assump,
                         depths,

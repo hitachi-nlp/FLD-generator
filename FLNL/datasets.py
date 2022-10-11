@@ -92,7 +92,8 @@ class NLProofSDataset:
                  proof_stances: List[str],
                  world_assump: str,
                  depths: List[int],
-                 branch_extension_steps: int,
+                 branch_extension_steps: List[int],
+                 num_distractors: Optional[List[int]] = None,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 
@@ -102,8 +103,8 @@ class NLProofSDataset:
         if len(depths) == 0:
             raise ValueError()
         self.depths = depths
-
         self.branch_extension_steps = branch_extension_steps
+        self.num_distractors = num_distractors or [0]
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
     @profile
@@ -141,9 +142,12 @@ class NLProofSDataset:
         for i_sample in range(size):
             depth = self.depths[i_sample % len(self.depths)]
             # generate a proof tree
+            _num_distractors = random.sample(self.num_distractors, 1)[0]
+            _branch_extension_steps = random.sample(self.branch_extension_steps, 1)[0]
             proof_tree, root_negation_formula, distractor_formulas, pipeline_stats = self.pipeline.run(
                 depth,
-                self.branch_extension_steps,
+                _branch_extension_steps,
+                _num_distractors,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
             # print(f'============== i_sample: {i_sample} ================')

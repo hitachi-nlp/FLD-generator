@@ -30,6 +30,7 @@ class ProofTreeGenerationPipeline:
     def run(self,
             depth: int,
             branch_extension_steps: int,
+            num_distractors: int,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], Dict[str, int]]:
 
         if not self.generator.disallow_contradiction_as_hypothesis:
@@ -49,7 +50,7 @@ class ProofTreeGenerationPipeline:
 
             logger.info('========================== generating distractor... ============================')
             if self.distractor is not None:
-                distractor_formulas = self.distractor.generate(proof_tree)
+                distractor_formulas = self.distractor.generate(proof_tree, num_distractors)
             else:
                 distractor_formulas = []
             logger.info('========================== generating distractor done! ============================')

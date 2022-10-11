@@ -32,17 +32,14 @@ class DistractorGenerationFailure(FormalLogicExceptionBase):
 
 class FormalLogicDistractor(ABC):
 
-    def __init__(self, num_distractor_factor: float):
-        self.num_distractor_factor = num_distractor_factor
-
     @abstractmethod
-    def generate(self, proof_tree: ProofTree) -> List[Formula]:
+    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         pass
 
 
 class UnkownPASDistractor(FormalLogicDistractor):
 
-    def generate(self, proof_tree: ProofTree) -> List[Formula]:
+    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
 
         used_zeroary_predicates = sorted({
@@ -52,15 +49,10 @@ class UnkownPASDistractor(FormalLogicDistractor):
         })
         unused_predicates = shuffle(list(set(PREDICATES) - set(used_zeroary_predicates)))
 
-        num_zeroary_distractors = len(used_zeroary_predicates) * self.num_distractor_factor
+        num_zeroary_distractors = size
         distractor_zeroary_predicates = unused_predicates[:int(num_zeroary_distractors)]
         zeroary_distractors = [Formula(f'{predicate}') for predicate in distractor_zeroary_predicates]
 
-        unary_PASs = sorted({
-            PAS.rep
-            for formula in leaf_formulas
-            for PAS in formula.unary_interprand_PASs
-        })
         used_unary_predicates = sorted({
             pred.rep
             for formula in leaf_formulas
@@ -94,10 +86,10 @@ class UnkownPASDistractor(FormalLogicDistractor):
 
         in_domain_unused_PASs = shuffle(in_domain_unused_PASs)
         out_of_domain_unused_PASs = shuffle(out_of_domain_unused_PASs)
-        num_unary_distractors = len(unary_PASs) * self.num_distractor_factor
+        num_unary_distractors = size
         unary_distractors = (in_domain_unused_PASs + out_of_domain_unused_PASs)[:int(num_unary_distractors)]
 
-        return zeroary_distractors + unary_distractors
+        return shuffle(zeroary_distractors + unary_distractors)[:size]
 
 
 class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
@@ -107,22 +99,18 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
     This class is superior to UnkownPASDistractor, which does not consider the similarity of the formu of formulas.
     """
 
-    def __init__(self,
-                 num_distractor_factor: float,
-                 max_retry: int = 100):
-        super().__init__(num_distractor_factor)
+    def __init__(self, max_retry: int = 100):
+        super().__init__()
         self.max_retry = max_retry
 
-    @profile
-    def generate(self, proof_tree: ProofTree) -> List[Formula]:
+    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
-        num_distractors = _get_num_distractors(proof_tree, self.num_distractor_factor)
-        logger.info('==== (SameFormUnkownInterprandsDistractor) Try to generate %d distractors ====', num_distractors)
+        logger.info('==== (SameFormUnkownInterprandsDistractor) Try to generate %d distractors ====', size)
 
-        if num_distractors == 0:
+        if size == 0:
             return []
 
         leaf_formulas = shuffle(leaf_formulas)
@@ -133,12 +121,12 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
             if trial >= self.max_retry:
                 logger.warning(
                     'Could not generate %d distractors. return only %d distractors.',
-                    num_distractors,
+                    size,
                     len(distractor_formulas),
                 )
                 return distractor_formulas
 
-            if len(distractor_formulas) >= num_distractors:
+            if len(distractor_formulas) >= size:
                 break
 
             src_formula = leaf_formulas[trial % len(leaf_formulas)]
@@ -218,11 +206,10 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
     """
 
     def __init__(self,
-                 num_distractor_factor: float,
                  generator: ProofTreeGenerator,
                  generator_max_retry: int = 5,
                  max_retry: int = 100):
-        super().__init__(num_distractor_factor)
+        super().__init__()
 
         if generator.complicated_arguments_weight < 0.01:
             raise ValueError('Generator with too small "complicated_arguments_weight" will lead to generation failure, since we try to generate a tree with negated hypothesis, which is only in the complicated arguments.')
@@ -230,15 +217,13 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
         self.generator_max_retry = generator_max_retry
         self.max_retry = max_retry
 
-    @profile
-    def generate(self, proof_tree: ProofTree) -> List[Formula]:
+    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
-        num_distractors = _get_num_distractors(proof_tree, self.num_distractor_factor)
-        logger.info('==== (NegatedHypothesisTreeDistractor) Try to generate %d distractors ====', num_distractors)
+        logger.info('==== (NegatedHypothesisTreeDistractor) Try to generate %d distractors ====', size)
 
-        if num_distractors == 0:
+        if size == 0:
             return []
 
         def generate_initial_negative_tree() -> ProofTree:
@@ -258,7 +243,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
             if n_trial >= self.max_retry:
                 logger.warning(
                     '(NegatedHypothesisTreeDistractor) Could not generate %d distractor formulas. return only %d distractors.',
-                    num_distractors,
+                    size,
                     len(the_most_distractor_formulas),
                 )
                 if the_most_tree is not None:
@@ -267,7 +252,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
 
             # gradually increase the number of extension steps to find the "just in" size tree.
             branch_extension_steps_factor = min(0.5 + 0.1 * n_trial, max_branch_extension_factor)
-            branch_extension_steps = math.ceil(num_distractors * branch_extension_steps_factor)
+            branch_extension_steps = math.ceil(size * branch_extension_steps_factor)
             logger.info('-- (NegatedHypothesisTreeDistractor) trial=%d    branch_extension_steps=%d', n_trial, branch_extension_steps)
 
             try:
@@ -284,11 +269,11 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                 n_trial += 1
                 logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial since no negatieve leaf formulas are found.')
                 continue
-            elif len(neg_leaf_formulas) - 1 < num_distractors:
+            elif len(neg_leaf_formulas) - 1 < size:
                 if branch_extension_steps_factor < max_branch_extension_factor:
-                    logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial with increased tree size, since number of negatieve leaf formulas %d < num_distractors=%d',
+                    logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial with increased tree size, since number of negatieve leaf formulas %d < size=%d',
                                 len(neg_leaf_formulas),
-                                num_distractors)
+                                size)
                     n_trial += 1
                     continue
             # else:
@@ -297,7 +282,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
             distractor_formulas: List[Formula] = []
             # We sample at most len(neg_leaf_formulas) - 1, since at least one distractor must be excluded so that the negated hypothesis can not be derived.
             for distractor_formula in random.sample(neg_leaf_formulas, len(neg_leaf_formulas) - 1):
-                if len(distractor_formulas) >= num_distractors:
+                if len(distractor_formulas) >= size:
                     break
 
                 if not is_ok_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
@@ -323,85 +308,78 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                 the_most_distractor_formulas = distractor_formulas
                 the_most_tree = neg_tree
 
-            if len(the_most_distractor_formulas) >= num_distractors:
-                logger.info('(NegatedHypothesisTreeDistractor) generating %d formulas succeeded!', num_distractors)
+            if len(the_most_distractor_formulas) >= size:
+                logger.info('(NegatedHypothesisTreeDistractor) generating %d formulas succeeded!', size)
                 if the_most_tree is not None:
                     logger.info('The negative tree is the following:\n%s', the_most_tree.format_str)
                 return the_most_distractor_formulas
             else:
-                logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial since, only %d (< num_distractors=%d) negative leaf formulas are appropriate.',
+                logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial since, only %d (< size=%d) negative leaf formulas are appropriate.',
                             len(distractor_formulas),
-                            num_distractors)
+                            size)
                 n_trial += 1
                 continue
 
 
 class MixtureDistractor(FormalLogicDistractor):
 
-    def __init__(self, num_distractor_factor: float, distractors: List[FormalLogicDistractor]):
-        super().__init__(num_distractor_factor)
+    def __init__(self, distractors: List[FormalLogicDistractor]):
+        super().__init__()
         self._distractors = distractors
 
-    def generate(self, proof_tree: ProofTree) -> List[Formula]:
-        num_distractors = _get_num_distractors(proof_tree, self.num_distractor_factor)
-        logger.info('==== (MixtureDistractor) Try to generate %d distractors ====', num_distractors)
+    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+        logger.info('==== (MixtureDistractor) Try to generate %d distractors ====', size)
 
-        if num_distractors == 0:
+        if size == 0:
             return []
 
         distractor_formulas = []
         for distractor in self._distractors:
-            distractor_formulas += distractor.generate(proof_tree)
+            distractor_formulas += distractor.generate(proof_tree, size)
 
-        if len(distractor_formulas) < num_distractors:
+        if len(distractor_formulas) < size:
             logger.warning(
                 '(MixtureDistractor) Could not generate %d formulas. Return only %d formulas.',
-                num_distractors,
+                size,
                 len(distractor_formulas),
             )
             return distractor_formulas
         else:
-            return random.sample(distractor_formulas, num_distractors)
+            return random.sample(distractor_formulas, size)
 
 
 class FallBackDistractor(FormalLogicDistractor):
 
-    def __init__(self, num_distractor_factor: float, distractors: List[FormalLogicDistractor]):
-        super().__init__(num_distractor_factor)
+    def __init__(self, distractors: List[FormalLogicDistractor]):
+        super().__init__()
         self._distractors = distractors
 
-    def generate(self, proof_tree: ProofTree) -> List[Formula]:
-        num_distractors = _get_num_distractors(proof_tree, self.num_distractor_factor)
-        logger.info('==== (FallBackDistractor) Try to generate %d distractors ====', num_distractors)
+    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+        logger.info('==== (FallBackDistractor) Try to generate %d distractors ====', size)
 
-        if num_distractors == 0:
+        if size == 0:
             return []
 
         distractor_formulas: List[Formula] = []
         for distractor in self._distractors:
-            if len(distractor_formulas) >= num_distractors:
+            if len(distractor_formulas) >= size:
                 break
             try:
-                _distractors = distractor.generate(proof_tree)
+                _distractors = distractor.generate(proof_tree, size)
                 distractor_formulas.extend(_distractors)
             except DistractorGenerationFailure as e:
                 logger.warning('Generating distractors by %s failed with the following message:', distractor.__class__)
                 logger.warning(str(e))
 
-        if len(distractor_formulas) < num_distractors:
+        if len(distractor_formulas) < size:
             logger.warning(
                 '(FallBackDistractor) Could not generate %d formulas. Return only %d formulas.',
-                num_distractors,
+                size,
                 len(distractor_formulas),
             )
             return distractor_formulas
         else:
-            return distractor_formulas[:num_distractors]
-
-
-def _get_num_distractors(proof_tree: ProofTree, num_distractor_factor: float) -> int:
-    leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-    return int(len(leaf_formulas) * num_distractor_factor)
+            return distractor_formulas[:size]
 
 
 AVAILABLE_DISTRACTORS = [
@@ -413,33 +391,29 @@ AVAILABLE_DISTRACTORS = [
 ]
 
 
-def build(type_: str,
-          num_distractor_factor: float,
-          generator: Optional[ProofTreeGenerator] = None):
+def build(type_: str, generator: Optional[ProofTreeGenerator] = None):
     if type_ not in AVAILABLE_DISTRACTORS:
         raise ValueError(f'Unknown distractor type {type_}')
 
     if type_ == 'unknown_PAS':
-        return UnkownPASDistractor(num_distractor_factor=num_distractor_factor)
+        return UnkownPASDistractor()
     elif type_ == 'unknown_interprands':
-        return SameFormUnkownInterprandsDistractor(num_distractor_factor)
+        return SameFormUnkownInterprandsDistractor()
     elif type_ == 'negated_hypothesis_tree':
         if generator is None:
             raise ValueError()
-        return NegatedHypothesisTreeDistractor(num_distractor_factor, generator)
+        return NegatedHypothesisTreeDistractor(generator)
     elif type_ == 'mixture.unknown_interprands.negated_hypothesis_tree':
         return MixtureDistractor(
-            num_distractor_factor,
             [
-                SameFormUnkownInterprandsDistractor(num_distractor_factor),
-                NegatedHypothesisTreeDistractor(num_distractor_factor, generator),
+                SameFormUnkownInterprandsDistractor(),
+                NegatedHypothesisTreeDistractor(generator),
             ]
         )
     elif type_ == 'fallback.negated_hypothesis_tree.unknown_interprands':
         return FallBackDistractor(
-            num_distractor_factor,
             [
-                NegatedHypothesisTreeDistractor(num_distractor_factor, generator),
-                SameFormUnkownInterprandsDistractor(num_distractor_factor),
+                NegatedHypothesisTreeDistractor(generator),
+                SameFormUnkownInterprandsDistractor(),
             ]
         )
