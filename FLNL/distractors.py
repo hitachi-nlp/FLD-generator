@@ -21,6 +21,8 @@ from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure
 
+import kern_profiler
+
 logger = logging.getLogger(__name__)
 
 
@@ -111,6 +113,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         super().__init__(num_distractor_factor)
         self.max_retry = max_retry
 
+    @profile
     def generate(self, proof_tree: ProofTree) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
@@ -179,6 +182,11 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
 
                     if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
+                        print('!!!!!!!!!!!!!!!!!!')
+                        # for formula in [transformed_formula] + distractor_formulas + formulas_in_tree:
+                        #     print(formula)
+                        # import pudb; pudb.set_trace()
+                        # not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree)
                         continue
 
                     if not is_consistent_formula_set([transformed_formula] + distractor_formulas):
@@ -227,6 +235,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
         self.generator_max_retry = generator_max_retry
         self.max_retry = max_retry
 
+    @profile
     def generate(self, proof_tree: ProofTree) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)

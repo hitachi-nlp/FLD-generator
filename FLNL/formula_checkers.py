@@ -64,6 +64,11 @@ def is_ok(formula: Formula) -> bool:
 
 @profile
 def is_ok_set(formulas: List[Formula]) -> bool:
+    # for formula in formulas:
+    #     if not is_predicate_arity_consistent(formula):
+    #         print('not is_predicate_arity_consistent(formula):', formula)
+    #     if _is_nonsense(formula):
+    #         print('is_nonsense(formula)', formula)
 
     return all([
         # is_consistent_set(formulas),    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
@@ -187,9 +192,10 @@ def _is_nonsense(formula: Formula) -> bool:
                 # this block means "contradiction getween premise and conclusion"
                 return True
 
+            # this block is like "A -> A", "A -> (A & B)" -> This is OK, for example, & 
             if ('T' in bool_in_conclusion and 'T' in bool_in_premise)\
                     or ('F' in bool_in_conclusion and 'F' in bool_in_premise):
-                # this block is like "A -> A", "A -> (A & B)"
+            
                 return True
     else:
         pass

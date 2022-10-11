@@ -46,6 +46,13 @@ CONSTANTS = [
     for char0 in _CONSTANT_ALPHABETS
     for char1 in _CONSTANT_ALPHABETS
 ][:200]
+# CONSTANTS = [
+#     '{a}', '{b}', '{c}', '{d}', '{e}',
+#     '{f}', '{g}', '{h}', '{i}', '{j}',
+#     '{k}', '{l}', '{m}', '{n}', '{o}',
+#     '{p}', '{q}', '{r}', '{s}', '{t}', '{u}',
+# ]  # do not use 'v' = OR
+
 
 _CONSTANT_REGEXP = re.compile('|'.join(CONSTANTS))
 

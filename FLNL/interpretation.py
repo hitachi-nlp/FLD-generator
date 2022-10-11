@@ -274,6 +274,7 @@ def _make_permutations(objs: List[Any],
                        src_idx=0,
                        constraints: Optional[Dict[int, Any]] = None,
                        block_shuffle=False,
+                       block_size=100000,
                        allow_many_to_one=True) -> Iterable[List[Any]]:
     """
 
@@ -297,7 +298,10 @@ def _make_permutations(objs: List[Any],
             heads = [constraints[src_idx]]
         else:
             heads = objs
+
+        block: List[Any] = []
         for head in heads:
+            head = random.sample(heads, 1)[0]
             if allow_many_to_one:
                 tail_objs = objs
             else:
@@ -310,7 +314,16 @@ def _make_permutations(objs: List[Any],
                                            constraints=constraints,
                                            block_shuffle=block_shuffle,
                                            allow_many_to_one=allow_many_to_one):
-                yield [head] + tail
+                if len(block) >= block_size:
+                    yield from block
+                    block = []
+
+                if block_shuffle:
+                    block.append([head] + tail)
+                else:
+                    yield [head] + tail
+
+        yield from block
 
 
 def interprete_argument(arg: Argument,
