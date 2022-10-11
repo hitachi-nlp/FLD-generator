@@ -6,17 +6,17 @@ import re
 import logging
 from pprint import pformat
 
+from tqdm import tqdm
 from FLNL.formula import Formula
-
-from .word_banks.base import WordBank, ATTR
-from .interpretation import (
+from FLNL.word_banks.base import WordBank, ATTR
+from FLNL.interpretation import (
     generate_mappings_from_formula,
     generate_mappings_from_predicates_and_constants,
     interprete_formula,
     formula_can_not_be_identical_to,
 )
-from .word_banks import POS, VerbForm, AdjForm, NounForm
-from .utils import starts_with_vowel_sound
+from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm
+from FLNL.utils import starts_with_vowel_sound
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import kern_profiler
 
@@ -171,14 +171,15 @@ class ClauseTypedTranslator(Translator):
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
         )
         transitive_verb_PASs = []
-        for verb in self._sample(transitive_verbs, 10000):  # limit 10000 for speed
-            for pred in self._sample(nouns, 10000):
+        for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
+            for pred in self._sample(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
-        size_per_type = min(10000, len(adjs), len(intransitive_verbs), len(transitive_verbs))
-        adj_and_verbs = self._sample(adjs, size_per_type)\
-            + self._sample(intransitive_verbs, size_per_type)\
-            + self._sample(transitive_verb_PASs, size_per_type)
+        # balance between types.
+        words_per_type = 5000
+        adj_and_verbs = self._sample(adjs, words_per_type)\
+            + self._sample(intransitive_verbs, words_per_type)\
+            + self._sample(transitive_verb_PASs, words_per_type)
 
         entity_nouns = sorted(
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
@@ -292,6 +293,8 @@ class ClauseTypedTranslator(Translator):
                 translation = interprete_formula(Formula(interp_templated_translation_pulled_wo_info_with_the_or_it), inflated_mapping).rep
             else:
                 translation = interp_templated_translation_pulled_wo_info
+
+            translation = translation.replace('__O__', ' ')
 
             translations.append(translation)
             translation_names.append(self._translation_name(sentence_key, chosen_nl))
@@ -520,16 +523,21 @@ class ClauseTypedTranslator(Translator):
 
         _word, obj = self._parse_word_with_obj(word)
         _word_inflated = self._wb.change_word_form(_word, form, force=force)
-        return self._pair_word_with_obj(_word_inflated, obj)
+        if _word_inflated is None:
+            return None
+        else:
+            return self._pair_word_with_obj(_word_inflated, obj)
 
     def _get_pos(self, word: str) -> List[POS]:
         word, _ = self._parse_word_with_obj(word)
         return self._wb.get_pos(word)
 
     def _parse_word_with_obj(self, word: str) -> Tuple[str, Optional[str]]:
-        if word.find('_O_'):
-            if word.count('_O_') != 2:
-                raise ValueError(f'Can not parse word {word}')
+        if word.find('__O__') > 0:
+            if word.count('__O__') != 1:
+                maybe_verb = word.split('__O__')[0]
+                logger.warning('Could not parse word %s since multiple "_O_" found. return verb %s only.', word, maybe_verb)
+                return maybe_verb, None
             else:
                 verb, obj = word.split('__O__')
                 return verb, obj
@@ -540,4 +548,4 @@ class ClauseTypedTranslator(Translator):
         if obj is None:
             return word
         else:
-            return '_O_'.join([word, obj])
+            return '__O__'.join([word, obj])

@@ -6,7 +6,7 @@ import logging
 
 from FLNL.formula import Formula
 
-from .interpretation import (
+from FLNL.interpretation import (
     generate_mappings_from_formula,
     generate_mappings_from_predicates_and_constants,
     interprete_formula,

@@ -94,7 +94,7 @@ def load_translator(type_: str,
 
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
-            build_translator(
+            return build_translator(
                 ['./configs/FLNL/translations/clause_typed.thing.json',
                  './configs/FLNL/translations/clause_typed.thing.sentence_negation.json'],
                 build_wordnet_wordbank(
