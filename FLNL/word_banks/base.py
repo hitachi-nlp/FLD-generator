@@ -12,7 +12,9 @@ class POS(Enum):
 
 
 class ATTR(Enum):
+    can_be_transitive_verb = 'can_be_transitive_verb'
     can_be_intransitive_verb = 'can_be_intransitive_verb'
+
     can_be_event_noun = 'can_be_event_noun'
     can_be_entity_noun = 'can_be_entity_noun'
 
@@ -94,6 +96,8 @@ class WordBank(ABC):
         attrs = []
         if POS.VERB in self.get_pos(word) and self._can_be_intransitive_verb(word):
             attrs.append(ATTR.can_be_intransitive_verb)
+        if POS.VERB in self.get_pos(word) and self._can_be_transitive_verb(word):
+            attrs.append(ATTR.can_be_transitive_verb)
         if POS.NOUN in self.get_pos(word) and self._can_be_event_noun(word):
             attrs.append(ATTR.can_be_event_noun)
         if POS.NOUN in self.get_pos(word) and self._can_be_entity_noun(word):
@@ -102,6 +106,10 @@ class WordBank(ABC):
 
     @abstractmethod
     def _can_be_intransitive_verb(self, verb: str) -> bool:
+        pass
+
+    @abstractmethod
+    def _can_be_transitive_verb(self, verb: str) -> bool:
         pass
 
     @abstractmethod

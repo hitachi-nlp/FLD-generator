@@ -1,9 +1,11 @@
-from typing import Optional, Iterable, List
+from typing import Optional, Iterable, List, Dict, Iterable
 import re
 import logging
 
 from pyinflect import getInflection
 from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from nltk.corpus.reader.wordnet import Synset, Lemma
+from nltk.corpus import wordnet as wn
 from FLNL.utils import starts_with_vowel_sound
 from .base import WordNetWordBank
 
@@ -19,6 +21,15 @@ class EnglishWordBank(WordNetWordBank):
         VerbForm.ING: 'VBG',
         VerbForm.S: 'VBZ',
     }
+
+    def __init__(self,
+                 transitive_verbs: Optional[Iterable[str]] = None,
+                 intransitive_verbs: Optional[Iterable[str]] = None,
+                 vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
+        super().__init__(vocab_restrictions=vocab_restrictions)
+
+        self._transitive_verbs = set(verb.lower() for verb in transitive_verbs) if transitive_verbs is not None else None
+        self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         # see https://github.com/bjascob/pyInflect for available forms
@@ -103,6 +114,19 @@ class EnglishWordBank(WordNetWordBank):
         else:
             raise ValueError(f'Unknown form {form}')
 
+    def _can_be_transitive_verb_synset(self, syn: Synset) -> bool:
+        if self._can_be_intransitive_verb is None:
+            raise ValueError('Set transitive verb list')
+        lemma = self._get_lemma(syn)
+        return lemma is not None and lemma.name().lower() in self._transitive_verbs
+
+    def _can_be_intransitive_verb_synset(self, syn: Synset) -> bool:
+        if self._intransitive_verbs is None:
+            raise ValueError('Set intransitive verb list')
+
+        lemma = self._get_lemma(syn)
+        return lemma is not None and lemma.name().lower() in self._intransitive_verbs
+
     def get_negnyms(self, word) -> List[str]:
         # See [here](https://langsquare.exblog.jp/28548624/) for the following detection rules.
         negnyms = []
@@ -117,6 +141,6 @@ class EnglishWordBank(WordNetWordBank):
             if any((word.startswith(prefix) and word.lstrip(prefix) in self._cached_word_set
                     for prefix in negation_prefixes))\
                     or any((word.endswith(postfix) and word.rstrip(postfix) in self._cached_word_set
-                        for postfix in negation_postfixes)):
+                            for postfix in negation_postfixes)):
                 negnyms.append(antonym)
         return negnyms

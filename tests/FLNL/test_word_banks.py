@@ -47,15 +47,15 @@ def _test_word_bank(wb):
 if __name__ == '__main__':
     test_word_bank('eng')
 
-    # restricted vocab
-    test_word_bank(
-        'eng',
-        vocab_restrictions={
-            POS.VERB: ['walk', 'run'],
-            POS.NOUN: ['apple', 'banana'],
-            POS.ADJ: ['tasty', 'beautiful'],
-            POS.ADJ_SAT: ['red', 'green'],
-        }
-    )
+    # # restricted vocab
+    # test_word_bank(
+    #     'eng',
+    #     vocab_restrictions={
+    #         POS.VERB: ['walk', 'run'],
+    #         POS.NOUN: ['apple', 'banana'],
+    #         POS.ADJ: ['tasty', 'beautiful'],
+    #         POS.ADJ_SAT: ['red', 'green'],
+    #     }
+    # )
 
-    test_word_bank('jpn')
+    # test_word_bank('jpn')

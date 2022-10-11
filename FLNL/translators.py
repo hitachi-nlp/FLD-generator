@@ -225,7 +225,8 @@ class ClauseTypedTranslator(Translator):
 
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
-        self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
+        # TODO: balance the entries
+        self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)   # HONOKA: ここで_adj_verbsに目的語付きverbを入れてしまえば良いのでは？ make__mapping
         if limit_vocab_size_per_type is not None:
             self._adj_and_verbs = self._sample(self._adj_and_verbs, limit_vocab_size_per_type)
             self._entity_nouns = self._sample(self._entity_nouns, limit_vocab_size_per_type)
@@ -316,22 +317,34 @@ class ClauseTypedTranslator(Translator):
     def _load_words(self,
                     word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
         logger.info('loading words from WordBank ...')
+
         _adj_set = set(self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ))
         _intransitive_verb_set = {
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
         }
+        _transitive_verb_set = {
+            word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
+            if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
+        }
+
+        # TODO: balance the entries
         _adj_and_verbs = sorted(_adj_set.union(_intransitive_verb_set))
+
         _entity_nouns = sorted(
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
         )
+
         _event_nouns = sorted(
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)
         )
+
         logger.info('loading words from WordBank done!')
+
         return _adj_and_verbs, _entity_nouns, _event_nouns
 
     @profile
@@ -481,7 +494,7 @@ class ClauseTypedTranslator(Translator):
                     word = interp_mapping[interprand.rep]
 
                     pos, form = self._get_interprand_info_from_template(interprand.rep, sentence_transl_pulled_formula.rep)
-                    if pos not in self._wb.get_pos(word):
+                    if pos not in self._get_pos(word):
                         interp_mapping_is_consisntent = False
                         break
 
@@ -646,7 +659,7 @@ class ClauseTypedTranslator(Translator):
         return pos, form
 
     def _get_inflated_word(self, word: str, pos: POS, form: Union[AdjForm, VerbForm, NounForm]) -> Optional[str]:
-        if pos not in self._wb.get_pos(word):
+        if pos not in self._get_pos(word):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
         if pos == POS.ADJ:
@@ -657,4 +670,27 @@ class ClauseTypedTranslator(Translator):
             force = False
         else:
             raise ValueError()
-        return self._wb.change_word_form(word, form, force=force)
+
+        _word, obj = self._parse_word_with_obj(word)
+        _word_inflated = self._wb.change_word_form(_word, form, force=force)
+        return self._pair_word_with_obj(_word_inflated, obj)
+
+    def _get_pos(self, word: str) -> List[POS]:
+        word, _ = self._parse_word_with_obj(word)
+        return self._wb.get_pos(word)
+
+    def _parse_word_with_obj(self, word: str) -> Tuple[str, Optional[str]]:
+        if word.find('_O_'):
+            if word.count('_O_') != 2:
+                raise ValueError(f'Can not parse word {word}')
+            else:
+                verb, obj = word.split('__O__')
+                return verb, obj
+        else:
+            return word, None
+
+    def _pair_word_with_obj(self, word: str, obj: Optional[str]) -> str:
+        if obj is None:
+            return word
+        else:
+            return '_O_'.join([word, obj])

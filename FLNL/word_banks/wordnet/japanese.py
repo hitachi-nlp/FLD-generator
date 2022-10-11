@@ -3,6 +3,7 @@ import re
 import logging
 
 from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from nltk.corpus.reader.wordnet import Synset, Lemma
 from .base import WordNetWordBank
 
 logger = logging.getLogger(__name__)
@@ -19,6 +20,12 @@ class JapaneseWordBank(WordNetWordBank):
         raise NotADirectoryError()
 
     def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+        raise NotADirectoryError()
+
+    def _can_be_transitive_verb_synset(self, syn: Synset) -> bool:
+        raise NotADirectoryError()
+
+    def _can_be_intransitive_verb_synset(self, syn: Synset) -> bool:
         raise NotADirectoryError()
 
     def get_negnyms(self, word) -> List[str]:

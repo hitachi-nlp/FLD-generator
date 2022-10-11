@@ -26,7 +26,7 @@ class WordNetWordBank(WordBank):
         POS.ADJ_SAT: wn.ADJ_SAT,
     }
 
-    def __init__(self, vocab_restrictions: Optional[Dict[POS, List[str]]] = None):
+    def __init__(self, vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
         self._pos_wn_to_wb = {val: key for key, val in self._pos_wb_to_wn.items()}
 
         self._cached_word_set: Set[str] = set()
@@ -34,11 +34,14 @@ class WordNetWordBank(WordBank):
 
         if vocab_restrictions is not None:
             logger.info('use restrected vocabulary')
-        self.vocab_restrictions = vocab_restrictions
+            self.vocab_restrictions = {pos: set(words) for pos, words in vocab_restrictions.items()}  # make sure the words are in set. list is too slow.
+        else:
+            self.vocab_restrictions = None
+
         for word, wn_pos in self._load_words_once():
             if vocab_restrictions is not None:
                 wb_POS = self._pos_wn_to_wb.get(wn_pos, None)
-                if wb_POS in vocab_restrictions and word not in vocab_restrictions[wb_POS]:
+                if wb_POS in self.vocab_restrictions and word not in self.vocab_restrictions[wb_POS]:
                     continue
             self._cached_word_set.add(word)
             self._cached_word_to_wn_pos[word].append(wn_pos)
@@ -50,10 +53,11 @@ class WordNetWordBank(WordBank):
         logger.info('loading words from WordNet ...')
         # done_lemmas = set()
         for syn in wn.all_synsets(lang=self.language):
-            for lemma in self._get_standard_lemmas(syn):
-                lemma_str = lemma.name()
-                yield lemma_str, syn.pos()
-                break
+            lemma = self._get_lemma(syn)
+            if lemma is None:
+                continue
+            lemma_str = lemma.name()
+            yield lemma_str, syn.pos()
         logger.info('loading words from WordNet done!')
 
     @profile
@@ -87,26 +91,28 @@ class WordNetWordBank(WordBank):
         pass
 
     def _can_be_intransitive_verb(self, verb: str) -> bool:
+        return any((self._can_be_intransitive_verb_synset(syn)
+                    for syn in self._get_synsets(verb)))
+
+    def _can_be_transitive_verb(self, verb: str) -> bool:
         return any((self._can_be_transitive_verb_synset(syn)
                     for syn in self._get_synsets(verb)))
 
-    def _get_standard_lemmas(self, syn: Synset) -> Iterable[Lemma]:
-        # exclude words like "drawing_card"
+    def _get_lemma(self, syn: Synset) -> Optional[Lemma]:
+        # syn.lemmas returns lemmas of synsets.
+        # We will return the first (~ best match) lemma
         for lemma in syn.lemmas(lang=self.language):
-            if lemma.name().find('_') < 0:
-                yield lemma
+            if lemma.name().find('_') < 0:  # exclude words like "drawing_card"
+                return lemma
+        return None
 
+    @abstractmethod
     def _can_be_transitive_verb_synset(self, syn: Synset) -> bool:
-        if syn.pos() != wn.VERB:
-            return False
+        pass
 
-        # Transitive verb if the verb details is like "Someone eat something"
-        if any([re.match('.*Some.*some.*', verb_info) is None
-                for lemma in self._get_standard_lemmas(syn)
-                for verb_info in lemma.frame_strings()]):
-            return True
-
-        return False
+    @abstractmethod
+    def _can_be_intransitive_verb_synset(self, syn: Synset) -> bool:
+        pass
 
     def _can_be_event_noun(self, noun: str) -> bool:
         """ Decide whether a noun can represent a event.
@@ -221,19 +227,25 @@ class WordNetWordBank(WordBank):
     def get_synonyms(self, word: str) -> List[str]:
         synonyms = []
         for syn in self._get_synsets(word):
-            for lemma in self._get_standard_lemmas(syn):
-                if "_" not in lemma.name() and "-" not in lemma.name():
-                    if lemma.name() not in synonyms:
-                        synonyms.append(lemma.name())
+            lemma = self._get_lemma(syn)
+            if lemma is None:
+                continue
+
+            if "_" not in lemma.name() and "-" not in lemma.name():
+                if lemma.name() not in synonyms:
+                    synonyms.append(lemma.name())
         return synonyms
 
     def get_antonyms(self, word: str) -> List[str]:
         antonyms = []
         for syn in self._get_synsets(word):
-            for lemma in self._get_standard_lemmas(syn):
-                for antonym in lemma.antonyms():
-                    if antonym.name() not in antonyms:
-                        antonyms.append(antonym.name())
+            lemma = self._get_lemma(syn)
+            if lemma is None:
+                continue
+
+            for antonym in lemma.antonyms():
+                if antonym.name() not in antonyms:
+                    antonyms.append(antonym.name())
         return antonyms
 
     @abstractmethod
