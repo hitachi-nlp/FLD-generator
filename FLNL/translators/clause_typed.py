@@ -1,23 +1,12 @@
 import json
 from typing import List, Dict, Optional, Tuple, Union, Iterable, Any
-from abc import abstractmethod, ABC
 from collections import OrderedDict, defaultdict
 import random
 import re
 import logging
-from pprint import pformat, pprint
-from nltk.corpus import cmudict
-from functools import lru_cache
+from pprint import pformat
 
-from .formula import (
-    Formula,
-    CONSTANTS,
-    VARIABLES,
-    AND,
-    OR,
-    IMPLICATION,
-    NEGATION,
-)
+from FLNL.formula import Formula
 
 from .word_banks.base import WordBank, ATTR
 from .interpretation import (
@@ -27,161 +16,11 @@ from .interpretation import (
     formula_can_not_be_identical_to,
 )
 from .word_banks import POS, VerbForm, AdjForm, NounForm
-from .exception import FormalLogicExceptionBase
 from .utils import starts_with_vowel_sound
+from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import kern_profiler
 
 logger = logging.getLogger(__name__)
-
-
-def calc_formula_specificity(formula: Formula) -> float:
-    """ Caluculate the specificity of the formula.
-
-    Examples:
-        {F}{a} -> {G}{a} is more specific than {F}{a} -> {G}{b},
-        since the former is constrained version of the latter as {a}={b}
-    """
-    return - float(len(formula.predicates) + len(formula.constants))
-
-
-class TranslationNotFoundError(FormalLogicExceptionBase):
-    pass
-
-
-class Translator(ABC):
-
-    @property
-    @abstractmethod
-    def acceptable_formulas(self) -> List[str]:
-        pass
-
-    @property
-    @abstractmethod
-    def translation_names(self) -> List[str]:
-        pass
-
-    @abstractmethod
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
-                                                                                               Dict[str, int]]:
-        pass
-
-
-class SentenceWiseTranslator(Translator):
-    """Translator compatible with ./configs/FLNL/sentence_translations/syllogistic_corpus-02.json"""
-
-    def __init__(self,
-                 sentence_translations: Dict[str, List[str]],
-                 predicate_translations: Optional[List[str]] = None,
-                 constant_translations: Optional[List[str]] = None,
-                 do_translate_to_nl=True):
-
-        self._sentence_translations = OrderedDict()
-        for formula, translations in sorted(
-            sentence_translations.items(),
-            key=lambda formula_trans: (calc_formula_specificity(Formula(formula_trans[0]), formula_trans[0]))
-        )[::-1]:
-            # sort by "complexity" of the formulas
-            # We want first match to simple = constrained formulas first.
-            # e.g.) We want matched to "Fa & Fb" first, rather than general "Fa & Gb"
-            self._sentence_translations[formula] = translations
-        self.predicate_translations = predicate_translations
-        self.constant_translations = constant_translations
-        self.do_translate_to_nl = do_translate_to_nl
-
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
-                                                                                               Dict[str, int]]:
-        translations = []
-
-        # sentence translation
-        for formula in formulas:
-
-            done_translation = False
-            for trans_formula_rep, trans_nls in self._sentence_translations.items():
-                if len(trans_nls) == 0:
-                    continue
-
-                trans_formula = Formula(trans_formula_rep)
-                for mapping in generate_mappings_from_formula([trans_formula], [formula]):
-                    trans_formula_pulled = interprete_formula(trans_formula, mapping)
-                    if trans_formula_pulled.rep == formula.rep:
-                        trans_nl = random.choice(trans_nls)
-                        translations.append(interprete_formula(Formula(trans_nl), mapping).rep)
-                        done_translation = True
-
-            if not done_translation:
-                if raise_if_translation_not_found:
-                    raise TranslationNotFoundError(f'translation not found for "{formula.rep}"')
-                else:
-                    logger.info('translation not found for "%s"', formula.rep)
-                    translations.append(None)
-
-        if self.do_translate_to_nl:
-            interp_mappings = generate_mappings_from_predicates_and_constants(
-                list(set([predicate.rep for formula in formulas for predicate in formula.predicates])),
-                list(set([constant.rep for formula in formulas for constant in formula.constants])),
-                self.predicate_translations,
-                self.constant_translations,
-                block_shuffle=True,
-            )
-            interp_mapping = next(interp_mappings)
-            for i_formula, (formula, translation) in enumerate(zip(formulas, translations)):
-                if translation is not None:
-                    translations[i_formula] = interprete_formula(Formula(translation), interp_mapping).rep
-
-        return [(None, translation) for translation in translations], {}
-
-
-class IterativeRegexpTranslator(Translator):
-    """ sample implementation of regexp matching """
-
-    def __init__(self):
-        pass
-
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
-                                                                                               Dict[str, int]]:
-
-        translations = {
-            '\({A} v {B}\)x': [
-                'someone is {A} and {B}'
-            ],
-            '{A}x': [
-                'someone is {A}',
-                'he is {A}',
-                'she is {A}',
-            ],
-            '\(x\): (.*) -> (.*)': [
-                'if \g<1>, then \g<2>'
-            ],
-        }
-        translations = OrderedDict([
-            (k, v) for k, v in sorted(translations.items(),
-                                      key=lambda k_v: len(k_v[0]))
-        ][::-1])
-
-        translated_reps = []
-        for formula in formulas:
-            translated_formula = Formula(formula.rep)
-
-            has_translation = True
-            while has_translation:
-                has_translation = False
-                for i_translation, (src_rep, tgt_reps) in enumerate(translations.items()):
-                    tgt_rep = random.choice(tgt_reps)
-
-                    src_formula = Formula(src_rep)
-                    tgt_formula = Formula(tgt_rep)
-
-                    for mapping in generate_mappings_from_formula([src_formula], [formula]):
-                        src_formula_replaced = interprete_formula(src_formula, mapping)
-                        tgt_formula_replaced = interprete_formula(tgt_formula, mapping)
-                        if re.search(src_formula_replaced.rep, translated_formula.rep) is not None:
-                            translated_formula = Formula(re.sub(src_formula_replaced.rep, tgt_formula_replaced.rep, translated_formula.rep))
-                            has_translation = True
-                            break
-
-            translated_reps.append(translated_formula.rep)
-
-        return [(None, translated_rep) for translated_rep in translated_reps], {}
 
 
 class ClauseTypedTranslator(Translator):
@@ -225,8 +64,7 @@ class ClauseTypedTranslator(Translator):
 
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
-        # TODO: balance the entries
-        self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)   # HONOKA: ここで_adj_verbsに目的語付きverbを入れてしまえば良いのでは？ make__mapping
+        self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
         if limit_vocab_size_per_type is not None:
             self._adj_and_verbs = self._sample(self._adj_and_verbs, limit_vocab_size_per_type)
             self._entity_nouns = self._sample(self._entity_nouns, limit_vocab_size_per_type)
@@ -318,34 +156,43 @@ class ClauseTypedTranslator(Translator):
                     word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
         logger.info('loading words from WordBank ...')
 
-        _adj_set = set(self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ))
-        _intransitive_verb_set = {
+        adjs = sorted(self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ))
+        intransitive_verbs = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
-        }
-        _transitive_verb_set = {
+        )
+        transitive_verbs = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
-        }
+        )
+        nouns = sorted(
+            word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+        )
+        transitive_verb_PASs = []
+        for verb in self._sample(transitive_verbs, 10000):  # limit 10000 for speed
+            for pred in self._sample(nouns, 10000):
+                transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
-        # TODO: balance the entries
-        _adj_and_verbs = sorted(_adj_set.union(_intransitive_verb_set))
+        size_per_type = min(10000, len(adjs), len(intransitive_verbs), len(transitive_verbs))
+        adj_and_verbs = self._sample(adjs, size_per_type)\
+            + self._sample(intransitive_verbs, size_per_type)\
+            + self._sample(transitive_verb_PASs, size_per_type)
 
-        _entity_nouns = sorted(
+        entity_nouns = sorted(
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
         )
 
-        _event_nouns = sorted(
+        event_nouns = sorted(
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)
         )
 
         logger.info('loading words from WordBank done!')
 
-        return _adj_and_verbs, _entity_nouns, _event_nouns
+        return adj_and_verbs, entity_nouns, event_nouns
 
     @profile
     def _load_words_by_pos_attrs(self,

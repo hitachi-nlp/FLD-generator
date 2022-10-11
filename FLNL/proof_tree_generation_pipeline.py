@@ -6,7 +6,7 @@ from FLNL.formula import Formula, NEGATION, eliminate_double_negation
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.proof_tree_generators import ProofTreeGenerator
 from FLNL.distractors import FormalLogicDistractor
-from FLNL.translators import Translator
+from FLNL.translators.base import Translator
 from FLNL.utils import flatten_dict
 import kern_profiler
 

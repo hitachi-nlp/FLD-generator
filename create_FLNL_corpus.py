@@ -12,7 +12,7 @@ import click
 from tqdm import tqdm
 import dill
 
-from FLNL.translators import ClauseTypedTranslator
+from FLNL.translators import build as build_translator
 from FLNL.word_banks import build_wordnet_wordbank
 from FLNL.distractors import SameFormUnkownInterprandsDistractor, FormalLogicDistractor
 from FLNL.argument import Argument
@@ -39,8 +39,8 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
     return arguments
 
 
-def load_dataset(argument_config: str,
-                 translation_config: str,
+def load_dataset(argument_config: List[str],
+                 translation_config: List[str],
                  limit_vocab_size_per_type: Optional[int],
                  complication: float,
                  quantification: float,
@@ -59,20 +59,12 @@ def load_dataset(argument_config: str,
         quantifier_axiom_arguments_weight=quantification,
     )
 
-    distractor = build_distractor(distractor, distractor_factor, generator=generator)
+    _distractor = build_distractor(distractor, distractor_factor, generator=generator)
+    translator = build_translator(translation_config,
+                                  build_wordnet_wordbank('eng'),
+                                  limit_vocab_size_per_type=limit_vocab_size_per_type)
 
-    merged_config_json = {}
-    for config_path in translation_config:
-        merged_config_json = nested_merge(merged_config_json,
-                                          json.load(open(config_path)))
-    translator = ClauseTypedTranslator(
-        merged_config_json,
-        build_wordnet_wordbank('eng'),
-        limit_vocab_size_per_type=limit_vocab_size_per_type,
-        do_translate_to_nl=True,
-    )
-
-    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(generator, distractor=_distractor, translator=translator)
 
     return NLProofSDataset(pipeline, proof_stances, world_assump, depths, branch_extension_steps)
 

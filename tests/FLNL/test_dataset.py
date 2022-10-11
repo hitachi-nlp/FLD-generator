@@ -9,10 +9,15 @@ from FLNL.formula import Formula
 from FLNL.argument import Argument
 from FLNL.proof_tree_generators import ProofTreeGenerator
 from FLNL.distractors import build as build_distractor, FormalLogicDistractor
-from FLNL.translators import SentenceWiseTranslator, IterativeRegexpTranslator, ClauseTypedTranslator
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.datasets import NLProofSDataset
 from FLNL.word_banks import build_wordnet_wordbank
+from FLNL.translators import (
+    build as build_translator,
+    SentenceWiseTranslator,
+    IterativeRegexpTranslator,
+    ClauseTypedTranslator,
+)
 from FLNL.utils import nested_merge
 from logger_setup import setup as setup_logger
 
@@ -89,12 +94,9 @@ def load_translator(type_: str,
 
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
-            config_json = nested_merge(
-                json.load(open('./configs/FLNL/translations/clause_typed.thing.json')),
-                json.load(open('./configs/FLNL/translations/clause_typed.thing.sentence_negation.json')),
-            )
-            return ClauseTypedTranslator(
-                config_json,
+            build_translator(
+                ['./configs/FLNL/translations/clause_typed.thing.json',
+                 './configs/FLNL/translations/clause_typed.thing.sentence_negation.json'],
                 build_wordnet_wordbank(
                     'eng',
                     vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None

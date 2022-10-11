@@ -11,7 +11,7 @@ from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.formula import Formula
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.utils import flatten_dict
-from FLNL.translators import Translator
+from FLNL.translators.base import Translator
 import kern_profiler
 
 logger = logging.getLogger(__name__)
