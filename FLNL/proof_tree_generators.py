@@ -374,7 +374,7 @@ def _generate_stem(arguments: List[Argument],
                     for premise_mapping in generate_mappings_from_formula(
                         [premise] + ([assumption] if assumption is not None else []),
                         [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
-                        block_shuffle=True,
+                        shuffle=True,
                     ):
                         if is_arg_done:
                             break
@@ -402,7 +402,7 @@ def _generate_stem(arguments: List[Argument],
                             next_arg.all_formulas,
                             [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
-                            block_shuffle=True,
+                            shuffle=True,
                         ):
                             if is_arg_done:
                                 break
@@ -569,7 +569,7 @@ def _extend_braches(proof_tree: ProofTree,
                         [next_arg.conclusion],
                         # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
-                        block_shuffle=True,
+                        shuffle=True,
                 ):
                     if is_leaf_node_done:
                         break
@@ -590,7 +590,7 @@ def _extend_braches(proof_tree: ProofTree,
                         next_arg.all_formulas,
                         [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         constraints=conclusion_mapping,
-                        block_shuffle=True,
+                        shuffle=True,
                     ):
                         next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
 

@@ -177,16 +177,11 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     [c.rep for c in src_formula.constants],
                     tgt_predicates,
                     tgt_constants,
-                    block_shuffle=True
+                    shuffle=True
                 ):
                     transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
 
                     if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
-                        print('!!!!!!!!!!!!!!!!!!')
-                        # for formula in [transformed_formula] + distractor_formulas + formulas_in_tree:
-                        #     print(formula)
-                        # import pudb; pudb.set_trace()
-                        # not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree)
                         continue
 
                     if not is_consistent_formula_set([transformed_formula] + distractor_formulas):

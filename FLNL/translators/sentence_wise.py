@@ -75,7 +75,7 @@ class SentenceWiseTranslator(Translator):
                 list(set([constant.rep for formula in formulas for constant in formula.constants])),
                 self.predicate_translations,
                 self.constant_translations,
-                block_shuffle=True,
+                shuffle=True,
             )
             interp_mapping = next(interp_mappings)
             for i_formula, (formula, translation) in enumerate(zip(formulas, translations)):

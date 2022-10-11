@@ -118,14 +118,14 @@ def generate_arguments_in_target_space(src_arg: Argument,
                                        tgt_arg: Argument,
                                        add_complicated_arguments=False,
                                        constraints: Optional[Dict[str, str]] = None,
-                                       block_shuffle=False,
+                                       shuffle=False,
                                        allow_many_to_one=True,
                                        elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
     for mapping in generate_mappings_from_formula(src_arg.all_formulas,
                                                   tgt_arg.all_formulas,
                                                   add_complicated_arguments=add_complicated_arguments,
                                                   constraints=constraints,
-                                                  block_shuffle=block_shuffle,
+                                                  shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
         yield interprete_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
@@ -134,14 +134,14 @@ def generate_formulas_in_target_space(src_formula: Formula,
                                       tgt_formula: Formula,
                                       add_complicated_arguments=False,
                                       constraints: Optional[Dict[str, str]] = None,
-                                      block_shuffle=False,
+                                      shuffle=False,
                                       allow_many_to_one=True,
                                       elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
     for mapping in generate_mappings_from_formula([src_formula],
                                                   [tgt_formula],
                                                   add_complicated_arguments=add_complicated_arguments,
                                                   constraints=constraints,
-                                                  block_shuffle=block_shuffle,
+                                                  shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
         yield interprete_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
@@ -150,14 +150,14 @@ def generate_mappings_from_argument(src_argument: Argument,
                                     tgt_argument: Argument,
                                     add_complicated_arguments=False,
                                     constraints: Optional[Dict[str, str]] = None,
-                                    block_shuffle=False,
+                                    shuffle=False,
                                     allow_many_to_one=True) -> Iterable[Dict[str, str]]:
     yield from generate_mappings_from_formula(
         src_argument.all_formulas,
         tgt_argument.all_formulas,
         add_complicated_arguments=add_complicated_arguments,
         constraints=constraints,
-        block_shuffle=block_shuffle,
+        shuffle=shuffle,
         allow_many_to_one=allow_many_to_one,
     )
 
@@ -166,7 +166,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                    tgt_formulas: List[Formula],
                                    add_complicated_arguments=False,
                                    constraints: Optional[Dict[str, str]] = None,
-                                   block_shuffle=False,
+                                   shuffle=False,
                                    allow_many_to_one=True,
                                    suppress_op_expansion_if_exists=False) -> Iterable[Dict[str, str]]:
     if add_complicated_arguments:
@@ -196,7 +196,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                                                    tgt_predicates,
                                                                    tgt_constants,
                                                                    constraints=constraints,
-                                                                   block_shuffle=block_shuffle,
+                                                                   shuffle=shuffle,
                                                                    allow_many_to_one=allow_many_to_one)
 
 
@@ -205,7 +205,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
                                                     tgt_predicates: List[str],
                                                     tgt_constants: List[str],
                                                     constraints: Optional[Dict[str, str]] = None,
-                                                    block_shuffle=False,
+                                                    shuffle=False,
                                                     allow_many_to_one=True) -> Iterable[Dict[str, str]]:
     if len(src_predicates) == 0 or len(tgt_predicates) == 0:
         # identity mapping for formulas that do not have predicates.
@@ -215,7 +215,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
             src_predicates,
             tgt_predicates,
             constraints=constraints,
-            block_shuffle=block_shuffle,
+            shuffle=shuffle,
             allow_many_to_one=allow_many_to_one,
         )
 
@@ -227,7 +227,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
             src_constants,
             tgt_constants,
             constraints=constraints,
-            block_shuffle=block_shuffle,
+            shuffle=shuffle,
             allow_many_to_one=allow_many_to_one,
         )
 
@@ -242,7 +242,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
 def _generate_mappings(src_objs: List[Any],
                        tgt_objs: List[Any],
                        constraints: Optional[Dict[Any, Any]] = None,
-                       block_shuffle=False,
+                       shuffle=False,
                        allow_many_to_one=True) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError('Elements in src_objs are not unique: {src_objs}')
@@ -259,7 +259,7 @@ def _generate_mappings(src_objs: List[Any],
         for chosen_tgt_objs in _make_permutations(tgt_objs,
                                                   len(src_objs),
                                                   constraints=idx_constraints,
-                                                  block_shuffle=block_shuffle,
+                                                  shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
             yield {
                 src_obj: tgt_obj
@@ -273,18 +273,11 @@ def _make_permutations(objs: List[Any],
                        length: int,
                        src_idx=0,
                        constraints: Optional[Dict[int, Any]] = None,
-                       block_shuffle=False,
-                       block_size=100000,
+                       shuffle=False,
                        allow_many_to_one=True) -> Iterable[List[Any]]:
-    """
-
-    block_shuffle=Trueであって，完全にblock_shuffleできるわけではない．
-    for head in heads: のループにおいて，headごとにブロック化しているため．
-    しかし，ここをblock_shuffleしようとすると，generatorではなくlistを作る必要があり，速度が落ちる．
-    """
     if length < 1:
         return
-    if block_shuffle:
+    if shuffle:
         objs = random.sample(objs, len(objs))  # shuffle
 
     if length == 1:
@@ -299,31 +292,106 @@ def _make_permutations(objs: List[Any],
         else:
             heads = objs
 
-        block: List[Any] = []
+        permutators = []
         for head in heads:
-            head = random.sample(heads, 1)[0]
             if allow_many_to_one:
                 tail_objs = objs
             else:
                 tail_objs = objs.copy()
                 while head in tail_objs:
                     tail_objs.remove(head)
-            for tail in _make_permutations(tail_objs,
-                                           length - 1,
-                                           src_idx=src_idx + 1,
-                                           constraints=constraints,
-                                           block_shuffle=block_shuffle,
-                                           allow_many_to_one=allow_many_to_one):
-                if len(block) >= block_size:
-                    yield from block
-                    block = []
 
-                if block_shuffle:
-                    block.append([head] + tail)
-                else:
+            tail_permutator = _make_permutations(tail_objs,
+                                                 length - 1,
+                                                 src_idx=src_idx + 1,
+                                                 constraints=constraints,
+                                                 shuffle=shuffle,
+                                                 allow_many_to_one=allow_many_to_one)
+            permutators.append((head, tail_permutator))
+
+        if shuffle:
+            is_done = [False] * len(permutators)
+            i_head = 0
+            while True:
+                i_head = i_head % len(permutators)
+                head, tail_permutator = permutators[i_head]
+                if all(is_done):
+                    break
+                if is_done[i_head]:
+                    i_head += 1
+                    continue
+                try:
+                    tail = next(tail_permutator)
+                    yield [head] + tail
+                except StopIteration:
+                    is_done[i_head] = True
+                i_head += 1
+        else:
+            for head, tail_permutator in permutators:
+                for tail in tail_permutator:
                     yield [head] + tail
 
-        yield from block
+
+            
+
+
+
+# -- block shuffle version --
+# def _make_permutations(objs: List[Any],
+#                        length: int,
+#                        src_idx=0,
+#                        constraints: Optional[Dict[int, Any]] = None,
+#                        shuffle=False,
+#                        block_size=10000,
+#                        allow_many_to_one=True) -> Iterable[List[Any]]:
+#     """
+# 
+#     shuffle=Trueであって，完全にshuffleできるわけではない．
+#     for head in heads: のループにおいて，headごとにブロック化しているため．
+#     しかし，ここをshuffleしようとすると，generatorではなくlistを作る必要があり，速度が落ちる．
+#     """
+#     if length < 1:
+#         return
+#     if shuffle:
+#         objs = random.sample(objs, len(objs))  # shuffle
+# 
+#     if length == 1:
+#         if constraints is not None and src_idx in constraints:
+#             yield [constraints[src_idx]]
+#         else:
+#             for obj in objs:
+#                 yield [obj]
+#     else:
+#         if constraints is not None and src_idx in constraints:
+#             heads = [constraints[src_idx]]
+#         else:
+#             heads = objs
+# 
+#         block: List[Any] = []
+#         for head in heads:
+#             if allow_many_to_one:
+#                 tail_objs = objs
+#             else:
+#                 tail_objs = objs.copy()
+#                 while head in tail_objs:
+#                     tail_objs.remove(head)
+# 
+#             for tail in _make_permutations(tail_objs,
+#                                            length - 1,
+#                                            src_idx=src_idx + 1,
+#                                            constraints=constraints,
+#                                            shuffle=shuffle,
+#                                            allow_many_to_one=allow_many_to_one):
+#                 if len(block) >= block_size:
+#                     yield from block
+#                     block = []
+# 
+#                 if shuffle:
+#                     block.append([head] + tail)
+#                 else:
+#                     yield [head] + tail
+# 
+#         yield from block
 
 
 def interprete_argument(arg: Argument,
