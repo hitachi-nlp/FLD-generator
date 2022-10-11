@@ -129,7 +129,7 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 1000) -> None:
     with open('test_dataset.output.json', 'w') as f_out:
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -219,11 +219,13 @@ def test_minimum_PL():
             Argument(
                 [Formula('(x): {A}x -> {B}x'), Formula('{A}{a}')],
                 Formula('{B}{a}'),
+                {},
                 id='MPL.modus_ponens',
             ),
             Argument(
                 [Formula('(x): {A}x -> {B}x'), Formula('(x): {B}x -> {C}x')],
                 Formula('(x): {A}x -> {C}x'),
+                {},
                 id='MPL.syllogism',
             ),
 
@@ -315,8 +317,8 @@ def test_PL_pred_arg():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              # [10],
-                              [3, 5],
+                              [3, 4, 5],
+                              # [1],
                               5,
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
