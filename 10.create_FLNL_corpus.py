@@ -58,7 +58,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221011.beat_ruletaker')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -96,24 +97,30 @@ def main():
         # # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
         # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
 
-        '20221011.debug'
+
+
+        '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
+        '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
+
+        '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
+
+        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
+
+        '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
+        '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
+
+        '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
+
+        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
     ]
 
-    split_sizes = {
-        # 'train': 100,
-        # 'valid': 100,
-        # 'test': 100,
+    # engine = SubprocessEngine()
+    engine = QsubEngine('ABCI', 'rt_C.small')
 
-        'train': 100000,
-        'valid': 1000,
-        'test': 1000,
-    }
-
-    engine = SubprocessEngine()
-    # engine = QsubEngine('ABCI', 'rt_C.small')
-
-    num_jobs = 1
-    # num_jobs = 100
+    # num_jobs = 1
+    num_jobs = 100
 
     # num_workers_per_job = 1
     num_workers_per_job = 5
@@ -147,6 +154,7 @@ def main():
                 'distractor',
                 # 'distractor_factor',
                 'num_distractors',
+                'split_sizes',
 
                 'translation_configs',
                 'limit_vocab_size_per_type',
@@ -160,7 +168,7 @@ def main():
         logger.addHandler(create_file_handler(output_dir / 'log.txt'))
 
         min_size_per_job = 100    # too small value might be slow.
-        for split, size in split_sizes.items():
+        for split, size in settings['split_sizes'].items():
             size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
 
             split_output_dir = output_dir / split

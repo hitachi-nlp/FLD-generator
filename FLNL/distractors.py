@@ -388,6 +388,7 @@ AVAILABLE_DISTRACTORS = [
     'negated_hypothesis_tree',
     'mixture.unknown_interprands.negated_hypothesis_tree',
     'fallback.negated_hypothesis_tree.unknown_interprands',
+    'fallback.unknown_interprands.negated_hypothesis_tree',
 ]
 
 
@@ -415,5 +416,12 @@ def build(type_: str, generator: Optional[ProofTreeGenerator] = None):
             [
                 NegatedHypothesisTreeDistractor(generator),
                 SameFormUnkownInterprandsDistractor(),
+            ]
+        )
+    elif type_ == 'fallback.unknown_interprands.negated_hypothesis_tree':
+        return FallBackDistractor(
+            [
+                SameFormUnkownInterprandsDistractor(),
+                NegatedHypothesisTreeDistractor(generator),
             ]
         )

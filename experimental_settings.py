@@ -1,5 +1,10 @@
-from typing import Dict
+from typing import Dict, List
 import copy
+
+
+def _to_range(begin: int, end: int) -> List[int]:
+    return list(range(begin, end + 1))
+
 
 _DATASET_SETTINGS = {
     # XXX: Be cared about the max length not to be too large, when you edit the setting.
@@ -1087,7 +1092,22 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20221011.debug': {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
@@ -1114,17 +1134,471 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
         'quantification': 0.2,
 
-        'depths': [1, 2, 3],
-        'branch_extension_steps': [3],
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(1, 3),
         'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
-        'num_distractors': [3],
+        'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
         'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
     },
+
+    '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 8),
+        'branch_extension_steps': _to_range(1, 5),
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'num_distractors': _to_range(1, 5),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(1, 3),
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'num_distractors': _to_range(1, 10),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 8),
+        'branch_extension_steps': _to_range(1, 5),
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'num_distractors': _to_range(1, 10),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 8),
+        'branch_extension_steps': _to_range(1, 5),
+        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'num_distractors': _to_range(1, 10),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 300000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+
+    '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(1, 3),
+        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'num_distractors': _to_range(1, 5),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 8),
+        'branch_extension_steps': _to_range(1, 5),
+        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'num_distractors': _to_range(1, 5),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(1, 3),
+        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'num_distractors': _to_range(1, 10),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 8),
+        'branch_extension_steps': _to_range(1, 5),
+        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'num_distractors': _to_range(1, 10),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+    '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom--negation.pred_only.json',
+            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+        ],
+
+        'complication': 0.3,
+        'quantification': 0.2,
+
+        'depths': _to_range(1, 8),
+        'branch_extension_steps': _to_range(1, 5),
+        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'num_distractors': _to_range(1, 10),
+
+        'translation_configs': [
+            './configs/FLNL/translations/clause_typed.thing.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+        ],
+        'limit_vocab_size_per_type': None,
+
+        'split_sizes': {
+            # 'train': 10,
+            # 'valid': 10,
+            # 'test': 10,
+
+            'train': 300000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
+
+
 
 }
 
