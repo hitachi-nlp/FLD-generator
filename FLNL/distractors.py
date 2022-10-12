@@ -103,6 +103,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         super().__init__()
         self.max_retry = max_retry
 
+    @profile
     def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]

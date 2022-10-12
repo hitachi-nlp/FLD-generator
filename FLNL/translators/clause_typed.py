@@ -157,19 +157,19 @@ class ClauseTypedTranslator(Translator):
         logger.info('loading words from WordBank ...')
 
         adjs = sorted(self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ))
-        intransitive_verbs = sorted(
+        intransitive_verbs = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
-        )
-        transitive_verbs = sorted(
+        })
+        transitive_verbs = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
-        )
-        nouns = sorted(
+        })
+        nouns = sorted({
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-        )
+        })
         transitive_verb_PASs = []
         for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
             for pred in self._sample(nouns, 1000):
@@ -177,19 +177,20 @@ class ClauseTypedTranslator(Translator):
 
         # balance between types.
         words_per_type = 5000
-        adj_and_verbs = self._sample(adjs, words_per_type)\
+        adj_and_verbs_list = self._sample(adjs, words_per_type)\
             + self._sample(intransitive_verbs, words_per_type)\
             + self._sample(transitive_verb_PASs, words_per_type)
+        adj_and_verbs = sorted({word for word in adj_and_verbs_list})
 
-        entity_nouns = sorted(
+        entity_nouns = sorted({
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
-        )
+        })
 
-        event_nouns = sorted(
+        event_nouns = sorted({
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)
-        )
+        })
 
         logger.info('loading words from WordBank done!')
 

@@ -99,28 +99,28 @@ def main():
 
 
 
-        '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
-        '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
+        # '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
+        # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
 
-        '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
+        # '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
 
-        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
+        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
 
-        '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
-        '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
+        # '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
+        # '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
 
-        '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
+        # '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
 
-        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
+        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
     ]
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # num_jobs = 1
-    num_jobs = 100
+    num_jobs = 180
 
     # num_workers_per_job = 1
     num_workers_per_job = 5
@@ -237,7 +237,7 @@ def main():
                         stdout=stdout,
                         stderr=stderr,
                         options={
-                            'l_opts': ['h_rt=12:00:00'],
+                            'l_opts': ['h_rt=5:00:00'],
                             'timeout_from_run': timeout_per_job,
                         },
                         dry_run=dry_run,
@@ -251,8 +251,13 @@ def main():
             logger.info('gathering results under %s', split_output_dir)
             cnt = 0
             is_done = False
+            job_output_jsonls = sorted([
+                path for path in split_output_dir.glob(f'**/*{split}.jsonl')
+                if path.find('job-') >= 0
+            ])
             with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
-                for jsonl in sorted(split_output_dir.glob(f'**/*{split}.jsonl')):
+                for jsonl in job_output_jsonls:
+                    logger.info('gathering results from %s', str(jsonl))
                     if is_done:
                         break
                     for line in open(jsonl):
