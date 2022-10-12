@@ -123,10 +123,6 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
     This class is superior to UnkownPASDistractor, which does not consider the similarity of the formu of formulas.
     """
 
-    def __init__(self, max_retry: int = 100):
-        super().__init__()
-        self.max_retry = max_retry
-
     @profile
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
@@ -142,8 +138,9 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         distractor_formulas: List[Formula] = []
 
         trial = 0
-        while True:
-            if trial >= self.max_retry:
+        max_trial = size * 10
+        for trial in range(max_trial):
+            if trial >= max_trial:
                 logger.warning(
                     'Could not generate %d distractors. return only %d distractors.',
                     size,
@@ -156,13 +153,17 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
             src_formula = leaf_formulas[trial % len(leaf_formulas)]
 
-            used_predicates = list({pred.rep for pred in src_formula.predicates})
-            used_constants = list({pred.rep for pred in src_formula.constants})
+            used_predicates = shuffle(list({pred.rep for pred in src_formula.predicates}))
+            used_constants = shuffle(list({pred.rep for pred in src_formula.constants}))
 
             # use subset of unused predicates and constant so that generate_mappings_from_predicates_and_constants() does not generate too large list
-            # * 3 comes from the intuition that a formula may contain 3 predicates or constans on average.
+            # * 3 comes from the intuition that a formula may contain 3 predicates or constants on maximum like {A}{a} v {B}{b} -> {C}{c}
             unused_predicates = shuffle(list(set(PREDICATES) - set(used_predicates)))[:size * 3]
             unused_constants = shuffle(list(set(CONSTANTS) - set(used_constants)))[:size * 3]
+
+            # mix unsed predicates constants a little
+            used_unused_predicates = shuffle(used_predicates + unused_predicates)
+            used_unused_constants = shuffle(used_constants + unused_constants)
 
             # It is possible that (used_predicates, used_constants) pair produces a new formula,
             # e.g., "{B}{b} -> {A}{a}" when src_formula is "{A}{a} -> {B}{b}"
@@ -174,14 +175,16 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 # is more distractive than the inverse pair.
                 # Thus, we sample it more often than the inverseed pair,
                 tgt_space = [
-                    (unused_predicates, used_constants),
-                    (used_predicates, unused_constants),
+                    # (used_predicates, used_constants),
+                    (used_unused_predicates, used_constants),
+                    (used_unused_predicates, used_unused_constants),
                     (unused_predicates, unused_constants)
                 ]
             else:
                 tgt_space = [
-                    (used_predicates, unused_constants),
-                    (unused_predicates, used_constants),
+                    # (used_predicates, used_constants),
+                    (used_predicates, used_unused_constants),
+                    (used_unused_predicates, used_unused_constants),
                     (unused_predicates, unused_constants)
                 ]
 
@@ -234,8 +237,6 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
             if is_found:
                 distractor_formulas.append(found_formula)
-
-            trial += 1
 
         return distractor_formulas
 
@@ -426,11 +427,14 @@ class FallBackDistractor(FormalLogicDistractor):
 
 AVAILABLE_DISTRACTORS = [
     'unknown_PAS',
+
     'unknown_interprands',
     'negated_hypothesis_tree',
-    'mixture.unknown_interprands.negated_hypothesis_tree',
+
     'fallback.negated_hypothesis_tree.unknown_interprands',
     'fallback.unknown_interprands.negated_hypothesis_tree',
+
+    'mixture.unknown_interprands.negated_hypothesis_tree',
 ]
 
 
@@ -446,13 +450,6 @@ def build(type_: str, generator: Optional[ProofTreeGenerator] = None):
         if generator is None:
             raise ValueError()
         return NegatedHypothesisTreeDistractor(generator)
-    elif type_ == 'mixture.unknown_interprands.negated_hypothesis_tree':
-        return MixtureDistractor(
-            [
-                SameFormUnkownInterprandsDistractor(),
-                NegatedHypothesisTreeDistractor(generator),
-            ]
-        )
     elif type_ == 'fallback.negated_hypothesis_tree.unknown_interprands':
         return FallBackDistractor(
             [
@@ -467,3 +464,11 @@ def build(type_: str, generator: Optional[ProofTreeGenerator] = None):
                 NegatedHypothesisTreeDistractor(generator),
             ]
         )
+    elif type_ == 'mixture.unknown_interprands.negated_hypothesis_tree':
+        return MixtureDistractor(
+            [
+                SameFormUnkownInterprandsDistractor(),
+                NegatedHypothesisTreeDistractor(generator),
+            ]
+        )
+
