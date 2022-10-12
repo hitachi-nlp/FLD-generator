@@ -152,8 +152,10 @@ def generate_dataset(dataset: NLProofSDataset,
             logger.info('--------------- NLProofs json --------------')
             logger.info('\n' + pformat(nlproof_json))
 
-            # logger.info('\n')
-            # logger.info('--------------- stats --------------')
+            logger.info('\n')
+            logger.info('--------------- stats --------------')
+            for key in ['avg.word_count_all']:
+                logger.info('%s: %s', key, stats[key])
             # logger.info(dict(stats))
             # logger.info('\n' + pformat(stats))
 
