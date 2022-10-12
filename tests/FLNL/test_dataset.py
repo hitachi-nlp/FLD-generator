@@ -120,13 +120,13 @@ def load_translator(type_: str,
 
 
 def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
-    # name = 'unknown_interprands',
-    # name = 'negated_hypothesis_tree',
+    # name = 'unknown_interprands'
+    # name = 'negated_hypothesis_tree'
 
-    # name = 'fallback.negated_hypothesis_tree.unknown_interprands',
-    # name = 'fallback.unknown_interprands.negated_hypothesis_tree',
+    name = 'fallback.negated_hypothesis_tree.unknown_interprands'
+    # name = 'fallback.unknown_interprands.negated_hypothesis_tree'
 
-    name = 'mixture.unknown_interprands.negated_hypothesis_tree',
+    # name = 'mixture.unknown_interprands.negated_hypothesis_tree'
 
     return build_distractor(name, generator=generator)
 

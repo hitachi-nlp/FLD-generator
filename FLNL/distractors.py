@@ -38,10 +38,10 @@ class FormalLogicDistractor(ABC):
     def generate(self,
                  proof_tree: ProofTree,
                  size: int,
-                 max_retry: Optional[int] = 3,
-                 timeout: Optional[int] = 10) -> List[Formula]:
-        max_retry = max_retry or 99999
-        timeout = timeout or 99999
+                 max_retry: Optional[int] = None,
+                 timeout: Optional[int] = None) -> List[Formula]:
+        max_retry = max_retry or self.default_max_retry
+        timeout = timeout or self.default_timeout
         try:
             return run_with_timeout_retry(
                 self._generate,
@@ -55,6 +55,16 @@ class FormalLogicDistractor(ABC):
             )
         except RetryAndTimeoutFailure as e:
             raise DistractorGenerationFailure(f'Distractor generation failed due to RetryAndTimeoutFailure: {str(e)}')
+
+    @property
+    @abstractmethod
+    def default_max_retry(self) -> int:
+        pass
+
+    @property
+    @abstractmethod
+    def default_timeout(self) -> int:
+        pass
 
     @abstractmethod
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
@@ -115,6 +125,14 @@ class UnkownPASDistractor(FormalLogicDistractor):
 
         return shuffle(zeroary_distractors + unary_distractors)[:size]
 
+    @property
+    def default_max_retry(self) -> int:
+        return 3
+
+    @property
+    def default_timeout(self) -> int:
+        return 10
+
 
 class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
     """ Generate the same form formula with unknown predicates or constants injected.
@@ -122,6 +140,14 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
     This class is superior to UnkownPASDistractor, which does not consider the similarity of the formu of formulas.
     """
+
+    @property
+    def default_max_retry(self) -> int:
+        return 3
+
+    @property
+    def default_timeout(self) -> int:
+        return 10
 
     @profile
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
@@ -259,6 +285,14 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
         self.generator_max_retry = generator_max_retry
         self.max_retry = max_retry
 
+    @property
+    def default_max_retry(self) -> int:
+        return 3
+
+    @property
+    def default_timeout(self) -> int:
+        return 10
+
     @profile
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
@@ -370,6 +404,17 @@ class MixtureDistractor(FormalLogicDistractor):
         super().__init__()
         self._distractors = distractors
 
+    @property
+    def default_max_retry(self) -> int:
+        return 1
+
+    @property
+    def default_timeout(self) -> int:
+        timeout_sum = 0
+        for distractor in self._distractors:
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout
+        return timeout_sum
+
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         logger.info('==== (MixtureDistractor) Try to generate %d distractors ====', size)
 
@@ -378,7 +423,11 @@ class MixtureDistractor(FormalLogicDistractor):
 
         distractor_formulas = []
         for distractor in self._distractors:
-            distractor_formulas += distractor.generate(proof_tree, size)
+            try:
+                distractor_formulas += distractor.generate(proof_tree, size)
+            except DistractorGenerationFailure as e:
+                logger.warning('Generating distractors by %s failed with the following message:', distractor.__class__)
+                logger.warning(str(e))
 
         if len(distractor_formulas) < size:
             logger.warning(
@@ -396,6 +445,17 @@ class FallBackDistractor(FormalLogicDistractor):
     def __init__(self, distractors: List[FormalLogicDistractor]):
         super().__init__()
         self._distractors = distractors
+
+    @property
+    def default_max_retry(self) -> int:
+        return 1
+
+    @property
+    def default_timeout(self) -> int:
+        timeout_sum = 0
+        for distractor in self._distractors:
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout
+        return timeout_sum
 
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         logger.info('==== (FallBackDistractor) Try to generate %d distractors ====', size)

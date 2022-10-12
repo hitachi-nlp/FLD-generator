@@ -102,19 +102,21 @@ def main():
 
         '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
         # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
-
         # '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
         # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
-
         # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
 
         # '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
         # '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
-
         # '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
         # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
-
         # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
+
+        # '20221011__dpth-S__bx-S__dist-mix__dist_size-S__size-S',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-S__size-S',
+        # '20221011__dpth-S__bx-S__dist-mix__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
     ]
 
     engine = SubprocessEngine()
