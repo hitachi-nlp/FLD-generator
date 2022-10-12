@@ -5,6 +5,7 @@ import logging
 from FLNL.formula import Formula
 
 from FLNL.exception import FormalLogicExceptionBase
+from FLNL.utils import run_with_timeout_retry, RetryAndTimeoutFailure
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,10 @@ def calc_formula_specificity(formula: Formula) -> float:
         since the former is constrained version of the latter as {a}={b}
     """
     return - float(len(formula.predicates) + len(formula.constants))
+
+
+class TranslationFailure(FormalLogicExceptionBase):
+    pass
 
 
 class TranslationNotFoundError(FormalLogicExceptionBase):
@@ -35,9 +40,27 @@ class Translator(ABC):
     def translation_names(self) -> List[str]:
         pass
 
+    def translate(self,
+                  formulas: List[Formula],
+                  raise_if_translation_not_found=True,
+                  max_retry: Optional[int] = 3,
+                  timeout: Optional[int] = 10) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                                                        Dict[str, int]]:
+        try:
+            return run_with_timeout_retry(
+                self._translate,
+                func_args=[formulas],
+                func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
+                retry_exception_class=TranslationFailure,
+                max_retry=max_retry,
+                timeout=timeout,
+                logger=logger,
+                log_title='_translate()',
+            )
+        except RetryAndTimeoutFailure as e:
+            raise TranslationFailure(f'Translation failed due to RetryAndTimeoutFailure: {str(e)}')
+
     @abstractmethod
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
-                                                                                               Dict[str, int]]:
+    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                                                                                                Dict[str, int]]:
         pass
-
-

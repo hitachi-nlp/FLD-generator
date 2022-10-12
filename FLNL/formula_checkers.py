@@ -50,30 +50,28 @@ def is_senseful(formula: Formula) -> bool:
 
 @profile
 def is_senseful_set(formulas: List[Formula]) -> bool:
+    # for formula in formulas:
+    #     if not is_senseful(formula):
+    #         print('not senseful:', formula)
     return all(is_senseful(formula) for formula in formulas)
 
 
 @profile
 def is_ok(formula: Formula) -> bool:
     return all([
-        # is_consistent(formula),  # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
+        is_senseful(formula),
         is_predicate_arity_consistent(formula),
-        is_senseful(formula)
+        # is_consistent(formula),  # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
     ])
 
 
+# HONOKA: SLOW, called many times
 @profile
 def is_ok_set(formulas: List[Formula]) -> bool:
-    # for formula in formulas:
-    #     if not is_predicate_arity_consistent(formula):
-    #         print('not is_predicate_arity_consistent(formula):', formula)
-    #     if _is_nonsense(formula):
-    #         print('is_nonsense(formula)', formula)
-
     return all([
-        # is_consistent_set(formulas),    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
+        is_senseful_set(formulas),   # HONOKA: passしない．
         is_predicate_arity_consistent_set(formulas),
-        is_senseful_set(formulas)
+        # is_consistent_set(formulas),    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
     ])
 
 
@@ -195,7 +193,6 @@ def _is_nonsense(formula: Formula) -> bool:
             # this block is like "A -> A", "A -> (A & B)" -> This is OK, for example, & 
             if ('T' in bool_in_conclusion and 'T' in bool_in_premise)\
                     or ('F' in bool_in_conclusion and 'F' in bool_in_premise):
-            
                 return True
     else:
         pass

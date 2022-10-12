@@ -42,7 +42,7 @@ class SentenceWiseTranslator(Translator):
         self.constant_translations = constant_translations
         self.do_translate_to_nl = do_translate_to_nl
 
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
                                                                                                Dict[str, int]]:
         translations = []
 

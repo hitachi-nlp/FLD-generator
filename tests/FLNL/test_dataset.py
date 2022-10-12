@@ -120,15 +120,14 @@ def load_translator(type_: str,
 
 
 def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
-    # distractor = build_distractor('unknown_interprands', 1, generator=generator)
-    # distractor = build_distractor('negated_hypothesis_tree', 1, generator=generator)
-    distractor = build_distractor('fallback.negated_hypothesis_tree.unknown_interprands',
-                                  generator=generator)
+    # distractor = build_distractor('unknown_interprands', generator=generator)
+    # distractor = build_distractor('negated_hypothesis_tree', generator=generator)
+    distractor = build_distractor('fallback.negated_hypothesis_tree.unknown_interprands', generator=generator)
     return distractor
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 1000) -> None:
+                     num_dataset: int = 100) -> None:
     with open('test_dataset.output.json', 'w') as f_out:
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
@@ -320,9 +319,12 @@ def test_PL_pred_arg():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              [3, 5],
-                              [3, 5],
-                              num_distractors=[3, 5],
+                              # [3, 5],
+                              # [3, 5],
+                              # num_distractors=[3, 5],
+                              [10],
+                              [10],
+                              num_distractors=[10],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

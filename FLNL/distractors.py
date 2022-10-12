@@ -1,5 +1,6 @@
 from typing import List
 from abc import abstractmethod, ABC
+from pprint import pprint
 import random
 import math
 
@@ -15,11 +16,13 @@ from .interpretation import (
 )
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
+    is_senseful,
     is_consistent_set as is_consistent_formula_set,
 )
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure
+from FLNL.utils import run_with_timeout_retry, RetryAndTimeoutFailure
 
 import kern_profiler
 
@@ -32,14 +35,35 @@ class DistractorGenerationFailure(FormalLogicExceptionBase):
 
 class FormalLogicDistractor(ABC):
 
+    def generate(self,
+                 proof_tree: ProofTree,
+                 size: int,
+                 max_retry: Optional[int] = 3,
+                 timeout: Optional[int] = 10) -> List[Formula]:
+        max_retry = max_retry or 99999
+        timeout = timeout or 99999
+        try:
+            return run_with_timeout_retry(
+                self._generate,
+                func_args=[proof_tree, size],
+                func_kwargs={},
+                retry_exception_class=DistractorGenerationFailure,
+                max_retry=max_retry,
+                timeout=timeout,
+                logger=logger,
+                log_title='_generate()',
+            )
+        except RetryAndTimeoutFailure as e:
+            raise DistractorGenerationFailure(f'Distractor generation failed due to RetryAndTimeoutFailure: {str(e)}')
+
     @abstractmethod
-    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+    def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         pass
 
 
 class UnkownPASDistractor(FormalLogicDistractor):
 
-    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+    def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
 
         used_zeroary_predicates = sorted({
@@ -104,7 +128,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         self.max_retry = max_retry
 
     @profile
-    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+    def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
@@ -134,8 +158,11 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
             used_predicates = list({pred.rep for pred in src_formula.predicates})
             used_constants = list({pred.rep for pred in src_formula.constants})
-            unused_predicates = shuffle(list(set(PREDICATES) - set(used_predicates)))
-            unused_constants = shuffle(list(set(CONSTANTS) - set(used_constants)))
+
+            # use subset of unused predicates and constant so that generate_mappings_from_predicates_and_constants() does not generate too large list
+            # * 3 comes from the intuition that a formula may contain 3 predicates or constans on average.
+            unused_predicates = shuffle(list(set(PREDICATES) - set(used_predicates)))[:size * 3]
+            unused_constants = shuffle(list(set(CONSTANTS) - set(used_constants)))[:size * 3]
 
             # It is possible that (used_predicates, used_constants) pair produces a new formula,
             # e.g., "{B}{b} -> {A}{a}" when src_formula is "{A}{a} -> {B}{b}"
@@ -158,9 +185,11 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     (unused_predicates, unused_constants)
                 ]
 
+            do_print = False
             is_found = False
             found_formula = None
             for tgt_predicates, tgt_constants in tgt_space:
+                # import pudb; pudb.set_trace()
                 for mapping in generate_mappings_from_predicates_and_constants(
                     [p.rep for p in src_formula.predicates],
                     [c.rep for c in src_formula.constants],
@@ -168,9 +197,20 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     tgt_constants,
                     shuffle=True
                 ):
+                    if do_print:
+                        print('\n\n!!!!!!!!!!!!!!!!!!!! loop !!!!!!!!!!!!!!!!!!!!!!!')
+                        print(mapping)
                     transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
 
                     if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
+                        if do_print:
+                            print('!! not is_ok_formula_set()')
+                            # print('    mapping:', mapping)
+                            print('    src_formula:', src_formula)
+                            print('    tgt_predicates:', tgt_predicates)
+                            print('    tgt_constants:', tgt_constants)
+                            print('    transformed_formula:', transformed_formula)
+                            print('    is_senseful:', is_senseful(transformed_formula))
                         continue
 
                     if not is_consistent_formula_set([transformed_formula] + distractor_formulas):
@@ -218,7 +258,8 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
         self.generator_max_retry = generator_max_retry
         self.max_retry = max_retry
 
-    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+    @profile
+    def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
@@ -328,7 +369,7 @@ class MixtureDistractor(FormalLogicDistractor):
         super().__init__()
         self._distractors = distractors
 
-    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+    def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         logger.info('==== (MixtureDistractor) Try to generate %d distractors ====', size)
 
         if size == 0:
@@ -355,7 +396,7 @@ class FallBackDistractor(FormalLogicDistractor):
         super().__init__()
         self._distractors = distractors
 
-    def generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
+    def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
         logger.info('==== (FallBackDistractor) Try to generate %d distractors ====', size)
 
         if size == 0:

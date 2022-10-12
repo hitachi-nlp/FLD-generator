@@ -235,7 +235,6 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
         for const_mappings in get_const_mappings():
             mappings = copy.copy(pred_mappings)
             mappings.update(const_mappings)
-
             yield mappings
 
 
@@ -274,7 +273,15 @@ def _make_permutations(objs: List[Any],
                        src_idx=0,
                        constraints: Optional[Dict[int, Any]] = None,
                        shuffle=False,
-                       allow_many_to_one=True) -> Iterable[List[Any]]:
+                       allow_many_to_one=True,
+                       indent=0) -> Iterable[List[Any]]:
+    do_print = False
+    if shuffle and do_print:
+        print('\n')
+        print(' ' * indent + '_make_permutations()')
+        print(' ' * indent + '  shuffle:', shuffle)
+        print(' ' * indent + '  objs:', objs)
+        print(' ' * indent + '  length:', length)
     if length < 1:
         return
     if shuffle:
@@ -282,9 +289,13 @@ def _make_permutations(objs: List[Any],
 
     if length == 1:
         if constraints is not None and src_idx in constraints:
+            if shuffle and do_print:
+                print(' ' * indent + '  yield0:', [constraints[src_idx]])
             yield [constraints[src_idx]]
         else:
             for obj in objs:
+                if shuffle and do_print:
+                    print(' ' * indent + '  yield1:', [obj])
                 yield [obj]
     else:
         if constraints is not None and src_idx in constraints:
@@ -306,15 +317,18 @@ def _make_permutations(objs: List[Any],
                                                  src_idx=src_idx + 1,
                                                  constraints=constraints,
                                                  shuffle=shuffle,
-                                                 allow_many_to_one=allow_many_to_one)
+                                                 allow_many_to_one=allow_many_to_one,
+                                                 indent=indent + 8)
             permutators.append((head, tail_permutator))
 
-        if shuffle:
+        if shuffle and do_print:
             is_done = [False] * len(permutators)
             i_head = 0
             while True:
                 i_head = i_head % len(permutators)
                 head, tail_permutator = permutators[i_head]
+                if shuffle and do_print:
+                    print(' ' * indent + f'  {i_head}: {str(head)}')
                 if all(is_done):
                     break
                 if is_done[i_head]:
@@ -322,6 +336,8 @@ def _make_permutations(objs: List[Any],
                     continue
                 try:
                     tail = next(tail_permutator)
+                    if shuffle and do_print:
+                        print(' ' * indent + '  yield2:', [head] + tail)
                     yield [head] + tail
                 except StopIteration:
                     is_done[i_head] = True
@@ -329,11 +345,9 @@ def _make_permutations(objs: List[Any],
         else:
             for head, tail_permutator in permutators:
                 for tail in tail_permutator:
+                    if shuffle and do_print:
+                        print(' ' * indent + '  yield3:', [head] + tail)
                     yield [head] + tail
-
-
-            
-
 
 
 # -- block shuffle version --

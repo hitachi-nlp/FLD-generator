@@ -224,7 +224,7 @@ class ClauseTypedTranslator(Translator):
         return '____'.join([sentence_key, nl])
 
     @profile
-    def translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]], Dict[str, int]]:
+    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]], Dict[str, int]]:
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:

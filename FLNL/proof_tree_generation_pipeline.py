@@ -8,9 +8,17 @@ from FLNL.proof_tree_generators import ProofTreeGenerator
 from FLNL.distractors import FormalLogicDistractor
 from FLNL.translators.base import Translator
 from FLNL.utils import flatten_dict
+from FLNL.exception import FormalLogicExceptionBase
+from FLNL.proof_tree_generators import ProofTreeGenerationFailure
+from FLNL.distractors import DistractorGenerationFailure
+from FLNL.translators import TranslationFailure
 import kern_profiler
 
 logger = logging.getLogger(__name__)
+
+
+class ProofTreeGenerationPipelineFailure(FormalLogicExceptionBase):
+    pass
 
 
 class ProofTreeGenerationPipeline:
@@ -41,7 +49,10 @@ class ProofTreeGenerationPipeline:
 
         while True:
             logger.info('========================== generating proof tree... ============================')
-            proof_tree = self.generator.generate_tree(depth, branch_extension_steps)
+            try:
+                proof_tree = self.generator.generate_tree(depth, branch_extension_steps)
+            except ProofTreeGenerationFailure as e:
+                raise ProofTreeGenerationPipelineFailure(str(e))
             logger.info('========================== generating proof tree done! ============================')
 
             if proof_tree is None:
@@ -50,7 +61,10 @@ class ProofTreeGenerationPipeline:
 
             logger.info('========================== generating distractor... ============================')
             if self.distractor is not None:
-                distractor_formulas = self.distractor.generate(proof_tree, num_distractors)
+                try:
+                    distractor_formulas = self.distractor.generate(proof_tree, num_distractors)
+                except DistractorGenerationFailure as e:
+                    raise ProofTreeGenerationPipelineFailure(str(e))
             else:
                 distractor_formulas = []
             logger.info('========================== generating distractor done! ============================')
@@ -63,8 +77,13 @@ class ProofTreeGenerationPipeline:
                 logger.info('========================== translating... ============================')
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + distractor_formulas
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
-                named_translations, translator_stats = self.translator.translate(all_formulas,
-                                                                                 raise_if_translation_not_found=raise_if_translation_not_found)
+
+                try:
+                    named_translations, translator_stats = self.translator.translate(all_formulas,
+                                                                                     raise_if_translation_not_found=raise_if_translation_not_found)
+                except TranslationFailure as e:
+                    raise ProofTreeGenerationPipelineFailure(str(e))
+
                 for i_formula, (formula, (translation_name, translation)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
                     if i_formula in assump_formula_indices:

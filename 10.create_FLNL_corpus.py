@@ -59,7 +59,8 @@ def main():
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221011.beat_ruletaker')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221011.beat_ruletaker')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -99,7 +100,7 @@ def main():
 
 
 
-        # '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
+        '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
         # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
 
         # '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
@@ -116,11 +117,11 @@ def main():
         # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
     ]
 
-    # engine = SubprocessEngine()
-    engine = QsubEngine('ABCI', 'rt_C.small')
+    engine = SubprocessEngine()
+    # engine = QsubEngine('ABCI', 'rt_C.small')
 
-    # num_jobs = 1
-    num_jobs = 180
+    num_jobs = 1
+    # num_jobs = 180
 
     # num_workers_per_job = 1
     num_workers_per_job = 5

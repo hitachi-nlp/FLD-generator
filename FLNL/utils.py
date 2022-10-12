@@ -1,76 +1,17 @@
+from typing import Optional, Callable
 import logging
-from copy import deepcopy
-from collections import defaultdict
-from typing import Dict, Any, Tuple, List, Iterable
+from typing import Dict, Any, List, Iterable
 import random
+import logging
 
 from nltk.corpus import cmudict
+from .exception import FormalLogicExceptionBase
+
+utils_logger = logging.getLogger(__name__)
 
 
-class DelayedLogger:
-
-    _level_strs = {
-        logging.DEBUG: 'DEBUG',
-        logging.INFO: 'INFO',
-        logging.WARNING: 'WARNING',
-        logging.FATAL: 'FATAL',
-    }
-
-    def __init__(self,
-                 logger,
-                 delayed=True):
-        self._logger = logger
-        self._delayed = delayed
-        self._traces = defaultdict(list)
-
-    def debug(self, msg: str) -> None:
-        self._log_or_cache(msg, logging.DEBUG)
-
-    def flush_debug(self) -> None:
-        self._log_and_flush(logging.DEBUG)
-
-    def info(self, msg: str) -> None:
-        self._log_or_cache(msg, logging.INFO)
-
-    def flush_info(self) -> None:
-        self._log_and_flush(logging.INFO)
-
-    def warning(self, msg: str) -> None:
-        self._log_or_cache(msg, logging.WARNING)
-
-    def flush_warning(self) -> None:
-        self._log_and_flush(logging.WARNING)
-
-    def fatal(self, msg: str) -> None:
-        self._log_or_cache(msg, logging.FATAL)
-
-    def flush_fatal(self) -> None:
-        self._log_and_flush(logging.FATAL)
-
-    def _log_or_cache(self,
-                      msg: str,
-                      level: int) -> None:
-        if self._delayed:
-            self._traces[level].append(msg)
-        else:
-            self._get_logging_func(level)
-
-    def _log_and_flush(self,
-                       level: int) -> None:
-        for msg in self._traces[level]:
-            self._get_logging_func(level)(msg)
-        self._traces[level] = []
-
-    def _get_logging_func(self, level: int):
-        if level == logging.DEBUG:
-            logging_fn = self._logger.debug
-        elif level == logging.info:
-            logging_fn = self._logger.info
-        elif level == logging.WARNING:
-            logging_fn = self._logger.warning
-        elif level == logging.FATAL:
-            logging_fn = self._logger.fatal
-        return logging_fn
+class RetryAndTimeoutFailure(FormalLogicExceptionBase):
+    pass
 
 
 def starts_with_vowel_sound(word, pronunciations=cmudict.dict()):
@@ -109,7 +50,7 @@ def weighted_shuffle(weights: List[float]) -> Iterable[int]:
             not_done_weights.append(weight)
             shifted_idx_to_idx[shifted_idx] = idx
             shifted_idx += 1
-            
+
         if sum(not_done_weights) == 0.0:
             return
 
@@ -154,3 +95,43 @@ def nested_merge(this: Any, that: Any) -> Any:
         return this + that
     else:
         raise ValueError(f'this and that are not containers. Thus, we can not append that to this.\nThis: {str(this)}\nThat: {str(that)}')
+
+
+def run_with_timeout_retry(
+    func: Callable,
+    func_args: List[Any] = None,
+    func_kwargs: Dict[Any, Any] = None,
+    retry_exception_class: Optional[Exception] = None,
+    max_retry: Optional[int] = None,
+    timeout: Optional[int] = None,
+    logger = None,
+    log_title: Optional[str] = None,
+) -> Any:
+
+    func_args = func_args or []
+    func_kwargs = func_kwargs or {}
+    max_retry = max_retry or 99999
+    timeout = timeout or 99999
+    logger = logger or utils_logger
+    log_title = log_title or str(func)
+
+    logger.info('=================== run_with_timeout_retry [%s]', log_title)
+    for i_trial in range(0, max_retry):
+        logger.info('---- trial=%d ----', i_trial)
+        try:
+            # with timeout_context(timeout, exception=TimeoutError):
+            #     result = func(*func_args, **func_kwargs)
+            import timeout_decorator
+            result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
+
+            # import timeout as timeout_mod
+            # timeout_mod.timeout(duration=timeout)(func)(*func_args, **func_kwargs)
+
+            logger.info('-- succeeded!')
+            return result
+        except TimeoutError:
+            logger.warning('-- the LAST trial failed with TimeoutError(timeout=%d)', timeout)
+        except retry_exception_class as e:
+            logger.warning('-- failed. The message of the LAST trial is the followings:')
+            logger.warning('%s', str(e))
+    raise RetryAndTimeoutFailure(f'-- {log_title} failed with max_retry={max_retry}.')

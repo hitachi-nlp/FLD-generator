@@ -6,8 +6,6 @@ from typing import List, Optional, Any, Iterable, Tuple, Dict, Union, Callable
 from pprint import pformat
 import logging
 
-from timeout_timer import timeout as timeout_context
-
 from pprint import pprint
 from .formula import (
     PREDICATES,
@@ -34,7 +32,7 @@ from .interpretation import (
 # from .utils import DelayedLogger
 from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
-from .utils import weighted_shuffle
+from .utils import weighted_shuffle, run_with_timeout_retry, RetryAndTimeoutFailure
 
 from .formula import (
     IMPLICATION,
@@ -185,27 +183,38 @@ class ProofTreeGenerator:
                       branch_extension_steps: int,
                       max_retry=100,
                       timeout=5) -> Optional[ProofTree]:
-
-        return self._run(
-            'generate_tree()',
-            max_retry,
-            timeout,
-            self._generate_tree,
-            depth,
-            branch_extension_steps,
-        )
+        try:
+            return run_with_timeout_retry(
+                self._generate_tree,
+                func_args=[depth, branch_extension_steps],
+                func_kwargs={},
+                retry_exception_class=ProofTreeGenerationFailure,
+                max_retry=max_retry,
+                timeout=timeout,
+                logger=logger,
+                log_title='generate_tree()',
+            )
+        except RetryAndTimeoutFailure as e:
+            raise ProofTreeGenerationFailure(f'Proof tree generation failed due to RetryAndTimeoutFailure: {str(e)}')
 
     def generate_stem(self,
                       depth: int,
                       max_retry=100,
                       timeout=5) -> Optional[ProofTree]:
-        return self._run(
-            'generate_stem()',
-            max_retry,
-            timeout,
-            self._generate_stem,
-            depth,
-        )
+        try:
+            return run_with_timeout_retry(
+                self._generate_stem,
+                func_args=[depth],
+                func_kwargs={},
+                retry_exception_class=ProofTreeGenerationFailure,
+                max_retry=max_retry,
+                timeout=timeout,
+                logger=logger,
+                log_title='generate_stem()',
+            )
+        except RetryAndTimeoutFailure as e:
+            raise ProofTreeGenerationFailure(f'Proof tree generation failed due to RetryAndTimeoutFailure: {str(e)}')
+
 
     def extend_braches(self,
                        generate_initial_tree_fn: Callable[[], ProofTree],
@@ -226,40 +235,19 @@ class ProofTreeGenerator:
         if we implement proof_tree.copy().
         However, the implementation of proof_tree.copy() cost a little and for now, we decided to bypass that.
         """
-        return self._run(
-            'extend_braches()',
-            max_retry,
-            timeout,
-            self._extend_braches,
-            generate_initial_tree_fn,
-            branch_extension_steps,
-            depth_limit=depth_limit,
-        )
-
-    def _run(self,
-             log_name: str,
-             max_retry: Optional[int],
-             timeout: Optional[int],
-             func: Callable,
-             *args,
-             **kwargs) -> Any:
-
-        max_retry = max_retry or 9999
-        timeout = timeout or 9999
-
-        for i_trial in range(0, max_retry):
-            logger.info('---- %s trial=%d ----', log_name, i_trial)
-            try:
-                with timeout_context(timeout, exception=TimeoutError):
-                    result = func(*args, **kwargs)
-                logger.info('-- %s succeeded!', log_name)
-                return result
-            except ProofTreeGenerationFailure as e:
-                logger.warning('-- %s failed. The message of the LAST trial is the followings:', log_name)
-                logger.warning('%s', str(e))
-            except TimeoutError:
-                logger.warning('-- %s the LAST trial failed with TimeoutError(timeout=%d)', log_name, timeout)
-        raise ProofTreeGenerationFailure(f'-- {log_name} failed with max_retry={max_retry}.')
+        try:
+            return run_with_timeout_retry(
+                self._extend_braches,
+                func_args=[generate_initial_tree_fn, branch_extension_steps],
+                func_kwargs={'depth_limit': depth_limit},
+                retry_exception_class=ProofTreeGenerationFailure,
+                max_retry=max_retry,
+                timeout=timeout,
+                logger=logger,
+                log_title='extend_braches()',
+            )
+        except RetryAndTimeoutFailure as e:
+            raise ProofTreeGenerationFailure(f'Proof tree generation failed due to RetryAndTimeoutFailure: {str(e)}')
 
     def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)
