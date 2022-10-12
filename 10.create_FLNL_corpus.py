@@ -60,7 +60,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221011.beat_ruletaker')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221012.beat_ruletaker')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -98,32 +99,30 @@ def main():
         # # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
         # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
 
-
-
         '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
-        # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
-        # '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
+        '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
+        '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
 
-        # '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
-        # '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
-        # '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
+        '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
+        '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
+        '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
 
-        # '20221011__dpth-S__bx-S__dist-mix__dist_size-S__size-S',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-S__size-S',
-        # '20221011__dpth-S__bx-S__dist-mix__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
+        '20221011__dpth-S__bx-S__dist-mix__dist_size-S__size-S',
+        '20221011__dpth-M__bx-M__dist-mix__dist_size-S__size-S',
+        '20221011__dpth-S__bx-S__dist-mix__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
+        '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
     ]
 
-    engine = SubprocessEngine()
-    # engine = QsubEngine('ABCI', 'rt_C.small')
+    # engine = SubprocessEngine()
+    engine = QsubEngine('ABCI', 'rt_C.small')
 
-    num_jobs = 1
-    # num_jobs = 180
+    # num_jobs = 1
+    num_jobs = 180
 
     # num_workers_per_job = 1
     num_workers_per_job = 5
@@ -256,7 +255,7 @@ def main():
             is_done = False
             job_output_jsonls = sorted([
                 path for path in split_output_dir.glob(f'**/*{split}.jsonl')
-                if path.find('job-') >= 0
+                if str(path).find('job-') >= 0
             ])
             with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
                 for jsonl in job_output_jsonls:

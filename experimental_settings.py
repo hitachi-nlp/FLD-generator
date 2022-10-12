@@ -1347,6 +1347,7 @@ _DATASET_SETTINGS = {
             # 'test': 10,
 
             'train': 300000,
+            'train': 50000,
             'valid': 1000,
             'test': 1000,
         }
