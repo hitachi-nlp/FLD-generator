@@ -127,7 +127,7 @@ def main():
     # num_workers_per_job = 1
     num_workers_per_job = 5
 
-    timeout_per_job = 600  # for the case some jobs hangs
+    timeout_per_job = 1800  # for the case some jobs hangs
     dry_run = False
 
     # ----------------- fixed ------------------
