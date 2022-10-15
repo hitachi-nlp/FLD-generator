@@ -92,7 +92,11 @@ def nested_merge(this: Any, that: Any) -> Any:
                 updated[that_key] = that_val
         return updated
     elif isinstance(this, list):
-        return this + that
+        unique_elems = []
+        for elem in this + that:
+            if elem not in unique_elems:
+                unique_elems.append(elem)
+        return unique_elems
     else:
         raise ValueError(f'this and that are not containers. Thus, we can not append that to this.\nThis: {str(this)}\nThat: {str(that)}')
 
