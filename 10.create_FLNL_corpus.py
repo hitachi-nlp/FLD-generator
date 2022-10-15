@@ -117,8 +117,8 @@ def main():
         # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
         # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
 
-        # '20221015__dpth-S__bx-S__dist-mix__dist_size-M__size-S.reuse_object_nouns',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S.reuse_object_nouns',
+        '20221015__dpth-S__bx-S__dist-mix__dist_size-M__size-S.reuse_object_nouns',
+        '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S.reuse_object_nouns',
     ]
 
     # engine = SubprocessEngine()
