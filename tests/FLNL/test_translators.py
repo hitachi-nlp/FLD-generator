@@ -13,7 +13,8 @@ def test_clause_typed_translator():
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json'
         ],
-        build_wordnet_wordbank('eng')
+        build_wordnet_wordbank('eng'),
+        reuse_object_nouns=True,
     )
 
     def show_translations(formulas: List[Formula]) -> None:
@@ -21,6 +22,13 @@ def test_clause_typed_translator():
         translations, _ = translator.translate(formulas)
         for formula, (_, translation) in zip(formulas, translations):
             print(formula, '  ->  ', translation)
+
+    for i in range(0, 5):
+        show_translations([
+            Formula('{A}'),
+            Formula('{B}'),
+            Formula('{C}'),
+        ])
 
     for i in range(0, 5):
         show_translations([
@@ -34,6 +42,17 @@ def test_clause_typed_translator():
             Formula('{A}{a} -> {B}{b}'),
             Formula('{B}{b} -> {C}{c}'),
             Formula('{C}{c} -> {D}{d}'),
+        ])
+
+    for i in range(0, 5):
+        show_translations([
+            Formula('{A}'),
+            Formula('{B}'),
+            Formula('{C}'),
+            Formula('{D}{d}'),
+            Formula('{E}{e}'),
+            Formula('{F}{f}'),
+
         ])
 
 

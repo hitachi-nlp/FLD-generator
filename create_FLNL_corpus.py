@@ -41,6 +41,7 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
 
 def load_dataset(argument_config: List[str],
                  translation_config: List[str],
+                 reuse_object_nouns: bool,
                  limit_vocab_size_per_type: Optional[int],
                  complication: float,
                  quantification: float,
@@ -62,6 +63,7 @@ def load_dataset(argument_config: List[str],
     _distractor = build_distractor(distractor, generator=generator)
     translator = build_translator(translation_config,
                                   build_wordnet_wordbank('eng'),
+                                  reuse_object_nouns=reuse_object_nouns,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type)
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=_distractor, translator=translator)
@@ -118,6 +120,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
+@click.option('--reuse-object-nouns', is_flag=True, default=False)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--depths', type=str, default=json.dumps([5]))
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
@@ -134,6 +137,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 def main(output_path,
          argument_config,
          translation_config,
+         reuse_object_nouns,
          limit_vocab_size_per_type,
          size,
          depths,
@@ -181,6 +185,7 @@ def main(output_path,
                         _batch_size_per_worker,
                         argument_config,
                         translation_config,
+                        reuse_object_nouns,
                         limit_vocab_size_per_type,
                         complication,
                         quantification,

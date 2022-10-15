@@ -101,6 +101,7 @@ def load_translator(type_: str,
                     'eng',
                     vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None
                 ),
+                reuse_object_nouns=True,
                 limit_vocab_size_per_type=limit_vocab_size_per_type,
                 do_translate_to_nl=do_translate_to_nl,
             )

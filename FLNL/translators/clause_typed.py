@@ -31,6 +31,7 @@ class ClauseTypedTranslator(Translator):
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
+                 reuse_object_nouns=False,
                  limit_vocab_size_per_type: Optional[int] = None,
                  do_translate_to_nl=True,
                  ):
@@ -64,11 +65,16 @@ class ClauseTypedTranslator(Translator):
 
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
+        self._reuse_object_nouns = reuse_object_nouns
+
         self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
         if limit_vocab_size_per_type is not None:
             self._adj_and_verbs = self._sample(self._adj_and_verbs, limit_vocab_size_per_type)
             self._entity_nouns = self._sample(self._entity_nouns, limit_vocab_size_per_type)
             self._event_nouns = self._sample(self._event_nouns, limit_vocab_size_per_type)
+        self._adj_and_verb_set = set(self._adj_and_verbs)
+        self._entity_noun_set = set(self._entity_nouns)
+        self._event_noun_set = set(self._event_nouns)
         self._wb = word_bank
 
         self._do_translate_to_nl = do_translate_to_nl
@@ -426,12 +432,33 @@ class ClauseTypedTranslator(Translator):
                                  for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
+        adj_and_verbs = self._sample(self._adj_and_verbs, len(unary_predicates) * 2)
+        if self._reuse_object_nouns:
+            obj_nouns = [self._parse_word_with_obj(word)[1] for word in adj_and_verbs
+                         if self._parse_word_with_obj(word)[1] is not None]
+        else:
+            obj_nouns = []
+
+        event_noun_size = len(zeroary_predicates) * 2
+        event_nouns = [noun for noun in obj_nouns if noun in self._event_noun_set][: int(event_noun_size / 2)]
+        if len(event_nouns) > 0:
+            logger.info('the following object nouns may be reused as as event nouns: %s', str(event_nouns))
+        event_nouns += self._sample(self._event_nouns, max(event_noun_size - len(event_nouns), 0))
+        event_nouns = list(set(event_nouns))
+
+        entity_noun_size = len(constants) * 2
+        entity_nouns = [noun for noun in obj_nouns if noun in self._entity_noun_set][: int(entity_noun_size / 2)]
+        if len(entity_nouns) > 0:
+            logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
+        entity_nouns += self._sample(self._entity_nouns, max(entity_noun_size - len(entity_nouns), 0))
+        entity_nouns = list(set(entity_nouns))
+
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
             generate_mappings_from_predicates_and_constants(
                 zeroary_predicates,
                 [],
-                self._sample(self._event_nouns, len(zeroary_predicates) * 3),
+                event_nouns,
                 [],
                 shuffle=True,
                 allow_many_to_one=False,
@@ -443,8 +470,8 @@ class ClauseTypedTranslator(Translator):
             generate_mappings_from_predicates_and_constants(
                 unary_predicates,
                 constants,
-                self._sample(self._adj_and_verbs, len(unary_predicates) * 3),
-                self._sample(self._entity_nouns, len(constants) * 3),
+                adj_and_verbs,
+                entity_nouns,
                 shuffle=True,
                 allow_many_to_one=False,
             )

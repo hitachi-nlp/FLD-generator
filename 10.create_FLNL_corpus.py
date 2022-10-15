@@ -99,23 +99,26 @@ def main():
         # # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
         # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
 
-        '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
-        '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
-        '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
+        # '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
+        # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
+        # '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
 
-        '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
-        '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
-        '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
+        # '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
+        # '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
+        # '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
 
-        '20221011__dpth-S__bx-S__dist-mix__dist_size-S__size-S',
-        '20221011__dpth-M__bx-M__dist-mix__dist_size-S__size-S',
-        '20221011__dpth-S__bx-S__dist-mix__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
-        '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
+        # '20221011__dpth-S__bx-S__dist-mix__dist_size-S__size-S',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-S__size-S',
+        # '20221011__dpth-S__bx-S__dist-mix__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
+
+        # '20221015__dpth-S__bx-S__dist-mix__dist_size-M__size-S.reuse_object_nouns',
+        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S.reuse_object_nouns',
     ]
 
     # engine = SubprocessEngine()
@@ -128,6 +131,7 @@ def main():
     num_workers_per_job = 5
 
     timeout_per_job = 1800  # for the case some jobs hangs
+    delete_logs_when_done = True
     dry_run = False
 
     # ----------------- fixed ------------------
@@ -210,6 +214,7 @@ def main():
 
                     _make_multiple_value_option('--ac', job_settings['argument_configs']),
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
+                    '--reuse-object-nouns' if job_settings.get("reuse_object_nouns", False) else '',
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
 
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
@@ -233,7 +238,7 @@ def main():
                     stdout = job_output_dir / 'stdout.txt'
                     stderr = job_output_dir / 'stderr.txt'
 
-                if i_job >= 5:
+                if delete_logs_when_done and i_job >= 5:
                     # remove large log files.
                     command += f'; rm {str(job_log_path)}; rm {str(job_output_dir)}/*.stats.json'
 

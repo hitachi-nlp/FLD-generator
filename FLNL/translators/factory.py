@@ -10,6 +10,7 @@ from .clause_typed import ClauseTypedTranslator
 
 def build(config_paths: List[str],
           word_bank: WordBank,
+          reuse_object_nouns=False,
           limit_vocab_size_per_type: Optional[int] = None,
           do_translate_to_nl=True):
 
@@ -21,6 +22,7 @@ def build(config_paths: List[str],
     translator = ClauseTypedTranslator(
         merged_config_json,
         word_bank,
+        reuse_object_nouns=reuse_object_nouns,
         limit_vocab_size_per_type=limit_vocab_size_per_type,
         do_translate_to_nl=do_translate_to_nl,
     )
