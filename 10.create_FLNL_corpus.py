@@ -233,6 +233,10 @@ def main():
                     stdout = job_output_dir / 'stdout.txt'
                     stderr = job_output_dir / 'stderr.txt'
 
+                if i_job >= 5:
+                    # remove large log files.
+                    command += f'; rm {str(job_log_path)}; rm {str(job_output_dir)}/*.stats.json'
+
                 jobs.append(
                     delayed(engine.run)(
                         command,
