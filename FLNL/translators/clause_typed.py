@@ -67,12 +67,12 @@ class ClauseTypedTranslator(Translator):
 
         self._reuse_object_nouns = reuse_object_nouns
 
-        self._adj_and_verbs, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
+        self._adj_verb_nouns, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
         if limit_vocab_size_per_type is not None:
-            self._adj_and_verbs = self._sample(self._adj_and_verbs, limit_vocab_size_per_type)
+            self._adj_verb_nouns = self._sample(self._adj_verb_nouns, limit_vocab_size_per_type)
             self._entity_nouns = self._sample(self._entity_nouns, limit_vocab_size_per_type)
             self._event_nouns = self._sample(self._event_nouns, limit_vocab_size_per_type)
-        self._adj_and_verb_set = set(self._adj_and_verbs)
+        self._adj_and_verb_set = set(self._adj_verb_nouns)
         self._entity_noun_set = set(self._entity_nouns)
         self._event_noun_set = set(self._event_nouns)
         self._wb = word_bank
@@ -183,10 +183,11 @@ class ClauseTypedTranslator(Translator):
 
         # balance between types.
         words_per_type = 5000
-        adj_and_verbs_list = self._sample(adjs, words_per_type)\
+        adj_verb_nouns_list = self._sample(adjs, words_per_type)\
             + self._sample(intransitive_verbs, words_per_type)\
-            + self._sample(transitive_verb_PASs, words_per_type)
-        adj_and_verbs = sorted({word for word in adj_and_verbs_list})
+            + self._sample(transitive_verb_PASs, words_per_type)\
+            + self._sample(nouns, words_per_type)
+        adj_verb_nouns = sorted({word for word in adj_verb_nouns_list})
 
         entity_nouns = sorted({
             word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
@@ -200,7 +201,7 @@ class ClauseTypedTranslator(Translator):
 
         logger.info('loading words from WordBank done!')
 
-        return adj_and_verbs, entity_nouns, event_nouns
+        return adj_verb_nouns, entity_nouns, event_nouns
 
     @profile
     def _load_words_by_pos_attrs(self,
@@ -432,9 +433,9 @@ class ClauseTypedTranslator(Translator):
                                  for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
-        adj_and_verbs = self._sample(self._adj_and_verbs, len(unary_predicates) * 2)
+        adj_verb_nouns = self._sample(self._adj_verb_nouns, len(unary_predicates) * 3)
         if self._reuse_object_nouns:
-            obj_nouns = [self._parse_word_with_obj(word)[1] for word in adj_and_verbs
+            obj_nouns = [self._parse_word_with_obj(word)[1] for word in adj_verb_nouns
                          if self._parse_word_with_obj(word)[1] is not None]
         else:
             obj_nouns = []
@@ -470,7 +471,7 @@ class ClauseTypedTranslator(Translator):
             generate_mappings_from_predicates_and_constants(
                 unary_predicates,
                 constants,
-                adj_and_verbs,
+                adj_verb_nouns,
                 entity_nouns,
                 shuffle=True,
                 allow_many_to_one=False,

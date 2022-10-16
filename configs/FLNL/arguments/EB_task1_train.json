@@ -1,0 +1,9 @@
+[
+  {
+      "id": "__EB_task1",
+      "premises": [
+          "{A}{a} ⊢ {B}{b}"
+      ],
+      "conclusion": "{A}{a} -> {B}{b}"
+  }
+]

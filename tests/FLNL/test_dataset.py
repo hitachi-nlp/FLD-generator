@@ -95,8 +95,11 @@ def load_translator(type_: str,
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
             return build_translator(
-                ['./configs/FLNL/translations/clause_typed.thing.json',
-                 './configs/FLNL/translations/clause_typed.thing.sentence_negation.json'],
+                [
+                    './configs/FLNL/translations/clause_typed.thing.json',
+                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+                    './configs/FLNL/translations/clause_typed.EB_task1_train.json',
+                ],
                 build_wordnet_wordbank(
                     'eng',
                     vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None

@@ -1,0 +1,2851 @@
+{
+
+  "sentence": {
+
+    "#F#": [
+      "this is contradiction"
+    ],
+
+    "{A}": [
+      "<<clause::verb::{A}>>"
+    ],
+    "¬{A}": [
+      "<<clause::verb::¬{A}>>"
+    ],
+
+
+    "({A} & {B})": [
+      "<<clause::verb::({A} & {B})>>"
+    ],
+    "(¬{A} & {B})": [
+      "<<clause::verb::(¬{A} & {B})>>"
+    ],
+    "({A} & ¬{B})": [
+      "<<clause::verb::({A} & ¬{B})>>"
+    ],
+    "(¬{A} & ¬{B})": [
+      "<<clause::verb::(¬{A} & ¬{B})>>"
+    ],
+
+
+    "¬({A} & {B})": [
+      "<<clause::verb::¬({A} & {B})>>"
+    ],
+    "¬(¬{A} & {B})": [
+      "<<clause::verb::¬(¬{A} & {B})>>"
+    ],
+    "¬({A} & ¬{B})": [
+      "<<clause::verb::¬({A} & ¬{B})>>"
+    ],
+    "¬(¬{A} & ¬{B})": [
+      "<<clause::verb::¬(¬{A} & ¬{B})>>"
+    ],
+
+
+    "({A} v {B})": [
+      "<<clause::verb::({A} v {B})>>"
+    ],
+    "(¬{A} v {B})": [
+      "<<clause::verb::(¬{A} v {B})>>"
+    ],
+    "({A} v ¬{B})": [
+      "<<clause::verb::({A} v ¬{B})>>"
+    ],
+    "(¬{A} v ¬{B})": [
+      "<<clause::verb::(¬{A} v ¬{B})>>"
+    ],
+
+
+    "¬({A} v {B})": [
+      "<<clause::verb::¬({A} v {B})>>"
+    ],
+    "¬(¬{A} v {B})": [
+      "<<clause::verb::¬(¬{A} v {B})>>"
+    ],
+    "¬({A} v ¬{B})": [
+      "<<clause::verb::¬({A} v ¬{B})>>"
+    ],
+    "¬(¬{A} v ¬{B})": [
+      "<<clause::verb::¬(¬{A} v ¬{B})>>"
+    ],
+
+
+    "{A} -> {B}": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::{B}>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::{B}.fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::{B}.subj>>"
+    ],
+    "¬{A} -> {B}": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::{B}>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::{B}.subj>>",
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::{B}.fact>>"
+    ],
+    "{A} -> ¬{B}": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬{B}>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::¬{B}.fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::¬{B}.fact>>"
+    ],
+    "¬{A} -> ¬{B}": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬{B}>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::¬{B}.fact>>"
+    ],
+
+
+    "({A} & {B}) -> {C}": [
+      "if <<clause::verb::({A} & {B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::({A} & {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::({A} & {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>",
+      "<<clause::noun::({A} & {B}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::({A} & {B}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "(¬{A} & {B}) -> {C}": [
+      "if <<clause::verb::(¬{A} & {B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::(¬{A} & {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::(¬{A} & {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "({A} & ¬{B}) -> {C}": [
+      "if <<clause::verb::({A} & ¬{B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::({A} & ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::({A} & ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "({A} & {B}) -> ¬{C}": [
+      "if <<clause::verb::({A} & {B})>>, then <<clause::verb::¬{C}>>",
+
+      "<<clause::noun::({A} & {B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>",
+      "<<clause::noun::({A} & {B}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+    "(¬{A} & ¬{B}) -> {C}": [
+      "if <<clause::verb::(¬{A} & ¬{B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::(¬{A} & ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::(¬{A} & ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "(¬{A} & {B}) -> ¬{C}": [
+      "if <<clause::verb::(¬{A} & {B})>>, then <<clause::verb::¬{C}>>",
+      "<<clause::noun::(¬{A} & {B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+    "({A} & ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::({A} & ¬{B})>>, then <<clause::verb::¬{C}>>",
+      "<<clause::noun::({A} & ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+    "(¬{A} & ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::(¬{A} & ¬{B})>>, then <<clause::verb::¬{C}>>",
+      "<<clause::noun::(¬{A} & ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+
+
+    "{A} -> ({B} & {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::({B} & {C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).fact>>",
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).subj>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).fact>>",
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).fact>>"
+    ],
+    "¬{A} -> ({B} & {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::({B} & {C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).fact>>",
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).subj>>"
+    ],
+    "{A} -> (¬{B} & {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::(¬{B} & {C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & {C}).fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & {C}).fact>>"
+    ],
+    "{A} -> ({B} & ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::({B} & ¬{C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & ¬{C}).fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::({B} & ¬{C}).fact>>"
+    ],
+    "¬{A} -> (¬{B} & {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::(¬{B} & {C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & {C}).fact>>"
+    ],
+    "¬{A} -> ({B} & ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::({B} & ¬{C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} & ¬{C}).fact>>"
+    ],
+    "{A} -> (¬{B} & ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::(¬{B} & ¬{C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & ¬{C}).fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & ¬{C}).fact>>"
+    ],
+    "¬{A} -> (¬{B} & ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::(¬{B} & ¬{C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & ¬{C}).fact>>"
+    ],
+
+
+    "¬({A} & {B}) -> {C}": [
+      "if <<clause::verb::¬({A} & {B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬(¬{A} & {B}) -> {C}": [
+      "if <<clause::verb::¬(¬{A} & {B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬({A} & ¬{B}) -> {C}": [
+      "if <<clause::verb::¬({A} & ¬{B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬({A} & {B}) -> ¬{C}": [
+      "if <<clause::verb::¬({A} & {B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    "¬(¬{A} & ¬{B}) -> {C}": [
+      "if <<clause::verb::¬(¬{A} & ¬{B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬(¬{A} & {B}) -> ¬{C}": [
+      "if <<clause::verb::¬(¬{A} & {B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    "¬({A} & ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::¬({A} & ¬{B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    "¬(¬{A} & ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::¬(¬{A} & ¬{B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    
+
+    "{A} -> ¬({B} & {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬({B} & {C})>>"
+    ],
+    "¬{A} -> ¬({B} & {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬({B} & {C})>>"
+    ],
+    "{A} -> ¬(¬{B} & {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬(¬{B} & {C})>>"
+    ],
+    "{A} -> ¬({B} & ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬({B} & ¬{C})>>"
+    ],
+    "¬{A} -> ¬(¬{B} & {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬(¬{B} & {C})>>"
+    ],
+    "¬{A} -> ¬({B} & ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬({B} & ¬{C})>>"
+    ],
+    "{A} -> ¬(¬{B} & ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬(¬{B} & ¬{C})>>"
+    ],
+    "¬{A} -> ¬(¬{B} & ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬(¬{B} & ¬{C})>>"
+    ],
+
+
+    "({A} v {B}) -> {C}": [
+      "if <<clause::verb::({A} v {B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::({A} v {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::({A} v {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>",
+      "<<clause::noun::({A} v {B}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::({A} v {B}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "(¬{A} v {B}) -> {C}": [
+      "if <<clause::verb::(¬{A} v {B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::(¬{A} v {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::(¬{A} v {B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "({A} v ¬{B}) -> {C}": [
+      "if <<clause::verb::({A} v ¬{B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::({A} v ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::({A} v ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "({A} v {B}) -> ¬{C}": [
+      "if <<clause::verb::({A} v {B})>>, then <<clause::verb::¬{C}>>",
+
+      "<<clause::noun::({A} v {B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>",
+      "<<clause::noun::({A} v {B}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+
+
+    "(¬{A} v ¬{B}) -> {C}": [
+      "if <<clause::verb::(¬{A} v ¬{B})>>, then <<clause::verb::{C}>>",
+
+      "<<clause::noun::(¬{A} v ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.fact>>",
+      "<<clause::noun::(¬{A} v ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::{C}.subj>>"
+    ],
+    "(¬{A} v {B}) -> ¬{C}": [
+      "if <<clause::verb::(¬{A} v {B})>>, then <<clause::verb::¬{C}>>",
+
+      "<<clause::noun::(¬{A} v {B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+    "({A} v ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::({A} v ¬{B})>>, then <<clause::verb::¬{C}>>",
+
+      "<<clause::noun::({A} v ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+    "(¬{A} v ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::(¬{A} v ¬{B})>>, then <<clause::verb::¬{C}>>",
+
+      "<<clause::noun::(¬{A} v ¬{B}).fact>> <<phrase::cause_verb>> <<clause::noun::¬{C}.fact>>"
+    ],
+
+
+    "{A} -> ({B} v {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::({B} v {C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).fact>>",
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).subj>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).fact>>",
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).fact>>"
+    ],
+    "¬{A} -> ({B} v {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::({B} v {C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).fact>>",
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).subj>>"
+    ],
+    "{A} -> (¬{B} v {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::(¬{B} v {C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v {C}).fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v {C}).fact>>"
+    ],
+    "{A} -> ({B} v ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::({B} v ¬{C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v ¬{C}).fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::({B} v ¬{C}).fact>>"
+    ],
+
+
+    "¬{A} -> (¬{B} v {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::(¬{B} v {C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v {C}).fact>>"
+    ],
+    "¬{A} -> ({B} v ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::({B} v ¬{C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::({B} v ¬{C}).fact>>"
+    ],
+    "{A} -> (¬{B} v ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::(¬{B} v ¬{C})>>",
+
+      "<<clause::noun::{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v ¬{C}).fact>>",
+      "<<clause::noun::{A}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v ¬{C}).fact>>"
+    ],
+    "¬{A} -> (¬{B} v ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::(¬{B} v ¬{C})>>",
+
+      "<<clause::noun::¬{A}.fact>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v ¬{C}).fact>>"
+    ],
+
+
+    "¬({A} v {B}) -> {C}": [
+      "if <<clause::verb::¬({A} v {B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬(¬{A} v {B}) -> {C}": [
+      "if <<clause::verb::¬(¬{A} v {B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬({A} v ¬{B}) -> {C}": [
+      "if <<clause::verb::¬({A} v ¬{B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬({A} v {B}) -> ¬{C}": [
+      "if <<clause::verb::¬({A} v {B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    "¬(¬{A} v ¬{B}) -> {C}": [
+      "if <<clause::verb::¬(¬{A} v ¬{B})>>, then <<clause::verb::{C}>>"
+    ],
+    "¬(¬{A} v {B}) -> ¬{C}": [
+      "if <<clause::verb::¬(¬{A} v {B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    "¬({A} v ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::¬({A} v ¬{B})>>, then <<clause::verb::¬{C}>>"
+    ],
+    "¬(¬{A} v ¬{B}) -> ¬{C}": [
+      "if <<clause::verb::¬(¬{A} v ¬{B})>>, then <<clause::verb::¬{C}>>"
+    ],
+
+
+    "{A} -> ¬({B} v {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬({B} v {C})>>"
+    ],
+    "¬{A} -> ¬({B} v {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬({B} v {C})>>"
+    ],
+    "{A} -> ¬(¬{B} v {C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬(¬{B} v {C})>>"
+    ],
+    "{A} -> ¬({B} v ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬({B} v ¬{C})>>"
+    ],
+    "¬{A} -> ¬(¬{B} v {C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬(¬{B} v {C})>>"
+    ],
+    "¬{A} -> ¬({B} v ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬({B} v ¬{C})>>"
+    ],
+    "{A} -> ¬(¬{B} v ¬{C})": [
+      "if <<clause::verb::{A}>>, then <<clause::verb::¬(¬{B} v ¬{C})>>"
+    ],
+    "¬{A} -> ¬(¬{B} v ¬{C})": [
+      "if <<clause::verb::¬{A}>>, then <<clause::verb::¬(¬{B} v ¬{C})>>"
+    ],
+
+
+
+
+
+
+
+
+    "{A}{a}": [
+      "<<clause::verb::{A}{a}>>"
+    ],
+    "¬{A}{a}": [
+      "<<clause::verb::¬{A}{a}>>"
+    ],
+
+
+    "({A}{a} & {B}{a})": [
+      "<<clause::verb::({A}{a} & {B}{a})>>"
+    ],
+    "(¬{A}{a} & {B}{a})": [
+      "<<clause::verb::(¬{A}{a} & {B}{a})>>"
+    ],
+    "({A}{a} & ¬{B}{a})": [
+      "<<clause::verb::({A}{a} & ¬{B}{a})>>"
+    ],
+    "(¬{A}{a} & ¬{B}{a})": [
+      "<<clause::verb::(¬{A}{a} & ¬{B}{a})>>"
+    ],
+
+    "¬({A}{a} & {B}{a})": [
+      "<<clause::verb::¬({A}{a} & {B}{a})>>"
+    ],
+    "¬(¬{A}{a} & {B}{a})": [
+      "<<clause::verb::¬(¬{A}{a} & {B}{a})>>"
+    ],
+    "¬({A}{a} & ¬{B}{a})": [
+      "<<clause::verb::¬({A}{a} & ¬{B}{a})>>"
+    ],
+    "¬(¬{A}{a} & ¬{B}{a})": [
+      "<<clause::verb::¬(¬{A}{a} & ¬{B}{a})>>"
+    ],
+
+
+    "({A}{a} v {B}{a})": [
+      "<<clause::verb::({A}{a} v {B}{a})>>"
+    ],
+    "(¬{A}{a} v {B}{a})": [
+      "<<clause::verb::(¬{A}{a} v {B}{a})>>"
+    ],
+    "({A}{a} v ¬{B}{a})": [
+      "<<clause::verb::({A}{a} v ¬{B}{a})>>"
+    ],
+    "(¬{A}{a} v ¬{B}{a})": [
+      "<<clause::verb::(¬{A}{a} v ¬{B}{a})>>"
+    ],
+
+
+    "¬({A}{a} v {B}{a})": [
+      "<<clause::verb::¬({A}{a} v {B}{a})>>"
+    ],
+    "¬(¬{A}{a} v {B}{a})": [
+      "<<clause::verb::¬(¬{A}{a} v {B}{a})>>"
+    ],
+    "¬({A}{a} v ¬{B}{a})": [
+      "<<clause::verb::¬({A}{a} v ¬{B}{a})>>"
+    ],
+    "¬(¬{A}{a} v ¬{B}{a})": [
+      "<<clause::verb::¬(¬{A}{a} v ¬{B}{a})>>"
+    ],
+
+
+    "{A}{a} -> {B}{b}": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::{B}{b}>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::{B}{b}.subj>>"
+    ],
+    "¬{A}{a} -> {B}{b}": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::{B}{b}>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::{B}{b}.subj>>"
+    ],
+    "{A}{a} -> ¬{B}{b}": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬{B}{b}>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subj>>"
+    ],
+    "¬{A}{a} -> ¬{B}{b}": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬{B}{b}>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subj>>"
+    ],
+
+
+    "({A}{a} & {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::({A}{a} & {B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::({A}{a} & {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} & {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::(¬{A}{a} & {B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "({A}{a} & ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::({A}{a} & ¬{B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "({A}{a} & {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::({A}{a} & {B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::({A}{a} & {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} & ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::(¬{A}{a} & ¬{B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} & {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::(¬{A}{a} & {B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+    "({A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::({A}{a} & ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::(¬{A}{a} & ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+
+
+    "{A}{a} -> ({B}{b} & {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::({B}{b} & {C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & {C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> ({B}{b} & {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::({B}{b} & {C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & {C}{b}).subj>>"
+    ],
+    "{A}{a} -> (¬{B}{b} & {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::(¬{B}{b} & {C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & {C}{b}).subj>>"
+    ],
+    "{A}{a} -> ({B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::({B}{b} & ¬{C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & ¬{C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> (¬{B}{b} & {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::(¬{B}{b} & {C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & {C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> ({B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::({B}{b} & ¬{C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & ¬{C}{b}).subj>>"
+    ],
+    "{A}{a} -> (¬{B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::(¬{B}{b} & ¬{C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & ¬{C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> (¬{B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::(¬{B}{b} & ¬{C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & ¬{C}{b}).subj>>"
+    ],
+
+
+    "¬({A}{a} & {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬({A}{a} & {B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬(¬{A}{a} & {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} & {B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬({A}{a} & ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬({A}{a} & ¬{B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬({A}{a} & {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬({A}{a} & {B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+    "¬(¬{A}{a} & ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} & ¬{B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬(¬{A}{a} & {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} & {B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+    "¬({A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬({A}{a} & ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+    "¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} & ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+
+
+    "{A}{a} -> ¬({B}{b} & {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬({B}{b} & {C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} & {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬({B}{b} & {C}{b})>>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} & {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬(¬{B}{b} & {C}{b})>>"
+    ],
+    "{A}{a} -> ¬({B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬({B}{b} & ¬{C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} & {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬(¬{B}{b} & {C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬({B}{b} & ¬{C}{b})>>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬(¬{B}{b} & ¬{C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} & ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬(¬{B}{b} & ¬{C}{b})>>"
+    ],
+
+
+    "({A}{a} v {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::({A}{a} v {B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::({A}{a} v {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} v {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::(¬{A}{a} v {B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "({A}{a} v ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::({A}{a} v ¬{B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "({A}{a} v {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::({A}{a} v {B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::({A}{a} v {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} v ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::(¬{A}{a} v ¬{B}{a})>>, then <<clause::verb::{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} v {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::(¬{A}{a} v {B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+    "({A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::({A}{a} v ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+    "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::(¬{A}{a} v ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>",
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subj>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subj>>"
+    ],
+
+
+    "{A}{a} -> ({B}{b} v {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::({B}{b} v {C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v {C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> ({B}{b} v {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::({B}{b} v {C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v {C}{b}).subj>>"
+    ],
+    "{A}{a} -> (¬{B}{b} v {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::(¬{B}{b} v {C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v {C}{b}).subj>>"
+    ],
+    "{A}{a} -> ({B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::({B}{b} v ¬{C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v ¬{C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> (¬{B}{b} v {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::(¬{B}{b} v {C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v {C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> ({B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::({B}{b} v ¬{C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v ¬{C}{b}).subj>>"
+    ],
+    "{A}{a} -> (¬{B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::(¬{B}{b} v ¬{C}{b})>>",
+      "<<clause::noun::{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v ¬{C}{b}).subj>>"
+    ],
+    "¬{A}{a} -> (¬{B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::(¬{B}{b} v ¬{C}{b})>>",
+      "<<clause::noun::¬{A}{a}.subj>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v ¬{C}{b}).subj>>"
+    ],
+
+
+    "¬({A}{a} v {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬({A}{a} v {B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬(¬{A}{a} v {B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} v {B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬({A}{a} v ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬({A}{a} v ¬{B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬({A}{a} v {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬({A}{a} v {B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+    "¬(¬{A}{a} v ¬{B}{a}) -> {C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} v ¬{B}{a})>>, then <<clause::verb::{C}{c}>>"
+    ],
+    "¬(¬{A}{a} v {B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} v {B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+    "¬({A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬({A}{a} v ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+    "¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
+      "if <<clause::verb::¬(¬{A}{a} v ¬{B}{a})>>, then <<clause::verb::¬{C}{c}>>"
+    ],
+
+
+    "{A}{a} -> ¬({B}{b} v {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬({B}{b} v {C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} v {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬({B}{b} v {C}{b})>>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} v {C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬(¬{B}{b} v {C}{b})>>"
+    ],
+    "{A}{a} -> ¬({B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬({B}{b} v ¬{C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} v {C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬(¬{B}{b} v {C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬({B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬({B}{b} v ¬{C}{b})>>"
+    ],
+    "{A}{a} -> ¬(¬{B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::{A}{a}>>, then <<clause::verb::¬(¬{B}{b} v ¬{C}{b})>>"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{b} v ¬{C}{b})": [
+      "if <<clause::verb::¬{A}{a}>>, then <<clause::verb::¬(¬{B}{b} v ¬{C}{b})>>"
+    ],
+
+
+
+
+
+
+
+    "(Ex): {A}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}it>>",
+      "<<clause::verb::{A}something>>"
+    ],
+    "(Ex): ¬{A}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬{A}it>>",
+      "<<clause::verb::¬{A}something>>"
+    ],
+
+
+    "(Ex): ({A}x & {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it & {B}it)>>",
+      "<<clause::verb::({A}something & {B}something)>>"
+    ],
+    "(Ex): (¬{A}x & {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it & {B}it)>>",
+      "<<clause::verb::(¬{A}something & {B}something)>>"
+    ],
+    "(Ex): ({A}x & ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it & ¬{B}it)>>",
+      "<<clause::verb::({A}something & ¬{B}something)>>"
+    ],
+    "(Ex): (¬{A}x & ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it & ¬{B}it)>>",
+      "<<clause::verb::(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "(Ex): ¬({A}x & {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it & {B}it)>>",
+      "<<clause::verb::¬({A}something & {B}something)>>"
+    ],
+    "(Ex): ¬(¬{A}x & {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it & {B}it)>>",
+      "<<clause::verb::¬(¬{A}something & {B}something)>>"
+    ],
+    "(Ex): ¬({A}x & ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it & ¬{B}it)>>",
+      "<<clause::verb::¬({A}something & ¬{B}something)>>"
+    ],
+    "(Ex): ¬(¬{A}x & ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it & ¬{B}it)>>",
+      "<<clause::verb::¬(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "(Ex): ({A}x v {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it v {B}it)>>",
+      "<<clause::verb::({A}something v {B}something)>>"
+    ],
+    "(Ex): (¬{A}x v {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v {B}it)>>",
+      "<<clause::verb::(¬{A}something v {B}something)>>"
+    ],
+    "(Ex): ({A}x v ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it v ¬{B}it)>>",
+      "<<clause::verb::({A}something v ¬{B}something)>>"
+    ],
+    "(Ex): (¬{A}x v ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v ¬{B}it)>>",
+      "<<clause::verb::(¬{A}something v ¬{B}something)>>"
+    ],
+
+
+    "(Ex): ¬({A}x v {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it v {B}it)>>",
+      "<<clause::verb::¬({A}something v {B}something)>>"
+    ],
+    "(Ex): ¬(¬{A}x v {B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it v {B}it)>>",
+      "<<clause::verb::¬(¬{A}something v {B}something)>>"
+    ],
+    "(Ex): ¬({A}x v ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it v ¬{B}it)>>",
+      "<<clause::verb::¬({A}something v ¬{B}something)>>"
+    ],
+    "(Ex): ¬(¬{A}x v ¬{B}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it v ¬{B}it)>>",
+      "<<clause::verb::¬(¬{A}something v ¬{B}something)>>"
+    ],
+
+
+    "(Ex): {A}x -> {B}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::{B}it>>"
+    ],
+    "(Ex): ¬{A}x -> {B}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::{B}it>>"
+    ],
+    "(Ex): {A}x -> ¬{B}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬{B}it>>"
+    ],
+    "(Ex): ¬{A}x -> ¬{B}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬{B}it>>"
+    ],
+
+
+    "(Ex): ({A}x & {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): (¬{A}x & {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ({A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ({A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): (¬{A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): (¬{A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ({A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): (¬{A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+
+
+    "(Ex): {A}x -> ({B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it & {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ({B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it & {C}it)>>"
+    ],
+    "(Ex): {A}x -> (¬{B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it & {C}it)>>"
+    ],
+    "(Ex): {A}x -> ({B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it & ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> (¬{B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it & {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ({B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it & ¬{C}it)>>"
+    ],
+    "(Ex): {A}x -> (¬{B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it & ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> (¬{B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it & ¬{C}it)>>"
+    ],
+
+
+    "(Ex): ¬({A}x & {B}x) -> {C}x": [
+     "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x & {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬({A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬({A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ¬({A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+
+
+    "(Ex): {A}x -> ¬({B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it & {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬({B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it & {C}it)>>"
+    ],
+    "(Ex): {A}x -> ¬(¬{B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it & {C}it)>>"
+    ],
+    "(Ex): {A}x -> ¬({B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it & ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬(¬{B}x & {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it & {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬({B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it & ¬{C}it)>>"
+    ],
+    "(Ex): {A}x -> ¬(¬{B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it & ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it & ¬{C}it)>>"
+    ],
+
+
+
+    "(Ex): ({A}x v {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): (¬{A}x v {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ({A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ({A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): (¬{A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): (¬{A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ({A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): (¬{A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+
+
+    "(Ex): {A}x -> ({B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it v {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ({B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it v {C}it)>>"
+    ],
+    "(Ex): {A}x -> (¬{B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it v {C}it)>>"
+    ],
+    "(Ex): {A}x -> ({B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it v ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> (¬{B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it v {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ({B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it v ¬{C}it)>>"
+    ],
+    "(Ex): {A}x -> (¬{B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it v ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> (¬{B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it v ¬{C}it)>>"
+    ],
+
+
+    "(Ex): ¬({A}x v {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x v {B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v {B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬({A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬({A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v {B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ¬({A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+    "(Ex): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>"
+    ],
+
+
+    "(Ex): {A}x -> ¬({B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it v {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬({B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it v {C}it)>>"
+    ],
+    "(Ex): {A}x -> ¬(¬{B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it v {C}it)>>"
+    ],
+    "(Ex): {A}x -> ¬({B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it v ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬(¬{B}x v {C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it v {C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬({B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it v ¬{C}it)>>"
+    ],
+    "(Ex): {A}x -> ¬(¬{B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it v ¬{C}it)>>"
+    ],
+    "(Ex): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
+      "<<phrase::some_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it v ¬{C}it)>>"
+    ],
+
+
+
+
+    "(x): {A}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}it>>",
+      "<<clause::verb::{A}everything>>"
+    ],
+    "(x): ¬{A}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬{A}it>>",
+      "<<clause::verb::¬{A}everything>>"
+    ],
+
+
+    "(x): ({A}x & {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it & {B}it)>>",
+      "<<clause::verb::({A}everything & {B}everything)>>"
+    ],
+    "(x): (¬{A}x & {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it & {B}it)>>",
+      "<<clause::verb::(¬{A}everything & {B}everything)>>"
+    ],
+    "(x): ({A}x & ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it & ¬{B}it)>>",
+      "<<clause::verb::({A}everything & ¬{B}everything)>>"
+    ],
+    "(x): (¬{A}x & ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it & ¬{B}it)>>",
+      "<<clause::verb::(¬{A}everything & ¬{B}everything)>>"
+    ],
+
+
+    "(x): ¬({A}x & {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it & {B}it)>>",
+      "<<clause::verb::¬({A}everything & {B}everything)>>"
+    ],
+    "(x): ¬(¬{A}x & {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it & {B}it)>>",
+      "<<clause::verb::¬(¬{A}everything & {B}everything)>>"
+    ],
+    "(x): ¬({A}x & ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it & ¬{B}it)>>",
+      "<<clause::verb::¬({A}everything & ¬{B}everything)>>"
+    ],
+    "(x): ¬(¬{A}x & ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it & ¬{B}it)>>",
+      "<<clause::verb::¬(¬{A}everything & ¬{B}everything)>>"
+    ],
+
+
+    "(x): ({A}x v {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it v {B}it)>>",
+      "<<clause::verb::({A}everything v {B}everything)>>"
+    ],
+    "(x): (¬{A}x v {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v {B}it)>>",
+      "<<clause::verb::(¬{A}everything v {B}everything)>>"
+    ],
+    "(x): ({A}x v ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it v ¬{B}it)>>",
+      "<<clause::verb::({A}everything v ¬{B}everything)>>"
+    ],
+    "(x): (¬{A}x v ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v ¬{B}it)>>",
+      "<<clause::verb::(¬{A}everything v ¬{B}everything)>>"
+    ],
+
+
+    "(x): ¬({A}x v {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it v {B}it)>>",
+      "<<clause::verb::¬({A}everything v {B}everything)>>"
+    ],
+    "(x): ¬(¬{A}x v {B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it v {B}it)>>",
+      "<<clause::verb::¬(¬{A}everything v {B}everything)>>"
+    ],
+    "(x): ¬({A}x v ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬({A}it v ¬{B}it)>>",
+      "<<clause::verb::¬({A}everything v ¬{B}everything)>>"
+    ],
+    "(x): ¬(¬{A}x v ¬{B}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<clause::verb::¬(¬{A}it v ¬{B}it)>>",
+      "<<clause::verb::¬(¬{A}everything v ¬{B}everything)>>"
+    ],
+
+
+
+    "(x): {A}x -> {B}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::{B}it>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::{B}the_thing>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::{B}the_thing.subj>>",
+
+      "a {A}[NOUN] is {B}[ADJ]",
+      "a {A}[NOUN] {B}[VERB.s]",
+      "a {A}[NOUN] is <<phrase::kind_of>> {B}[NOUN]"
+    ],
+    "(x): ¬{A}x -> {B}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::{B}it>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::{B}the_thing>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::{B}the_thing.subj>>"
+    ],
+    "(x): {A}x -> ¬{B}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬{B}it>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬{B}the_thing>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::¬{B}the_thing.subj>>",
+
+      "a {A}[NOUN] is not {B}[ADJ]",
+      "a {A}[NOUN] does not {B}[VERB]",
+      "a {A}[NOUN] is not <<phrase::kind_of>> {B}[NOUN]"
+    ],
+    "(x): ¬{A}x -> ¬{B}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬{B}it>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬{B}the_thing>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::¬{B}the_thing.subj>>"
+    ],
+
+
+    "(x): ({A}x & {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::({A}something & {B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::({A}something & {B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x & {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::(¬{A}something & {B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::(¬{A}something & {B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): ({A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::({A}something & ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::({A}something & ¬{B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): ({A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::({A}something & {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::({A}something & {B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::(¬{A}something & ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::(¬{A}something & ¬{B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::(¬{A}something & {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::(¬{A}something & {B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+    "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::({A}something & ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::({A}something & ¬{B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::(¬{A}something & ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::(¬{A}something & ¬{B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+
+
+    "(x): {A}x -> ({B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it & {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing & {C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::({B}the_thing & {C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> ({B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it & {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing & {C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::({B}the_thing & {C}the_thing).subj>>"
+    ],
+    "(x): {A}x -> (¬{B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it & {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing & {C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::(¬{B}the_thing & {C}the_thing).subj>>"
+    ],
+    "(x): {A}x -> ({B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it & ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing & ¬{C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::({B}the_thing & ¬{C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> (¬{B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it & {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing & {C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::(¬{B}the_thing & {C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it & ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing & ¬{C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::({B}the_thing & ¬{C}the_thing).subj>>"
+    ],
+    "(x): {A}x -> (¬{B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it & ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing & ¬{C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::(¬{B}the_thing & ¬{C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it & ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing & ¬{C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::(¬{B}the_thing & ¬{C}the_thing).subj>>"
+    ],
+
+
+    "(x): ¬({A}x & {B}x) -> {C}x": [
+     "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬({A}something & {B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x & {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬(¬{A}something & {B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬({A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬({A}something & ¬{B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬({A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬({A}something & {B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x & ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬(¬{A}something & ¬{B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x & {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬(¬{A}something & {B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+    "(x): ¬({A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬({A}something & ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬(¬{A}something & ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+
+
+    "(x): {A}x -> ¬({B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it & {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬({B}the_thing & {C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it & {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬({B}the_thing & {C}the_thing)>>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it & {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬(¬{B}the_thing & {C}the_thing)>>"
+    ],
+    "(x): {A}x -> ¬({B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it & ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬({B}the_thing & ¬{C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x & {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it & {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬(¬{B}the_thing & {C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it & ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬({B}the_thing & ¬{C}the_thing)>>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it & ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬(¬{B}the_thing & ¬{C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it & ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬(¬{B}the_thing & ¬{C}the_thing)>>"
+    ],
+
+
+
+    "(x): ({A}x v {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::({A}something v {B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::({A}something v {B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x v {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::(¬{A}something v {B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::(¬{A}something v {B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): ({A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::({A}something v ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::({A}something v ¬{B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): ({A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::({A}something v {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::({A}something v {B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::(¬{A}something v ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
+      "<<clause::noun::(¬{A}something v ¬{B}something).subj>> is <<clause::noun::{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::(¬{A}something v {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::(¬{A}something v {B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+    "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::({A}something v ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::({A}something v ¬{B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+    "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::(¬{A}something v ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
+      "<<clause::noun::(¬{A}something v ¬{B}something).subj>> is <<clause::noun::¬{C}the_thing.subj>>"
+    ],
+
+
+    "(x): {A}x -> ({B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it v {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing v {C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::({B}the_thing v {C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> ({B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it v {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing v {C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::({B}the_thing v {C}the_thing).subj>>"
+    ],
+    "(x): {A}x -> (¬{B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it v {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing v {C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::(¬{B}the_thing v {C}the_thing).subj>>"
+    ],
+    "(x): {A}x -> ({B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it v ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing v ¬{C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::({B}the_thing v ¬{C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> (¬{B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it v {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing v {C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::(¬{B}the_thing v {C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it v ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing v ¬{C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::({B}the_thing v ¬{C}the_thing).subj>>"
+    ],
+    "(x): {A}x -> (¬{B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it v ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing v ¬{C}the_thing)>>",
+      "<<clause::noun::{A}something.subj>> is <<clause::noun::(¬{B}the_thing v ¬{C}the_thing).subj>>"
+    ],
+    "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it v ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing v ¬{C}the_thing)>>",
+      "<<clause::noun::¬{A}something.subj>> is <<clause::noun::(¬{B}the_thing v ¬{C}the_thing).subj>>"
+    ],
+
+
+    "(x): ¬({A}x v {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬({A}something v {B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x v {B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v {B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬(¬{A}something v {B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬({A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬({A}something v ¬{B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬({A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬({A}something v {B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x v ¬{B}x) -> {C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>",
+      "if <<clause::verb::¬(¬{A}something v ¬{B}something)>>, then <<clause::verb::{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x v {B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v {B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬(¬{A}something v {B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+    "(x): ¬({A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬({A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬({A}something v ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+    "(x): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬(¬{A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
+      "if <<clause::verb::¬(¬{A}something v ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>"
+    ],
+
+
+    "(x): {A}x -> ¬({B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it v {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬({B}the_thing v {C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it v {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬({B}the_thing v {C}the_thing)>>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it v {C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬(¬{B}the_thing v {C}the_thing)>>"
+    ],
+    "(x): {A}x -> ¬({B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬({B}it v ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬({B}the_thing v ¬{C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x v {C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it v {C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬(¬{B}the_thing v {C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬({B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬({B}it v ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬({B}the_thing v ¬{C}the_thing)>>"
+    ],
+    "(x): {A}x -> ¬(¬{B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬(¬{B}it v ¬{C}it)>>",
+      "if <<clause::verb::{A}something>>, then <<clause::verb::¬(¬{B}the_thing v ¬{C}the_thing)>>"
+    ],
+    "(x): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
+      "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬(¬{B}it v ¬{C}it)>>",
+      "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬(¬{B}the_thing v ¬{C}the_thing)>>"
+    ]
+
+
+
+
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+  "clause": {
+
+
+
+
+    "verb": {
+
+      "{A}": [
+        "a {A}[NOUN] occurs"
+      ],
+
+      "¬{A}": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}>>",
+
+        "a {A}[NOUN] does not occur"
+      ],
+
+
+      "({A} & {B})": [
+          "a {A}[NOUN] and a {B}[NOUN] occurs"
+      ],
+      "(¬{A} & {B})": [
+          "a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
+      ],
+      "({A} & ¬{B})": [
+          "a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
+      ],
+      "(¬{A} & ¬{B})": [
+          "a {A}[NOUN] and a {B}[NOUN] do not occur"
+      ],
+
+
+      "¬({A} & {B})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A} & {B})>>"
+      ],
+      "¬(¬{A} & {B})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A} & {B})>>"
+      ],
+      "¬({A} & ¬{B})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A} & ¬{B})>>"
+      ],
+      "¬(¬{A} & ¬{B})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A} & ¬{B})>>"
+      ],
+
+
+
+      "({A} v {B})": [
+          "either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
+      ],
+      "(¬{A} v {B})": [
+          "either a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
+      ],
+      "({A} v ¬{B})": [
+          "either a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
+      ],
+      "(¬{A} v ¬{B})": [
+          "either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
+      ],
+
+
+      "¬({A} v {B})": [
+          "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A} v {B})>>"
+      ],
+      "¬(¬{A} v {B})": [
+          "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A} v {B})>>"
+      ],
+      "¬({A} v ¬{B})": [
+          "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A} v ¬{B})>>"
+      ],
+      "¬(¬{A} v ¬{B})": [
+          "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A} v ¬{B})>>"
+      ],
+
+
+
+
+      "{A}{a}": [
+        "a {a}[NOUN] is {A}[ADJ]",
+        "a {a}[NOUN] {A}[VERB.s]",
+
+        "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN]"
+      ],
+      "¬{A}{a}": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}{a}>>",
+
+        "a {a}[NOUN] is not {A}[ADJ]",
+        "a {a}[NOUN] is {A}[ADJ.neg]",
+        "a {a}[NOUN] does not {A}[VERB]",
+
+        "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN]"
+      ],
+
+
+      "({A}{a} & {B}{a})": [
+          "a {a}[NOUN] is {A}[ADJ] and {B}[ADJ]",
+
+          "a {a}[NOUN] is {A}[ADJ] and {B}[VERB.s]",
+
+          "a {a}[NOUN] {A}[VERB.s] and is {B}[ADJ]",
+
+          "a {a}[NOUN] {A}[VERB.s] and {B}[VERB.s]",
+
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}{a} & {B}{a})": [
+          "a {a}[NOUN] is not {A}[ADJ] and is {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "a {a}[NOUN] is not {A}[ADJ] and {B}[VERB.s]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "a {a}[NOUN] does not {A}[VERB] and is {B}[ADJ]",
+
+          "a {a}[NOUN] does not {A}[VERB] and does {B}[VERB]",
+
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "({A}{a} & ¬{B}{a})": [
+          "a {a}[NOUN] is {A}[ADJ] and is not {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "a {a}[NOUN] is {A}[ADJ] and does not {B}[VERB]",
+
+          "a {a}[NOUN] {A}[VERB.s] and is not {B}[ADJ]",
+          "a {a}[NOUN] {A}[VERB.s] and is {B}[ADJ.neg]",
+
+          "a {a}[NOUN] {A}[VERB.s] and does not {B}[VERB]",
+
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}{a} & ¬{B}{a})": [
+          "a {a}[NOUN] is not {A}[ADJ] or {B}[ADJ]",
+          "a {a}[NOUN] is not {A}[ADJ] and is {B}[ADJ.neg]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and is not {B}[ADJ]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "a {a}[NOUN] is not {A}[ADJ] and does not {B}[VERB]",
+          "a {a}[NOUN] is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "a {a}[NOUN] does not {A}[VERB] and is not {B}[ADJ]",
+          "a {a}[NOUN] does not {A}[VERB] and is {B}[ADJ.neg]",
+
+          "a {a}[NOUN] does not {A}[VERB.s] or {B}[VERB.s]",
+
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+
+
+      "¬({A}{a} & {B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}{a} & {B}{a})>>"
+      ],
+      "¬(¬{A}{a} & {B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}{a} & {B}{a})>>"
+      ],
+      "¬({A}{a} & ¬{B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}{a} & ¬{B}{a})>>"
+      ],
+      "¬(¬{A}{a} & ¬{B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}{a} & ¬{B}{a})>>"
+      ],
+
+
+      "({A}{a} v {B}{a})": [
+          "a {a}[NOUN] either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "a {a}[NOUN] either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] either {A}[VERB.s] or {B}[VERB.s] or both",
+
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "(¬{A}{a} v {B}{a})": [
+          "a {a}[NOUN] either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "a {a}[NOUN] either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] either does not {A}[VERB] or {B}[VERB.s] or both",
+
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "({A}{a} v ¬{B}{a})": [
+          "a {a}[NOUN] either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "a {a}[NOUN] either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] either {A}[VERB.s] or does not {B}[VERB] or both",
+
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "(¬{A}{a} v ¬{B}{a})": [
+          "a {a}[NOUN] either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "a {a}[NOUN] either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "a {a}[NOUN] either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] either does not {A}[VERB] or does not {B}[VERB] or both",
+
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+
+
+      "¬({A}{a} v {B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}{a} v {B}{a})>>"
+      ],
+      "¬(¬{A}{a} v {B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}{a} v {B}{a})>>"
+      ],
+      "¬({A}{a} v ¬{B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}{a} v ¬{B}{a})>>"
+      ],
+      "¬(¬{A}{a} v ¬{B}{a})": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}{a} v ¬{B}{a})>>"
+      ],
+
+
+
+
+
+      "{A}something": [
+        "something is {A}[ADJ]",
+        "something {A}[VERB.s]",
+
+        "something is <<phrase::kind_of>> {A}[NOUN]"
+      ],
+      "¬{A}something": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}something>>",
+
+        "something is not {A}[ADJ]",
+        "something is {A}[ADJ.neg]",
+        "something does not {A}[VERB]",
+
+        "something is not <<phrase::kind_of>> {A}[NOUN]"
+      ],
+
+
+      "({A}something & {B}something)": [
+          "something is {A}[ADJ] and {B}[ADJ]",
+
+          "something is {A}[ADJ] and {B}[VERB.s]",
+
+          "something {A}[VERB.s] and is {B}[ADJ]",
+
+          "something {A}[VERB.s] and {B}[VERB.s]",
+
+          "something is <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}something & {B}something)": [
+          "something is not {A}[ADJ] and is {B}[ADJ]",
+          "something is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "something is not {A}[ADJ] and {B}[VERB.s]",
+          "something is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "something does not {A}[VERB] and is {B}[ADJ]",
+
+          "something does not {A}[VERB] and does {B}[VERB]",
+
+          "something is not <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "({A}something & ¬{B}something)": [
+          "something is {A}[ADJ] and is not {B}[ADJ]",
+          "something is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "something is {A}[ADJ] and does not {B}[VERB]",
+
+          "something {A}[VERB.s] and is not {B}[ADJ]",
+          "something {A}[VERB.s] and is {B}[ADJ.neg]",
+
+          "something {A}[VERB.s] and does not {B}[VERB]",
+
+          "something is <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}something & ¬{B}something)": [
+          "something is not {A}[ADJ] or {B}[ADJ]",
+          "something is not {A}[ADJ] and is {B}[ADJ.neg]",
+          "something is {A}[ADJ.neg] and is not {B}[ADJ]",
+          "something is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "something is not {A}[ADJ] and does not {B}[VERB]",
+          "something is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "something does not {A}[VERB] and is not {B}[ADJ]",
+          "something does not {A}[VERB] and is {B}[ADJ.neg]",
+
+          "something does not {A}[VERB.s] or {B}[VERB.s]",
+
+          "something is not <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+
+
+      "¬({A}something & {B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}something & {B}something)>>"
+      ],
+      "¬(¬{A}something & {B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}something & {B}something)>>"
+      ],
+      "¬({A}something & ¬{B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}something & ¬{B}something)>>"
+      ],
+      "¬(¬{A}something & ¬{B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}something & ¬{B}something)>>"
+      ],
+
+
+      "({A}something v {B}something)": [
+          "something either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "something either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "something either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "something either {A}[VERB.s] or {B}[VERB.s] or both",
+          
+          "something is <<phrase::kind_of>> {A}[NOUN] or is <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "(¬{A}something v {B}something)": [
+          "something either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "something either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "something either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "something either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "something either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "something either does not {A}[VERB] or {B}[VERB.s] or both",
+
+          "something is not <<phrase::kind_of>> {A}[NOUN] or is <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "({A}something v ¬{B}something)": [
+          "something either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "something either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "something either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "something either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "something either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "something either {A}[VERB.s] or does not {B}[VERB] or both",
+
+          "something is <<phrase::kind_of>> {A}[NOUN] or is not <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "(¬{A}something v ¬{B}something)": [
+          "something either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "something either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "something either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "something either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "something either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "something either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "something either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "something either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "something either does not {A}[VERB] or does not {B}[VERB] or both",
+
+          "something is not <<phrase::kind_of>> {A}[NOUN] or is not <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+
+      "¬({A}something v {B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}something v {B}something)>>"
+      ],
+      "¬(¬{A}something v {B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}something v {B}something)>>"
+      ],
+      "¬({A}something v ¬{B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}something v ¬{B}something)>>"
+      ],
+      "¬(¬{A}something v ¬{B}something)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}something v ¬{B}something)>>"
+      ],
+
+
+
+
+      "{A}the_thing": [
+        "the thing is {A}[ADJ]",
+        "the thing {A}[VERB.s]",
+
+        "the thing is <<phrase::kind_of>> {A}[NOUN]"
+      ],
+      "¬{A}the_thing": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}the_thing>>",
+
+        "the thing is not {A}[ADJ]",
+        "the thing is {A}[ADJ.neg]",
+        "the thing does not {A}[VERB]",
+
+        "the thing is not <<phrase::kind_of>> {A}[NOUN]"
+      ],
+
+
+      "({A}the_thing & {B}the_thing)": [
+          "the thing is {A}[ADJ] and {B}[ADJ]",
+
+          "the thing is {A}[ADJ] and {B}[VERB.s]",
+
+          "the thing {A}[VERB.s] and is {B}[ADJ]",
+
+          "the thing {A}[VERB.s] and {B}[VERB.s]",
+
+          "the thing is <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}the_thing & {B}the_thing)": [
+          "the thing is not {A}[ADJ] and is {B}[ADJ]",
+          "the thing is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "the thing is not {A}[ADJ] and {B}[VERB.s]",
+          "the thing is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "the thing does not {A}[VERB] and is {B}[ADJ]",
+
+          "the thing does not {A}[VERB] and does {B}[VERB]",
+
+          "the thing is not <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "({A}the_thing & ¬{B}the_thing)": [
+          "the thing is {A}[ADJ] and is not {B}[ADJ]",
+          "the thing is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "the thing is {A}[ADJ] and does not {B}[VERB]",
+
+          "the thing {A}[VERB.s] and is not {B}[ADJ]",
+          "the thing {A}[VERB.s] and is {B}[ADJ.neg]",
+
+          "the thing {A}[VERB.s] and does not {B}[VERB]",
+
+          "the thing is <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}the_thing & ¬{B}the_thing)": [
+          "the thing is not {A}[ADJ] or {B}[ADJ]",
+          "the thing is not {A}[ADJ] and is {B}[ADJ.neg]",
+          "the thing is {A}[ADJ.neg] and is not {B}[ADJ]",
+          "the thing is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "the thing is not {A}[ADJ] and does not {B}[VERB]",
+          "the thing is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "the thing does not {A}[VERB] and is not {B}[ADJ]",
+          "the thing does not {A}[VERB] and is {B}[ADJ.neg]",
+
+          "the thing does not {A}[VERB.s] or {B}[VERB.s]",
+
+          "the thing is not <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+
+
+      "¬({A}the_thing & {B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing & {B}the_thing)>>"
+      ],
+      "¬(¬{A}the_thing & {B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing & {B}the_thing)>>"
+      ],
+      "¬({A}the_thing & ¬{B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing & ¬{B}the_thing)>>"
+      ],
+      "¬(¬{A}the_thing & ¬{B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing & ¬{B}the_thing)>>"
+      ],
+
+
+      "({A}the_thing v {B}the_thing)": [
+          "the thing either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "the thing either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "the thing either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "the thing either {A}[VERB.s] or {B}[VERB.s] or both",
+
+          "the thing is <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}the_thing v {B}the_thing)": [
+          "the thing either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "the thing either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "the thing either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "the thing either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "the thing either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "the thing either does not {A}[VERB] or {B}[VERB.s] or both",
+
+          "the thing is not <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "({A}the_thing v ¬{B}the_thing)": [
+          "the thing either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "the thing either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "the thing either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "the thing either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "the thing either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "the thing either {A}[VERB.s] or does not {B}[VERB] or both",
+
+          "the thing is <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}the_thing v ¬{B}the_thing)": [
+          "the thing either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "the thing either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "the thing either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "the thing either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "the thing either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "the thing either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "the thing either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "the thing either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "the thing either does not {A}[VERB] or does not {B}[VERB] or both",
+
+          "the thing is not <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+
+      "¬({A}the_thing v {B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing v {B}the_thing)>>"
+      ],
+      "¬(¬{A}the_thing v {B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing v {B}the_thing)>>"
+      ],
+      "¬({A}the_thing v ¬{B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing v ¬{B}the_thing)>>"
+      ],
+      "¬(¬{A}the_thing v ¬{B}the_thing)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing v ¬{B}the_thing)>>"
+      ],
+
+
+
+
+
+      "{A}everything": [
+        "everything is {A}[ADJ]",
+        "everything {A}[VERB.s]"
+      ],
+      "¬{A}everything": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}everything>>",
+
+        "everything is not {A}[ADJ]",
+        "everything is {A}[ADJ.neg]",
+        "everything does not {A}[VERB]"
+      ],
+
+
+      "({A}everything & {B}everything)": [
+          "everything is {A}[ADJ] and {B}[ADJ]",
+
+          "everything is {A}[ADJ] and {B}[VERB.s]",
+
+          "everything {A}[VERB.s] and is {B}[ADJ]",
+
+          "everything {A}[VERB.s] and {B}[VERB.s]"
+      ],
+      "(¬{A}everything & {B}everything)": [
+          "everything is not {A}[ADJ] and is {B}[ADJ]",
+          "everything is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "everything is not {A}[ADJ] and {B}[VERB.s]",
+          "everything is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "everything does not {A}[VERB] and is {B}[ADJ]",
+
+          "everything does not {A}[VERB] and does {B}[VERB]"
+      ],
+      "({A}everything & ¬{B}everything)": [
+          "everything is {A}[ADJ] and is not {B}[ADJ]",
+          "everything is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "everything is {A}[ADJ] and does not {B}[VERB]",
+
+          "everything {A}[VERB.s] and is not {B}[ADJ]",
+          "everything {A}[VERB.s] and is {B}[ADJ.neg]",
+
+          "everything {A}[VERB.s] and does not {B}[VERB]"
+      ],
+      "(¬{A}everything & ¬{B}everything)": [
+          "everything is not {A}[ADJ] or {B}[ADJ]",
+          "everything is not {A}[ADJ] and is {B}[ADJ.neg]",
+          "everything is {A}[ADJ.neg] and is not {B}[ADJ]",
+          "everything is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "everything is not {A}[ADJ] and does not {B}[VERB]",
+          "everything is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "everything does not {A}[VERB] and is not {B}[ADJ]",
+          "everything does not {A}[VERB] and is {B}[ADJ.neg]",
+
+          "everything does not {A}[VERB.s] or {B}[VERB.s]"
+      ],
+
+
+      "¬({A}everything & {B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}everything & {B}everything)>>"
+      ],
+      "¬(¬{A}everything & {B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}everything & {B}everything)>>"
+      ],
+      "¬({A}everything & ¬{B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}everything & ¬{B}everything)>>"
+      ],
+      "¬(¬{A}everything & ¬{B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}everything & ¬{B}everything)>>"
+      ],
+
+
+
+      "({A}everything v {B}everything)": [
+          "everything either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "everything either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "everything either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "everything either {A}[VERB.s] or {B}[VERB.s] or both"
+      ],
+      "(¬{A}everything v {B}everything)": [
+          "everything either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "everything either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "everything either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "everything either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "everything either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "everything either does not {A}[VERB] or {B}[VERB.s] or both"
+      ],
+      "({A}everything v ¬{B}everything)": [
+          "everything either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "everything either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "everything either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "everything either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "everything either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "everything either {A}[VERB.s] or does not {B}[VERB] or both"
+      ],
+      "(¬{A}everything v ¬{B}everything)": [
+          "everything either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "everything either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "everything either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "everything either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "everything either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "everything either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "everything either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "everything either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "everything either does not {A}[VERB] or does not {B}[VERB] or both"
+      ],
+
+      "¬({A}everything v {B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}everything v {B}everything)>>"
+      ],
+      "¬(¬{A}everything v {B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}everything v {B}everything)>>"
+      ],
+      "¬({A}everything v ¬{B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}everything v ¬{B}everything)>>"
+      ],
+      "¬(¬{A}everything v ¬{B}everything)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}everything v ¬{B}everything)>>"
+      ],
+
+
+
+
+
+      "{A}it": [
+        "it is {A}[ADJ]",
+        "it {A}[VERB.s]",
+
+        "it is <<phrase::kind_of>> {A}[NOUN]"
+      ],
+      "¬{A}it": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}it>>",
+
+        "it is not {A}[ADJ]",
+        "it is {A}[ADJ.neg]",
+        "it does not {A}[VERB]",
+
+        "it is not <<phrase::kind_of>> {A}[NOUN]"
+      ],
+
+
+      "({A}it & {B}it)": [
+          "it is {A}[ADJ] and {B}[ADJ]",
+
+          "it is {A}[ADJ] and {B}[VERB.s]",
+
+          "it {A}[VERB.s] and is {B}[ADJ]",
+
+          "it {A}[VERB.s] and {B}[VERB.s]",
+
+          "it is <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}it & {B}it)": [
+          "it is not {A}[ADJ] and is {B}[ADJ]",
+          "it is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "it is not {A}[ADJ] and {B}[VERB.s]",
+          "it is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "it does not {A}[VERB] and is {B}[ADJ]",
+
+          "it does not {A}[VERB] and does {B}[VERB]",
+
+          "it is not <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "({A}it & ¬{B}it)": [
+          "it is {A}[ADJ] and is not {B}[ADJ]",
+          "it is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "it is {A}[ADJ] and does not {B}[VERB]",
+
+          "it {A}[VERB.s] and is not {B}[ADJ]",
+          "it {A}[VERB.s] and is {B}[ADJ.neg]",
+
+          "it {A}[VERB.s] and does not {B}[VERB]",
+
+          "it is <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+      "(¬{A}it & ¬{B}it)": [
+          "it is not {A}[ADJ] or {B}[ADJ]",
+          "it is not {A}[ADJ] and is {B}[ADJ.neg]",
+          "it is {A}[ADJ.neg] and is not {B}[ADJ]",
+          "it is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "it is not {A}[ADJ] and does not {B}[VERB]",
+          "it is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "it does not {A}[VERB] and is not {B}[ADJ]",
+          "it does not {A}[VERB] and is {B}[ADJ.neg]",
+
+          "it does not {A}[VERB.s] or {B}[VERB.s]",
+
+          "it is not <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
+      ],
+
+
+      "¬({A}it & {B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it & {B}it)>>"
+      ],
+      "¬(¬{A}it & {B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it & {B}it)>>"
+      ],
+      "¬({A}it & ¬{B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it & ¬{B}it)>>"
+      ],
+      "¬(¬{A}it & ¬{B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it & ¬{B}it)>>"
+      ],
+
+
+
+      "({A}it v {B}it)": [
+          "it either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "it either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "it either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "it either {A}[VERB.s] or {B}[VERB.s] or both",
+
+          "it is <<phrase::kind_of>> {A}[NOUN] or is <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "(¬{A}it v {B}it)": [
+          "it either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "it either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "it either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "it either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "it either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "it either does not {A}[VERB] or {B}[VERB.s] or both",
+
+          "it is not <<phrase::kind_of>> {A}[NOUN] or is <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "({A}it v ¬{B}it)": [
+          "it either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "it either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "it either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "it either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "it either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "it either {A}[VERB.s] or does not {B}[VERB] or both",
+
+          "it is <<phrase::kind_of>> {A}[NOUN] or is not <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+      "(¬{A}it v ¬{B}it)": [
+          "it either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "it either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "it either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "it either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "it either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "it either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+        
+          "it either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "it either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "it either does not {A}[VERB] or does not {B}[VERB] or both",
+
+          "it is not <<phrase::kind_of>> {A}[NOUN] or is not <<phrase::kind_of>> {B}[NOUN] or both"
+      ],
+
+      "¬({A}it v {B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it v {B}it)>>"
+      ],
+      "¬(¬{A}it v {B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v {B}it)>>"
+      ],
+      "¬({A}it v ¬{B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}it v ¬{B}it)>>"
+      ],
+      "¬(¬{A}it v ¬{B}it)": [
+        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v ¬{B}it)>>"
+      ]
+
+
+
+
+
+    },
+
+
+
+
+
+
+
+    "noun": {
+
+
+      "{A}.subj": [
+        "a {A}[NOUN]"
+      ],
+
+      "{A}.fact": [
+        "that a {A}[NOUN] occurs"
+      ],
+      "¬{A}.fact": [
+        "that <<clause::noun::{A}.fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>",
+
+        "that a {A}[NOUN] does not occur"
+      ],
+
+
+      "({A} & {B}).subj": [
+        "a {A}[NOUN] and a {B}[NOUN]"
+      ],
+
+
+      "({A} & {B}).fact": [
+          "that a {A}[NOUN] and a {B}[NOUN] occurs"
+      ],
+      "(¬{A} & {B}).fact": [
+          "that a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
+      ],
+      "({A} & ¬{B}).fact": [
+          "that a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
+      ],
+      "(¬{A} & ¬{B}).fact": [
+          "that a {A}[NOUN] and a {B}[NOUN] do not occur"
+      ],
+
+      "¬({A} & {B}).fact": [
+          "that <<clause::noun::({A} & {B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+      "¬(¬{A} & {B}).fact": [
+          "that <<clause::noun::(¬{A} & {B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+      "¬({A} & ¬{B}).fact": [
+          "that <<clause::noun::({A} & ¬{B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+      "¬(¬{A} & ¬{B}).fact": [
+          "that <<clause::noun::(¬{A} & ¬{B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+
+
+
+      "({A} v {B}).subj": [
+          "a {A}[NOUN] or a {B}[NOUN] or both"
+      ],
+
+
+      "({A} v {B}).fact": [
+          "that either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
+      ],
+      "(¬{A} v {B}).fact": [
+          "that either a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
+      ],
+      "({A} v ¬{B}).fact": [
+          "that either a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
+      ],
+      "(¬{A} v ¬{B}).fact": [
+          "that either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
+      ],
+
+      "¬({A} v {B}).fact": [
+          "that <<clause::noun::({A} v {B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+      "¬(¬{A} v {B}).fact": [
+          "that <<clause::noun::(¬{A} v {B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+      "¬({A} v ¬{B}).fact": [
+          "that <<clause::noun::({A} v ¬{B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+      "¬(¬{A} v ¬{B}).fact": [
+          "that <<clause::noun::(¬{A} v ¬{B}).fact>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
+      ],
+
+
+
+
+
+
+
+
+      "{A}{a}.subj": [
+        "a {A}[ADJ] {a}[NOUN]",
+        "a {a}[NOUN] that is {A}[ADJ]",
+        "a {a}[NOUN] that {A}[VERB.s]"
+      ],
+      "¬{A}{a}.subj": [
+        "a {A}[ADJ.neg] {a}[NOUN]",
+        "a {a}[NOUN] that is not {A}[ADJ]",
+        "a {a}[NOUN] that does not {A}[VERB]"
+      ],
+
+      
+      "({A}{a} & {B}{a}).subj": [
+          "a {A}[ADJ] and {B}[ADJ] {a}[NOUN]",
+          "a {A}[ADJ] {a}[NOUN] that is {B}[ADJ]",
+          "a {B}[ADJ] {a}[NOUN] that is {A}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ] and {B}[ADJ]",
+
+          "a {A}[ADJ] {a}[NOUN] that {B}[VERB.s]",
+          "a {a}[NOUN] that is {A}[ADJ] and {B}[VERB.s]",
+
+          "a {B}[ADJ] {a}[NOUN] that {A}[VERB.s]",
+          "a {a}[NOUN] that is {B}[ADJ] and {A}[VERB.s]",
+
+          "a {a}[NOUN] that {A}[VERB.s] and {B}[VERB.s]"
+      ],
+      "(¬{A}{a} & {B}{a}).subj": [
+          "a {A}[ADJ.neg] and {B}[ADJ] {a}[NOUN]",
+          "a {A}[ADJ.neg] {a}[NOUN] that is {B}[ADJ]",
+          "a {B}[ADJ] {a}[NOUN] that is not {A}[ADJ]",
+          "a {B}[ADJ] {a}[NOUN] that is {A}[ADJ.neg]",
+          "a {a}[NOUN] that is not {A}[ADJ] and is {B}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "a {A}[ADJ.neg] {a}[NOUN] that {B}[VERB.s]",
+          "a {a}[NOUN] that is not {A}[ADJ] and {B}[VERB.s]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "a {B}[ADJ] {a}[NOUN] that does not {A}[VERB]",
+          "a {a}[NOUN] that is {B}[ADJ] and does not {A}[VERB]",
+
+          "a {a}[NOUN] that does not {A}[VERB.s] and does {B}[VERB.s]"
+      ],
+      "({A}{a} & ¬{B}{a}).subj": [
+          "a {A}[ADJ] and {B}[ADJ.neg] {a}[NOUN]",
+          "a {A}[ADJ] {a}[NOUN] that is not {B}[ADJ]",
+          "a {A}[ADJ] {a}[NOUN] that is {B}[ADJ.neg]",
+          "a {B}[ADJ.neg] {a}[NOUN] that is {A}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ] and is not {B}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "a {A}[ADJ] {a}[NOUN] that does not {B}[VERB]",
+          "a {a}[NOUN] that is {A}[ADJ] and does not {B}[VERB]",
+
+          "a {B}[ADJ.neg] {a}[NOUN] that {A}[VERB.s]",
+          "a {a}[NOUN] that is not {B}[ADJ] and {A}[VERB.s]",
+          "a {a}[NOUN] that is {B}[ADJ.neg] and {A}[VERB.s]",
+
+          "a {a}[NOUN] that {A}[VERB.s] and does not {B}[VERB]"
+      ],
+      "(¬{A}{a} & ¬{B}{a}).subj": [
+          "a {A}[ADJ.neg] and {B}[ADJ.neg] {a}[NOUN]",
+          "a {A}[ADJ.neg] {a}[NOUN] that is not {B}[ADJ]",
+          "a {A}[ADJ.neg] {a}[NOUN] that is {B}[ADJ.neg]",
+          "a {B}[ADJ.neg] {a}[NOUN] that is not {A}[ADJ]",
+          "a {B}[ADJ.neg] {a}[NOUN] that is {A}[ADJ.neg]",
+          "a {a}[NOUN] that is not {A}[ADJ] or {B}[ADJ]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "a {A}[ADJ.neg] {a}[NOUN] that does not {B}[VERB]",
+          "a {a}[NOUN] that is not {A}[ADJ] and does not {B}[VERB]",
+          "a {a}[NOUN] that is {A}[ADJ.neg] and does not {B}[VERB]",
+
+          "a {B}[ADJ.neg] {a}[NOUN] that does not {A}[VERB]",
+          "a {a}[NOUN] that is not {B}[ADJ] and does not {A}[VERB]",
+          "a {a}[NOUN] that is {B}[ADJ.neg] and does not {A}[VERB]",
+
+          "a {a}[NOUN] that does not {A}[VERB] or {B}[VERB]"
+      ],
+
+
+      "({A}{a} v {B}{a}).subj": [
+          "a {a}[NOUN] that either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] that either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] that either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "a {a}[NOUN] that either {A}[VERB.s] or {B}[VERB.s] or both"
+
+      ],
+      "(¬{A}{a} v {B}{a}).subj": [
+          "a {a}[NOUN] that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] that either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "a {a}[NOUN] that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "a {a}[NOUN] that either does not {A}[VERB] or {B}[VERB.s] or both"
+      ],
+      "({A}{a} v ¬{B}{a}).subj": [
+          "a {a}[NOUN] that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] that either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "a {a}[NOUN] that either {A}[VERB.s] or does not {B}[VERB] or both"
+      ],
+      "(¬{A}{a} v ¬{B}{a}).subj": [
+          "a {a}[NOUN] that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "a {a}[NOUN] that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "a {a}[NOUN] that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "a {a}[NOUN] that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+
+          "a {a}[NOUN] that either does not {A}[VERB] or does not {B}[VERB] or both"
+      ],
+
+
+
+
+
+
+
+
+      "{A}something.subj": [
+        "{A}[ADJ] thing",
+        "something that is {A}[ADJ]",
+        "something that {A}[VERB.s]"
+      ],
+      "¬{A}something.subj": [
+        "{A}[ADJ.neg] thing",
+        "something that is not {A}[ADJ]",
+        "something that does not {A}[VERB]"
+      ],
+
+
+      "({A}something & {B}something).subj": [
+          "{A}[ADJ] and {B}[ADJ] thing",
+          "{A}[ADJ] thing that is {B}[ADJ]",
+          "{B}[ADJ] thing that is {A}[ADJ]",
+          "something that is {A}[ADJ] and {B}[ADJ]",
+
+          "{A}[ADJ] thing that {B}[VERB.s]",
+          "something that is {A}[ADJ] and {B}[VERB.s]",
+
+          "{B}[ADJ] thing that {A}[VERB.s]",
+          "something that is {B}[ADJ] and {A}[VERB.s]",
+
+          "something that {A}[VERB.s] and {B}[VERB.s]"
+      ],
+      "(¬{A}something & {B}something).subj": [
+          "{A}[ADJ.neg] and {B}[ADJ] thing",
+          "{A}[ADJ.neg] thing that is {B}[ADJ]",
+          "{B}[ADJ] thing that is not {A}[ADJ]",
+          "{B}[ADJ] thing that is {A}[ADJ.neg]",
+          "something that is not {A}[ADJ] and is {B}[ADJ]",
+          "something that is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "{A}[ADJ.neg] thing that {B}[VERB.s]",
+          "something that is not {A}[ADJ] and {B}[VERB.s]",
+          "something that is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "{B}[ADJ] thing that does not {A}[VERB]",
+          "something that is {B}[ADJ] and does not {A}[VERB]",
+
+          "something that does not {A}[VERB.s] and does {B}[VERB.s]"
+      ],
+      "({A}something & ¬{B}something).subj": [
+          "{A}[ADJ] and {B}[ADJ.neg] thing",
+          "{A}[ADJ] thing that is not {B}[ADJ]",
+          "{A}[ADJ] thing that is {B}[ADJ.neg]",
+          "{B}[ADJ.neg] thing that is {A}[ADJ]",
+          "something that is {A}[ADJ] and is not {B}[ADJ]",
+          "something that is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "{A}[ADJ] thing that does not {B}[VERB]",
+          "something that is {A}[ADJ] and does not {B}[VERB]",
+
+          "{B}[ADJ.neg] thing that {A}[VERB.s]",
+          "something that is not {B}[ADJ] and {A}[VERB.s]",
+          "something that is {B}[ADJ.neg] and {A}[VERB.s]",
+
+          "something that {A}[VERB.s] and does not {B}[VERB]"
+      ],
+      "(¬{A}something & ¬{B}something).subj": [
+          "{A}[ADJ.neg] and {B}[ADJ.neg] thing",
+          "{A}[ADJ.neg] thing that is not {B}[ADJ]",
+          "{A}[ADJ.neg] thing that is {B}[ADJ.neg]",
+          "{B}[ADJ.neg] thing that is not {A}[ADJ]",
+          "{B}[ADJ.neg] thing that is {A}[ADJ.neg]",
+          "something that is not {A}[ADJ] or {B}[ADJ]",
+          "something that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "{A}[ADJ.neg] thing that does not {B}[VERB]",
+          "something that is not {A}[ADJ] and does not {B}[VERB]",
+          "something that is {A}[ADJ.neg] and does not {B}[VERB]",
+
+          "{B}[ADJ.neg] thing that does not {A}[VERB]",
+          "something that is not {B}[ADJ] and does not {A}[VERB]",
+          "something that is {B}[ADJ.neg] and does not {A}[VERB]",
+
+          "something that does not {A}[VERB] or {B}[VERB]"
+      ],
+
+
+      "({A}something v {B}something).subj": [
+          "something that either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "something that either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "something that either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "something that either {A}[VERB.s] or {B}[VERB.s] or both"
+
+      ],
+      "(¬{A}something v {B}something).subj": [
+          "something that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "something that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "something that either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "something that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "something that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "something that either does not {A}[VERB] or {B}[VERB.s] or both"
+      ],
+      "({A}something v ¬{B}something).subj": [
+          "something that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "something that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "something that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "something that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "something that either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "something that either {A}[VERB.s] or does not {B}[VERB] or both"
+      ],
+      "(¬{A}something v ¬{B}something).subj": [
+          "something that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "something that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "something that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "something that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "something that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "something that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "something that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "something that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+
+          "something that either does not {A}[VERB] or does not {B}[VERB] or both"
+      ],
+
+
+
+
+
+
+      "{A}the_thing.subj": [
+        "the {A}[ADJ] thing",
+        "the thing that is {A}[ADJ]",
+        "the thing that {A}[VERB.s]"
+      ],
+      "¬{A}the_thing.subj": [
+        "the {A}[ADJ.neg] thing",
+        "the thing that is not {A}[ADJ]",
+        "the thing that does not {A}[VERB]"
+      ],
+
+
+      "({A}the_thing & {B}the_thing).subj": [
+          "the {A}[ADJ] and {B}[ADJ] thing",
+          "the {A}[ADJ] thing that is {B}[ADJ]",
+          "the {B}[ADJ] thing that is {A}[ADJ]",
+          "the thing that is {A}[ADJ] and {B}[ADJ]",
+
+          "the {A}[ADJ] thing that {B}[VERB.s]",
+          "the thing that is {A}[ADJ] and {B}[VERB.s]",
+
+          "the {B}[ADJ] thing that {A}[VERB.s]",
+          "the thing that is {B}[ADJ] and {A}[VERB.s]",
+
+          "the thing that {A}[VERB.s] and {B}[VERB.s]"
+      ],
+      "(¬{A}the_thing & {B}the_thing).subj": [
+          "the {A}[ADJ.neg] and {B}[ADJ] thing",
+          "the {A}[ADJ.neg] thing that is {B}[ADJ]",
+          "the {B}[ADJ] thing that is not {A}[ADJ]",
+          "the {B}[ADJ] thing that is {A}[ADJ.neg]",
+          "the thing that is not {A}[ADJ] and is {B}[ADJ]",
+          "the thing that is {A}[ADJ.neg] and {B}[ADJ]",
+
+          "the {A}[ADJ.neg] thing that {B}[VERB.s]",
+          "the thing that is not {A}[ADJ] and {B}[VERB.s]",
+          "the thing that is {A}[ADJ.neg] and {B}[VERB.s]",
+
+          "the {B}[ADJ] thing that does not {A}[VERB]",
+          "the thing that is {B}[ADJ] and does not {A}[VERB]",
+
+          "the thing that does not {A}[VERB.s] and does {B}[VERB.s]"
+      ],
+      "({A}the_thing & ¬{B}the_thing).subj": [
+          "the {A}[ADJ] and {B}[ADJ.neg] thing",
+          "the {A}[ADJ] thing that is not {B}[ADJ]",
+          "the {A}[ADJ] thing that is {B}[ADJ.neg]",
+          "the {B}[ADJ.neg] thing that is {A}[ADJ]",
+          "the thing that is {A}[ADJ] and is not {B}[ADJ]",
+          "the thing that is {A}[ADJ] and {B}[ADJ.neg]",
+
+          "the {A}[ADJ] thing that does not {B}[VERB]",
+          "the thing that is {A}[ADJ] and does not {B}[VERB]",
+
+          "the {B}[ADJ.neg] thing that {A}[VERB.s]",
+          "the thing that is not {B}[ADJ] and {A}[VERB.s]",
+          "the thing that is {B}[ADJ.neg] and {A}[VERB.s]",
+
+          "the thing that {A}[VERB.s] and does not {B}[VERB]"
+      ],
+      "(¬{A}the_thing & ¬{B}the_thing).subj": [
+          "the {A}[ADJ.neg] and {B}[ADJ.neg] thing",
+          "the {A}[ADJ.neg] thing that is not {B}[ADJ]",
+          "the {A}[ADJ.neg] thing that is {B}[ADJ.neg]",
+          "the {B}[ADJ.neg] thing that is not {A}[ADJ]",
+          "the {B}[ADJ.neg] thing that is {A}[ADJ.neg]",
+          "the thing that is not {A}[ADJ] or {B}[ADJ]",
+          "the thing that is {A}[ADJ.neg] and {B}[ADJ.neg]",
+
+          "the {A}[ADJ.neg] thing that does not {B}[VERB]",
+          "the thing that is not {A}[ADJ] and does not {B}[VERB]",
+          "the thing that is {A}[ADJ.neg] and does not {B}[VERB]",
+
+          "the {B}[ADJ.neg] thing that does not {A}[VERB]",
+          "the thing that is not {B}[ADJ] and does not {A}[VERB]",
+          "the thing that is {B}[ADJ.neg] and does not {A}[VERB]",
+
+          "the thing that does not {A}[VERB] or {B}[VERB]"
+      ],
+
+
+      "({A}the_thing v {B}the_thing).subj": [
+          "the thing that either is {A}[ADJ] or is {B}[ADJ] or both",
+
+          "the thing that either {A}[VERB.s] or is {B}[ADJ] or both",
+
+          "the thing that either is {A}[ADJ] or {B}[VERB.s] or both",
+
+          "the thing that either {A}[VERB.s] or {B}[VERB.s] or both"
+
+      ],
+      "(¬{A}the_thing v {B}the_thing).subj": [
+          "the thing that either is not {A}[ADJ] or is {B}[ADJ] or both",
+          "the thing that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
+
+          "the thing that either does not {A}[VERB] or is {B}[ADJ] or both",
+
+          "the thing that either is not {A}[ADJ] or {B}[VERB.s] or both",
+          "the thing that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
+
+          "the thing that either does not {A}[VERB] or {B}[VERB.s] or both"
+      ],
+      "({A}the_thing v ¬{B}the_thing).subj": [
+          "the thing that either is {A}[ADJ] or is not {B}[ADJ] or both",
+          "the thing that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
+
+          "the thing that either {A}[VERB.s] or is not {B}[ADJ] or both",
+          "the thing that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
+
+          "the thing that either is {A}[ADJ] or does not {B}[VERB] or both",
+
+          "the thing that either {A}[VERB.s] or does not {B}[VERB] or both"
+      ],
+      "(¬{A}the_thing v ¬{B}the_thing).subj": [
+          "the thing that either is not {A}[ADJ] or is not {B}[ADJ] or both",
+          "the thing that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
+          "the thing that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
+          "the thing that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
+
+          "the thing that either does not {A}[VERB] or is not {B}[ADJ] or both",
+          "the thing that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
+
+          "the thing that either is not {A}[ADJ] or does not {B}[VERB] or both",
+          "the thing that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
+
+          "the thing that either does not {A}[VERB] or does not {B}[VERB] or both"
+      ]
+
+    }
+  },
+
+
+
+
+
+
+
+
+  "phrase": {
+    "cause_verb": [
+      "leads to",
+      "causes",
+      "results in"
+    ],
+
+    "kind_of": [
+      "a",
+      "a kind of"
+    ],
+
+    "not_prefix.verb_clause_to_verb_clause": [
+      "it is wrong that",
+      "it is not the fact that",
+      "it is not true that"
+    ],
+    "not_postfix.noun_clause_to_verb_clause": [
+      "is wrong",
+      "is not the fact",
+      "is not true"
+    ],
+    "some_prefix.verb_clause_to_verb_clause": [
+       "for something,",
+       "there is something such that",
+       "there exists something such that"
+    ],
+    "every_prefix.verb_clause_to_verb_clause" : [
+      "for everything,"
+    ]
+  }
+
+
+
+}
