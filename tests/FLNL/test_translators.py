@@ -10,9 +10,11 @@ def test_clause_typed_translator():
 
     translator = build_translator(
         [
-            './configs/FLNL/translations/clause_typed.thing.json',
-            './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
-            './configs/FLNL/translations/clause_typed.EB_task1_train.json',
+            # './configs/FLNL/translations/clause_typed.thing.json',
+            # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+
+            './configs/FLNL/translations/clause_typed.thine.EB_task1_train.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.EB_task1_train.json',
         ],
         build_wordnet_wordbank('eng'),
         reuse_object_nouns=True,
