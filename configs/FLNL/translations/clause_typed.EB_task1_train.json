@@ -1571,7 +1571,7 @@
 
           "a {a}[NOUN] {A}[VERB.s] and {B}[VERB.s]",
 
-          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN]"
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
       ],
       "(¬{A}{a} & {B}{a})": [
           "a {a}[NOUN] is not {A}[ADJ] and is {B}[ADJ]",
@@ -1584,7 +1584,7 @@
 
           "a {a}[NOUN] does not {A}[VERB] and does {B}[VERB]",
 
-          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN]"
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] and is <<phrase::kind_of>> {B}[NOUN]"
       ],
       "({A}{a} & ¬{B}{a})": [
           "a {a}[NOUN] is {A}[ADJ] and is not {B}[ADJ]",
@@ -1597,7 +1597,7 @@
 
           "a {a}[NOUN] {A}[VERB.s] and does not {B}[VERB]",
 
-          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN]"
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
           "a {a}[NOUN] is not {A}[ADJ] or {B}[ADJ]",
@@ -1613,7 +1613,7 @@
 
           "a {a}[NOUN] does not {A}[VERB.s] or {B}[VERB.s]",
 
-          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] and a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN]"
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] and is not <<phrase::kind_of>> {B}[NOUN]"
       ],
 
 
@@ -1640,7 +1640,7 @@
 
           "a {a}[NOUN] either {A}[VERB.s] or {B}[VERB.s] or both",
 
-          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN] or both"
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] or is <<phrase::kind_of>> {B}[NOUN] or both"
       ],
       "(¬{A}{a} v {B}{a})": [
           "a {a}[NOUN] either is not {A}[ADJ] or is {B}[ADJ] or both",
@@ -1653,7 +1653,7 @@
 
           "a {a}[NOUN] either does not {A}[VERB] or {B}[VERB.s] or both",
 
-          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is <<phrase::kind_of>> {B}[NOUN] or both"
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] or is <<phrase::kind_of>> {B}[NOUN] or both"
       ],
       "({A}{a} v ¬{B}{a})": [
           "a {a}[NOUN] either is {A}[ADJ] or is not {B}[ADJ] or both",
@@ -1666,7 +1666,7 @@
 
           "a {a}[NOUN] either {A}[VERB.s] or does not {B}[VERB] or both",
 
-          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN] or both"
+          "a {a}[NOUN] is <<phrase::kind_of>> {A}[NOUN] or is not <<phrase::kind_of>> {B}[NOUN] or both"
       ],
       "(¬{A}{a} v ¬{B}{a})": [
           "a {a}[NOUN] either is not {A}[ADJ] or is not {B}[ADJ] or both",
@@ -1682,7 +1682,7 @@
 
           "a {a}[NOUN] either does not {A}[VERB] or does not {B}[VERB] or both",
 
-          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] or a {a}[NOUN] is not <<phrase::kind_of>> {B}[NOUN] or both"
+          "a {a}[NOUN] is not <<phrase::kind_of>> {A}[NOUN] or is not <<phrase::kind_of>> {B}[NOUN] or both"
       ],
 
 
