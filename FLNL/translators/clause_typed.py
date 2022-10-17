@@ -4,7 +4,7 @@ from collections import OrderedDict, defaultdict
 import random
 import re
 import logging
-from pprint import pformat
+from pprint import pformat, pprint
 
 from tqdm import tqdm
 from FLNL.formula import Formula
@@ -129,7 +129,8 @@ class ClauseTypedTranslator(Translator):
                                                                   [template_key_formula]):
                         key_formula_pulled = interprete_formula(transl_key_formula, mapping)
                         if key_formula_pulled.rep == template_key_formula.rep:
-                            template_nls = [interprete_formula(Formula(transl_nl), mapping).rep for transl_nl in transl_nls]
+                            template_nls = [interprete_formula(Formula(transl_nl), mapping).rep
+                                            for transl_nl in transl_nls]
                             template_is_found = True
                     if template_is_found:
                         break
@@ -146,10 +147,16 @@ class ClauseTypedTranslator(Translator):
             ]
 
             resolved_nls = [
-                transl_nl.replace(f'{self._TEMPLATE_BRACES[0]}{template}{self._TEMPLATE_BRACES[1]}', resolved_template_nl)
+                transl_nl.replace(
+                    f'{self._TEMPLATE_BRACES[0]}{template}{self._TEMPLATE_BRACES[1]}',
+                    resolved_template_nl,
+                    1,
+                )
                 for transl_nl in resolved_nls
                 for resolved_template_nl in resolved_template_nls
             ]
+
+            # print('!!')
 
         return resolved_nls
 
@@ -274,9 +281,10 @@ class ClauseTypedTranslator(Translator):
             if len(interp_mapping_consisntent_nls) == 0:
                 msgs = [
                     f'translation not found for "{formula.rep}" the pos and word inflations of which are consistent with the following chosen interpretation mapping.',
-                    'The tried translations are:\n',
-                    "\n".join(interp_mapping_consisntent_nls_pulled),
-                    f'The interp_mapping is:{pformat(interp_mapping)}',
+                    'The interp_mapping is the following:',
+                    '\n    ' + '\n    '.join(pformat(interp_mapping).split('\n')),
+                    'The tried translations are:',
+                    '\n    ' + '\n    '.join(sentence_nls_pulled),
                 ]
                 raise_or_warn('\n'.join(msgs))
                 translations.append(None)
@@ -331,8 +339,10 @@ class ClauseTypedTranslator(Translator):
                     transl_nls_pulled = [interprete_formula(Formula(transl_nl), mapping).rep for transl_nl in transl_nls]
                     transl_is_found = True
                     break
+
             if transl_is_found:
                 break
+
         return transl_key, transl_nls, transl_nls_pulled
 
     def _find_interp_mapping_consistent_translations(self,
