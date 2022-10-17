@@ -1121,114 +1121,106 @@
     "(x): {A}x -> {B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::{B}it>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::{B}the_thing>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::{B}the_thing.subset>>",
-
-      "a {A}[NOUN] <<phrase::{B}predicate>>"
+      "<<clause::noun::{A}something.subset>> <<phrase::{B}predicate>>"
     ],
     "(x): ¬{A}x -> {B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::{B}it>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::{B}the_thing>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::{B}the_thing.subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::{B}predicate>>"
     ],
     "(x): {A}x -> ¬{B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::¬{B}it>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::¬{B}the_thing>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::¬{B}the_thing.subset>>",
-
-      "a {A}[NOUN] <<phrase::{B}not_predicate>>"
+      "<<clause::noun::{A}something.subset>> <<phrase::¬{B}predicate>>"
     ],
     "(x): ¬{A}x -> ¬{B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::¬{B}it>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::¬{B}the_thing>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::¬{B}the_thing.subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::¬{B}predicate>>"
     ],
 
 
     "(x): ({A}x & {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & {B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::({A}something & {B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::({A}something & {B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::({A}something & {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x & {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & {B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::(¬{A}something & {B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::(¬{A}something & {B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something & {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x & ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::({A}something & ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::({A}something & ¬{B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::({A}something & ¬{B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x & {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & {B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::({A}something & {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::({A}something & {B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::({A}something & {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & ¬{B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::(¬{A}something & ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::(¬{A}something & ¬{B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something & ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & {B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::(¬{A}something & {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::(¬{A}something & {B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something & {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::({A}something & ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::({A}something & ¬{B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::({A}something & ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it & ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::(¬{A}something & ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::(¬{A}something & ¬{B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something & ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
 
 
     "(x): {A}x -> ({B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it & {C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing & {C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::({B}the_thing & {C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}predicate>> and <<phrase::{C}predicate>>"
+      "<<clause::noun::{A}something.subset>> <<phrase::({B} & {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it & {C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing & {C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::({B}the_thing & {C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::({B} & {C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it & {C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing & {C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::(¬{B}the_thing & {C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}not_predicate>> and <<phrase::{C}predicate>>"
+      "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} & {C})predicate>>"
     ],
     "(x): {A}x -> ({B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it & ¬{C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::({B}the_thing & ¬{C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}predicate>> and <<phrase::{C}not_predicate>>"
+      "<<clause::noun::{A}something.subset>> <<phrase::({B} & ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it & {C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing & {C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::(¬{B}the_thing & {C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} & {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it & ¬{C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::({B}the_thing & ¬{C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::({B} & ¬{C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it & ¬{C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::(¬{B}the_thing & ¬{C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}not_predicate>> and <<phrase::{C}not_predicate>>"
+      "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} & ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it & ¬{C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::(¬{B}the_thing & ¬{C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} & ¬{C})predicate>>"
     ],
 
 
@@ -1304,88 +1296,84 @@
     "(x): ({A}x v {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v {B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::({A}something v {B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::({A}something v {B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::({A}something v {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v {B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::(¬{A}something v {B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::(¬{A}something v {B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something v {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::({A}something v ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::({A}something v ¬{B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::({A}something v ¬{B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v {B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::({A}something v {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::({A}something v {B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::({A}something v {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v ¬{B}it)>>, then <<clause::verb::{C}it>>",
       "if <<clause::verb::(¬{A}something v ¬{B}something)>>, then <<clause::verb::{C}the_thing>>",
-      "<<clause::noun::(¬{A}something v ¬{B}something).subset>> is <<clause::noun::{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something v ¬{B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v {B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::(¬{A}something v {B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::(¬{A}something v {B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something v {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::({A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::({A}something v ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::({A}something v ¬{B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::({A}something v ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::(¬{A}it v ¬{B}it)>>, then <<clause::verb::¬{C}it>>",
       "if <<clause::verb::(¬{A}something v ¬{B}something)>>, then <<clause::verb::¬{C}the_thing>>",
-      "<<clause::noun::(¬{A}something v ¬{B}something).subset>> is <<clause::noun::¬{C}the_thing.subset>>"
+      "<<clause::noun::(¬{A}something v ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
 
 
     "(x): {A}x -> ({B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it v {C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing v {C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::({B}the_thing v {C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}predicate>> or <<phrase::{C}predicate>> or both"
+      "<<clause::noun::{A}something.subset>> <<phrase::({B} v {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it v {C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing v {C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::({B}the_thing v {C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::({B} v {C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it v {C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing v {C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::(¬{B}the_thing v {C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}not_predicate>> or <<phrase::{C}predicate>> or both"
+      "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} v {C})predicate>>"
     ],
     "(x): {A}x -> ({B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::({B}it v ¬{C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::({B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::({B}the_thing v ¬{C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}predicate>> or <<phrase::{C}not_predicate>> or both"
+      "<<clause::noun::{A}something.subset>> <<phrase::({B} v ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it v {C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing v {C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::(¬{B}the_thing v {C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} v {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::({B}it v ¬{C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::({B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::({B}the_thing v ¬{C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::({B} v ¬{C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::{A}it>>, then <<clause::verb::(¬{B}it v ¬{C}it)>>",
       "if <<clause::verb::{A}something>>, then <<clause::verb::(¬{B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::noun::{A}something.subset>> is <<clause::noun::(¬{B}the_thing v ¬{C}the_thing).subset>>",
-      "a {A}[NOUN] <<phrase::{B}not_predicate>> or <<phrase::{C}not_predicate>> or both"
+      "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} v ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> if <<clause::verb::¬{A}it>>, then <<clause::verb::(¬{B}it v ¬{C}it)>>",
       "if <<clause::verb::¬{A}something>>, then <<clause::verb::(¬{B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::noun::¬{A}something.subset>> is <<clause::noun::(¬{B}the_thing v ¬{C}the_thing).subset>>"
+      "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} v ¬{C})predicate>>"
     ],
 
 
@@ -1557,21 +1545,21 @@
       ],
       "¬{A}{a}": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}{a}>>",
-        "a {a}[NOUN] <<phrase::{A}not_predicate>>"
+        "a {a}[NOUN] <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}{a} & {B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+          "a {a}[NOUN] <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}{a} & {B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "a {a}[NOUN] <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}{a} & ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "a {a}[NOUN] <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}not_predicate>> and <<phrase::{B}not_predicate>>"
+          "a {a}[NOUN] <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
@@ -1590,16 +1578,16 @@
 
 
       "({A}{a} v {B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+          "a {a}[NOUN] <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}{a} v {B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "a {a}[NOUN] <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}{a} v ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "a {a}[NOUN] <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}{a} v ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::{A}not_predicate>> or <<phrase::{B}not_predicate>> or both"
+          "a {a}[NOUN] <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -1626,21 +1614,21 @@
       ],
       "¬{A}something": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}something>>",
-        "something <<phrase::{A}not_predicate>>"
+        "something <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}something & {B}something)": [
-          "something <<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+          "something <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}something & {B}something)": [
-          "something <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "something <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}something & ¬{B}something)": [
-          "something <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "something <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}something & ¬{B}something)": [
-          "something <<phrase::{A}not_predicate>> and <<phrase::{B}not_predicate>>"
+          "something <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
@@ -1659,16 +1647,16 @@
 
 
       "({A}something v {B}something)": [
-          "something <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+          "something <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}something v {B}something)": [
-          "something <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "something <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}something v ¬{B}something)": [
-          "something <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "something <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}something v ¬{B}something)": [
-          "something <<phrase::{A}not_predicate>> or <<phrase::{B}not_predicate>> or both"
+          "something <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -1696,21 +1684,22 @@
       ],
       "¬{A}the_thing": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}the_thing>>",
-        "the thing <<phrase::{A}not_predicate>>"
+        "the thing <<phrase::¬{A}predicate>>"
       ],
+
 
 
       "({A}the_thing & {B}the_thing)": [
-          "the thing <<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+          "the thing <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}the_thing & {B}the_thing)": [
-          "the thing <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "the thing <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}the_thing & ¬{B}the_thing)": [
-          "the thing <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "the thing <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}the_thing & ¬{B}the_thing)": [
-          "the thing <<phrase::{A}not_predicate>> and <<phrase::{B}not_predicate>>"
+          "the thing <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
@@ -1729,16 +1718,16 @@
 
 
       "({A}the_thing v {B}the_thing)": [
-          "the thing <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+          "the thing <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}the_thing v {B}the_thing)": [
-          "the thing <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "the thing <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}the_thing v ¬{B}the_thing)": [
-          "the thing <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "the thing <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}the_thing v ¬{B}the_thing)": [
-          "the thing <<phrase::{A}not_predicate>> or <<phrase::{B}not_predicate>> or both"
+          "the thing <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -1765,21 +1754,21 @@
       ],
       "¬{A}everything": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}everything>>",
-        "everything <<phrase::{A}not_predicate>>"
+        "everything <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}everything & {B}everything)": [
-          "everything <<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+          "everything <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}everything & {B}everything)": [
-          "everything <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "everything <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}everything & ¬{B}everything)": [
-          "everything <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "everything <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}everything & ¬{B}everything)": [
-          "everything <<phrase::{A}not_predicate>> and <<phrase::{B}not_predicate>>"
+          "everything <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
@@ -1798,16 +1787,16 @@
 
 
       "({A}everything v {B}everything)": [
-          "everything <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+          "everything <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}everything v {B}everything)": [
-          "everything <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "everything <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}everything v ¬{B}everything)": [
-          "everything <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "everything <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}everything v ¬{B}everything)": [
-          "everything <<phrase::{A}not_predicate>> or <<phrase::{B}not_predicate>> or both"
+          "everything <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -1830,27 +1819,26 @@
 
 
 
-
       "{A}it": [
         "it <<phrase::{A}predicate>>"
       ],
       "¬{A}it": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}it>>",
-        "it <<phrase::{A}not_predicate>>"
+        "it <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}it & {B}it)": [
-          "it <<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+          "it <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}it & {B}it)": [
-          "it <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "it <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}it & ¬{B}it)": [
-          "it <<phrase::{A}not_predicate>> and <<phrase::{B}predicate>>"
+          "it <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}it & ¬{B}it)": [
-          "it <<phrase::{A}not_predicate>> and <<phrase::{B}not_predicate>>"
+          "it <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
@@ -1869,16 +1857,16 @@
 
 
       "({A}it v {B}it)": [
-          "it <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+          "it <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}it v {B}it)": [
-          "it <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "it <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}it v ¬{B}it)": [
-          "it <<phrase::{A}not_predicate>> or <<phrase::{B}predicate>> or both"
+          "it <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}it v ¬{B}it)": [
-          "it <<phrase::{A}not_predicate>> or <<phrase::{B}not_predicate>> or both"
+          "it <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -1894,7 +1882,6 @@
       "¬(¬{A}it v ¬{B}it)": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}it v ¬{B}it)>>"
       ]
-
 
 
 
@@ -1996,131 +1983,64 @@
 
 
       "{A}{a}.subset": [
-        "a {A}[ADJ] {a}[NOUN]",
-        "a {a}[NOUN] that is {A}[ADJ]",
-        "a {a}[NOUN] that {A}[VERB.s]"
+        "a <<phrase::{A}modifier>> {a}[NOUN]",
+        "a {a}[NOUN] that <<phrase::{A}predicate>>"
       ],
       "¬{A}{a}.subset": [
-        "a {A}[ADJ.neg] {a}[NOUN]",
-        "a {a}[NOUN] that is not {A}[ADJ]",
-        "a {a}[NOUN] that does not {A}[VERB]"
+        "a <<phrase::¬{A}modifier>> {a}[NOUN]",
+        "a {a}[NOUN] that <<phrase::¬{A}predicate>>"
       ],
 
       
       "({A}{a} & {B}{a}).subset": [
-          "a {A}[ADJ] and {B}[ADJ] {a}[NOUN]",
-          "a {A}[ADJ] {a}[NOUN] that is {B}[ADJ]",
-          "a {B}[ADJ] {a}[NOUN] that is {A}[ADJ]",
-          "a {a}[NOUN] that is {A}[ADJ] and {B}[ADJ]",
-
-          "a {A}[ADJ] {a}[NOUN] that {B}[VERB.s]",
-          "a {a}[NOUN] that is {A}[ADJ] and {B}[VERB.s]",
-
-          "a {B}[ADJ] {a}[NOUN] that {A}[VERB.s]",
-          "a {a}[NOUN] that is {B}[ADJ] and {A}[VERB.s]",
-
-          "a {a}[NOUN] that {A}[VERB.s] and {B}[VERB.s]"
+          "a <<phrase::({A} & {B})modifier>> {a}[NOUN]",
+          "a <<phrase::{A}modifier>> {a}[NOUN] that <<phrase::{B}predicate>>",
+          "a <<phrase::{B}modifier>> {a}[NOUN] that <<phrase::{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}{a} & {B}{a}).subset": [
-          "a {A}[ADJ.neg] and {B}[ADJ] {a}[NOUN]",
-          "a {A}[ADJ.neg] {a}[NOUN] that is {B}[ADJ]",
-          "a {B}[ADJ] {a}[NOUN] that is not {A}[ADJ]",
-          "a {B}[ADJ] {a}[NOUN] that is {A}[ADJ.neg]",
-          "a {a}[NOUN] that is not {A}[ADJ] and is {B}[ADJ]",
-          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[ADJ]",
-
-          "a {A}[ADJ.neg] {a}[NOUN] that {B}[VERB.s]",
-          "a {a}[NOUN] that is not {A}[ADJ] and {B}[VERB.s]",
-          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[VERB.s]",
-
-          "a {B}[ADJ] {a}[NOUN] that does not {A}[VERB]",
-          "a {a}[NOUN] that is {B}[ADJ] and does not {A}[VERB]",
-
-          "a {a}[NOUN] that does not {A}[VERB.s] and does {B}[VERB.s]"
+          "a <<phrase::(¬{A} & {B})modifier>> {a}[NOUN]",
+          "a <<phrase::¬{A}modifier>> {a}[NOUN] that <<phrase::{B}predicate>>",
+          "a <<phrase::{B}modifier>> {a}[NOUN] that <<phrase::¬{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}{a} & ¬{B}{a}).subset": [
-          "a {A}[ADJ] and {B}[ADJ.neg] {a}[NOUN]",
-          "a {A}[ADJ] {a}[NOUN] that is not {B}[ADJ]",
-          "a {A}[ADJ] {a}[NOUN] that is {B}[ADJ.neg]",
-          "a {B}[ADJ.neg] {a}[NOUN] that is {A}[ADJ]",
-          "a {a}[NOUN] that is {A}[ADJ] and is not {B}[ADJ]",
-          "a {a}[NOUN] that is {A}[ADJ] and {B}[ADJ.neg]",
-
-          "a {A}[ADJ] {a}[NOUN] that does not {B}[VERB]",
-          "a {a}[NOUN] that is {A}[ADJ] and does not {B}[VERB]",
-
-          "a {B}[ADJ.neg] {a}[NOUN] that {A}[VERB.s]",
-          "a {a}[NOUN] that is not {B}[ADJ] and {A}[VERB.s]",
-          "a {a}[NOUN] that is {B}[ADJ.neg] and {A}[VERB.s]",
-
-          "a {a}[NOUN] that {A}[VERB.s] and does not {B}[VERB]"
+          "a <<phrase::({A} & ¬{B})modifier>> {a}[NOUN]",
+          "a <<phrase::{A}modifier>> {a}[NOUN] that <<phrase::¬{B}predicate>>",
+          "a <<phrase::¬{B}modifier>> {a}[NOUN] that <<phrase::{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}{a} & ¬{B}{a}).subset": [
-          "a {A}[ADJ.neg] and {B}[ADJ.neg] {a}[NOUN]",
-          "a {A}[ADJ.neg] {a}[NOUN] that is not {B}[ADJ]",
-          "a {A}[ADJ.neg] {a}[NOUN] that is {B}[ADJ.neg]",
-          "a {B}[ADJ.neg] {a}[NOUN] that is not {A}[ADJ]",
-          "a {B}[ADJ.neg] {a}[NOUN] that is {A}[ADJ.neg]",
-          "a {a}[NOUN] that is not {A}[ADJ] or {B}[ADJ]",
-          "a {a}[NOUN] that is {A}[ADJ.neg] and {B}[ADJ.neg]",
-
-          "a {A}[ADJ.neg] {a}[NOUN] that does not {B}[VERB]",
-          "a {a}[NOUN] that is not {A}[ADJ] and does not {B}[VERB]",
-          "a {a}[NOUN] that is {A}[ADJ.neg] and does not {B}[VERB]",
-
-          "a {B}[ADJ.neg] {a}[NOUN] that does not {A}[VERB]",
-          "a {a}[NOUN] that is not {B}[ADJ] and does not {A}[VERB]",
-          "a {a}[NOUN] that is {B}[ADJ.neg] and does not {A}[VERB]",
-
-          "a {a}[NOUN] that does not {A}[VERB] or {B}[VERB]"
+          "a <<phrase::(¬{A} & ¬{B})modifier>> {a}[NOUN]",
+          "a <<phrase::¬{A}modifier>> {a}[NOUN] that <<phrase::¬{B}predicate>>",
+          "a <<phrase::¬{B}modifier>> {a}[NOUN] that <<phrase::¬{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
       "({A}{a} v {B}{a}).subset": [
-          "a {a}[NOUN] that either is {A}[ADJ] or is {B}[ADJ] or both",
-
-          "a {a}[NOUN] that either {A}[VERB.s] or is {B}[ADJ] or both",
-
-          "a {a}[NOUN] that either is {A}[ADJ] or {B}[VERB.s] or both",
-
-          "a {a}[NOUN] that either {A}[VERB.s] or {B}[VERB.s] or both"
-
+          "a <<phrase::({A} v {B})modifier>> {a}[NOUN]",
+          "a <<phrase::{A}modifier>> {a}[NOUN] that <<phrase::{B}predicate>>",
+          "a <<phrase::{B}modifier>> {a}[NOUN] that <<phrase::{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}{a} v {B}{a}).subset": [
-          "a {a}[NOUN] that either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "a {a}[NOUN] that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
-
-          "a {a}[NOUN] that either does not {A}[VERB] or is {B}[ADJ] or both",
-
-          "a {a}[NOUN] that either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "a {a}[NOUN] that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
-
-          "a {a}[NOUN] that either does not {A}[VERB] or {B}[VERB.s] or both"
+          "a <<phrase::(¬{A} v {B})modifier>> {a}[NOUN]",
+          "a <<phrase::¬{A}modifier>> {a}[NOUN] that <<phrase::{B}predicate>>",
+          "a <<phrase::{B}modifier>> {a}[NOUN] that <<phrase::¬{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}{a} v ¬{B}{a}).subset": [
-          "a {a}[NOUN] that either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "a {a}[NOUN] that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
-
-          "a {a}[NOUN] that either {A}[VERB.s] or is not {B}[ADJ] or both",
-          "a {a}[NOUN] that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
-
-          "a {a}[NOUN] that either is {A}[ADJ] or does not {B}[VERB] or both",
-
-          "a {a}[NOUN] that either {A}[VERB.s] or does not {B}[VERB] or both"
+          "a <<phrase::({A} v ¬{B})modifier>> {a}[NOUN]",
+          "a <<phrase::{A}modifier>> {a}[NOUN] that <<phrase::¬{B}predicate>>",
+          "a <<phrase::¬{B}modifier>> {a}[NOUN] that <<phrase::{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}{a} v ¬{B}{a}).subset": [
-          "a {a}[NOUN] that either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "a {a}[NOUN] that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
-          "a {a}[NOUN] that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
-          "a {a}[NOUN] that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
-
-          "a {a}[NOUN] that either does not {A}[VERB] or is not {B}[ADJ] or both",
-          "a {a}[NOUN] that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
-
-          "a {a}[NOUN] that either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "a {a}[NOUN] that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
-
-          "a {a}[NOUN] that either does not {A}[VERB] or does not {B}[VERB] or both"
+          "a <<phrase::(¬{A} v ¬{B})modifier>> {a}[NOUN]",
+          "a <<phrase::¬{A}modifier>> {a}[NOUN] that <<phrase::¬{B}predicate>>",
+          "a <<phrase::¬{B}modifier>> {a}[NOUN] that <<phrase::¬{A}predicate>>",
+          "a {a}[NOUN] that <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -2131,131 +2051,65 @@
 
 
       "{A}something.subset": [
-        "{A}[ADJ] thing",
-        "something that is {A}[ADJ]",
-        "something that {A}[VERB.s]"
+        "a {A}[NOUN]",
+        "<<phrase::{A}modifier>> thing",
+        "something that <<phrase::{A}predicate>>"
       ],
       "¬{A}something.subset": [
-        "{A}[ADJ.neg] thing",
-        "something that is not {A}[ADJ]",
-        "something that does not {A}[VERB]"
+        "<<phrase::¬{A}modifier>> thing",
+        "something that <<phrase::¬{A}predicate>>"
       ],
 
-
+      
       "({A}something & {B}something).subset": [
-          "{A}[ADJ] and {B}[ADJ] thing",
-          "{A}[ADJ] thing that is {B}[ADJ]",
-          "{B}[ADJ] thing that is {A}[ADJ]",
-          "something that is {A}[ADJ] and {B}[ADJ]",
-
-          "{A}[ADJ] thing that {B}[VERB.s]",
-          "something that is {A}[ADJ] and {B}[VERB.s]",
-
-          "{B}[ADJ] thing that {A}[VERB.s]",
-          "something that is {B}[ADJ] and {A}[VERB.s]",
-
-          "something that {A}[VERB.s] and {B}[VERB.s]"
+          "<<phrase::({A} & {B})modifier>> thing",
+          "<<phrase::{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "<<phrase::{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "something that <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}something & {B}something).subset": [
-          "{A}[ADJ.neg] and {B}[ADJ] thing",
-          "{A}[ADJ.neg] thing that is {B}[ADJ]",
-          "{B}[ADJ] thing that is not {A}[ADJ]",
-          "{B}[ADJ] thing that is {A}[ADJ.neg]",
-          "something that is not {A}[ADJ] and is {B}[ADJ]",
-          "something that is {A}[ADJ.neg] and {B}[ADJ]",
-
-          "{A}[ADJ.neg] thing that {B}[VERB.s]",
-          "something that is not {A}[ADJ] and {B}[VERB.s]",
-          "something that is {A}[ADJ.neg] and {B}[VERB.s]",
-
-          "{B}[ADJ] thing that does not {A}[VERB]",
-          "something that is {B}[ADJ] and does not {A}[VERB]",
-
-          "something that does not {A}[VERB.s] and does {B}[VERB.s]"
+          "<<phrase::(¬{A} & {B})modifier>> thing",
+          "<<phrase::¬{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "<<phrase::{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "something that <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}something & ¬{B}something).subset": [
-          "{A}[ADJ] and {B}[ADJ.neg] thing",
-          "{A}[ADJ] thing that is not {B}[ADJ]",
-          "{A}[ADJ] thing that is {B}[ADJ.neg]",
-          "{B}[ADJ.neg] thing that is {A}[ADJ]",
-          "something that is {A}[ADJ] and is not {B}[ADJ]",
-          "something that is {A}[ADJ] and {B}[ADJ.neg]",
-
-          "{A}[ADJ] thing that does not {B}[VERB]",
-          "something that is {A}[ADJ] and does not {B}[VERB]",
-
-          "{B}[ADJ.neg] thing that {A}[VERB.s]",
-          "something that is not {B}[ADJ] and {A}[VERB.s]",
-          "something that is {B}[ADJ.neg] and {A}[VERB.s]",
-
-          "something that {A}[VERB.s] and does not {B}[VERB]"
+          "<<phrase::({A} & ¬{B})modifier>> thing",
+          "<<phrase::{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "<<phrase::¬{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "something that <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}something & ¬{B}something).subset": [
-          "{A}[ADJ.neg] and {B}[ADJ.neg] thing",
-          "{A}[ADJ.neg] thing that is not {B}[ADJ]",
-          "{A}[ADJ.neg] thing that is {B}[ADJ.neg]",
-          "{B}[ADJ.neg] thing that is not {A}[ADJ]",
-          "{B}[ADJ.neg] thing that is {A}[ADJ.neg]",
-          "something that is not {A}[ADJ] or {B}[ADJ]",
-          "something that is {A}[ADJ.neg] and {B}[ADJ.neg]",
-
-          "{A}[ADJ.neg] thing that does not {B}[VERB]",
-          "something that is not {A}[ADJ] and does not {B}[VERB]",
-          "something that is {A}[ADJ.neg] and does not {B}[VERB]",
-
-          "{B}[ADJ.neg] thing that does not {A}[VERB]",
-          "something that is not {B}[ADJ] and does not {A}[VERB]",
-          "something that is {B}[ADJ.neg] and does not {A}[VERB]",
-
-          "something that does not {A}[VERB] or {B}[VERB]"
+          "<<phrase::(¬{A} & ¬{B})modifier>> thing",
+          "<<phrase::¬{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "<<phrase::¬{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "something that <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
       "({A}something v {B}something).subset": [
-          "something that either is {A}[ADJ] or is {B}[ADJ] or both",
-
-          "something that either {A}[VERB.s] or is {B}[ADJ] or both",
-
-          "something that either is {A}[ADJ] or {B}[VERB.s] or both",
-
-          "something that either {A}[VERB.s] or {B}[VERB.s] or both"
-
+          "<<phrase::({A} v {B})modifier>> thing",
+          "<<phrase::{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "<<phrase::{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "something that <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}something v {B}something).subset": [
-          "something that either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "something that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
-
-          "something that either does not {A}[VERB] or is {B}[ADJ] or both",
-
-          "something that either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "something that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
-
-          "something that either does not {A}[VERB] or {B}[VERB.s] or both"
+          "<<phrase::(¬{A} v {B})modifier>> thing",
+          "<<phrase::¬{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "<<phrase::{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "something that <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}something v ¬{B}something).subset": [
-          "something that either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "something that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
-
-          "something that either {A}[VERB.s] or is not {B}[ADJ] or both",
-          "something that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
-
-          "something that either is {A}[ADJ] or does not {B}[VERB] or both",
-
-          "something that either {A}[VERB.s] or does not {B}[VERB] or both"
+          "<<phrase::({A} v ¬{B})modifier>> thing",
+          "<<phrase::{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "<<phrase::¬{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "something that <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}something v ¬{B}something).subset": [
-          "something that either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "something that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
-          "something that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
-          "something that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
-
-          "something that either does not {A}[VERB] or is not {B}[ADJ] or both",
-          "something that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
-
-          "something that either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "something that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
-
-          "something that either does not {A}[VERB] or does not {B}[VERB] or both"
+          "<<phrase::(¬{A} v ¬{B})modifier>> thing",
+          "<<phrase::¬{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "<<phrase::¬{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "something that <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -2264,131 +2118,65 @@
 
 
       "{A}the_thing.subset": [
-        "the {A}[ADJ] thing",
-        "the thing that is {A}[ADJ]",
-        "the thing that {A}[VERB.s]"
+        "a {A}[NOUN]",
+        "the <<phrase::{A}modifier>> thing",
+        "the thing that <<phrase::{A}predicate>>"
       ],
       "¬{A}the_thing.subset": [
-        "the {A}[ADJ.neg] thing",
-        "the thing that is not {A}[ADJ]",
-        "the thing that does not {A}[VERB]"
+        "the <<phrase::¬{A}modifier>> thing",
+        "the thing that <<phrase::¬{A}predicate>>"
       ],
 
-
+      
       "({A}the_thing & {B}the_thing).subset": [
-          "the {A}[ADJ] and {B}[ADJ] thing",
-          "the {A}[ADJ] thing that is {B}[ADJ]",
-          "the {B}[ADJ] thing that is {A}[ADJ]",
-          "the thing that is {A}[ADJ] and {B}[ADJ]",
-
-          "the {A}[ADJ] thing that {B}[VERB.s]",
-          "the thing that is {A}[ADJ] and {B}[VERB.s]",
-
-          "the {B}[ADJ] thing that {A}[VERB.s]",
-          "the thing that is {B}[ADJ] and {A}[VERB.s]",
-
-          "the thing that {A}[VERB.s] and {B}[VERB.s]"
+          "the <<phrase::({A} & {B})modifier>> thing",
+          "the <<phrase::{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "the <<phrase::{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "the thing that <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}the_thing & {B}the_thing).subset": [
-          "the {A}[ADJ.neg] and {B}[ADJ] thing",
-          "the {A}[ADJ.neg] thing that is {B}[ADJ]",
-          "the {B}[ADJ] thing that is not {A}[ADJ]",
-          "the {B}[ADJ] thing that is {A}[ADJ.neg]",
-          "the thing that is not {A}[ADJ] and is {B}[ADJ]",
-          "the thing that is {A}[ADJ.neg] and {B}[ADJ]",
-
-          "the {A}[ADJ.neg] thing that {B}[VERB.s]",
-          "the thing that is not {A}[ADJ] and {B}[VERB.s]",
-          "the thing that is {A}[ADJ.neg] and {B}[VERB.s]",
-
-          "the {B}[ADJ] thing that does not {A}[VERB]",
-          "the thing that is {B}[ADJ] and does not {A}[VERB]",
-
-          "the thing that does not {A}[VERB.s] and does {B}[VERB.s]"
+          "the <<phrase::(¬{A} & {B})modifier>> thing",
+          "the <<phrase::¬{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "the <<phrase::{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "the thing that <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}the_thing & ¬{B}the_thing).subset": [
-          "the {A}[ADJ] and {B}[ADJ.neg] thing",
-          "the {A}[ADJ] thing that is not {B}[ADJ]",
-          "the {A}[ADJ] thing that is {B}[ADJ.neg]",
-          "the {B}[ADJ.neg] thing that is {A}[ADJ]",
-          "the thing that is {A}[ADJ] and is not {B}[ADJ]",
-          "the thing that is {A}[ADJ] and {B}[ADJ.neg]",
-
-          "the {A}[ADJ] thing that does not {B}[VERB]",
-          "the thing that is {A}[ADJ] and does not {B}[VERB]",
-
-          "the {B}[ADJ.neg] thing that {A}[VERB.s]",
-          "the thing that is not {B}[ADJ] and {A}[VERB.s]",
-          "the thing that is {B}[ADJ.neg] and {A}[VERB.s]",
-
-          "the thing that {A}[VERB.s] and does not {B}[VERB]"
+          "the <<phrase::({A} & ¬{B})modifier>> thing",
+          "the <<phrase::{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "the <<phrase::¬{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "the thing that <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}the_thing & ¬{B}the_thing).subset": [
-          "the {A}[ADJ.neg] and {B}[ADJ.neg] thing",
-          "the {A}[ADJ.neg] thing that is not {B}[ADJ]",
-          "the {A}[ADJ.neg] thing that is {B}[ADJ.neg]",
-          "the {B}[ADJ.neg] thing that is not {A}[ADJ]",
-          "the {B}[ADJ.neg] thing that is {A}[ADJ.neg]",
-          "the thing that is not {A}[ADJ] or {B}[ADJ]",
-          "the thing that is {A}[ADJ.neg] and {B}[ADJ.neg]",
-
-          "the {A}[ADJ.neg] thing that does not {B}[VERB]",
-          "the thing that is not {A}[ADJ] and does not {B}[VERB]",
-          "the thing that is {A}[ADJ.neg] and does not {B}[VERB]",
-
-          "the {B}[ADJ.neg] thing that does not {A}[VERB]",
-          "the thing that is not {B}[ADJ] and does not {A}[VERB]",
-          "the thing that is {B}[ADJ.neg] and does not {A}[VERB]",
-
-          "the thing that does not {A}[VERB] or {B}[VERB]"
+          "the <<phrase::(¬{A} & ¬{B})modifier>> thing",
+          "the <<phrase::¬{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "the <<phrase::¬{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "the thing that <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
       "({A}the_thing v {B}the_thing).subset": [
-          "the thing that either is {A}[ADJ] or is {B}[ADJ] or both",
-
-          "the thing that either {A}[VERB.s] or is {B}[ADJ] or both",
-
-          "the thing that either is {A}[ADJ] or {B}[VERB.s] or both",
-
-          "the thing that either {A}[VERB.s] or {B}[VERB.s] or both"
-
+          "the <<phrase::({A} v {B})modifier>> thing",
+          "the <<phrase::{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "the <<phrase::{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "the thing that <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}the_thing v {B}the_thing).subset": [
-          "the thing that either is not {A}[ADJ] or is {B}[ADJ] or both",
-          "the thing that either is {A}[ADJ.neg] or is {B}[ADJ] or both",
-
-          "the thing that either does not {A}[VERB] or is {B}[ADJ] or both",
-
-          "the thing that either is not {A}[ADJ] or {B}[VERB.s] or both",
-          "the thing that either is {A}[ADJ.neg] or {B}[VERB.s] or both",
-
-          "the thing that either does not {A}[VERB] or {B}[VERB.s] or both"
+          "the <<phrase::(¬{A} v {B})modifier>> thing",
+          "the <<phrase::¬{A}modifier>> thing that <<phrase::{B}predicate>>",
+          "the <<phrase::{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "the thing that <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}the_thing v ¬{B}the_thing).subset": [
-          "the thing that either is {A}[ADJ] or is not {B}[ADJ] or both",
-          "the thing that either is {A}[ADJ] or is {B}[ADJ.neg] or both",
-
-          "the thing that either {A}[VERB.s] or is not {B}[ADJ] or both",
-          "the thing that either {A}[VERB.s] or is {B}[ADJ.neg] or both",
-
-          "the thing that either is {A}[ADJ] or does not {B}[VERB] or both",
-
-          "the thing that either {A}[VERB.s] or does not {B}[VERB] or both"
+          "the <<phrase::({A} v ¬{B})modifier>> thing",
+          "the <<phrase::{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "the <<phrase::¬{B}modifier>> thing that <<phrase::{A}predicate>>",
+          "the thing that <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}the_thing v ¬{B}the_thing).subset": [
-          "the thing that either is not {A}[ADJ] or is not {B}[ADJ] or both",
-          "the thing that either is {A}[ADJ.neg] or is not {B}[ADJ] or both",
-          "the thing that either is not {A}[ADJ] or is {B}[ADJ.neg] or both",
-          "the thing that either is {A}[ADJ.neg] or is {B}[ADJ.neg] or both",
-
-          "the thing that either does not {A}[VERB] or is not {B}[ADJ] or both",
-          "the thing that either does not {A}[VERB] or is {B}[ADJ.neg] or both",
-
-          "the thing that either is not {A}[ADJ] or does not {B}[VERB] or both",
-          "the thing that either is {A}[ADJ.neg] or does not {B}[VERB] or both",
-
-          "the thing that either does not {A}[VERB] or does not {B}[VERB] or both"
+          "the <<phrase::(¬{A} v ¬{B})modifier>> thing",
+          "the <<phrase::¬{A}modifier>> thing that <<phrase::¬{B}predicate>>",
+          "the <<phrase::¬{B}modifier>> thing that <<phrase::¬{A}predicate>>",
+          "the thing that <<phrase::(¬{A} v ¬{B})predicate>>"
       ]
 
     }
@@ -2409,12 +2197,88 @@
       "is <<phrase::kind_of>> {A}[NOUN]"
     ],
 
-    "{A}not_predicate": [
+    "{A}the_thing.subset": [
+      "the <<phrase::{A}modifier>> thing",
+      "the thing that <<phrase::{A}predicate>>"
+    ],
+
+
+    "¬{A}predicate": [
       "is not {A}[ADJ]",
       "is {A}[ADJ.neg]",
       "does not {A}[VERB]",
       "is not <<phrase::kind_of>> {A}[NOUN]"
     ],
+
+    "({A} & {B})predicate": [
+      "<<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+    ],
+    "(¬{A} & {B})predicate": [
+      "<<phrase::¬{A}predicate>> and <<phrase::{B}predicate>>"
+    ],
+    "({A} & ¬{B})predicate": [
+      "<<phrase::{A}predicate>> and <<phrase::¬{B}predicate>>"
+    ],
+    "(¬{A} & ¬{B})predicate": [
+      "<<phrase::¬{A}predicate>> and <<phrase::¬{B}predicate>>"
+    ],
+
+    "({A} v {B})predicate": [
+      "either <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+    ],
+    "(¬{A} v {B})predicate": [
+      "either <<phrase::¬{A}predicate>> or <<phrase::{B}predicate>> or both"
+    ],
+    "({A} v ¬{B})predicate": [
+      "either <<phrase::{A}predicate>> or <<phrase::¬{B}predicate>> or both"
+    ],
+    "(¬{A} v ¬{B})predicate": [
+      "either <<phrase::¬{A}predicate>> or <<phrase::¬{B}predicate>> or both"
+    ],
+
+
+
+
+    "{A}modifier": [
+      "{A}[ADJ]"
+    ],
+
+    "¬{A}modifier": [
+      "{A}[ADJ.neg]"
+    ],
+
+    "({A} & {B})modifier": [
+      "<<phrase::{A}modifier>> and <<phrase::{B}modifier>>"
+    ],
+    "(¬{A} & {B})modifier": [
+      "<<phrase::¬{A}modifier>> and <<phrase::{B}modifier>>"
+    ],
+    "({A} & ¬{B})modifier": [
+      "<<phrase::{A}modifier>> and <<phrase::¬{B}modifier>>"
+    ],
+    "(¬{A} & ¬{B})modifier": [
+      "<<phrase::¬{A}modifier>> and <<phrase::¬{B}modifier>>"
+    ],
+
+    "({A} v {B})modifier": [
+      "either <<phrase::{A}modifier>> or <<phrase::{B}modifier>> or both"
+    ],
+    "(¬{A} v {B})modifier": [
+      "either <<phrase::¬{A}modifier>> or <<phrase::{B}modifier>> or both"
+    ],
+    "({A} v ¬{B})modifier": [
+      "either <<phrase::{A}modifier>> or <<phrase::¬{B}modifier>> or both"
+    ],
+    "(¬{A} v ¬{B})modifier": [
+      "either <<phrase::¬{A}modifier>> or <<phrase::¬{B}modifier>> or both"
+    ],
+
+
+
+
+
+
+
 
     "cause_verb": [
       "leads to",
