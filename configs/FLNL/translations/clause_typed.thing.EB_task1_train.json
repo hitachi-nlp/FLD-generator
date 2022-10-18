@@ -2531,17 +2531,21 @@
 
   "phrase": {
 
-    "{A}predicate": [
-      "is {A}[ADJ]",
-      "{A}[VERB.s]",
-      "is <<phrase::kind_of>> {A}[NOUN]"
-    ],
-
     "{A}the_thing.subset": [
       "the <<phrase::{A}modifier>> thing",
       "the thing that <<phrase::{A}predicate>>"
     ],
 
+
+    "{A}predicate": [
+      "is {A}[ADJ]",
+      "{A}[VERB.s]",
+      "<<phrase::{A}is_noun_predicate>>"
+    ],
+
+    "{A}is_noun_predicate": [
+      "is <<phrase::kind_of>> {A}[NOUN]"
+    ],
 
     "¬{A}predicate": [
       "is not {A}[ADJ]",
@@ -2551,13 +2555,17 @@
     ],
 
     "({A} & {B})predicate": [
-      "<<phrase::{A}predicate>> and <<phrase::{B}predicate>>"
+      "<<phrase::{A}predicate>> and <<phrase::{B}predicate>>",
+      "<<phrase::{A}is_noun_predicate>> that <<phrase::{B}predicate>>",
+      "<<phrase::{B}is_noun_predicate>> that <<phrase::{A}predicate>>"
     ],
     "(¬{A} & {B})predicate": [
-      "<<phrase::¬{A}predicate>> and <<phrase::{B}predicate>>"
+      "<<phrase::¬{A}predicate>> and <<phrase::{B}predicate>>",
+      "<<phrase::{B}is_noun_predicate>> that <<phrase::¬{A}predicate>>"
     ],
     "({A} & ¬{B})predicate": [
-      "<<phrase::{A}predicate>> and <<phrase::¬{B}predicate>>"
+      "<<phrase::{A}predicate>> and <<phrase::¬{B}predicate>>",
+      "<<phrase::{A}is_noun_predicate>> that <<phrase::¬{B}predicate>>"
     ],
     "(¬{A} & ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> and <<phrase::¬{B}predicate>>"
