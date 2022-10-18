@@ -7,7 +7,7 @@ from FLNL.interpretation import (
     interprete_formula,
     formula_can_not_be_identical_to,
     generate_quantifier_formulas,
-    generate_quantifier_arguments,
+    generate_partially_quantifier_arguments,
 )
 from FLNL.proof_tree_generators import generate_mappings_from_formula
 from FLNL.formula import Formula
@@ -401,7 +401,7 @@ def test_generate_quantifier_arguments():
                          quantify_all_at_once=False,
                          quantify_all_at_once_in_a_formula=False):
         generated_arguments = list(
-            generate_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
+            generate_partially_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
         )
         print()
         print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}, quantify_all_at_once_in_a_formula={quantify_all_at_once_in_a_formula}) ------')

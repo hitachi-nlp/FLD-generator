@@ -22,7 +22,7 @@ from .interpretation import (
     generate_mappings_from_formula,
     generate_formulas_in_target_space,
     generate_complicated_arguments,
-    generate_quantifier_arguments,
+    generate_partially_quantifier_arguments,
     interprete_formula,
     interprete_argument,
     formula_is_identical_to,
@@ -127,16 +127,17 @@ class ProofTreeGenerator:
                         complicated_arguments.append(quantifier_argument)
 
         quantified_arguments: List[Argument] = []
-        for argument in arguments + complicated_arguments:
-            for quantifier_type in ['universal', 'existential']:
-                for quantifier_argument, _, name in generate_quantifier_arguments(argument,
-                                                                                  quantifier_type,
-                                                                                  elim_dneg=elim_dneg,
-                                                                                  quantify_all_at_once_in_a_formula=True,  # current translation config does not support formulas such as (x) Ax v Ba
-                                                                                  get_name=True):
-                    if _is_argument_new(quantifier_argument, arguments + complicated_arguments + quantified_arguments):
-                        quantified_arguments.append(quantifier_argument)
-                        quantifier_argument.id += f'.{name}'
+        if quantifier_arguments_weight > 0.0:
+            for argument in arguments + complicated_arguments:
+                for quantifier_type in ['universal', 'existential']:
+                    for quantifier_argument, _, name in generate_partially_quantifier_arguments(argument,
+                                                                                      quantifier_type,
+                                                                                      elim_dneg=elim_dneg,
+                                                                                      quantify_all_at_once_in_a_formula=True,  # current translation config does not support formulas such as (x) Ax v Ba
+                                                                                      get_name=True):
+                        if _is_argument_new(quantifier_argument, arguments + complicated_arguments + quantified_arguments):
+                            quantified_arguments.append(quantifier_argument)
+                            quantifier_argument.id += f'.{name}'
 
         quantifier_axiom_arguments: List[Argument] = []
         if quantifier_axiom_arguments_weight > 0.0:

@@ -749,12 +749,20 @@ def generate_quantifier_axiom_arguments(
         yield argument
 
 
-def generate_quantifier_arguments(src_arg: Argument,
-                                  quantifier_type: str,
-                                  elim_dneg=False,
-                                  quantify_all_at_once=False,
-                                  quantify_all_at_once_in_a_formula=False,
-                                  get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
+def generate_partially_quantifier_arguments(src_arg: Argument,
+                                            quantifier_type: str,
+                                            elim_dneg=False,
+                                            quantify_all_at_once=False,
+                                            quantify_all_at_once_in_a_formula=False,
+                                            get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
+    """
+
+    Examples:
+        See the test codes.
+    """
+    # XXX: We should not quantify the conclusion since such arguments do not hold
+    raise NotImplementedError()
+
     for mapping, name in generate_quantifier_mappings(src_arg.all_formulas,
                                                       quantify_all_at_once=quantify_all_at_once,
                                                       get_name=True):
