@@ -1,9 +1,11 @@
 [
   {
-      "id": "__EB_task1",
+      "id": "EB_task1.definition_sentence",
+      "__comment__": "'ED_2008_4_45' sent2: a star produces light sent3: a source of something produces that something -> stars are a source of light",
       "premises": [
-          "{A}{a} ⊢ {B}{b}"
+          "(x): {A}x -> {B}x",
+          "{B}{a}"
       ],
-      "conclusion": "{A}{a} -> {B}{b}"
+      "conclusion": "{A}{a}"
   }
 ]
