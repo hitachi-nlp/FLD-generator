@@ -58,11 +58,11 @@ class ClauseTypedTranslator(Translator):
             )
 
         self._translations: Dict[str, List[str]] = _resolved_translations_sorted['sentence']
-        logger.info('---- loaded translations ----')
+        logger.debug('---- loaded translations ----')
         for key, nls in self._translations.items():
-            logger.info('translation key = "%s"', key)
+            logger.debug('translation key = "%s"', key)
             for nl in nls:
-                logger.info('    "%s"', nl)
+                logger.debug('    "%s"', nl)
 
         # self._translations, self._clause_translations = self._load_translations(config_json)
 
@@ -79,6 +79,7 @@ class ClauseTypedTranslator(Translator):
         self._wb = word_bank
 
         self._do_translate_to_nl = do_translate_to_nl
+        logger.info('-- building translator done! --')
 
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[str]]]:
         two_layered_config = self._completely_flatten_config(config)
