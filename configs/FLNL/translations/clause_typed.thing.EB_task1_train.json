@@ -2667,16 +2667,16 @@
     ],
 
     "({A} v {B})post_modifier": [
-      "either <<phrase::{A}post_modifier>> or <<phrase::{B}post_modifier>> or both"
+      "either <<phrase::{A}post_modifier>> or <<phrase::{B}post_modifier>> or both,"
     ],
     "(¬{A} v {B})post_modifier": [
-      "either <<phrase::¬{A}post_modifier>> or <<phrase::{B}post_modifier>> or both"
+      "either <<phrase::¬{A}post_modifier>> or <<phrase::{B}post_modifier>> or both,"
     ],
     "({A} v ¬{B})post_modifier": [
-      "either <<phrase::{A}post_modifier>> or <<phrase::¬{B}post_modifier>> or both"
+      "either <<phrase::{A}post_modifier>> or <<phrase::¬{B}post_modifier>> or both,"
     ],
     "(¬{A} v ¬{B})post_modifier": [
-      "either <<phrase::¬{A}post_modifier>> or <<phrase::¬{B}post_modifier>> or both"
+      "either <<phrase::¬{A}post_modifier>> or <<phrase::¬{B}post_modifier>> or both,"
     ],
 
 
