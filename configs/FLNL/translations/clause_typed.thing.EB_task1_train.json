@@ -2354,7 +2354,10 @@
 
     "{A}predicate": [
       "is {A}[ADJ]",
+
       "{A}[VERB.s]",
+      "<<phrase::will>> {A}[VERB]",
+
       "<<phrase::{A}equal_noun_predicate>>"
     ],
 
@@ -2366,7 +2369,9 @@
     "¬{A}predicate": [
       "is not {A}[ADJ]",
       "is {A}[ADJ.neg]",
-      "does not {A}[VERB]",
+
+      "<<phrase::will>> not {A}[VERB]",
+
       "is not <<phrase::kind_of>> {A}[NOUN]"
     ],
 
@@ -2479,8 +2484,10 @@
 
 
 
-
-
+    "will": [
+      "will",
+      "does"
+    ],
 
     "cause_verb": [
       "leads to",
