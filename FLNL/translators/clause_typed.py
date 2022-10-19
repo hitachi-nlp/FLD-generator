@@ -45,6 +45,7 @@ class ClauseTypedTranslator(Translator):
                     resolved_nl
                     for transl_nl in transl_nls
                     for resolved_nl in self._resolve_translation(transl_nl, two_layered_config)
+                    if not resolved_nl.startswith('__')
                 ]
                 for key, transl_nls in config.items()
             }
