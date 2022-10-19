@@ -2578,139 +2578,11 @@
           "something <<phrase::(¬{A} v ¬{B})post_modifier>>",
 
           "something that <<phrase::(¬{A} v ¬{B})predicate>>"
-      ],
-
-
-
-
-
-
-
-      "{A}the_thing.subset": [
-        "the <<phrase::{A}pre_modifier>> thing",
-        "the thing <<phrase::{A}post_modifier>> ",
-        "the thing that <<phrase::{A}predicate>>"
-      ],
-
-      "¬{A}the_thing.subset": [
-        "the <<phrase::¬{A}pre_modifier>> thing",
-        "the thing <<phrase::¬{A}post_modifier>> ",
-        "the thing that <<phrase::¬{A}predicate>>"
-      ],
-
-      
-      "({A}the_thing & {B}the_thing).subset": [
-          "the <<phrase::({A} & {B})pre_modifier>> thing",
-
-          "the <<phrase::{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
-          "the <<phrase::{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
-
-          "the <<phrase::{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "the <<phrase::{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
-          "the thing <<phrase::({A} & {B})post_modifier>>",
-
-          "the thing that <<phrase::({A} & {B})predicate>>"
-      ],
-
-      "(¬{A}the_thing & {B}the_thing).subset": [
-          "the <<phrase::(¬{A} & {B})pre_modifier>> thing",
-
-          "the <<phrase::¬{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
-          "the <<phrase::¬{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
-
-          "the <<phrase::{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "the <<phrase::{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
-
-          "the thing <<phrase::(¬{A} & {B})post_modifier>>",
-
-          "the thing that <<phrase::(¬{A} & {B})predicate>>"
-      ],
-
-      "({A}the_thing & ¬{B}the_thing).subset": [
-          "the <<phrase::({A} & ¬{B})pre_modifier>> thing",
-
-          "the <<phrase::{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
-          "the <<phrase::{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
-
-          "the <<phrase::¬{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "the <<phrase::¬{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
-          "the thing <<phrase::({A} & ¬{B})post_modifier>>",
-
-          "the thing that <<phrase::({A} & ¬{B})predicate>>"
-      ],
-
-      "(¬{A}the_thing & ¬{B}the_thing).subset": [
-          "the <<phrase::(¬{A} & ¬{B})pre_modifier>> thing",
-
-          "the <<phrase::¬{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
-          "the <<phrase::¬{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
-
-          "the <<phrase::¬{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "the <<phrase::¬{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
-
-          "the thing <<phrase::(¬{A} & ¬{B})post_modifier>>",
-
-          "the thing that <<phrase::(¬{A} & ¬{B})predicate>>"
-      ],
-
-
-      "({A}the_thing v {B}the_thing).subset": [
-          "the <<phrase::({A} v {B})pre_modifier>> thing",
-
-          "the <<phrase::{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
-          "the <<phrase::{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
-
-          "the <<phrase::{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "the <<phrase::{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
-          "the thing <<phrase::({A} v {B})post_modifier>>",
-
-          "the thing that <<phrase::({A} v {B})predicate>>"
-      ],
-
-      "(¬{A}the_thing v {B}the_thing).subset": [
-          "the <<phrase::(¬{A} v {B})pre_modifier>> thing",
-
-          "the <<phrase::¬{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
-          "the <<phrase::¬{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
-
-          "the <<phrase::{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "the <<phrase::{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
-
-          "the thing <<phrase::(¬{A} v {B})post_modifier>>",
-
-          "the thing that <<phrase::(¬{A} v {B})predicate>>"
-      ],
-
-      "({A}the_thing v ¬{B}the_thing).subset": [
-          "the <<phrase::({A} v ¬{B})pre_modifier>> thing",
-
-          "the <<phrase::{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
-          "the <<phrase::{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
-
-          "the <<phrase::¬{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "the <<phrase::¬{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
-          "the thing <<phrase::({A} v ¬{B})post_modifier>>",
-
-          "the thing that <<phrase::({A} v ¬{B})predicate>>"
-      ],
-
-      "(¬{A}the_thing v ¬{B}the_thing).subset": [
-          "the <<phrase::(¬{A} v ¬{B})pre_modifier>> thing",
-
-          "the <<phrase::¬{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
-          "the <<phrase::¬{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
-
-          "the <<phrase::¬{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "the <<phrase::¬{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
-
-          "the thing <<phrase::(¬{A} v ¬{B})post_modifier>>",
-
-          "the thing that <<phrase::(¬{A} v ¬{B})predicate>>"
       ]
+
+
+
+
 
 
 
@@ -2725,11 +2597,6 @@
 
 
   "phrase": {
-
-    "{A}the_thing.subset": [
-      "the <<phrase::{A}pre_modifier>> thing",
-      "the thing that <<phrase::{A}predicate>>"
-    ],
 
     "{A}predicate": [
       "is {A}[ADJ]",
