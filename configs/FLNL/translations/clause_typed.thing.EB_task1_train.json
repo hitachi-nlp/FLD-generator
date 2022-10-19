@@ -2359,7 +2359,8 @@
     ],
 
     "{A}equal_noun_predicate": [
-      "is <<phrase::kind_of>> {A}[NOUN]"
+      "is <<phrase::kind_of>> {A}[NOUN]",
+      "means {A}[NOUN]"
     ],
 
     "¬{A}predicate": [
