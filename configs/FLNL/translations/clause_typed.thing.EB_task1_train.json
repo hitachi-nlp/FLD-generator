@@ -1227,397 +1227,397 @@
 
     "(x): {A}x -> {B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::{B}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::{B}the_thing>>",
-      "<<clause::verb::{B}something>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::{B}it>>",
+      "<<clause::verb::{B}something>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::{B}predicate>>"
     ],
     "(x): ¬{A}x -> {B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::{B}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::{B}the_thing>>",
-      "<<clause::verb::{B}something>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::{B}it>>",
+      "<<clause::verb::{B}something>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::{B}predicate>>"
     ],
     "(x): {A}x -> ¬{B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬{B}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬{B}the_thing>>",
-      "<<clause::verb::¬{B}something>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬{B}it>>",
+      "<<clause::verb::¬{B}something>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::¬{B}predicate>>"
     ],
     "(x): ¬{A}x -> ¬{B}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬{B}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬{B}the_thing>>",
-      "<<clause::verb::¬{B}something>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬{B}it>>",
+      "<<clause::verb::¬{B}something>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::¬{B}predicate>>"
     ],
 
 
     "(x): ({A}x & {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it & {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something & {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing & {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something & {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it & {B}it)>>",
       "<<clause::noun::({A}something & {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x & {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing & {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & {B}it)>>",
       "<<clause::noun::(¬{A}something & {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x & ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it & ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something & ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing & ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something & ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it & ¬{B}it)>>",
       "<<clause::noun::({A}something & ¬{B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x & {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it & {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something & {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing & {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something & {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it & {B}it)>>",
       "<<clause::noun::({A}something & {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing & ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & ¬{B}it)>>",
       "<<clause::noun::(¬{A}something & ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing & {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & {B}it)>>",
       "<<clause::noun::(¬{A}something & {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it & ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something & ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing & ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something & ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it & ¬{B}it)>>",
       "<<clause::noun::({A}something & ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing & ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something & ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it & ¬{B}it)>>",
       "<<clause::noun::(¬{A}something & ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
 
 
     "(x): {A}x -> ({B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::({B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}it & {C}it)>>",
+      "<<clause::verb::({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::({B} & {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::({B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}it & {C}it)>>",
+      "<<clause::verb::({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::({B} & {C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::(¬{B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}it & {C}it)>>",
+      "<<clause::verb::(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} & {C})predicate>>"
     ],
     "(x): {A}x -> ({B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::({B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}it & ¬{C}it)>>",
+      "<<clause::verb::({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::({B} & ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::(¬{B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}it & {C}it)>>",
+      "<<clause::verb::(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} & {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::({B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}it & ¬{C}it)>>",
+      "<<clause::verb::({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::({B} & ¬{C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::(¬{B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}it & ¬{C}it)>>",
+      "<<clause::verb::(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} & ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::(¬{B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}it & ¬{C}it)>>",
+      "<<clause::verb::(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} & ¬{C})predicate>>"
     ],
 
 
     "(x): ¬({A}x & {B}x) -> {C}x": [
      "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing & {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & {B}it)>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing & {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & {B}it)>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing & ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & ¬{B}it)>>"
     ],
     "(x): ¬({A}x & {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing & {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & {B}it)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing & ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing & {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & {B}it)>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing & ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something & ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it & ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing & ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something & ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it & ¬{B}it)>>"
     ],
 
 
     "(x): {A}x -> ¬({B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬({B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::¬({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}it & {C}it)>>",
+      "<<clause::verb::¬({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬({B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::¬({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}it & {C}it)>>",
+      "<<clause::verb::¬({B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬(¬{B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}it & {C}it)>>",
+      "<<clause::verb::¬(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): {A}x -> ¬({B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬({B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::¬({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}it & ¬{C}it)>>",
+      "<<clause::verb::¬({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x & {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬(¬{B}it & {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}the_thing & {C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}it & {C}it)>>",
+      "<<clause::verb::¬(¬{B}something & {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬({B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::¬({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}it & ¬{C}it)>>",
+      "<<clause::verb::¬({B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬(¬{B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}it & ¬{C}it)>>",
+      "<<clause::verb::¬(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬(¬{B}it & ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}the_thing & ¬{C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}it & ¬{C}it)>>",
+      "<<clause::verb::¬(¬{B}something & ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
 
 
 
     "(x): ({A}x v {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it v {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something v {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing v {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something v {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it v {B}it)>>",
       "<<clause::noun::({A}something v {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing v {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v {B}it)>>",
       "<<clause::noun::(¬{A}something v {B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it v ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something v ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing v ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something v ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it v ¬{B}it)>>",
       "<<clause::noun::({A}something v ¬{B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it v {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something v {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing v {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something v {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it v {B}it)>>",
       "<<clause::noun::({A}something v {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing v ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v ¬{B}it)>>",
       "<<clause::noun::(¬{A}something v ¬{B}something).subset>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing v {B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v {B}it)>>",
       "<<clause::noun::(¬{A}something v {B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::({A}it v ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::({A}something v ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}the_thing v ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::({A}something v ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::({A}it v ¬{B}it)>>",
       "<<clause::noun::({A}something v ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}the_thing v ¬{B}the_thing)>>",
+      "<<phrase::if_conjunction>> <<clause::verb::(¬{A}something v ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}it v ¬{B}it)>>",
       "<<clause::noun::(¬{A}something v ¬{B}something).subset>> <<phrase::¬{C}predicate>>"
     ],
 
 
     "(x): {A}x -> ({B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::({B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}it v {C}it)>>",
+      "<<clause::verb::({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::({B} v {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::({B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}it v {C}it)>>",
+      "<<clause::verb::({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::({B} v {C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::(¬{B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}it v {C}it)>>",
+      "<<clause::verb::(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} v {C})predicate>>"
     ],
     "(x): {A}x -> ({B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::({B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::({B}it v ¬{C}it)>>",
+      "<<clause::verb::({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::({B} v ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::(¬{B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}it v {C}it)>>",
+      "<<clause::verb::(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} v {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::({B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::({B}it v ¬{C}it)>>",
+      "<<clause::verb::({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::({B} v ¬{C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::(¬{B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::(¬{B}it v ¬{C}it)>>",
+      "<<clause::verb::(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
       "<<clause::noun::{A}something.subset>> <<phrase::(¬{B} v ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::(¬{B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::(¬{B}it v ¬{C}it)>>",
+      "<<clause::verb::(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
       "<<clause::noun::¬{A}something.subset>> <<phrase::(¬{B} v ¬{C})predicate>>"
     ],
 
 
     "(x): ¬({A}x v {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing v {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v {B}it)>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v {B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v {B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing v {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v {B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v {B}it)>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing v ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v ¬{B}it)>>"
     ],
     "(x): ¬({A}x v {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing v {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v {B}it)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> {C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v ¬{B}it)>>, <<clause::verb::{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v ¬{B}something)>>, <<clause::verb::{C}the_thing>>",
-      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing v ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v ¬{B}something)>>, <<clause::verb::{C}it>>",
+      "<<clause::verb::{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v {B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v {B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing v {B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v {B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v {B}it)>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}the_thing v ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬({A}something v ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬({A}it v ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v ¬{B}it)>>, <<clause::verb::¬{C}it>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v ¬{B}something)>>, <<clause::verb::¬{C}the_thing>>",
-      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}the_thing v ¬{B}the_thing)>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬(¬{A}something v ¬{B}something)>>, <<clause::verb::¬{C}it>>",
+      "<<clause::verb::¬{C}something>> <<phrase::if_conjunction>> <<clause::verb::¬(¬{A}it v ¬{B}it)>>"
     ],
 
 
     "(x): {A}x -> ¬({B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬({B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::¬({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}it v {C}it)>>",
+      "<<clause::verb::¬({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬({B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::¬({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}it v {C}it)>>",
+      "<<clause::verb::¬({B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬(¬{B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}it v {C}it)>>",
+      "<<clause::verb::¬(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): {A}x -> ¬({B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬({B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::¬({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬({B}it v ¬{C}it)>>",
+      "<<clause::verb::¬({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x v {C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬(¬{B}it v {C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}the_thing v {C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}it v {C}it)>>",
+      "<<clause::verb::¬(¬{B}something v {C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬({B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::¬({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬({B}it v ¬{C}it)>>",
+      "<<clause::verb::¬({B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>, <<clause::verb::¬(¬{B}it v ¬{C}it)>>",
-      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::{A}something>>, <<clause::verb::¬(¬{B}it v ¬{C}it)>>",
+      "<<clause::verb::¬(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
       "<<phrase::every_prefix.verb_clause_to_verb_clause>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>, <<clause::verb::¬(¬{B}it v ¬{C}it)>>",
 
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}the_thing v ¬{C}the_thing)>>",
-      "<<clause::verb::¬(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}the_thing>>"
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}something>>, <<clause::verb::¬(¬{B}it v ¬{C}it)>>",
+      "<<clause::verb::¬(¬{B}something v ¬{C}something)>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>"
     ]
 
 
@@ -1849,75 +1849,6 @@
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}something v ¬{B}something)>>"
       ],
 
-
-
-
-
-
-
-      "{A}the_thing": [
-        "the thing <<phrase::{A}predicate>>"
-      ],
-      "¬{A}the_thing": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}the_thing>>",
-        "the thing <<phrase::¬{A}predicate>>"
-      ],
-
-
-      "({A}the_thing & {B}the_thing)": [
-          "the thing <<phrase::({A} & {B})predicate>>"
-      ],
-      "(¬{A}the_thing & {B}the_thing)": [
-          "the thing <<phrase::(¬{A} & {B})predicate>>"
-      ],
-      "({A}the_thing & ¬{B}the_thing)": [
-          "the thing <<phrase::({A} & ¬{B})predicate>>"
-      ],
-      "(¬{A}the_thing & ¬{B}the_thing)": [
-          "the thing <<phrase::(¬{A} & ¬{B})predicate>>"
-      ],
-
-
-      "¬({A}the_thing & {B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing & {B}the_thing)>>"
-      ],
-      "¬(¬{A}the_thing & {B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing & {B}the_thing)>>"
-      ],
-      "¬({A}the_thing & ¬{B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing & ¬{B}the_thing)>>"
-      ],
-      "¬(¬{A}the_thing & ¬{B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing & ¬{B}the_thing)>>"
-      ],
-
-
-      "({A}the_thing v {B}the_thing)": [
-          "the thing <<phrase::({A} v {B})predicate>>"
-      ],
-      "(¬{A}the_thing v {B}the_thing)": [
-          "the thing <<phrase::(¬{A} v {B})predicate>>"
-      ],
-      "({A}the_thing v ¬{B}the_thing)": [
-          "the thing <<phrase::({A} v ¬{B})predicate>>"
-      ],
-      "(¬{A}the_thing v ¬{B}the_thing)": [
-          "the thing <<phrase::(¬{A} v ¬{B})predicate>>"
-      ],
-
-
-      "¬({A}the_thing v {B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing v {B}the_thing)>>"
-      ],
-      "¬(¬{A}the_thing v {B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing v {B}the_thing)>>"
-      ],
-      "¬({A}the_thing v ¬{B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::({A}the_thing v ¬{B}the_thing)>>"
-      ],
-      "¬(¬{A}the_thing v ¬{B}the_thing)": [
-        "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::(¬{A}the_thing v ¬{B}the_thing)>>"
-      ],
 
 
 
@@ -2424,10 +2355,10 @@
     "{A}predicate": [
       "is {A}[ADJ]",
       "{A}[VERB.s]",
-      "<<phrase::{A}is_noun_predicate>>"
+      "<<phrase::{A}equal_noun_predicate>>"
     ],
 
-    "{A}is_noun_predicate": [
+    "{A}equal_noun_predicate": [
       "is <<phrase::kind_of>> {A}[NOUN]"
     ],
 
@@ -2440,16 +2371,16 @@
 
     "({A} & {B})predicate": [
       "<<phrase::{A}predicate>> and <<phrase::{B}predicate>>",
-      "<<phrase::{A}is_noun_predicate>> that <<phrase::{B}predicate>>",
-      "<<phrase::{B}is_noun_predicate>> that <<phrase::{A}predicate>>"
+      "<<phrase::{A}equal_noun_predicate>> that <<phrase::{B}predicate>>",
+      "<<phrase::{B}equal_noun_predicate>> that <<phrase::{A}predicate>>"
     ],
     "(¬{A} & {B})predicate": [
       "<<phrase::¬{A}predicate>> and <<phrase::{B}predicate>>",
-      "<<phrase::{B}is_noun_predicate>> that <<phrase::¬{A}predicate>>"
+      "<<phrase::{B}equal_noun_predicate>> that <<phrase::¬{A}predicate>>"
     ],
     "({A} & ¬{B})predicate": [
       "<<phrase::{A}predicate>> and <<phrase::¬{B}predicate>>",
-      "<<phrase::{A}is_noun_predicate>> that <<phrase::¬{B}predicate>>"
+      "<<phrase::{A}equal_noun_predicate>> that <<phrase::¬{B}predicate>>"
     ],
     "(¬{A} & ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> and <<phrase::¬{B}predicate>>"
