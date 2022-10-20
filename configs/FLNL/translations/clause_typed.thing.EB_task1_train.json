@@ -2378,15 +2378,22 @@
     "({A} & {B})predicate": [
       "<<phrase::{A}predicate>> and <<phrase::{B}predicate>>",
       "<<phrase::{A}equal_noun_predicate>> that <<phrase::{B}predicate>>",
-      "<<phrase::{B}equal_noun_predicate>> that <<phrase::{A}predicate>>"
+      "<<phrase::{B}equal_noun_predicate>> that <<phrase::{A}predicate>>",
+
+      "is <<phrase::{A}pre_modifier>> {B}[NOUN]",
+      "is <<phrase::{B}pre_modifier>> {A}[NOUN]"
     ],
     "(¬{A} & {B})predicate": [
       "<<phrase::¬{A}predicate>> and <<phrase::{B}predicate>>",
-      "<<phrase::{B}equal_noun_predicate>> that <<phrase::¬{A}predicate>>"
+      "<<phrase::{B}equal_noun_predicate>> that <<phrase::¬{A}predicate>>",
+
+      "is <<phrase::¬{A}pre_modifier>> {B}[NOUN]"
     ],
     "({A} & ¬{B})predicate": [
       "<<phrase::{A}predicate>> and <<phrase::¬{B}predicate>>",
-      "<<phrase::{A}equal_noun_predicate>> that <<phrase::¬{B}predicate>>"
+      "<<phrase::{A}equal_noun_predicate>> that <<phrase::¬{B}predicate>>",
+
+      "is <<phrase::¬{B}pre_modifier>> {A}[NOUN]"
     ],
     "(¬{A} & ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> and <<phrase::¬{B}predicate>>"
