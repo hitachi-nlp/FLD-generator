@@ -27,7 +27,9 @@ class SentenceWiseTranslator(Translator):
                  sentence_translations: Dict[str, List[str]],
                  predicate_translations: Optional[List[str]] = None,
                  constant_translations: Optional[List[str]] = None,
-                 do_translate_to_nl=True):
+                 do_translate_to_nl=True,
+                 log_stats=False):
+        super().__init__(log_stats=log_stats)
 
         self._sentence_translations = OrderedDict()
         for formula, translations in sorted(

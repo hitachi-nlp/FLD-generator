@@ -10,7 +10,6 @@ from nltk.corpus import wordnet as wn
 from pyinflect import getInflection
 from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from FLNL.utils import starts_with_vowel_sound
-import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +25,7 @@ class WordNetWordBank(WordBank):
         POS.ADJ_SAT: wn.ADJ_SAT,
     }
 
+    @profile
     def __init__(self, vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
         self._pos_wn_to_wb = {val: key for key, val in self._pos_wb_to_wn.items()}
 
@@ -60,11 +60,9 @@ class WordNetWordBank(WordBank):
             yield lemma_str, syn.pos()
         logger.info('loading words from WordNet done!')
 
-    @profile
     def get_words(self) -> Iterable[str]:
         yield from sorted(self._cached_word_set)
 
-    @profile
     def get_pos(self, word: str) -> List[POS]:
         wb_POSs = {
             (self._pos_wn_to_wb[syn.pos()] if syn.pos() in self._pos_wn_to_wb else POS.UNK)

@@ -72,6 +72,7 @@ _REFERENCE_ARGUMENTS = [
 
 class ProofTreeGenerator:
 
+    @profile
     def __init__(self,
                  arguments: List[Argument],
                  complicated_arguments_weight=0.0,
@@ -103,6 +104,7 @@ class ProofTreeGenerator:
     def complicated_arguments_weight(self):
         return self._complicated_arguments_weight
 
+    @profile
     def _load_arguments(self,
                         arguments: List[Argument],
                         complicated_arguments_weight: float,
@@ -122,7 +124,7 @@ class ProofTreeGenerator:
                                                                                    elim_dneg=elim_dneg,
                                                                                    suppress_op_expansion_if_exists=True,
                                                                                    get_name=True):
-                    if _is_argument_new(quantifier_argument, arguments + complicated_arguments):
+                    if _is_argument_new(quantifier_argument, arguments + complicated_arguments):  # SLOW
                         quantifier_argument.id += f'.{name}'
                         complicated_arguments.append(quantifier_argument)
 
@@ -665,6 +667,7 @@ def _extend_braches(proof_tree: ProofTree,
     return proof_tree
 
 
+@profile
 def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
     is_already_added = False
     for existent_argument in arguments:

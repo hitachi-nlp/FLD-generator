@@ -17,6 +17,7 @@ from .formula import (
     negate,
 )
 from .argument import Argument
+import kern_profiler
 
 
 def _fill_str(no: int) -> str:
@@ -431,6 +432,7 @@ def interprete_argument(arg: Argument,
                     scheme_variant=arg.scheme_variant)
 
 
+@profile
 def interprete_formula(formula: Formula,
                        mapping: Dict[str, str],
                        quantifier_types: Dict[str, str] = None,
@@ -488,6 +490,7 @@ def _expand_op(formula: Formula) -> Formula:
     return Formula(rep)
 
 
+@profile
 def _interprete_rep(rep: str,
                     mapping: Dict[str, str],
                     elim_dneg=False) -> str:
@@ -614,6 +617,7 @@ def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     )
 
 
+@profile
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
                              allow_many_to_oneg=True,

@@ -20,9 +20,6 @@ logger = logging.getLogger(__name__)
 class IterativeRegexpTranslator(Translator):
     """ sample implementation of regexp matching """
 
-    def __init__(self):
-        pass
-
     def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
                                                                                                Dict[str, int]]:
 

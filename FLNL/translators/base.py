@@ -30,6 +30,9 @@ class TranslationNotFoundError(FormalLogicExceptionBase):
 
 class Translator(ABC):
 
+    def __init__(self, log_stats=False):
+        self.log_stats = log_stats
+
     @property
     @abstractmethod
     def acceptable_formulas(self) -> List[str]:

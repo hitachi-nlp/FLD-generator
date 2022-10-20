@@ -161,7 +161,8 @@ def generate_dataset(dataset: NLProofSDataset,
             logger.info('\n')
             logger.info('--------------- stats --------------')
             for key in ['avg.word_count_all']:
-                logger.info('%s: %s', key, stats[key])
+                if key in stats:
+                    logger.info('%s: %s', key, stats[key])
             # logger.info(dict(stats))
             # logger.info('\n' + pformat(stats))
 
@@ -347,7 +348,7 @@ def test_PL_pred_arg():
 
 if __name__ == '__main__':
     random.seed(0)
-    setup_logger(level=logging.DEBUG)
+    setup_logger(level=logging.INFO)
 
     RAISE_IF_TRANSLATION_NOT_FOUND = False
 

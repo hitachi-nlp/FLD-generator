@@ -38,6 +38,9 @@ class NounForm(Enum):
     SINGULAR_WITH_PARTICLE = 'swa'
 
 
+WordForm = Union[AdjForm, VerbForm, NounForm]
+
+
 def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
     if pos == POS.VERB:
         return VerbForm
