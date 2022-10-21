@@ -1717,7 +1717,8 @@
 
 
       "{A}{a}": [
-        "a {a}[NOUN] <<phrase::{A}predicate>>"
+        "a {a}[NOUN] <<phrase::{A}predicate>>",
+        "<<phrase::kind_of>> {A}[NOUN] is {a}{NOUN]"
       ],
       "¬{A}{a}": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}{a}>>",
