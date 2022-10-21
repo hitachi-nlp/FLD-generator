@@ -2450,16 +2450,16 @@
     ],
 
     "({A} v {B})pre_modifier": [
-      "either <<phrase::{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
+      "__either <<phrase::{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
     ],
     "(¬{A} v {B})pre_modifier": [
-      "either <<phrase::¬{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
+      "__either <<phrase::¬{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
     ],
     "({A} v ¬{B})pre_modifier": [
-      "either <<phrase::{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
+      "__either <<phrase::{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
     ],
     "(¬{A} v ¬{B})pre_modifier": [
-      "either <<phrase::¬{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
+      "__either <<phrase::¬{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
     ],
 
     "({A} & {B})post_modifier": [

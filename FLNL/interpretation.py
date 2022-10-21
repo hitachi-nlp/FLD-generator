@@ -409,21 +409,22 @@ def _make_permutations(objs: List[Any],
 #         yield from block
 
 
+@profile
 def interpret_argument(arg: Argument,
-                        mapping: Dict[str, str],
-                        quantifier_types: Dict[str, str] = None,
-                        elim_dneg=False) -> Argument:
+                       mapping: Dict[str, str],
+                       quantifier_types: Dict[str, str] = None,
+                       elim_dneg=False) -> Argument:
     interpreted_premises = [interpret_formula(formula, mapping,
-                                               quantifier_types=quantifier_types, elim_dneg=elim_dneg)
+                                              quantifier_types=quantifier_types, elim_dneg=elim_dneg)
                             for formula in arg.premises]
     interpreted_assumptions = {
         interpreted_premise: interpret_formula(arg.assumptions[premise], mapping,
-                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
+                                               quantifier_types=quantifier_types, elim_dneg=elim_dneg)
         for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
         if premise in arg.assumptions
     }
     interpreted_conclusion = interpret_formula(arg.conclusion, mapping,
-                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
+                                               quantifier_types=quantifier_types, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
                     interpreted_assumptions,
