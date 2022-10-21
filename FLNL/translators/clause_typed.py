@@ -64,8 +64,6 @@ class ClauseTypedTranslator(Translator):
                 _resolved_translations[prefix][key] = defaultdict(list)
                 for transl_nl in transl_nls:
                     for resolved_nl, condition in self._resolve_translation(transl_nl):
-                        if resolved_nl.startswith('__'):
-                            continue
                         _resolved_translations[prefix][key][_PosFormConditionTuple(condition)].append(resolved_nl)
                         self._nl_to_condition[resolved_nl] = condition
 
@@ -83,14 +81,14 @@ class ClauseTypedTranslator(Translator):
                 logger.debug('    "%s"', nl)
 
         self._reuse_object_nouns = reuse_object_nouns
-        self._adj_verb_nouns, self._entity_nouns, self._event_nouns = self._load_words(word_bank)
+        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(word_bank)
         if limit_vocab_size_per_type is not None:
-            self._adj_verb_nouns = self._sample(self._adj_verb_nouns, limit_vocab_size_per_type)
-            self._entity_nouns = self._sample(self._entity_nouns, limit_vocab_size_per_type)
-            self._event_nouns = self._sample(self._event_nouns, limit_vocab_size_per_type)
-        self._adj_and_verb_set = set(self._adj_verb_nouns)
-        self._entity_noun_set = set(self._entity_nouns)
-        self._event_noun_set = set(self._event_nouns)
+            self._zeroary_predicates = self._sample(self._zeroary_predicates, limit_vocab_size_per_type)
+            self._unary_predicates = self._sample(self._unary_predicates, limit_vocab_size_per_type)
+            self._constants = self._sample(self._constants, limit_vocab_size_per_type)
+        self._zeroary_predicate_set = set(self._zeroary_predicates)
+        self._unary_predicate_set = set(self._unary_predicates)
+        self._constant_set = set(self._constants)
         self._wb = word_bank
 
         self._do_translate_to_nl = do_translate_to_nl
@@ -126,6 +124,9 @@ class ClauseTypedTranslator(Translator):
         return flat_config
 
     def _resolve_translation(self, nl: str) -> List[Tuple[str, _PosFormConditionSet]]:
+        if nl.startswith('__'):
+            return []
+
         if nl in self._resolve_cache:
             return self._resolve_cache[nl]
 
@@ -199,7 +200,24 @@ class ClauseTypedTranslator(Translator):
                     word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
         logger.info('loading words from WordBank ...')
 
-        adjs = sorted(self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ))
+        nouns = sorted({
+            word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+        })
+        event_nouns = sorted({
+            word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+            if ATTR.can_be_event_noun in word_bank.get_attrs(word)
+        })
+        entity_nouns = sorted({
+            word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
+        })
+        adjs = sorted({
+            word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)
+        })
         intransitive_verbs = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
@@ -210,35 +228,31 @@ class ClauseTypedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
         })
-        nouns = sorted({
-            word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-        })
+
         transitive_verb_PASs = []
         for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
             for pred in self._sample(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
-        # balance between types.
         words_per_type = 5000
-        adj_verb_nouns_list = self._sample(adjs, words_per_type)\
+
+        zeroary_predicates = self._sample(adjs, words_per_type)\
+            + self._sample(intransitive_verbs, words_per_type)\
+            + self._sample(transitive_verb_PASs, words_per_type)\
+            + self._sample(event_nouns, words_per_type)
+        zeroary_predicates = sorted({word for word in zeroary_predicates})
+
+        unary_predicates = self._sample(adjs, words_per_type)\
             + self._sample(intransitive_verbs, words_per_type)\
             + self._sample(transitive_verb_PASs, words_per_type)\
             + self._sample(nouns, words_per_type)
-        adj_verb_nouns = sorted({word for word in adj_verb_nouns_list})
+        unary_predicates = sorted({word for word in unary_predicates})
 
-        entity_nouns = sorted({
-            word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
-        })
-
-        event_nouns = sorted({
-            word for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_event_noun in word_bank.get_attrs(word)
-        })
+        constants = self._sample(entity_nouns, words_per_type)
 
         logger.info('loading words from WordBank done!')
 
-        return adj_verb_nouns, entity_nouns, event_nouns
+        return zeroary_predicates, unary_predicates, constants
 
     def _load_words_by_pos_attrs(self,
                                  word_bank: WordBank,
@@ -301,6 +315,13 @@ class ClauseTypedTranslator(Translator):
                     'The interp_mapping is the following:',
                     '\n    ' + '\n    '.join(pformat(interp_mapping).split('\n')),
                 ]
+
+                if len(translation_key) < 5:
+                    import pudb; pudb.set_trace()
+                    matched_condition = self._find_interp_mapping_consistent_condition(translation_key,
+                                                                                       push_mapping,
+                                                                                       interp_mapping)
+
                 raise_or_warn('\n'.join(msgs))
                 translations.append(None)
                 translation_names.append(None)
@@ -462,7 +483,7 @@ class ClauseTypedTranslator(Translator):
                                  for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
-        adj_verb_nouns = self._sample(self._adj_verb_nouns, len(unary_predicates) * 3)
+        adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)
         if self._reuse_object_nouns:
             obj_nouns = [self._parse_word_with_obj(word)[1] for word in adj_verb_nouns
                          if self._parse_word_with_obj(word)[1] is not None]
@@ -470,17 +491,17 @@ class ClauseTypedTranslator(Translator):
             obj_nouns = []
 
         event_noun_size = len(zeroary_predicates) * 2
-        event_nouns = [noun for noun in obj_nouns if noun in self._event_noun_set][: int(event_noun_size / 2)]
+        event_nouns = [noun for noun in obj_nouns if noun in self._zeroary_predicate_set][: int(event_noun_size / 2)]
         if len(event_nouns) > 0:
             logger.info('the following object nouns may be reused as as event nouns: %s', str(event_nouns))
-        event_nouns += self._sample(self._event_nouns, max(event_noun_size - len(event_nouns), 0))
+        event_nouns += self._sample(self._zeroary_predicates, max(event_noun_size - len(event_nouns), 0))
         event_nouns = list(set(event_nouns))
 
         entity_noun_size = len(constants) * 2
-        entity_nouns = [noun for noun in obj_nouns if noun in self._entity_noun_set][: int(entity_noun_size / 2)]
+        entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size / 2)]
         if len(entity_nouns) > 0:
             logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
-        entity_nouns += self._sample(self._entity_nouns, max(entity_noun_size - len(entity_nouns), 0))
+        entity_nouns += self._sample(self._constants, max(entity_noun_size - len(entity_nouns), 0))
         entity_nouns = list(set(entity_nouns))
 
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
@@ -590,7 +611,7 @@ class ClauseTypedTranslator(Translator):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
         if pos == POS.ADJ:
-            force = False
+            force = True
         elif pos == POS.VERB:
             force = True
         elif pos == POS.NOUN:

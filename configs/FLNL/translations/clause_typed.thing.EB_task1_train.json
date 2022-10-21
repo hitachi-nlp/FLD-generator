@@ -1644,12 +1644,16 @@
     "verb": {
 
       "{A}": [
+        "{A}[ADJ.ness] occurs",
+        "{A}[VERB.ing] occurs",
         "a {A}[NOUN] occurs"
       ],
 
       "¬{A}": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}>>",
 
+        "{A}[ADJ.ness] does not occur",
+        "{A}[VERB.ing] does not occur",
         "a {A}[NOUN] does not occur"
       ],
 
@@ -1657,16 +1661,16 @@
 
 
       "({A} & {B})": [
-          "a {A}[NOUN] and a {B}[NOUN] occurs"
+          "<<clause::verb::{A}>> and <<clause::verb::{B}>>"
       ],
       "(¬{A} & {B})": [
-          "a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
+          "<<clause::verb::¬{A}>> and <<clause::verb::{B}>>"
       ],
       "({A} & ¬{B})": [
-          "a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
+          "<<clause::verb::{A}>> and <<clause::verb::¬{B}>>"
       ],
       "(¬{A} & ¬{B})": [
-          "a {A}[NOUN] and a {B}[NOUN] do not occur"
+          "<<clause::verb::¬{A}>> and <<clause::verb::¬{B}>>"
       ],
 
 
@@ -1685,16 +1689,16 @@
 
 
       "({A} v {B})": [
-          "either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
+          "either <<clause::verb::{A}>> or <<clause::verb::{B}>> or both"
       ],
       "(¬{A} v {B})": [
-          "either a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
+          "either <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both"
       ],
       "({A} v ¬{B})": [
-          "either a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
+          "either <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both"
       ],
       "(¬{A} v ¬{B})": [
-          "either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
+          "either <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both"
       ],
 
 
@@ -2004,28 +2008,32 @@
     "noun": {
 
       "{A}.occurrence": [
+        "{A}[ADJ.ness]",
+        "{A}[VERB.ing]",
         "a {A}[NOUN]",
         "that a {A}[NOUN] occurs"
       ],
       "¬{A}.occurrence": [
         "that <<clause::noun::{A}.occurrence>> <<phrase::not_postfix.noun_clause_to_verb_clause>>",
 
+        "{A}[ADJ.neg]ness",
+        "non-{A}[ADJ.ness]",
+        "that {A}[VERB.ing] does not occur",
         "that a {A}[NOUN] does not occur"
       ],
 
 
       "({A} & {B}).occurrence": [
-          "a {A}[NOUN] and a {B}[NOUN]",
-          "that a {A}[NOUN] and a {B}[NOUN] occurs"
+          "<<clause::noun::{A}.occurrence>> and <<clause::noun::{B}.occurrence>>"
       ],
       "(¬{A} & {B}).occurrence": [
-          "that a {A}[NOUN] does not occur and a {B}[NOUN] occurs"
+          "<<clause::noun::¬{A}.occurrence>> and <<clause::noun::{B}.occurrence>>"
       ],
       "({A} & ¬{B}).occurrence": [
-          "that a {A}[NOUN] occurs and a {B}[NOUN] does not occur"
+          "<<clause::noun::{A}.occurrence>> and <<clause::noun::¬{B}.occurrence>>"
       ],
       "(¬{A} & ¬{B}).occurrence": [
-          "that a {A}[NOUN] and a {B}[NOUN] do not occur"
+          "<<clause::noun::¬{A}.occurrence>> and <<clause::noun::¬{B}.occurrence>>"
       ],
 
       "¬({A} & {B}).occurrence": [
@@ -2043,18 +2051,18 @@
 
 
       "({A} v {B}).occurrence": [
-          "a {A}[NOUN] or a {B}[NOUN] or both",
-          "that either a {A}[NOUN] occurs or a {B}[NOUN] occurs or both"
+          "either <<clause::noun::{A}.occurrence>> or <<clause::noun::{B}.occurrence>> or both"
       ],
       "(¬{A} v {B}).occurrence": [
-          "that either a {A}[NOUN] does not occur or a {B}[NOUN] occurs or both"
+          "either <<clause::noun::¬{A}.occurrence>> or <<clause::noun::{B}.occurrence>> or both"
       ],
       "({A} v ¬{B}).occurrence": [
-          "that either a {A}[NOUN] occurs or a {B}[NOUN] does not occur or both"
+          "either <<clause::noun::{A}.occurrence>> or <<clause::noun::¬{B}.occurrence>> or both"
       ],
       "(¬{A} v ¬{B}).occurrence": [
-          "that either a {A}[NOUN] does not occur or a {B}[NOUN] does not occur or both"
+          "either <<clause::noun::¬{A}.occurrence>> or <<clause::noun::¬{B}.occurrence>> or both"
       ],
+
 
       "¬({A} v {B}).occurrence": [
           "that <<clause::noun::({A} v {B}).occurrence>> <<phrase::not_postfix.noun_clause_to_verb_clause>>"
