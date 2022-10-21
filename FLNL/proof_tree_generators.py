@@ -23,8 +23,8 @@ from .interpretation import (
     generate_formulas_in_target_space,
     generate_complicated_arguments,
     generate_quantifier_arguments,
-    interprete_formula,
-    interprete_argument,
+    interpret_formula,
+    interpret_argument,
     formula_is_identical_to,
     argument_is_identical_to,
     generate_quantifier_axiom_arguments,
@@ -394,8 +394,8 @@ def _generate_stem(arguments: List[Argument],
                     ):
                         if is_arg_done:
                             break
-                        premise_pulled = interprete_formula(premise, premise_mapping, elim_dneg=elim_dneg)
-                        assumption_pulled = interprete_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
+                        premise_pulled = interpret_formula(premise, premise_mapping, elim_dneg=elim_dneg)
+                        assumption_pulled = interpret_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
 
@@ -423,7 +423,7 @@ def _generate_stem(arguments: List[Argument],
                             if is_arg_done:
                                 break
 
-                            next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
+                            next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
                             if not is_argument_senseful(next_arg_pulled):
                                 rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
@@ -593,7 +593,7 @@ def _extend_braches(proof_tree: ProofTree,
                     if is_leaf_node_done:
                         break
 
-                    conclusion_pulled = interprete_formula(next_arg.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
+                    conclusion_pulled = interpret_formula(next_arg.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
                     log_traces.append(f'   |   |   | conclusion_pulled {conclusion_pulled}')
 
                     if conclusion_pulled.rep != leaf_node.formula.rep:
@@ -611,7 +611,7 @@ def _extend_braches(proof_tree: ProofTree,
                         constraints=conclusion_mapping,
                         shuffle=True,
                     ):
-                        next_arg_pulled = interprete_argument(next_arg, mapping, elim_dneg=elim_dneg)
+                        next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
                         if not is_argument_senseful(next_arg_pulled):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1

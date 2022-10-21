@@ -31,7 +31,7 @@ def generate_complicated_arguments(src_arg: Argument,
     for mapping, name in generate_complication_mappings_from_formula(src_arg.all_formulas,
                                                                      suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
                                                                      get_name=True):
-        complicated_argument = interprete_argument(src_arg, mapping, elim_dneg=elim_dneg)
+        complicated_argument = interpret_argument(src_arg, mapping, elim_dneg=elim_dneg)
         if get_name:
             yield complicated_argument, mapping, name
         else:
@@ -46,7 +46,7 @@ def generate_complicated_formulas(src_formula: Formula,
     for mapping, name in generate_complication_mappings_from_formula([src_formula],
                                                                      suppress_op_expansion_if_exists=suppress_op_expansion_if_exists,
                                                                      get_name=True):
-        complicated_formula = interprete_formula(src_formula, mapping, elim_dneg=elim_dneg)
+        complicated_formula = interpret_formula(src_formula, mapping, elim_dneg=elim_dneg)
         done_reps[complicated_formula.rep] = name
         if get_name:
             yield complicated_formula, mapping, name
@@ -128,7 +128,7 @@ def generate_arguments_in_target_space(src_arg: Argument,
                                                   constraints=constraints,
                                                   shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
-        yield interprete_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
+        yield interpret_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
 
 
 def generate_formulas_in_target_space(src_formula: Formula,
@@ -144,7 +144,7 @@ def generate_formulas_in_target_space(src_formula: Formula,
                                                   constraints=constraints,
                                                   shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
-        yield interprete_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
+        yield interpret_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
 def generate_mappings_from_argument(src_argument: Argument,
@@ -183,7 +183,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
         ]
 
     for complication_mapping in complication_mappings:
-        complicated_formulas = [interprete_formula(formula, complication_mapping)
+        complicated_formulas = [interpret_formula(formula, complication_mapping)
                                 for formula in src_formulas]
 
         # Use "sorted" to eliminate randomness here.
@@ -409,20 +409,20 @@ def _make_permutations(objs: List[Any],
 #         yield from block
 
 
-def interprete_argument(arg: Argument,
+def interpret_argument(arg: Argument,
                         mapping: Dict[str, str],
                         quantifier_types: Dict[str, str] = None,
                         elim_dneg=False) -> Argument:
-    interpreted_premises = [interprete_formula(formula, mapping,
+    interpreted_premises = [interpret_formula(formula, mapping,
                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
                             for formula in arg.premises]
     interpreted_assumptions = {
-        interpreted_premise: interprete_formula(arg.assumptions[premise], mapping,
+        interpreted_premise: interpret_formula(arg.assumptions[premise], mapping,
                                                 quantifier_types=quantifier_types, elim_dneg=elim_dneg)
         for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
         if premise in arg.assumptions
     }
-    interpreted_conclusion = interprete_formula(arg.conclusion, mapping,
+    interpreted_conclusion = interpret_formula(arg.conclusion, mapping,
                                                 quantifier_types=quantifier_types, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
@@ -433,14 +433,14 @@ def interprete_argument(arg: Argument,
 
 
 @profile
-def interprete_formula(formula: Formula,
+def interpret_formula(formula: Formula,
                        mapping: Dict[str, str],
                        quantifier_types: Dict[str, str] = None,
                        elim_dneg=False) -> Formula:
 
     interpreted_formula = _expand_op(
         Formula(
-            _interprete_rep(formula.rep, mapping, elim_dneg=elim_dneg)
+            _interpret_rep(formula.rep, mapping, elim_dneg=elim_dneg)
         )
     )
 
@@ -491,7 +491,7 @@ def _expand_op(formula: Formula) -> Formula:
 
 
 @profile
-def _interprete_rep(rep: str,
+def _interpret_rep(rep: str,
                     mapping: Dict[str, str],
                     elim_dneg=False) -> str:
     interpreted_rep = rep
@@ -532,7 +532,7 @@ def formula_is_identical_to(this_formula: Formula,
         return False
 
     for mapping in generate_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one=allow_many_to_oneg):
-        this_interpreted = interprete_formula(this_formula, mapping, elim_dneg=elim_dneg)
+        this_interpreted = interpret_formula(this_formula, mapping, elim_dneg=elim_dneg)
         if this_interpreted.rep == that_formula.rep:
             return True
     return False
@@ -685,7 +685,7 @@ def argument_is_identical_to(this_argument: Argument,
                                                    that_argument,
                                                    add_complicated_arguments=add_complicated_arguments,
                                                    allow_many_to_one=allow_many_to_oneg):
-        this_argument_interpreted = interprete_argument(this_argument, mapping, elim_dneg=elim_dneg)
+        this_argument_interpreted = interpret_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
         if is_conclusion_same(this_argument_interpreted, that_argument)\
                 and is_premises_same(this_argument_interpreted, that_argument):
@@ -728,8 +728,8 @@ def generate_quantifier_axiom_arguments(
         }
 
         if argument_type == 'universal_quantifier_elim':
-            quantifier_formula = Formula(f'({quantifier_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
-            de_quantifier_formula = interprete_formula(formula, de_quantifier_mapping)
+            quantifier_formula = Formula(f'({quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
+            de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
             argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
             argument = Argument(
                 [quantifier_formula],
@@ -738,8 +738,8 @@ def generate_quantifier_axiom_arguments(
                 id = argument_id,
             )
         elif argument_type == 'existential_quantifier_intro':
-            quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interprete_formula(formula, quantifier_mapping).rep)
-            de_quantifier_formula = interprete_formula(formula, de_quantifier_mapping)
+            quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
+            de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
             argument_id = f'{id_prefix}.quantifier_axiom.existential_elim--{i}' if id_prefix is not None else f'quantifier_axiom.existential_elim--{i}'
             argument = Argument(
                 [de_quantifier_formula],
@@ -788,7 +788,7 @@ def generate_quantifier_arguments(src_arg: Argument,
             if not is_all_or_nothing:
                 continue
 
-        complicated_argument = interprete_argument(
+        complicated_argument = interpret_argument(
             src_arg,
             mapping,
             quantifier_types={tgt_var: quantifier_type for tgt_var in quantified_variables},
@@ -811,7 +811,7 @@ def generate_quantifier_formulas(src_formula: Formula,
         quantifier_variables = [tgt for tgt in quantifier_mapping.values()
                                 if tgt in VARIABLES]
 
-        quantifier_formula = interprete_formula(
+        quantifier_formula = interpret_formula(
             src_formula,
             quantifier_mapping,
             quantifier_types={var: quantifier_type for var in quantifier_variables}

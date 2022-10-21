@@ -9,7 +9,7 @@ from FLNL.formula import Formula
 from FLNL.interpretation import (
     generate_mappings_from_formula,
     generate_mappings_from_predicates_and_constants,
-    interprete_formula,
+    interpret_formula,
 )
 from .base import (
     Translator,
@@ -58,10 +58,10 @@ class SentenceWiseTranslator(Translator):
 
                 trans_formula = Formula(trans_formula_rep)
                 for mapping in generate_mappings_from_formula([trans_formula], [formula]):
-                    trans_formula_pulled = interprete_formula(trans_formula, mapping)
+                    trans_formula_pulled = interpret_formula(trans_formula, mapping)
                     if trans_formula_pulled.rep == formula.rep:
                         trans_nl = random.choice(trans_nls)
-                        translations.append(interprete_formula(Formula(trans_nl), mapping).rep)
+                        translations.append(interpret_formula(Formula(trans_nl), mapping).rep)
                         done_translation = True
 
             if not done_translation:
@@ -82,6 +82,6 @@ class SentenceWiseTranslator(Translator):
             interp_mapping = next(interp_mappings)
             for i_formula, (formula, translation) in enumerate(zip(formulas, translations)):
                 if translation is not None:
-                    translations[i_formula] = interprete_formula(Formula(translation), interp_mapping).rep
+                    translations[i_formula] = interpret_formula(Formula(translation), interp_mapping).rep
 
         return [(None, translation) for translation in translations], {}

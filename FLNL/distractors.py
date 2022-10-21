@@ -11,7 +11,7 @@ from .formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegati
 from .utils import shuffle
 from .interpretation import (
     generate_mappings_from_predicates_and_constants,
-    interprete_formula,
+    interpret_formula,
     eliminate_double_negation,
 )
 from .formula_checkers import (
@@ -230,7 +230,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     if do_print:
                         print('\n\n!!!!!!!!!!!!!!!!!!!! loop !!!!!!!!!!!!!!!!!!!!!!!')
                         print(mapping)
-                    transformed_formula = interprete_formula(src_formula, mapping, elim_dneg=True)
+                    transformed_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
                     if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
                         if do_print:

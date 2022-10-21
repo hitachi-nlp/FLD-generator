@@ -9,7 +9,7 @@ from FLNL.formula import Formula
 
 from FLNL.interpretation import (
     generate_mappings_from_formula,
-    interprete_formula,
+    interpret_formula,
 )
 
 from .base import Translator, TranslationNotFoundError
@@ -55,8 +55,8 @@ class IterativeRegexpTranslator(Translator):
                     tgt_formula = Formula(tgt_rep)
 
                     for mapping in generate_mappings_from_formula([src_formula], [formula]):
-                        src_formula_replaced = interprete_formula(src_formula, mapping)
-                        tgt_formula_replaced = interprete_formula(tgt_formula, mapping)
+                        src_formula_replaced = interpret_formula(src_formula, mapping)
+                        tgt_formula_replaced = interpret_formula(tgt_formula, mapping)
                         if re.search(src_formula_replaced.rep, translated_formula.rep) is not None:
                             translated_formula = Formula(re.sub(src_formula_replaced.rep, tgt_formula_replaced.rep, translated_formula.rep))
                             has_translation = True

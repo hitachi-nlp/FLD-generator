@@ -14,7 +14,7 @@ from FLNL.word_banks.base import WordBank, ATTR
 from FLNL.interpretation import (
     generate_mappings_from_formula,
     generate_mappings_from_predicates_and_constants,
-    interprete_formula,
+    interpret_formula,
     formula_can_not_be_identical_to,
 )
 from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
@@ -148,9 +148,9 @@ class ClauseTypedTranslator(Translator):
 
                     for mapping in generate_mappings_from_formula([transl_key_formula],
                                                                   [template_key_formula]):
-                        key_formula_pulled = interprete_formula(transl_key_formula, mapping)
+                        key_formula_pulled = interpret_formula(transl_key_formula, mapping)
                         if key_formula_pulled.rep == template_key_formula.rep:
-                            template_nls = [interprete_formula(Formula(transl_nl), mapping).rep
+                            template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
                                             for transl_nl in transl_nls]
                             template_is_found = True
 
@@ -310,7 +310,7 @@ class ClauseTypedTranslator(Translator):
             # Choose a translation
             _idx = random.choice(range(len(interp_mapping_consisntent_nls)))
             chosen_nl = interp_mapping_consisntent_nls[_idx]
-            chosen_nl_pushed = interprete_formula(Formula(chosen_nl), push_mapping).rep
+            chosen_nl_pushed = interpret_formula(Formula(chosen_nl), push_mapping).rep
 
             # Generate word inflated mapping.
             inflated_mapping, _inflation_stats = self._make_word_inflated_interp_mapping(interp_mapping,
@@ -324,7 +324,7 @@ class ClauseTypedTranslator(Translator):
             # do interpretation using predicates and constants using interp_mapping
             if self._do_translate_to_nl:
                 interp_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pushed_wo_info)
-                translation = interprete_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
+                translation = interpret_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
             else:
                 translation = interp_templated_translation_pushed_wo_info
 
@@ -347,7 +347,7 @@ class ClauseTypedTranslator(Translator):
                 continue
 
             for push_mapping in generate_mappings_from_formula([Formula(_transl_key)], [formula]):
-                _transl_key_pushed = interprete_formula(Formula(_transl_key), push_mapping).rep
+                _transl_key_pushed = interpret_formula(Formula(_transl_key), push_mapping).rep
                 if _transl_key_pushed == formula.rep:
                     return _transl_key, push_mapping
         return None, None
