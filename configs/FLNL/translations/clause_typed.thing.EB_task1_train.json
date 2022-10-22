@@ -94,7 +94,7 @@
       "<<clause::verb::¬{B}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}>>",
 
       "<<clause::noun::¬{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.occurrence>>",
-      "<<clause::noun::¬{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::{B}.occurrence>>"
+      "<<clause::noun::¬{A}.occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{B}.occurrence>>"
     ],
 
 
@@ -153,7 +153,6 @@
       "<<phrase::if_conjunction>> <<clause::verb::{A}>>, <<clause::verb::({B} & {C})>>",
       "<<clause::verb::({B} & {C})>> <<phrase::if_conjunction>> <<clause::verb::{A}>>",
 
-      "<<clause::noun::{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).occurrence>>",
       "<<clause::noun::{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).occurrence>>"
     ],
     "¬{A} -> ({B} & {C})": [
@@ -328,7 +327,6 @@
       "<<phrase::if_conjunction>> <<clause::verb::{A}>>, <<clause::verb::({B} v {C})>>",
       "<<clause::verb::({B} v {C})>> <<phrase::if_conjunction>> <<clause::verb::{A}>>",
 
-      "<<clause::noun::{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).occurrence>>",
       "<<clause::noun::{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).occurrence>>"
     ],
     "¬{A} -> ({B} v {C})": [
