@@ -1,4 +1,5 @@
-from typing import Optional, Callable
+from typing import Optional, Callable, List, Iterable, Any
+import math
 import logging
 from typing import Dict, Any, List, Iterable
 import random
@@ -142,3 +143,51 @@ def compress(text: str) -> bytes:
 
 def decompress(binary: bytes) -> str:
     return zlib.decompress(binary).decode('utf-8')
+
+
+def make_combination(elem_generators: List[Callable[[], Iterable[Any]]]) -> Iterable[List[Any]]:
+    head_elem_generator = elem_generators[0]
+    tail_elem_generators = elem_generators[1:]
+
+    if len(tail_elem_generators) == 0:
+        for elem in head_elem_generator():
+            yield [elem]
+    else:
+        for head_elem in head_elem_generator():
+            for tail_elems in make_combination(tail_elem_generators):
+                yield [head_elem] + tail_elems
+
+
+@profile
+def chained_sampling_from_weighted_iterators(iterators: List[Iterable[Any]], weights: List[float]) -> Iterable[Any]:
+    sum_weights = sum(weights)
+    if math.isclose(sum_weights, 0):
+        return
+
+    normalized_weights = [weight / sum_weights for weight in weights]
+    aliving_iterators = iterators
+    while True:
+        if len(aliving_iterators) == 0:
+            break
+        rand = random.random()
+        _w = 0.0
+        chosen_idx = None
+        margin = 0.000001
+        for i, weight in enumerate(normalized_weights):
+            if _w - margin <= rand <= _w + weight + margin:
+                chosen_idx = i
+                break
+            _w += weight
+
+        try:
+            item = next(aliving_iterators[chosen_idx])
+            yield item
+        except StopIteration:
+            aliving_iterators = [iterator for idx, iterator in enumerate(aliving_iterators)
+                                 if idx != chosen_idx]
+            aliving_weights = [weight for idx, weight in enumerate(normalized_weights)
+                               if idx != chosen_idx]
+            sum_weights = sum(aliving_weights)
+            if math.isclose(sum_weights, 0):
+                return
+            normalized_weights = [weight / sum_weights for weight in aliving_weights]
