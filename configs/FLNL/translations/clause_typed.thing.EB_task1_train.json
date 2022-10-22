@@ -1654,20 +1654,20 @@
 
 
       "({A} & {B})": [
-          "<<clause::verb::{A}>> and <<clause::verb::{B}>>",
-          "<<phrase::{A}event>> and <<phrase::{B}event>> occurs"
+          "<<clause::verb::{A}>> <<phrase::and_also>> <<clause::verb::{B}>>",
+          "<<phrase::{A}event>> <<phrase::and_also>> <<phrase::{B}event>> occurs"
       ],
       "(¬{A} & {B})": [
-          "<<clause::verb::¬{A}>> and <<clause::verb::{B}>>",
-          "<<phrase::¬{A}event>> and <<phrase::{B}event>> occurs"
+          "<<clause::verb::¬{A}>> <<phrase::and_also>> <<clause::verb::{B}>>",
+          "<<phrase::¬{A}event>> <<phrase::and_also>> <<phrase::{B}event>> occurs"
       ],
       "({A} & ¬{B})": [
-          "<<clause::verb::{A}>> and <<clause::verb::¬{B}>>",
-          "<<phrase::{A}event>> and <<phrase::¬{B}event>> occurs"
+          "<<clause::verb::{A}>> <<phrase::and_also>> <<clause::verb::¬{B}>>",
+          "<<phrase::{A}event>> <<phrase::and_also>> <<phrase::¬{B}event>> occurs"
       ],
       "(¬{A} & ¬{B})": [
-          "<<clause::verb::¬{A}>> and <<clause::verb::¬{B}>>",
-          "<<phrase::¬{A}event>> and <<phrase::¬{B}event>> occurs"
+          "<<clause::verb::¬{A}>> <<phrase::and_also>> <<clause::verb::¬{B}>>",
+          "<<phrase::¬{A}event>> <<phrase::and_also>> <<phrase::¬{B}event>> occurs"
       ],
 
 
@@ -1723,7 +1723,7 @@
 
       "{A}{a}": [
         "a {a}[NOUN] <<phrase::{A}predicate>>",
-        "<<phrase::kind_of>> {A}[NOUN] is {a}{NOUN]"
+        "<<phrase::kind_of>> {A}[NOUN] is {a}[NOUN]"
       ],
       "¬{A}{a}": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}{a}>>",
@@ -1733,22 +1733,22 @@
 
       "({A}{a} & {B}{a})": [
           "a {a}[NOUN] <<phrase::({A} & {B})predicate>>",
-          "<<clause::verb::{A}{a}>> and <<clause::verb::{B}it>>",
+          "<<clause::verb::{A}{a}>> <<phrase::and_also>> <<clause::verb::{B}it>>",
           "a {a}[NOUN] <<phrase::{A}predicate>> <<phrase::{A}predicate_clause>>"
       ],
       "(¬{A}{a} & {B}{a})": [
           "a {a}[NOUN] <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}>> and <<clause::verb::{B}it>>",
+          "<<clause::verb::¬{A}{a}>> <<phrase::and_but>> <<clause::verb::{B}it>>",
           "a {a}[NOUN] <<phrase::¬{A}predicate>> <<phrase::{B}predicate_clause>>"
       ],
       "({A}{a} & ¬{B}{a})": [
           "a {a}[NOUN] <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}>> and <<clause::verb::¬{B}it>>",
+          "<<clause::verb::{A}{a}>> <<phrase::and_but>> <<clause::verb::¬{B}it>>",
           "a {a}[NOUN] <<phrase::{A}predicate>> <<phrase::¬{B}predicate_clause>>"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
           "a {a}[NOUN] <<phrase::(¬{A} & ¬{B})predicate>>",
-          "<<clause::verb::¬{A}{a}>> and <<clause::verb::¬{B}it>>",
+          "<<clause::verb::¬{A}{a}>> <<phrase::and_also>> <<clause::verb::¬{B}it>>",
           "a {a}[NOUN] <<phrase::¬{A}predicate>> <<phrase::¬{B}predicate_clause>>"
       ],
 
@@ -1814,22 +1814,22 @@
 
       "({A}something & {B}something)": [
           "something <<phrase::({A} & {B})predicate>>",
-          "<<clause::verb::{A}something>> and <<clause::verb::{B}it>>",
+          "<<clause::verb::{A}something>> <<phrase::and_also>> <<clause::verb::{B}it>>",
           "something <<phrase::{A}predicate>> <<phrase::{A}predicate_clause>>"
       ],
       "(¬{A}something & {B}something)": [
           "something <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}something>> and <<clause::verb::{B}it>>",
+          "<<clause::verb::¬{A}something>> <<phrase::and_but>> <<clause::verb::{B}it>>",
           "something <<phrase::¬{A}predicate>> <<phrase::{B}predicate_clause>>"
       ],
       "({A}something & ¬{B}something)": [
           "something <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}something>> and <<clause::verb::¬{B}it>>",
+          "<<clause::verb::{A}something>> <<phrase::and_but>> <<clause::verb::¬{B}it>>",
           "something <<phrase::{A}predicate>> <<phrase::¬{B}predicate_clause>>"
       ],
       "(¬{A}something & ¬{B}something)": [
           "something <<phrase::(¬{A} & ¬{B})predicate>>",
-          "<<clause::verb::¬{A}something>> and <<clause::verb::¬{B}it>>",
+          "<<clause::verb::¬{A}something>> <<phrase::and_also>> <<clause::verb::¬{B}it>>",
           "something <<phrase::¬{A}predicate>> <<phrase::¬{B}predicate_clause>>"
       ],
 
@@ -1970,22 +1970,22 @@
 
       "({A}it & {B}it)": [
           "it <<phrase::({A} & {B})predicate>>",
-          "<<clause::verb::{A}it>> and <<clause::verb::{B}it>>",
+          "<<clause::verb::{A}it>> <<phrase::and_also>> <<clause::verb::{B}it>>",
           "it <<phrase::{A}predicate>> <<phrase::{A}predicate_clause>>"
       ],
       "(¬{A}it & {B}it)": [
           "it <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}it>> and <<clause::verb::{B}it>>",
+          "<<clause::verb::¬{A}it>> <<phrase::and_but>> <<clause::verb::{B}it>>",
           "it <<phrase::¬{A}predicate>> <<phrase::{B}predicate_clause>>"
       ],
       "({A}it & ¬{B}it)": [
           "it <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}it>> and <<clause::verb::¬{B}it>>",
+          "<<clause::verb::{A}it>> <<phrase::and_but>> <<clause::verb::¬{B}it>>",
           "it <<phrase::{A}predicate>> <<phrase::¬{B}predicate_clause>>"
       ],
       "(¬{A}it & ¬{B}it)": [
           "it <<phrase::(¬{A} & ¬{B})predicate>>",
-          "<<clause::verb::¬{A}it>> and <<clause::verb::¬{B}it>>",
+          "<<clause::verb::¬{A}it>> <<phrase::and_also>> <<clause::verb::¬{B}it>>",
           "it <<phrase::¬{A}predicate>> <<phrase::¬{B}predicate_clause>>"
       ],
 
@@ -2065,16 +2065,16 @@
 
 
       "({A} & {B}).occurrence": [
-          "<<clause::noun::{A}.occurrence>> and <<clause::noun::{B}.occurrence>>"
+          "<<clause::noun::{A}.occurrence>> <<phrase::with>> <<clause::noun::{B}.occurrence>>"
       ],
       "(¬{A} & {B}).occurrence": [
-          "<<clause::noun::¬{A}.occurrence>> and <<clause::noun::{B}.occurrence>>"
+          "<<clause::noun::¬{A}.occurrence>> <<phrase::with>> <<clause::noun::{B}.occurrence>>"
       ],
       "({A} & ¬{B}).occurrence": [
-          "<<clause::noun::{A}.occurrence>> and <<clause::noun::¬{B}.occurrence>>"
+          "<<clause::noun::{A}.occurrence>> <<phrase::with>> <<clause::noun::¬{B}.occurrence>>"
       ],
       "(¬{A} & ¬{B}).occurrence": [
-          "<<clause::noun::¬{A}.occurrence>> and <<clause::noun::¬{B}.occurrence>>"
+          "<<clause::noun::¬{A}.occurrence>> <<phrase::with>> <<clause::noun::¬{B}.occurrence>>"
       ],
 
       "¬({A} & {B}).occurrence": [
@@ -2436,7 +2436,7 @@
     ],
 
     "({A} & {B})predicate": [
-      "<<phrase::{A}predicate>> and <<phrase::{B}predicate>>",
+      "<<phrase::{A}predicate>> <<phrase::and_also>> <<phrase::{B}predicate>>",
       "<<phrase::{A}equal_noun_predicate>> that <<phrase::{B}predicate>>",
       "<<phrase::{B}equal_noun_predicate>> that <<phrase::{A}predicate>>",
 
@@ -2444,19 +2444,19 @@
       "is <<phrase::{B}pre_modifier>> {A}[NOUN]"
     ],
     "(¬{A} & {B})predicate": [
-      "<<phrase::¬{A}predicate>> and <<phrase::{B}predicate>>",
+      "<<phrase::¬{A}predicate>> <<phrase::and_also>> <<phrase::{B}predicate>>",
       "<<phrase::{B}equal_noun_predicate>> that <<phrase::¬{A}predicate>>",
 
       "is <<phrase::¬{A}pre_modifier>> {B}[NOUN]"
     ],
     "({A} & ¬{B})predicate": [
-      "<<phrase::{A}predicate>> and <<phrase::¬{B}predicate>>",
+      "<<phrase::{A}predicate>> <<phrase::and_also>> <<phrase::¬{B}predicate>>",
       "<<phrase::{A}equal_noun_predicate>> that <<phrase::¬{B}predicate>>",
 
       "is <<phrase::¬{B}pre_modifier>> {A}[NOUN]"
     ],
     "(¬{A} & ¬{B})predicate": [
-      "<<phrase::¬{A}predicate>> and <<phrase::¬{B}predicate>>"
+      "<<phrase::¬{A}predicate>> <<phrase::and_also>> <<phrase::¬{B}predicate>>"
     ],
 
     "({A} v {B})predicate": [
@@ -2520,16 +2520,16 @@
     ],
 
     "({A} & {B})pre_modifier": [
-      "<<phrase::{A}pre_modifier>> and <<phrase::{B}pre_modifier>>"
+      "<<phrase::{A}pre_modifier>> <<phrase::and_also>> <<phrase::{B}pre_modifier>>"
     ],
     "(¬{A} & {B})pre_modifier": [
-      "<<phrase::¬{A}pre_modifier>> and <<phrase::{B}pre_modifier>>"
+      "<<phrase::¬{A}pre_modifier>> <<phrase::and_but>> <<phrase::{B}pre_modifier>>"
     ],
     "({A} & ¬{B})pre_modifier": [
-      "<<phrase::{A}pre_modifier>> and <<phrase::¬{B}pre_modifier>>"
+      "<<phrase::{A}pre_modifier>> <<phrase::and_but>> <<phrase::¬{B}pre_modifier>>"
     ],
     "(¬{A} & ¬{B})pre_modifier": [
-      "<<phrase::¬{A}pre_modifier>> and <<phrase::¬{B}pre_modifier>>"
+      "<<phrase::¬{A}pre_modifier>> <<phrase::and_also>> <<phrase::¬{B}pre_modifier>>"
     ],
 
     "({A} v {B})pre_modifier": [
@@ -2546,16 +2546,16 @@
     ],
 
     "({A} & {B})post_modifier": [
-      "<<phrase::{A}post_modifier>> and <<phrase::{B}post_modifier>>"
+      "<<phrase::{A}post_modifier>> <<phrase::and_also>> <<phrase::{B}post_modifier>>"
     ],
     "(¬{A} & {B})post_modifier": [
-      "<<phrase::¬{A}post_modifier>> and <<phrase::{B}post_modifier>>"
+      "<<phrase::¬{A}post_modifier>> <<phrase::and_but>> <<phrase::{B}post_modifier>>"
     ],
     "({A} & ¬{B})post_modifier": [
-      "<<phrase::{A}post_modifier>> and <<phrase::¬{B}post_modifier>>"
+      "<<phrase::{A}post_modifier>> <<phrase::and_but>> <<phrase::¬{B}post_modifier>>"
     ],
     "(¬{A} & ¬{B})post_modifier": [
-      "<<phrase::¬{A}post_modifier>> and <<phrase::¬{B}post_modifier>>"
+      "<<phrase::¬{A}post_modifier>> <<phrase::and_also>> <<phrase::¬{B}post_modifier>>"
     ],
 
     "({A} v {B})post_modifier": [
@@ -2572,7 +2572,21 @@
     ],
 
 
+    "and_also": [
+      "and",
+      "and also"
+    ],
 
+    "and_but": [
+      "and",
+      "but"
+    ],
+
+
+    "with": [
+      "with",
+      "and"
+    ],
 
     "will": [
       "will",
