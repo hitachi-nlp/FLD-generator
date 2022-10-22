@@ -1644,33 +1644,30 @@
     "verb": {
 
       "{A}": [
-        "{A}[ADJ.ness] occurs",
-        "{A}[VERB.ing] occurs",
-        "a {A}[NOUN] occurs"
+        "<<phrase::{A}event>> occurs"
       ],
 
       "¬{A}": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}>>",
-
-        "{A}[ADJ.ness] does not occur",
-        "{A}[VERB.ing] does not occur",
-        "a {A}[NOUN] does not occur"
+        "<<phrase::{A}event>> does not occur"
       ],
-
-
 
 
       "({A} & {B})": [
-          "<<clause::verb::{A}>> and <<clause::verb::{B}>>"
+          "<<clause::verb::{A}>> and <<clause::verb::{B}>>",
+          "<<phrase::{A}event>> and <<phrase::{B}event>> occurs"
       ],
       "(¬{A} & {B})": [
-          "<<clause::verb::¬{A}>> and <<clause::verb::{B}>>"
+          "<<clause::verb::¬{A}>> and <<clause::verb::{B}>>",
+          "<<phrase::¬{A}event>> and <<phrase::{B}event>> occurs"
       ],
       "({A} & ¬{B})": [
-          "<<clause::verb::{A}>> and <<clause::verb::¬{B}>>"
+          "<<clause::verb::{A}>> and <<clause::verb::¬{B}>>",
+          "<<phrase::{A}event>> and <<phrase::¬{B}event>> occurs"
       ],
       "(¬{A} & ¬{B})": [
-          "<<clause::verb::¬{A}>> and <<clause::verb::¬{B}>>"
+          "<<clause::verb::¬{A}>> and <<clause::verb::¬{B}>>",
+          "<<phrase::¬{A}event>> and <<phrase::¬{B}event>> occurs"
       ],
 
 
@@ -1689,16 +1686,20 @@
 
 
       "({A} v {B})": [
-          "either <<clause::verb::{A}>> or <<clause::verb::{B}>> or both"
+          "either <<clause::verb::{A}>> or <<clause::verb::{B}>> or both",
+          "either <<phrase::{A}event>> or <<phrase::{B}event>> or both occurs"
       ],
       "(¬{A} v {B})": [
-          "either <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both"
+          "either <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both",
+          "either <<phrase::¬{A}event>> or <<phrase::{B}event>> or both occurs"
       ],
       "({A} v ¬{B})": [
-          "either <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both"
+          "either <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both",
+          "either <<phrase::{A}event>> or <<phrase::¬{B}event>> or both occurs"
       ],
       "(¬{A} v ¬{B})": [
-          "either <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both"
+          "either <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both",
+          "either <<phrase::¬{A}event>> or <<phrase::¬{B}event>> or both occurs"
       ],
 
 
@@ -1731,16 +1732,20 @@
 
 
       "({A}{a} & {B}{a})": [
-          "a {a}[NOUN] <<phrase::({A} & {B})predicate>>"
+          "a {a}[NOUN] <<phrase::({A} & {B})predicate>>",
+          "<<clause::verb::{A}{a}>> and <<clause::verb::{B}it>>"
       ],
       "(¬{A}{a} & {B}{a})": [
-          "a {a}[NOUN] <<phrase::(¬{A} & {B})predicate>>"
+          "a {a}[NOUN] <<phrase::(¬{A} & {B})predicate>>",
+          "<<clause::verb::¬{A}{a}>> and <<clause::verb::{B}it>>"
       ],
       "({A}{a} & ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::({A} & ¬{B})predicate>>"
+          "a {a}[NOUN] <<phrase::({A} & ¬{B})predicate>>",
+          "<<clause::verb::{A}{a}>> and <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}{a} & ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::(¬{A} & ¬{B})predicate>>"
+          "a {a}[NOUN] <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<clause::verb::¬{A}{a}>> and <<clause::verb::¬{B}it>>"
       ],
 
 
@@ -1759,16 +1764,20 @@
 
 
       "({A}{a} v {B}{a})": [
-          "a {a}[NOUN] <<phrase::({A} v {B})predicate>>"
+          "a {a}[NOUN] <<phrase::({A} v {B})predicate>>",
+          "<<clause::verb::{A}{a}>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}{a} v {B}{a})": [
-          "a {a}[NOUN] <<phrase::(¬{A} v {B})predicate>>"
+          "a {a}[NOUN] <<phrase::(¬{A} v {B})predicate>>",
+          "<<clause::verb::¬{A}{a}>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}{a} v ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::({A} v ¬{B})predicate>>"
+          "a {a}[NOUN] <<phrase::({A} v ¬{B})predicate>>",
+          "<<clause::verb::{A}{a}>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}{a} v ¬{B}{a})": [
-          "a {a}[NOUN] <<phrase::(¬{A} v ¬{B})predicate>>"
+          "a {a}[NOUN] <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<clause::verb::¬{A}{a}>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
@@ -1800,16 +1809,20 @@
 
 
       "({A}something & {B}something)": [
-          "something <<phrase::({A} & {B})predicate>>"
+          "something <<phrase::({A} & {B})predicate>>",
+          "<<clause::verb::{A}something>> and <<clause::verb::{B}it>>"
       ],
       "(¬{A}something & {B}something)": [
-          "something <<phrase::(¬{A} & {B})predicate>>"
+          "something <<phrase::(¬{A} & {B})predicate>>",
+          "<<clause::verb::¬{A}something>> and <<clause::verb::{B}it>>"
       ],
       "({A}something & ¬{B}something)": [
-          "something <<phrase::({A} & ¬{B})predicate>>"
+          "something <<phrase::({A} & ¬{B})predicate>>",
+          "<<clause::verb::{A}something>> and <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}something & ¬{B}something)": [
-          "something <<phrase::(¬{A} & ¬{B})predicate>>"
+          "something <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<clause::verb::¬{A}something>> and <<clause::verb::¬{B}it>>"
       ],
 
 
@@ -1828,16 +1841,20 @@
 
 
       "({A}something v {B}something)": [
-          "something <<phrase::({A} v {B})predicate>>"
+          "something <<phrase::({A} v {B})predicate>>",
+          "<<clause::verb::{A}something>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}something v {B}something)": [
-          "something <<phrase::(¬{A} v {B})predicate>>"
+          "something <<phrase::(¬{A} v {B})predicate>>",
+          "<<clause::verb::¬{A}something>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}something v ¬{B}something)": [
-          "something <<phrase::({A} v ¬{B})predicate>>"
+          "something <<phrase::({A} v ¬{B})predicate>>",
+          "<<clause::verb::{A}something>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}something v ¬{B}something)": [
-          "something <<phrase::(¬{A} v ¬{B})predicate>>"
+          "something <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<clause::verb::¬{A}something>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
@@ -1940,16 +1957,20 @@
 
 
       "({A}it & {B}it)": [
-          "it <<phrase::({A} & {B})predicate>>"
+          "it <<phrase::({A} & {B})predicate>>",
+          "<<clause::verb::{A}it>> and <<clause::verb::{B}it>>"
       ],
       "(¬{A}it & {B}it)": [
-          "it <<phrase::(¬{A} & {B})predicate>>"
+          "it <<phrase::(¬{A} & {B})predicate>>",
+          "<<clause::verb::¬{A}it>> and <<clause::verb::{B}it>>"
       ],
       "({A}it & ¬{B}it)": [
-          "it <<phrase::({A} & ¬{B})predicate>>"
+          "it <<phrase::({A} & ¬{B})predicate>>",
+          "<<clause::verb::{A}it>> and <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}it & ¬{B}it)": [
-          "it <<phrase::(¬{A} & ¬{B})predicate>>"
+          "it <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<clause::verb::¬{A}it>> and <<clause::verb::¬{B}it>>"
       ],
 
 
@@ -1968,16 +1989,20 @@
 
 
       "({A}it v {B}it)": [
-          "it <<phrase::({A} v {B})predicate>>"
+          "it <<phrase::({A} v {B})predicate>>",
+          "<<clause::verb::{A}it>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}it v {B}it)": [
-          "it <<phrase::(¬{A} v {B})predicate>>"
+          "it <<phrase::(¬{A} v {B})predicate>>",
+          "<<clause::verb::¬{A}it>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}it v ¬{B}it)": [
-          "it <<phrase::({A} v ¬{B})predicate>>"
+          "it <<phrase::({A} v ¬{B})predicate>>",
+          "<<clause::verb::{A}it>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}it v ¬{B}it)": [
-          "it <<phrase::(¬{A} v ¬{B})predicate>>"
+          "it <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<clause::verb::¬{A}it>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
@@ -2360,6 +2385,20 @@
 
 
   "phrase": {
+
+    "{A}event": [
+      "{A}[ADJ.ness]",
+      "{A}[VERB.ing]",
+      "a {A}[NOUN]"
+    ],
+
+
+    "¬{A}event": [
+      "non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]",
+      "__a {A}[NOUN]"
+    ],
+
 
     "{A}predicate": [
       "is {A}[ADJ]",
