@@ -86,13 +86,15 @@
       "<<phrase::if_conjunction>> <<clause::verb::{A}>>, <<clause::verb::¬{B}>>",
       "<<clause::verb::¬{B}>> <<phrase::if_conjunction>> <<clause::verb::{A}>>",
 
-      "<<clause::noun::{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.occurrence>>"
+      "<<clause::noun::{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.occurrence>>",
+      "<<clause::noun::{A}.occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{B}.occurrence>>"
     ],
     "¬{A} -> ¬{B}": [
       "<<phrase::if_conjunction>> <<clause::verb::¬{A}>>, <<clause::verb::¬{B}>>",
       "<<clause::verb::¬{B}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}>>",
 
-      "<<clause::noun::¬{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.occurrence>>"
+      "<<clause::noun::¬{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.occurrence>>",
+      "<<clause::noun::¬{A}.occurrence>> <<phrase::cause_verb>> <<clause::noun::{B}.occurrence>>"
     ],
 
 
@@ -118,7 +120,8 @@
       "<<phrase::if_conjunction>> <<clause::verb::({A} & {B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} & {B})>>",
 
-      "<<clause::noun::({A} & {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::({A} & {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::({A} & {B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
     "(¬{A} & ¬{B}) -> {C}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} & ¬{B})>>, <<clause::verb::{C}>>",
@@ -129,17 +132,20 @@
     "(¬{A} & {B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} & {B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} & {B})>>",
-      "<<clause::noun::(¬{A} & {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::(¬{A} & {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::(¬{A} & {B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
     "({A} & ¬{B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A} & ¬{B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} & ¬{B})>>",
-      "<<clause::noun::({A} & ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::({A} & ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::({A} & ¬{B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
     "(¬{A} & ¬{B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} & ¬{B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} & ¬{B})>>",
-      "<<clause::noun::(¬{A} & ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::(¬{A} & ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::(¬{A} & ¬{B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
 
 
@@ -284,7 +290,8 @@
       "<<phrase::if_conjunction>> <<clause::verb::({A} v {B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} v {B})>>",
 
-      "<<clause::noun::({A} v {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::({A} v {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::({A} v {B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
 
 
@@ -298,19 +305,22 @@
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} v {B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} v {B})>>",
 
-      "<<clause::noun::(¬{A} v {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::(¬{A} v {B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::(¬{A} v {B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
     "({A} v ¬{B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A} v ¬{B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} v ¬{B})>>",
 
-      "<<clause::noun::({A} v ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::({A} v ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::({A} v ¬{B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
     "(¬{A} v ¬{B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} v ¬{B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} v ¬{B})>>",
 
-      "<<clause::noun::(¬{A} v ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>"
+      "<<clause::noun::(¬{A} v ¬{B}).occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.occurrence>>",
+      "<<clause::noun::(¬{A} v ¬{B}).occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.occurrence>>"
     ],
 
 
@@ -517,12 +527,14 @@
     "{A}{a} -> ¬{B}{b}": [
       "<<phrase::if_conjunction>> <<clause::verb::{A}{a}>>, <<clause::verb::¬{B}{b}>>",
       "<<clause::verb::¬{B}{b}>> <<phrase::if_conjunction>> <<clause::verb::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>"
     ],
     "¬{A}{a} -> ¬{B}{b}": [
       "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>, <<clause::verb::¬{B}{b}>>",
       "<<clause::verb::¬{B}{b}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>"
     ],
 
 
@@ -544,7 +556,8 @@
     "({A}{a} & {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} & {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} & {B}{a})>>",
-      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} & ¬{B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & ¬{B}{a})>>, <<clause::verb::{C}{c}>>",
@@ -554,17 +567,20 @@
     "(¬{A}{a} & {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & {B}{a})>>",
-      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "({A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} & ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} & ¬{B}{a})>>",
-      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & ¬{B}{a})>>",
-      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
 
 
@@ -696,7 +712,8 @@
     "({A}{a} v {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} v {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} v {B}{a})>>",
-      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} v ¬{B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v ¬{B}{a})>>, <<clause::verb::{C}{c}>>",
@@ -706,17 +723,20 @@
     "(¬{A}{a} v {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v {B}{a})>>",
-      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "({A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} v ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} v ¬{B}{a})>>",
-      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v ¬{B}{a})>>",
-      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
 
 
@@ -2598,6 +2618,12 @@
       "causes",
       "results in"
     ],
+
+    "anti_cause_verb": [
+      "prevents",
+      "is the opposite of"
+    ],
+
 
     "kind_of": [
       "a",
