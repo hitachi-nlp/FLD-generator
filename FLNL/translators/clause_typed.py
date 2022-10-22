@@ -18,7 +18,7 @@ from FLNL.interpretation import (
     formula_can_not_be_identical_to,
 )
 from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
-from FLNL.utils import starts_with_vowel_sound
+from FLNL.utils import starts_with_vowel_sound, compress, decompress
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import kern_profiler
 
@@ -37,6 +37,14 @@ class _PosFormConditionTuple(tuple):
 
     def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[WordForm]]]):
         return super().__new__(cls, sorted(elems))
+
+
+def _compress_nls(texts: List[str]) -> bytes:
+    return compress('<<SEP>>'.join(texts))
+
+
+def _decompress_nls(binary: bytes) -> List[str]:
+    return decompress(binary).split('<<SEP>>')
 
 
 class ClauseTypedTranslator(Translator):
@@ -58,14 +66,20 @@ class ClauseTypedTranslator(Translator):
         self._resolve_cache: Dict[str, List[Tuple[str, _PosFormConditionSet]]] = {}
         _resolved_translations: Dict[str, Dict[str, Dict[_PosFormConditionTuple, List[str]]]] = {}
         self._nl_to_condition: Dict[str, _PosFormConditionSet] = {}
+        total_trans_nls = 0
         for prefix, config in self._two_layered_config.items():
             _resolved_translations[prefix] = {}
-            for key, transl_nls in tqdm(config.items()):
+            pbar = tqdm(config.items())
+            for key, transl_nls in pbar:
+                pbar.set_description(f'resolved translations = {str(total_trans_nls).zfill(10)}')
                 _resolved_translations[prefix][key] = defaultdict(list)
                 for transl_nl in transl_nls:
                     for resolved_nl, condition in self._resolve_translation(transl_nl):
-                        _resolved_translations[prefix][key][_PosFormConditionTuple(condition)].append(resolved_nl)
+                        _resolved_translations[prefix][key][_PosFormConditionTuple(condition)].append(
+                            resolved_nl
+                        )
                         self._nl_to_condition[resolved_nl] = condition
+                        total_trans_nls += 1
 
         self._translations: Dict[str, Dict[_PosFormConditionTuple, List[str]]] = _resolved_translations['sentence']
         # sort by specificity
@@ -316,12 +330,6 @@ class ClauseTypedTranslator(Translator):
                     '\n    ' + '\n    '.join(pformat(interp_mapping).split('\n')),
                 ]
 
-                if len(translation_key) < 5:
-                    import pudb; pudb.set_trace()
-                    matched_condition = self._find_interp_mapping_consistent_condition(translation_key,
-                                                                                       push_mapping,
-                                                                                       interp_mapping)
-
                 raise_or_warn('\n'.join(msgs))
                 translations.append(None)
                 translation_names.append(None)
@@ -363,7 +371,7 @@ class ClauseTypedTranslator(Translator):
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Tuple[Optional[str], Optional[Dict[str, str]]]:
-        for _transl_key, condition_config in self._translations.items():
+        for _transl_key, _ in self._translations.items():
             if formula_can_not_be_identical_to(Formula(_transl_key), formula):  # early rejection
                 continue
 

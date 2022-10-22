@@ -3,8 +3,10 @@ import logging
 from typing import Dict, Any, List, Iterable
 import random
 import logging
+import zlib
 
 from nltk.corpus import cmudict
+import timeout_decorator
 from .exception import FormalLogicExceptionBase
 
 utils_logger = logging.getLogger(__name__)
@@ -123,14 +125,7 @@ def run_with_timeout_retry(
     for i_trial in range(0, max_retry):
         logger.info('---- trial=%d ----', i_trial)
         try:
-            # with timeout_context(timeout, exception=TimeoutError):
-            #     result = func(*func_args, **func_kwargs)
-            import timeout_decorator
             result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
-
-            # import timeout as timeout_mod
-            # timeout_mod.timeout(duration=timeout)(func)(*func_args, **func_kwargs)
-
             logger.info('-- succeeded!')
             return result
         except TimeoutError:
@@ -139,3 +134,11 @@ def run_with_timeout_retry(
             logger.warning('-- failed. The message of the LAST trial is the followings:')
             logger.warning('%s', str(e))
     raise RetryAndTimeoutFailure(f'-- {log_title} failed with max_retry={max_retry}.')
+
+
+def compress(text: str) -> bytes:
+    return zlib.compress(text.encode('utf-8'))
+
+
+def decompress(binary: bytes) -> str:
+    return zlib.decompress(binary).decode('utf-8')
