@@ -351,6 +351,8 @@ class ClauseTypedTranslator(Translator):
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume) -> Tuple[Iterable[NLAndCondition], int]:
+        if nl.startswith('__'):
+            return [], 0
 
         condition = self._get_pos_form_consistency_condition(nl)
         if constraint_push_mapping is not None\

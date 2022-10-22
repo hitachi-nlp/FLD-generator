@@ -2525,7 +2525,7 @@
 
     "¬{A}pre_modifier": [
       "{A}[ADJ.neg]",
-      "non-[ADJ]",
+      "non-{A}[ADJ]",
       "non-{A}[VERB.ing]"
     ],
 
@@ -2536,7 +2536,7 @@
     "¬{A}post_modifier": [
       "{A}[ADJ.neg]",
       "not [ADJ]",
-      "non {A}[VERB.ing]"
+      "not {A}[VERB.ing]"
     ],
 
     "({A} & {B})pre_modifier": [
