@@ -65,6 +65,7 @@ class ClauseTypedTranslator(Translator):
                  word_bank: WordBank,
                  reuse_object_nouns=False,
                  limit_vocab_size_per_type: Optional[int] = None,
+                 words_per_type=5000,
                  do_translate_to_nl=True,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
@@ -84,6 +85,8 @@ class ClauseTypedTranslator(Translator):
             logger.debug('translation key = "%s"', key)
             for nl in nls:
                 logger.debug('    "%s"', nl)
+
+        self.words_per_type = words_per_type
 
         self._reuse_object_nouns = reuse_object_nouns
         self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(word_bank)
@@ -166,21 +169,19 @@ class ClauseTypedTranslator(Translator):
             for pred in self._sample(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
-        words_per_type = 5000
-
-        zeroary_predicates = self._sample(adjs, words_per_type)\
-            + self._sample(intransitive_verbs, words_per_type)\
-            + self._sample(transitive_verb_PASs, words_per_type)\
-            + self._sample(event_nouns, words_per_type)
+        zeroary_predicates = self._sample(adjs, self.words_per_type)\
+            + self._sample(intransitive_verbs, self.words_per_type)\
+            + self._sample(transitive_verb_PASs, self.words_per_type)\
+            + self._sample(event_nouns, self.words_per_type)
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
-        unary_predicates = self._sample(adjs, words_per_type)\
-            + self._sample(intransitive_verbs, words_per_type)\
-            + self._sample(transitive_verb_PASs, words_per_type)\
-            + self._sample(nouns, words_per_type)
+        unary_predicates = self._sample(adjs, self.words_per_type)\
+            + self._sample(intransitive_verbs, self.words_per_type)\
+            + self._sample(transitive_verb_PASs, self.words_per_type)\
+            + self._sample(nouns, self.words_per_type)
         unary_predicates = sorted({word for word in unary_predicates})
 
-        constants = self._sample(entity_nouns, words_per_type)
+        constants = self._sample(entity_nouns, self.words_per_type)
 
         logger.info('loading words from WordBank done!')
 
