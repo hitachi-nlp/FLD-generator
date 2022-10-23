@@ -1,7 +1,13 @@
 from typing import List
 from pprint import pprint
 from collections import defaultdict
-from FLNL.utils import weighted_sampling, weighted_shuffle, nested_merge
+from FLNL.utils import (
+    weighted_sampling,
+    weighted_shuffle,
+    nested_merge,
+    make_combination,
+    chained_sampling_from_weighted_iterators,
+)
 
 
 def test_weighted_sampling():
@@ -83,7 +89,62 @@ def test_nested_merge():
     assert merged['B']['b'] == [2, 3]
 
 
+def test_make_combination():
+    print('\n\ntest_make_combination()')
+
+    def int_generator():
+        for i in range(0, 3):
+            yield i
+
+
+    def str_generator1():
+        for rep in ['a', 'b', 'c']:
+            yield rep
+
+
+    def str_generator2():
+        for rep in ['hoge', 'fuga', 'piyo']:
+            yield rep
+
+    combs = make_combination([
+        int_generator,
+        str_generator1,
+        str_generator2,
+    ])
+
+    combs = list(combs)
+    for comb in combs:
+        print(comb)
+    assert(len(combs) == 3**3)
+
+
+def test_chained_sampling_from_weighted_iterators():
+
+    def generator_large():
+        for i in range(0, 100):
+            yield 'large'
+
+    def generator_small():
+        for i in range(0, 10):
+            yield 'small'
+
+    def show_sampling(weights: List[float]) -> None:
+        print('\n\n')
+        print(f'==== show_sampling (weights={weights} ====')
+        for item in chained_sampling_from_weighted_iterators(
+            [generator_large(), generator_small()],
+            weights,
+        ):
+            print('    ', item)
+            
+    show_sampling([10.0, 1.0])
+    show_sampling([1.0, 1.0])
+    show_sampling([0.1, 1.0])
+
+
 if __name__ == '__main__':
     test_weighted_sampling()
     test_weighted_shuffle()
     test_nested_merge()
+    test_make_combination()
+    test_chained_sampling_from_weighted_iterators()

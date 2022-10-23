@@ -1,10 +1,13 @@
-from typing import Optional, Callable
+from typing import Optional, Callable, List, Iterable, Any
+import math
 import logging
 from typing import Dict, Any, List, Iterable
 import random
 import logging
+import zlib
 
 from nltk.corpus import cmudict
+import timeout_decorator
 from .exception import FormalLogicExceptionBase
 
 utils_logger = logging.getLogger(__name__)
@@ -92,7 +95,11 @@ def nested_merge(this: Any, that: Any) -> Any:
                 updated[that_key] = that_val
         return updated
     elif isinstance(this, list):
-        return this + that
+        unique_elems = []
+        for elem in this + that:
+            if elem not in unique_elems:
+                unique_elems.append(elem)
+        return unique_elems
     else:
         raise ValueError(f'this and that are not containers. Thus, we can not append that to this.\nThis: {str(this)}\nThat: {str(that)}')
 
@@ -119,14 +126,7 @@ def run_with_timeout_retry(
     for i_trial in range(0, max_retry):
         logger.info('---- trial=%d ----', i_trial)
         try:
-            # with timeout_context(timeout, exception=TimeoutError):
-            #     result = func(*func_args, **func_kwargs)
-            import timeout_decorator
             result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
-
-            # import timeout as timeout_mod
-            # timeout_mod.timeout(duration=timeout)(func)(*func_args, **func_kwargs)
-
             logger.info('-- succeeded!')
             return result
         except TimeoutError:
@@ -135,3 +135,59 @@ def run_with_timeout_retry(
             logger.warning('-- failed. The message of the LAST trial is the followings:')
             logger.warning('%s', str(e))
     raise RetryAndTimeoutFailure(f'-- {log_title} failed with max_retry={max_retry}.')
+
+
+def compress(text: str) -> bytes:
+    return zlib.compress(text.encode('utf-8'))
+
+
+def decompress(binary: bytes) -> str:
+    return zlib.decompress(binary).decode('utf-8')
+
+
+def make_combination(elem_generators: List[Callable[[], Iterable[Any]]]) -> Iterable[List[Any]]:
+    head_elem_generator = elem_generators[0]
+    tail_elem_generators = elem_generators[1:]
+
+    if len(tail_elem_generators) == 0:
+        for elem in head_elem_generator():
+            yield [elem]
+    else:
+        for head_elem in head_elem_generator():
+            for tail_elems in make_combination(tail_elem_generators):
+                yield [head_elem] + tail_elems
+
+
+@profile
+def chained_sampling_from_weighted_iterators(iterators: List[Iterable[Any]], weights: List[float]) -> Iterable[Any]:
+    sum_weights = sum(weights)
+    if math.isclose(sum_weights, 0):
+        return
+
+    normalized_weights = [weight / sum_weights for weight in weights]
+    aliving_iterators = iterators
+    while True:
+        if len(aliving_iterators) == 0:
+            break
+        rand = random.random()
+        _w = 0.0
+        chosen_idx = None
+        margin = 0.000001
+        for i, weight in enumerate(normalized_weights):
+            if _w - margin <= rand <= _w + weight + margin:
+                chosen_idx = i
+                break
+            _w += weight
+
+        try:
+            item = next(aliving_iterators[chosen_idx])
+            yield item
+        except StopIteration:
+            aliving_iterators = [iterator for idx, iterator in enumerate(aliving_iterators)
+                                 if idx != chosen_idx]
+            aliving_weights = [weight for idx, weight in enumerate(normalized_weights)
+                               if idx != chosen_idx]
+            sum_weights = sum(aliving_weights)
+            if math.isclose(sum_weights, 0):
+                return
+            normalized_weights = [weight / sum_weights for weight in aliving_weights]

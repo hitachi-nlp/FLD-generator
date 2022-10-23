@@ -11,28 +11,23 @@ from .formula import (
     NEGATION,
     CONSTANTS,
 )
-import kern_profiler
 
 logger = logging.getLogger(__name__)
 
 
-@profile
 def is_consistent(formula: Formula) -> bool:
     return not _is_inconsistent(formula)
 
 
-@profile
 def is_consistent_set(formulas: List[Formula]) -> bool:
     """ consistent = satisfiable in formal meaning. """
     return not _is_inconsistent_set(formulas)
 
 
-@profile
 def is_predicate_arity_consistent(formula: Formula) -> bool:
     return is_predicate_arity_consistent_set([formula])
 
 
-@profile
 def is_predicate_arity_consistent_set(formulas: List[Formula]) -> bool:
     unary_predicates = {pred.rep
                         for formula in formulas
@@ -43,12 +38,10 @@ def is_predicate_arity_consistent_set(formulas: List[Formula]) -> bool:
     return len(unary_predicates.intersection(zeroary_predicates)) == 0
 
 
-@profile
 def is_senseful(formula: Formula) -> bool:
     return not _is_nonsense(formula)
 
 
-@profile
 def is_senseful_set(formulas: List[Formula]) -> bool:
     # for formula in formulas:
     #     if not is_senseful(formula):
@@ -56,7 +49,6 @@ def is_senseful_set(formulas: List[Formula]) -> bool:
     return all(is_senseful(formula) for formula in formulas)
 
 
-@profile
 def is_ok(formula: Formula) -> bool:
     return all([
         is_senseful(formula),
@@ -66,7 +58,6 @@ def is_ok(formula: Formula) -> bool:
 
 
 # HONOKA: SLOW, called many times
-@profile
 def is_ok_set(formulas: List[Formula]) -> bool:
     return all([
         is_senseful_set(formulas),   # HONOKA: passしない．
@@ -75,7 +66,6 @@ def is_ok_set(formulas: List[Formula]) -> bool:
     ])
 
 
-@profile
 def _is_inconsistent(formula: Formula) -> bool:
     """ A formula is inconsistent if for any interpretation it can not be true.
 
@@ -96,7 +86,6 @@ def _is_inconsistent(formula: Formula) -> bool:
     ))
 
 
-@profile
 def _is_inconsistent_set(formulas: List[Formula]) -> bool:
     """ Detect whether a set of formulas is inconsistent, i.e., whether, for any interpretation, they can not be true at the same time.
 
@@ -156,7 +145,6 @@ def _is_inconsistent_set(formulas: List[Formula]) -> bool:
     return False
 
 
-@profile
 def _is_nonsense(formula: Formula) -> bool:
     """ Detect fomula which is nonsense.
 
@@ -208,7 +196,6 @@ def _is_nonsense(formula: Formula) -> bool:
     return False
 
 
-@profile
 def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
     """ Detect the boolean values of PASs which is neccesary for the given formula to be true.
 

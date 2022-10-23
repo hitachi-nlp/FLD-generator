@@ -1,0 +1,12 @@
+[
+  {
+      "id": "__EB_task1.definition_sentence",
+      "__comment__": "'ED_2008_4_45' sent2: a star produces light sent3: a source of something produces that something -> stars are a source of light",
+      "__reason_for_rejection__": "logically wrong and contradicts with generalized modus ponens. Such examples should be intepreted by common sense reasoning or abductive reasoning.",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "{B}{a}"
+      ],
+      "conclusion": "{A}{a}"
+  }
+]

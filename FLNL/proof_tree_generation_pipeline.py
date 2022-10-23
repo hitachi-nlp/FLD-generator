@@ -26,10 +26,14 @@ class ProofTreeGenerationPipeline:
     def __init__(self,
                  generator: ProofTreeGenerator,
                  distractor: Optional[FormalLogicDistractor] = None,
-                 translator: Optional[Translator] = None):
+                 translator: Optional[Translator] = None,
+                 log_stats=False):
         self.generator = generator
         self.distractor = distractor
         self.translator = translator
+
+        self.log_stats = log_stats
+        self.translator.log_stats = log_stats
 
         self._empty_argument_stat = {arg.id: 0 for arg in self.generator.arguments}
         self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
@@ -94,9 +98,12 @@ class ProofTreeGenerationPipeline:
                         formula.translation = translation_prefix + translation
                 logger.info('========================== translating done! ============================')
 
-            return proof_tree, root_negation_formula, distractor_formulas, self._get_stats(proof_tree,
-                                                                                           distractor_formulas,
-                                                                                           translator_stats)
+            if self.log_stats:
+                stats = self._get_stats(proof_tree, distractor_formulas, translator_stats)
+            else:
+                stats = {}
+
+            return proof_tree, root_negation_formula, distractor_formulas, stats
 
     def _get_stats(self,
                    proof_tree: ProofTree,

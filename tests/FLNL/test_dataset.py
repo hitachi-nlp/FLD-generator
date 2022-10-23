@@ -95,8 +95,13 @@ def load_translator(type_: str,
     elif type_ == 'clause_typed_translator':
         if from_ == 'config':
             return build_translator(
-                ['./configs/FLNL/translations/clause_typed.thing.json',
-                 './configs/FLNL/translations/clause_typed.thing.sentence_negation.json'],
+                [
+                    # './configs/FLNL/translations/clause_typed.thing.json',
+                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+
+                    './configs/FLNL/translations/clause_typed.thing.e1.json',
+                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+                ],
                 build_wordnet_wordbank(
                     'eng',
                     vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None
@@ -156,7 +161,8 @@ def generate_dataset(dataset: NLProofSDataset,
             logger.info('\n')
             logger.info('--------------- stats --------------')
             for key in ['avg.word_count_all']:
-                logger.info('%s: %s', key, stats[key])
+                if key in stats:
+                    logger.info('%s: %s', key, stats[key])
             # logger.info(dict(stats))
             # logger.info('\n' + pformat(stats))
 
@@ -315,6 +321,8 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/theorem--and_or.pred_only.json',
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
+            './configs/FLNL/arguments/e1.json',
+
         ],
         complicated_arguments_weight=0.3,
         quantifier_axiom_arguments_weight=0.3,
@@ -340,7 +348,7 @@ def test_PL_pred_arg():
 
 if __name__ == '__main__':
     random.seed(0)
-    setup_logger(level=logging.DEBUG)
+    setup_logger(level=logging.INFO)
 
     RAISE_IF_TRANSLATION_NOT_FOUND = False
 

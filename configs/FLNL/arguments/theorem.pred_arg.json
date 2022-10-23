@@ -13,5 +13,20 @@
           "{B}{b} -> {C}{c}"
       ],
       "conclusion": "{A}{a} -> {C}{c}"
+  },
+  {
+      "id": "contraposition.pred_arg.shared_arg",
+      "premises": [
+          "{A}{a} -> {B}{a}"
+      ],
+      "conclusion": "¬{B}{a} -> ¬{A}{a}"
+  },
+  {
+      "id": "syllogism_0.pred_arg.shared_arg",
+      "premises": [
+          "{A}{a} -> {B}{a}",
+          "{B}{a} -> {C}{a}"
+      ],
+      "conclusion": "{A}{a} -> {C}{a}"
   }
 ]

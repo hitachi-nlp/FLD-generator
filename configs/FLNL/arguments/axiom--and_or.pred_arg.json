@@ -1,6 +1,6 @@
 [
   {
-      "id": "and_intro.pred_arg",
+      "id": "and_intro.pred_arg.shared_arg",
       "premises": [
           "{A}{a}",
           "{B}{a}"
@@ -8,14 +8,14 @@
       "conclusion": "({A}{a} & {B}{a})"
   },
   {
-      "id": "and_elim_0.pred_arg",
+      "id": "and_elim_0.pred_arg.shared_arg",
       "premises": [
           "({A}{a} & {B}{a})"
       ],
       "conclusion": "{A}{a}"
   },
   {
-      "id": "and_elim_1.pred_arg",
+      "id": "and_elim_1.pred_arg.shared_arg",
       "premises": [
           "({A}{a} & {B}{a})"
       ],
@@ -24,21 +24,21 @@
 
 
   {
-      "id": "or_intro_0.pred_arg",
+      "id": "or_intro_0.pred_arg.shared_arg",
       "premises": [
           "{A}{a}"
       ],
       "conclusion": "({A}{a} v {B}{a})"
   },
   {
-      "id": "or_intro_1.pred_arg",
+      "id": "or_intro_1.pred_arg.shared_arg",
       "premises": [
           "{B}{a}"
       ],
       "conclusion": "({A}{a} v {B}{a})"
   },
   {
-      "id": "__or_elim.pred_arg__",
+      "id": "__or_elim.pred_arg.shared_arg__",
       "__reason_for_rejection__": "({A}{a} v {B}{b}) not in translation",
       "premises": [
           "({A}{a} v {B}{b})",

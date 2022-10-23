@@ -4,7 +4,7 @@ from FLNL.interpretation import (
     generate_quantifier_axiom_arguments,
     formula_is_identical_to,
     argument_is_identical_to,
-    interprete_formula,
+    interpret_formula,
     formula_can_not_be_identical_to,
     generate_quantifier_formulas,
     generate_partially_quantifier_arguments,
@@ -34,7 +34,7 @@ from FLNL.argument import Argument
 #     for mapping in mappings:
 #         print('')
 #         print('mapping     :', mapping)
-#         print('pushed formula :', interprete_formula(formula, mapping))
+#         print('pushed formula :', interpret_formula(formula, mapping))
 # 
 #     assert(len(formula.predicates) == 3)
 #     assert(len(formula.constants) == 2)

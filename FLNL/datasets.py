@@ -94,6 +94,7 @@ class NLProofSDataset:
                  depths: List[int],
                  branch_extension_steps: List[int],
                  num_distractors: Optional[List[int]] = None,
+                 log_stats=False,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 
@@ -105,6 +106,8 @@ class NLProofSDataset:
         self.depths = depths
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
+        self.log_stats = log_stats,
+        self.pipeline.log_stats = log_stats
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
     @profile
@@ -321,35 +324,40 @@ class NLProofSDataset:
             }
 
             # Update statistics
-            sample_stats = flatten_dict(pipeline_stats)
-            sample_stats[f'answer.{label}'] = 1
-            sample_stats[f'proof_stance.{proof_stance.value}'] = 1
-            sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
-            sample_stats['word_count_context'] = len(context.split(' '))
-            sample_stats['word_count_proof'] = mean([len(proof_str.split(' ')) for proof_str in proof_strs])
-            sample_stats['word_count_all'] = sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']
-            sample_stats['tree'] = 1
+            if self.log_stats:
+                sample_stats = flatten_dict(pipeline_stats)
+                sample_stats[f'answer.{label}'] = 1
+                sample_stats[f'proof_stance.{proof_stance.value}'] = 1
+                sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
+                sample_stats['word_count_context'] = len(context.split(' '))
+                sample_stats['word_count_proof'] = mean([len(proof_str.split(' ')) for proof_str in proof_strs])
+                sample_stats['word_count_all'] = sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']
+                sample_stats['tree'] = 1
 
-            for name, count in sample_stats.items():
-                sample_cum_stats[name] += count
+                for name, count in sample_stats.items():
+                    sample_cum_stats[name] += count
 
-            for name, count in sample_stats.items():
-                if name.find('argument') >= 0 or name.find('translation') >= 0:
-                    continue
-                all_sample_stats[name].append(count)
+                for name, count in sample_stats.items():
+                    if name.find('argument') >= 0 or name.find('translation') >= 0:
+                        continue
+                    all_sample_stats[name].append(count)
 
-            sample_avg_stats = {
-                name: count / sample_cum_stats['tree']
-                for name, count in sample_cum_stats.items()
-                if name != 'tree'
-            }
+                sample_avg_stats = {
+                    name: count / sample_cum_stats['tree']
+                    for name, count in sample_cum_stats.items()
+                    if name != 'tree'
+                }
 
-            sample_std_stats = {
-                name: stdev(count_list) if len(count_list) >= 2 else None
-                for name, count_list in all_sample_stats.items()
-            }
+                sample_std_stats = {
+                    name: stdev(count_list) if len(count_list) >= 2 else None
+                    for name, count_list in all_sample_stats.items()
+                }
+
+                gathered_stats = flatten_dict({'cum': sample_cum_stats, 'avg': sample_avg_stats, 'std': sample_std_stats})
+            else:
+                gathered_stats = {}
 
             yield dataset_json,\
                 proof_tree,\
                 distractor_formulas,\
-                flatten_dict({'cum': sample_cum_stats, 'avg': sample_avg_stats, 'std': sample_std_stats})
+                gathered_stats
