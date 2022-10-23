@@ -99,8 +99,11 @@ def load_translator(type_: str,
                     # './configs/FLNL/translations/clause_typed.thing.json',
                     # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
 
-                    './configs/FLNL/translations/clause_typed.thing.e1.json',
-                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+                    # './configs/FLNL/translations/clause_typed.thing.e1.json',
+                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+
+                    './configs/FLNL/translations/clause_typed.thing.r.json',
+                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
                 ],
                 build_wordnet_wordbank(
                     'eng',
@@ -322,6 +325,7 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/e1.json',
+            './configs/FLNL/arguments/r.json',
 
         ],
         complicated_arguments_weight=0.3,

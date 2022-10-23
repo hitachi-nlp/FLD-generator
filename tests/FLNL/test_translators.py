@@ -13,8 +13,12 @@ def test_clause_typed_translator():
             # './configs/FLNL/translations/clause_typed.thing.json',
             # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
 
-            './configs/FLNL/translations/clause_typed.thing.e1.json',
-            './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+            # './configs/FLNL/translations/clause_typed.thing.e1.json',
+            # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+
+            './configs/FLNL/translations/clause_typed.thing.r.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
+
         ],
         build_wordnet_wordbank('eng'),
         reuse_object_nouns=True,
