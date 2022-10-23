@@ -8,6 +8,11 @@
       "conclusion": "{B}{b}"
   },
   {
-      "id": "__implication_elim.pred_arg__"
+      "id": "implication_elim.pred_arg.shared_arg",
+      "premises": [
+          "{A}{a} -> {B}{a}",
+          "{A}{a}"
+      ],
+      "conclusion": "{B}{a}"
   }
 ]

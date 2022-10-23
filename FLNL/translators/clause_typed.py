@@ -25,6 +25,8 @@ import kern_profiler
 
 logger = logging.getLogger(__name__)
 
+_SENTENCE_TRANSLATION_PREFIX = 'sentence'
+
 
 class _PosFormConditionSet(set):
 
@@ -70,7 +72,7 @@ class ClauseTypedTranslator(Translator):
         logger.info('-- building translator.. --')
         self._two_layered_config = self._build_two_layered_config(config_json)
 
-        self._translations: Dict[str, List[str]] = self._two_layered_config['sentence']
+        self._translations: Dict[str, List[str]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
         # sort by specificity
         self._translations = OrderedDict((
             (key, val)
@@ -305,6 +307,7 @@ class ClauseTypedTranslator(Translator):
         """ Find translations the pos and nflations of which are consistent with interp_mapping """
         iterator_with_volumes = [
             self._make_resolved_translation_sampler(transl_nl,
+                                                    set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
                                                     constraint_interp_mapping=interp_mapping,
                                                     constraint_push_mapping=push_mapping,
                                                     block_shuffle=block_shuffle,
@@ -347,6 +350,7 @@ class ClauseTypedTranslator(Translator):
     @profile
     def _make_resolved_translation_sampler(self,
                                            nl: str,
+                                           ancestor_keys: Set[str],
                                            constraint_interp_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
@@ -381,6 +385,7 @@ class ClauseTypedTranslator(Translator):
                 def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
+                        ancestor_keys,
                         constraint_interp_mapping=constraint_interp_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
@@ -414,12 +419,16 @@ class ClauseTypedTranslator(Translator):
     @profile
     def _make_resolved_template_sampler(self,
                                         template: str,
+                                        ancestor_keys: Set[str],
                                         constraint_interp_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume) -> Tuple[Iterable[NLAndCondition], int]:
-        template_nls = self._find_template_nls(template)
+        template_key, template_nls = self._find_template_nls(template, tuple(sorted(ancestor_keys)))
+        if template_key is None:
+            raise Exception(f'template for {template} not found.')
         iterator_with_volumes = [self._make_resolved_translation_sampler(template_nl,
+                                                                         ancestor_keys.union(set([template_key])),
                                                                          constraint_interp_mapping=constraint_interp_mapping,
                                                                          constraint_push_mapping=constraint_push_mapping,
                                                                          block_shuffle=shuffle,
@@ -445,31 +454,41 @@ class ClauseTypedTranslator(Translator):
         return generate(), volume_sum
 
     @lru_cache(maxsize=1000000)
-    def _find_template_nls(self, template: str) -> Optional[List[str]]:
+    def _find_template_nls(self, template: str, ancestor_keys: Tuple[str]) -> Tuple[Optional[str], Optional[List[str]]]:
+        ancestor_keys_set = set(ancestor_keys)
+
         template_prefix = '::'.join(template.split('::')[:-1])
         template_key = template.split('::')[-1]
         template_key_formula = Formula(template_key)
 
-        template_nls = None
+        found_template_nls = None
+        found_template_key = None
 
         config = self._two_layered_config[template_prefix]
         for transl_key, transl_nls in config.items():
-            transl_key_formula = Formula(transl_key)
-            if formula_can_not_be_identical_to(transl_key_formula, template_key_formula):
+            if transl_key in ancestor_keys_set:  # prevent circular reference
                 continue
 
-            for mapping in generate_mappings_from_formula([transl_key_formula],
+            key_formula = Formula(transl_key)
+            if formula_can_not_be_identical_to(key_formula, template_key_formula):
+                continue
+
+            for mapping in generate_mappings_from_formula([key_formula],
                                                           [template_key_formula]):
-                key_formula_pulled = interpret_formula(transl_key_formula, mapping)
+                key_formula_pulled = interpret_formula(key_formula, mapping)
                 if key_formula_pulled.rep == template_key_formula.rep:
-                    template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
+                    found_template_key = transl_key
+                    found_template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
                                     for transl_nl in transl_nls]
                     break
 
-            if template_nls is not None:
+            if found_template_nls is not None:
                 break
 
-        return template_nls
+        return (
+            '::'.join([template_prefix, found_template_key]) if found_template_key is not None else None,
+            found_template_nls,
+        )
 
     def _merge_condition(self, this: _PosFormConditionSet, that: _PosFormConditionSet) -> _PosFormConditionSet:
         return this.union(that)

@@ -87,6 +87,7 @@
       "<<clause::verb::¬{B}>> <<phrase::if_conjunction>> <<clause::verb::{A}>>",
 
       "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.event_occurrence>>",
+
       "<<clause::noun::{A}.event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{B}.event_occurrence>>"
     ],
     "¬{A} -> ¬{B}": [
@@ -94,6 +95,7 @@
       "<<clause::verb::¬{B}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}>>",
 
       "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.event_occurrence>>",
+
       "<<clause::noun::¬{A}.event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{B}.event_occurrence>>"
     ],
 
@@ -121,6 +123,7 @@
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} & {B})>>",
 
       "<<clause::noun::({A} & {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::({A} & {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
     "(¬{A} & ¬{B}) -> {C}": [
@@ -133,18 +136,21 @@
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} & {B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} & {B})>>",
       "<<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
     "({A} & ¬{B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A} & ¬{B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} & ¬{B})>>",
       "<<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
     "(¬{A} & ¬{B}) -> ¬{C}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A} & ¬{B})>>, <<clause::verb::¬{C}>>",
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} & ¬{B})>>",
       "<<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
 
@@ -290,6 +296,7 @@
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} v {B})>>",
 
       "<<clause::noun::({A} v {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::({A} v {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
 
@@ -305,6 +312,7 @@
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} v {B})>>",
 
       "<<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
     "({A} v ¬{B}) -> ¬{C}": [
@@ -312,6 +320,7 @@
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::({A} v ¬{B})>>",
 
       "<<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
     "(¬{A} v ¬{B}) -> ¬{C}": [
@@ -319,6 +328,7 @@
       "<<clause::verb::¬{C}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A} v ¬{B})>>",
 
       "<<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+
       "<<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>"
     ],
 
@@ -526,12 +536,14 @@
       "<<phrase::if_conjunction>> <<clause::verb::{A}{a}>>, <<clause::verb::¬{B}{b}>>",
       "<<clause::verb::¬{B}{b}>> <<phrase::if_conjunction>> <<clause::verb::{A}{a}>>",
       "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>",
+
       "<<clause::noun::{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>"
     ],
     "¬{A}{a} -> ¬{B}{b}": [
       "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>, <<clause::verb::¬{B}{b}>>",
       "<<clause::verb::¬{B}{b}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>",
       "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>",
+
       "<<clause::noun::¬{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>"
     ],
 
@@ -555,6 +567,7 @@
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} & {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} & {B}{a})>>",
       "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} & ¬{B}{a}) -> {C}{c}": [
@@ -566,18 +579,21 @@
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & {B}{a})>>",
       "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "({A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} & ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} & ¬{B}{a})>>",
       "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} & ¬{B}{a})>>",
       "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
 
@@ -711,6 +727,7 @@
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} v {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} v {B}{a})>>",
       "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} v ¬{B}{a}) -> {C}{c}": [
@@ -722,18 +739,21 @@
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v {B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v {B}{a})>>",
       "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "({A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::({A}{a} v ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::({A}{a} v ¬{B}{a})>>",
       "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
     "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v ¬{B}{a})>>, <<clause::verb::¬{C}{c}>>",
       "<<clause::verb::¬{C}{c}>> <<phrase::if_conjunction>> <<clause::verb::(¬{A}{a} v ¬{B}{a})>>",
       "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
+
       "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
     ],
 
@@ -846,6 +866,248 @@
       "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>, <<clause::verb::¬(¬{B}{b} v ¬{C}{b})>>",
       "<<clause::verb::¬(¬{B}{b} v ¬{C}{b})>> <<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>"
     ],
+
+
+
+
+
+    "{A}{a} -> {B}{a}": [
+      "<<phrase::if_conjunction>> <<clause::verb::{A}{a}>>, <<clause::verb::{B}it>>",
+      "<<clause::verb::{B}{a}>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
+
+      "<<clause::verb::{A}{a}>> <<phrase::{B}to_do>>",
+      "<<clause::verb::{B}{a}>> by <<phrase::{A}doing>>",
+      "__TODO__"
+    ],
+    "¬{A}{a} -> {B}{a}": [
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>, <<clause::verb::{B}it>>",
+      "<<clause::verb::{B}{a}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
+
+      "<<clause::verb::{B}{a}>> by <<phrase::¬{A}doing>>"
+    ],
+    "{A}{a} -> ¬{B}{a}": [
+      "<<phrase::if_conjunction>> <<clause::verb::{A}{a}>>, <<clause::verb::¬{B}it>>",
+      "<<clause::verb::¬{B}{a}>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
+
+      "<<clause::verb::¬{B}{a}>> by <<phrase::{A}doing>>"
+    ],
+    "¬{A}{a} -> ¬{B}{a}": [
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}>>, <<clause::verb::¬{B}it>>",
+      "<<clause::verb::¬{B}{a}>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
+
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{a}.subset>>"
+    ],
+
+
+    "({A}{a} & {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} & {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "({A}{a} & ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "({A}{a} & {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} & ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} & {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "({A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+
+
+    "{A}{a} -> ({B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ({B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> (¬{B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ({B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> (¬{B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ({B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> (¬{B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> (¬{B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+
+
+    "¬({A}{a} & {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} & {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬({A}{a} & ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬({A}{a} & {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} & ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} & {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "¬({A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+
+
+    "{A}{a} -> ¬({B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬({B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ¬(¬{B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ¬({B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{a} & {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬({B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})": [
+      "__not_implemented"
+    ],
+
+
+
+
+    "({A}{a} v {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} v {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "({A}{a} v ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "({A}{a} v {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} v ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} v {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "({A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+
+
+    "{A}{a} -> ({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> (¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> (¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> (¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> (¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+
+
+    "¬({A}{a} v {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} v {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬({A}{a} v ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬({A}{a} v {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} v ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} v {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "¬({A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+
+
+    "{A}{a} -> ¬({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ¬(¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ¬({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+
 
 
 
@@ -1740,8 +2002,7 @@
 
 
       "{A}{a}": [
-        "a {a}[NOUN] <<phrase::{A}predicate>>",
-        "<<phrase::kind_of>> <<phrase::{A}subsettable_noun>> is {a}[NOUN]"
+        "a {a}[NOUN] <<phrase::{A}predicate>>"
       ],
       "¬{A}{a}": [
         "<<phrase::not_prefix.verb_clause_to_verb_clause>> <<clause::verb::{A}{a}>>",
@@ -2494,14 +2755,95 @@
 
 
 
-    "{A}to_do_clause": [
+    "{A}to_do": [
       "to be {A}[ADJ]",
       "to {A}[VERB]",
       "to be <<phrase::{A}subsettable_noun>>"
     ],
 
-    "¬{A}to_do_clause": [
-      "not <<phrase::{A}to_do_clause>>"
+    "¬{A}to_do": [
+      "not <<phrase::{A}to_do>>"
+    ],
+
+
+    "({A} & {B})to_do": [
+      "<<phrase::{A}>> and <<phrase::{B}>>"
+    ],
+
+    "(¬{A} & {B})to_do": [
+      "<<phrase::¬{A}>> and <<phrase::{B}>>"
+    ],
+
+    "({A} & ¬{B})to_do": [
+      "<<phrase::{A}>> and <<phrase::¬{B}>>"
+    ],
+
+    "(¬{A} & ¬{B})to_do": [
+      "<<phrase::¬{A}>> and <<phrase::¬{B}>>"
+    ],
+
+
+    "({A} v {B})to_do": [
+      "either <<phrase::{A}>> or <<phrase::{B}>> or both"
+    ],
+
+    "(¬{A} v {B})to_do": [
+      "either <<phrase::¬{A}>> or <<phrase::{B}>> or both"
+    ],
+
+    "({A} v ¬{B})to_do": [
+      "either <<phrase::{A}>> or <<phrase::¬{B}>> or both"
+    ],
+
+    "(¬{A} v ¬{B})to_do": [
+      "either <<phrase::¬{A}>> or <<phrase::¬{B}>> or both"
+    ],
+
+
+
+
+    "{A}doing": [
+      "being {A}[ADJ]",
+      "{A}[VERB.ing]",
+      "being <<phrase::{A}subsettable_noun>>"
+    ],
+
+    "¬{A}doing": [
+      "not <<phrase::{A}doing>>"
+    ],
+
+
+    "({A} & {B})doing": [
+      "<<phrase::{A}>> and <<phrase::{B}>>"
+    ],
+
+    "(¬{A} & {B})doing": [
+      "<<phrase::¬{A}>> and <<phrase::{B}>>"
+    ],
+
+    "({A} & ¬{B})doing": [
+      "<<phrase::{A}>> and <<phrase::¬{B}>>"
+    ],
+
+    "(¬{A} & ¬{B})doing": [
+      "<<phrase::¬{A}>> and <<phrase::¬{B}>>"
+    ],
+
+
+    "({A} v {B})doing": [
+      "either <<phrase::{A}>> or <<phrase::{B}>> or both"
+    ],
+
+    "(¬{A} v {B})doing": [
+      "either <<phrase::¬{A}>> or <<phrase::{B}>> or both"
+    ],
+
+    "({A} v ¬{B})doing": [
+      "either <<phrase::{A}>> or <<phrase::¬{B}>> or both"
+    ],
+
+    "(¬{A} v ¬{B})doing": [
+      "either <<phrase::¬{A}>> or <<phrase::¬{B}>> or both"
     ],
 
 
