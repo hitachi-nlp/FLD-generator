@@ -1752,7 +1752,7 @@
       "({A}{a} & {B}{a})": [
           "a {a}[NOUN] <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}{a}>> <<phrase::and_also>> <<clause::verb::{B}it>>",
-          "a {a}[NOUN] <<phrase::{A}predicate>> <<phrase::{A}to_do_clause>>"
+          "a {a}[NOUN] <<phrase::{A}predicate>> <<phrase::{B}to_do_clause>>"
       ],
       "(¬{A}{a} & {B}{a})": [
           "a {a}[NOUN] <<phrase::(¬{A} & {B})predicate>>",
@@ -1833,7 +1833,7 @@
       "({A}something & {B}something)": [
           "something <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::and_also>> <<clause::verb::{B}it>>",
-          "something <<phrase::{A}predicate>> <<phrase::{A}to_do_clause>>"
+          "something <<phrase::{A}predicate>> <<phrase::{B}to_do_clause>>"
       ],
       "(¬{A}something & {B}something)": [
           "something <<phrase::(¬{A} & {B})predicate>>",
@@ -1914,7 +1914,7 @@
 
       "({A}everything & {B}everything)": [
           "everything <<phrase::({A} & {B})predicate>>",
-          "everything <<phrase::{A}predicate>> <<phrase::{A}to_do_clause>>"
+          "everything <<phrase::{A}predicate>> <<phrase::{B}to_do_clause>>"
       ],
       "(¬{A}everything & {B}everything)": [
           "everything <<phrase::(¬{A} & {B})predicate>>",
@@ -1989,7 +1989,7 @@
       "({A}it & {B}it)": [
           "it <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::and_also>> <<clause::verb::{B}it>>",
-          "it <<phrase::{A}predicate>> <<phrase::{A}to_do_clause>>"
+          "it <<phrase::{A}predicate>> <<phrase::{B}to_do_clause>>"
       ],
       "(¬{A}it & {B}it)": [
           "it <<phrase::(¬{A} & {B})predicate>>",
