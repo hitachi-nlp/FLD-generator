@@ -528,118 +528,139 @@
     "{A}{a} -> {B}{b}": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::{B}{b}>>",
       "<<sentence::{B}{b}>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::{B}{b}.subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::{B}{b}.subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::{B}to_do>>"
     ],
     "¬{A}{a} -> {B}{b}": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::{B}{b}>>",
       "<<sentence::{B}{b}>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::{B}{b}.subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::{B}{b}.subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::{B}to_do>>"
     ],
     "{A}{a} -> ¬{B}{b}": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬{B}{b}>>",
       "<<sentence::¬{B}{b}>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
       "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>",
 
-      "<<clause::noun::{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::¬{B}to_do>>"
     ],
     "¬{A}{a} -> ¬{B}{b}": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬{B}{b}>>",
       "<<sentence::¬{B}{b}>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
       "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::¬{B}{b}.subset>>",
 
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::anti_cause_verb>> <<clause::noun::{B}{b}.subset>>",
+
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::¬{B}to_do>>"
     ],
 
 
     "({A}{a} & {B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>",
-      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "(¬{A}{a} & {B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>",
-      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "({A}{a} & ¬{B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>",
-      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "({A}{a} & {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>",
       "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} & {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
     "(¬{A}{a} & ¬{B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>",
-      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "(¬{A}{a} & {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>",
       "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} & {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
     "({A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>",
       "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} & ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
     "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>",
       "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
 
 
     "{A}{a} -> ({B}{b} & {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}{b} & {C}{b})>>",
       "<<sentence::({B}{b} & {C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & {C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & {C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} & {C})to_do>>"
     ],
     "¬{A}{a} -> ({B}{b} & {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}{b} & {C}{b})>>",
       "<<sentence::({B}{b} & {C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & {C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & {C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} & {C})to_do>>"
     ],
     "{A}{a} -> (¬{B}{b} & {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}{b} & {C}{b})>>",
       "<<sentence::(¬{B}{b} & {C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & {C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & {C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} & {C})to_do>>"
     ],
     "{A}{a} -> ({B}{b} & ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}{b} & ¬{C}{b})>>",
       "<<sentence::({B}{b} & ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & ¬{C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & ¬{C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} & ¬{C})to_do>>"
     ],
     "¬{A}{a} -> (¬{B}{b} & {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}{b} & {C}{b})>>",
       "<<sentence::(¬{B}{b} & {C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & {C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & {C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} & {C})to_do>>"
     ],
     "¬{A}{a} -> ({B}{b} & ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}{b} & ¬{C}{b})>>",
       "<<sentence::({B}{b} & ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & ¬{C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} & ¬{C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} & ¬{C})to_do>>"
     ],
     "{A}{a} -> (¬{B}{b} & ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}{b} & ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} & ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & ¬{C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & ¬{C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} & ¬{C})to_do>>"
     ],
     "¬{A}{a} -> (¬{B}{b} & ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}{b} & ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} & ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & ¬{C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} & ¬{C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} & ¬{C})to_do>>"
     ],
 
 
@@ -711,96 +732,117 @@
     ],
 
 
+
+
+
+
     "({A}{a} v {B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>",
-      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "(¬{A}{a} v {B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>",
-      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "({A}{a} v ¬{B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>",
-      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "({A}{a} v {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>",
       "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} v {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
     "(¬{A}{a} v ¬{B}{a}) -> {C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>",
-      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::{C}to_do>>"
     ],
     "(¬{A}{a} v {B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>",
       "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} v {B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
     "({A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>",
       "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::({A}{a} v ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
     "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>",
       "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::cause_verb>> <<clause::noun::¬{C}{c}.subset>>",
 
-      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>"
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::anti_cause_verb>> <<clause::noun::{C}{c}.subset>>",
+      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).subset>> <<phrase::force>> {c}[NOUN] <<phrase::¬{C}to_do>>"
     ],
 
 
     "{A}{a} -> ({B}{b} v {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}{b} v {C}{b})>>",
       "<<sentence::({B}{b} v {C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v {C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v {C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} v {C})to_do>>"
     ],
     "¬{A}{a} -> ({B}{b} v {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}{b} v {C}{b})>>",
       "<<sentence::({B}{b} v {C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v {C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v {C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} v {C})to_do>>"
     ],
     "{A}{a} -> (¬{B}{b} v {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}{b} v {C}{b})>>",
       "<<sentence::(¬{B}{b} v {C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v {C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v {C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} v {C})to_do>>"
     ],
     "{A}{a} -> ({B}{b} v ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}{b} v ¬{C}{b})>>",
       "<<sentence::({B}{b} v ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v ¬{C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v ¬{C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} v ¬{C})to_do>>"
     ],
     "¬{A}{a} -> (¬{B}{b} v {C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}{b} v {C}{b})>>",
       "<<sentence::(¬{B}{b} v {C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v {C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v {C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} v {C})to_do>>"
     ],
     "¬{A}{a} -> ({B}{b} v ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}{b} v ¬{C}{b})>>",
       "<<sentence::({B}{b} v ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v ¬{C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::({B}{b} v ¬{C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::({B} v ¬{C})to_do>>"
     ],
     "{A}{a} -> (¬{B}{b} v ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}{b} v ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} v ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>",
-      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v ¬{C}{b}).subset>>"
+      "<<clause::noun::{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v ¬{C}{b}).subset>>",
+      "<<clause::noun::{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} v ¬{C})to_do>>"
     ],
     "¬{A}{a} -> (¬{B}{b} v ¬{C}{b})": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}{b} v ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} v ¬{C}{b})>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>",
-      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v ¬{C}{b}).subset>>"
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::cause_verb>> <<clause::noun::(¬{B}{b} v ¬{C}{b}).subset>>",
+      "<<clause::noun::¬{A}{a}.subset>> <<phrase::force>> {b}[NOUN] <<phrase::(¬{B} v ¬{C})to_do>>"
     ],
+
 
 
     "¬({A}{a} v {B}{a}) -> {C}{c}": [
@@ -2830,36 +2872,36 @@
 
 
     "({A} & {B})to_do": [
-      "<<phrase::{A}>> and <<phrase::{B}>>"
+      "<<phrase::{A}to_do>> and <<phrase::{B}to_do>>"
     ],
 
     "(¬{A} & {B})to_do": [
-      "<<phrase::¬{A}>> and <<phrase::{B}>>"
+      "<<phrase::¬{A}to_do>> and <<phrase::{B}to_do>>"
     ],
 
     "({A} & ¬{B})to_do": [
-      "<<phrase::{A}>> and <<phrase::¬{B}>>"
+      "<<phrase::{A}to_do>> and <<phrase::¬{B}to_do>>"
     ],
 
     "(¬{A} & ¬{B})to_do": [
-      "<<phrase::¬{A}>> and <<phrase::¬{B}>>"
+      "<<phrase::¬{A}to_do>> and <<phrase::¬{B}to_do>>"
     ],
 
 
     "({A} v {B})to_do": [
-      "either <<phrase::{A}>> or <<phrase::{B}>> or both"
+      "either <<phrase::{A}to_do>> or <<phrase::{B}to_do>> or both"
     ],
 
     "(¬{A} v {B})to_do": [
-      "either <<phrase::¬{A}>> or <<phrase::{B}>> or both"
+      "either <<phrase::¬{A}to_do>> or <<phrase::{B}to_do>> or both"
     ],
 
     "({A} v ¬{B})to_do": [
-      "either <<phrase::{A}>> or <<phrase::¬{B}>> or both"
+      "either <<phrase::{A}to_do>> or <<phrase::¬{B}to_do>> or both"
     ],
 
     "(¬{A} v ¬{B})to_do": [
-      "either <<phrase::¬{A}>> or <<phrase::¬{B}>> or both"
+      "either <<phrase::¬{A}to_do>> or <<phrase::¬{B}to_do>> or both"
     ],
 
 
@@ -2877,36 +2919,36 @@
 
 
     "({A} & {B})doing": [
-      "<<phrase::{A}>> and <<phrase::{B}>>"
+      "<<phrase::{A}doing>> and <<phrase::{B}doing>>"
     ],
 
     "(¬{A} & {B})doing": [
-      "<<phrase::¬{A}>> and <<phrase::{B}>>"
+      "<<phrase::¬{A}doing>> and <<phrase::{B}doing>>"
     ],
 
     "({A} & ¬{B})doing": [
-      "<<phrase::{A}>> and <<phrase::¬{B}>>"
+      "<<phrase::{A}doing>> and <<phrase::¬{B}doing>>"
     ],
 
     "(¬{A} & ¬{B})doing": [
-      "<<phrase::¬{A}>> and <<phrase::¬{B}>>"
+      "<<phrase::¬{A}doing>> and <<phrase::¬{B}doing>>"
     ],
 
 
     "({A} v {B})doing": [
-      "either <<phrase::{A}>> or <<phrase::{B}>> or both"
+      "either <<phrase::{A}doing>> or <<phrase::{B}doing>> or both"
     ],
 
     "(¬{A} v {B})doing": [
-      "either <<phrase::¬{A}>> or <<phrase::{B}>> or both"
+      "either <<phrase::¬{A}doing>> or <<phrase::{B}doing>> or both"
     ],
 
     "({A} v ¬{B})doing": [
-      "either <<phrase::{A}>> or <<phrase::¬{B}>> or both"
+      "either <<phrase::{A}doing>> or <<phrase::¬{B}doing>> or both"
     ],
 
     "(¬{A} v ¬{B})doing": [
-      "either <<phrase::¬{A}>> or <<phrase::¬{B}>> or both"
+      "either <<phrase::¬{A}doing>> or <<phrase::¬{B}doing>> or both"
     ],
 
 
@@ -3017,6 +3059,11 @@
 
     "anti_cause_verb": [
       "prevents"
+    ],
+
+    "force": [
+      "force",
+      "make"
     ],
 
 
