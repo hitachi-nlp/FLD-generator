@@ -229,64 +229,73 @@ class ClauseTypedTranslator(Translator):
 
         for formula in formulas:
             # find translation key
-            translation_key, push_mapping = self._find_translation_key(formula)
-            if translation_key is None:
-                raise_or_warn(f'translation not found for "{formula.rep}", since the translation_key was not found.')
+            found_keys = 0
+            is_found = False
+            for translation_key, push_mapping in self._find_translation_key(formula):
+                found_keys += 1
+
+                # Choose a translation
+                chosen_nl = self._sample_interp_mapping_consistent_nl(
+                    translation_key,
+                    interp_mapping,
+                    push_mapping,
+                )
+                if chosen_nl is None:
+                    msgs = [
+                        f'translation not found for "{formula.rep}" in key="{translation_key}"',
+                        'The possible causes includes:',
+                        f'(i) the key="{translation_key}" in config indeed have no translation',
+                        '(ii) we have found translations, but the sampled interpretation mapping could not match the pos and word inflation required by the translations. The interp_mapping is the following:',
+                        '\n    ' + '\n    '.join(pformat(interp_mapping).split('\n')),
+                    ]
+                    logger.info('\n'.join(msgs))
+                    continue
+
+                chosen_nl_pushed = interpret_formula(Formula(chosen_nl), push_mapping).rep
+
+                # Generate word inflated mapping.
+                inflated_mapping, _inflation_stats = self._make_word_inflated_interp_mapping(
+                    interp_mapping,
+                    chosen_nl_pushed,
+                )
+
+                if self.log_stats:
+                    for inflation_type, count in _inflation_stats.items():
+                        count_stats['inflation_stats'][f'{inflation_type}'] = count
+
+                interp_templated_translation_pushed_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
+
+                # do interpretation using predicates and constants using interp_mapping
+                if self._do_translate_to_nl:
+                    interp_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pushed_wo_info)
+                    translation = interpret_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
+                else:
+                    translation = interp_templated_translation_pushed_wo_info
+
+                translation = translation.replace('__O__', ' ')
+
+                translations.append(translation)
+                translation_names.append(self._translation_name(translation_key, chosen_nl))
+                is_found = True
+                break
+
+            if not is_found:
+                if found_keys == 0:
+                    raise_or_warn(f'translation not found for "{formula.rep}", since the translation_key was not found.')
+                else:
+                    raise_or_warn(f'translation not found for "{formula.rep}" due to the reasons stated the above: (i) or (ii).')
                 translations.append(None)
                 translation_names.append(None)
-                continue
 
-            # Choose a translation
-            chosen_nl = self._sample_interp_mapping_consistent_nl(
-                translation_key,
-                interp_mapping,
-                push_mapping,
-            )
-            if chosen_nl is None:
-                msgs = [
-                    f'translation not found for "{formula.rep}" the pos and word inflations of which are consistent with the following chosen interpretation mapping.',
-                    'The interp_mapping is the following:',
-                    '\n    ' + '\n    '.join(pformat(interp_mapping).split('\n')),
-                ]
-                raise_or_warn('\n'.join(msgs))
-                translations.append(None)
-                translation_names.append(None)
-                continue
-            chosen_nl_pushed = interpret_formula(Formula(chosen_nl), push_mapping).rep
-
-            # Generate word inflated mapping.
-            inflated_mapping, _inflation_stats = self._make_word_inflated_interp_mapping(
-                interp_mapping,
-                chosen_nl_pushed,
-            )
-
-            if self.log_stats:
-                for inflation_type, count in _inflation_stats.items():
-                    count_stats['inflation_stats'][f'{inflation_type}'] = count
-
-            interp_templated_translation_pushed_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
-
-            # do interpretation using predicates and constants using interp_mapping
-            if self._do_translate_to_nl:
-                interp_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pushed_wo_info)
-                translation = interpret_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
-            else:
-                translation = interp_templated_translation_pushed_wo_info
-
-            translation = translation.replace('__O__', ' ')
-
-            translations.append(translation)
-            translation_names.append(self._translation_name(translation_key, chosen_nl))
-
-        translations = [
-            (self._correct_indefinite_particles(translation) if translation is not None else None)
-            for translation in translations
-        ]
+            translations = [
+                (self._correct_indefinite_particles(translation) if translation is not None else None)
+                for translation in translations
+            ]
 
         return list(zip(translation_names, translations)), count_stats
 
     @profile
-    def _find_translation_key(self, formula: Formula) -> Tuple[Optional[str], Optional[Dict[str, str]]]:
+    def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
         for _transl_key, _ in self._translations.items():
             if formula_can_not_be_identical_to(Formula(_transl_key), formula):  # early rejection
                 continue
@@ -294,8 +303,7 @@ class ClauseTypedTranslator(Translator):
             for push_mapping in generate_mappings_from_formula([Formula(_transl_key)], [formula]):
                 _transl_key_pushed = interpret_formula(Formula(_transl_key), push_mapping).rep
                 if _transl_key_pushed == formula.rep:
-                    return _transl_key, push_mapping
-        return None, None
+                    yield _transl_key, push_mapping
 
     @profile
     def _sample_interp_mapping_consistent_nl(self,
