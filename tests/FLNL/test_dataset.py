@@ -312,20 +312,20 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/e1.json',
             './configs/FLNL/arguments/r.json',

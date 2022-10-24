@@ -15,16 +15,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -49,16 +49,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -84,16 +84,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -119,16 +119,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -154,16 +154,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -188,16 +188,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -222,16 +222,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -266,16 +266,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -301,16 +301,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -336,16 +336,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -371,16 +371,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -405,16 +405,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -447,16 +447,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -482,16 +482,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -517,16 +517,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -552,16 +552,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -586,16 +586,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -620,18 +620,18 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/axiom.pred_arg.json',
-            # './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             # './configs/FLNL/arguments/theorem.pred_arg.json',
-            # './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -657,18 +657,18 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -693,18 +693,18 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -730,16 +730,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -764,16 +764,16 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
 
             './configs/FLNL/arguments/axiom.pred_arg.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
 
             './configs/FLNL/arguments/theorem.pred_arg.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -801,20 +801,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -841,20 +841,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -882,20 +882,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -923,20 +923,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -965,20 +965,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1006,20 +1006,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1047,20 +1047,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1088,20 +1088,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1144,20 +1144,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1194,20 +1194,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1244,20 +1244,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1294,20 +1294,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1344,20 +1344,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1395,20 +1395,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1445,20 +1445,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1495,20 +1495,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1545,20 +1545,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1595,20 +1595,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1650,20 +1650,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1700,20 +1700,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1750,20 +1750,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1800,20 +1800,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1850,20 +1850,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1901,20 +1901,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1953,20 +1953,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -2003,20 +2003,20 @@ _DATASET_SETTINGS = {
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom--and_or.pred_arg.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom--implication_intro.pred_arg.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom--negation.pred_only.json',
-            './configs/FLNL/arguments/axiom--negation.pred_arg.json',
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             './configs/FLNL/arguments/theorem.pred_only.json',
             './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem--and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
