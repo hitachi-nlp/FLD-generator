@@ -282,6 +282,9 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
 
         if not is_decidable_or:
             values.add('Unknown')
+    elif rep.startswith(f'{NEGATION}(('):
+        # something like ¬((x): {A}x)
+        values.add('Unknown')
     else:
         if re.match(f'^{PAS_rep}$', rep):
             values.add('T')

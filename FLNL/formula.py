@@ -2,6 +2,7 @@ import re
 from typing import List, Optional
 
 from FLNL.exception import FormalLogicExceptionBase
+import kern_profiler
 
 
 IMPLICATION = '->'
@@ -84,6 +85,11 @@ _EXISTENTIAL_QUENTIFIER_REGEXP = re.compile(
     '|'.join([f'\(E{variable}\)' for variable in VARIABLES])
 )
 
+_QUENTIFIER_INTRO_REGEXP = re.compile(
+    '|'.join([f'\({variable}\): ' for variable in VARIABLES]\
+             + [f'\(E{variable}\): ' for variable in VARIABLES])
+)
+
 
 class ContradictionNegationError(FormalLogicExceptionBase):
     pass
@@ -126,7 +132,7 @@ class Formula:
 
     @property
     def wo_quantifier(self) -> 'Formula':
-        return Formula(self.rep.split(': ')[-1])
+        return Formula(_QUENTIFIER_INTRO_REGEXP.sub('', self.rep))
 
     @property
     def predicates(self) -> List['Formula']:

@@ -32,7 +32,15 @@ def test_get_boolean_values():
 
     assert _get_boolean_values(Formula('({A} & ¬{A})'), Formula('{A}')) == {'T', 'F'}
 
-    # assert _get_boolean_values(Formula('{C} or ({A} & ¬{B})'), Formula('{A}')) == {'Unknown'}
+    assert _get_boolean_values(Formula('¬({A} v {B})'), Formula('{A}')) == {'F'}
+    assert _get_boolean_values(Formula('¬({A} & {B})'), Formula('{A}')) == {'Unknown'}
+
+    assert _get_boolean_values(Formula('¬({A} & {B})'), Formula('{A}')) == {'Unknown'}
+
+    assert _get_boolean_values(Formula('(x): {A}x'), Formula('{A}x')) == {'T'}
+    assert _get_boolean_values(Formula('(x): ({A}x & {B}x)'), Formula('{A}x')) == {'T'}
+    assert _get_boolean_values(Formula('¬((x): {A}x)'), Formula('{A}x')) == {'Unknown'}
+
 
 
 def test_is_single_formula_inconsistent():
@@ -56,7 +64,6 @@ def test_is_consistent_set():
         Formula('{A}{a}'),
         Formula('{B}{b}'),
     ])
-
 
     assert not is_consistent_set([
         Formula('{A}{a}'),
@@ -155,8 +162,8 @@ def test_is_ok():
 if __name__ == '__main__':
     setup_logger()
 
-    test_is_single_formula_inconsistent()
     test_get_boolean_values()
-    test_is_consistent_set()
-    test_is_predicate_arity_consistent()
-    test_is_ok()
+    # test_is_single_formula_inconsistent()
+    # test_is_consistent_set()
+    # test_is_predicate_arity_consistent()
+    # test_is_ok()

@@ -19,6 +19,17 @@ def test_formula():
     assert check_reps(Formula('(Ex): {A}x -> {B}x').existential_variables, {'x'})
 
 
+def test_wo_quantifier():
+
+    def _test_wo_quantifier(rep: str, gold: str):
+        assert Formula(rep).wo_quantifier.rep == gold
+
+    _test_wo_quantifier('(x): {A}x', '{A}x')
+    _test_wo_quantifier('(x): ({A}x & {B}x)', '({A}x & {B}x)')
+    _test_wo_quantifier('((x): ({A}x & {B}x))', '(({A}x & {B}x))')
+    _test_wo_quantifier('¬((x): ({A}x & {B}x))', '¬(({A}x & {B}x))')
+
+
 def test_negate():
 
     def _test_negate(rep: str, gold: str) -> bool:
@@ -42,7 +53,10 @@ def test_negate():
 
     assert _test_negate('(x): ¬(¬{A}x v {B}x)', '¬((x): ¬(¬{A}x v {B}x))')
 
+    assert _test_negate('¬((x): {A}x)', '¬¬((x): {A}x)')
+
 
 if __name__ == '__main__':
     test_formula()
+    test_wo_quantifier()
     test_negate()
