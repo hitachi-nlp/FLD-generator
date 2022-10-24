@@ -2556,9 +2556,6 @@
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}pre_modifier>>",
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{B}predicate>>",
 
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::{A}pre_modifier>>",
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{A}predicate>>",
-
           "a <<phrase::{a}noun>> <<phrase::({A} & {B})post_modifier>>",
 
           "a <<phrase::{a}noun>> that <<phrase::({A} & {B})predicate>>"
@@ -2569,9 +2566,6 @@
 
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}pre_modifier>>",
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{B}predicate>>",
-
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{A}pre_modifier>>",
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{A}predicate>>",
 
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})post_modifier>>",
 
@@ -2584,9 +2578,6 @@
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}pre_modifier>>",
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{B}predicate>>",
 
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::{A}pre_modifier>>",
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{A}predicate>>",
-
           "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})post_modifier>>",
 
           "a <<phrase::{a}noun>> that <<phrase::({A} & ¬{B})predicate>>"
@@ -2597,9 +2588,6 @@
 
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}pre_modifier>>",
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{B}predicate>>",
-
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{A}pre_modifier>>",
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{A}predicate>>",
 
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
@@ -2613,9 +2601,6 @@
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}pre_modifier>>",
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{B}predicate>>",
 
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::{A}pre_modifier>>",
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{A}predicate>>",
-
           "a <<phrase::{a}noun>> <<phrase::({A} v {B})post_modifier>>",
 
           "a <<phrase::{a}noun>> that <<phrase::({A} v {B})predicate>>"
@@ -2626,9 +2611,6 @@
 
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}pre_modifier>>",
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{B}predicate>>",
-
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{A}pre_modifier>>",
-          "a <<phrase::{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{A}predicate>>",
 
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v {B})post_modifier>>",
 
@@ -2641,9 +2623,6 @@
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}pre_modifier>>",
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{B}predicate>>",
 
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::{A}pre_modifier>>",
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::{A}predicate>>",
-
           "a <<phrase::{a}noun>> <<phrase::({A} v ¬{B})post_modifier>>",
 
           "a <<phrase::{a}noun>> that <<phrase::({A} v ¬{B})predicate>>"
@@ -2654,9 +2633,6 @@
 
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}pre_modifier>>",
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{B}predicate>>",
-
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{A}pre_modifier>>",
-          "a <<phrase::¬{B}pre_modifier>> <<phrase::{a}noun>> that <<phrase::¬{A}predicate>>",
 
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})post_modifier>>",
 
@@ -2689,9 +2665,6 @@
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
 
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
           "something <<phrase::({A} & {B})post_modifier>>",
 
           "something that <<phrase::({A} & {B})predicate>>"
@@ -2702,9 +2675,6 @@
 
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
-
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
 
           "something <<phrase::(¬{A} & {B})post_modifier>>",
 
@@ -2717,9 +2687,6 @@
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
 
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
           "something <<phrase::({A} & ¬{B})post_modifier>>",
 
           "something that <<phrase::({A} & ¬{B})predicate>>"
@@ -2730,9 +2697,6 @@
 
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
-
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
 
           "something <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
@@ -2746,9 +2710,6 @@
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
 
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
           "something <<phrase::({A} v {B})post_modifier>>",
 
           "something that <<phrase::({A} v {B})predicate>>"
@@ -2759,9 +2720,6 @@
 
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing <<phrase::{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing that <<phrase::{B}predicate>>",
-
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
 
           "something <<phrase::(¬{A} v {B})post_modifier>>",
 
@@ -2774,9 +2732,6 @@
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
 
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing <<phrase::{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing that <<phrase::{A}predicate>>",
-
           "something <<phrase::({A} v ¬{B})post_modifier>>",
 
           "something that <<phrase::({A} v ¬{B})predicate>>"
@@ -2787,9 +2742,6 @@
 
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing <<phrase::¬{B}pre_modifier>>",
           "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing that <<phrase::¬{B}predicate>>",
-
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing <<phrase::¬{A}pre_modifier>>",
-          "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> thing that <<phrase::¬{A}predicate>>",
 
           "something <<phrase::(¬{A} v ¬{B})post_modifier>>",
 
