@@ -25,9 +25,10 @@ def test_clause_typed_translator():
         build_wordnet_wordbank('eng'),
         reuse_object_nouns=True,
         # volume_to_weight='linear',
-        # volume_to_weight='sqrt',
+        volume_to_weight='sqrt',
         # volume_to_weight='pow-0.7',
-        volume_to_weight='inv_linear',
+        # volume_to_weight='pow-0.7',
+        # volume_to_weight='inv_linear',
     )
 
     def show_translations(formulas: List[Formula], trial: int) -> None:
