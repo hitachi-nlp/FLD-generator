@@ -99,8 +99,11 @@ def load_translator(type_: str,
                     # './configs/FLNL/translations/clause_typed.thing.json',
                     # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
 
-                    './configs/FLNL/translations/clause_typed.thing.e1.json',
-                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+                    # './configs/FLNL/translations/clause_typed.thing.e1.json',
+                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+
+                    './configs/FLNL/translations/clause_typed.thing.r.json',
+                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
                 ],
                 build_wordnet_wordbank(
                     'eng',
@@ -108,6 +111,7 @@ def load_translator(type_: str,
                 ),
                 reuse_object_nouns=True,
                 limit_vocab_size_per_type=limit_vocab_size_per_type,
+                volume_to_weight='linear',
                 do_translate_to_nl=do_translate_to_nl,
             )
         elif from_ == 'minimum':
@@ -139,37 +143,36 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 def generate_dataset(dataset: NLProofSDataset,
                      num_dataset: int = 100) -> None:
-    with open('test_dataset.output.json', 'w') as f_out:
+    logger.info('\n\n')
+    logger.info('=================== generating proof tree =========================')
+    for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
+
+        logger.info('\n')
+        logger.info('--------------- tree --------------')
+
+        logger.info('\n')
+        logger.info('\n' + proof_tree.format_str)
+
+        logger.info('\n')
+        logger.info('--------------- distractors --------------')
+        logger.info('\n' + pformat(distractors))
+
+        logger.info('\n')
+        logger.info('--------------- NLProofs json --------------')
+        logger.info('\n' + pformat(nlproof_json))
+
+        logger.info('\n')
+        logger.info('--------------- stats --------------')
+        for key in ['avg.word_count_all']:
+            if key in stats:
+                logger.info('%s: %s', key, stats[key])
+        # logger.info(dict(stats))
+        # logger.info('\n' + pformat(stats))
+
         logger.info('\n\n')
         logger.info('=================== generating proof tree =========================')
-        for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
 
-            logger.info('\n')
-            logger.info('--------------- tree --------------')
-
-            logger.info('\n')
-            logger.info('\n' + proof_tree.format_str)
-
-            logger.info('\n')
-            logger.info('--------------- distractors --------------')
-            logger.info('\n' + pformat(distractors))
-
-            logger.info('\n')
-            logger.info('--------------- NLProofs json --------------')
-            logger.info('\n' + pformat(nlproof_json))
-
-            logger.info('\n')
-            logger.info('--------------- stats --------------')
-            for key in ['avg.word_count_all']:
-                if key in stats:
-                    logger.info('%s: %s', key, stats[key])
-            # logger.info(dict(stats))
-            # logger.info('\n' + pformat(stats))
-
-            logger.info('\n\n')
-            logger.info('=================== generating proof tree =========================')
-
-            f_out.write(json.dumps(nlproof_json) + '\n')
+        # f_out.write(json.dumps(nlproof_json) + '\n')
 
 
 def test_original():
@@ -322,6 +325,7 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/theorem--and_or.pred_arg.json',
 
             './configs/FLNL/arguments/e1.json',
+            './configs/FLNL/arguments/r.json',
 
         ],
         complicated_arguments_weight=0.3,

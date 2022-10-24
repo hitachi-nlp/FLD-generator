@@ -43,6 +43,7 @@ def load_dataset(argument_config: List[str],
                  translation_config: List[str],
                  reuse_object_nouns: bool,
                  limit_vocab_size_per_type: Optional[int],
+                 translation_volume_to_weight: str,
                  complication: float,
                  quantification: float,
                  keep_dneg: bool,
@@ -64,7 +65,8 @@ def load_dataset(argument_config: List[str],
     translator = build_translator(translation_config,
                                   build_wordnet_wordbank('eng'),
                                   reuse_object_nouns=reuse_object_nouns,
-                                  limit_vocab_size_per_type=limit_vocab_size_per_type)
+                                  limit_vocab_size_per_type=limit_vocab_size_per_type,
+                                  volume_to_weight=translation_volume_to_weight)
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=_distractor, translator=translator)
 
@@ -122,6 +124,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
 @click.option('--reuse-object-nouns', is_flag=True, default=False)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
+@click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
@@ -139,6 +142,7 @@ def main(output_path,
          translation_config,
          reuse_object_nouns,
          limit_vocab_size_per_type,
+         translation_volume_to_weight,
          size,
          depths,
          branch_extension_steps,

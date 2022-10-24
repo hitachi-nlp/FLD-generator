@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 import copy
 
 
@@ -2051,3 +2051,10 @@ _DATASET_SETTINGS = {
 
 def get_dataset_setting(name: str) -> Dict:
     return copy.deepcopy(_DATASET_SETTINGS[name])
+
+
+def maybe_option(option: str, value: Any) -> str:
+    if value is None:
+        return ''
+    else:
+        return f'{option} {value}'

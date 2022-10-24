@@ -1,4 +1,6 @@
 from typing import List
+import logging
+
 from FLNL.formula import Formula
 from FLNL.translators import build as build_translator
 from FLNL.word_banks import build_wordnet_wordbank
@@ -6,25 +8,34 @@ from logger_setup import setup as setup_logger
 
 
 def test_clause_typed_translator():
-    setup_logger()
+    setup_logger(level=logging.DEBUG)
 
     translator = build_translator(
         [
             # './configs/FLNL/translations/clause_typed.thing.json',
             # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
 
-            './configs/FLNL/translations/clause_typed.thing.e1.json',
-            './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+            # './configs/FLNL/translations/clause_typed.thing.e1.json',
+            # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+
+            './configs/FLNL/translations/clause_typed.thing.r.json',
+            './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
+
         ],
         build_wordnet_wordbank('eng'),
         reuse_object_nouns=True,
+        # volume_to_weight='linear',
+        volume_to_weight='sqrt',
+        # volume_to_weight='pow-0.7',
+        # volume_to_weight='pow-0.7',
+        # volume_to_weight='inv_linear',
     )
 
     def show_translations(formulas: List[Formula], trial: int) -> None:
         print('\n\n\n================   translate  ================')
         for i_trial in range(0, trial):
             print()
-            print(f'---------- trial={trial} ----------')
+            print(f'---------- trial={i_trial} ----------')
             translations, _ = translator.translate(formulas)
             for formula, (_, translation) in zip(formulas, translations):
                 print(formula, '  ->  ', translation)

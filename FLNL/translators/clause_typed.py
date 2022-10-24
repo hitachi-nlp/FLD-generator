@@ -7,6 +7,7 @@ import re
 import logging
 from pprint import pformat, pprint
 from functools import lru_cache
+import math
 
 from tqdm import tqdm
 from FLNL.formula import Formula
@@ -66,6 +67,7 @@ class ClauseTypedTranslator(Translator):
                  reuse_object_nouns=False,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
+                 volume_to_weight: str = 'linear',
                  do_translate_to_nl=True,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
@@ -98,6 +100,20 @@ class ClauseTypedTranslator(Translator):
         self._unary_predicate_set = set(self._unary_predicates)
         self._constant_set = set(self._constants)
         self._wb = word_bank
+
+        if volume_to_weight == 'linear':
+            self._volume_to_weight_func = lambda volume: volume
+        elif volume_to_weight == 'sqrt':
+            self._volume_to_weight_func = lambda volume: (math.sqrt(volume) if volume > 0 else 0)
+        elif volume_to_weight == 'log10':
+            self._volume_to_weight_func = lambda volume: (math.log10(volume) if volume > 0 else 0)
+        elif volume_to_weight == 'inv_linear':
+            self._volume_to_weight_func = lambda volume: (1.0 / volume if volume > 0 else 0)
+        elif volume_to_weight.startswith('pow-'):
+            ind = float(volume_to_weight.split('-')[1])
+            self._volume_to_weight_func = lambda volume: (math.pow(volume, ind) if volume > 0 else 0)
+        else:
+            raise ValueError()
 
         self._do_translate_to_nl = do_translate_to_nl
 
@@ -240,6 +256,7 @@ class ClauseTypedTranslator(Translator):
                     translation_key,
                     interp_mapping,
                     push_mapping,
+                    volume_to_weight=self._volume_to_weight_func,
                 )
                 if chosen_nl is None:
                     msgs = [
@@ -325,7 +342,11 @@ class ClauseTypedTranslator(Translator):
         ]
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-        for resolved_nl, condition in chained_sampling_from_weighted_iterators(iterators, [volume_to_weight(volume) for volume in volumes]):
+
+        for resolved_nl, condition in chained_sampling_from_weighted_iterators(
+            iterators,
+            [volume_to_weight(volume) for volume in volumes]
+        ):
             condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
                 condition,
                 interp_mapping,
@@ -365,14 +386,14 @@ class ClauseTypedTranslator(Translator):
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume) -> Tuple[Iterable[NLAndCondition], int]:
         if nl.startswith('__'):
-            return [], 0
+            return iter([]), 0
 
         condition = self._get_pos_form_consistency_condition(nl)
         if constraint_push_mapping is not None\
                 and not self._interp_mapping_is_consistent_with_condition(condition,
                                                                           constraint_interp_mapping,
                                                                           constraint_push_mapping):
-            return [], 0
+            return iter([]), 0
 
         templates = list(self._extract_templates(nl))
         if len(templates) == 0:
@@ -454,6 +475,7 @@ class ClauseTypedTranslator(Translator):
                     [volume_to_weight(volume) for volume in volumes]
                 ):
                     yield resolved_template_nl, condition
+
         else:
             def generate():
                 for iterator in iterators:
