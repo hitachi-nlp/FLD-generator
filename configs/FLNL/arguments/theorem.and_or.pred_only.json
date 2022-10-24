@@ -1,10 +1,26 @@
 [
   {
+      "id": "and_interchangeability.pred_only.shared_arg",
+      "premises": [
+          "({A} & {B})"
+      ],
+      "conclusion": "({B} & {A})"
+  },
+  {
       "id": "De_Morgan_0.pred_only",
       "premises": [
           "¬({A} & {B})"
       ],
       "conclusion": "(¬{A} v ¬{B})"
+  },
+
+
+  {
+      "id": "or_interchangeability.pred_only.shared_arg",
+      "premises": [
+          "({A} v {B})"
+      ],
+      "conclusion": "({B} v {A})"
   },
   {
       "id": "De_Morgan_1.pred_only",
