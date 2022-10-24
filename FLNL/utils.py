@@ -9,6 +9,7 @@ import zlib
 from nltk.corpus import cmudict
 import timeout_decorator
 from .exception import FormalLogicExceptionBase
+import kern_profiler
 
 utils_logger = logging.getLogger(__name__)
 

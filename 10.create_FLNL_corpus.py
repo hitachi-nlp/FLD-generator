@@ -11,7 +11,7 @@ from script_engine import QsubEngine, SubprocessEngine
 from logger_setup import setup as setup_logger, create_file_handler
 from lab import build_dir, save_params
 from joblib import Parallel, delayed
-from experimental_settings import get_dataset_setting
+from experimental_settings import get_dataset_setting, maybe_option
 
 logger = logging.getLogger(__name__)
 
@@ -164,6 +164,7 @@ def main():
 
                 'translation_configs',
                 'limit_vocab_size_per_type',
+                'translation_volume_to_weight',
 
                 'num_workers_per_job',
 
@@ -216,7 +217,8 @@ def main():
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
                     '--reuse-object-nouns' if job_settings.get("reuse_object_nouns", False) else '',
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
-
+                    maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
+                    f'--quantification {job_settings["quantification"]}',
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
                     f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                     f'--complication {job_settings["complication"]}',
@@ -227,6 +229,7 @@ def main():
                     f'--world-assump {job_settings["world_assump"]}',
                     f'--num-workers {job_settings["num_workers_per_job"]}',
                     f'--seed {job_settings["seed"]}',
+
                 ])
 
                 if isinstance(engine, SubprocessEngine):
