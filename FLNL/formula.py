@@ -85,7 +85,7 @@ _EXISTENTIAL_QUENTIFIER_REGEXP = re.compile(
     '|'.join([f'\(E{variable}\)' for variable in VARIABLES])
 )
 
-_QUENTIFIER_INTRO_REGEXP = re.compile(
+_QUANTIFIER_INTRO_REGEXP = re.compile(
     '|'.join([f'\({variable}\): ' for variable in VARIABLES]\
              + [f'\(E{variable}\): ' for variable in VARIABLES])
 )
@@ -132,7 +132,8 @@ class Formula:
 
     @property
     def wo_quantifier(self) -> 'Formula':
-        return Formula(_QUENTIFIER_INTRO_REGEXP.sub('', self.rep))
+        return Formula(_QUANTIFIER_INTRO_REGEXP.sub('', self.rep))
+        # return Formula(self.rep.split(': ')[-1])
 
     @property
     def predicates(self) -> List['Formula']:

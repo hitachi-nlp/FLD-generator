@@ -99,7 +99,6 @@ class ProofTreeGenerator:
             elim_dneg=elim_dneg,
             allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
         )
-        raise
 
     @property
     def complicated_arguments_weight(self):

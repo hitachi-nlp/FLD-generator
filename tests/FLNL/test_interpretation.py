@@ -49,6 +49,8 @@ def test_expand_op():
     assert _expand_op(Formula('(x): ({P} v ¬{Q})x -> ({R} v ¬{S})x')).rep == '(x): ({P}x v ¬{Q}x) -> ({R}x v ¬{S}x)'
     assert _expand_op(Formula('({P} v ¬{Q}){a} -> ({R} v ¬{S}){b}')).rep == '({P}{a} v ¬{Q}{a}) -> ({R}{b} v ¬{S}{b})'
 
+    assert _expand_op(Formula('¬((x): ({P} v ¬{Q})x)')).rep == '¬((x): ({P}x v ¬{Q}x))'
+
 
 def test_formula_can_not_be_identical_to():
     assert not formula_can_not_be_identical_to(
@@ -636,4 +638,4 @@ if __name__ == '__main__':
     test_generate_quantifier_axiom_arguments()
 
     test_generate_quantifier_formulas()
-    test_generate_quantifier_arguments()
+    # test_generate_quantifier_arguments()

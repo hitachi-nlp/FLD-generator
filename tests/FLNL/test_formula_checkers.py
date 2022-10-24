@@ -78,7 +78,6 @@ def test_is_consistent_set():
         Formula('¬{B}{b}'),
     ])
 
-
     assert not is_consistent_set([
         Formula('{A}{a}'),
         Formula('(¬{A}{a} & {B}{a})'),
@@ -163,7 +162,7 @@ if __name__ == '__main__':
     setup_logger()
 
     test_get_boolean_values()
-    # test_is_single_formula_inconsistent()
-    # test_is_consistent_set()
-    # test_is_predicate_arity_consistent()
-    # test_is_ok()
+    test_is_single_formula_inconsistent()
+    test_is_consistent_set()
+    test_is_predicate_arity_consistent()
+    test_is_ok()

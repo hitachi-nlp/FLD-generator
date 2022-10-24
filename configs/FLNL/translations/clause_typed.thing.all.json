@@ -2274,7 +2274,7 @@
     "verb": {
 
       "{A}": [
-        "<<phrase::{A}a_event_noun>> occurs"
+        "<<phrase::{A}a_event_noun>> <<phrase::occur>>"
       ],
 
       "¬{A}": [
@@ -2284,37 +2284,37 @@
 
       "({A} & {B})": [
           "<<clause::verb::{A}>> <<phrase::and_also>> <<clause::verb::{B}>>",
-          "<<phrase::{A}a_event_noun>> <<phrase::and_also>> <<phrase::{B}a_event_noun>> occurs"
+          "<<phrase::{A}a_event_noun>> <<phrase::and_also>> <<phrase::{B}a_event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & {B})": [
           "<<clause::verb::¬{A}>> <<phrase::and_also>> <<clause::verb::{B}>>",
-          "<<phrase::¬{A}a_event_noun>> <<phrase::and_also>> <<phrase::{B}a_event_noun>> occurs"
+          "<<phrase::¬{A}a_event_noun>> <<phrase::and_also>> <<phrase::{B}a_event_noun>> <<phrase::occur>>"
       ],
       "({A} & ¬{B})": [
           "<<clause::verb::{A}>> <<phrase::and_also>> <<clause::verb::¬{B}>>",
-          "<<phrase::{A}a_event_noun>> <<phrase::and_also>> <<phrase::¬{B}a_event_noun>> occurs"
+          "<<phrase::{A}a_event_noun>> <<phrase::and_also>> <<phrase::¬{B}a_event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & ¬{B})": [
           "<<clause::verb::¬{A}>> <<phrase::and_also>> <<clause::verb::¬{B}>>",
-          "<<phrase::¬{A}a_event_noun>> <<phrase::and_also>> <<phrase::¬{B}a_event_noun>> occurs"
+          "<<phrase::¬{A}a_event_noun>> <<phrase::and_also>> <<phrase::¬{B}a_event_noun>> <<phrase::occur>>"
       ],
 
 
       "({A} v {B})": [
           "either <<clause::verb::{A}>> or <<clause::verb::{B}>> or both",
-          "either <<phrase::{A}a_event_noun>> or <<phrase::{B}a_event_noun>> or both occurs"
+          "either <<phrase::{A}a_event_noun>> or <<phrase::{B}a_event_noun>> or both <<phrase::occur>>"
       ],
       "(¬{A} v {B})": [
           "either <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both",
-          "either <<phrase::¬{A}a_event_noun>> or <<phrase::{B}a_event_noun>> or both occurs"
+          "either <<phrase::¬{A}a_event_noun>> or <<phrase::{B}a_event_noun>> or both <<phrase::occur>>"
       ],
       "({A} v ¬{B})": [
           "either <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both",
-          "either <<phrase::{A}a_event_noun>> or <<phrase::¬{B}a_event_noun>> or both occurs"
+          "either <<phrase::{A}a_event_noun>> or <<phrase::¬{B}a_event_noun>> or both <<phrase::occur>>"
       ],
       "(¬{A} v ¬{B})": [
           "either <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both",
-          "either <<phrase::¬{A}a_event_noun>> or <<phrase::¬{B}a_event_noun>> or both occurs"
+          "either <<phrase::¬{A}a_event_noun>> or <<phrase::¬{B}a_event_noun>> or both <<phrase::occur>>"
       ],
 
 
@@ -3075,7 +3075,8 @@
       "leads to",
       "results in",
       "triggers",
-      "invoke"
+      "invoke",
+      "give rise to"
     ],
 
     "caused_verb": [
@@ -3137,15 +3138,27 @@
     ],
 
     "not_prefix.sentence_intro": [
-      "it is wrong that",
-      "it is not the fact that",
-      "it is not true that"
+      "it is not <<phrase::correct_adj>>",
+      "it is not <<phrase::incorrect_adj>>"
     ],
-    "not_postfix.noun_clause_to_verb_clause": [
-      "is wrong",
-      "is not the fact",
-      "is not true"
+
+    "correct_adj": [
+      "the fact",
+      "true"
     ],
+
+    "occur": [
+      "occurs",
+      "happens",
+      "takes its rise"
+    ],
+
+    "incorrect_adj": [
+      "wrong",
+      "incorrect",
+      "false"
+    ],
+
     "some_prefix.sentence_intro": [
        "for something,",
        "there is something such that",
@@ -3154,6 +3167,7 @@
     "every_prefix.sentence_intro" : [
       "for everything,"
     ]
+
   }
 
 

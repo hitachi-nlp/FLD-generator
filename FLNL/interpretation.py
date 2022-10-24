@@ -469,9 +469,10 @@ def interpret_formula(formula: Formula,
     return interpreted_formula
 
 
-_expand_op_regexp = re.compile(f'\([^\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
+_expand_op_regexp = re.compile(f'\([^\(\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
 
 
+@profile
 def _expand_op(formula: Formula) -> Formula:
     rep = formula.rep
 
@@ -814,7 +815,7 @@ def generate_quantifier_formulas(src_formula: Formula,
                                  quantifier_type: str,
                                  quantify_all_at_once=False,
                                  get_name=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for i, quantifier_mapping in enumerate(generate_quantifier_mappings([src_formula],
+    for i, (quantifier_mapping, name) in enumerate(generate_quantifier_mappings([src_formula],
                                                                         quantify_all_at_once=quantify_all_at_once,
                                                                         get_name=True)):
         quantifier_variables = [tgt for tgt in quantifier_mapping.values()
