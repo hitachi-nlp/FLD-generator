@@ -102,8 +102,11 @@ def load_translator(type_: str,
                     # './configs/FLNL/translations/clause_typed.thing.e1.json',
                     # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
 
-                    './configs/FLNL/translations/clause_typed.thing.r.json',
-                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
+                    # './configs/FLNL/translations/clause_typed.thing.r.json',
+                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
+
+                    './configs/FLNL/translations/clause_typed.thing.all.json',
+                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.all.json',
                 ],
                 build_wordnet_wordbank(
                     'eng',
