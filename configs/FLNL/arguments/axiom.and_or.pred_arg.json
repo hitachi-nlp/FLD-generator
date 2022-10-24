@@ -38,12 +38,11 @@
       "conclusion": "({A}{a} v {B}{a})"
   },
   {
-      "id": "__or_elim.pred_arg.shared_arg__",
-      "__reason_for_rejection__": "({A}{a} v {B}{b}) not in translation",
+      "id": "or_elim.pred_arg.shared_arg",
       "premises": [
-          "({A}{a} v {B}{b})",
+          "({A}{a} v {B}{a})",
           "{A}{a} -> {C}{c}",
-          "{B}{b} -> {C}{c}"
+          "{B}{a} -> {C}{c}"
       ],
       "conclusion": "{C}{c}"
   }
