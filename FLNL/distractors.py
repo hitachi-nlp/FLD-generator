@@ -334,7 +334,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
             logger.info('-- (NegatedHypothesisTreeDistractor) trial=%d    branch_extension_steps=%d', n_trial, branch_extension_steps)
 
             try:
-                neg_tree = self.generator.extend_braches(
+                neg_tree = self.generator.extend_branches(
                     generate_initial_negative_tree,
                     branch_extension_steps,
                     max_retry=self.generator_max_retry,
