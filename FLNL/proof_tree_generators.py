@@ -79,6 +79,8 @@ class ProofTreeGenerator:
                  quantifier_arguments_weight=0.0,
                  quantifier_axiom_arguments_weight=0.0,
                  quantify_all_at_once=True,
+                 or_arguments_factor=0.2,  # or is not that impotant for NLI
+                 universal_theorem_argument_factor=1.0,
                  elim_dneg=False,
                  disallow_contradiction_as_hypothesis=True,
                  allow_reference_arguments_when_depth_1=True):
@@ -96,6 +98,7 @@ class ProofTreeGenerator:
             quantifier_arguments_weight=quantifier_arguments_weight,
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
             quantify_all_at_once=quantify_all_at_once,
+            or_arguments_factor=or_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
             elim_dneg=elim_dneg,
             allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
@@ -112,6 +115,7 @@ class ProofTreeGenerator:
                         quantifier_arguments_weight: float,
                         quantifier_axiom_arguments_weight: float,
                         quantify_all_at_once: bool,
+                        or_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         elim_dneg: bool,
                         allow_reference_arguments_when_depth_1: bool) -> Tuple[List[Argument], List[Argument]]:
@@ -179,9 +183,19 @@ class ProofTreeGenerator:
         _arguments = arguments + complicated_arguments + quantified_arguments + quantifier_axiom_arguments
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
-        # heuristics to enhance / suppress uninsteresting or arguments.
+        def is_or_formula(formula: Formula) -> bool:
+            return formula.rep.find(f' {OR} ') >= 0
+
+        def is_or_argument(argument: Argument) -> bool:
+            return any(is_or_formula(formula) for formula in argument.all_formulas)
+
         def is_universal_theorem_argument(argument: Argument) -> bool:
             return argument.id.startswith('universal_theorem')
+
+        _argument_weights = {
+            argument: (weight * or_arguments_factor if is_or_argument(argument) else weight)
+            for argument, weight in _argument_weights.items()
+        }
 
         _argument_weights = {
             argument: (weight * universal_theorem_argument_factor if is_universal_theorem_argument(argument) else weight)
