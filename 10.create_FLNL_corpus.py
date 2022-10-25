@@ -218,7 +218,6 @@ def main():
                     '--reuse-object-nouns' if job_settings.get("reuse_object_nouns", False) else '',
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                     maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
-                    f'--quantification {job_settings["quantification"]}',
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
                     f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                     f'--complication {job_settings["complication"]}',

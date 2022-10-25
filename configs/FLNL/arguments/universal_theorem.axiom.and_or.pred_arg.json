@@ -1,0 +1,49 @@
+[
+  {
+      "id": "universal_theorem.and_intro.pred_arg",
+      "premises": [
+          "(x): {A}x",
+          "(x): {B}x"
+      ],
+      "conclusion": "(x): ({A}x & {B}x)"
+  },
+  {
+      "id": "universal_theorem.and_elim_0.pred_arg",
+      "premises": [
+          "(x): ({A}x & {B}x)"
+      ],
+      "conclusion": "(x): {A}x"
+  },
+  {
+      "id": "universal_theorem.and_elim_1.pred_arg",
+      "premises": [
+          "(x): ({A}x & {B}x)"
+      ],
+      "conclusion": "(x): {B}x"
+  },
+
+
+  {
+      "id": "universal_theorem.or_intro_0.pred_arg",
+      "premises": [
+          "(x): {A}x"
+      ],
+      "conclusion": "(x): ({A}x v {B}x)"
+  },
+  {
+      "id": "universal_theorem.or_intro_1.pred_arg",
+      "premises": [
+          "(x): {B}x"
+      ],
+      "conclusion": "(x): ({A}x v {B}x)"
+  },
+  {
+      "id": "universal_theorem.or_elim.pred_arg",
+      "premises": [
+          "(x): ({A}x v {B}x)",
+          "(x): {A}x -> {C}x",
+          "(x): {B}x -> {C}x"
+      ],
+      "conclusion": "(x): {C}x"
+  }
+]

@@ -3,14 +3,14 @@ import logging
 import math
 from collections import defaultdict
 from typing import List, Optional, Any, Iterable, Tuple, Dict, Union, Callable
-from pprint import pformat
+from pprint import pformat, pprint
 import logging
 
-from pprint import pprint
 from .formula import (
     PREDICATES,
     CONSTANTS,
     Formula,
+    OR,
 )
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
@@ -96,6 +96,7 @@ class ProofTreeGenerator:
             quantifier_arguments_weight=quantifier_arguments_weight,
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
             quantify_all_at_once=quantify_all_at_once,
+            universal_theorem_argument_factor=universal_theorem_argument_factor,
             elim_dneg=elim_dneg,
             allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
         )
@@ -111,6 +112,7 @@ class ProofTreeGenerator:
                         quantifier_arguments_weight: float,
                         quantifier_axiom_arguments_weight: float,
                         quantify_all_at_once: bool,
+                        universal_theorem_argument_factor: float,
                         elim_dneg: bool,
                         allow_reference_arguments_when_depth_1: bool) -> Tuple[List[Argument], List[Argument]]:
         logger.info('-- loading arguments ....')
@@ -177,6 +179,15 @@ class ProofTreeGenerator:
         _arguments = arguments + complicated_arguments + quantified_arguments + quantifier_axiom_arguments
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
+        # heuristics to enhance / suppress uninsteresting or arguments.
+        def is_universal_theorem_argument(argument: Argument) -> bool:
+            return argument.id.startswith('universal_theorem')
+
+        _argument_weights = {
+            argument: (weight * universal_theorem_argument_factor if is_universal_theorem_argument(argument) else weight)
+            for argument, weight in _argument_weights.items()
+        }
+
         logger.info('------- loaded arguments ------')
         for argument in _arguments:
             logger.info('weight: %f    %s', _argument_weights[argument], str(argument))
@@ -200,7 +211,7 @@ class ProofTreeGenerator:
                 log_title='generate_tree()',
             )
         except RetryAndTimeoutFailure as e:
-            raise ProofTreeGenerationFailure(f'Proof tree generation failed due to RetryAndTimeoutFailure: {str(e)}')
+            raise ProofTreeGenerationFailure(str(e))
 
     def generate_stem(self,
                       depth: int,
@@ -218,7 +229,7 @@ class ProofTreeGenerator:
                 log_title='generate_stem()',
             )
         except RetryAndTimeoutFailure as e:
-            raise ProofTreeGenerationFailure(f'Proof tree generation failed due to RetryAndTimeoutFailure: {str(e)}')
+            raise ProofTreeGenerationFailure(str(e))
 
     def extend_braches(self,
                        generate_initial_tree_fn: Callable[[], ProofTree],
@@ -251,7 +262,7 @@ class ProofTreeGenerator:
                 log_title='extend_braches()',
             )
         except RetryAndTimeoutFailure as e:
-            raise ProofTreeGenerationFailure(f'Proof tree generation failed due to RetryAndTimeoutFailure: {str(e)}')
+            raise ProofTreeGenerationFailure(str(e))
 
     def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)

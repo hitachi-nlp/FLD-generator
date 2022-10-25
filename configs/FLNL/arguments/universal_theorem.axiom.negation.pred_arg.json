@@ -1,0 +1,18 @@
+[
+  {
+      "id": "__universal_theorem.negation_elim.pred_arg",
+      "__comment": "this argument can be proved.",
+      "premises": [
+          "(x): {A}x",
+          "(x): ¬{A}x"
+      ],
+      "conclusion": "#F#"
+  },
+  {
+      "id": "universal_theorem.negation_intro.pred_arg",
+      "premises": [
+          "(x): {A}x ⊢ #F#"
+      ],
+      "conclusion": "¬((x): {A}x)"
+  }
+]

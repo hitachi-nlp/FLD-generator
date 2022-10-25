@@ -1,0 +1,32 @@
+[
+  {
+      "id": "universal_theorem.and_interchangeability.pred_arg",
+      "premises": [
+          "(x): ({A}x & {B}x)"
+      ],
+      "conclusion": "(x): ({B}x & {A}x)"
+  },
+  {
+      "id": "universal_theorem.De_Morgan_0.pred_arg",
+      "premises": [
+          "(x): ¬({A}x & {B}x)"
+      ],
+      "conclusion": "(x): (¬{A}x v ¬{B}x)"
+  },
+
+
+  {
+      "id": "universal_theorem.or_interchangeability.pred_arg",
+      "premises": [
+          "(x): ({A}x v {B}x)"
+      ],
+      "conclusion": "(x): ({B}x v {A}x)"
+  },
+  {
+      "id": "universal_theorem.De_Morgan_1.pred_arg",
+      "premises": [
+          "(x): ¬({A}x v {B}x)"
+      ],
+      "conclusion": "(x): (¬{A}x & ¬{B}x)"
+  }
+]

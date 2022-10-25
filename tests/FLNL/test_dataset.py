@@ -40,10 +40,12 @@ def load_proof_tree_generator(arguments: Optional[List[Argument]] = None,
                           for json_obj in json.load(open(config_path))
                           if not json_obj['id'].startswith('__')])
 
-    return ProofTreeGenerator(arguments,
-                              elim_dneg=elim_dneg,
-                              complicated_arguments_weight=complicated_arguments_weight,
-                              quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight)
+    return ProofTreeGenerator(
+        arguments,
+        elim_dneg=elim_dneg,
+        complicated_arguments_weight=complicated_arguments_weight,
+        quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
+    )
 
 
 def load_translator(type_: str,
@@ -145,7 +147,7 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 10) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
@@ -327,11 +329,15 @@ def test_PL_pred_arg():
             './configs/FLNL/arguments/theorem.and_or.pred_only.json',
             './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
+
+            # most important universal theorems
             # './configs/FLNL/arguments/universal_theorem.axiom.pred_arg.json',
+            # './configs/FLNL/arguments/universal_theorem.theorem.pred_arg.json',
+
+            # not that important universal theorems
             # './configs/FLNL/arguments/universal_theorem.axiom.and_or.pred_arg.json',
             # './configs/FLNL/arguments/universal_theorem.axiom.implication_intro.pred_arg.json',
             # './configs/FLNL/arguments/universal_theorem.axiom.negation.pred_arg.json',
-            # './configs/FLNL/arguments/universal_theorem.theorem.pred_arg.json',
             # './configs/FLNL/arguments/universal_theorem.theorem.and_or.pred_arg.json',
         ],
         complicated_arguments_weight=0.3,

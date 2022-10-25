@@ -54,7 +54,7 @@ class FormalLogicDistractor(ABC):
                 log_title='_generate()',
             )
         except RetryAndTimeoutFailure as e:
-            raise DistractorGenerationFailure(f'Distractor generation failed due to RetryAndTimeoutFailure: {str(e)}')
+            raise DistractorGenerationFailure(str(e))
 
     @property
     @abstractmethod
@@ -340,7 +340,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                     max_retry=self.generator_max_retry,
                 )
             except ProofTreeGenerationFailure as e:
-                raise DistractorGenerationFailure(f'Distractor generation failed since self.generator.extend_braches() failed. The original message is the followings\n:{str(e)}')
+                raise DistractorGenerationFailure(str(e))
 
             neg_leaf_formulas = [node.formula for node in neg_tree.leaf_nodes]
             if len(neg_leaf_formulas) - 1 == 0:
@@ -350,7 +350,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
             elif len(neg_leaf_formulas) - 1 < size:
                 if branch_extension_steps_factor < max_branch_extension_factor:
                     logger.info('(NegatedHypothesisTreeDistractor) Continue to the next trial with increased tree size, since number of negatieve leaf formulas %d < size=%d',
-                                len(neg_leaf_formulas),
+                                len(neg_leaf_formulas) - 1,
                                 size)
                     n_trial += 1
                     continue
@@ -428,7 +428,7 @@ class MixtureDistractor(FormalLogicDistractor):
                 distractor_formulas += distractor.generate(proof_tree, size)
             except DistractorGenerationFailure as e:
                 logger.warning('Generating distractors by %s failed with the following message:', distractor.__class__)
-                logger.warning(str(e))
+                logger.warning('\n%s', str(e))
 
         if len(distractor_formulas) < size:
             logger.warning(
@@ -473,7 +473,7 @@ class FallBackDistractor(FormalLogicDistractor):
                 distractor_formulas.extend(_distractors)
             except DistractorGenerationFailure as e:
                 logger.warning('Generating distractors by %s failed with the following message:', distractor.__class__)
-                logger.warning(str(e))
+                logger.warning('\n%s', str(e))
 
         if len(distractor_formulas) < size:
             logger.warning(

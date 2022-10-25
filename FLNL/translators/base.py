@@ -61,7 +61,7 @@ class Translator(ABC):
                 log_title='_translate()',
             )
         except RetryAndTimeoutFailure as e:
-            raise TranslationFailure(f'Translation failed due to RetryAndTimeoutFailure: {str(e)}')
+            raise TranslationFailure(str(e))
 
     @abstractmethod
     def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],

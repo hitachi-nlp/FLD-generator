@@ -1,0 +1,17 @@
+[
+  {
+      "id": "universal_theorem.contraposition.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x"
+      ],
+      "conclusion": "(x): ¬{B}x -> ¬{A}x"
+  },
+  {
+      "id": "universal_theorem.syllogism_0.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "(x): {B}x -> {C}x"
+      ],
+      "conclusion": "(x): {A}x -> {C}x"
+  }
+]

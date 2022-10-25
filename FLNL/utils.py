@@ -123,19 +123,21 @@ def run_with_timeout_retry(
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
-    logger.info('=================== run_with_timeout_retry [%s]', log_title)
+    logger.info('=================== run_with_timeout_retry (%s) [max_retry=%d] ==================', log_title, max_retry)
     for i_trial in range(0, max_retry):
-        logger.info('---- trial=%d ----', i_trial)
+        exception_msg = None
         try:
             result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
             logger.info('-- succeeded!')
             return result
-        except TimeoutError:
-            logger.warning('-- the LAST trial failed with TimeoutError(timeout=%d)', timeout)
+        except TimeoutError as e:
+            exception_msg = f'TimeoutError(timeout={timeout})'
         except retry_exception_class as e:
-            logger.warning('-- failed. The message of the LAST trial is the followings:')
-            logger.warning('%s', str(e))
-    raise RetryAndTimeoutFailure(f'-- {log_title} failed with max_retry={max_retry}.')
+            exception_msg = str(e)
+        if exception_msg is not None:
+            logger.info('-------- trial [%d/%d] failed with the following exception -----------', i_trial + 1, max_retry)
+            logger.info('\n%s', exception_msg)
+    raise RetryAndTimeoutFailure(f'[failed] run_with_timeout_retry ({log_title}) [max_retry={max_retry}]')
 
 
 def compress(text: str) -> bytes:

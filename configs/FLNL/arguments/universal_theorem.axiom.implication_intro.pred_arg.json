@@ -1,0 +1,10 @@
+[
+  {
+      "id": "__universal_theorem.implication_intro.pred_arg",
+      "__comment": "we do not have translations for the conclusion",
+      "premises": [
+          "(x): {A}x ⊢ (x): {B}x"
+      ],
+      "conclusion": "(x): {A}x -> (x): {B}x"
+  }
+]
