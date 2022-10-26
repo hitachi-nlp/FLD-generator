@@ -612,7 +612,7 @@ class ClauseTypedTranslator(Translator):
                                  for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
-        adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)
+        adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
         if self.reused_object_nouns_max_factor > 0.0:
             obj_nouns = [self._parse_word_with_obj(word)[1] for word in adj_verb_nouns
                          if self._parse_word_with_obj(word)[1] is not None]
