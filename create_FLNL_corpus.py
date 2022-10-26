@@ -122,7 +122,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
-@click.option('--reused-object-nouns-max-factor', is_flag=True, default=False)
+@click.option('--reused-object-nouns-max-factor', type=float, default=0.0)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))

@@ -114,7 +114,7 @@ def load_translator(type_: str,
                     'eng',
                     vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None
                 ),
-                reused_object_nouns_max_factor=0.5,
+                reused_object_nouns_max_factor=1.0,
                 limit_vocab_size_per_type=limit_vocab_size_per_type,
                 volume_to_weight='linear',
                 do_translate_to_nl=do_translate_to_nl,
@@ -138,8 +138,8 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
     # name = 'unknown_interprands'
     # name = 'negated_hypothesis_tree'
 
-    name = 'fallback.negated_hypothesis_tree.unknown_interprands'
-    # name = 'fallback.unknown_interprands.negated_hypothesis_tree'
+    # name = 'fallback.negated_hypothesis_tree.unknown_interprands'
+    name = 'fallback.unknown_interprands.negated_hypothesis_tree'
 
     # name = 'mixture.unknown_interprands.negated_hypothesis_tree'
 
