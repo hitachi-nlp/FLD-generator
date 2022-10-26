@@ -64,7 +64,7 @@ class ClauseTypedTranslator(Translator):
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
-                 reuse_object_nouns=False,
+                 reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
                  volume_to_weight: str = 'linear',
@@ -90,7 +90,7 @@ class ClauseTypedTranslator(Translator):
 
         self.words_per_type = words_per_type
 
-        self._reuse_object_nouns = reuse_object_nouns
+        self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
         self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(word_bank)
         if limit_vocab_size_per_type is not None:
             self._zeroary_predicates = self._sample(self._zeroary_predicates, limit_vocab_size_per_type)
@@ -613,21 +613,21 @@ class ClauseTypedTranslator(Translator):
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
 
         adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)
-        if self._reuse_object_nouns:
+        if self.reused_object_nouns_max_factor > 0.0:
             obj_nouns = [self._parse_word_with_obj(word)[1] for word in adj_verb_nouns
                          if self._parse_word_with_obj(word)[1] is not None]
         else:
             obj_nouns = []
 
         event_noun_size = len(zeroary_predicates) * 2
-        event_nouns = [noun for noun in obj_nouns if noun in self._zeroary_predicate_set][: int(event_noun_size / 2)]
+        event_nouns = [noun for noun in obj_nouns if noun in self._zeroary_predicate_set][: int(event_noun_size * self.reused_object_nouns_max_factor)]
         if len(event_nouns) > 0:
             logger.info('the following object nouns may be reused as as event nouns: %s', str(event_nouns))
         event_nouns += self._sample(self._zeroary_predicates, max(event_noun_size - len(event_nouns), 0))
         event_nouns = list(set(event_nouns))
 
         entity_noun_size = len(constants) * 2
-        entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size / 2)]
+        entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
         if len(entity_nouns) > 0:
             logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
         entity_nouns += self._sample(self._constants, max(entity_noun_size - len(entity_nouns), 0))

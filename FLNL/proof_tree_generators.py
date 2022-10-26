@@ -246,12 +246,12 @@ class ProofTreeGenerator:
             raise ProofTreeGenerationFailure(str(e))
 
     def extend_branches(self,
-                       generate_initial_tree_fn: Callable[[], ProofTree],
-                       # proof_tree: ProofTree,
-                       branch_extension_steps: int,
-                       depth_limit: Optional[int] = None,
-                       max_retry=100,
-                       timeout=5) -> ProofTree:
+                        generate_initial_tree_fn: Callable[[], ProofTree],
+                        # proof_tree: ProofTree,
+                        branch_extension_steps: int,
+                        depth_limit: Optional[int] = None,
+                        max_retry=100,
+                        timeout=5) -> ProofTree:
         """ extend branches of the tree
 
         Please make sure that generate_initial_tree_fn generate a completely new tree each time it is called.
@@ -293,17 +293,17 @@ class ProofTreeGenerator:
                               disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis)
 
     def _extend_branches(self,
-                        generate_initial_tree_fn: Callable[[], ProofTree],
-                        branch_extension_steps: int,
-                        depth_limit: Optional[int] = None) -> ProofTree:
+                         generate_initial_tree_fn: Callable[[], ProofTree],
+                         branch_extension_steps: int,
+                         depth_limit: Optional[int] = None) -> ProofTree:
         return _extend_branches(generate_initial_tree_fn(),
-                               self.arguments,
-                               branch_extension_steps,
-                               PREDICATES,
-                               CONSTANTS,
-                               depth_limit=depth_limit,
-                               argument_weights=self.argument_weights,
-                               elim_dneg=self.elim_dneg)
+                                self.arguments,
+                                branch_extension_steps,
+                                PREDICATES,
+                                CONSTANTS,
+                                depth_limit=depth_limit,
+                                argument_weights=self.argument_weights,
+                                elim_dneg=self.elim_dneg)
 
 
 def _generate_stem(arguments: List[Argument],
@@ -537,14 +537,14 @@ def _generate_stem(arguments: List[Argument],
 
 
 def _extend_branches(proof_tree: ProofTree,
-                    arguments: List[Argument],
-                    num_steps: int,
-                    predicate_pool: List[str],
-                    constant_pool: List[str],
-                    argument_weights: Optional[Dict[Argument, float]] = None,
-                    depth_limit: Optional[int] = None,
-                    elim_dneg=False,
-                    allow_reference_arguments_when_depth_1=True) -> ProofTree:
+                     arguments: List[Argument],
+                     num_steps: int,
+                     predicate_pool: List[str],
+                     constant_pool: List[str],
+                     argument_weights: Optional[Dict[Argument, float]] = None,
+                     depth_limit: Optional[int] = None,
+                     elim_dneg=False,
+                     allow_reference_arguments_when_depth_1=True) -> ProofTree:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
     The steps are:

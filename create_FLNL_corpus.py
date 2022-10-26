@@ -41,7 +41,7 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
 
 def load_dataset(argument_config: List[str],
                  translation_config: List[str],
-                 reuse_object_nouns: bool,
+                 reused_object_nouns_max_factor: float,
                  limit_vocab_size_per_type: Optional[int],
                  translation_volume_to_weight: str,
                  complication: float,
@@ -64,7 +64,7 @@ def load_dataset(argument_config: List[str],
     _distractor = build_distractor(distractor, generator=generator)
     translator = build_translator(translation_config,
                                   build_wordnet_wordbank('eng'),
-                                  reuse_object_nouns=reuse_object_nouns,
+                                  reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight)
 
@@ -122,7 +122,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/FLNL/translations/clause_typed.thing.json'])
-@click.option('--reuse-object-nouns', is_flag=True, default=False)
+@click.option('--reused-object-nouns-max-factor', is_flag=True, default=False)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
@@ -140,7 +140,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 def main(output_path,
          argument_config,
          translation_config,
-         reuse_object_nouns,
+         reused_object_nouns_max_factor,
          limit_vocab_size_per_type,
          translation_volume_to_weight,
          size,
@@ -189,7 +189,7 @@ def main(output_path,
                         _batch_size_per_worker,
                         argument_config,
                         translation_config,
-                        reuse_object_nouns,
+                        reused_object_nouns_max_factor,
                         limit_vocab_size_per_type,
                         complication,
                         quantification,

@@ -215,7 +215,7 @@ def main():
 
                     _make_multiple_value_option('--ac', job_settings['argument_configs']),
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
-                    '--reuse-object-nouns' if job_settings.get("reuse_object_nouns", False) else '',
+                    maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                     maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',

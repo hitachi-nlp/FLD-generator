@@ -39,7 +39,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -73,7 +73,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -108,7 +108,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -143,7 +143,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -178,7 +178,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -212,7 +212,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -246,7 +246,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -290,7 +290,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -325,7 +325,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -360,7 +360,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -395,7 +395,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -429,7 +429,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -471,7 +471,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -506,7 +506,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -541,7 +541,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -576,7 +576,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -610,7 +610,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -647,7 +647,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
         'limit_vocab_size_per_type': None,
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
     },
 
 
@@ -719,7 +719,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -754,7 +754,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -788,7 +788,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -829,7 +829,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -869,7 +869,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -910,7 +910,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -951,7 +951,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
 
@@ -993,7 +993,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
 
@@ -1034,7 +1034,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
 
@@ -1075,7 +1075,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
 
@@ -1116,7 +1116,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
 
@@ -1172,7 +1172,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1222,7 +1222,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1272,7 +1272,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1322,7 +1322,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1372,7 +1372,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1423,7 +1423,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1473,7 +1473,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1523,7 +1523,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1573,7 +1573,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1623,7 +1623,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1678,7 +1678,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1728,7 +1728,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1778,7 +1778,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1828,7 +1828,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1878,7 +1878,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': False,
+        'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1929,7 +1929,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': True,
+        'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -1981,7 +1981,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': True,
+        'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
@@ -2031,7 +2031,7 @@ _DATASET_SETTINGS = {
             './configs/FLNL/translations/clause_typed.thing.json',
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
         ],
-        'reuse_object_nouns': True,
+        'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
 
         'split_sizes': {
