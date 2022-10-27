@@ -258,7 +258,7 @@ class ClauseTypedTranslator(Translator):
                     translation_key,
                     interp_mapping,
                     push_mapping,
-                    block_shuffle=self.use_fixed_translation,
+                    block_shuffle=not self.use_fixed_translation,
                     volume_to_weight=self._volume_to_weight_func,
                 )
                 if chosen_nl is None:

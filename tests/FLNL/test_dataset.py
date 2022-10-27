@@ -114,9 +114,11 @@ def load_translator(type_: str,
                     'eng',
                     vocab_restrictions=json.load(open(word_bank_vocab)) if word_bank_vocab is not None else None
                 ),
+                use_fixed_translation=False,
                 reused_object_nouns_max_factor=1.0,
                 limit_vocab_size_per_type=limit_vocab_size_per_type,
-                volume_to_weight='linear',
+                # volume_to_weight='linear',
+                volume_to_weight='sqrt',
                 do_translate_to_nl=do_translate_to_nl,
             )
         elif from_ == 'minimum':
@@ -147,7 +149,7 @@ def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 10) -> None:
+                     num_dataset: int = 100) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
