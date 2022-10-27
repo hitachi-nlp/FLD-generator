@@ -3302,46 +3302,46 @@
 
 
     "{A}a_event_noun": [
+      "a {A}[NOUN]",
       "{A}[ADJ.ness]",
       "{A}[VERB.ing]",
-      "a {A}[NOUN]",
 
       "__comment: We wanted to exclude [ADJ.ness] since it is not an event. However excluding it will leads to translation not found error."
     ],
 
     "¬{A}a_event_noun": [
+      "__a {A}[NOUN]",
       "{A}[ADJ.neg]ness",
       "non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]",
-      "__a {A}[NOUN]"
+      "__not {A}[VERB.ing]"
     ],
 
 
     "{A}a_noun": [
       "__comment: We eliminate ADJ and VERB otherwise the semantic of translations will diverge like (i) is [ADJ] (ii) is [ADJ.ness].",
+      "a {A}[NOUN]",
       "__{A}[ADJ.ness]",
-      "__{A}[VERB.ing]",
-      "a {A}[NOUN]"
+      "__{A}[VERB.ing]"
     ],
 
     "¬{A}a_noun": [
+      "__a {A}[NOUN]",
       "__{A}[ADJ.neg]ness",
       "__non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]",
-      "__a {A}[NOUN]"
+      "__not {A}[VERB.ing]"
     ],
 
     "{A}noun": [
+      "{A}[NOUN]",
       "__{A}[ADJ.ness]",
-      "__{A}[VERB.ing]",
-      "{A}[NOUN]"
+      "__{A}[VERB.ing]"
     ],
 
     "¬{A}noun": [
+      "__a {A}[NOUN]",
       "__{A}[ADJ.neg]ness",
       "__non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]",
-      "__a {A}[NOUN]"
+      "__not {A}[VERB.ing]"
     ],
 
 
