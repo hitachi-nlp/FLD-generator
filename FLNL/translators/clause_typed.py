@@ -64,6 +64,7 @@ class ClauseTypedTranslator(Translator):
     def __init__(self,
                  config_json: Dict[str, Dict],
                  word_bank: WordBank,
+                 use_fixed_translation: bool,
                  reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
@@ -90,6 +91,7 @@ class ClauseTypedTranslator(Translator):
 
         self.words_per_type = words_per_type
 
+        self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
         self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(word_bank)
         if limit_vocab_size_per_type is not None:
@@ -256,6 +258,7 @@ class ClauseTypedTranslator(Translator):
                     translation_key,
                     interp_mapping,
                     push_mapping,
+                    block_shuffle=self.use_fixed_translation,
                     volume_to_weight=self._volume_to_weight_func,
                 )
                 if chosen_nl is None:

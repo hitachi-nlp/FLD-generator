@@ -25,7 +25,8 @@ def test_clause_typed_translator():
             './configs/FLNL/translations/clause_typed.thing.sentence_negation.all.json',
         ],
         build_wordnet_wordbank('eng'),
-        reuse_object_nouns=True,
+        use_fixed_translation=True,
+        reused_object_nouns_max_factor=1.0,
 
         # volume_to_weight='linear',
         volume_to_weight='sqrt',
