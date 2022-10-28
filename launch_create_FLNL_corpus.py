@@ -26,7 +26,7 @@ def _make_multiple_value_option(option: str, values: List[str]) -> str:
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
-    logger.info('============================== [10.create_FLNL_corpus.py] start! ============================')
+    logger.info('============================== [launch_create_FLNL_corpus] start! ============================')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220827.trial')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
@@ -193,7 +193,7 @@ def main():
                 _num_jobs = num_jobs
             size_per_job = math.ceil(size_with_margin / _num_jobs)
 
-            logger.info('============================== [10.create_FLNL_corpus.py] Generating dataset for %s split ============================', split)
+            logger.info('============================== [launch_create_FLNL_corpus] Generating dataset for %s split ============================', split)
             logger.info('size: %d', size)
             logger.info('size_with_margin: %d', size_with_margin)
             logger.info('num_jobs: %d', _num_jobs)
@@ -287,7 +287,7 @@ def main():
                         f_out.write(line)
                         cnt += 1
 
-    logger.info('============================== [10.create_FLNL_corpus.py] done! ============================')
+    logger.info('============================== [launch_create_FLNL_corpus] done! ============================')
 
 
 if __name__ == '__main__':
