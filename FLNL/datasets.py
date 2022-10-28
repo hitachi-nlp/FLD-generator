@@ -321,6 +321,8 @@ class NLProofSDataset:
 
                 # I have no idea how to define depth from the root when proof is incomplete.
                 'depth': None if proof_stance == ProofStance.UNKNOWN else proof_tree.depth,
+
+                'num_distractors': len(distractor_formulas),
             }
 
             # Update statistics
