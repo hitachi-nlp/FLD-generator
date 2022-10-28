@@ -63,7 +63,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221012.beat_ruletaker')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221026.enhance')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221027.enhance.fix')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221027.enhance.fix')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.enhance.fix_translation')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -124,8 +125,6 @@ def main():
 
         '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
         '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-sqrt__size-S',
-        # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-1.0__transl_weight-linear__size-S',
-        # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-1.0__transl_weight-sqrt__size-S',
     ]
 
     # engine = SubprocessEngine()

@@ -1643,7 +1643,8 @@
     ],
     "(Ex): ¬{A}x": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬{A}it>>",
-      "<<sentence::¬{A}something>>"
+      "__<<sentence::¬{A}something>>",
+      "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
 
 
@@ -1667,19 +1668,19 @@
 
     "(Ex): ¬({A}x & {B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it & {B}it)>>",
-      "<<sentence::¬({A}something & {B}something)>>"
+      "__<<sentence::¬({A}something & {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it & {B}it)>>",
-      "<<sentence::¬(¬{A}something & {B}something)>>"
+      "__<<sentence::¬(¬{A}something & {B}something)>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it & ¬{B}it)>>",
-      "<<sentence::¬({A}something & ¬{B}something)>>"
+      "__<<sentence::¬({A}something & ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it & ¬{B}it)>>",
-      "<<sentence::¬(¬{A}something & ¬{B}something)>>"
+      "__<<sentence::¬(¬{A}something & ¬{B}something)>>"
     ],
 
 
@@ -1703,19 +1704,19 @@
 
     "(Ex): ¬({A}x v {B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it v {B}it)>>",
-      "<<sentence::¬({A}something v {B}something)>>"
+      "__<<sentence::¬({A}something v {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it v {B}it)>>",
-      "<<sentence::¬(¬{A}something v {B}something)>>"
+      "__<<sentence::¬(¬{A}something v {B}something)>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it v ¬{B}it)>>",
-      "<<sentence::¬({A}something v ¬{B}something)>>"
+      "__<<sentence::¬({A}something v ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x)": [
       "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it v ¬{B}it)>>",
-      "<<sentence::¬(¬{A}something v ¬{B}something)>>"
+      "__<<sentence::¬(¬{A}something v ¬{B}something)>>"
     ],
 
 
@@ -1950,7 +1951,8 @@
     ],
     "(x): ¬{A}x": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬{A}it>>",
-      "<<sentence::¬{A}everything>>"
+      "__<<sentence::¬{A}everything>>",
+      "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
 
 
@@ -1974,19 +1976,19 @@
 
     "(x): ¬({A}x & {B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it & {B}it)>>",
-      "<<sentence::¬({A}everything & {B}everything)>>"
+      "__<<sentence::¬({A}everything & {B}everything)>>"
     ],
     "(x): ¬(¬{A}x & {B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it & {B}it)>>",
-      "<<sentence::¬(¬{A}everything & {B}everything)>>"
+      "__<<sentence::¬(¬{A}everything & {B}everything)>>"
     ],
     "(x): ¬({A}x & ¬{B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it & ¬{B}it)>>",
-      "<<sentence::¬({A}everything & ¬{B}everything)>>"
+      "__<<sentence::¬({A}everything & ¬{B}everything)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it & ¬{B}it)>>",
-      "<<sentence::¬(¬{A}everything & ¬{B}everything)>>"
+      "__<<sentence::¬(¬{A}everything & ¬{B}everything)>>"
     ],
 
 
@@ -2010,19 +2012,19 @@
 
     "(x): ¬({A}x v {B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it v {B}it)>>",
-      "<<sentence::¬({A}everything v {B}everything)>>"
+      "__<<sentence::¬({A}everything v {B}everything)>>"
     ],
     "(x): ¬(¬{A}x v {B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it v {B}it)>>",
-      "<<sentence::¬(¬{A}everything v {B}everything)>>"
+      "__<<sentence::¬(¬{A}everything v {B}everything)>>"
     ],
     "(x): ¬({A}x v ¬{B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it v ¬{B}it)>>",
-      "<<sentence::¬({A}everything v ¬{B}everything)>>"
+      "__<<sentence::¬({A}everything v ¬{B}everything)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x)": [
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it v ¬{B}it)>>",
-      "<<sentence::¬(¬{A}everything v ¬{B}everything)>>"
+      "__<<sentence::¬(¬{A}everything v ¬{B}everything)>>"
     ],
 
 
