@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Set
+from typing import List, Optional, Set, Iterable
 import logging
 
 from .formula import (
@@ -64,6 +64,21 @@ def is_ok_set(formulas: List[Formula]) -> bool:
         is_predicate_arity_consistent_set(formulas),
         # is_consistent_set(formulas),    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
     ])
+
+
+def is_new(formula: Formula,
+           existing_formulas: List[Formula]) -> bool:
+    for _ in _search_formulas([formula], existing_formulas):
+        return False
+    return True
+
+
+def _search_formulas(formulas: List[Formula],
+                     existing_formulas: List[Formula]) -> Iterable[Formula]:
+    for formula in formulas:
+        for existing_formula in existing_formulas:
+            if existing_formula.rep == formula.rep:
+                yield existing_formula
 
 
 def _is_inconsistent(formula: Formula) -> bool:
@@ -178,7 +193,7 @@ def _is_nonsense(formula: Formula) -> bool:
                 # this block means "contradiction getween premise and conclusion"
                 return True
 
-            # this block is like "A -> A", "A -> (A & B)" -> This is OK, for example, & 
+            # this block is like "A -> A", "A -> (A & B)" -> This is OK, for example, &
             if ('T' in bool_in_conclusion and 'T' in bool_in_premise)\
                     or ('F' in bool_in_conclusion and 'F' in bool_in_premise):
                 return True

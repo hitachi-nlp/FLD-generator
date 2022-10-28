@@ -18,6 +18,7 @@ from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
     is_senseful,
     is_consistent_set as is_consistent_formula_set,
+    is_new as is_formula_new,
 )
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
@@ -138,8 +139,7 @@ class UnkownPASDistractor(FormalLogicDistractor):
 class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
     """ Generate the same form formula with unknown predicates or constants injected.
 
-
-    This class is superior to UnkownPASDistractor, which does not consider the similarity of the formu of formulas.
+    This class is superior to UnkownPASDistractor, which does not consider the similarity of the forms of formulas.
     """
 
     @property
@@ -232,6 +232,10 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                         print(mapping)
                     transformed_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
+                    if not is_formula_new(transformed_formula,
+                                          distractor_formulas + formulas_in_tree):
+                        continue
+
                     if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
                         if do_print:
                             print('!! not is_ok_formula_set()')
@@ -249,11 +253,6 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     # The tree will become inconsistent by ADDING distractor formulas.
                     if original_tree_is_consistent and\
                             not is_consistent_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):
-                        continue
-
-                    if any(transformed_formula.rep == existent_formula
-                           for existent_formula in distractor_formulas + formulas_in_tree):
-                        # is not new
                         continue
 
                     found_formula = transformed_formula
@@ -363,6 +362,10 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                 if len(distractor_formulas) >= size:
                     break
 
+                if not is_formula_new(distractor_formula,
+                                      distractor_formulas + formulas_in_tree):
+                    continue
+
                 if not is_ok_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
                     continue
 
@@ -374,10 +377,6 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                 # Since the detection of such logic is complicated and such case is rare, we abandon the detection.
                 if original_tree_is_consistent and\
                         not is_consistent_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
-                    continue
-
-                if any(distractor_formula.rep == existent_formula
-                       for existent_formula in distractor_formulas + formulas_in_tree):
                     continue
 
                 distractor_formulas.append(distractor_formula)

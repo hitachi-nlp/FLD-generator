@@ -15,9 +15,12 @@ from .formula import (
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
     is_consistent_set as is_consistent_formula_set,
+    is_new as is_formula_new,
 )
 from .argument import Argument
-from .argument_checkers import is_senseful as is_argument_senseful
+from .argument_checkers import (
+    is_senseful as is_argument_senseful,
+)
 from .interpretation import (
     generate_mappings_from_formula,
     generate_formulas_in_target_space,
@@ -458,7 +461,7 @@ def _generate_stem(arguments: List[Argument],
                                 rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                                 continue
 
-                            if not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
+                            if not is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
                                 # if next_arg_pulled.id.startswith('negation_intro.pred_only'):  # HONOKA
                                 #     import pudb; pudb.set_trace()
                                 rejection_stats['not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree)'] += 1
@@ -706,38 +709,8 @@ def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:
-    return all((_is_formula_new(formula, existing_formulas)
+    return all((is_formula_new(formula, existing_formulas)
                 for formula in formulas))
-
-
-def _is_formula_new(formula: Formula,
-                    existing_formulas: List[Formula]) -> bool:
-    return len(_search_formulas([formula], existing_formulas)) == 0
-
-
-def _search_formulas(formulas: List[Formula],
-                     existing_formulas: List[Formula]) -> List[Formula]:
-    return [
-        existing_formula
-        for formula in formulas
-        for existing_formula in existing_formulas
-        if existing_formula.rep == formula.rep
-    ]
-
-
-def _search_formula(formula: Formula,
-                    existing_formulas: List[Formula]) -> List[Formula]:
-    return [
-        existing_formula
-        for existing_formula in existing_formulas
-        if existing_formula.rep == formula.rep
-    ]
-
-
-# def _weighted_shuffle(weighted_elems: List[Tuple[float, Any]]) -> Iterable[Any]:
-#     weights = [weight for weight, _ in weighted_elems]
-#     for idx in weighted_shuffle(weights):
-#         yield weighted_elems[idx]
 
 
 def _shuffle(elems: List[Any],
