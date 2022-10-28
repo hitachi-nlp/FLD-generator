@@ -1,4 +1,5 @@
 import random
+import json
 import logging
 import math
 from collections import defaultdict
@@ -111,7 +112,6 @@ class ProofTreeGenerator:
     def complicated_arguments_weight(self):
         return self._complicated_arguments_weight
 
-    @profile
     def _load_arguments(self,
                         arguments: List[Argument],
                         complicated_arguments_weight: float,
@@ -695,7 +695,6 @@ def _extend_branches(proof_tree: ProofTree,
     return proof_tree
 
 
-@profile
 def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
     is_already_added = False
     for existent_argument in arguments:
@@ -731,3 +730,26 @@ def _shuffle_arguments(arguments: List[Argument],
 def _check_leaf_consistency(proof_tree: ProofTree) -> None:
     # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
+
+
+def load_arguments(config_paths: List[str]) -> List[Argument]:
+    arguments = []
+    for config_path in config_paths:
+        arguments.extend([Argument.from_json(json_obj)
+                          for json_obj in json.load(open(config_path))
+                          if not json_obj['id'].startswith('__')])
+    return arguments
+
+
+def build(config_paths: List[str],
+          elim_dneg=False,
+          complication=0.0,
+          quantification=0.0):
+    arguments = load_arguments(config_paths)
+    generator = ProofTreeGenerator(
+        arguments,
+        elim_dneg=elim_dneg,
+        complicated_arguments_weight=complication,
+        quantifier_axiom_arguments_weight=quantification,
+    )
+    return generator

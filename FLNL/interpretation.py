@@ -619,7 +619,6 @@ def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
     )
 
 
-@profile
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
                              allow_many_to_oneg=True,

@@ -17,7 +17,7 @@ from FLNL.word_banks import build_wordnet_wordbank
 from FLNL.distractors import SameFormUnkownInterprandsDistractor, FormalLogicDistractor
 from FLNL.argument import Argument
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLNL.proof_tree_generators import ProofTreeGenerator
+from FLNL.proof_tree_generators import build as build_generator
 from FLNL.datasets import NLProofSDataset
 from FLNL.proof import ProofTree
 from FLNL.utils import nested_merge
@@ -28,15 +28,6 @@ from logger_setup import setup as setup_logger
 
 
 logger = logging.getLogger(__name__)
-
-
-def load_arguments(config_paths: List[str]) -> List[Argument]:
-    arguments = []
-    for config_path in config_paths:
-        arguments.extend([Argument.from_json(json_obj)
-                          for json_obj in json.load(open(config_path))
-                          if not json_obj['id'].startswith('__')])
-    return arguments
 
 
 def load_dataset(argument_config: List[str],
@@ -54,15 +45,15 @@ def load_dataset(argument_config: List[str],
                  world_assump: str,
                  depths: List[int],
                  branch_extension_steps: List[int]):
-    arguments = load_arguments(argument_config)
-    generator = ProofTreeGenerator(
-        arguments,
+    generator = build_generator(
+        argument_config,
         elim_dneg=not keep_dneg,
-        complicated_arguments_weight=complication,
-        quantifier_axiom_arguments_weight=quantification,
+        complication=complication,
+        quantification=quantification,
     )
 
     _distractor = build_distractor(distractor, generator=generator)
+
     translator = build_translator(translation_config,
                                   build_wordnet_wordbank('eng'),
                                   use_fixed_translation=use_fixed_translation,

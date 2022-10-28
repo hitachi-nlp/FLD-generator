@@ -1,6 +1,7 @@
-from typing import List
+from typing import List, Optional
 import statistics
 import math
+import logging
 
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.formula import Formula
@@ -8,8 +9,10 @@ from FLNL.distractors import (
     FormalLogicDistractor,
     UnkownPASDistractor,
     SameFormUnkownInterprandsDistractor,
+    VariousFormUnkownInterprandsDistractor,
     NegatedHypothesisTreeDistractor,
 )
+from logger_setup import setup as setup_logger
 
 
 def _generate_and_print(distractor: FormalLogicDistractor, formulas: List[Formula], num_distractors: int) -> List[Formula]:
@@ -70,7 +73,60 @@ def test_same_form_distractor():
     _test_same_form_distractor('({A} & {B})')
 
 
+def test_various_form_distractor():
+
+    def _test_distractor(rep: str,
+                         ng_reps: List[str],
+                         prototype_formulas: Optional[List[Formula]] = None):
+        num_distractors = 10
+        distractor = VariousFormUnkownInterprandsDistractor(prototype_formulas=prototype_formulas)
+
+        ratios = []
+        original_formula = Formula(rep)
+        for _ in range(0, 10):
+            distractor_formulas = _generate_and_print(
+                distractor,
+                [original_formula],
+                num_distractors,
+            )
+            ratio = len([f for f in distractor_formulas if f.rep.endswith('{a}')]) / len(distractor_formulas)
+            ratios.append(ratio)
+            assert all(
+                all(distractor_formula.rep != ng_rep for ng_rep in ng_reps)
+                for distractor_formula in distractor_formulas
+            )
+        ratio = statistics.mean(ratios)
+
+    # _test_distractor(
+    #     '{A}',
+    #     ['{A}'],
+    # )
+
+    # _test_distractor(
+    #     '{A}{a}',
+    #     ['{A}{a}'],
+    # )
+
+    # _test_distractor(
+    #     '({A} & {B})',
+    #     ['({A} & {A})', '({A} & {B})', '({B} & {A})', '({B} & {B})'],
+    # )
+
+    # _test_distractor(
+    #     '({A}{a} & {B}{b})',
+    #     ['({A}{a} & {A}{a})', '({A}{a} & {B}{b})', '({B}{b} & {A}{a})', '({B}{b} & {B}{b})'],
+    # )
+
+    _test_distractor(
+        '({A}{a} & {B}{b})',
+        ['({A}{a} v {A}{a})', '({A}{a} v {B}{b})', '({B}{b} v {A}{a})', '({B}{b} v {B}{b})'],
+        prototype_formulas=[Formula('({C}{c} v {D}{d})')]
+    )
+
 
 if __name__ == '__main__':
-    test_unknown_PAS_distractor()
-    test_same_form_distractor()
+    setup_logger(level=logging.INFO)
+
+    # test_unknown_PAS_distractor()
+    # test_same_form_distractor()
+    test_various_form_distractor()
