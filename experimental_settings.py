@@ -2153,7 +2153,7 @@ _DATASET_SETTINGS = {
     },
 
 
-    '20221027__dpth-M__bx-M__dist-var__dist_size-S__reuse-0.0__transl_weight-linear__size-S': {
+    '20221028__dpth-M__bx-M__dist-var__dist_size-S__reuse-0.0__transl_weight-linear__size-S': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
@@ -2194,16 +2194,16 @@ _DATASET_SETTINGS = {
         'translation_volume_to_weight': 'linear',
 
         'split_sizes': {
-            'test': 10,
+            # 'test': 100,
 
-            # 'train': 100000,
-            # 'valid': 1000,
-            # 'test': 1000,
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
 
-    '20221027__dpth-M__bx-M__dist-var__dist_size-M__reuse-0.0__transl_weight-linear__size-S': {
+    '20221028__dpth-M__bx-M__dist-var__dist_size-M__reuse-0.0__transl_weight-linear__size-S': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
@@ -2244,11 +2244,11 @@ _DATASET_SETTINGS = {
         'translation_volume_to_weight': 'linear',
 
         'split_sizes': {
-            'test': 10,
+            # 'test': 100,
 
-            # 'train': 100000,
-            # 'valid': 1000,
-            # 'test': 1000,
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
