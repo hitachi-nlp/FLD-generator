@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any, Iterable
 from abc import abstractmethod, ABC
 from pprint import pprint
 import random

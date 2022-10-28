@@ -14,10 +14,9 @@ from FLNL.datasets import NLProofSDataset
 from FLNL.word_banks import build_wordnet_wordbank
 from FLNL.translators import (
     build as build_translator,
-    SentenceWiseTranslator,
-    IterativeRegexpTranslator,
-    ClauseTypedTranslator,
+    TemplatedTranslator,
 )
+from FLNL.interpretation import formula_is_identical_to
 from FLNL.utils import nested_merge
 from logger_setup import setup as setup_logger
 
@@ -53,62 +52,22 @@ def load_translator(type_: str,
                     word_bank_vocab: Optional[str] = None,
                     limit_vocab_size_per_type: Optional[int] = None,
                     do_translate_to_nl=True):
-    if type_ == 'sentence_wise_translator':
-        if from_ == 'config':
-            sentence_translations_config_path = './configs/FLNL/translations/old/syllogistic_corpus-02.json'
-            sentence_translations = json.load(open(sentence_translations_config_path))
-            predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
-            constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
-            return SentenceWiseTranslator(
-                sentence_translations,
-                predicate_translations=predicate_translations,
-                constant_translations=constant_translations,
-                do_translate_to_nl=do_translate_to_nl,
-            )
-        elif from_ == 'minimum':
-            sentence_translations = {
-                '{A}{a}': [
-                    '{a} is {A}.',
-                ],
 
-                '(x): {A}x -> {B}x': [
-                    'If someone is {A}, then the one is {B}.',
-                    'Every {A} is a {B}.',
-                ],
-
-                '(x): ({A} v {B})x -> {C}x': [
-                    'If someone is {A} or {B}, then the one is {C}.',
-                ],
-                '(x): ({A} & {B})x -> {C}x': [
-                    'If someone is {A} and {B}, then the one is {C}.',
-                ],
-            }
-            predicate_translations = [f'red-{str(i).zfill(2)}' for i in range(30)]
-            constant_translations = [f'Alice-{str(i).zfill(2)}' for i in range(30)]
-            return SentenceWiseTranslator(
-                sentence_translations,
-                predicate_translations=predicate_translations,
-                constant_translations=constant_translations,
-                do_translate_to_nl=do_translate_to_nl,
-            )
-        else:
-            raise ValueError()
-
-    elif type_ == 'clause_typed_translator':
+    if type_ == 'templated_translator':
         if from_ == 'config':
             return build_translator(
                 [
-                    # './configs/FLNL/translations/clause_typed.thing.json',
-                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+                    # './configs/FLNL/translations/thing.json',
+                    # './configs/FLNL/translations/thing.sentence_negation.json',
 
-                    # './configs/FLNL/translations/clause_typed.thing.e1.json',
-                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+                    # './configs/FLNL/translations/thing.e1.json',
+                    # './configs/FLNL/translations/thing.sentence_negation.e1.json',
 
-                    # './configs/FLNL/translations/clause_typed.thing.r.json',
-                    # './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
+                    # './configs/FLNL/translations/thing.r.json',
+                    # './configs/FLNL/translations/thing.sentence_negation.r.json',
 
-                    './configs/FLNL/translations/clause_typed.thing.all.json',
-                    './configs/FLNL/translations/clause_typed.thing.sentence_negation.all.json',
+                    './configs/FLNL/translations/thing.all.json',
+                    './configs/FLNL/translations/thing.sentence_negation.all.json',
                 ],
                 build_wordnet_wordbank(
                     'eng',
@@ -128,24 +87,26 @@ def load_translator(type_: str,
     elif type_ == 'iterative_regexp':
         if from_ == 'config':
             raise ValueError()
-        elif from_ == 'minimum':
-            return IterativeRegexpTranslator()
         else:
             raise ValueError()
     else:
         raise ValueError()
 
 
-def load_distractor(generator: ProofTreeGenerator) -> FormalLogicDistractor:
+def load_distractor(generator: ProofTreeGenerator, prototype_formulas: Optional[List[Formula]] = None) -> FormalLogicDistractor:
     # name = 'unknown_interprands'
+    # name = 'various_form'
     # name = 'negated_hypothesis_tree'
 
+    # name = 'fallback.unknown_interprands.negated_hypothesis_tree'
+    name = 'fallback.various_form.negated_hypothesis_tree'
     # name = 'fallback.negated_hypothesis_tree.unknown_interprands'
-    name = 'fallback.unknown_interprands.negated_hypothesis_tree'
 
     # name = 'mixture.unknown_interprands.negated_hypothesis_tree'
+    # name = 'mixture.various_form.negated_hypothesis_tree'
+    # name = 'mixture.negated_hypothesis_tree.unknown_interprands'
 
-    return build_distractor(name, generator=generator)
+    return build_distractor(name, generator=generator, prototype_formulas=prototype_formulas)
 
 
 def generate_dataset(dataset: NLProofSDataset,
@@ -209,7 +170,7 @@ def test_original():
 
 
 def test_LP_pred_only():
-    translator = load_translator('clause_typed_translator', 'config')
+    translator = load_translator('templated_translator', 'config')
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -236,7 +197,7 @@ def test_LP_pred_only():
 
 
 def test_minimum_PL():
-    translator = load_translator('clause_typed_translator', 'config')
+    translator = load_translator('templated_translator', 'config')
 
     generator = load_proof_tree_generator(
         arguments=[
@@ -274,7 +235,7 @@ def test_minimum_PL():
 
 
 def test_LP_pred_arg():
-    translator = load_translator('clause_typed_translator', 'config')
+    translator = load_translator('templated_translator', 'config')
 
     generator = load_proof_tree_generator(
         config_paths=[
@@ -305,7 +266,7 @@ def test_LP_pred_arg():
 
 def test_PL_pred_arg():
     translator = load_translator(
-        'clause_typed_translator',
+        'templated_translator',
         'config',
         # word_bank_vocab='./configs/FLNL/vocab/proofwriter-dataset-V2020.12.3.preprocessed_OWA.depth-3ext.json',
         # limit_vocab_size_per_type=100,

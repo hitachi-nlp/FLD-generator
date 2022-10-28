@@ -7,22 +7,22 @@ from FLNL.word_banks import build_wordnet_wordbank
 from logger_setup import setup as setup_logger
 
 
-def test_clause_typed_translator():
+def test_templated_translator():
     setup_logger(level=logging.DEBUG)
 
     translator = build_translator(
         [
-            # './configs/FLNL/translations/clause_typed.thing.json',
-            # './configs/FLNL/translations/clause_typed.thing.sentence_negation.json',
+            # './configs/FLNL/translations/thing.json',
+            # './configs/FLNL/translations/thing.sentence_negation.json',
 
-            # './configs/FLNL/translations/clause_typed.thing.e1.json',
-            # './configs/FLNL/translations/clause_typed.thing.sentence_negation.e1.json',
+            # './configs/FLNL/translations/thing.e1.json',
+            # './configs/FLNL/translations/thing.sentence_negation.e1.json',
 
-            # './configs/FLNL/translations/clause_typed.thing.r.json',
-            # './configs/FLNL/translations/clause_typed.thing.sentence_negation.r.json',
+            # './configs/FLNL/translations/thing.r.json',
+            # './configs/FLNL/translations/thing.sentence_negation.r.json',
 
-            './configs/FLNL/translations/clause_typed.thing.all.json',
-            './configs/FLNL/translations/clause_typed.thing.sentence_negation.all.json',
+            './configs/FLNL/translations/thing.all.json',
+            './configs/FLNL/translations/thing.sentence_negation.all.json',
         ],
         build_wordnet_wordbank('eng'),
         use_fixed_translation=False,
@@ -94,4 +94,4 @@ def test_clause_typed_translator():
 
 
 if __name__ == '__main__':
-    test_clause_typed_translator()
+    test_templated_translator()
