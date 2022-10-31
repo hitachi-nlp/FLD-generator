@@ -3144,12 +3144,12 @@
 
       "{A}{a}.set": [
         "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>>",
-        "a <<phrase::{a}noun>> <<phrase::{A}post_modifier>> "
+        "a <<phrase::{a}noun>> <<phrase::{A}post_modifier>>"
       ],
 
       "¬{A}{a}.set": [
         "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>>",
-        "a <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>> "
+        "a <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>>"
       ],
 
       
