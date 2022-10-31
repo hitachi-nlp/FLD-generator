@@ -268,6 +268,12 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
 
 class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
+    """
+    Unlike SameFormUnkownInterprandsDistractor:
+    (i) we sample the formula prototypes not from the tree but from all possible prototypes specified by the user.
+    (ii) we reject distractor formula having all the PASs are the used ones. This makes distractors more "safe",
+         i.e., fewer chance of having another proof due to the new formulas. However, this makes distractors less distractive, of course.
+    """
 
     def __init__(self, prototype_formulas: Optional[List[Formula]] = None):
         self._prototype_formulas = prototype_formulas
@@ -438,7 +444,6 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 distractor_formulas.append(found_formula)
 
         return distractor_formulas
-
 
 
 class NegatedHypothesisTreeDistractor(FormalLogicDistractor):

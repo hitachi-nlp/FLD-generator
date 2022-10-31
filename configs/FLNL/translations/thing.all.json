@@ -3519,7 +3519,7 @@
 
     "¬{A}post_modifier": [
       "{A}[ADJ.neg]",
-      "not [ADJ]",
+      "not {A}[ADJ]",
       "not {A}[VERB.ing]",
       "that <<phrase::¬{A}predicate>>"
     ],
