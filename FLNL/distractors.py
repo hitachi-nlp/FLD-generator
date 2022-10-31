@@ -271,8 +271,15 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
     """
     Unlike SameFormUnkownInterprandsDistractor:
     (i) we sample the formula prototypes not from the tree but from all possible prototypes specified by the user.
-    (ii) we reject distractor formula having all the PASs are the used ones. This makes distractors more "safe",
-         i.e., fewer chance of having another proof due to the new formulas. However, this makes distractors less distractive, of course.
+        we think this is more appropriate.
+    (ii) we sample predicates and constants from the tree, rather than a sampled leaf formula.
+    (iii) we reject distractor formula all the PASs of which are the used ones.
+
+    (ii) and (iii) makes distractors more "safe", i.e., fewer chance of having another proof due to the new formulas.
+    However, this makes distractors less distractive, of course.
+
+    We are confident that (i) is better.
+    We are not that confident about (ii) and (iii) since it makes less distractive.
     """
 
     def __init__(self, prototype_formulas: Optional[List[Formula]] = None):
