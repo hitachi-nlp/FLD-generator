@@ -12,17 +12,8 @@ def test_templated_translator():
 
     translator = build_translator(
         [
-            # './configs/FLNL/translations/thing.json',
-            # './configs/FLNL/translations/thing.sentence_negation.json',
-
-            # './configs/FLNL/translations/thing.e1.json',
-            # './configs/FLNL/translations/thing.sentence_negation.e1.json',
-
-            # './configs/FLNL/translations/thing.r.json',
-            # './configs/FLNL/translations/thing.sentence_negation.r.json',
-
-            './configs/FLNL/translations/thing.all.json',
-            './configs/FLNL/translations/thing.sentence_negation.all.json',
+            './configs/FLNL/translations/thing.json',
+            './configs/FLNL/translations/thing.sentence_negation.json',
         ],
         build_wordnet_wordbank('eng'),
         use_fixed_translation=False,
