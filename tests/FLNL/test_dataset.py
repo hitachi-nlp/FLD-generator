@@ -61,6 +61,9 @@ def generate_dataset(dataset: NLProofSDataset,
 
 
 def test_generate_dataset():
+    def _to_range(begin: int, end: int) -> List[int]:
+        return list(range(begin, end + 1))
+
     translator = build_translator(
         [
             './configs/FLNL/translations/thing.json',
@@ -70,7 +73,6 @@ def test_generate_dataset():
         use_fixed_translation=False,
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
-        # volume_to_weight='linear',
         volume_to_weight='sqrt',
         do_translate_to_nl=True,
     )
@@ -108,7 +110,7 @@ def test_generate_dataset():
         ],
         elim_dneg=True,
         complication=0.3,
-        quantification=0.3,
+        quantification=0.2,
     )
 
     distractor = build_distractor(
@@ -132,12 +134,9 @@ def test_generate_dataset():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              # [3, 5],
-                              # [3, 5],
-                              # num_distractors=[3, 5],
-                              [10],
-                              [10],
-                              num_distractors=[10],
+                              _to_range(1, 10),
+                              _to_range(1, 5),
+                              num_distractors=_to_range(0, 10),
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

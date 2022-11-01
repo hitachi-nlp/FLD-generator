@@ -227,19 +227,23 @@ class ProofTreeGenerator:
                       branch_extension_steps: int,
                       max_retry=100,
                       timeout=5) -> Optional[ProofTree]:
-        try:
-            return run_with_timeout_retry(
-                self._generate_tree,
-                func_args=[depth, branch_extension_steps],
-                func_kwargs={},
-                retry_exception_class=ProofTreeGenerationFailure,
-                max_retry=max_retry,
-                timeout=timeout,
-                logger=logger,
-                log_title='generate_tree()',
-            )
-        except RetryAndTimeoutFailure as e:
-            raise ProofTreeGenerationFailure(str(e))
+        if depth == 1:
+            logger.info('do only generate_stem() since depth=1 tree can not be extend_branches()')
+            return self.generate_stem(depth, max_retry=max_retry, timeout=timeout)
+        else:
+            try:
+                return run_with_timeout_retry(
+                    self._generate_tree,
+                    func_args=[depth, branch_extension_steps],
+                    func_kwargs={},
+                    retry_exception_class=ProofTreeGenerationFailure,
+                    max_retry=max_retry,
+                    timeout=timeout,
+                    logger=logger,
+                    log_title='generate_tree()',
+                )
+            except RetryAndTimeoutFailure as e:
+                raise ProofTreeGenerationFailure(str(e))
 
     def generate_stem(self,
                       depth: int,
@@ -584,7 +588,7 @@ def _extend_branches(proof_tree: ProofTree,
             leaf_nodes = [node for node in leaf_nodes
                           if proof_tree.get_node_depth(node) < depth_limit]
         if len(leaf_nodes) == 0:
-            logger.warning('Couldn\'t extend branch since the tree have no leaf nodes.')
+            logger.warning('Couldn\'t extend branch since the tree have no leaf nodes under depth limit %d.', depth_limit)
             _check_leaf_consistency(proof_tree)
             return proof_tree
 

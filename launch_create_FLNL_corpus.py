@@ -65,7 +65,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221026.enhance')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221027.enhance.fix')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.enhance.fix_translation')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.dist-var')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.dist-var')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221101.various_datasets')
 
     dataset_names = [
         # '20220901.atmf-P.arg-basic.dpth-1',
@@ -127,8 +128,15 @@ def main():
         # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
         # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-sqrt__size-S',
 
-        '20221028__dpth-M__bx-M__dist-var__dist_size-S__reuse-0.0__transl_weight-linear__size-S',
-        '20221028__dpth-M__bx-M__dist-var__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
+        # '20221028__dpth-M__bx-M__dist-var__dist_size-S__reuse-0.0__transl_weight-linear__size-S',
+        # '20221028__dpth-M__bx-M__dist-var__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
+
+        '20221101__arg-basic__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-True__voc_limit-100__dataset_size-100000',
+        '20221101__arg-cmpl__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-True__voc_limit-100__dataset_size-100000',
+        '20221101__arg-cmpl__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
+        '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-0__reuse-0.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
+        '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
+        '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-300000',
     ]
 
     # engine = SubprocessEngine()
@@ -225,7 +233,7 @@ def main():
 
                     _make_multiple_value_option('--ac', job_settings['argument_configs']),
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
-                    f'--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
+                    '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
                     maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                     maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),

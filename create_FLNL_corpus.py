@@ -206,7 +206,7 @@ def main(output_path,
 
             cnt = 0
             is_done = False
-            num_used_jobs = 0
+            num_jobs: Dict[str, int] = defaultdict(int)
             for instances, stats in instances_list:
                 if is_done:
                     break
@@ -219,13 +219,13 @@ def main(output_path,
                     cnt += 1
 
                 for name, count in stats.items():
-                    gathered_stats[name] += count
-
-                num_used_jobs += 1
+                    if count is not None:
+                        gathered_stats[name] += count
+                        num_jobs[name] += 1
 
             for name, count in stats.items():
                 if not name.startswith('cum.'):
-                    gathered_stats[name] = gathered_stats[name] / num_used_jobs
+                    gathered_stats[name] = gathered_stats[name] / num_jobs[name]
 
             logger.debug('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
 
