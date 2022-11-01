@@ -84,6 +84,7 @@ class ProofTreeGenerator:
                  quantifier_axiom_arguments_weight=0.0,
                  quantify_all_at_once=True,
                  or_arguments_factor=0.2,  # or is not that impotant for NLI
+                 existential_arguments_factor=0.2,  # existential quantifier is not that impotant for NLI
                  universal_theorem_argument_factor=1.0,
                  elim_dneg=False,
                  disallow_contradiction_as_hypothesis=True,
@@ -103,6 +104,7 @@ class ProofTreeGenerator:
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
             quantify_all_at_once=quantify_all_at_once,
             or_arguments_factor=or_arguments_factor,
+            existential_arguments_factor=existential_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
             elim_dneg=elim_dneg,
             allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
@@ -119,6 +121,7 @@ class ProofTreeGenerator:
                         quantifier_axiom_arguments_weight: float,
                         quantify_all_at_once: bool,
                         or_arguments_factor: float,
+                        existential_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         elim_dneg: bool,
                         allow_reference_arguments_when_depth_1: bool) -> Tuple[List[Argument], List[Argument]]:
@@ -192,11 +195,19 @@ class ProofTreeGenerator:
         def is_or_argument(argument: Argument) -> bool:
             return any(is_or_formula(formula) for formula in argument.all_formulas)
 
+        def is_existential_argument(argument: Argument) -> bool:
+            return argument.id.startswith('existential')
+
         def is_universal_theorem_argument(argument: Argument) -> bool:
             return argument.id.startswith('universal_theorem')
 
         _argument_weights = {
             argument: (weight * or_arguments_factor if is_or_argument(argument) else weight)
+            for argument, weight in _argument_weights.items()
+        }
+
+        _argument_weights = {
+            argument: (weight * existential_arguments_factor if is_existential_argument(argument) else weight)
             for argument, weight in _argument_weights.items()
         }
 
