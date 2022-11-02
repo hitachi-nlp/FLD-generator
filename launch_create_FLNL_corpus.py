@@ -28,35 +28,6 @@ def main():
     setup_logger(level=logging.INFO)
     logger.info('============================== [launch_create_FLNL_corpus.py] start! ============================')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220827.trial')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
-
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220828.size--100')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220828.size--100000')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220830.various_datasets.trial')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220831.various_datasets.trial')
-
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220901.various_datasets.trial')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220902.disproof-off')
-
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220909.various_levels')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.wo_disproof')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220910.various_levels.w_disproof.wo_marker')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.unknown.trial')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220916.UNKNOWN')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220917.UNKNOWN')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220919.UNKNOWN.fix_translation')
-
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220929.assump.void')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221001.assump.void.large')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.assump_brace.large')
-
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20220928.neg_tree_distractor')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221002.neg_tree_distractor.more')
-
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221011.beat_ruletaker')
@@ -69,31 +40,6 @@ def main():
     output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221101.various_datasets')
 
     dataset_names = [
-        # '20220901.atmf-P.arg-basic.dpth-1',
-        # '20220901.atmf-PA.arg-basic.dpth-1',
-        # '20220901.atmf-PA.arg-compl.dpth-1',
-        # '20220901.atmf-PA.arg-compl.dpth-3',
-        # '20220901.atmf-PA.arg-compl.dpth-5',
-
-        # '20220916.atmf-P.arg-basic.dpth-1.UNKNOWN',
-        # '20220916.atmf-PA.arg-basic.dpth-1.UNKNOWN',
-        # '20220916.atmf-PA.arg-compl.dpth-1.UNKNOWN',
-        # '20220916.atmf-PA.arg-compl.dpth-3.UNKNOWN',
-        # '20220916.atmf-PA.arg-compl.dpth-5.UNKNOWN',
-
-        # '20220929.atmf-PA.arg-compl.dpth-3.20220929.assump.debug',
-        # '20220929.atmf-PA.arg-compl.dpth-3.20221001.assump.void',
-        # '20220929.atmf-PA.arg-compl.dpth-5.20221001.assump.void',
-
-        # '20220928.atmf-P.arg-basic.dpth-1.neg_tree_distractor',
-        # '20220928.atmf-PA.arg-basic.dpth-1.neg_tree_distractor',
-        # '20220928.atmf-PA.arg-compl.dpth-1.neg_tree_distractor',
-        # '20220928.atmf-PA.arg-compl.dpth-3.neg_tree_distractor',
-        # '20220928.atmf-PA.arg-compl.dpth-5.neg_tree_distractor',
-
-        # '20221002.atmf-PA.arg-compl.dpth-3.neg_tree_distractor.more',
-        # '20221002.atmf-PA.arg-compl.dpth-5.neg_tree_distractor.more',
-
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
         # '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems',
         # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
