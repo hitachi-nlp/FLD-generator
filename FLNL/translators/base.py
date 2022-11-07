@@ -47,7 +47,7 @@ class Translator(ABC):
                   formulas: List[Formula],
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
-                  timeout: Optional[int] = 10) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
+                  timeout: Optional[int] = 10) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
                                                         Dict[str, int]]:
         try:
             return run_with_timeout_retry(

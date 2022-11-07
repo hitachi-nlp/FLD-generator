@@ -7,7 +7,7 @@ import math
 import logging
 from typing import Optional
 from .proof import ProofTree, ProofNode
-from .formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError
+from .formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
 from .utils import shuffle
 from .interpretation import (
     generate_mappings_from_predicates_and_constants,
@@ -324,9 +324,9 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         used_predicates = {pred.rep
                            for formula in leaf_formulas_in_tree
                            for pred in formula.predicates}
-        used_constants = {pred.rep
+        used_constants = {constant.rep
                           for formula in leaf_formulas_in_tree
-                          for pred in formula.constants}
+                          for constant in formula.constants}
 
         unused_predicates = set(PREDICATES) - set(used_predicates)
         unused_constants = set(CONSTANTS) - set(used_constants)
@@ -373,6 +373,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     raise ValueError()
 
         distractor_formulas: List[Formula] = []
+
         trial = 0
         max_trial = size * 10
         for trial in range(max_trial):

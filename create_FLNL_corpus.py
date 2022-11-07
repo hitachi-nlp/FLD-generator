@@ -43,6 +43,7 @@ def load_dataset(argument_config: List[str],
                  num_distractors: List[int],
                  sample_distractor_formulas_from_tree: bool,
                  sample_hard_negative_distractors: bool,
+                 add_subj_obj_swapped_distractor: bool,
                  proof_stances: List[str],
                  world_assump: str,
                  depths: List[int],
@@ -66,7 +67,12 @@ def load_dataset(argument_config: List[str],
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight)
 
-    pipeline = ProofTreeGenerationPipeline(generator, distractor=_distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(
+        generator,
+        distractor=_distractor,
+        translator=translator,
+        add_subj_obj_swapped_distractor=add_subj_obj_swapped_distractor,
+    )
 
     return NLProofSDataset(pipeline,
                            proof_stances,
@@ -133,6 +139,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
+@click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
 @click.option('--num-workers', type=int, default=1)
@@ -154,7 +161,8 @@ def main(output_path,
          distractor,
          num_distractors,
          sample_distractor_formulas_from_tree,
-         sample_hard_negative_distractorsA,
+         sample_hard_negative_distractors,
+         add_subj_obj_swapped_distractor,
          proof_stances,
          world_assump,
          num_workers,
@@ -204,6 +212,7 @@ def main(output_path,
                         num_distractors,
                         sample_distractor_formulas_from_tree,
                         sample_hard_negative_distractors,
+                        add_subj_obj_swapped_distractor,
                         proof_stances,
                         world_assump,
                         depths,

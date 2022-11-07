@@ -27,10 +27,12 @@ class ProofTreeGenerationPipeline:
                  generator: ProofTreeGenerator,
                  distractor: Optional[FormalLogicDistractor] = None,
                  translator: Optional[Translator] = None,
+                 add_subj_obj_swapped_distractor=False,
                  log_stats=False):
         self.generator = generator
         self.distractor = distractor
         self.translator = translator
+        self.add_subj_obj_swapped_distractor = add_subj_obj_swapped_distractor
 
         self.log_stats = log_stats
         self.translator.log_stats = log_stats
@@ -80,6 +82,7 @@ class ProofTreeGenerationPipeline:
             if self.translator is not None:
                 logger.info('========================== translating... ============================')
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + distractor_formulas
+                leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
 
                 try:
@@ -88,14 +91,20 @@ class ProofTreeGenerationPipeline:
                 except TranslationFailure as e:
                     raise ProofTreeGenerationPipelineFailure(str(e))
 
-                for i_formula, (formula, (translation_name, translation)) in enumerate(zip(all_formulas, named_translations)):
+                for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
                     if i_formula in assump_formula_indices:
                         translation_prefix = 'let\'s assume that '
                     else:
                         translation_prefix = ''
+
                     if translation is not None:
                         formula.translation = translation_prefix + translation
+
+                    if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
+                        logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
+                        distractor_formulas.append(SO_swap_formula)
+                    
                 logger.info('========================== translating done! ============================')
 
             if self.log_stats:

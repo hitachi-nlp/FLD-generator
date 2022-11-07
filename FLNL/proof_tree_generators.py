@@ -86,6 +86,7 @@ class ProofTreeGenerator:
                  or_arguments_factor=0.2,  # or is not that impotant for NLI
                  existential_arguments_factor=0.2,  # existential quantifier is not that impotant for NLI
                  universal_theorem_argument_factor=1.0,
+                 reference_argument_factor=3.0,  # reference argument is impotant
                  elim_dneg=False,
                  disallow_contradiction_as_hypothesis=True,
                  allow_reference_arguments_when_depth_1=True):
@@ -106,6 +107,7 @@ class ProofTreeGenerator:
             or_arguments_factor=or_arguments_factor,
             existential_arguments_factor=existential_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
+            reference_argument_factor=reference_argument_factor,
             elim_dneg=elim_dneg,
             allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
         )
@@ -123,8 +125,9 @@ class ProofTreeGenerator:
                         or_arguments_factor: float,
                         existential_arguments_factor: float,
                         universal_theorem_argument_factor: float,
+                        reference_argument_factor: float,
                         elim_dneg: bool,
-                        allow_reference_arguments_when_depth_1: bool) -> Tuple[List[Argument], List[Argument]]:
+                        allow_reference_arguments_when_depth_1: bool,) -> Tuple[List[Argument], List[Argument]]:
         logger.info('-- loading arguments ....')
 
         arguments = _REFERENCE_ARGUMENTS + arguments
@@ -201,6 +204,9 @@ class ProofTreeGenerator:
         def is_universal_theorem_argument(argument: Argument) -> bool:
             return argument.id.startswith('universal_theorem')
 
+        def is_reference_argument(argument: Argument) -> bool:
+            return argument.id.startswith('reference')
+
         _argument_weights = {
             argument: (weight * or_arguments_factor if is_or_argument(argument) else weight)
             for argument, weight in _argument_weights.items()
@@ -213,6 +219,11 @@ class ProofTreeGenerator:
 
         _argument_weights = {
             argument: (weight * universal_theorem_argument_factor if is_universal_theorem_argument(argument) else weight)
+            for argument, weight in _argument_weights.items()
+        }
+
+        _argument_weights = {
+            argument: (weight * reference_argument_factor if is_reference_argument(argument) else weight)
             for argument, weight in _argument_weights.items()
         }
 

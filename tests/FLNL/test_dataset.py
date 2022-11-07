@@ -27,7 +27,7 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 1000) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
@@ -131,7 +131,12 @@ def test_generate_dataset():
         sample_hard_negatives=True,
     )
 
-    pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)
+    pipeline = ProofTreeGenerationPipeline(
+        generator,
+        distractor=distractor,
+        translator=translator,
+        add_subj_obj_swapped_distractor=True,
+    )
 
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],

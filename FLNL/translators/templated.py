@@ -2,6 +2,7 @@ import json
 from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
 from collections import OrderedDict, defaultdict
 from tqdm import tqdm
+import copy
 import random
 import re
 import logging
@@ -11,7 +12,7 @@ import math
 
 from tqdm import tqdm
 from FLNL.utils import nested_merge
-from FLNL.formula import Formula
+from FLNL.formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
 from FLNL.word_banks.base import WordBank, ATTR
 from FLNL.interpretation import (
     generate_mappings_from_formula,
@@ -234,7 +235,7 @@ class TemplatedTranslator(Translator):
         return '____'.join([sentence_key, nl])
 
     @profile
-    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]], Dict[str, int]]:
+    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
@@ -243,6 +244,7 @@ class TemplatedTranslator(Translator):
                 logger.warning(msg)
 
         translations: List[Optional[str]] = []
+        SO_swap_formulas: List[Optional[Formula]] = []
         translation_names: List[Optional[str]] = []
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
@@ -256,7 +258,7 @@ class TemplatedTranslator(Translator):
                 found_keys += 1
 
                 # Choose a translation
-                chosen_nl = self._sample_interp_mapping_consistent_nl(
+                chosen_nl = self._sample_interp_mapping_consistent_nl(    # HONOKA ここで通るのは誤り．
                     translation_key,
                     interp_mapping,
                     push_mapping,
@@ -295,9 +297,51 @@ class TemplatedTranslator(Translator):
                 else:
                     translation = interp_templated_translation_pushed_wo_info
 
-                translation = translation.replace('__O__', ' ')
+                SO_swap_formula: Optional[Formula] = None
+                if len(formula.unary_PASs) == 1 and len(formula.predicates) == 1 and len(formula.constants) == 1:  # something like {A}{a}
+                    constant = formula.constants[0].rep
+                    predicate = formula.predicates[0].rep
 
+                    constant_transl = interp_mapping[constant]
+                    predicate_transl = interp_mapping[predicate]
+
+                    predicate_transl_verb, predicate_transl_obj = self._parse_word_with_obj(predicate_transl)
+
+                    if predicate_transl_obj is not None:
+                        SO_swap_interp_mapping = copy.deepcopy(inflated_mapping)
+                        SO_swap_interp_mapping[constant] = predicate_transl_obj
+                        SO_swap_interp_mapping[predicate] = self._pair_word_with_obj(predicate_transl_verb, constant_transl)
+
+                        SO_swap_inflated_mapping, _ = self._make_word_inflated_interp_mapping(
+                            SO_swap_interp_mapping,
+                            chosen_nl_pushed,
+                        )
+                        interp_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pushed_wo_info)
+                        SO_swap_translation = interpret_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), SO_swap_inflated_mapping).rep
+
+                        used_predicates = {pred.rep
+                                           for formula in formulas + SO_swap_formulas
+                                           if formula is not None
+                                           for pred in formula.predicates}
+                        used_constants = {constant.rep
+                                          for formula in formulas + SO_swap_formulas
+                                          if formula is not None
+                                          for constant in formula.constants}
+                        unused_predicate = sorted(set(PREDICATES) - set(used_predicates))[0]
+                        unused_constant = sorted(set(CONSTANTS) - set(used_constants))[0]
+
+                        if self._do_translate_to_nl:
+                            SO_swap_formula = interpret_formula(formula, {predicate: unused_predicate, constant: unused_constant})
+                            SO_swap_formula.translation = SO_swap_translation
+                            logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
+
+                translation = translation.replace('__O__', ' ')
                 translations.append(translation)
+
+                if SO_swap_formula is not None:
+                    SO_swap_formula.translation = SO_swap_formula.translation.replace('__O__', ' ')
+                SO_swap_formulas.append(SO_swap_formula)
+
                 translation_names.append(self._translation_name(translation_key, chosen_nl))
                 is_found = True
                 break
@@ -315,7 +359,11 @@ class TemplatedTranslator(Translator):
             for translation in translations
         ]
 
-        return list(zip(translation_names, translations)), count_stats
+        for SO_swap_formula in SO_swap_formulas:
+            if SO_swap_formula is not None and SO_swap_formula.translation is not None:
+                SO_swap_formula.translation = self._correct_indefinite_particles(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
+
+        return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
@@ -515,7 +563,7 @@ class TemplatedTranslator(Translator):
                 if key_formula_pulled.rep == template_key_formula.rep:
                     found_template_key = transl_key
                     found_template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
-                                    for transl_nl in transl_nls]
+                                          for transl_nl in transl_nls]
                     break
 
             if found_template_nls is not None:
@@ -605,7 +653,8 @@ class TemplatedTranslator(Translator):
                     corrected_words.append(word)
             else:
                 corrected_words.append(word)
-        return ' '.join(corrected_words)
+        corrected_sentence = ' '.join(corrected_words)
+        return corrected_sentence
 
     @profile
     def _choose_interp_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
@@ -765,8 +814,13 @@ class TemplatedTranslator(Translator):
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
-        word, _ = self._parse_word_with_obj(word)
-        return self._wb.get_pos(word)
+        word, obj = self._parse_word_with_obj(word)
+        if obj is not None:
+            POSs = self._wb.get_pos(word)
+            assert POS.VERB in POSs
+            return [POS.VERB]
+        else:
+            return self._wb.get_pos(word)
 
     @lru_cache(maxsize=1000000)
     def _parse_word_with_obj(self, word: str) -> Tuple[str, Optional[str]]:

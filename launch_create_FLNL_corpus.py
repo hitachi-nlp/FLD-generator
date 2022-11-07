@@ -125,6 +125,8 @@ def main():
                 # 'distractor_factor',
                 'num_distractors',
                 'sample_distractor_formulas_from_tree',
+                'sample_hard_negative_distractors',
+                'add_subj_obj_swapped_distractor',
                 'split_sizes',
 
                 'translation_configs',
@@ -192,6 +194,7 @@ def main():
                     f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
                     '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
                     '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
+                    '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',
                     f'--num-workers {job_settings["num_workers_per_job"]}',
