@@ -188,15 +188,16 @@ class TemplatedTranslator(Translator):
             for pred in self._sample(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
+        # transitive_verbs are the most difficult, in the sense of distractors, so we sample it more than others.
         zeroary_predicates = self._sample(adjs, self.words_per_type)\
             + self._sample(intransitive_verbs, self.words_per_type)\
-            + self._sample(transitive_verb_PASs, self.words_per_type)\
+            + self._sample(transitive_verb_PASs, self.words_per_type * 7)\
             + self._sample(event_nouns, self.words_per_type)
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
         unary_predicates = self._sample(adjs, self.words_per_type)\
             + self._sample(intransitive_verbs, self.words_per_type)\
-            + self._sample(transitive_verb_PASs, self.words_per_type)\
+            + self._sample(transitive_verb_PASs, self.words_per_type * 7)\
             + self._sample(nouns, self.words_per_type)
         unary_predicates = sorted({word for word in unary_predicates})
 
