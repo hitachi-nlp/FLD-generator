@@ -307,8 +307,8 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                                   for formula in formulas_in_tree
                                   for zeroary_predicate in formula.zeroary_predicates}
         num_unary_predicates = {unary_predicate.rep
-                                 for formula in formulas_in_tree
-                                 for unary_predicate in formula.unary_predicates}
+                                for formula in formulas_in_tree
+                                for unary_predicate in formula.unary_predicates}
 
         used_predicates = {pred.rep
                            for formula in formulas_in_tree
@@ -389,10 +389,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
             # We guess, however, that such transoformation leads to many inconsistent or not senseful formula set, as the above.
             # We may still filter out such a formula by some heuristic method, but this is costly.
             # Thus, we decided not ot use used_predicates_samples + used_predicates pair.
-            if trial % 3 in [0, 1]:
-                # We guess (unused_predicates_samples, used_constants_samples) pair, that produces the formula of the known object plus unknown predicate,
-                # is more distractive than the inverse pair.
-                # Thus, we sample it more often than the inverseed pair,
+            if trial % 2 == 0:
                 tgt_space = [
                     # (used_predicates_samples, used_constants_samples),
                     (used_unused_predicates_samples, used_constants_samples),
