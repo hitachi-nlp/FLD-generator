@@ -303,6 +303,14 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
+        used_PASs = {PAS.rep
+                     for formula in formulas_in_tree
+                     for PAS in formula.PASs}
+        used_paired_pred_args = {(PAS.predicates[0].rep, PAS.constants[0].rep)
+                                 for formula in formulas_in_tree
+                                 for PAS in formula.PASs
+                                 if len(PAS.constants) > 0}
+
         num_zeroary_predicates = {zeroary_predicate.rep
                                   for formula in formulas_in_tree
                                   for zeroary_predicate in formula.zeroary_predicates}
@@ -316,13 +324,6 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         used_constants = {pred.rep
                           for formula in formulas_in_tree
                           for pred in formula.constants}
-        used_PASs = {PAS.rep
-                     for formula in formulas_in_tree
-                     for PAS in formula.PASs}
-        used_paired_pred_args = {(PAS.predicates[0], PAS.constants[0])
-                                 for formula in formulas_in_tree
-                                 for PAS in formula.PASs
-                                 if len(PAS.constants) > 0}
 
         unused_predicates = set(PREDICATES) - set(used_predicates)
         unused_constants = set(CONSTANTS) - set(used_constants)
@@ -384,6 +385,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 break
 
             src_formula = sample_arity_typed_formula()
+            num_PASs = len(src_formula.PASs)
             num_predicate = len(src_formula.predicates)
             num_constant = len(src_formula.constants)
 
@@ -391,6 +393,11 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 return random.sample(elems, min(num, len(elems)))
 
             # mix unsed predicates constants a little
+
+            used_PASs_samples = _sample_at_most(used_PASs, num_PASs)
+            used_paired_predicates_samples = [PAS_sample[0] for PAS_sample in used_PASs_samples]
+            used_paired_constants_samples = [PAS_sample[0] for PAS_sample in used_PASs_samples]
+
             used_predicates_samples = _sample_at_most(used_predicates, num_constant)
             used_constants_samples = _sample_at_most(used_constants, num_constant)
 
@@ -402,6 +409,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
             if trial % 2 == 0:
                 tgt_space = [
+                    (used_paired_predicates_samples, used_paired_constants_samples),
                     (used_predicates_samples, used_constants_samples),
                     (used_unused_predicates_samples, used_constants_samples),
                     (used_unused_predicates_samples, used_unused_constants_samples),
@@ -409,6 +417,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 ]
             else:
                 tgt_space = [
+                    (used_paired_predicates_samples, used_paired_constants_samples),
                     (used_predicates_samples, used_constants_samples),
                     (used_predicates_samples, used_unused_constants_samples),
                     (used_unused_predicates_samples, used_unused_constants_samples),
