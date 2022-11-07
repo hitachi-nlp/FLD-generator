@@ -3725,13 +3725,13 @@
     ],
 
     "is_a_kind_of": [
-      "is a",
+      "is",
       "is a kind of",
       "is an example of"
     ],
 
     "is_not_a_kind_of": [
-      "is not a",
+      "is not",
       "is not a kind of",
       "is not an example of"
     ],
