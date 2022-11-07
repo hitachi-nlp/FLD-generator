@@ -135,7 +135,7 @@ class NLProofSDataset:
             return isinstance(node, _DistractorNode)
 
         def _get_sent_from_node(node: Node) -> str:
-            return node.formula.translation or node.formula.rep
+            return _get_sent_from_formula(node.formula)
 
         def _get_sent_from_formula(formula: Formula) -> str:
             return formula.translation or formula.rep
