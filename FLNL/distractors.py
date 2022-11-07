@@ -225,7 +225,8 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     [c.rep for c in src_formula.constants],
                     tgt_predicates,
                     tgt_constants,
-                    shuffle=True
+                    shuffle=True,
+                    allow_many_to_one=False,
                 ):
                     if do_print:
                         print('\n\n!!!!!!!!!!!!!!!!!!!! loop !!!!!!!!!!!!!!!!!!!!!!!')
@@ -450,7 +451,8 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     [c.rep for c in src_formula.constants],
                     tgt_predicates,
                     tgt_constants,
-                    shuffle=True
+                    shuffle=True,
+                    allow_many_to_one=False,
                 ):
                     distractor_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
