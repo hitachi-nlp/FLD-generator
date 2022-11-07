@@ -282,7 +282,8 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
     We are not that confident about (ii) and (iii) since it makes less distractive.
     """
 
-    def __init__(self, prototype_formulas: Optional[List[Formula]] = None):
+    def __init__(self,
+                 prototype_formulas: Optional[List[Formula]] = None):
         self._prototype_formulas = prototype_formulas
 
     @property
@@ -682,13 +683,15 @@ AVAILABLE_DISTRACTORS = [
 
 
 def build(type_: str,
-          generator: Optional[ProofTreeGenerator] = None):
+          generator: Optional[ProofTreeGenerator] = None,
+          sample_prototype_formulas_from_tree=False):
     if type_ not in AVAILABLE_DISTRACTORS:
         raise ValueError(f'Unknown distractor type {type_}')
 
-    prototype_formulas: List[Formula] = []
-    if type_.find('various_form') >= 0:
+    prototype_formulas: Optional[List[Formula]] = None
+    if type_.find('various_form') >= 0 and not sample_prototype_formulas_from_tree:
         if generator is not None:
+            prototype_formulas = []
             logger.info('collecting prototype formulas from arguments to build the distractor ...')
             for argument in generator.arguments:
                 for formula in argument.all_formulas:

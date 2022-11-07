@@ -41,6 +41,7 @@ def load_dataset(argument_config: List[str],
                  keep_dneg: bool,
                  distractor: str,
                  num_distractors: List[int],
+                 sample_distractor_formulas_from_tree: bool,
                  proof_stances: List[str],
                  world_assump: str,
                  depths: List[int],
@@ -52,7 +53,9 @@ def load_dataset(argument_config: List[str],
         quantification=quantification,
     )
 
-    _distractor = build_distractor(distractor, generator=generator)
+    _distractor = build_distractor(distractor,
+                                   generator=generator,
+                                   sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree)
 
     translator = build_translator(translation_config,
                                   build_wordnet_wordbank('eng'),
@@ -126,6 +129,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor', type=click.Choice(AVAILABLE_DISTRACTORS), default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
+@click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
 @click.option('--num-workers', type=int, default=1)
@@ -146,6 +150,7 @@ def main(output_path,
          keep_dneg,
          distractor,
          num_distractors,
+         sample_distractor_formulas_from_tree,
          proof_stances,
          world_assump,
          num_workers,
@@ -193,6 +198,7 @@ def main(output_path,
                         keep_dneg,
                         distractor,
                         num_distractors,
+                        sample_distractor_formulas_from_tree,
                         proof_stances,
                         world_assump,
                         depths,

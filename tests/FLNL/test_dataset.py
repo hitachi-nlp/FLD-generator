@@ -127,6 +127,7 @@ def test_generate_dataset():
         # 'mixture.negated_hypothesis_tree.unknown_interprands',
 
         generator=generator,
+        sample_prototype_formulas_from_tree=True,
     )
 
     pipeline = ProofTreeGenerationPipeline(generator, distractor=distractor, translator=translator)

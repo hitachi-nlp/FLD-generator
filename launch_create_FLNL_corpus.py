@@ -124,6 +124,7 @@ def main():
                 'distractor',
                 # 'distractor_factor',
                 'num_distractors',
+                'sample_distractor_formulas_from_tree',
                 'split_sizes',
 
                 'translation_configs',
@@ -189,6 +190,7 @@ def main():
                     f'--quantification {job_settings["quantification"]}',
                     f'--distractor {job_settings["distractor"]}',
                     f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
+                    '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',
                     f'--num-workers {job_settings["num_workers_per_job"]}',
