@@ -283,8 +283,10 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
     """
 
     def __init__(self,
-                 prototype_formulas: Optional[List[Formula]] = None):
+                 prototype_formulas: Optional[List[Formula]] = None,
+                 sample_hard_negatives=False):
         self._prototype_formulas = prototype_formulas
+        self._sample_hard_negatives = sample_hard_negatives
 
     @property
     def default_max_retry(self) -> int:
@@ -306,10 +308,10 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         used_PASs = {PAS.rep
                      for formula in formulas_in_tree
                      for PAS in formula.PASs}
-        used_paired_pred_args = {(PAS.predicates[0].rep, PAS.constants[0].rep)
-                                 for formula in formulas_in_tree
-                                 for PAS in formula.PASs
-                                 if len(PAS.constants) > 0}
+        used_pairs = {(PAS.predicates[0].rep, PAS.constants[0].rep)
+                      for formula in formulas_in_tree
+                      for PAS in formula.PASs
+                      if len(PAS.constants) > 0}
 
         num_zeroary_predicates = {zeroary_predicate.rep
                                   for formula in formulas_in_tree
@@ -343,16 +345,16 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         elif num_zeroary_predicates == num_unary_predicates:
             tree_predicate_type = 'unknown'
 
-        max_PASs_per_formula = 3
-        if tree_predicate_type == 'zeroary':
-            estimated_predicates_required = size * max_PASs_per_formula
-            estimated_constants_required = size * max_PASs_per_formula
-        elif tree_predicate_type == 'unary':
-            estimated_predicates_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
-            estimated_constants_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
-        elif tree_predicate_type == 'unknown':
-            estimated_predicates_required = size * max_PASs_per_formula
-            estimated_constants_required = size * max_PASs_per_formula
+        # max_PASs_per_formula = 3
+        # if tree_predicate_type == 'zeroary':
+        #     estimated_predicates_required = size * max_PASs_per_formula
+        #     estimated_constants_required = size * max_PASs_per_formula
+        # elif tree_predicate_type == 'unary':
+        #     estimated_predicates_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
+        #     estimated_constants_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
+        # elif tree_predicate_type == 'unknown':
+        #     estimated_predicates_required = size * max_PASs_per_formula
+        #     estimated_constants_required = size * max_PASs_per_formula
 
         def sample_arity_typed_formula():
             # sample a formula the predicate arity of which is consistent of formulas in tree for speedup.
@@ -385,7 +387,6 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 break
 
             src_formula = sample_arity_typed_formula()
-            num_PASs = len(src_formula.PASs)
             num_predicate = len(src_formula.predicates)
             num_constant = len(src_formula.constants)
 
@@ -394,9 +395,18 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
             # mix unsed predicates constants a little
 
-            used_PASs_samples = _sample_at_most(used_PASs, num_PASs)
-            used_paired_predicates_samples = [PAS_sample[0] for PAS_sample in used_PASs_samples]
-            used_paired_constants_samples = [PAS_sample[0] for PAS_sample in used_PASs_samples]
+            used_pairs_shuffle = shuffle(used_pairs)
+            used_paired_predicates_samples: List[str] = []
+            used_paired_constants_samples: List[str] = []
+            for used_pair in used_pairs_shuffle:
+                if len(used_paired_predicates_samples) >= num_predicate\
+                        and len(used_paired_constants_samples) >= num_constant:
+                    break
+                used_pair_predicate, used_pair_constant = used_pair
+                if used_pair_predicate not in used_paired_predicates_samples:
+                    used_paired_predicates_samples.append(used_pair_predicate)
+                if used_pair_constant not in used_paired_constants_samples:
+                    used_paired_constants_samples.append(used_pair_constant)
 
             used_predicates_samples = _sample_at_most(used_predicates, num_constant)
             used_constants_samples = _sample_at_most(used_constants, num_constant)
@@ -407,22 +417,29 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
             used_unused_predicates_samples = shuffle(used_predicates_samples + unused_predicates_samples)
             used_unused_constants_samples = shuffle(used_constants_samples + unused_constants_samples)
 
+            tgt_space = []
+            if self._sample_hard_negatives:
+                # It is possible that (used_predicates, used_constants) pair produces a new formula,
+                # e.g., "{B}{b} -> {A}{a}" when src_formula is "{A}{a} -> {B}{b}"
+                # We guess, however, that such transoformation leads to many inconsistent or not senseful formula set, as the above.
+                # thus here, we make it as optional.
+                tgt_space.extend([
+                    (used_paired_predicates_samples, used_paired_constants_samples),
+                    (used_predicates_samples, used_constants_samples),
+                ])
             if trial % 2 == 0:
-                tgt_space = [
-                    (used_paired_predicates_samples, used_paired_constants_samples),
-                    (used_predicates_samples, used_constants_samples),
-                    (used_unused_predicates_samples, used_constants_samples),
-                    (used_unused_predicates_samples, used_unused_constants_samples),
-                    (unused_predicates_samples, unused_constants_samples)
-                ]
-            else:
-                tgt_space = [
-                    (used_paired_predicates_samples, used_paired_constants_samples),
-                    (used_predicates_samples, used_constants_samples),
+                tgt_space.extend([
                     (used_predicates_samples, used_unused_constants_samples),
                     (used_unused_predicates_samples, used_unused_constants_samples),
-                    (unused_predicates_samples, unused_constants_samples)
-                ]
+                ])
+            else:
+                tgt_space.extend([
+                    (used_unused_predicates_samples, used_constants_samples),
+                    (used_unused_predicates_samples, used_unused_constants_samples),
+                ])
+            tgt_space.extend([
+                (unused_predicates_samples, unused_constants_samples)
+            ])
 
             is_found = False
             found_formula = None
@@ -701,6 +718,7 @@ AVAILABLE_DISTRACTORS = [
 
 def build(type_: str,
           generator: Optional[ProofTreeGenerator] = None,
+          sample_hard_negatives=False,
           sample_prototype_formulas_from_tree=False):
     if type_ not in AVAILABLE_DISTRACTORS:
         raise ValueError(f'Unknown distractor type {type_}')
@@ -724,7 +742,10 @@ def build(type_: str,
     elif type_ == 'unknown_interprands':
         return SameFormUnkownInterprandsDistractor()
     elif type_ == 'various_form':
-        return VariousFormUnkownInterprandsDistractor(prototype_formulas=prototype_formulas)
+        return VariousFormUnkownInterprandsDistractor(
+            prototype_formulas=prototype_formulas,
+            sample_hard_negatives=sample_hard_negatives,
+        )
     elif type_ == 'negated_hypothesis_tree':
         if generator is None:
             raise ValueError()
@@ -740,7 +761,10 @@ def build(type_: str,
     elif type_ == 'fallback.various_form.negated_hypothesis_tree':
         return FallBackDistractor(
             [
-                VariousFormUnkownInterprandsDistractor(prototype_formulas=prototype_formulas),
+                VariousFormUnkownInterprandsDistractor(
+                    prototype_formulas=prototype_formulas,
+                    sample_hard_negatives=sample_hard_negatives,
+                ),
                 NegatedHypothesisTreeDistractor(generator),
             ]
         )
@@ -763,7 +787,10 @@ def build(type_: str,
     elif type_ == 'mixture.various_form.negated_hypothesis_tree':
         return MixtureDistractor(
             [
-                VariousFormUnkownInterprandsDistractor(prototype_formulas=prototype_formulas),
+                VariousFormUnkownInterprandsDistractor(
+                    prototype_formulas=prototype_formulas,
+                    sample_hard_negatives=sample_hard_negatives,
+                ),
                 NegatedHypothesisTreeDistractor(generator),
             ]
         )
