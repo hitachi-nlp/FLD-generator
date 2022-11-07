@@ -310,10 +310,10 @@ class TemplatedTranslator(Translator):
                 translations.append(None)
                 translation_names.append(None)
 
-            translations = [
-                (self._correct_indefinite_particles(translation) if translation is not None else None)
-                for translation in translations
-            ]
+        translations = [
+            (self._correct_indefinite_particles(translation) if translation is not None else None)
+            for translation in translations
+        ]
 
         return list(zip(translation_names, translations)), count_stats
 
