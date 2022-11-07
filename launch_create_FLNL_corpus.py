@@ -85,7 +85,13 @@ def main():
         # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
         # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-300000',
 
-        '20221107__arg-cmpl__dpth-10__dist_size-10__transl-wide__dataset_size-100000',
+        # '20221107__arg-base__dpth-03__dist-00__transl-nrrw__size-100000',
+        # '20221107__arg-cmpl__dpth-03__dist-00__transl-nrrw__size-100000',
+        # '20221107__arg-cmpl__dpth-03__dist-00__transl-wide__size-100000',
+        '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
+        '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
+
+        # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-300000',
     ]
 
     # engine = SubprocessEngine()
