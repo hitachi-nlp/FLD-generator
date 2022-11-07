@@ -303,29 +303,29 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         if size == 0:
             return []
 
-        formulas_in_tree = [node.formula for node in proof_tree.nodes]
-        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
+        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
+        original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
 
         used_PASs = {PAS.rep
-                     for formula in formulas_in_tree
+                     for formula in leaf_formulas_in_tree
                      for PAS in formula.PASs}
         used_pairs = {(PAS.predicates[0].rep, PAS.constants[0].rep)
-                      for formula in formulas_in_tree
+                      for formula in leaf_formulas_in_tree
                       for PAS in formula.PASs
                       if len(PAS.constants) > 0}
 
         num_zeroary_predicates = {zeroary_predicate.rep
-                                  for formula in formulas_in_tree
+                                  for formula in leaf_formulas_in_tree
                                   for zeroary_predicate in formula.zeroary_predicates}
         num_unary_predicates = {unary_predicate.rep
-                                for formula in formulas_in_tree
+                                for formula in leaf_formulas_in_tree
                                 for unary_predicate in formula.unary_predicates}
 
         used_predicates = {pred.rep
-                           for formula in formulas_in_tree
+                           for formula in leaf_formulas_in_tree
                            for pred in formula.predicates}
         used_constants = {pred.rep
-                          for formula in formulas_in_tree
+                          for formula in leaf_formulas_in_tree
                           for pred in formula.constants}
 
         unused_predicates = set(PREDICATES) - set(used_predicates)
@@ -457,7 +457,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                     distractor_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
                     if not is_formula_new(distractor_formula,
-                                          distractor_formulas + formulas_in_tree):
+                                          distractor_formulas + leaf_formulas_in_tree):
                         continue
 
                     if all(distractor_PAS.rep in used_PASs
@@ -467,7 +467,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                         # we want to prevent such possiblity.
                         continue
 
-                    if not is_ok_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
+                    if not is_ok_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):  # SLOW, called many times
                         continue
 
                     if not is_consistent_formula_set([distractor_formula] + distractor_formulas):
@@ -475,7 +475,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
 
                     # The tree will become inconsistent by ADDING distractor formulas.
                     if original_tree_is_consistent and\
-                            not is_consistent_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
+                            not is_consistent_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):
                         continue
 
                     found_formula = distractor_formula
