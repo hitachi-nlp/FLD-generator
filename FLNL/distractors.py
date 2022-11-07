@@ -319,6 +319,11 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         used_PASs = {PAS.rep
                      for formula in formulas_in_tree
                      for PAS in formula.PASs}
+        used_paired_pred_args = {(PAS.predicates[0], PAS.constants[0])
+                                 for formula in formulas_in_tree
+                                 for PAS in formula.PASs
+                                 if len(PAS.constants) > 0}
+
         unused_predicates = set(PREDICATES) - set(used_predicates)
         unused_constants = set(CONSTANTS) - set(used_constants)
 
@@ -336,6 +341,17 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
             tree_predicate_type = 'unary'
         elif num_zeroary_predicates == num_unary_predicates:
             tree_predicate_type = 'unknown'
+
+        max_PASs_per_formula = 3
+        if tree_predicate_type == 'zeroary':
+            estimated_predicates_required = size * max_PASs_per_formula
+            estimated_constants_required = size * max_PASs_per_formula
+        elif tree_predicate_type == 'unary':
+            estimated_predicates_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
+            estimated_constants_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
+        elif tree_predicate_type == 'unknown':
+            estimated_predicates_required = size * max_PASs_per_formula
+            estimated_constants_required = size * max_PASs_per_formula
 
         def sample_arity_typed_formula():
             # sample a formula the predicate arity of which is consistent of formulas in tree for speedup.
@@ -375,30 +391,25 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
                 return random.sample(elems, min(num, len(elems)))
 
             # mix unsed predicates constants a little
-            used_predicates_samples = _sample_at_most(used_predicates, num_predicate)
+            used_predicates_samples = _sample_at_most(used_predicates, num_constant)
             used_constants_samples = _sample_at_most(used_constants, num_constant)
 
             unused_predicates_samples = _sample_at_most(unused_predicates, num_predicate)
-            unused_constants_samples = _sample_at_most(unused_constants, num_constant)
+            unused_constants_samples = _sample_at_most(unused_constants, num_predicate)
 
             used_unused_predicates_samples = shuffle(used_predicates_samples + unused_predicates_samples)
             used_unused_constants_samples = shuffle(used_constants_samples + unused_constants_samples)
 
-            # It is possible that (used_predicates_samples, used_constants_samples) pair produces a new formula,
-            # e.g., "{B}{b} -> {A}{a}" when src_formula is "{A}{a} -> {B}{b}"
-            # We guess, however, that such transoformation leads to many inconsistent or not senseful formula set, as the above.
-            # We may still filter out such a formula by some heuristic method, but this is costly.
-            # Thus, we decided not ot use used_predicates_samples + used_predicates pair.
             if trial % 2 == 0:
                 tgt_space = [
-                    # (used_predicates_samples, used_constants_samples),
+                    (used_predicates_samples, used_constants_samples),
                     (used_unused_predicates_samples, used_constants_samples),
                     (used_unused_predicates_samples, used_unused_constants_samples),
                     (unused_predicates_samples, unused_constants_samples)
                 ]
             else:
                 tgt_space = [
-                    # (used_predicates_samples, used_constants_samples),
+                    (used_predicates_samples, used_constants_samples),
                     (used_predicates_samples, used_unused_constants_samples),
                     (used_unused_predicates_samples, used_unused_constants_samples),
                     (unused_predicates_samples, unused_constants_samples)
