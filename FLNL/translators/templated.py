@@ -676,14 +676,11 @@ class TemplatedTranslator(Translator):
         else:
             obj_nouns = []
 
-        event_noun_size = int(len(zeroary_predicates) * 1.5)
-        event_nouns = [noun for noun in obj_nouns if noun in self._zeroary_predicate_set][: int(event_noun_size * self.reused_object_nouns_max_factor)]
-        if len(event_nouns) > 0:
-            logger.info('the following object nouns may be reused as as event nouns: %s', str(event_nouns))
-        event_nouns += self._sample(self._zeroary_predicates, max(event_noun_size - len(event_nouns), 0))
+        event_noun_size = int(len(zeroary_predicates) * 2.0)
+        event_nouns = self._sample(self._zeroary_predicates, max(event_noun_size, 0))
         event_nouns = list(set(event_nouns))
 
-        entity_noun_size = int(len(constants) * 1.5)
+        entity_noun_size = int(len(constants) * 1.0)   # since all the constants have pos=NOUN, x 1.0 is enough
         entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
         if len(entity_nouns) > 0:
             logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
