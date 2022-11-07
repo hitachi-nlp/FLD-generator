@@ -223,7 +223,7 @@ def main(output_path,
                         gathered_stats[name] += count
                         num_jobs[name] += 1
 
-            for name, count in stats.items():
+            for name, count in gathered_stats.items():
                 if not name.startswith('cum.'):
                     gathered_stats[name] = gathered_stats[name] / num_jobs[name]
 

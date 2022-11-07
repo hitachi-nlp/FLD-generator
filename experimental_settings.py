@@ -2601,6 +2601,64 @@ _DATASET_SETTINGS = {
     },
 
 
+    '20221107__arg-cmpl__dpth-10__dist_size-10__transl-wide__dataset_size-100000': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'complication': 0.3,
+        'quantification': 0.2,
+
+
+        'depths': _to_range(1, 10),
+        'branch_extension_steps': _to_range(1, 5),
+
+
+        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'num_distractors': _to_range(0, 10),
+        'reused_object_nouns_max_factor': 1.0,
+        'sample_distractor_formulas_from_tree': True,
+        'sample_hard_negatives': True,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'translation_configs': [
+            './configs/FLNL/translations/thing.json',
+            './configs/FLNL/translations/thing.sentence_negation.json',
+        ],
+        'translation_volume_to_weight': 'sqrt',
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 100,
+
+            # 'train': 300000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
 }
 
 
