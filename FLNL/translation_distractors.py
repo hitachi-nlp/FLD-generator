@@ -80,7 +80,7 @@ class WordSwapDistractor(TranslationDistractor):
 
     @profile
     def _generate(self, translations: List[str], size: int) -> List[str]:
-        if len(translations) == 0:
+        if len(translations) == 0 or size == 0:
             return []
         
         distractor_translations = []

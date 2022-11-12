@@ -38,7 +38,9 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.enhance.fix_translation')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.dist-var')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221101.various_datasets')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221107.more_distractive')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221107.more_distractive')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221112.various_negatives')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -88,12 +90,13 @@ def main():
         # '20221107__arg-base__dpth-03__dist-00__transl-nrrw__size-100000',
         # '20221107__arg-cmpl__dpth-03__dist-00__transl-nrrw__size-100000',
         # '20221107__arg-cmpl__dpth-03__dist-00__transl-wide__size-100000',
-        '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
-        '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
+        # '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
+        # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
 
-        '20221112__arg-cmpl__dpth-3__dist-10__cllps--False__transl-wide__unk-0.33__size-100000',
-        '20221112__arg-cmpl__dpth-3__dist-10__cllps--True__transl-wide__unk-0.33__size-100000',
-        '20221112__arg-cmpl__dpth-3__dist-10__cllps--False__transl-wide__unk-0.60__size-100000',
+        '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
+        '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
+        '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000',
+        '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
     ]
 
     # engine = SubprocessEngine()
@@ -217,8 +220,8 @@ def main():
                     '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
                     '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
 
-                    f'--translation_distractor {job_settings["translation_distractor"]}',
-                    f'--num-translation_distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
+                    f'--translation-distractor {job_settings["translation_distractor"]}',
+                    f'--num-translation-distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
 
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',

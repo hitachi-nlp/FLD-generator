@@ -42,11 +42,11 @@ def load_dataset(argument_config: List[str],
                  keep_dneg: bool,
                  distractor: str,
                  num_distractors: List[int],
-                 translation_distractor: str,
-                 num_translation_distractors: List[int],
-                 sample_formula_distractors_from_tree: bool,
+                 sample_distractor_formulas_from_tree: bool,
                  sample_hard_negative_distractors: bool,
                  add_subj_obj_swapped_distractor: bool,
+                 translation_distractor: str,
+                 num_translation_distractors: List[int],
                  proof_stances: List[str],
                  world_assump: str,
                  unknown_ratio: float,
@@ -64,7 +64,7 @@ def load_dataset(argument_config: List[str],
 
     _distractor = build_distractor(distractor,
                                    generator=generator,
-                                   sample_prototype_formulas_from_tree=sample_formula_distractors_from_tree,
+                                   sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                    sample_hard_negatives=sample_hard_negative_distractors)
 
     _translation_distractor = build_translation_distractor(
@@ -108,15 +108,15 @@ def generate_instances(size: int, *args):
 
     data = []
     _final_stats = None
-    for nlproof_json, proof_tree, distractors, stats in tqdm(dataset.generate(size)):  # HONOKA: we can't pass here
-        data.append((nlproof_json, proof_tree, distractors))
+    for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):  # HONOKA: we can't pass here
+        data.append((nlproof_json, proof_tree, distractors, translation_distractors))
         _final_stats = stats
-        log(logger, nlproof_json, proof_tree, distractors)
+        log(logger, nlproof_json, proof_tree, distractors, translation_distractors)
     logger.debug('[pass or not checking for finding the cause of hangups] 02')
     return data, _final_stats
 
 
-def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str]):
+def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str], translation_distractors: List[str]):
     logger.info('\n')
     logger.info('--------------- tree --------------')
 
@@ -126,6 +126,11 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
     logger.info('\n')
     logger.info('--------------- distractors --------------')
     logger.info('\n' + pformat(distractors))
+
+
+    logger.info('\n')
+    logger.info('--------------- translation distractors --------------')
+    logger.info('\n' + pformat(translation_distractors))
 
     logger.info('\n')
     logger.info('--------------- NLProofs json --------------')
@@ -181,7 +186,7 @@ def main(output_path,
          keep_dneg,
          distractor,
          num_distractors,
-         sample_formula_distractors_from_tree,
+         sample_distractor_formulas_from_tree,
          sample_hard_negative_distractors,
          add_subj_obj_swapped_distractor,
          translation_distractor,
@@ -236,7 +241,7 @@ def main(output_path,
                         keep_dneg,
                         distractor,
                         num_distractors,
-                        sample_formula_distractors_from_tree,
+                        sample_distractor_formulas_from_tree,
                         sample_hard_negative_distractors,
                         add_subj_obj_swapped_distractor,
                         translation_distractor,
@@ -261,7 +266,7 @@ def main(output_path,
                 if is_done:
                     break
 
-                for nlproof_json, proof_tree, distractors in instances:
+                for nlproof_json, proof_tree, _, _ in instances:
                     if cnt >= size:
                         is_done = True
                         break
@@ -286,7 +291,6 @@ def main(output_path,
     with open(str(output_path) + '.stats.json', 'w') as f_out:
         json.dump(dict(gathered_stats), f_out,
                   ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
-
 
 
 if __name__ == '__main__':
