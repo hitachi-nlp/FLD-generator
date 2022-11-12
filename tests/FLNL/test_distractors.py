@@ -5,8 +5,8 @@ import logging
 
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.formula import Formula
-from FLNL.distractors import (
-    FormalLogicDistractor,
+from FLNL.formula_distractors import (
+    FormulaDistractor,
     UnkownPASDistractor,
     SameFormUnkownInterprandsDistractor,
     VariousFormUnkownInterprandsDistractor,
@@ -15,7 +15,7 @@ from FLNL.distractors import (
 from logger_setup import setup as setup_logger
 
 
-def _generate_and_print(distractor: FormalLogicDistractor, formulas: List[Formula], num_distractors: int) -> List[Formula]:
+def _generate_and_print(distractor: FormulaDistractor, formulas: List[Formula], num_distractors: int) -> List[Formula]:
     print('\nformulas:')
     for formula in formulas:
         print('    ', formula)

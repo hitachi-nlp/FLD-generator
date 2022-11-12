@@ -383,7 +383,7 @@ class NLProofSDataset:
                         subtree_root_nodes.append(node)
 
                 # We do not consider leaf nodes.
-                # Since ther are indistinguishable from distractors, the prover can not specify them.
+                # Since ther are indistinguishable from formula_distractors, the prover can not specify them.
                 subtree_root_nodes_wo_leaf = [node for node in subtree_root_nodes if not is_leaf(node)]
 
                 if len(subtree_root_nodes_wo_leaf) == 0:

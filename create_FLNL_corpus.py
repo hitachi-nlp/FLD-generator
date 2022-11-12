@@ -14,14 +14,14 @@ import dill
 
 from FLNL.translators import build as build_translator
 from FLNL.word_banks import build_wordnet_wordbank
-from FLNL.distractors import SameFormUnkownInterprandsDistractor, FormalLogicDistractor
+from FLNL.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
 from FLNL.argument import Argument
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.proof_tree_generators import build as build_generator
 from FLNL.datasets import NLProofSDataset
 from FLNL.proof import ProofTree
 from FLNL.utils import nested_merge
-from FLNL.distractors import AVAILABLE_DISTRACTORS, build as build_distractor
+from FLNL.formula_distractors import AVAILABLE_DISTRACTORS, build as build_distractor
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -226,7 +226,7 @@ def main(output_path,
                         add_subj_obj_swapped_distractor,
                         proof_stances,
                         world_assump,
-                        unknown_ratio=unknown_ratio,
+                        unknown_ratio,
                         use_collappsed_translation_nodes_for_unknown_tree,
                         depths,
                         branch_extension_steps,

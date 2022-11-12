@@ -31,11 +31,11 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
-class DistractorGenerationFailure(FormalLogicExceptionBase):
+class FormulaDistractorGenerationFailure(FormalLogicExceptionBase):
     pass
 
 
-class FormalLogicDistractor(ABC):
+class FormulaDistractor(ABC):
 
     def generate(self,
                  proof_tree: ProofTree,
@@ -49,14 +49,14 @@ class FormalLogicDistractor(ABC):
                 self._generate,
                 func_args=[proof_tree, size],
                 func_kwargs={},
-                retry_exception_class=DistractorGenerationFailure,
+                retry_exception_class=FormulaDistractorGenerationFailure,
                 max_retry=max_retry,
                 timeout=timeout,
                 logger=logger,
                 log_title='_generate()',
             )
         except RetryAndTimeoutFailure as e:
-            raise DistractorGenerationFailure(str(e))
+            raise FormulaDistractorGenerationFailure(str(e))
 
     @property
     @abstractmethod
@@ -73,7 +73,7 @@ class FormalLogicDistractor(ABC):
         pass
 
 
-class UnkownPASDistractor(FormalLogicDistractor):
+class UnkownPASDistractor(FormulaDistractor):
 
     @profile
     def _generate(self, proof_tree: ProofTree, size: int) -> List[Formula]:
@@ -137,7 +137,7 @@ class UnkownPASDistractor(FormalLogicDistractor):
         return 10
 
 
-class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
+class SameFormUnkownInterprandsDistractor(FormulaDistractor):
     """ Generate the same form formula with unknown predicates or constants injected.
 
     This class is superior to UnkownPASDistractor, which does not consider the similarity of the forms of formulas.
@@ -268,7 +268,7 @@ class SameFormUnkownInterprandsDistractor(FormalLogicDistractor):
         return distractor_formulas
 
 
-class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
+class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
     """
     Unlike SameFormUnkownInterprandsDistractor:
     (i) we sample the formula prototypes not from the tree but from all possible prototypes specified by the user.
@@ -491,7 +491,7 @@ class VariousFormUnkownInterprandsDistractor(FormalLogicDistractor):
         return distractor_formulas
 
 
-class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
+class NegatedHypothesisTreeDistractor(FormulaDistractor):
     """ Generate sentences which are the partial facts to derive negative of hypothesis.
 
     At least one leaf formula is excluded to make the tree incomplete.
@@ -562,7 +562,7 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                     max_retry=self.generator_max_retry,
                 )
             except ProofTreeGenerationFailure as e:
-                raise DistractorGenerationFailure(str(e))
+                raise FormulaDistractorGenerationFailure(str(e))
 
             neg_leaf_formulas = [node.formula for node in neg_tree.leaf_nodes]
             if len(neg_leaf_formulas) - 1 == 0:
@@ -621,9 +621,9 @@ class NegatedHypothesisTreeDistractor(FormalLogicDistractor):
                 continue
 
 
-class MixtureDistractor(FormalLogicDistractor):
+class MixtureDistractor(FormulaDistractor):
 
-    def __init__(self, distractors: List[FormalLogicDistractor]):
+    def __init__(self, distractors: List[FormulaDistractor]):
         super().__init__()
         self._distractors = distractors
 
@@ -647,7 +647,7 @@ class MixtureDistractor(FormalLogicDistractor):
         for distractor in self._distractors:
             try:
                 distractor_formulas += distractor.generate(proof_tree, size)
-            except DistractorGenerationFailure as e:
+            except FormulaDistractorGenerationFailure as e:
                 logger.warning('Generating distractors by %s failed with the following message:', distractor.__class__)
                 logger.warning('\n%s', str(e))
 
@@ -662,9 +662,9 @@ class MixtureDistractor(FormalLogicDistractor):
             return random.sample(distractor_formulas, size)
 
 
-class FallBackDistractor(FormalLogicDistractor):
+class FallBackDistractor(FormulaDistractor):
 
-    def __init__(self, distractors: List[FormalLogicDistractor]):
+    def __init__(self, distractors: List[FormulaDistractor]):
         super().__init__()
         self._distractors = distractors
 
@@ -691,7 +691,7 @@ class FallBackDistractor(FormalLogicDistractor):
             try:
                 _distractors = distractor.generate(proof_tree, size)
                 distractor_formulas.extend(_distractors)
-            except DistractorGenerationFailure as e:
+            except FormulaDistractorGenerationFailure as e:
                 logger.warning('Generating distractors by %s failed with the following message:', distractor.__class__)
                 logger.warning('\n%s', str(e))
 

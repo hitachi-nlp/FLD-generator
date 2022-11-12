@@ -8,7 +8,7 @@ from pprint import pformat
 from FLNL.formula import Formula
 from FLNL.argument import Argument
 from FLNL.proof_tree_generators import build as build_generator, ProofTreeGenerator
-from FLNL.distractors import build as build_distractor, FormalLogicDistractor
+from FLNL.formula_distractors import build as build_distractor, FormulaDistractor
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.datasets import NLProofSDataset
 from FLNL.word_banks import build_wordnet_wordbank

@@ -5,12 +5,12 @@ from collections import defaultdict
 from FLNL.formula import Formula, NEGATION, eliminate_double_negation
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.proof_tree_generators import ProofTreeGenerator
-from FLNL.distractors import FormalLogicDistractor
+from FLNL.formula_distractors import FormulaDistractor
 from FLNL.translators.base import Translator
 from FLNL.utils import flatten_dict
 from FLNL.exception import FormalLogicExceptionBase
 from FLNL.proof_tree_generators import ProofTreeGenerationFailure
-from FLNL.distractors import DistractorGenerationFailure
+from FLNL.formula_distractors import FormulaDistractorGenerationFailure
 from FLNL.translators import TranslationFailure
 import kern_profiler
 
@@ -25,7 +25,7 @@ class ProofTreeGenerationPipeline:
 
     def __init__(self,
                  generator: ProofTreeGenerator,
-                 distractor: Optional[FormalLogicDistractor] = None,
+                 distractor: Optional[FormulaDistractor] = None,
                  translator: Optional[Translator] = None,
                  add_subj_obj_swapped_distractor=False,
                  log_stats=False):
@@ -69,7 +69,7 @@ class ProofTreeGenerationPipeline:
             if self.distractor is not None:
                 try:
                     distractor_formulas = self.distractor.generate(proof_tree, num_distractors)
-                except DistractorGenerationFailure as e:
+                except FormulaDistractorGenerationFailure as e:
                     raise ProofTreeGenerationPipelineFailure(str(e))
             else:
                 distractor_formulas = []
