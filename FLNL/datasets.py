@@ -294,9 +294,13 @@ class NLProofSDataset:
                 subtree_root_nodes_wo_leaf = [node for node in subtree_root_nodes if not is_leaf(node)]
 
                 if len(subtree_root_nodes_wo_leaf) == 0:
+                    # XXX: we fixed this to avoid making sent1 too frequent.
                     # rare case but possible when all the subtrees are leaf
                     # in that case, we use sent1 as a proxy.
-                    node_ids = ['sent1']
+                    # node_ids = ['sent1']
+
+                    sent_ids = [id_ for id_ in id2node.keys() if id_.startswith('sent')]
+                    node_id = random.sample(sent_ids, 1)
                 else:
                     node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]
                 proof_elems.append(' & '.join(node_ids) + ' -> hypothesis')
