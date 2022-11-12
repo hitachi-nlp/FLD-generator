@@ -143,7 +143,7 @@ class NLProofSDataset:
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
         for i_sample in range(size):
-            depth = self.depths[i_sample % len(self.depths)]
+            depth = random.sample(self.depths, 1)[0]
             # generate a proof tree
             _num_distractors = random.sample(self.num_distractors, 1)[0]
             _branch_extension_steps = random.sample(self.branch_extension_steps, 1)[0]
@@ -153,11 +153,8 @@ class NLProofSDataset:
                 _num_distractors,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
-            # print(f'============== i_sample: {i_sample} ================')
-            # print(proof_tree.root_node.formula)
-            # pprint(distractor_formulas)
 
-            proof_stance = self.proof_stances[int(i_sample / len(self.depths)) % len(self.proof_stances)]
+            proof_stance = random.sample(self.proof_stances, 1)[0]
             if proof_stance == ProofStance.PROOF:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
                 missing_leaf_nodes = []
