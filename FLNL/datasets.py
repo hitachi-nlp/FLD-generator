@@ -12,6 +12,7 @@ from FLNL.formula import Formula
 from FLNL.proof import ProofTree, ProofNode
 from FLNL.utils import flatten_dict
 from FLNL.translators.base import Translator
+from FLNL.word_banks.base import WordBank
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -58,6 +59,10 @@ def _make_instance_label(proof_stance: ProofStance, world_assump: WorldAssumptio
             raise ValueError()
     else:
         raise ValueError()
+
+
+def _collapse_transl(self, transl: str, wb: WordBank) -> str:
+    pass
 
 
 class _DistractorNode:
@@ -186,7 +191,10 @@ class NLProofSDataset:
                     continue
                 else:
                     raise Exception()
-                nodes_in_proof.extend(node.children)
+
+                for child_node in node.children:
+                    if child_node not in nodes_in_proof:
+                        nodes_in_proof.append(child_node)
                 nodes_in_proof.append(node)
 
             all_nodes: List[Node] = list(nodes_in_proof)\
@@ -300,7 +308,7 @@ class NLProofSDataset:
                     # node_ids = ['sent1']
 
                     sent_ids = [id_ for id_ in id2node.keys() if id_.startswith('sent')]
-                    node_id = random.sample(sent_ids, 1)
+                    node_ids = random.sample(sent_ids, 1)
                 else:
                     node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]
                 proof_elems.append(' & '.join(node_ids) + ' -> hypothesis')
