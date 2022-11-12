@@ -103,7 +103,7 @@ class TemplatedTranslator(Translator):
         self._zeroary_predicate_set = set(self._zeroary_predicates)
         self._unary_predicate_set = set(self._unary_predicates)
         self._constant_set = set(self._constants)
-        self._wb = word_bank
+        self._word_bank = word_bank
 
         if volume_to_weight == 'linear':
             self._volume_to_weight_func = lambda volume: volume
@@ -803,7 +803,7 @@ class TemplatedTranslator(Translator):
             raise ValueError()
 
         _word, obj = self._parse_word_with_obj(word)
-        _word_inflated = self._wb.change_word_form(_word, form, force=force)
+        _word_inflated = self._word_bank.change_word_form(_word, form, force=force)
         if _word_inflated is None:
             return None
         else:
@@ -813,11 +813,11 @@ class TemplatedTranslator(Translator):
     def _get_pos(self, word: str) -> List[POS]:
         word, obj = self._parse_word_with_obj(word)
         if obj is not None:
-            POSs = self._wb.get_pos(word)
+            POSs = self._word_bank.get_pos(word)
             assert POS.VERB in POSs
             return [POS.VERB]
         else:
-            return self._wb.get_pos(word)
+            return self._word_bank.get_pos(word)
 
     @lru_cache(maxsize=1000000)
     def _parse_word_with_obj(self, word: str) -> Tuple[str, Optional[str]]:

@@ -61,8 +61,8 @@ def _make_instance_label(proof_stance: ProofStance, world_assump: WorldAssumptio
         raise ValueError()
 
 
-def _collapse_transl(self, transl: str, wb: WordBank) -> str:
-    pass
+def _collapse_transl(transl: str, wb: WordBank) -> str:
+    raise NotImplementedError()
 
 
 class _DistractorNode:
@@ -99,6 +99,8 @@ class NLProofSDataset:
                  depths: List[int],
                  branch_extension_steps: List[int],
                  num_distractors: Optional[List[int]] = None,
+                 use_collappsed_nodes_for_unknown_tree=False,
+                 word_bank: Optional[WordBank] = None,
                  log_stats=False,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
@@ -111,8 +113,10 @@ class NLProofSDataset:
         self.depths = depths
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
+        self.use_collappsed_nodes_for_unknown_tree = use_collappsed_nodes_for_unknown_tree
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
+        self._word_bank = word_bank
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
     @profile
@@ -162,40 +166,62 @@ class NLProofSDataset:
             proof_stance = random.sample(self.proof_stances, 1)[0]
             if proof_stance == ProofStance.PROOF:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
-                missing_leaf_nodes = []
+                dead_leaf_nodes = []
             elif proof_stance == ProofStance.DISPROOF:
                 hypothesis = _get_sent_from_formula(root_negation_formula)
-                missing_leaf_nodes = []
+                dead_leaf_nodes = []
             elif proof_stance == ProofStance.UNKNOWN:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
-                missing_leaf_nodes = random.sample(proof_tree.leaf_nodes,
-                                                   max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
+                dead_leaf_nodes = random.sample(proof_tree.leaf_nodes,
+                                                max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
             else:
                 raise ValueError()
 
+            missing_leaf_nodes = []
+            collapsed_leaf_nodes = []
+            for dead_node in dead_leaf_nodes:
+                if self.use_collappsed_nodes_for_unknown_tree:
+                    if random.random() <= 0.5:
+                        missing_leaf_nodes.append(dead_node)
+                    else:
+                        collapsed_leaf_nodes.append(dead_node)
+                else:
+                    missing_leaf_nodes.append(dead_node)
+
+            for collapased_node in collapsed_leaf_nodes:
+                if collapased_node.formula.translation is not None:
+                    collapased_node.formula.translation = _collapse_transl(collapased_node.formula.translation, self._word_bank)
+                if collapased_node.formula.translation_name is not None:
+                    collapased_node.formula.translation_name = collapased_node.formula.translation_name + '.collapsed'
+
             # indentify nodes in proof
             nodes_in_proof: List[Node] = []
-            missing_nodes = copy.copy(missing_leaf_nodes)
+            dead_nodes = copy.copy(dead_leaf_nodes)
+            missinge_nodes = copy.copy(missing_leaf_nodes)
+            collapased_nodes = copy.copy(collapsed_leaf_nodes)
             for node in proof_tree.depth_first_traverse():
-                if is_root(node):
-                    if any((child in missing_nodes for child in node.children)):
-                        missing_nodes.append(node)
-                        continue
-                elif is_leaf(node):
-                    continue
-                elif is_int(node):
-                    if any((child in missing_nodes for child in node.children)):
-                        missing_nodes.append(node)
-                        continue
-                elif is_distractor(node):
-                    continue
-                else:
-                    raise Exception()
+                if not is_root(node) or is_int(node):
+                    # add children
+                    for child_node in node.children:
+                        if child_node in dead_nodes:
+                            if child_node in missinge_nodes:
+                                continue
+                            elif child_node in collapased_nodes:
+                                if child_node not in nodes_in_proof:
+                                    nodes_in_proof.append(child_node)
+                            else:
+                                raise Exception()
+                        else:
+                            if child_node not in nodes_in_proof:
+                                nodes_in_proof.append(child_node)
 
-                for child_node in node.children:
-                    if child_node not in nodes_in_proof:
-                        nodes_in_proof.append(child_node)
-                nodes_in_proof.append(node)
+                    # add the parent
+                    if any(child in dead_nodes for child in node.children):
+                        # if a child is dead, then the parent will be also dead.
+                        dead_nodes.append(node)
+                        missinge_nodes.append(node)
+                    else:
+                        nodes_in_proof.append(node)
 
             all_nodes: List[Node] = list(nodes_in_proof)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
