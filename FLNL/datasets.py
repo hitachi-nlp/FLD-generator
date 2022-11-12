@@ -157,37 +157,39 @@ class NLProofSDataset:
             proof_stance = random.sample(self.proof_stances, 1)[0]
             if proof_stance == ProofStance.PROOF:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
-                missing_leaf_nodes = []
+                dead_leaf_nodes = []
             elif proof_stance == ProofStance.DISPROOF:
                 hypothesis = _get_sent_from_formula(root_negation_formula)
-                missing_leaf_nodes = []
+                dead_leaf_nodes = []
             elif proof_stance == ProofStance.UNKNOWN:
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
-                missing_leaf_nodes = random.sample(proof_tree.leaf_nodes,
-                                                   max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
+                dead_leaf_nodes = random.sample(proof_tree.leaf_nodes,
+                                           max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
             else:
                 raise ValueError()
 
+            missing_leaf_nodes = []
+            collapsed_leaf_nodes = []
+            for dead_node in dead_leaf_nodes:
+                if random.random() <= 0.5:
+                    missing_leaf_nodes.append(dead_node)
+                else:
+                    collapsed_leaf_nodes.append(dead_node)
+
             # indentify nodes in proof
             nodes_in_proof: List[Node] = []
-            missing_nodes = copy.copy(missing_leaf_nodes)
+            dead_nodes = copy.copy(dead_leaf_nodes)
+            missinge_nodes = copy.copy(missing_leaf_nodes)
+            collapased_nodes = copy.copy(collapsed_leaf_nodes)
             for node in proof_tree.depth_first_traverse():
-                if is_root(node):
-                    if any((child in missing_nodes for child in node.children)):
-                        missing_nodes.append(node)
+                if is_root(node) or is_int(node):
+                    if any((child in dead_nodes for child in node.children)):
+                        dead_nodes.append(node)
                         continue
-                elif is_leaf(node):
-                    continue
-                elif is_int(node):
-                    if any((child in missing_nodes for child in node.children)):
-                        missing_nodes.append(node)
-                        continue
-                elif is_distractor(node):
-                    continue
-                else:
-                    raise Exception()
-                nodes_in_proof.extend(node.children)
-                nodes_in_proof.append(node)
+                    for child_node in node.children:
+                        if child_node not in missinge_nodes:
+                    nodes_in_proof.extend(node.children)
+                    nodes_in_proof.append(node)
 
             all_nodes: List[Node] = list(nodes_in_proof)\
                 + [_DistractorNode(distractor) for distractor in distractor_formulas]
