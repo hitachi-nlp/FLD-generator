@@ -18,12 +18,13 @@ class WordNetWordBank(WordBank):
 
     language: str = '__THIS_IS_BASE_CLASS__'
 
+    # nltk/corpus/reader/wordnet.py
     _pos_wb_to_wn = {
-        POS.VERB: wn.VERB,
-        POS.NOUN: wn.NOUN,
-        POS.ADJ: wn.ADJ,
+        POS.VERB: wn.VERB,     # verbs (all tenses and modes)
+        POS.NOUN: wn.NOUN,     # nouns (common and proper)
+        POS.ADJ: wn.ADJ,       # adjectives
         POS.ADJ_SAT: wn.ADJ_SAT,
-        POS.ADV: wn.ADV,
+        POS.ADV: wn.ADV,       # adverbs
     }
 
     @profile

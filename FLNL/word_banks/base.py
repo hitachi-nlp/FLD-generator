@@ -4,12 +4,12 @@ from abc import ABC, abstractmethod
 
 
 class POS(Enum):
-    VERB = 'VERB'
-    NOUN = 'NOUN'
-    ADJ = 'ADJ'
+    # from nltk/corpus/reader/wordnet.py
+    VERB = 'VERB'     # verbs (all tenses and modes)
+    NOUN = 'NOUN'     # nouns (common and proper)
+    ADJ = 'ADJ'       # adjectives
     ADJ_SAT = 'ADJ_SAT'
-    ADV = 'ADV'
-    UNK = 'UNK'
+    ADV = 'ADV'       # adverbs
 
 
 class ATTR(Enum):
