@@ -91,7 +91,9 @@ def main():
         '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
         '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
 
-        # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-300000',
+        '20221112__arg-cmpl__dpth-3__dist-10__cllps--False__transl-wide__unk-0.33__size-100000',
+        '20221112__arg-cmpl__dpth-3__dist-10__cllps--True__transl-wide__unk-0.33__size-100000',
+        '20221112__arg-cmpl__dpth-3__dist-10__cllps--False__transl-wide__unk-0.60__size-100000',
     ]
 
     # engine = SubprocessEngine()
@@ -131,13 +133,17 @@ def main():
 
                 'depths',
                 'branch_extension_steps',
+
                 'distractor',
                 # 'distractor_factor',
                 'num_distractors',
                 'sample_distractor_formulas_from_tree',
                 'sample_hard_negative_distractors',
                 'add_subj_obj_swapped_distractor',
-                'use_collappsed_translation_nodes_for_unknown_tree'
+                'use_collapsed_translation_nodes_for_unknown_tree'
+
+                'translation_distractor',
+                'num_translation_distractors',
 
                 'split_sizes',
 
@@ -193,24 +199,31 @@ def main():
                     str(int(size_per_job)),
 
                     _make_multiple_value_option('--ac', job_settings['argument_configs']),
+
                     _make_multiple_value_option('--tc', job_settings['translation_configs']),
                     '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
                     maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
                     f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                     maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
+
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
                     f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',
+
                     f'--distractor {job_settings["distractor"]}',
                     f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
                     '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
                     '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
                     '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
+
+                    f'--translation_distractor {job_settings["translation_distractor"]}',
+                    f'--num-translation_distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
+
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',
                     maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
-                    '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collappsed_translation_nodes_for_unknown_tree', False) else '',
+                    '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
                     f'--num-workers {job_settings["num_workers_per_job"]}',
                     f'--seed {job_settings["seed"]}',
 

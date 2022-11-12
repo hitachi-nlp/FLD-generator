@@ -8,7 +8,8 @@ from pprint import pformat
 from FLNL.formula import Formula
 from FLNL.argument import Argument
 from FLNL.proof_tree_generators import build as build_generator, ProofTreeGenerator
-from FLNL.formula_distractors import build as build_distractor, FormulaDistractor
+from FLNL.formula_distractors import build as build_distractor
+from FLNL.translation_distractors import build as build_translation_distractor
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.datasets import NLProofSDataset
 from FLNL.word_banks import build_wordnet_wordbank
@@ -30,7 +31,7 @@ def generate_dataset(dataset: NLProofSDataset,
                      num_dataset: int = 1000) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
-    for nlproof_json, proof_tree, distractors, stats in dataset.generate(num_dataset):
+    for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
 
         logger.info('\n')
         logger.info('--------------- tree --------------')
@@ -39,8 +40,12 @@ def generate_dataset(dataset: NLProofSDataset,
         logger.info('\n' + proof_tree.format_str)
 
         logger.info('\n')
-        logger.info('--------------- distractors --------------')
+        logger.info('--------------- formula distractors --------------')
         logger.info('\n' + pformat(distractors))
+
+        logger.info('\n')
+        logger.info('--------------- translation distractors --------------')
+        logger.info('\n' + pformat(translation_distractors))
 
         logger.info('\n')
         logger.info('--------------- NLProofs json --------------')
@@ -133,9 +138,15 @@ def test_generate_dataset():
         sample_hard_negatives=True,
     )
 
+    translation_distractor = build_translation_distractor(
+        'word_swap',
+        word_bank=word_bank,
+    )
+
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
+        translation_distractor=translation_distractor,
         translator=translator,
         add_subj_obj_swapped_distractor=True,
     )
@@ -146,9 +157,10 @@ def test_generate_dataset():
                               _to_range(1, 10),
                               _to_range(1, 5),
                               unknown_ratio=0.333,
-                              use_collappsed_translation_nodes_for_unknown_tree=True,
+                              use_collapsed_translation_nodes_for_unknown_tree=True,
                               word_bank=word_bank,
-                              num_distractors=_to_range(0, 10),
+                              num_distractors=[5],
+                              num_translation_distractors=[5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

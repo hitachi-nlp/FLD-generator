@@ -22,6 +22,7 @@ from FLNL.datasets import NLProofSDataset
 from FLNL.proof import ProofTree
 from FLNL.utils import nested_merge
 from FLNL.formula_distractors import AVAILABLE_DISTRACTORS, build as build_distractor
+from FLNL.translation_distractors import build as build_translation_distractor, AVAILABLE_DISTRACTORS as AVAILABLE_TRANSLATION_DISTRACTORS
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -41,13 +42,15 @@ def load_dataset(argument_config: List[str],
                  keep_dneg: bool,
                  distractor: str,
                  num_distractors: List[int],
-                 sample_distractor_formulas_from_tree: bool,
+                 translation_distractor: str,
+                 num_translation_distractors: List[int],
+                 sample_formula_distractors_from_tree: bool,
                  sample_hard_negative_distractors: bool,
                  add_subj_obj_swapped_distractor: bool,
                  proof_stances: List[str],
                  world_assump: str,
                  unknown_ratio: float,
-                 use_collappsed_translation_nodes_for_unknown_tree: bool,
+                 use_collapsed_translation_nodes_for_unknown_tree: bool,
                  depths: List[int],
                  branch_extension_steps: List[int]):
     generator = build_generator(
@@ -61,8 +64,13 @@ def load_dataset(argument_config: List[str],
 
     _distractor = build_distractor(distractor,
                                    generator=generator,
-                                   sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
+                                   sample_prototype_formulas_from_tree=sample_formula_distractors_from_tree,
                                    sample_hard_negatives=sample_hard_negative_distractors)
+
+    _translation_distractor = build_translation_distractor(
+        translation_distractor,
+        word_bank=word_bank,
+    )
 
     translator = build_translator(translation_config,
                                   word_bank,
@@ -74,6 +82,7 @@ def load_dataset(argument_config: List[str],
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=_distractor,
+        translation_distractor=_translation_distractor,
         translator=translator,
         add_subj_obj_swapped_distractor=add_subj_obj_swapped_distractor,
     )
@@ -84,9 +93,10 @@ def load_dataset(argument_config: List[str],
                            depths,
                            branch_extension_steps,
                            num_distractors=num_distractors,
+                           num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
-                           use_collappsed_translation_nodes_for_unknown_tree=use_collappsed_translation_nodes_for_unknown_tree,
-                           word_bank = word_bank if use_collappsed_translation_nodes_for_unknown_tree else None)
+                           use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
+                           word_bank = word_bank if use_collapsed_translation_nodes_for_unknown_tree else None)
 
 
 def generate_instances(size: int, *args):
@@ -147,6 +157,8 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
+@click.option('--translation-distractor', type=click.Choice(AVAILABLE_TRANSLATION_DISTRACTORS), default='word_swap')
+@click.option('--num-translation-distractors', type=str, default=json.dumps([5]))
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
@@ -169,13 +181,15 @@ def main(output_path,
          keep_dneg,
          distractor,
          num_distractors,
-         sample_distractor_formulas_from_tree,
+         sample_formula_distractors_from_tree,
          sample_hard_negative_distractors,
          add_subj_obj_swapped_distractor,
+         translation_distractor,
+         num_translation_distractors,
          proof_stances,
          world_assump,
          unknown_ratio,
-         use_collappsed_translation_nodes_for_unknown_tree,
+         use_collapsed_translation_nodes_for_unknown_tree,
          num_workers,
          batch_size_per_worker,
          seed):
@@ -184,6 +198,7 @@ def main(output_path,
     depths = json.loads(depths)
     branch_extension_steps = json.loads(branch_extension_steps)
     num_distractors = json.loads(num_distractors)
+    num_translation_distractors = json.loads(num_translation_distractors)
     proof_stances = json.loads(proof_stances)
 
     if len(argument_config) == 0:
@@ -221,13 +236,15 @@ def main(output_path,
                         keep_dneg,
                         distractor,
                         num_distractors,
-                        sample_distractor_formulas_from_tree,
+                        sample_formula_distractors_from_tree,
                         sample_hard_negative_distractors,
                         add_subj_obj_swapped_distractor,
+                        translation_distractor,
+                        num_translation_distractors,
                         proof_stances,
                         world_assump,
                         unknown_ratio,
-                        use_collappsed_translation_nodes_for_unknown_tree,
+                        use_collapsed_translation_nodes_for_unknown_tree,
                         depths,
                         branch_extension_steps,
                     )
