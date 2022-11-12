@@ -23,6 +23,7 @@ class WordNetWordBank(WordBank):
         POS.NOUN: wn.NOUN,
         POS.ADJ: wn.ADJ,
         POS.ADJ_SAT: wn.ADJ_SAT,
+        POS.ADV: wn.ADV,
     }
 
     @profile

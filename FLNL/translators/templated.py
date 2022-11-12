@@ -93,9 +93,11 @@ class TemplatedTranslator(Translator):
 
         self.words_per_type = words_per_type
 
+        self._word_bank = word_bank
+
         self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
-        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(word_bank)
+        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(self._word_bank)
         if limit_vocab_size_per_type is not None:
             self._zeroary_predicates = self._sample(self._zeroary_predicates, limit_vocab_size_per_type)
             self._unary_predicates = self._sample(self._unary_predicates, limit_vocab_size_per_type)
@@ -103,7 +105,6 @@ class TemplatedTranslator(Translator):
         self._zeroary_predicate_set = set(self._zeroary_predicates)
         self._unary_predicate_set = set(self._unary_predicates)
         self._constant_set = set(self._constants)
-        self._word_bank = word_bank
 
         if volume_to_weight == 'linear':
             self._volume_to_weight_func = lambda volume: volume

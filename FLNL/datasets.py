@@ -7,6 +7,7 @@ import copy
 from collections import defaultdict
 from pprint import pprint
 
+from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.formula import Formula
 from FLNL.proof import ProofTree, ProofNode
@@ -61,10 +62,6 @@ def _make_instance_label(proof_stance: ProofStance, world_assump: WorldAssumptio
         raise ValueError()
 
 
-def _collapse_transl(transl: str, wb: WordBank) -> str:
-    raise NotImplementedError()
-
-
 class _DistractorNode:
 
     def __init__(self, distractor: Formula):
@@ -98,26 +95,81 @@ class NLProofSDataset:
                  world_assump: str,
                  depths: List[int],
                  branch_extension_steps: List[int],
-                 num_distractors: Optional[List[int]] = None,
-                 use_collappsed_nodes_for_unknown_tree=False,
+                 unknown_ratio: float = 1 / 3.,
+                 use_collappsed_translation_nodes_for_unknown_tree=False,
                  word_bank: Optional[WordBank] = None,
+                 num_distractors: Optional[List[int]] = None,
                  log_stats=False,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 
         self.proof_stances = [ProofStance(proof_stance) for proof_stance in proof_stances]
         self.world_assump = WorldAssumption(world_assump)
+        self.unknown_ratio = unknown_ratio
 
         if len(depths) == 0:
             raise ValueError()
         self.depths = depths
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
-        self.use_collappsed_nodes_for_unknown_tree = use_collappsed_nodes_for_unknown_tree
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
-        self._word_bank = word_bank
         self.raise_if_translation_not_found = raise_if_translation_not_found
+
+        self.use_collappsed_translation_nodes_for_unknown_tree = use_collappsed_translation_nodes_for_unknown_tree
+        self._word_bank = word_bank
+        self._words = {}
+        if self.use_collappsed_translation_nodes_for_unknown_tree:
+            if self._word_bank is None:
+                raise ValueError('Please specify word bank')
+            for pos in POS:
+                self._words[pos] = list(self._load_words_by_pos_attrs(word_bank, pos=pos))
+
+    def _collapse_transl(self,
+                         transl: str,
+                         prob=0.1,
+                         at_least_one=True) -> Optional[str]:
+        ng_words = ['a', 'the', 'is']
+
+        for trial in range(0, 10):
+            words = transl.split(' ')
+            collapsed_words = []
+            for word in words:
+                if word in ng_words:
+                    collapsed_words.append(word)
+                    continue
+
+                if random.random() <= prob:
+                    POSs = self._word_bank.get_pos(word)
+                    if len(POSs) == 0:
+                        collapsed_words.append(word)
+                        continue
+
+                    random_word = None
+                    for pos in random.sample(POSs, len(POSs)):
+                        if pos in self._words:
+                            random_word = random.choice(self._words[pos])
+                            break
+
+                    if random_word is not None:
+                        collapsed_words.append(random_word)
+                    else:
+                        collapsed_words.append(word)
+                else:
+                    collapsed_words.append(word)
+
+            any_word_is_collapsed = any(
+                collapsed_word != word
+                for collapsed_word, word in zip(collapsed_words, words)
+            )
+
+            if at_least_one and not any_word_is_collapsed:
+                continue
+            else:
+                return ' '.join(collapsed_words)
+
+        return None
+
 
     @profile
     def generate(self,
@@ -163,36 +215,43 @@ class NLProofSDataset:
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
-            proof_stance = random.sample(self.proof_stances, 1)[0]
-            if proof_stance == ProofStance.PROOF:
-                hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
-                dead_leaf_nodes = []
-            elif proof_stance == ProofStance.DISPROOF:
-                hypothesis = _get_sent_from_formula(root_negation_formula)
-                dead_leaf_nodes = []
-            elif proof_stance == ProofStance.UNKNOWN:
+            if random.random() < self.unknown_ratio:
+                proof_stance = ProofStance.UNKNOWN
                 hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
                 dead_leaf_nodes = random.sample(proof_tree.leaf_nodes,
                                                 max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
             else:
-                raise ValueError()
+                if random.random() < 1 / 2.:
+                    proof_stance = ProofStance.PROOF
+                    hypothesis = _get_sent_from_formula(proof_tree.root_node.formula)
+                    dead_leaf_nodes = []
+                else:
+                    proof_stance = ProofStance.DISPROOF
+                    hypothesis = _get_sent_from_formula(root_negation_formula)
+                    dead_leaf_nodes = []
 
             missing_leaf_nodes = []
             collapsed_leaf_nodes = []
             for dead_node in dead_leaf_nodes:
-                if self.use_collappsed_nodes_for_unknown_tree:
-                    if random.random() <= 0.5:
-                        missing_leaf_nodes.append(dead_node)
+                if self.use_collappsed_translation_nodes_for_unknown_tree:
+                    if random.random() <= 0.5 and dead_node.formula.translation is not None:
+                        collapased_translation = self._collapse_transl(dead_node.formula.translation)
+
+                        if collapased_translation is None:
+                            logger.warning('Could not collapse the translation "%s". Will be treated as missing nodes.', dead_node.formula.translation)
+                            missing_leaf_nodes.append(dead_node)
+                        else:
+                            logger.info('Make collapsed translation node as:\norig     : "%s"\ncollapsed: "%s"', dead_node.formula.translation, collapased_translation)
+                            dead_node.formula.translation = collapased_translation
+                            if dead_node.formula.translation_name is not None:
+                                dead_node.formula.translation_name = dead_node.formula.translation_name + '.collapsed'
+
+                            collapsed_leaf_nodes.append(dead_node)
                     else:
-                        collapsed_leaf_nodes.append(dead_node)
+                        missing_leaf_nodes.append(dead_node)
                 else:
                     missing_leaf_nodes.append(dead_node)
 
-            for collapased_node in collapsed_leaf_nodes:
-                if collapased_node.formula.translation is not None:
-                    collapased_node.formula.translation = _collapse_transl(collapased_node.formula.translation, self._word_bank)
-                if collapased_node.formula.translation_name is not None:
-                    collapased_node.formula.translation_name = collapased_node.formula.translation_name + '.collapsed'
 
             # indentify nodes in proof
             nodes_in_proof: List[Node] = []
@@ -398,3 +457,16 @@ class NLProofSDataset:
                 proof_tree,\
                 distractor_formulas,\
                 gathered_stats
+
+    def _load_words_by_pos_attrs(self,
+                                 word_bank: WordBank,
+                                 pos: Optional[POS] = None,
+                                 attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
+        attrs = attrs or []
+        for word in word_bank.get_words():
+            if pos is not None and pos not in word_bank.get_pos(word):
+                continue
+            if any((attr not in word_bank.get_attrs(word)
+                    for attr in attrs)):
+                continue
+            yield word

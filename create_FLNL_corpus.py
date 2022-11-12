@@ -46,6 +46,8 @@ def load_dataset(argument_config: List[str],
                  add_subj_obj_swapped_distractor: bool,
                  proof_stances: List[str],
                  world_assump: str,
+                 unknown_ratio: float,
+                 use_collappsed_translation_nodes_for_unknown_tree: bool,
                  depths: List[int],
                  branch_extension_steps: List[int]):
     generator = build_generator(
@@ -55,13 +57,15 @@ def load_dataset(argument_config: List[str],
         quantification=quantification,
     )
 
+    word_bank = build_wordnet_wordbank('eng')
+
     _distractor = build_distractor(distractor,
                                    generator=generator,
                                    sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                    sample_hard_negatives=sample_hard_negative_distractors)
 
     translator = build_translator(translation_config,
-                                  build_wordnet_wordbank('eng'),
+                                  word_bank,
                                   use_fixed_translation=use_fixed_translation,
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
@@ -79,7 +83,10 @@ def load_dataset(argument_config: List[str],
                            world_assump,
                            depths,
                            branch_extension_steps,
-                           num_distractors=num_distractors)
+                           num_distractors=num_distractors,
+                           unknown_ratio=unknown_ratio,
+                           use_collappsed_translation_nodes_for_unknown_tree=use_collappsed_translation_nodes_for_unknown_tree,
+                           word_bank = word_bank if use_collappsed_translation_nodes_for_unknown_tree else None)
 
 
 def generate_instances(size: int, *args):
@@ -142,6 +149,8 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
+@click.option('--unknown-ratio', type=float, default = 1 / 3.)
+@click.option('--use-collapsed-translation-nodes-for-unknown-tree', default='CWA')
 @click.option('--num-workers', type=int, default=1)
 @click.option('--batch-size-per-worker', type=int, default=300)
 @click.option('--seed', type=int, default=0)
@@ -165,6 +174,8 @@ def main(output_path,
          add_subj_obj_swapped_distractor,
          proof_stances,
          world_assump,
+         unknown_ratio,
+         use_collappsed_translation_nodes_for_unknown_tree,
          num_workers,
          batch_size_per_worker,
          seed):
@@ -215,6 +226,8 @@ def main(output_path,
                         add_subj_obj_swapped_distractor,
                         proof_stances,
                         world_assump,
+                        unknown_ratio=unknown_ratio,
+                        use_collappsed_translation_nodes_for_unknown_tree,
                         depths,
                         branch_extension_steps,
                     )
