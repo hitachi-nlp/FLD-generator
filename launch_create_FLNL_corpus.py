@@ -122,6 +122,7 @@ def main():
             dirname_exclude_params=[
                 'dataset_name',
                 'proof_stances',
+                'unknown_ratio',
 
                 'argument_configs',
 
@@ -136,6 +137,8 @@ def main():
                 'sample_distractor_formulas_from_tree',
                 'sample_hard_negative_distractors',
                 'add_subj_obj_swapped_distractor',
+                'use_collappsed_translation_nodes_for_unknown_tree'
+
                 'split_sizes',
 
                 'translation_configs',
@@ -206,6 +209,8 @@ def main():
                     '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
                     f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
                     f'--world-assump {job_settings["world_assump"]}',
+                    maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
+                    '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collappsed_translation_nodes_for_unknown_tree', False) else '',
                     f'--num-workers {job_settings["num_workers_per_job"]}',
                     f'--seed {job_settings["seed"]}',
 

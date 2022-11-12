@@ -8,6 +8,7 @@ class POS(Enum):
     NOUN = 'NOUN'
     ADJ = 'ADJ'
     ADJ_SAT = 'ADJ_SAT'
+    ADV = 'ADV'
     UNK = 'UNK'
 
 

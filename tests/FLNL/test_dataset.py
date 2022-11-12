@@ -64,12 +64,14 @@ def test_generate_dataset():
     def _to_range(begin: int, end: int) -> List[int]:
         return list(range(begin, end + 1))
 
+    word_bank = build_wordnet_wordbank('eng')
+
     translator = build_translator(
         [
             './configs/FLNL/translations/thing.json',
             './configs/FLNL/translations/thing.sentence_negation.json',
         ],
-        build_wordnet_wordbank('eng'),
+        word_bank,
         use_fixed_translation=False,
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
@@ -143,6 +145,9 @@ def test_generate_dataset():
                               'OWA',
                               _to_range(1, 10),
                               _to_range(1, 5),
+                              unknown_ratio=0.333,
+                              use_collappsed_translation_nodes_for_unknown_tree=True,
+                              word_bank=word_bank,
                               num_distractors=_to_range(0, 10),
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
