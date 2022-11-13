@@ -2725,7 +2725,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000': {
+    '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
         'unknown_ratio': 0.33,
@@ -2754,7 +2754,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
 
-        'depths': _to_range(1, 5),
+        'depths': _to_range(1, 10),
         'branch_extension_steps': _to_range(1, 5),
 
 
@@ -2783,15 +2783,15 @@ _DATASET_SETTINGS = {
         'split_sizes': {
             # 'test': 100,
 
-            # 'train': 100000,
-            # 'valid': 1000,
+            'train': 100000,
+            'valid': 1000,
             'test': 1000,
         }
     },
 
 
 
-    '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000': {
+    '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
         'unknown_ratio': 0.33,
@@ -2820,7 +2820,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
 
-        'depths': _to_range(1, 5),
+        'depths': _to_range(1, 10),
         'branch_extension_steps': _to_range(1, 5),
 
 
@@ -2857,7 +2857,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000': {
+    '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
         'unknown_ratio': 0.65,
@@ -2886,7 +2886,7 @@ _DATASET_SETTINGS = {
         'quantification': 0.2,
 
 
-        'depths': _to_range(1, 5),
+        'depths': _to_range(1, 10),
         'branch_extension_steps': _to_range(1, 5),
 
 
@@ -2915,9 +2915,9 @@ _DATASET_SETTINGS = {
         'split_sizes': {
             # 'test': 100,
 
-            'train': 1000,
+            'train': 100000,
             'valid': 1000,
-            # 'test': 1000,
+            'test': 1000,
         }
     },
 
@@ -2981,8 +2981,8 @@ _DATASET_SETTINGS = {
         'split_sizes': {
             # 'test': 100,
 
-            # 'train': 100000,
-            # 'valid': 1000,
+            'train': 100000,
+            'valid': 1000,
             'test': 1000,
         }
     },
