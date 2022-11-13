@@ -93,10 +93,10 @@ def main():
         # '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
         # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
 
-        '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
-        '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
+        # '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
+        # '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
         '20221112__arg-cmpl__dpth-5__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000',
-        '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
+        # '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
     ]
 
     # engine = SubprocessEngine()

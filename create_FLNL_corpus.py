@@ -167,7 +167,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
-@click.option('--use-collapsed-translation-nodes-for-unknown-tree', default='CWA')
+@click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--num-workers', type=int, default=1)
 @click.option('--batch-size-per-worker', type=int, default=300)
 @click.option('--seed', type=int, default=0)

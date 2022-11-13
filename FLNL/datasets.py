@@ -241,7 +241,7 @@ class NLProofSDataset:
             missinge_nodes = copy.copy(missing_leaf_nodes)
             collapsed_nodes = copy.copy(collapsed_leaf_nodes)
             for node in proof_tree.depth_first_traverse():
-                if not is_root(node) or is_int(node):
+                if is_root(node) or is_int(node):
                     # add children
                     for child_node in node.children:
                         if child_node in dead_nodes:
