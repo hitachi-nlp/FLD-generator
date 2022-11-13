@@ -52,6 +52,7 @@ def load_dataset(argument_config: List[str],
                  unknown_ratio: float,
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
                  depths: List[int],
+                 depth_1_weight: float,
                  branch_extension_steps: List[int]):
     generator = build_generator(
         argument_config,
@@ -92,6 +93,7 @@ def load_dataset(argument_config: List[str],
                            world_assump,
                            depths,
                            branch_extension_steps,
+                           depth_1_weight=depth_1_weight,
                            num_distractors=num_distractors,
                            num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
@@ -153,6 +155,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
+@click.option('--depth-1-weight', type=float, default=1.0)
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
@@ -180,6 +183,7 @@ def main(output_path,
          translation_volume_to_weight,
          size,
          depths,
+         depth_1_weight,
          branch_extension_steps,
          complication,
          quantification,
@@ -251,6 +255,7 @@ def main(output_path,
                         unknown_ratio,
                         use_collapsed_translation_nodes_for_unknown_tree,
                         depths,
+                        depth_1_weight,
                         branch_extension_steps,
                     )
                 )

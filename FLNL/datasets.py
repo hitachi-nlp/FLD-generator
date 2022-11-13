@@ -12,7 +12,7 @@ from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLNL.formula import Formula
 from FLNL.proof import ProofTree, ProofNode
-from FLNL.utils import flatten_dict
+from FLNL.utils import flatten_dict, weighted_sampling
 from FLNL.translators.base import Translator
 from FLNL.word_banks.base import WordBank
 from FLNL.translation_distractors import build as build_translation_distractor
@@ -119,6 +119,7 @@ class NLProofSDataset:
                  world_assump: str,
                  depths: List[int],
                  branch_extension_steps: List[int],
+                 depth_1_weight=1.0,
                  unknown_ratio: float = 1 / 3.,
                  use_collapsed_translation_nodes_for_unknown_tree=False,
                  word_bank: Optional[WordBank] = None,
@@ -135,6 +136,14 @@ class NLProofSDataset:
         if len(depths) == 0:
             raise ValueError()
         self.depths = depths
+
+        depth_weights = [
+            depth_1_weight * (1 / len(depths)) if depth == 1 else (1 / len(depths))
+            for depth in depths
+        ]
+        depth_weights = [weight / sum(depth_weights) for weight in depth_weights]
+        self._depth_weights = depth_weights
+
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
         self.num_translation_distractors = num_translation_distractors or [0]
@@ -181,7 +190,8 @@ class NLProofSDataset:
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
         for i_sample in range(size):
-            depth = random.sample(self.depths, 1)[0]
+            depth_idx = weighted_sampling(self._depth_weights)
+            depth = self.depths[depth_idx]
             # generate a proof tree
             _num_distractors = random.sample(self.num_distractors, 1)[0]
             _num_translation_distractors = random.sample(self.num_translation_distractors, 1)[0]
