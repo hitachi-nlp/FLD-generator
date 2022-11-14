@@ -2,7 +2,9 @@ from typing import Optional, Iterable, List, Dict, Iterable
 import re
 import logging
 
-from pyinflect import getInflection
+# from pyinflect import getInflection
+from lemminflect import getInflection
+
 from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
@@ -32,9 +34,8 @@ class EnglishWordBank(WordNetWordBank):
         self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
-        # see https://github.com/bjascob/pyInflect for available forms
-        results = getInflection(verb,
-                                tag=self._verb_inflation_mapping[form])
+        results = getInflection(verb, tag=self._verb_inflation_mapping[form])
+
         if results is not None:
             return results[0]
         else:

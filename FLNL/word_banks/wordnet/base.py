@@ -7,7 +7,6 @@ import nltk
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
-from pyinflect import getInflection
 from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from FLNL.utils import starts_with_vowel_sound
 
