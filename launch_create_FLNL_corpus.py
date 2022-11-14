@@ -210,7 +210,7 @@ def main():
                     maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
 
                     f'--depths \'{json.dumps(job_settings["depths"])}\'',
-                    maybe_option(f'--depth-1-weight {settings["depth_1_weight"]}', settings.get("depth_1_weight", None)),
+                    f'--depth-1-weight {settings["depth_1_weight"]}' if settings.get("depth_1_weight", None) is not None else '',
                     f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                     f'--complication {job_settings["complication"]}',
                     f'--quantification {job_settings["quantification"]}',
