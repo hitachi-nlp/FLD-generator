@@ -3,7 +3,7 @@ import re
 import logging
 
 # from pyinflect import getInflection
-from lemminflect import getInflection
+from lemminflect import getInflection, getLemma
 
 from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from nltk.corpus.reader.wordnet import Synset, Lemma
@@ -34,6 +34,12 @@ class EnglishWordBank(WordNetWordBank):
         self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+        if verb in ['am', 'are', 'is', 'was', 'were']:
+            logger.warning('Changing verb form for be-verb "{%s}" is subtle. Thus, we do not change it\'s form.', verb)
+            return verb
+        else:
+            verb = getLemma(verb, upos='VERB')[0]
+
         results = getInflection(verb, tag=self._verb_inflation_mapping[form])
 
         if results is not None:
