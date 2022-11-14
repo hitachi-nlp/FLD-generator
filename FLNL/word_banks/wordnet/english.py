@@ -33,12 +33,16 @@ class EnglishWordBank(WordNetWordBank):
         self._transitive_verbs = set(verb.lower() for verb in transitive_verbs) if transitive_verbs is not None else None
         self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
 
+    def get_lemma(self, word: str) -> str:
+        # TODO: pos other than VERB
+        return getLemma(word, upos='VERB')[0]
+
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         if verb in ['am', 'are', 'is', 'was', 'were']:
             logger.warning('Changing verb form for be-verb "{%s}" is subtle. Thus, we do not change it\'s form.', verb)
             return verb
         else:
-            verb = getLemma(verb, upos='VERB')[0]
+            verb = self.get_lemma(verb)
 
         results = getInflection(verb, tag=self._verb_inflation_mapping[form])
 

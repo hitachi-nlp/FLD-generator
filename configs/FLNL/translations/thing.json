@@ -3720,7 +3720,7 @@
 
     "a_all": [
       "a",
-      "__all",
+      "all",
       "__comment: we can not add all to here since it will lead to something like 'all red thing is xx'"
     ],
 

@@ -2783,9 +2783,9 @@ _DATASET_SETTINGS = {
         'split_sizes': {
             # 'test': 100,
 
-            'train': 100000,
-            'valid': 1000,
-            'test': 1000,
+            'train': 10000,
+            # 'valid': 1000,
+            # 'test': 1000,
         }
     },
 

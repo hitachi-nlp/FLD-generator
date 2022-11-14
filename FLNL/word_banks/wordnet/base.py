@@ -65,6 +65,7 @@ class WordNetWordBank(WordBank):
         yield from sorted(self._cached_word_set)
 
     def get_pos(self, word: str) -> List[POS]:
+        word = self.get_lemma(word)
         wb_POSs = {
             (self._pos_wn_to_wb[syn.pos()] if syn.pos() in self._pos_wn_to_wb else POS.UNK)
             for syn in self._get_synsets(word)
@@ -76,6 +77,10 @@ class WordNetWordBank(WordBank):
             }
         
         return list(wb_POSs)
+
+    @abstractmethod
+    def get_lemma(self, word: str) -> str:
+        pass
 
     @abstractmethod
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:

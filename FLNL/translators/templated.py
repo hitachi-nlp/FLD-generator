@@ -1,6 +1,7 @@
 import json
 from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
 from collections import OrderedDict, defaultdict
+import re
 from tqdm import tqdm
 import copy
 import random
@@ -355,16 +356,58 @@ class TemplatedTranslator(Translator):
                 translations.append(None)
                 translation_names.append(None)
 
+        # fix grammers and other stufs
         translations = [
-            (self._correct_indefinite_particles(translation) if translation is not None else None)
+            (self._fix_translation(translation) if translation is not None else None)
             for translation in translations
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
-                SO_swap_formula.translation = self._correct_indefinite_particles(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
+                SO_swap_formula.translation = self._fix_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
+
+    def _fix_translation(self, translation: str) -> str:
+        # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
+        translation = self._correct_indefinite_particles(translation)
+        translation = self._fix_pred_singularity(translation)
+
+        return translation
+
+    def _fix_pred_singularity(self, translation: str) -> str:
+        # TODO: A and B {is, runs} => currently, we do not have ({A}{a} and {B}{a}) so that we do not this fix.
+        translation_fixed = translation
+
+        def fix(translation: str, src_pred: str, dst_pred: str) -> str:
+            regexp = f'(.*)all (.*)things? {src_pred}(.*)'
+            if re.match(regexp, translation):
+                translation_fixed = re.sub(regexp, '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
+                # logger.info('translation singularity is fixed as:\norig : "%s"\nfixed: "%s"',
+                #             translation,
+                #             translation_fixed)
+                return translation_fixed
+            else:
+                return translation
+
+        translation_fixed = fix(translation_fixed, 'is a', 'are')
+        translation_fixed = fix(translation_fixed, 'is', 'are')
+        translation_fixed = fix(translation_fixed, 'was a', 'were')
+        translation_fixed = fix(translation_fixed, 'was', 'wer')
+        translation_fixed = fix(translation_fixed, 'does', 'do')
+
+        # all kind thing squashes apple -> all kind thing squash apple
+        if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
+            word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
+            if POS.VERB in self._word_bank.get_pos(word_after_things):
+                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)
+                translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
+
+        if translation_fixed != translation:
+            logger.info('translation is fixed as:\norig : "%s"\nfixed: "%s"', translation, translation_fixed)
+
+        return translation_fixed
+
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:

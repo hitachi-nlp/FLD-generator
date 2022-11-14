@@ -3,10 +3,11 @@ tqdm
 pandas
 click
 nltk
-pyinflect
 joblib
 transformers
 py-timeout
+# pyinflect
+lemminflect
 
 script_engine@git+https://github.com/HonoMi/script-engine.git@master
 lab@git+https://github.com/HonoMi/lab.git@master
