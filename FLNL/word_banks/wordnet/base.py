@@ -39,6 +39,7 @@ class WordNetWordBank(WordBank):
         else:
             self.vocab_restrictions = None
 
+        logger.info('loading words from WordNet ...')
         for word, wn_pos in self._load_words_once():
             if vocab_restrictions is not None:
                 wb_POS = self._pos_wn_to_wb.get(wn_pos, None)
@@ -46,12 +47,12 @@ class WordNetWordBank(WordBank):
                     continue
             self._cached_word_set.add(word)
             self._cached_word_to_wn_pos[word].append(wn_pos)
+        logger.info('loading words from WordNet done!')
 
         self._cached_event_noun_synsets = None
         self._cached_entity_noun_synsets = None
 
     def _load_words_once(self) -> Iterable[Tuple[str, str]]:
-        logger.info('loading words from WordNet ...')
         # done_lemmas = set()
         for syn in wn.all_synsets(lang=self.language):
             lemma = self._get_lemma(syn)
@@ -59,7 +60,6 @@ class WordNetWordBank(WordBank):
                 continue
             lemma_str = lemma.name()
             yield lemma_str, syn.pos()
-        logger.info('loading words from WordNet done!')
 
     def get_words(self) -> Iterable[str]:
         yield from sorted(self._cached_word_set)
@@ -195,13 +195,13 @@ class WordNetWordBank(WordBank):
         ]
 
         if self._cached_entity_noun_synsets is None:
-            logger.info('loading entity nouns ...')
+            logger.info('loading entity nouns once ...')
             self._cached_entity_noun_synsets = set()
             for root_synset_name in root_synset_names:
                 root_synset = self._get_synset(root_synset_name)
                 self._cached_entity_noun_synsets = self._cached_entity_noun_synsets.union(
                     self._get_descendant_synsets(root_synset))
-            logger.info('loading entity nouns ... done!')
+            logger.info('loading entity nouns once ... done!')
 
         return any((syn in self._cached_entity_noun_synsets
                     for syn in self._get_synsets(noun)))

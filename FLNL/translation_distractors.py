@@ -60,8 +60,11 @@ class WordSwapDistractor(TranslationDistractor):
     def __init__(self, word_bank: WordBank, word_swap_prob=0.1):
         self._word_bank = word_bank
         self._words = {}
+
+        logger.info('loading words from the wordbank ...')
         for pos in POS:
             self._words[pos] = list(self._load_words_by_pos_attrs(word_bank, pos=pos))
+        logger.info('loading words from the wordbank ... done!')
 
         self.word_swap_prob = word_swap_prob
 

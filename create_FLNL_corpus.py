@@ -61,24 +61,38 @@ def load_dataset(argument_config: List[str],
         quantification=quantification,
     )
 
+    logger.info('------------------- building wordnet ----------------')
     word_bank = build_wordnet_wordbank('eng')
+    logger.info('------------------- building wordnet done! ----------------')
 
-    _distractor = build_distractor(distractor,
-                                   generator=generator,
-                                   sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
-                                   sample_hard_negatives=sample_hard_negative_distractors)
+    if any(size > 0 for size in num_distractors):
+        logger.info('------------------- building distractor ----------------')
+        _distractor = build_distractor(distractor,
+                                       generator=generator,
+                                       sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
+                                       sample_hard_negatives=sample_hard_negative_distractors)
+        logger.info('------------------- building distractor done! ----------------')
+    else:
+        _distractor = None
 
-    _translation_distractor = build_translation_distractor(
-        translation_distractor,
-        word_bank=word_bank,
-    )
+    if any(size > 0 for size in num_translation_distractors):
+        logger.info('------------------- building translation distractor ----------------')
+        _translation_distractor = build_translation_distractor(
+            translation_distractor,
+            word_bank=word_bank,
+        )
+        logger.info('------------------- building translation distractor done! ----------------')
+    else:
+        _translation_distractor = None
 
+    logger.info('------------------- building translator ----------------')
     translator = build_translator(translation_config,
                                   word_bank,
                                   use_fixed_translation=use_fixed_translation,
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight)
+    logger.info('------------------- building translator done! ----------------')
 
     pipeline = ProofTreeGenerationPipeline(
         generator,

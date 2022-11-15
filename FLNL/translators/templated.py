@@ -76,7 +76,6 @@ class TemplatedTranslator(Translator):
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
-        logger.info('-- building translator.. --')
         self._two_layered_config = self._build_two_layered_config(config_json)
 
         self._translations: Dict[str, List[str]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
@@ -123,8 +122,6 @@ class TemplatedTranslator(Translator):
 
         self._do_translate_to_nl = do_translate_to_nl
 
-        logger.info('-- building translator done! --')
-
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[str]]]:
         two_layered_config = self._completely_flatten_config(config)
 
@@ -155,37 +152,48 @@ class TemplatedTranslator(Translator):
 
     def _load_words(self,
                     word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
-        logger.info('loading words from WordBank ...')
 
+        logger.info('loading nouns ...')
         nouns = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
         })
+
+        logger.info('loading event nouns ...')
         event_nouns = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)
         })
+
+        logger.info('loading entity nouns ...')
         entity_nouns = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
         })
+
+        logger.info('loading adjs ...')
         adjs = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)
         })
+
+        logger.info('loading intransitive_verbs ...')
         intransitive_verbs = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
         })
+
+        logger.info('loading transitive_verbs ...')
         transitive_verbs = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
         })
 
+        logger.info('making transitive verb and object combinations ...')
         transitive_verb_PASs = []
         for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
             for pred in self._sample(nouns, 1000):
@@ -205,8 +213,6 @@ class TemplatedTranslator(Translator):
         unary_predicates = sorted({word for word in unary_predicates})
 
         constants = self._sample(entity_nouns, self.words_per_type)
-
-        logger.info('loading words from WordBank done!')
 
         return zeroary_predicates, unary_predicates, constants
 
