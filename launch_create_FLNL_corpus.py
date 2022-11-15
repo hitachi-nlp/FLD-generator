@@ -40,7 +40,9 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221101.various_datasets')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221107.more_distractive')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221112.various_negatives')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221112.various_negatives')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221114.new_steps')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -93,20 +95,29 @@ def main():
         # '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
         # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
 
-        '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
-        '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
-        '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000',
-        '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
+        # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
+        # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
+        # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000',
+        # '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
+
+        '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
+        '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
+        '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000',
+
+        '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',  # ~ RuleTaker
+
+        '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
+        '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
+        '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
     ]
+    # dataset_names = dataset_names[::-1]
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # num_jobs = 1
-    num_jobs = 180
-
-    # num_workers_per_job = 1
-    num_workers_per_job = 5
+    # num_jobs = 180
+    num_jobs = 10
 
     timeout_per_job = 1800  # for the case some jobs hangs
     delete_logs_when_done = True
@@ -116,7 +127,7 @@ def main():
     for dataset_name in dataset_names:
         settings = {
             'dataset_name': dataset_name,
-            'num_workers_per_job': num_workers_per_job,
+            'num_workers_per_job': 5,
         }
         settings.update(get_dataset_setting(dataset_name))
 

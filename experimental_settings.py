@@ -2194,7 +2194,7 @@ _DATASET_SETTINGS = {
         'translation_volume_to_weight': 'linear',
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2244,7 +2244,7 @@ _DATASET_SETTINGS = {
         'translation_volume_to_weight': 'linear',
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2312,7 +2312,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2368,7 +2368,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2424,7 +2424,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2480,7 +2480,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2536,7 +2536,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2592,7 +2592,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 300000,
             'valid': 1000,
@@ -2651,7 +2651,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2710,7 +2710,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2781,7 +2781,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 10000,
             # 'valid': 1000,
@@ -2847,7 +2847,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2913,7 +2913,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2979,7 +2979,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 100,
+            # 'test': 1000,
 
             'train': 100000,
             'valid': 1000,
@@ -2988,11 +2988,464 @@ _DATASET_SETTINGS = {
     },
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.0,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'num_distractors': _to_range(0, 0),
+        'reused_object_nouns_max_factor': 0.0,
+        'add_subj_obj_swapped_distractor': False,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+
+    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'num_distractors': _to_range(0, 0),
+        'reused_object_nouns_max_factor': 0.0,
+        'add_subj_obj_swapped_distractor': False,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'num_distractors': _to_range(0, 0),
+        'reused_object_nouns_max_factor': 0.0,
+        'add_subj_obj_swapped_distractor': False,
+
+
+        'num_translation_distractors': _to_range(0, 10),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+
+    '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'num_distractors': _to_range(0, 10),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+
+
+    '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'num_distractors': _to_range(0, 10),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+
+    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 10),
+        'branch_extension_steps': _to_range(0, 5),
+
+
+        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'num_distractors': _to_range(0, 10),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 10),
+        'branch_extension_steps': _to_range(0, 5),
+
+
+        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'num_distractors': _to_range(0, 10),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 1000,
+
+            # 'train': 100000,
+            # 'valid': 1000,
+            # 'test': 1000,
+        }
+    },
+
+
+
+
+
+}
+
+
+_DEFAULT_DATASET_SETTINGS = {
+    '20221114': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
+        'unknown_ratio': 0.33,
+
+
+        'sample_distractor_formulas_from_tree': True,
+        'sample_hard_negatives': True,
+
+
+        'translation_distractor': 'word_swap',
+
+
+        'translation_configs': [
+            './configs/FLNL/translations/thing.json',
+            './configs/FLNL/translations/thing.sentence_negation.json',
+        ],
+        'translation_volume_to_weight': 'sqrt',
+
+    },
+}
+
+
+_DATASET_NAME_TO_DEFAULT = {
+    '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': '20221114',
+    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': '20221114',
+    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': '20221114',
+
+    '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221114',  # ~ RuleTaker
+
+    '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221114',
+    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221114',
+    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': '20221114',
 }
 
 
 def get_dataset_setting(name: str) -> Dict:
-    return copy.deepcopy(_DATASET_SETTINGS[name])
+    setting = _DEFAULT_DATASET_SETTINGS[_DATASET_NAME_TO_DEFAULT[name]]
+    setting.update(copy.deepcopy(_DATASET_SETTINGS[name]))
+    return setting
 
 
 def maybe_option(option: str, value: Any) -> str:
