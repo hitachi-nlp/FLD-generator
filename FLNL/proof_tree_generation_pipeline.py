@@ -28,12 +28,14 @@ class ProofTreeGenerationPipeline:
                  generator: ProofTreeGenerator,
                  distractor: Optional[FormulaDistractor] = None,
                  translation_distractor: Optional[TranslationDistractor] = None,
+                 fallback_from_formula_to_translation_distractor=False,
                  translator: Optional[Translator] = None,
                  add_subj_obj_swapped_distractor=False,
                  log_stats=False):
         self.generator = generator
         self.distractor = distractor
         self.translation_distractor = translation_distractor
+        self.fallback_from_formula_to_translation_distractor = fallback_from_formula_to_translation_distractor
         self.translator = translator
         self.add_subj_obj_swapped_distractor = add_subj_obj_swapped_distractor
 
@@ -70,15 +72,21 @@ class ProofTreeGenerationPipeline:
                 continue
 
             logger.info('========================== generating distractor... ============================')
+            is_formula_distractor_failed = False
             if num_distractors > 0:
                 if self.distractor is not None:
                     try:
                         formula_distractors: List[Formula] = self.distractor.generate(proof_tree, num_distractors)
                     except FormulaDistractorGenerationFailure as e:
-                        raise ProofTreeGenerationPipelineFailure(str(e))
+                        is_formula_distractor_failed = True
+                        if self.fallback_from_formula_to_translation_distractor:
+                            logger.warning('formula distractor %s failed in generating distractors. will fallback to generate distractors by translation distractors.',
+                                           str(self.distractor))
+                            formula_distractors = []
+                        else:
+                            raise ProofTreeGenerationPipelineFailure(str(e))
                 else:
-                    logger.warning('could not generate distractors since distractor was not specified in the constructor.')
-                    formula_distractors = []
+                    raise ValueError('could not generate distractors since distractor was not specified in the constructor.')
             else:
                 formula_distractors = []
             logger.info('========================== generating distractor done! ============================')
@@ -116,17 +124,24 @@ class ProofTreeGenerationPipeline:
                 logger.info('========================== translating done! ============================')
 
             logger.info('========================== generating translation_distractor... ============================')
-            if num_translation_distractors > 0:
+            if num_translation_distractors > 0 or (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
+                if (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
+                    _num_translation_distractors = num_translation_distractors + num_distractors
+                    logger.info('try to generate %d + %d distractors by translation distractor. The latter is due to that the formula distractor failed.',
+                                num_translation_distractors, num_distractors)
+
+                else:
+                    _num_translation_distractors = num_translation_distractors
+
                 if self.translation_distractor is not None:
                     leaf_translations = [leaf_node.formula.translation for leaf_node in proof_tree.leaf_nodes
                                          if leaf_node.formula.translation is not None]
                     try:
-                        translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, num_translation_distractors)
+                        translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors)
                     except FormulaDistractorGenerationFailure as e:
                         raise ProofTreeGenerationPipelineFailure(str(e))
                 else:
-                    logger.warning('could not generate translation distractors since translation distractor was not specified in the constructor.')
-                    translation_distractors = []
+                    raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
             else:
                 translation_distractors = []
             logger.info('========================== generating translation_distractor done! ============================')

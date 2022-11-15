@@ -46,6 +46,7 @@ def load_dataset(argument_config: List[str],
                  sample_hard_negative_distractors: bool,
                  add_subj_obj_swapped_distractor: bool,
                  translation_distractor: str,
+                 fallback_from_formula_to_translation_distractor: bool,
                  num_translation_distractors: List[int],
                  proof_stances: List[str],
                  world_assump: str,
@@ -75,7 +76,7 @@ def load_dataset(argument_config: List[str],
     else:
         _distractor = None
 
-    if any(size > 0 for size in num_translation_distractors):
+    if any(size > 0 for size in num_translation_distractors) or fallback_from_formula_to_translation_distractor:
         logger.info('------------------- building translation distractor ----------------')
         _translation_distractor = build_translation_distractor(
             translation_distractor,
@@ -98,6 +99,7 @@ def load_dataset(argument_config: List[str],
         generator,
         distractor=_distractor,
         translation_distractor=_translation_distractor,
+        fallback_from_formula_to_translation_distractor=fallback_from_formula_to_translation_distractor,
         translator=translator,
         add_subj_obj_swapped_distractor=add_subj_obj_swapped_distractor,
     )
@@ -180,6 +182,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--translation-distractor', type=click.Choice(AVAILABLE_TRANSLATION_DISTRACTORS), default='word_swap')
+@click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 @click.option('--num-translation-distractors', type=str, default=json.dumps([5]))
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
@@ -209,6 +212,7 @@ def main(output_path,
          sample_hard_negative_distractors,
          add_subj_obj_swapped_distractor,
          translation_distractor,
+         fallback_from_formula_to_translation_distractor,
          num_translation_distractors,
          proof_stances,
          world_assump,
@@ -269,6 +273,7 @@ def main(output_path,
                         sample_hard_negative_distractors,
                         add_subj_obj_swapped_distractor,
                         translation_distractor,
+                        fallback_from_formula_to_translation_distractor,
                         num_translation_distractors,
                         proof_stances,
                         world_assump,

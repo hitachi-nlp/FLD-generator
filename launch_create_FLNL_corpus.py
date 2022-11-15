@@ -65,7 +65,8 @@ def make_dataset(dataset_name: str,
             'sample_distractor_formulas_from_tree',
             'sample_hard_negative_distractors',
             'add_subj_obj_swapped_distractor',
-            'use_collapsed_translation_nodes_for_unknown_tree'
+            'use_collapsed_translation_nodes_for_unknown_tree',
+            'fallback_from_formula_to_translation_distractor',
 
             'translation_distractor',
             'num_translation_distractors',
@@ -142,6 +143,7 @@ def make_dataset(dataset_name: str,
                 '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
                 '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
                 '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
+                '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
 
                 f'--translation-distractor {job_settings["translation_distractor"]}',
                 f'--num-translation-distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
@@ -289,9 +291,9 @@ def main():
 
         '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',  # ~ RuleTaker
 
-        # '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
-        # '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
-        # '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
+        '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
+        '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
+        '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
     ]
 
     num_jobs_for_datasets = 4

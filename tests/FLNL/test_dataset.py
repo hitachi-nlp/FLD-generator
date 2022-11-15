@@ -147,6 +147,7 @@ def test_generate_dataset():
         generator,
         distractor=distractor,
         translation_distractor=translation_distractor,
+        fallback_from_formula_to_translation_distractor=True,
         translator=translator,
         add_subj_obj_swapped_distractor=True,
     )

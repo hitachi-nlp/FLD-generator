@@ -3414,6 +3414,7 @@ _DEFAULT_DATASET_SETTINGS = {
 
         'sample_distractor_formulas_from_tree': True,
         'sample_hard_negatives': True,
+        'fallback_from_formula_to_translation_distractor': True,
 
 
         'translation_distractor': 'word_swap',
