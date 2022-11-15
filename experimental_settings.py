@@ -3008,7 +3008,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
+    '20221115__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3053,18 +3053,18 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
 
 
 
-    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
+    '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3109,17 +3109,17 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
 
 
-    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': {
+    '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3164,18 +3164,18 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
 
 
 
-    '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
+    '20221115__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3220,11 +3220,11 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
@@ -3232,7 +3232,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
+    '20221115__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3277,18 +3277,18 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
 
 
 
-    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': {
+    '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3334,17 +3334,17 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
 
 
-    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': {
+    '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3390,11 +3390,11 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
-
-            # 'train': 100000,
-            # 'valid': 1000,
             # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
         }
     },
 
@@ -3406,7 +3406,7 @@ _DATASET_SETTINGS = {
 
 
 _DEFAULT_DATASET_SETTINGS = {
-    '20221114': {
+    '20221115': {
         'world_assump': 'OWA',
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
         'unknown_ratio': 0.33,
@@ -3431,15 +3431,15 @@ _DEFAULT_DATASET_SETTINGS = {
 
 
 _DATASET_NAME_TO_DEFAULT = {
-    '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': '20221114',
-    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': '20221114',
-    '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': '20221114',
+    '20221115__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': '20221115',
+    '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': '20221115',
+    '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': '20221115',
 
-    '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221114',  # ~ RuleTaker
+    '20221115__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221115',  # ~ RuleTaker
 
-    '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221114',
-    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221114',
-    '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': '20221114',
+    '20221115__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221115',
+    '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221115',
+    '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': '20221115',
 }
 
 
