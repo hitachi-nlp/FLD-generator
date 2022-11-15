@@ -755,16 +755,24 @@ class TemplatedTranslator(Translator):
         )
 
         # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
-        unary_mapping = next(
-            generate_mappings_from_predicates_and_constants(
-                unary_predicates,
-                constants,
-                adj_verb_nouns,
-                entity_nouns,
-                shuffle=True,
-                allow_many_to_one=False,
+        try:
+            unary_mapping = next(
+                generate_mappings_from_predicates_and_constants(
+                    unary_predicates,
+                    constants,
+                    adj_verb_nouns,
+                    entity_nouns,
+                    shuffle=True,
+                    allow_many_to_one=False,
+                )
             )
-        )
+        except:
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            print(unary_predicates)
+            print(constants)
+            print(adj_verb_nouns)
+            print(entity_nouns)
+            raise
 
         interp_mapping = zeroary_mapping.copy()
         interp_mapping.update(unary_mapping)
