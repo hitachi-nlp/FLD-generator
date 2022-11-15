@@ -186,7 +186,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--num-workers', type=int, default=1)
-@click.option('--batch-size-per-worker', type=int, default=300)
+@click.option('--batch-size-per-worker', type=int, default=10000)
 @click.option('--seed', type=int, default=0)
 def main(output_path,
          argument_config,
@@ -275,6 +275,7 @@ def main(output_path,
                 )
 
             logger.debug('[pass or not checking for finding the cause of hangups] 0')  # HONOKA: we pass here
+            logger.info('creating corpus with %d jobs', num_workers)
             instances_list = Parallel(n_jobs=num_workers, backend='multiprocessing')(jobs)
             logger.debug('[pass or not checking for finding the cause of hangups] 1')  # HONOKA: we can't pass here
 
