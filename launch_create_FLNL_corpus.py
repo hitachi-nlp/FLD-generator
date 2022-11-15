@@ -2,12 +2,13 @@
 import json
 import math
 import logging
-from typing import List
+from typing import List, Union
 from pathlib import Path
 import copy
 
 import click
 from script_engine import QsubEngine, SubprocessEngine
+from script_engine.base import EngineBase
 from logger_setup import setup as setup_logger, create_file_handler
 from lab import build_dir, save_params
 from joblib import Parallel, delayed
@@ -21,6 +22,187 @@ def _make_multiple_value_option(option: str, values: List[str]) -> str:
         f'{option} {value}'
         for value in values
     ])
+
+
+def make_dataset(dataset_name: str,
+                 output_top_dir: Union[str, Path],
+                 engine: EngineBase,
+                 timeout_per_job: int,
+                 delete_logs_when_done: bool,
+                 num_jobs: int,
+                 dry_run: bool) -> None:
+    logger.info('====================== make_dataset() for "%s" =========================',
+                dataset_name)
+    output_top_dir = Path(output_top_dir)
+
+    # ----------------- fixed ------------------
+    settings = {
+        'dataset_name': dataset_name,
+        'num_workers_per_job': 5,
+    }
+    settings.update(get_dataset_setting(dataset_name))
+
+    output_dir = build_dir(
+        settings,
+        top_dir=str(output_top_dir / f'dataset_name={dataset_name}'),
+        short=True,
+        dirname_exclude_params=[
+            'dataset_name',
+            'proof_stances',
+            'unknown_ratio',
+
+            'argument_configs',
+
+            'complication',
+            'quantification',
+
+            'depths',
+            'branch_extension_steps',
+
+            'distractor',
+            # 'distractor_factor',
+            'num_distractors',
+            'sample_distractor_formulas_from_tree',
+            'sample_hard_negative_distractors',
+            'add_subj_obj_swapped_distractor',
+            'use_collapsed_translation_nodes_for_unknown_tree'
+
+            'translation_distractor',
+            'num_translation_distractors',
+
+            'split_sizes',
+
+            'translation_configs',
+            'limit_vocab_size_per_type',
+            'translation_volume_to_weight',
+
+            'num_workers_per_job',
+
+            'world_assump',
+        ],
+        save_params=True
+    )
+    logger.addHandler(create_file_handler(output_dir / 'log.txt'))
+
+    min_size_per_job = 100    # too small value might be slow.
+    for split, size in settings['split_sizes'].items():
+        size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
+
+        split_output_dir = output_dir / split
+        split_output_dir.mkdir(exist_ok=True, parents=True)
+
+        if size_with_margin / num_jobs < min_size_per_job:
+            _num_jobs = max(math.ceil(size_with_margin / min_size_per_job), 1)
+        else:
+            _num_jobs = num_jobs
+        size_per_job = math.ceil(size_with_margin / _num_jobs)
+
+        logger.info('============================== [launch_create_FLNL_corpus.py] Generating dataset for %s split ============================', split)
+        logger.info('size: %d', size)
+        logger.info('size_with_margin: %d', size_with_margin)
+        logger.info('num_jobs: %d', _num_jobs)
+        logger.info('size_per_job: %d', size_per_job)
+
+        jobs = []
+        for i_job in range(_num_jobs):
+            job_output_dir = split_output_dir / f'job-{str(i_job).zfill(6)}'
+            job_output_dir.mkdir(exist_ok=True, parents=True)
+
+            job_output_path = job_output_dir / f'{split}.jsonl'
+            job_log_path = job_output_dir / 'log.txt'
+
+            job_settings = copy.deepcopy(settings)
+            job_settings['split'] = split
+            job_settings['seed'] = i_job
+
+            save_params(job_settings, job_output_dir)
+
+            command = ' '.join([
+                'python ./create_FLNL_corpus.py',
+
+                f'{job_output_path}',
+                str(int(size_per_job)),
+
+                _make_multiple_value_option('--ac', job_settings['argument_configs']),
+
+                _make_multiple_value_option('--tc', job_settings['translation_configs']),
+                '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
+                maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
+                f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
+                maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
+
+                f'--depths \'{json.dumps(job_settings["depths"])}\'',
+                f'--depth-1-weight {settings["depth_1_weight"]}' if settings.get("depth_1_weight", None) is not None else '',
+                f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
+                f'--complication {job_settings["complication"]}',
+                f'--quantification {job_settings["quantification"]}',
+
+                f'--distractor {job_settings["distractor"]}',
+                f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
+                '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
+                '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
+                '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
+
+                f'--translation-distractor {job_settings["translation_distractor"]}',
+                f'--num-translation-distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
+
+                f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
+                f'--world-assump {job_settings["world_assump"]}',
+                maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
+                '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
+                f'--num-workers {job_settings["num_workers_per_job"]}',
+                f'--seed {job_settings["seed"]}',
+
+            ])
+
+            if isinstance(engine, SubprocessEngine):
+                command += f' 2>&1 | tee {str(job_log_path)}'
+                stdout = None
+                stderr = None
+            else:
+                command += f' 1>{str(job_log_path)} 2>&1'
+                stdout = job_output_dir / 'stdout.txt'
+                stderr = job_output_dir / 'stderr.txt'
+
+            if delete_logs_when_done and i_job >= 5:
+                # remove large log files.
+                command += f'; rm {str(job_log_path)}; rm {str(job_output_dir)}/*.stats.json'
+
+            jobs.append(
+                delayed(engine.run)(
+                    command,
+                    stdout=stdout,
+                    stderr=stderr,
+                    options={
+                        'l_opts': ['h_rt=5:00:00'],
+                        'timeout_from_run': timeout_per_job,
+                    },
+                    dry_run=dry_run,
+                    wait_until_finish=True,
+                )
+            )
+
+        logger.info('waiting %d jobs to be finished...', len(jobs))
+        Parallel(n_jobs=_num_jobs, backend='threading')(jobs)
+
+        logger.info('gathering results under %s', split_output_dir)
+        cnt = 0
+        is_done = False
+        job_output_jsonls = sorted([
+            path for path in split_output_dir.glob(f'**/*{split}.jsonl')
+            if str(path).find('job-') >= 0
+        ])
+        with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
+            for jsonl in job_output_jsonls:
+                logger.info('gathering results from %s', str(jsonl))
+                if is_done:
+                    break
+                for line in open(jsonl):
+                    if cnt >= size:
+                        is_done = True
+                        break
+                    f_out.write(line)
+                    cnt += 1
 
 
 @click.command()
@@ -42,7 +224,8 @@ def main():
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221112.various_negatives')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221114.new_steps')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221114.new_steps')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.debug.parallel')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -106,192 +289,43 @@ def main():
 
         '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',  # ~ RuleTaker
 
-        '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
-        '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
-        '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
+        # '20221114__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
+        # '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
+        # '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
     ]
-    # dataset_names = dataset_names[::-1]
+
+    num_jobs_for_datasets = 4
+
+    # num_jobs_per_dataset = 1
+    # num_jobs_per_dataset = 180
+    num_jobs_per_dataset = 10
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
-
-    # num_jobs = 1
-    # num_jobs = 180
-    num_jobs = 10
 
     timeout_per_job = 1800  # for the case some jobs hangs
     delete_logs_when_done = True
     dry_run = False
 
-    # ----------------- fixed ------------------
+    if num_jobs_for_datasets * num_jobs_per_dataset > 180:
+        raise ValueError('Too much jobs %s ~ ABCI job limit = 200',
+                         num_jobs_for_datasets * num_jobs_per_dataset)
+
+    jobs = []
     for dataset_name in dataset_names:
-        settings = {
-            'dataset_name': dataset_name,
-            'num_workers_per_job': 5,
-        }
-        settings.update(get_dataset_setting(dataset_name))
-
-        output_dir = build_dir(
-            settings,
-            top_dir=str(output_top_dir / f'dataset_name={dataset_name}'),
-            short=True,
-            dirname_exclude_params=[
-                'dataset_name',
-                'proof_stances',
-                'unknown_ratio',
-
-                'argument_configs',
-
-                'complication',
-                'quantification',
-
-                'depths',
-                'branch_extension_steps',
-
-                'distractor',
-                # 'distractor_factor',
-                'num_distractors',
-                'sample_distractor_formulas_from_tree',
-                'sample_hard_negative_distractors',
-                'add_subj_obj_swapped_distractor',
-                'use_collapsed_translation_nodes_for_unknown_tree'
-
-                'translation_distractor',
-                'num_translation_distractors',
-
-                'split_sizes',
-
-                'translation_configs',
-                'limit_vocab_size_per_type',
-                'translation_volume_to_weight',
-
-                'num_workers_per_job',
-
-                'world_assump',
-            ],
-            save_params=True
+        jobs.append(
+            delayed(make_dataset)(
+                dataset_name,
+                output_top_dir,
+                engine,
+                timeout_per_job,
+                delete_logs_when_done,
+                num_jobs_per_dataset,
+                dry_run,
+            )
         )
-        logger.addHandler(create_file_handler(output_dir / 'log.txt'))
 
-        min_size_per_job = 100    # too small value might be slow.
-        for split, size in settings['split_sizes'].items():
-            size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
-
-            split_output_dir = output_dir / split
-            split_output_dir.mkdir(exist_ok=True, parents=True)
-
-            if size_with_margin / num_jobs < min_size_per_job:
-                _num_jobs = max(math.ceil(size_with_margin / min_size_per_job), 1)
-            else:
-                _num_jobs = num_jobs
-            size_per_job = math.ceil(size_with_margin / _num_jobs)
-
-            logger.info('============================== [launch_create_FLNL_corpus.py] Generating dataset for %s split ============================', split)
-            logger.info('size: %d', size)
-            logger.info('size_with_margin: %d', size_with_margin)
-            logger.info('num_jobs: %d', _num_jobs)
-            logger.info('size_per_job: %d', size_per_job)
-
-            jobs = []
-            for i_job in range(_num_jobs):
-                job_output_dir = split_output_dir / f'job-{str(i_job).zfill(6)}'
-                job_output_dir.mkdir(exist_ok=True, parents=True)
-
-                job_output_path = job_output_dir / f'{split}.jsonl'
-                job_log_path = job_output_dir / 'log.txt'
-
-                job_settings = copy.deepcopy(settings)
-                job_settings['split'] = split
-                job_settings['seed'] = i_job
-
-                save_params(job_settings, job_output_dir)
-
-                command = ' '.join([
-                    'python ./create_FLNL_corpus.py',
-
-                    f'{job_output_path}',
-                    str(int(size_per_job)),
-
-                    _make_multiple_value_option('--ac', job_settings['argument_configs']),
-
-                    _make_multiple_value_option('--tc', job_settings['translation_configs']),
-                    '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
-                    maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
-                    f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
-                    maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
-
-                    f'--depths \'{json.dumps(job_settings["depths"])}\'',
-                    f'--depth-1-weight {settings["depth_1_weight"]}' if settings.get("depth_1_weight", None) is not None else '',
-                    f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
-                    f'--complication {job_settings["complication"]}',
-                    f'--quantification {job_settings["quantification"]}',
-
-                    f'--distractor {job_settings["distractor"]}',
-                    f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
-                    '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
-                    '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
-                    '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
-
-                    f'--translation-distractor {job_settings["translation_distractor"]}',
-                    f'--num-translation-distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
-
-                    f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
-                    f'--world-assump {job_settings["world_assump"]}',
-                    maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
-                    '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
-                    f'--num-workers {job_settings["num_workers_per_job"]}',
-                    f'--seed {job_settings["seed"]}',
-
-                ])
-
-                if isinstance(engine, SubprocessEngine):
-                    command += f' 2>&1 | tee {str(job_log_path)}'
-                    stdout = None
-                    stderr = None
-                else:
-                    command += f' 1>{str(job_log_path)} 2>&1'
-                    stdout = job_output_dir / 'stdout.txt'
-                    stderr = job_output_dir / 'stderr.txt'
-
-                if delete_logs_when_done and i_job >= 5:
-                    # remove large log files.
-                    command += f'; rm {str(job_log_path)}; rm {str(job_output_dir)}/*.stats.json'
-
-                jobs.append(
-                    delayed(engine.run)(
-                        command,
-                        stdout=stdout,
-                        stderr=stderr,
-                        options={
-                            'l_opts': ['h_rt=5:00:00'],
-                            'timeout_from_run': timeout_per_job,
-                        },
-                        dry_run=dry_run,
-                        wait_until_finish=True,
-                    )
-                )
-
-            logger.info('waiting %d jobs to be finished...', len(jobs))
-            Parallel(n_jobs=_num_jobs, backend='threading')(jobs)
-
-            logger.info('gathering results under %s', split_output_dir)
-            cnt = 0
-            is_done = False
-            job_output_jsonls = sorted([
-                path for path in split_output_dir.glob(f'**/*{split}.jsonl')
-                if str(path).find('job-') >= 0
-            ])
-            with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
-                for jsonl in job_output_jsonls:
-                    logger.info('gathering results from %s', str(jsonl))
-                    if is_done:
-                        break
-                    for line in open(jsonl):
-                        if cnt >= size:
-                            is_done = True
-                            break
-                        f_out.write(line)
-                        cnt += 1
+    Parallel(n_jobs=num_jobs_for_datasets, backend='threading')(jobs)
 
     logger.info('============================== [launch_create_FLNL_corpus.py] done! ============================')
 
