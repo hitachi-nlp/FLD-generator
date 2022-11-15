@@ -186,6 +186,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--num-workers', type=int, default=1)
+@click.option('--min-size-per-worker', type=int, default=100)
 @click.option('--batch-size-per-worker', type=int, default=10000)
 @click.option('--seed', type=int, default=0)
 def main(output_path,
@@ -214,6 +215,7 @@ def main(output_path,
          unknown_ratio,
          use_collapsed_translation_nodes_for_unknown_tree,
          num_workers,
+         min_size_per_worker,
          batch_size_per_worker,
          seed):
     setup_logger(do_stderr=True, level=logging.INFO)
@@ -231,6 +233,10 @@ def main(output_path,
     output_path.parent.mkdir(exist_ok=True, parents=True)
 
     size_per_worker = math.ceil(size / num_workers)
+    if size_per_worker < min_size_per_worker:
+        num_workers = max(int(size / min_size_per_worker), 1)
+    size_per_worker = math.ceil(size / num_workers)
+
     _batch_size_per_worker = min(batch_size_per_worker, size_per_worker)
     num_batches = math.ceil(size_per_worker / _batch_size_per_worker)
 
