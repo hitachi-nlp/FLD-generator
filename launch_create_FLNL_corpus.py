@@ -227,7 +227,9 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221112.various_negatives')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221114.new_steps')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.debug.parallel')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.debug.parallel')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.steps')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -235,10 +237,12 @@ def main():
         # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
         # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems',
 
+
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems.limit_vocab',
         # '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems.limit_vocab',
         # # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
         # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
+
 
         # '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
         # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
@@ -258,14 +262,18 @@ def main():
         # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
         # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
 
+
         # '20221015__dpth-S__bx-S__dist-mix__dist_size-M__size-S.reuse_object_nouns',
         # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S.reuse_object_nouns',
+
 
         # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
         # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-sqrt__size-S',
 
+
         # '20221028__dpth-M__bx-M__dist-var__dist_size-S__reuse-0.0__transl_weight-linear__size-S',
         # '20221028__dpth-M__bx-M__dist-var__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
+
 
         # '20221101__arg-basic__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-True__voc_limit-100__dataset_size-100000',
         # '20221101__arg-cmpl__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-True__voc_limit-100__dataset_size-100000',
@@ -274,19 +282,22 @@ def main():
         # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
         # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-300000',
 
+
         # '20221107__arg-base__dpth-03__dist-00__transl-nrrw__size-100000',
         # '20221107__arg-cmpl__dpth-03__dist-00__transl-nrrw__size-100000',
         # '20221107__arg-cmpl__dpth-03__dist-00__transl-wide__size-100000',
         # '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
         # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
 
+
         # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
         # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
         # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000',
         # '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
 
-        '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
-        '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
+
+        # '20221114__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
+        # '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
         '20221114__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000',
 
         '20221114__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',  # ~ RuleTaker
@@ -295,17 +306,18 @@ def main():
         '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
         '20221114__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
     ]
+    # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 4
+    num_jobs_for_datasets = 3
 
     # num_jobs_per_dataset = 1
     # num_jobs_per_dataset = 180
-    num_jobs_per_dataset = 10
+    num_jobs_per_dataset = 60
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
-    timeout_per_job = 1800  # for the case some jobs hangs
+    timeout_per_job = 3600  # for the case some jobs hangs
     delete_logs_when_done = True
     dry_run = False
 
