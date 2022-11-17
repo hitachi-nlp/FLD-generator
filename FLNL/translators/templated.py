@@ -1,6 +1,7 @@
 import json
 from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
 from collections import OrderedDict, defaultdict
+import traceback
 import re
 from tqdm import tqdm
 import copy
@@ -723,24 +724,22 @@ class TemplatedTranslator(Translator):
 
         adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
         if self.reused_object_nouns_max_factor > 0.0:
-            obj_nouns = [
+            obj_nouns = list({
                 self._parse_word_with_obj(word)[1]
                 for word in adj_verb_nouns
                 if self._parse_word_with_obj(word)[1] is not None
-            ]
+            })
         else:
             obj_nouns = []
 
         event_noun_size = int(len(zeroary_predicates) * 2.0)
         event_nouns = self._sample(self._zeroary_predicates, max(event_noun_size, 0))
-        event_nouns = list(set(event_nouns))
 
-        entity_noun_size = int(len(constants) * 1.0)   # since all the constants have pos=NOUN, x 1.0 is enough
+        entity_noun_size = int(math.ceil(len(constants) * 1.0))   # since all the constants have pos=NOUN, x 1.0 is enough
         entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
         if len(entity_nouns) > 0:
             logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
         entity_nouns += self._sample(self._constants, max(entity_noun_size - len(entity_nouns), 0))
-        entity_nouns = list(set(entity_nouns))
 
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
@@ -772,6 +771,7 @@ class TemplatedTranslator(Translator):
             print(constants)
             print(adj_verb_nouns)
             print(entity_nouns)
+            print(traceback.format_exc())
             raise
 
         interp_mapping = zeroary_mapping.copy()
