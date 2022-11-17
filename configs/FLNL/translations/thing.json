@@ -3569,7 +3569,7 @@
 
     "{A}pre_modifier": [
       "{A}[ADJ]",
-      "{A}[VERB.ing]"
+      "__{A}[VERB.ing] __ this will lead to 'eating apple dog is nice' which is not appropriate." 
     ],
 
     "¬{A}pre_modifier": [
