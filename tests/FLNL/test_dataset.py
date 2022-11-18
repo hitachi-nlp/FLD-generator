@@ -162,7 +162,7 @@ def test_generate_dataset():
                               use_collapsed_translation_nodes_for_unknown_tree=True,
                               word_bank=word_bank,
                               num_distractors=[5],
-                              num_translation_distractors=[5],
+                              num_translation_distractors=[20],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

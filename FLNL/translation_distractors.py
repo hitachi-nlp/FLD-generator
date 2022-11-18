@@ -87,17 +87,25 @@ class WordSwapDistractor(TranslationDistractor):
             return []
         
         distractor_translations = []
+        is_duplicated_translation_generated = False
         num_loop = int(size / len(translations) + 1)
         for i_loop in range(0, num_loop):
             for translation in random.sample(translations, len(translations)):
                 swapped_translation = self._word_swap_translation(translation)
+
                 if swapped_translation is not None:
-                    distractor_translations.append(swapped_translation)
+                    if swapped_translation in distractor_translations:
+                        is_duplicated_translation_generated = True
+                    else:
+                        distractor_translations.append(swapped_translation)
+
                 if len(distractor_translations) >= size:
                     return distractor_translations
 
         if len(distractor_translations) < size:
             logger.warning('WordSwapDistractor could not generate %s distractors. Will return only %d distractors', size, len(distractor_translations))
+            if is_duplicated_translation_generated:
+                logger.warning('This might be due to that duplicated translation are generated but they are excluded.')
         return distractor_translations
 
     def _word_swap_translation(self, transl: str, at_least_one=True) -> Optional[str]:
