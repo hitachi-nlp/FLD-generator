@@ -230,7 +230,9 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.debug.parallel')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.steps')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221116.fix_translation')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221116.fix_translation')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221117.investigation')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -299,19 +301,26 @@ def main():
 
         # '20221115__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
         # '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
-        '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000',
+        # '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000',
         # '20221115__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',  # ~ RuleTaker
         # '20221115__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
         # '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
         # '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
+
+
+        # '20221117__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--20__transl-wide__size-100000',
+        '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000',
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 3
-    num_jobs_per_dataset = 60
+    # num_jobs_for_datasets = 3
+    # num_jobs_per_dataset = 60
 
-    # num_jobs_per_dataset = 1
-    # num_jobs_per_dataset = 180
+    # num_jobs_for_datasets = 2
+    # num_jobs_per_dataset = 90
+
+    num_jobs_for_datasets = 1
+    num_jobs_per_dataset = 180
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')

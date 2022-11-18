@@ -3448,7 +3448,7 @@ _DATASET_SETTINGS = {
         'add_subj_obj_swapped_distractor': False,
 
 
-        'num_translation_distractors': _to_range(0, 10),
+        'num_translation_distractors': _to_range(0, 20),
         'use_collapsed_translation_nodes_for_unknown_tree': True,
 
 
@@ -3465,6 +3465,59 @@ _DATASET_SETTINGS = {
         }
     },
 
+
+    '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 2),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'num_distractors': _to_range(0, 0),
+        'reused_object_nouns_max_factor': 0.0,
+        'add_subj_obj_swapped_distractor': False,
+
+
+        'num_translation_distractors': _to_range(0, 20),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            # 'test': 1000,
+
+            'train': 100000,
+            'valid': 1000,
+            'test': 1000,
+        }
+    },
 
 
 
@@ -3510,6 +3563,10 @@ _DATASET_NAME_TO_DEFAULT = {
     '20221115__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221115',
     '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': '20221115',
     '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': '20221115',
+
+    '20221117__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--20__transl-wide__size-100000': '20221115',
+    '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000': '20221115',
+
 }
 
 
