@@ -3438,7 +3438,7 @@ _DATASET_SETTINGS = {
         'complication': 0.3,
 
 
-        'depths': _to_range(1, 3),
+        'depths': _to_range(1, 4),
         'branch_extension_steps': _to_range(0, 0),
 
 

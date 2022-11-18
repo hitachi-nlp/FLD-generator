@@ -406,8 +406,8 @@ class NLProofSDataset:
 
                 'original_tree_depth': proof_tree.depth,
 
-                # I have no idea how to define depth from the root when proof is incomplete.
-                'depth': None if proof_stance == ProofStance.UNKNOWN else proof_tree.depth,
+                # We follow ProofWriter to define proof depth as tree depth - 1
+                'depth': None if proof_stance == ProofStance.UNKNOWN else proof_tree.depth - 1,
 
                 'num_formula_distractors': len(formula_distractors),
                 'num_translation_distractors': len(translation_distractors),
