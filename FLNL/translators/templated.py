@@ -736,10 +736,20 @@ class TemplatedTranslator(Translator):
         event_nouns = self._sample(self._zeroary_predicates, max(event_noun_size, 0))
 
         entity_noun_size = int(math.ceil(len(constants) * 1.0))   # since all the constants have pos=NOUN, x 1.0 is enough
-        entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
-        if len(entity_nouns) > 0:
-            logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
-        entity_nouns += self._sample(self._constants, max(entity_noun_size - len(entity_nouns), 0))
+        while True:
+            entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
+            if len(entity_nouns) > 0:
+                logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
+
+            sampled_constants = self._sample(self._constants, max((entity_noun_size - len(entity_nouns)) * 5, 0))
+            for constant in sampled_constants:
+                if len(entity_nouns) >= entity_noun_size:
+                    break
+                if constant not in entity_nouns:
+                    entity_nouns.append(constant)
+
+            if len(entity_nouns) >= entity_noun_size:
+                break
 
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
