@@ -316,7 +316,7 @@ def main():
         # '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000',
 
 
-        '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-1000',
+        '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -327,7 +327,7 @@ def main():
     # num_jobs_per_dataset = 90
 
     num_jobs_for_datasets = 1
-    num_jobs_per_dataset = 180
+    num_jobs_per_dataset = 100
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
