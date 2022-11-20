@@ -98,11 +98,11 @@ def test_generate_dataset():
             './configs/FLNL/arguments/axiom.negation.pred_only.json',
             './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
 
             # most important universal theorems
@@ -126,8 +126,9 @@ def test_generate_dataset():
         # 'negated_hypothesis_tree',
 
         # 'fallback.unknown_interprands.negated_hypothesis_tree',
-        'fallback.various_form.negated_hypothesis_tree',
         # 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'fallback.negated_hypothesis_tree.various_form',
+        # 'fallback.various_form.negated_hypothesis_tree',
 
         # 'mixture.unknown_interprands.negated_hypothesis_tree',
         # 'mixture.various_form.negated_hypothesis_tree',
@@ -162,7 +163,7 @@ def test_generate_dataset():
                               use_collapsed_translation_nodes_for_unknown_tree=True,
                               word_bank=word_bank,
                               num_distractors=[5],
-                              num_translation_distractors=[20],
+                              num_translation_distractors=[5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

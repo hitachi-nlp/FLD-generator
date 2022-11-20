@@ -21,8 +21,8 @@ from FLNL.proof_tree_generators import build as build_generator
 from FLNL.datasets import NLProofSDataset
 from FLNL.proof import ProofTree
 from FLNL.utils import nested_merge
-from FLNL.formula_distractors import AVAILABLE_DISTRACTORS, build as build_distractor
-from FLNL.translation_distractors import build as build_translation_distractor, AVAILABLE_DISTRACTORS as AVAILABLE_TRANSLATION_DISTRACTORS
+from FLNL.formula_distractors import build as build_distractor
+from FLNL.translation_distractors import build as build_translation_distractor
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -176,12 +176,12 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--keep-dneg', is_flag=True, default=False)
-@click.option('--distractor', type=click.Choice(AVAILABLE_DISTRACTORS), default='unknown_interprands')
+@click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
-@click.option('--translation-distractor', type=click.Choice(AVAILABLE_TRANSLATION_DISTRACTORS), default='word_swap')
+@click.option('--translation-distractor', default='word_swap')
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 @click.option('--num-translation-distractors', type=str, default=json.dumps([5]))
 @click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))

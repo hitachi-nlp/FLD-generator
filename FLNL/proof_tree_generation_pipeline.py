@@ -10,7 +10,7 @@ from FLNL.translators.base import Translator
 from FLNL.utils import flatten_dict
 from FLNL.exception import FormalLogicExceptionBase
 from FLNL.proof_tree_generators import ProofTreeGenerationFailure
-from FLNL.formula_distractors import FormulaDistractorGenerationFailure
+from FLNL.formula_distractors import FormulaDistractorGenerationFailure, NegatedHypothesisTreeDistractor
 from FLNL.translation_distractors import TranslationDistractor
 from FLNL.translators import TranslationFailure
 import kern_profiler
@@ -51,7 +51,8 @@ class ProofTreeGenerationPipeline:
             branch_extension_steps: int,
             num_distractors: int,
             num_translation_distractors: int,
-            raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, int]]:
+            raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
+        others = {}
 
         if not self.generator.disallow_contradiction_as_hypothesis:
             raise ValueError('generator.disallow_contradiction_as_hypothesis must be "Ture" since we need the negated hypothesis for ')
@@ -76,7 +77,12 @@ class ProofTreeGenerationPipeline:
             if num_distractors > 0:
                 if self.distractor is not None:
                     try:
-                        formula_distractors: List[Formula] = self.distractor.generate(proof_tree, num_distractors)
+                        formula_distractors, _others = self.distractor.generate(proof_tree, num_distractors)
+                        for _other_key, _other_val in _others.items():
+                            if _other_key in others:
+                                raise ValueError(f'Duplicated other key {_other_key}')
+                            others[_other_key] = _other_val
+
                     except FormulaDistractorGenerationFailure as e:
                         is_formula_distractor_failed = True
                         if self.fallback_from_formula_to_translation_distractor:
@@ -100,6 +106,12 @@ class ProofTreeGenerationPipeline:
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
                 leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
+
+                other_formulas = []
+                if others.get('negative_tree', None) is not None:
+                    negative_tree = others['negative_tree']
+                    other_formulas = [node.formula for node in negative_tree.nodes]
+                all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
                 try:
                     named_translations, translator_stats = self.translator.translate(all_formulas,
@@ -151,7 +163,7 @@ class ProofTreeGenerationPipeline:
             else:
                 stats = {}
 
-            return proof_tree, root_negation_formula, formula_distractors, translation_distractors, stats
+            return proof_tree, root_negation_formula, formula_distractors, translation_distractors, others, stats
 
     def _get_stats(self,
                    proof_tree: ProofTree,

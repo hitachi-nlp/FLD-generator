@@ -159,18 +159,10 @@ class WordSwapDistractor(TranslationDistractor):
         return 10
 
 
-AVAILABLE_DISTRACTORS = [
-    'word_swap',
-]
-
-
 def build(type_: str, word_bank: Optional[WordBank] = None):
-    if type_ not in AVAILABLE_DISTRACTORS:
-        raise ValueError(f'Unknown distractor type {type_}')
-
     if type_ == 'word_swap':
         if word_bank is None:
             raise ValueError()
         return WordSwapDistractor(word_bank)
     else:
-        raise ValueError()
+        raise ValueError(f'Unknown distractor type {type_}')

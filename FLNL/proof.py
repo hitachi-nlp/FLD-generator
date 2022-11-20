@@ -195,15 +195,14 @@ class ProofTree:
 
     def depth_first_traverse(self,
                              start_node: Optional[ProofNode] = None,
-                             depth=0,
-                             get_depth=False) -> Iterable[Union[ProofNode, Tuple[ProofNode, int]]]:
+                             depth=0) -> Iterable[ProofNode]:
         if len(self._nodes) == 0:
             return None
 
         start_node = start_node or self.root_node
         for child_node in start_node.children:
-            yield from self.depth_first_traverse(start_node=child_node, depth=depth + 1, get_depth=get_depth)
-        yield (start_node, depth) if get_depth else start_node
+            yield from self.depth_first_traverse(start_node=child_node, depth=depth + 1)
+        yield start_node
 
     def __repr__(self):
         return 'ProofTree(...)'
@@ -215,7 +214,8 @@ class ProofTree:
     def format_str(self):
         rep = ''
         # rep = 'ProofTree(\n'
-        for node, depth in self.depth_first_traverse(get_depth=True):
+        for node in self.depth_first_traverse():
+            depth = self.get_node_depth(node)
             rep += ''.join([f'{_depth}    ' for _depth in range(0, 10)]) + '\n'
             rep += ''.join(['|    '] * 10) + '\n'
             rep += '|    ' * depth + f'|  {node.argument}\n'
