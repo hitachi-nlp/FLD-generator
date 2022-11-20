@@ -267,6 +267,14 @@ class NLProofSDataset:
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
 
+            if proof_stance == ProofStance.UNKNOWN:
+                proof_depth = None
+            else:
+                if proof_tree.root_node.argument.id.startswith('reference'):
+                    proof_depth = 0
+                else:
+                    proof_depth = proof_tree.depth
+
             # make output json
             label = _make_instance_label(proof_stance, self.world_assump)
             dataset_json = {
@@ -283,7 +291,7 @@ class NLProofSDataset:
                 'original_tree_depth': proof_tree.depth,
 
                 # We follow ProofWriter to define proof depth as tree depth - 1
-                'depth': None if proof_stance == ProofStance.UNKNOWN else proof_tree.depth - 1,
+                'depth': proof_depth,
 
                 'num_formula_distractors': len(formula_distractors),
                 'num_translation_distractors': len(translation_distractors),
