@@ -257,7 +257,7 @@ class NLProofSDataset:
                     id2node=id2node,
 
                     add_randome_sentence_if_context_is_null=add_randome_sentence_if_context_is_null,
-                    conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
+                    conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True,
                 )
 
                 for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):

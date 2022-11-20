@@ -3553,7 +3553,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'fallback.various_form.negative_tree',
+        'distractor': 'fallback.negative_tree.various_form',
         'try_negated_hypothesis_first': False,
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
