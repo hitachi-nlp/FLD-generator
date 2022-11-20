@@ -240,9 +240,9 @@ class NLProofSDataset:
                 missing_nodes_of_negative_tree = others['negative_tree_missing_nodes']
 
                 if len(missing_nodes_of_negative_tree) == 0:
-                    negative_proof_stance = ProofStance.UNKNOWN
-                else:
                     negative_proof_stance = ProofStance.PROOF
+                else:
+                    negative_proof_stance = ProofStance.UNKNOWN
 
                 negative_hypothesis = self._get_sent_from_node(negative_tree.root_node)
 

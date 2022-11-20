@@ -534,7 +534,7 @@ _DATASET_SETTINGS = {
 
         'depths': [1],
         'branch_extension_steps': [0],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -569,7 +569,7 @@ _DATASET_SETTINGS = {
 
         'depths': [3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -603,7 +603,7 @@ _DATASET_SETTINGS = {
 
         'depths': [5],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -639,7 +639,7 @@ _DATASET_SETTINGS = {
 
         'depths': [3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -676,7 +676,7 @@ _DATASET_SETTINGS = {
 
         'depths': [3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -712,7 +712,7 @@ _DATASET_SETTINGS = {
 
         'depths': [5],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
         'translation_configs': [
@@ -747,7 +747,7 @@ _DATASET_SETTINGS = {
 
         'depths': [3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -781,7 +781,7 @@ _DATASET_SETTINGS = {
 
         'depths': [5],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -822,7 +822,7 @@ _DATASET_SETTINGS = {
 
         'depths': [3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -862,7 +862,7 @@ _DATASET_SETTINGS = {
 
         'depths': [5],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -903,7 +903,7 @@ _DATASET_SETTINGS = {
 
         'depths': [10],
         'branch_extension_steps': [5],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -944,7 +944,7 @@ _DATASET_SETTINGS = {
 
         'depths': [1, 2, 3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -986,7 +986,7 @@ _DATASET_SETTINGS = {
 
         'depths': [3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -1027,7 +1027,7 @@ _DATASET_SETTINGS = {
 
         'depths': [5],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -1068,7 +1068,7 @@ _DATASET_SETTINGS = {
 
         'depths': [10],
         'branch_extension_steps': [5],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -1109,7 +1109,7 @@ _DATASET_SETTINGS = {
 
         'depths': [1, 2, 3],
         'branch_extension_steps': [3],
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
         'translation_configs': [
@@ -1165,7 +1165,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -1215,7 +1215,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -1265,7 +1265,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1315,7 +1315,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1365,7 +1365,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.negated_hypothesis_tree.unknown_interprands',
+        'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1416,7 +1416,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -1466,7 +1466,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -1516,7 +1516,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1566,7 +1566,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1616,7 +1616,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1671,7 +1671,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -1721,7 +1721,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -1771,7 +1771,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1821,7 +1821,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1871,7 +1871,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1922,7 +1922,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -1974,7 +1974,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -2024,7 +2024,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'mixture.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -2082,7 +2082,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -2132,7 +2132,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.unknown_interprands.negated_hypothesis_tree',
+        'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -2182,7 +2182,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
@@ -2232,7 +2232,7 @@ _DATASET_SETTINGS = {
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
@@ -2297,7 +2297,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 3),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
 
@@ -2353,7 +2353,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 3),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
 
@@ -2409,7 +2409,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 3),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
 
@@ -2465,7 +2465,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
 
@@ -2521,7 +2521,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
 
@@ -2577,7 +2577,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
 
@@ -2633,7 +2633,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'sample_distractor_formulas_from_tree': True,
@@ -2692,7 +2692,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'sample_distractor_formulas_from_tree': True,
@@ -2758,7 +2758,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
         'sample_distractor_formulas_from_tree': True,
@@ -2824,7 +2824,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
         'sample_distractor_formulas_from_tree': True,
@@ -2890,7 +2890,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
         'sample_distractor_formulas_from_tree': True,
@@ -2956,7 +2956,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(1, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
         'sample_distractor_formulas_from_tree': True,
@@ -3038,7 +3038,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
         'add_subj_obj_swapped_distractor': False,
@@ -3094,7 +3094,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
         'add_subj_obj_swapped_distractor': False,
@@ -3149,7 +3149,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
         'add_subj_obj_swapped_distractor': False,
@@ -3205,7 +3205,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3262,7 +3262,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3319,7 +3319,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3375,7 +3375,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 5),
 
 
-        'distractor': 'fallback.various_form.negated_hypothesis_tree',
+        'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3442,7 +3442,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
         'add_subj_obj_swapped_distractor': False,
@@ -3496,7 +3496,7 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 0),
 
 
-        'distractor': 'various_form',   # we can not use NegatedHypothesisTreeDistractor since the arguments do not include negation.
+        'distractor': 'various_form',   # we can not use NegativeTreeDistractor since the arguments do not include negation.
         'num_distractors': _to_range(0, 0),
         'reused_object_nouns_max_factor': 0.0,
         'add_subj_obj_swapped_distractor': False,

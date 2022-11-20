@@ -10,7 +10,7 @@ from FLNL.translators.base import Translator
 from FLNL.utils import flatten_dict
 from FLNL.exception import FormalLogicExceptionBase
 from FLNL.proof_tree_generators import ProofTreeGenerationFailure
-from FLNL.formula_distractors import FormulaDistractorGenerationFailure, NegatedHypothesisTreeDistractor
+from FLNL.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
 from FLNL.translation_distractors import TranslationDistractor
 from FLNL.translators import TranslationFailure
 import kern_profiler

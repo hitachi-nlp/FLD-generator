@@ -44,6 +44,7 @@ def load_dataset(argument_config: List[str],
                  num_distractors: List[int],
                  sample_distractor_formulas_from_tree: bool,
                  sample_hard_negative_distractors: bool,
+                 dont_try_negated_hypothesis: bool,
                  add_subj_obj_swapped_distractor: bool,
                  translation_distractor: str,
                  fallback_from_formula_to_translation_distractor: bool,
@@ -71,7 +72,8 @@ def load_dataset(argument_config: List[str],
         _distractor = build_distractor(distractor,
                                        generator=generator,
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
-                                       sample_hard_negatives=sample_hard_negative_distractors)
+                                       sample_hard_negatives=sample_hard_negative_distractors,
+                                       try_negated_hypothesis_first=not dont_try_negated_hypothesis)
         logger.info('------------------- building distractor done! ----------------')
     else:
         _distractor = None
@@ -179,6 +181,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
+@click.option('--dont-try-negative-hypothesis', type=bool, is_flag=True)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--translation-distractor', default='word_swap')
@@ -210,6 +213,7 @@ def main(output_path,
          num_distractors,
          sample_distractor_formulas_from_tree,
          sample_hard_negative_distractors,
+         dont_try_negated_hypothesis,
          add_subj_obj_swapped_distractor,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
@@ -271,6 +275,7 @@ def main(output_path,
                         num_distractors,
                         sample_distractor_formulas_from_tree,
                         sample_hard_negative_distractors,
+                        dont_try_negated_hypothesis,
                         add_subj_obj_swapped_distractor,
                         translation_distractor,
                         fallback_from_formula_to_translation_distractor,

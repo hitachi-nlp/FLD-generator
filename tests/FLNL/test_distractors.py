@@ -10,7 +10,7 @@ from FLNL.formula_distractors import (
     UnkownPASDistractor,
     SameFormUnkownInterprandsDistractor,
     VariousFormUnkownInterprandsDistractor,
-    NegatedHypothesisTreeDistractor,
+    NegativeTreeDistractor,
 )
 from logger_setup import setup as setup_logger
 

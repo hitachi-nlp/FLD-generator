@@ -123,20 +123,21 @@ def test_generate_dataset():
     distractor = build_distractor(
         # 'unknown_interprands',
         # 'various_form',
-        # 'negated_hypothesis_tree',
+        # 'negative_tree',
 
-        # 'fallback.unknown_interprands.negated_hypothesis_tree',
-        # 'fallback.negated_hypothesis_tree.unknown_interprands',
-        'fallback.negated_hypothesis_tree.various_form',
-        # 'fallback.various_form.negated_hypothesis_tree',
+        # 'fallback.unknown_interprands.negative_tree',
+        # 'fallback.negative_tree.unknown_interprands',
+        'fallback.negative_tree.various_form',
+        # 'fallback.various_form.negative_tree',
 
-        # 'mixture.unknown_interprands.negated_hypothesis_tree',
-        # 'mixture.various_form.negated_hypothesis_tree',
-        # 'mixture.negated_hypothesis_tree.unknown_interprands',
+        # 'mixture.unknown_interprands.negative_tree',
+        # 'mixture.various_form.negative_tree',
+        # 'mixture.negative_tree.unknown_interprands',
 
         generator=generator,
         sample_prototype_formulas_from_tree=True,
         sample_hard_negatives=True,
+        try_negated_hypothesis_first=True,
     )
 
     translation_distractor = build_translation_distractor(
