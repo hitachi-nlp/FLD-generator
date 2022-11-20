@@ -98,6 +98,7 @@ def test_generate_dataset():
             './configs/FLNL/arguments/axiom.negation.pred_only.json',
             './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
+            # -- we exclude the below for speed --
             # './configs/FLNL/arguments/theorem.pred_only.json',
             # './configs/FLNL/arguments/theorem.pred_arg.json',
 
@@ -105,7 +106,7 @@ def test_generate_dataset():
             # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
 
 
-            # most important universal theorems
+            # -- not tested. may not work --
             # './configs/FLNL/arguments/universal_theorem.axiom.pred_arg.json',
             # './configs/FLNL/arguments/universal_theorem.theorem.pred_arg.json',
 
