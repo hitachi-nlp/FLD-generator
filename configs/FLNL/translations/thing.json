@@ -3569,13 +3569,13 @@
 
     "{A}pre_modifier": [
       "{A}[ADJ]",
-      "__{A}[VERB.ing] __ this will lead to 'eating apple dog is nice' which is not appropriate." 
+      "__{A}[VERB.ing] __comments: this will lead to 'eating apple dog is nice' which is not appropriate." 
     ],
 
     "¬{A}pre_modifier": [
       "{A}[ADJ.neg]",
       "non-{A}[ADJ]",
-      "non-{A}[VERB.ing]"
+      "__non-{A}[VERB.ing] __comments: this will lead to 'eating apple dog is nice' which is not appropriate."
     ],
 
     "{A}post_modifier": [
