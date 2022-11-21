@@ -54,6 +54,35 @@ def generate_complicated_formulas(src_formula: Formula,
             yield complicated_formula, mapping
 
 
+def generate_simplified_formulas(src_formula: Formula,
+                                 get_name=False) -> Union[Iterable[Formula], Iterable[Tuple[Formula, str]]]:
+    # We will exclude "negation", "and" and "or"
+    # For simplicity, we change one element at once
+
+    rep = src_formula.rep
+
+    for i_negation_match, negation_match in enumerate(re.finditer(NEGATION, rep)):
+        rep_wo_negation = rep[:negation_match.start()] + rep[negation_match.end():]
+
+        if get_name:
+            yield Formula(rep_wo_negation), f'simplification.not-{_fill_str(i_negation_match)}'
+        else:
+            yield Formula(rep_wo_negation)
+
+    for op in [AND, OR]:
+        op_regexp = f'\(([^\)]*) {op} ([^\)]*)\)'
+        for i_match, match in enumerate(re.finditer(op_regexp, rep)):
+            span_text = rep[match.start():match.end()]
+            span_text_replaced = re.sub(op_regexp, '\g<1>', span_text)
+
+            rep_wo_op = rep[:match.start()] + span_text_replaced + rep[match.end():]
+
+            if get_name:
+                yield Formula(rep_wo_op), f'simplification.{op}-{_fill_str(i_match)}'
+            else:
+                yield Formula(rep_wo_op)
+
+
 def generate_complication_mappings_from_formula(formulas: List[Formula],
                                                 suppress_op_expansion_if_exists=False,
                                                 get_name=False) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:

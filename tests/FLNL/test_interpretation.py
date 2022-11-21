@@ -8,6 +8,7 @@ from FLNL.interpretation import (
     formula_can_not_be_identical_to,
     generate_quantifier_formulas,
     generate_partially_quantifier_arguments,
+    generate_simplified_formulas,
 )
 from FLNL.proof_tree_generators import generate_mappings_from_formula
 from FLNL.formula import Formula
@@ -629,13 +630,43 @@ def test_generate_quantifier_arguments():
     # )
 
 
+def test_generate_simplified_formulas():
+
+    def check(src_rep: str, gold_reps: List[str]):
+        print(f'================ src_rep = {src_rep} ================')
+        src_formula = Formula(src_rep)
+        generated_reps = [f.rep for f in generate_simplified_formulas(src_formula)]
+        for generated_rep in generated_reps:
+            print(generated_rep)
+        assert all(gold_rep in generated_reps for gold_rep in gold_reps)
+
+    check(
+        '¬{A}',
+        [
+            '{A}',
+        ],
+    )
+
+    check(
+        '(¬{A} & {B}) -> ({C} v ¬{D})',
+        [
+            '({A} & {B}) -> ({C} v ¬{D})',
+            '(¬{A} & {B}) -> ({C} v {D})',
+            '¬{A} -> ({C} v ¬{D})',
+            '(¬{A} & {B}) -> {C}',
+        ],
+    )
+
+
 if __name__ == '__main__':
-    test_expand_op()
-    test_formula_is_identical_to()
-    test_formula_can_not_be_identical_to()
-    test_argument_is_identical_to()
+    # test_expand_op()
+    # test_formula_is_identical_to()
+    # test_formula_can_not_be_identical_to()
+    # test_argument_is_identical_to()
 
-    test_generate_quantifier_axiom_arguments()
+    # test_generate_quantifier_axiom_arguments()
 
-    test_generate_quantifier_formulas()
-    # test_generate_quantifier_arguments()
+    # test_generate_quantifier_formulas()
+    # # test_generate_quantifier_arguments()
+
+    test_generate_simplified_formulas()
