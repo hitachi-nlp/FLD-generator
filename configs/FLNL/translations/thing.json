@@ -1421,212 +1421,212 @@
     ],
 
 
-    "({A}{a} & {B}{a}) -> {C}{a}": [
+    "__({A}{a} & {B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} & {B}{a}) -> {C}{a}": [
+    "__(¬{A}{a} & {B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "({A}{a} & ¬{B}{a}) -> {C}{a}": [
+    "__({A}{a} & ¬{B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "({A}{a} & {B}{a}) -> ¬{C}{a}": [
+    "__({A}{a} & {B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} & ¬{B}{a}) -> {C}{a}": [
+    "__(¬{A}{a} & ¬{B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} & {B}{a}) -> ¬{C}{a}": [
+    "__(¬{A}{a} & {B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "({A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
+    "__({A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
-      "__not_implemented"
-    ],
-
-
-    "{A}{a} -> ({B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ({B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> (¬{B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> ({B}{a} & ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> (¬{B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ({B}{a} & ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> (¬{B}{a} & ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> (¬{B}{a} & ¬{C}{a})": [
+    "__(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
 
 
-    "¬({A}{a} & {B}{a}) -> {C}{a}": [
+    "__{A}{a} -> ({B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} & {B}{a}) -> {C}{a}": [
+    "__¬{A}{a} -> ({B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬({A}{a} & ¬{B}{a}) -> {C}{a}": [
+    "__{A}{a} -> (¬{B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬({A}{a} & {B}{a}) -> ¬{C}{a}": [
+    "__{A}{a} -> ({B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} & ¬{B}{a}) -> {C}{a}": [
+    "__¬{A}{a} -> (¬{B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} & {B}{a}) -> ¬{C}{a}": [
+    "__¬{A}{a} -> ({B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
-    "¬({A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
+    "__{A}{a} -> (¬{B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
-      "__not_implemented"
-    ],
-
-
-    "{A}{a} -> ¬({B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ¬({B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> ¬(¬{B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> ¬({B}{a} & ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ¬(¬{B}{a} & {C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ¬({B}{a} & ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})": [
+    "__¬{A}{a} -> (¬{B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
 
 
-
-
-    "({A}{a} v {B}{a}) -> {C}{a}": [
+    "__¬({A}{a} & {B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} v {B}{a}) -> {C}{a}": [
+    "__¬(¬{A}{a} & {B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "({A}{a} v ¬{B}{a}) -> {C}{a}": [
+    "__¬({A}{a} & ¬{B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "({A}{a} v {B}{a}) -> ¬{C}{a}": [
+    "__¬({A}{a} & {B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} v ¬{B}{a}) -> {C}{a}": [
+    "__¬(¬{A}{a} & ¬{B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} v {B}{a}) -> ¬{C}{a}": [
+    "__¬(¬{A}{a} & {B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "({A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+    "__¬({A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
-      "__not_implemented"
-    ],
-
-
-    "{A}{a} -> ({B}{a} v {C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ({B}{a} v {C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> (¬{B}{a} v {C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> ({B}{a} v ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> (¬{B}{a} v {C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> ({B}{a} v ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "{A}{a} -> (¬{B}{a} v ¬{C}{a})": [
-      "__not_implemented"
-    ],
-    "¬{A}{a} -> (¬{B}{a} v ¬{C}{a})": [
+    "__¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
 
 
-    "¬({A}{a} v {B}{a}) -> {C}{a}": [
+    "__{A}{a} -> ¬({B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} v {B}{a}) -> {C}{a}": [
+    "__¬{A}{a} -> ¬({B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬({A}{a} v ¬{B}{a}) -> {C}{a}": [
+    "__{A}{a} -> ¬(¬{B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬({A}{a} v {B}{a}) -> ¬{C}{a}": [
+    "__{A}{a} -> ¬({B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} v ¬{B}{a}) -> {C}{a}": [
+    "__¬{A}{a} -> ¬(¬{B}{a} & {C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} v {B}{a}) -> ¬{C}{a}": [
+    "__¬{A}{a} -> ¬({B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
-    "¬({A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+    "__{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
-    "¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+    "__¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})": [
       "__not_implemented"
     ],
 
 
-    "{A}{a} -> ¬({B}{a} v {C}{a})": [
+
+
+    "__({A}{a} v {B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "¬{A}{a} -> ¬({B}{a} v {C}{a})": [
+    "__(¬{A}{a} v {B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "{A}{a} -> ¬(¬{B}{a} v {C}{a})": [
+    "__({A}{a} v ¬{B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "{A}{a} -> ¬({B}{a} v ¬{C}{a})": [
+    "__({A}{a} v {B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "¬{A}{a} -> ¬(¬{B}{a} v {C}{a})": [
+    "__(¬{A}{a} v ¬{B}{a}) -> {C}{a}": [
       "__not_implemented"
     ],
-    "¬{A}{a} -> ¬({B}{a} v ¬{C}{a})": [
+    "__(¬{A}{a} v {B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})": [
+    "__({A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
       "__not_implemented"
     ],
-    "¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})": [
+    "__(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+
+
+    "__{A}{a} -> ({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> ({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__{A}{a} -> (¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__{A}{a} -> ({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> (¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> ({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "__{A}{a} -> (¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> (¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+
+
+    "__¬({A}{a} v {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬(¬{A}{a} v {B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬({A}{a} v ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬({A}{a} v {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬(¬{A}{a} v ¬{B}{a}) -> {C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬(¬{A}{a} v {B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬({A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+    "__¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}": [
+      "__not_implemented"
+    ],
+
+
+    "__{A}{a} -> ¬({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> ¬({B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__{A}{a} -> ¬(¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__{A}{a} -> ¬({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> ¬(¬{B}{a} v {C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> ¬({B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "__{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})": [
+      "__not_implemented"
+    ],
+    "__¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})": [
       "__not_implemented"
     ],
 

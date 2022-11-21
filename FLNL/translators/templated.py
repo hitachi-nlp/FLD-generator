@@ -128,12 +128,18 @@ class TemplatedTranslator(Translator):
 
         one_hierarchy_config: Dict[str, Dict[str, List[str]]] = defaultdict(dict)
         for key, val in two_layered_config.items():
-            if key.find('::') >= 0:
+            if key.startswith('__'):
+                logger.info('skip key "%s"', key)
+                continue
+            elif key.find('::') >= 0:
                 prefix = '::'.join(key.split('::')[:-1])
                 transl_key = key.split('::')[-1]
             else:
                 prefix = 'others'
                 transl_key = key
+            if transl_key.startswith('__'):
+                logger.info('skip key "%s"', key)
+                continue
             one_hierarchy_config[prefix][transl_key] = val
         return one_hierarchy_config
 
