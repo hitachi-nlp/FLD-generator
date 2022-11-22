@@ -10,6 +10,7 @@ from FLNL.formula_distractors import (
     UnkownPASDistractor,
     SameFormUnkownInterprandsDistractor,
     VariousFormUnkownInterprandsDistractor,
+    SimplifiedFormulaDistractor,
     NegativeTreeDistractor,
 )
 from logger_setup import setup as setup_logger
@@ -78,13 +79,9 @@ def test_various_form_distractor():
 
     def _test_distractor(rep: str,
                          ng_reps: List[str],
-                         prototype_formulas: Optional[List[Formula]] = None,
-                         sample_simplified_formulas_from_tree=False):
+                         prototype_formulas: Optional[List[Formula]] = None):
         num_distractors = 10
-        distractor = VariousFormUnkownInterprandsDistractor(
-            prototype_formulas=prototype_formulas,
-            sample_simplified_formulas_from_tree=sample_simplified_formulas_from_tree,
-        )
+        distractor = VariousFormUnkownInterprandsDistractor(prototype_formulas=prototype_formulas,)
 
         ratios = []
         original_formula = Formula(rep)
@@ -129,13 +126,18 @@ def test_various_form_distractor():
         prototype_formulas=[Formula('({C}{c} v {D}{d})')]
     )
 
-    _test_distractor(
-        '(¬{A}{a} & {B}{b}) -> ¬{C}{c}',
-        [],
-        # prototype_formulas=[Formula('({C}{c} v {D}{d})')],
-        sample_simplified_formulas_from_tree=True,
-    )
 
+def test_simplified_formula_distractor():
+
+    distractor = SimplifiedFormulaDistractor()
+
+    _generate_and_print(
+        distractor,
+        [
+            Formula('(¬{A}{a} & {B}{b}) -> ¬{C}{c}'),
+        ],
+        5,
+    )
 
 
 
@@ -145,4 +147,5 @@ if __name__ == '__main__':
 
     # test_unknown_PAS_distractor()
     # test_same_form_distractor()
-    test_various_form_distractor()
+    # test_various_form_distractor()
+    test_simplified_formula_distractor()
