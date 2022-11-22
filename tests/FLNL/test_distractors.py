@@ -140,8 +140,6 @@ def test_simplified_formula_distractor():
     )
 
 
-
-
 if __name__ == '__main__':
     setup_logger(level=logging.INFO)
 
