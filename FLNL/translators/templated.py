@@ -206,17 +206,16 @@ class TemplatedTranslator(Translator):
             for pred in self._sample(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
-        # transitive_verbs are the most difficult, in the sense of distractors, so we sample it more than others.
         zeroary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, self.words_per_type)\
-            + self._sample(transitive_verb_PASs, self.words_per_type * 7)\
-            + self._sample(event_nouns, self.words_per_type)
+            + self._sample(intransitive_verbs, int(self.words_per_type * 1 / 3))\
+            + self._sample(transitive_verb_PASs, int(self.words_per_type * 2 / 3))\
+            + self._sample(event_nouns, int(self.words_per_type))
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
         unary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, self.words_per_type)\
-            + self._sample(transitive_verb_PASs, self.words_per_type * 7)\
-            + self._sample(nouns, self.words_per_type)
+            + self._sample(intransitive_verbs, int(self.words_per_type * 1 / 3))\
+            + self._sample(transitive_verb_PASs, int(self.words_per_type * 2 / 3))\
+            + self._sample(nouns, int(self.words_per_type))
         unary_predicates = sorted({word for word in unary_predicates})
 
         constants = self._sample(entity_nouns, self.words_per_type)
@@ -273,7 +272,7 @@ class TemplatedTranslator(Translator):
                 found_keys += 1
 
                 # Choose a translation
-                chosen_nl = self._sample_interp_mapping_consistent_nl(    # HONOKA ここで通るのは誤り．
+                chosen_nl = self._sample_interp_mapping_consistent_nl(
                     translation_key,
                     interp_mapping,
                     push_mapping,
@@ -446,6 +445,62 @@ class TemplatedTranslator(Translator):
                                              block_shuffle=True,
                                              volume_to_weight = lambda weight: weight) -> Optional[str]:
         """ Find translations the pos and nflations of which are consistent with interp_mapping """
+
+        # # -------------------------------- XXX do not remove those code for debugging ------------------------------
+        # query = None
+        # # query = '^\({[A-Z]}{[a-z]} & {[A-Z]}{[a-z]}\) ->.*'
+        # if query is not None and re.match(query, sentence_key):
+        #     print('\n\n\n')
+        #     print(f'================ translator resolve debugging for key = "{sentence_key}" =====================')
+
+        #     print('\n\n\n')
+        #     print('--------------------- interp mapping ---------------------')
+
+        #     pull_mapping = {val: key for key, val in push_mapping.items()}
+        #     pprint({
+        #         pull_mapping[key]: val for key, val in interp_mapping.items()
+        #         if key in pull_mapping
+        #     })
+
+        #     iterator_with_volumes = [
+        #         self._make_resolved_translation_sampler(transl_nl,
+        #                                                 set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
+        #                                                 constraint_interp_mapping=interp_mapping,
+        #                                                 constraint_push_mapping=push_mapping,
+        #                                                 block_shuffle=block_shuffle,
+        #                                                 volume_to_weight=volume_to_weight,
+        #                                                 check_condition=False)
+        #         for transl_nl in self._translations[sentence_key]
+        #     ]
+        #     iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
+        #     volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
+
+        #     print('\n\n\n')
+        #     print('--------------------- resolved translations ---------------------')
+        #     is_target = False
+        #     for resolved_nl, condition in chained_sampling_from_weighted_iterators(
+        #         iterators,
+        #         [volume_to_weight(volume) for volume in volumes]
+        #     ):
+        #         condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
+        #             condition,
+        #             interp_mapping,
+        #             push_mapping,
+        #         )
+        #         if condition_is_consistent:
+        #             print('OK:  ', resolved_nl)
+        #             if resolved_nl.find('a {A}[ADJ] {a}[NOUN] {B}[ADJ]') >= 0:
+        #                 is_target = True
+        #             if resolved_nl.startswith('a {A}[ADJ] and {B}[ADJ]'):
+        #                 print('!! found')
+        #                 raise
+        #         else:
+        #             print('NG:  ', resolved_nl)
+        #         # if resolved_nl.find('a {A}[ADJ] and {B}[ADJ]') >= 0:
+        #         #     break
+        #     if is_target:
+        #         raise
+
         iterator_with_volumes = [
             self._make_resolved_translation_sampler(transl_nl,
                                                     set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
@@ -457,51 +512,6 @@ class TemplatedTranslator(Translator):
         ]
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-
-        # -------------------------------- XXX do not remove those code for debugging ------------------------------
-        # query = None
-        query = '^\({[A-Z]}{[a-z]} & {[A-Z]}{[a-z]}\) ->.*'
-        if query is not None and re.match(query, sentence_key):
-            print('\n\n\n')
-            print(f'================ translator resolve debugging for key = "{sentence_key}" =====================')
-
-            print('\n\n\n')
-            print('--------------------- interp mapping ---------------------')
-
-            pull_mapping = {val: key for key, val in push_mapping.items()}
-            pprint({
-                pull_mapping[key]: val for key, val in interp_mapping.items()
-                if key in pull_mapping
-            })
-
-            iterator_with_volumes = [
-                self._make_resolved_translation_sampler(transl_nl,
-                                                        set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-                                                        constraint_interp_mapping=interp_mapping,
-                                                        constraint_push_mapping=push_mapping,
-                                                        block_shuffle=block_shuffle,
-                                                        volume_to_weight=volume_to_weight,
-                                                        check_condition=False)
-                for transl_nl in self._translations[sentence_key]
-            ]
-            iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-            volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-
-            print('\n\n\n')
-            print('--------------------- resolved translations ---------------------')
-            for resolved_nl, condition in chained_sampling_from_weighted_iterators(
-                iterators,
-                [volume_to_weight(volume) for volume in volumes]
-            ):
-                condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
-                    condition,
-                    interp_mapping,
-                    push_mapping,
-                )
-                if condition_is_consistent:
-                    print('OK:  ', resolved_nl)
-                else:
-                    print('NG:  ', resolved_nl)
 
         for resolved_nl, condition in chained_sampling_from_weighted_iterators(
             iterators,

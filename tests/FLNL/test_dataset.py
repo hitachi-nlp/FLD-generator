@@ -28,7 +28,7 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 1000) -> None:
+                     num_dataset: int = 10000) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
@@ -162,7 +162,7 @@ def test_generate_dataset():
                               _to_range(0, 0),
                               depth_1_weight=2.0,
                               unknown_ratio=0.333,
-                              use_collapsed_translation_nodes_for_unknown_tree=True,
+                              use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
                               num_distractors=[0],
                               # num_translation_distractors=[0],
