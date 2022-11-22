@@ -745,11 +745,27 @@ class MixtureDistractor(FormulaDistractor):
         if size == 0:
             return [], {}
 
+        sizes: List[int] = []
+        remaining_size = size
+        num_distractors = len(self._distractors)
+        for i_distractor in range(0, num_distractors):
+            if i_distractor == num_distractors - 1:
+                _size = remaining_size
+            else:
+                if remaining_size < 0:
+                    _size = 0
+                else:
+                    _size = random.randint(0, remaining_size)
+                    if _size > remaining_size:
+                        _size = remaining_size
+                    remaining_size -= _size
+            sizes.append(_size)
+
         distractor_formulas = []
         others = {}
-        for distractor in self._distractors:
+        for distractor, _size in zip(self._distractors, sizes):
             try:
-                _distractor_formulas, _others = distractor.generate(proof_tree, size)
+                _distractor_formulas, _others = distractor.generate(proof_tree, _size)
 
                 distractor_formulas += _distractor_formulas
 
