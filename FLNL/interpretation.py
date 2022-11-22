@@ -73,14 +73,16 @@ def generate_simplified_formulas(src_formula: Formula,
         op_regexp = f'\(([^\)]*) {op} ([^\)]*)\)'
         for i_match, match in enumerate(re.finditer(op_regexp, rep)):
             span_text = rep[match.start():match.end()]
-            span_text_replaced = re.sub(op_regexp, '\g<1>', span_text)
 
-            rep_wo_op = rep[:match.start()] + span_text_replaced + rep[match.end():]
+            for i_target, target in enumerate(['\g<1>', '\g<2>']):
+                span_text_replaced = re.sub(op_regexp, target, span_text)
 
-            if get_name:
-                yield Formula(rep_wo_op), f'simplification.{op}-{_fill_str(i_match)}'
-            else:
-                yield Formula(rep_wo_op)
+                rep_wo_op = rep[:match.start()] + span_text_replaced + rep[match.end():]
+
+                if get_name:
+                    yield Formula(rep_wo_op), f'simplification.{op}-{_fill_str(i_match)}.target_term-{_fill_str(i_target)}'
+                else:
+                    yield Formula(rep_wo_op)
 
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],
