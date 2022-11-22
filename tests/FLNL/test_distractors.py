@@ -16,16 +16,17 @@ from logger_setup import setup as setup_logger
 
 
 def _generate_and_print(distractor: FormulaDistractor, formulas: List[Formula], num_distractors: int) -> List[Formula]:
-    print('\nformulas:')
-    for formula in formulas:
-        print('    ', formula)
-
     nodes = [ProofNode(formula) for formula in formulas]
     tree = ProofTree()
     for node in nodes:
         tree.add_node(node)
 
-    distractor_formulas = distractor.generate(tree, num_distractors)
+    distractor_formulas, others = distractor.generate(tree, num_distractors)
+
+    print('\nformulas:')
+    for formula in formulas:
+        print('    ', formula)
+
 
     print('\ndistractors:')
     for distractor_formula in distractor_formulas:
@@ -77,9 +78,13 @@ def test_various_form_distractor():
 
     def _test_distractor(rep: str,
                          ng_reps: List[str],
-                         prototype_formulas: Optional[List[Formula]] = None):
+                         prototype_formulas: Optional[List[Formula]] = None,
+                         sample_simplified_formulas_from_tree=False):
         num_distractors = 10
-        distractor = VariousFormUnkownInterprandsDistractor(prototype_formulas=prototype_formulas)
+        distractor = VariousFormUnkownInterprandsDistractor(
+            prototype_formulas=prototype_formulas,
+            sample_simplified_formulas_from_tree=sample_simplified_formulas_from_tree,
+        )
 
         ratios = []
         original_formula = Formula(rep)
@@ -90,6 +95,7 @@ def test_various_form_distractor():
                 num_distractors,
             )
             ratio = len([f for f in distractor_formulas if f.rep.endswith('{a}')]) / len(distractor_formulas)
+
             ratios.append(ratio)
             assert all(
                 all(distractor_formula.rep != ng_rep for ng_rep in ng_reps)
@@ -97,31 +103,41 @@ def test_various_form_distractor():
             )
         ratio = statistics.mean(ratios)
 
-    # _test_distractor(
-    #     '{A}',
-    #     ['{A}'],
-    # )
+    _test_distractor(
+        '{A}',
+        ['{A}'],
+    )
 
-    # _test_distractor(
-    #     '{A}{a}',
-    #     ['{A}{a}'],
-    # )
+    _test_distractor(
+        '{A}{a}',
+        ['{A}{a}'],
+    )
 
-    # _test_distractor(
-    #     '({A} & {B})',
-    #     ['({A} & {A})', '({A} & {B})', '({B} & {A})', '({B} & {B})'],
-    # )
+    _test_distractor(
+        '({A} & {B})',
+        ['({A} & {A})', '({A} & {B})', '({B} & {A})', '({B} & {B})'],
+    )
 
-    # _test_distractor(
-    #     '({A}{a} & {B}{b})',
-    #     ['({A}{a} & {A}{a})', '({A}{a} & {B}{b})', '({B}{b} & {A}{a})', '({B}{b} & {B}{b})'],
-    # )
+    _test_distractor(
+        '({A}{a} & {B}{b})',
+        ['({A}{a} & {A}{a})', '({A}{a} & {B}{b})', '({B}{b} & {A}{a})', '({B}{b} & {B}{b})'],
+    )
 
     _test_distractor(
         '({A}{a} & {B}{b})',
         ['({A}{a} v {A}{a})', '({A}{a} v {B}{b})', '({B}{b} v {A}{a})', '({B}{b} v {B}{b})'],
         prototype_formulas=[Formula('({C}{c} v {D}{d})')]
     )
+
+    _test_distractor(
+        '(¬{A}{a} & {B}{b}) -> ¬{C}{c}',
+        [],
+        # prototype_formulas=[Formula('({C}{c} v {D}{d})')],
+        sample_simplified_formulas_from_tree=True,
+    )
+
+
+
 
 
 if __name__ == '__main__':
