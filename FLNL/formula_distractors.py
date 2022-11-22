@@ -450,7 +450,6 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
             is_found = False
             found_formula = None
             for tgt_predicates, tgt_constants in tgt_space:
-                # import pudb; pudb.set_trace()
                 for mapping in generate_mappings_from_predicates_and_constants(
                     [p.rep for p in src_formula.predicates],
                     [c.rep for c in src_formula.constants],
@@ -786,7 +785,10 @@ class MixtureDistractor(FormulaDistractor):
             )
             return distractor_formulas, others
         else:
-            return random.sample(distractor_formulas, size), others
+            # subsampling will lead to inconsistency for NegativeTreeDistractor
+            # return random.sample(distractor_formulas, size), others
+
+            return distractor_formulas
 
 
 class FallBackDistractor(FormulaDistractor):
@@ -886,20 +888,32 @@ def build(type_: str,
     elif type_ == 'negative_tree':
         if generator is None:
             raise ValueError()
-        return NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first)
+        return NegativeTreeDistractor(
+            generator,
+            prototype_formulas=prototype_formulas,
+            try_negated_hypothesis_first=try_negated_hypothesis_first
+        )
 
     elif type_ == 'fallback.unknown_interprands.negative_tree':
         return FallBackDistractor(
             [
                 SameFormUnkownInterprandsDistractor(),
-                NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    try_negated_hypothesis_first=try_negated_hypothesis_first
+                ),
             ]
         )
 
     elif type_ == 'fallback.negative_tree.unknown_interprands':
         return FallBackDistractor(
             [
-                NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    try_negated_hypothesis_first=try_negated_hypothesis_first
+                ),
                 SameFormUnkownInterprandsDistractor(),
             ]
         )
@@ -907,7 +921,11 @@ def build(type_: str,
     elif type_ == 'fallback.negative_tree.various_form':
         return FallBackDistractor(
             [
-                NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    try_negated_hypothesis_first=try_negated_hypothesis_first,
+                ),
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
@@ -922,27 +940,29 @@ def build(type_: str,
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
                 ),
-                NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    try_negated_hypothesis_first=try_negated_hypothesis_first
+                ),
             ]
         )
 
-    elif type_ == 'mixture.unknown_interprands.negative_tree':
+    elif type_ == 'mixture.negative_tree.simplified_formula.various_form':
         return MixtureDistractor(
             [
-                SameFormUnkownInterprandsDistractor(),
-                NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first),
-            ]
-        )
-
-    elif type_ == 'mixture.various_form.negative_tree':
-        return MixtureDistractor(
-            [
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    try_negated_hypothesis_first=try_negated_hypothesis_first,
+                ),
+                SimplifiedFormulaDistractor(),
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
                 ),
-                NegativeTreeDistractor(generator, prototype_formulas=prototype_formulas, try_negated_hypothesis_first=try_negated_hypothesis_first),
             ]
         )
+
     else:
         raise ValueError(f'Unknown distractor type {type_}')
