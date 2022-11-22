@@ -89,14 +89,14 @@ def test_generate_dataset():
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.negation.pred_only.json',
-            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
             # -- we exclude the below for speed --
             # './configs/FLNL/arguments/theorem.pred_only.json',
@@ -141,15 +141,15 @@ def test_generate_dataset():
         try_negated_hypothesis_first=True,
     )
 
-    translation_distractor = build_translation_distractor(
-        'word_swap',
-        word_bank=word_bank,
-    )
+    # translation_distractor = build_translation_distractor(
+    #     'word_swap',
+    #     word_bank=word_bank,
+    # )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
-        translation_distractor=translation_distractor,
+        translation_distractor=None,
         fallback_from_formula_to_translation_distractor=True,
         translator=translator,
         add_subj_obj_swapped_distractor=True,
@@ -158,14 +158,14 @@ def test_generate_dataset():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              _to_range(1, 10),
-                              _to_range(1, 5),
+                              _to_range(1, 3),
+                              _to_range(0, 0),
                               depth_1_weight=2.0,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=True,
                               word_bank=word_bank,
-                              num_distractors=[5],
-                              num_translation_distractors=[5],
+                              num_distractors=[0],
+                              # num_translation_distractors=[0],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

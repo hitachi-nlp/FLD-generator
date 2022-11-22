@@ -458,6 +458,51 @@ class TemplatedTranslator(Translator):
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
 
+        # -------------------------------- XXX do not remove those code for debugging ------------------------------
+        # query = None
+        query = '^\({[A-Z]}{[a-z]} & {[A-Z]}{[a-z]}\) ->.*'
+        if query is not None and re.match(query, sentence_key):
+            print('\n\n\n')
+            print(f'================ translator resolve debugging for key = "{sentence_key}" =====================')
+
+            print('\n\n\n')
+            print('--------------------- interp mapping ---------------------')
+
+            pull_mapping = {val: key for key, val in push_mapping.items()}
+            pprint({
+                pull_mapping[key]: val for key, val in interp_mapping.items()
+                if key in pull_mapping
+            })
+
+            iterator_with_volumes = [
+                self._make_resolved_translation_sampler(transl_nl,
+                                                        set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
+                                                        constraint_interp_mapping=interp_mapping,
+                                                        constraint_push_mapping=push_mapping,
+                                                        block_shuffle=block_shuffle,
+                                                        volume_to_weight=volume_to_weight,
+                                                        check_condition=False)
+                for transl_nl in self._translations[sentence_key]
+            ]
+            iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
+            volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
+
+            print('\n\n\n')
+            print('--------------------- resolved translations ---------------------')
+            for resolved_nl, condition in chained_sampling_from_weighted_iterators(
+                iterators,
+                [volume_to_weight(volume) for volume in volumes]
+            ):
+                condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
+                    condition,
+                    interp_mapping,
+                    push_mapping,
+                )
+                if condition_is_consistent:
+                    print('OK:  ', resolved_nl)
+                else:
+                    print('NG:  ', resolved_nl)
+
         for resolved_nl, condition in chained_sampling_from_weighted_iterators(
             iterators,
             [volume_to_weight(volume) for volume in volumes]
@@ -469,6 +514,7 @@ class TemplatedTranslator(Translator):
             )
             assert condition_is_consistent  # the consistency should have been checked recursively.
             return resolved_nl
+
         return None
 
     @profile
@@ -499,12 +545,14 @@ class TemplatedTranslator(Translator):
                                            constraint_interp_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
-                                           volume_to_weight = lambda volume: volume) -> Tuple[Iterable[NLAndCondition], int]:
+                                           volume_to_weight = lambda volume: volume,
+                                           check_condition=True) -> Tuple[Iterable[NLAndCondition], int]:
         if nl.startswith('__'):
             return iter([]), 0
 
         condition = self._get_pos_form_consistency_condition(nl)
         if constraint_push_mapping is not None\
+                and check_condition\
                 and not self._interp_mapping_is_consistent_with_condition(condition,
                                                                           constraint_interp_mapping,
                                                                           constraint_push_mapping):
@@ -535,6 +583,7 @@ class TemplatedTranslator(Translator):
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
+                        check_condition=check_condition,
                     )
 
             template_resolve_generators = [ResolveTemplateGenerator(self, template) for template in templates]
@@ -568,7 +617,8 @@ class TemplatedTranslator(Translator):
                                         constraint_interp_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
-                                        volume_to_weight = lambda volume: volume) -> Tuple[Iterable[NLAndCondition], int]:
+                                        volume_to_weight = lambda volume: volume,
+                                        check_condition=True) -> Tuple[Iterable[NLAndCondition], int]:
         template_key, template_nls = self._find_template_nls(template, tuple(sorted(ancestor_keys)))
         if template_key is None:
             raise Exception(f'template for {template} not found.')
@@ -577,7 +627,8 @@ class TemplatedTranslator(Translator):
                                                                          constraint_interp_mapping=constraint_interp_mapping,
                                                                          constraint_push_mapping=constraint_push_mapping,
                                                                          block_shuffle=shuffle,
-                                                                         volume_to_weight=volume_to_weight)
+                                                                         volume_to_weight=volume_to_weight,
+                                                                         check_condition=check_condition)
                                  for template_nl in template_nls]
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
