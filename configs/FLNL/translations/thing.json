@@ -3751,8 +3751,8 @@
     ],
 
     "not_prefix.sentence_intro": [
-      "it is not <<phrase::correct_adj>>",
-      "it is <<phrase::incorrect_adj>>"
+      "it is not <<phrase::correct_adj>> that",
+      "it is <<phrase::incorrect_adj>> that"
     ],
 
     "correct_adj": [
