@@ -1638,308 +1638,308 @@
 
 
     "(Ex): {A}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::{A}it>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::{A}it>>",
       "<<sentence::{A}something>>"
     ],
     "(Ex): ¬{A}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬{A}it>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬{A}it>>",
       "__<<sentence::¬{A}something>>",
       "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
 
 
     "(Ex): ({A}x & {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::({A}it & {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::({A}it & {B}it)>>",
       "<<sentence::({A}something & {B}something)>>"
     ],
     "(Ex): (¬{A}x & {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::(¬{A}it & {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::(¬{A}it & {B}it)>>",
       "<<sentence::(¬{A}something & {B}something)>>"
     ],
     "(Ex): ({A}x & ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::({A}it & ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::({A}it & ¬{B}it)>>",
       "<<sentence::({A}something & ¬{B}something)>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::(¬{A}it & ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::(¬{A}it & ¬{B}it)>>",
       "<<sentence::(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "(Ex): ¬({A}x & {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it & {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬({A}it & {B}it)>>",
       "__<<sentence::¬({A}something & {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it & {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬(¬{A}it & {B}it)>>",
       "__<<sentence::¬(¬{A}something & {B}something)>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it & ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬({A}it & ¬{B}it)>>",
       "__<<sentence::¬({A}something & ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it & ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬(¬{A}it & ¬{B}it)>>",
       "__<<sentence::¬(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "(Ex): ({A}x v {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::({A}it v {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::({A}it v {B}it)>>",
       "<<sentence::({A}something v {B}something)>>"
     ],
     "(Ex): (¬{A}x v {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::(¬{A}it v {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::(¬{A}it v {B}it)>>",
       "<<sentence::(¬{A}something v {B}something)>>"
     ],
     "(Ex): ({A}x v ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::({A}it v ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::({A}it v ¬{B}it)>>",
       "<<sentence::({A}something v ¬{B}something)>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::(¬{A}it v ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::(¬{A}it v ¬{B}it)>>",
       "<<sentence::(¬{A}something v ¬{B}something)>>"
     ],
 
 
     "(Ex): ¬({A}x v {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it v {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬({A}it v {B}it)>>",
       "__<<sentence::¬({A}something v {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it v {B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬(¬{A}it v {B}it)>>",
       "__<<sentence::¬(¬{A}something v {B}something)>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬({A}it v ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬({A}it v ¬{B}it)>>",
       "__<<sentence::¬({A}something v ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬(¬{A}it v ¬{B}it)>>",
+      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬(¬{A}it v ¬{B}it)>>",
       "__<<sentence::¬(¬{A}something v ¬{B}something)>>"
     ],
 
 
     "(Ex): {A}x -> {B}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::{B}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::{B}it>>"
     ],
     "(Ex): ¬{A}x -> {B}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::{B}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::{B}it>>"
     ],
     "(Ex): {A}x -> ¬{B}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬{B}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬{B}it>>"
     ],
     "(Ex): ¬{A}x -> ¬{B}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬{B}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬{B}it>>"
     ],
 
 
     "(Ex): ({A}x & {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): (¬{A}x & {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ({A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ({A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): (¬{A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ({A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
     "(Ex): {A}x -> ({B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ({B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & {C}it)>>"
     ],
     "(Ex): {A}x -> (¬{B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
     ],
     "(Ex): {A}x -> ({B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ({B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
     ],
     "(Ex): {A}x -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
     ],
 
 
     "(Ex): ¬({A}x & {B}x) -> {C}x": [
-     "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::{C}it>>"
+     "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬({A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
     "(Ex): {A}x -> ¬({B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & {C}it)>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
     ],
     "(Ex): {A}x -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
     ],
 
 
 
     "(Ex): ({A}x v {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): (¬{A}x v {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ({A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ({A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): (¬{A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ({A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
     "(Ex): {A}x -> ({B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ({B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v {C}it)>>"
     ],
     "(Ex): {A}x -> (¬{B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
     ],
     "(Ex): {A}x -> ({B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ({B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
     ],
     "(Ex): {A}x -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
     ],
 
 
     "(Ex): ¬({A}x v {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬({A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
     "(Ex): {A}x -> ¬({B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v {C}it)>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
     ],
     "(Ex): {A}x -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::some_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
+      "<<phrase::some_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
     ],
 
 
@@ -1947,84 +1947,84 @@
 
     "(x): {A}x": [
       "<<sentence::{A}everything>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::{A}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x": [
       "__<<sentence::¬{A}everything>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬{A}it>>",
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬{A}it>>",
       "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
 
 
     "(x): ({A}x & {B}x)": [
       "<<sentence::({A}everything & {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::({A}it & {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::({A}it & {B}it)>>"
     ],
     "(x): (¬{A}x & {B}x)": [
       "<<sentence::(¬{A}everything & {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::(¬{A}it & {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::(¬{A}it & {B}it)>>"
     ],
     "(x): ({A}x & ¬{B}x)": [
       "<<sentence::({A}everything & ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::({A}it & ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::({A}it & ¬{B}it)>>"
     ],
     "(x): (¬{A}x & ¬{B}x)": [
       "<<sentence::(¬{A}everything & ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::(¬{A}it & ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::(¬{A}it & ¬{B}it)>>"
     ],
 
 
     "(x): ¬({A}x & {B}x)": [
       "__<<sentence::¬({A}everything & {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it & {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it & {B}it)>>"
     ],
     "(x): ¬(¬{A}x & {B}x)": [
       "__<<sentence::¬(¬{A}everything & {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it & {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it & {B}it)>>"
     ],
     "(x): ¬({A}x & ¬{B}x)": [
       "__<<sentence::¬({A}everything & ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it & ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it & ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything & ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it & ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it & ¬{B}it)>>"
     ],
 
 
     "(x): ({A}x v {B}x)": [
       "<<sentence::({A}everything v {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::({A}it v {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::({A}it v {B}it)>>"
     ],
     "(x): (¬{A}x v {B}x)": [
       "<<sentence::(¬{A}everything v {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::(¬{A}it v {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::(¬{A}it v {B}it)>>"
     ],
     "(x): ({A}x v ¬{B}x)": [
       "<<sentence::({A}everything v ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::({A}it v ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::({A}it v ¬{B}it)>>"
     ],
     "(x): (¬{A}x v ¬{B}x)": [
       "<<sentence::(¬{A}everything v ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::(¬{A}it v ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::(¬{A}it v ¬{B}it)>>"
     ],
 
 
     "(x): ¬({A}x v {B}x)": [
       "__<<sentence::¬({A}everything v {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it v {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it v {B}it)>>"
     ],
     "(x): ¬(¬{A}x v {B}x)": [
       "__<<sentence::¬(¬{A}everything v {B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it v {B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it v {B}it)>>"
     ],
     "(x): ¬({A}x v ¬{B}x)": [
       "__<<sentence::¬({A}everything v ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬({A}it v ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it v ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything v ¬{B}everything)>>",
-      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬(¬{A}it v ¬{B}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it v ¬{B}it)>>"
     ],
 
 
@@ -2036,7 +2036,7 @@
       "<<sentence::{B}something>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::{B}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::{B}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::{B}it>>"
     ],
     "(x): ¬{A}x -> {B}x": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::{B}it>>",
@@ -2045,7 +2045,7 @@
       "<<sentence::{B}something>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::{B}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::{B}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::{B}it>>"
     ],
     "(x): {A}x -> ¬{B}x": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬{B}it>>",
@@ -2054,7 +2054,7 @@
       "<<sentence::¬{B}something>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::¬{B}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬{B}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬{B}it>>"
     ],
     "(x): ¬{A}x -> ¬{B}x": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬{B}it>>",
@@ -2063,7 +2063,7 @@
       "<<sentence::¬{B}something>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::¬{B}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬{B}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬{B}it>>"
     ],
 
 
@@ -2074,7 +2074,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>",
       "<<clause::noun::({A}something & {B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): (¬{A}x & {B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<sentence::{C}it>>",
@@ -2083,7 +2083,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>",
       "<<clause::noun::(¬{A}something & {B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ({A}x & ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2092,7 +2092,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>",
       "<<clause::noun::({A}something & ¬{B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ({A}x & {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<sentence::¬{C}it>>",
@@ -2101,7 +2101,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>",
       "<<clause::noun::({A}something & {B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2110,7 +2110,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>",
       "<<clause::noun::(¬{A}something & ¬{B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<sentence::¬{C}it>>",
@@ -2119,7 +2119,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>",
       "<<clause::noun::(¬{A}something & {B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2128,7 +2128,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>",
       "<<clause::noun::({A}something & ¬{B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2137,7 +2137,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>",
       "<<clause::noun::(¬{A}something & ¬{B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
@@ -2148,7 +2148,7 @@
       "<<sentence::({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::({B} & {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & {C}it)>>"
     ],
     "(x): ¬{A}x -> ({B}x & {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it & {C}it)>>",
@@ -2157,7 +2157,7 @@
       "<<sentence::({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::({B} & {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & {C}it)>>"
     ],
     "(x): {A}x -> (¬{B}x & {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it & {C}it)>>",
@@ -2166,7 +2166,7 @@
       "<<sentence::(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::(¬{B} & {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
     ],
     "(x): {A}x -> ({B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::({B}it & ¬{C}it)>>",
@@ -2175,7 +2175,7 @@
       "<<sentence::({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::({B} & ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it & {C}it)>>",
@@ -2184,7 +2184,7 @@
       "<<sentence::(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::(¬{B} & {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & {C}it)>>"
     ],
     "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it & ¬{C}it)>>",
@@ -2193,7 +2193,7 @@
       "<<sentence::({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::({B} & ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it & ¬{C}it)>>"
     ],
     "(x): {A}x -> (¬{B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it & ¬{C}it)>>",
@@ -2202,7 +2202,7 @@
       "<<sentence::(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::(¬{B} & ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it & ¬{C}it)>>",
@@ -2211,7 +2211,7 @@
       "<<sentence::(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::(¬{B} & ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it & ¬{C}it)>>"
     ],
 
 
@@ -2221,7 +2221,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>",
 
-     "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::{C}it>>"
+     "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & {B}something)>>, <<sentence::{C}it>>",
@@ -2229,7 +2229,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬({A}something & ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2237,7 +2237,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬({A}x & {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬({A}something & {B}something)>>, <<sentence::¬{C}it>>",
@@ -2245,7 +2245,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2253,7 +2253,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & {B}something)>>, <<sentence::¬{C}it>>",
@@ -2261,7 +2261,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬({A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2269,7 +2269,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2277,7 +2277,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
@@ -2287,7 +2287,7 @@
 
       "<<sentence::¬({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & {C}it)>>"
     ],
     "(x): ¬{A}x -> ¬({B}x & {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it & {C}it)>>",
@@ -2295,7 +2295,7 @@
 
       "<<sentence::¬({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & {C}it)>>"
     ],
     "(x): {A}x -> ¬(¬{B}x & {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it & {C}it)>>",
@@ -2303,7 +2303,7 @@
 
       "<<sentence::¬(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
     ],
     "(x): {A}x -> ¬({B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬({B}it & ¬{C}it)>>",
@@ -2311,7 +2311,7 @@
 
       "<<sentence::¬({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x & {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it & {C}it)>>",
@@ -2319,7 +2319,7 @@
 
       "<<sentence::¬(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & {C}it)>>"
     ],
     "(x): ¬{A}x -> ¬({B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it & ¬{C}it)>>",
@@ -2327,7 +2327,7 @@
 
       "<<sentence::¬({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it & ¬{C}it)>>"
     ],
     "(x): {A}x -> ¬(¬{B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it & ¬{C}it)>>",
@@ -2335,7 +2335,7 @@
 
       "<<sentence::¬(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it & ¬{C}it)>>",
@@ -2343,7 +2343,7 @@
 
       "<<sentence::¬(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
     ],
 
 
@@ -2355,7 +2355,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>",
       "<<clause::noun::({A}something v {B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<sentence::{C}it>>",
@@ -2364,7 +2364,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>",
       "<<clause::noun::(¬{A}something v {B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2373,7 +2373,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>",
       "<<clause::noun::({A}something v ¬{B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<sentence::¬{C}it>>",
@@ -2382,7 +2382,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>",
       "<<clause::noun::({A}something v {B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2391,7 +2391,7 @@
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>",
       "<<clause::noun::(¬{A}something v ¬{B}something).set>> <<phrase::{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<sentence::¬{C}it>>",
@@ -2400,7 +2400,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>",
       "<<clause::noun::(¬{A}something v {B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2409,7 +2409,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>",
       "<<clause::noun::({A}something v ¬{B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2418,7 +2418,7 @@
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>",
       "<<clause::noun::(¬{A}something v ¬{B}something).set>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
@@ -2429,7 +2429,7 @@
       "<<sentence::({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::({B} v {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v {C}it)>>"
     ],
     "(x): ¬{A}x -> ({B}x v {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it v {C}it)>>",
@@ -2438,7 +2438,7 @@
       "<<sentence::({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::({B} v {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v {C}it)>>"
     ],
     "(x): {A}x -> (¬{B}x v {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it v {C}it)>>",
@@ -2447,7 +2447,7 @@
       "<<sentence::(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::(¬{B} v {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
     ],
     "(x): {A}x -> ({B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::({B}it v ¬{C}it)>>",
@@ -2456,7 +2456,7 @@
       "<<sentence::({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::({B} v ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it v {C}it)>>",
@@ -2465,7 +2465,7 @@
       "<<sentence::(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::(¬{B} v {C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v {C}it)>>"
     ],
     "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it v ¬{C}it)>>",
@@ -2474,7 +2474,7 @@
       "<<sentence::({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::({B} v ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::({B}it v ¬{C}it)>>"
     ],
     "(x): {A}x -> (¬{B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it v ¬{C}it)>>",
@@ -2483,7 +2483,7 @@
       "<<sentence::(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.set>> <<phrase::(¬{B} v ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it v ¬{C}it)>>",
@@ -2492,7 +2492,7 @@
       "<<sentence::(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
       "<<clause::noun::¬{A}something.set>> <<phrase::(¬{B} v ¬{C})predicate>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::(¬{B}it v ¬{C}it)>>"
     ],
 
 
@@ -2502,7 +2502,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v {B}something)>>, <<sentence::{C}it>>",
@@ -2510,7 +2510,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬({A}something v ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2518,7 +2518,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬({A}x v {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬({A}something v {B}something)>>, <<sentence::¬{C}it>>",
@@ -2526,7 +2526,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v ¬{B}something)>>, <<sentence::{C}it>>",
@@ -2534,7 +2534,7 @@
 
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::{C}it>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v {B}something)>>, <<sentence::¬{C}it>>",
@@ -2542,7 +2542,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬({A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2550,7 +2550,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
@@ -2558,7 +2558,7 @@
 
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>, <<sentence::¬{C}it>>"
     ],
 
 
@@ -2568,7 +2568,7 @@
 
       "<<sentence::¬({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v {C}it)>>"
     ],
     "(x): ¬{A}x -> ¬({B}x v {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it v {C}it)>>",
@@ -2576,7 +2576,7 @@
 
       "<<sentence::¬({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v {C}it)>>"
     ],
     "(x): {A}x -> ¬(¬{B}x v {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it v {C}it)>>",
@@ -2584,7 +2584,7 @@
 
       "<<sentence::¬(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
     ],
     "(x): {A}x -> ¬({B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬({B}it v ¬{C}it)>>",
@@ -2592,7 +2592,7 @@
 
       "<<sentence::¬({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x v {C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it v {C}it)>>",
@@ -2600,7 +2600,7 @@
 
       "<<sentence::¬(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v {C}it)>>"
     ],
     "(x): ¬{A}x -> ¬({B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it v ¬{C}it)>>",
@@ -2608,7 +2608,7 @@
 
       "<<sentence::¬({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬({B}it v ¬{C}it)>>"
     ],
     "(x): {A}x -> ¬(¬{B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it v ¬{C}it)>>",
@@ -2616,7 +2616,7 @@
 
       "<<sentence::¬(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
       "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it v ¬{C}it)>>",
@@ -2624,7 +2624,7 @@
 
       "<<sentence::¬(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
-      "<<phrase::every_prefix.sentence_intro>> <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
+      "<<phrase::every_prefix.sentence_intro>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
     ],
 
 
