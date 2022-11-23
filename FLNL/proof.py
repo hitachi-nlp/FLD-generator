@@ -1,4 +1,5 @@
 from typing import List, Tuple, Optional, Iterable, Union
+from collections import defaultdict
 from copy import copy
 from .formula import Formula
 from .argument import Argument
@@ -14,9 +15,9 @@ class MultipleParentError(FormalLogicExceptionBase):
 
 class ProofNode:
 
-    def __init__(self, formula: Formula):
+    def __init__(self, formula: Formula, argument: Optional[Argument] = None):
         self.formula = formula
-        self.argument: Optional[Argument] = None
+        self.argument: Optional[Argument] = argument
 
         self._parent: Optional[ProofNode] = None
         self._children: List['ProofNode'] = []
@@ -28,14 +29,17 @@ class ProofNode:
     def parent(self):
         return self._parent
 
-    def set_parent(self, node: 'ProofNode') -> None:
+    def set_parent(self, node: 'ProofNode', force=False) -> None:
+        node.add_child(self, force=force)
+
+    def _set_parent(self, node: 'ProofNode') -> None:
         self._parent = node
-        if self not in node.children:
-            node.add_child(self)
 
     def delete_parent(self) -> None:
         if self._parent is not None:
             self._parent.delete_child(self)
+
+    def _delete_parent(self) -> None:
         self._parent = None
 
     @property
@@ -49,19 +53,19 @@ class ProofNode:
     def children(self):
         return self._children
 
-    def add_child(self, node: 'ProofNode') -> None:
-        if node.parent is not None:
-            raise MultipleParentError('Can\'t add child since it already has a parent.')
+    def add_child(self, node: 'ProofNode', force=False) -> None:
+        if not force and node.parent is not None:
+            raise MultipleParentError('Can\'t add child since the child already has a parent.')
 
         if node not in self._children:
             self._children.append(node)
-        node.set_parent(self)
+        node._set_parent(self)
 
     def delete_child(self, node: 'ProofNode') -> None:
         for _node in self._children:
             if _node  == node:
                 self._children.remove(_node)
-                _node.delete_parent()
+                _node._delete_parent()
                 break
         if len(self._children) == 0:
             self.argument = None
@@ -77,33 +81,36 @@ class ProofNode:
     def assump_parent(self):
         return self._assump_parent
 
-    def set_assump_parent(self, node: 'ProofNode') -> None:
+    def set_assump_parent(self, node: 'ProofNode', force=False) -> None:
+        node.add_assump_child(self, force=force)
+
+    def _set_assump_parent(self, node: 'ProofNode') -> None:
         self._assump_parent = node
-        if self not in node.assump_children:
-            node.add_assump_child(self)
 
     def delete_assump_parent(self) -> None:
         if self._assump_parent is not None:
             self._assump_parent.delete_assump_child(self)
+
+    def _delete_assump_parent(self) -> None:
         self._assump_parent = None
 
     @property
     def assump_children(self):
         return self._assump_children
 
-    def add_assump_child(self, node: 'ProofNode') -> None:
-        if node.assump_parent is not None:
-            raise MultipleParentError('Can\'t add assump_child since the added child already has a assump_parent.')
+    def add_assump_child(self, node: 'ProofNode', force=False) -> None:
+        if not force and node.assump_parent is not None:
+            raise MultipleParentError('Can\'t add assump_child since the assump_child already has a assump_parent.')
 
         if node not in self._assump_children:
             self._assump_children.append(node)
-        node.set_assump_parent(self)
+        node._set_assump_parent(self)
 
     def delete_assump_child(self, node: 'ProofNode') -> None:
         for _node in self._assump_children:
             if _node  == node:
                 self._assump_children.remove(_node)
-                _node.delete_assump_parent()
+                _node._delete_assump_parent()
                 break
         if len(self._assump_children) == 0:
             self.argument = None
@@ -223,3 +230,83 @@ class ProofTree:
             rep += ''.join(['|    '] * 10) + '\n'
         # rep += '\n)'
         return rep
+
+    def copy(self) -> 'ProofTree':
+        nodes = self.nodes
+        assump_nodes = []
+        for node in nodes:
+            for assump_child in node.assump_children:
+                if assump_child not in assump_nodes:
+                    assump_nodes.append(assump_child)
+
+        orig_nodes_to_orig_parents = {orig_node: orig_node.parent for orig_node in nodes}
+        orig_nodes_to_orig_children = {orig_node: orig_node.children for orig_node in nodes}
+        orig_nodes_to_orig_assump_parents = {orig_node: orig_node.assump_parent for orig_node in nodes}
+        orig_nodes_to_orig_assump_children = {orig_node: orig_node.assump_children for orig_node in nodes}
+
+        copy_nodes_to_orig_parents = {}
+        copy_nodes_to_orig_children = defaultdict(set)
+        copy_nodes_to_orig_assump_parents = {}
+        copy_nodes_to_orig_assump_children = defaultdict(set)
+
+        orig_nodes_to_copy_nodes = {}
+        copy_nodes_to_orig_nodes = {}
+
+        copy_nodes = []
+        for orig_node in nodes + assump_nodes:
+            copy_node = ProofNode(orig_node.formula, argument=orig_node.argument)
+
+            orig_nodes_to_copy_nodes[orig_node] = copy_node
+            copy_nodes_to_orig_nodes[copy_node] = orig_node
+
+            if orig_nodes_to_orig_parents.get(orig_node, None) is not None:
+                orig_parent = orig_nodes_to_orig_parents[orig_node]
+                copy_nodes_to_orig_parents[copy_node] = orig_parent
+
+            if orig_nodes_to_orig_children.get(orig_node, None) is not None:
+                orig_children = orig_nodes_to_orig_children[orig_node]
+                for orig_child in orig_children:
+                    copy_nodes_to_orig_children[copy_node].add(orig_child)
+
+            if orig_nodes_to_orig_assump_parents.get(orig_node, None) is not None:
+                orig_assump_parent = orig_nodes_to_orig_assump_parents[orig_node]
+                copy_nodes_to_orig_assump_parents[copy_node] = orig_assump_parent
+
+            if orig_nodes_to_orig_assump_children.get(orig_node, None) is not None:
+                orig_assump_children = orig_nodes_to_orig_assump_children[orig_node]
+                for orig_child in orig_assump_children:
+                    copy_nodes_to_orig_assump_children[copy_node].add(orig_child)
+
+            copy_nodes.append(copy_node)
+
+        for copy_node in copy_nodes:
+
+            if copy_node in copy_nodes_to_orig_parents:
+                orig_parent = copy_nodes_to_orig_parents[copy_node]
+                copy_parent = orig_nodes_to_copy_nodes[orig_parent]
+                copy_node.set_parent(copy_parent, force=True)
+
+            if copy_node in copy_nodes_to_orig_children:
+                orig_children = copy_nodes_to_orig_children[copy_node]
+                copy_children = [orig_nodes_to_copy_nodes[child] for child in orig_children]
+                for copy_child in copy_children:
+                    copy_node.add_child(copy_child, force=True)
+
+            if copy_node in copy_nodes_to_orig_assump_parents:
+                orig_assump_parent = copy_nodes_to_orig_assump_parents[copy_node]
+                copy_assump_parent = orig_nodes_to_copy_nodes[orig_assump_parent]
+                copy_node.set_assump_parent(copy_assump_parent, force=True)
+
+            if copy_node in copy_nodes_to_orig_assump_children:
+                orig_assump_children = copy_nodes_to_orig_assump_children[copy_node]
+                copy_assump_children = [orig_nodes_to_copy_nodes[child] for child in orig_assump_children]
+                for copy_child in copy_assump_children:
+                    copy_node.add_assump_child(copy_child, force=True)
+
+        copy_nodes_wo_assump = []
+        for copy_node in copy_nodes:
+            orig_node = copy_nodes_to_orig_nodes[copy_node]
+            if orig_node not in assump_nodes:
+                copy_nodes_wo_assump.append(copy_node)
+
+        return ProofTree(nodes=copy_nodes_wo_assump)

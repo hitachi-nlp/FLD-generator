@@ -160,7 +160,7 @@ def test_generate_dataset():
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
                               _to_range(1, 3),
-                              _to_range(0, 0),
+                              _to_range(0, 3),
                               depth_1_weight=2.0,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
