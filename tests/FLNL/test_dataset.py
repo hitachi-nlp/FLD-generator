@@ -141,6 +141,7 @@ def test_generate_dataset():
         try_negated_hypothesis_first=True,
     )
 
+    # SLOW
     # translation_distractor = build_translation_distractor(
     #     'word_swap',
     #     word_bank=word_bank,
@@ -164,7 +165,7 @@ def test_generate_dataset():
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
-                              num_distractors=[0],
+                              num_distractors=[5],
                               # num_translation_distractors=[0],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
