@@ -666,16 +666,16 @@
 
 
     "¬({A}{a} & {B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::({A}{a} & {B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}{a} & {B}{a})>>"
     ],
     "¬(¬{A}{a} & {B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::(¬{A}{a} & {B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}{a} & {B}{a})>>"
     ],
     "¬({A}{a} & ¬{B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::({A}{a} & ¬{B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}{a} & ¬{B}{a})>>"
     ],
     "¬(¬{A}{a} & ¬{B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::(¬{A}{a} & ¬{B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}{a} & ¬{B}{a})>>"
     ],
 
 
@@ -694,16 +694,16 @@
 
 
     "¬({A}{a} v {B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::({A}{a} v {B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}{a} v {B}{a})>>"
     ],
     "¬(¬{A}{a} v {B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::(¬{A}{a} v {B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}{a} v {B}{a})>>"
     ],
     "¬({A}{a} v ¬{B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::({A}{a} v ¬{B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}{a} v ¬{B}{a})>>"
     ],
     "¬(¬{A}{a} v ¬{B}{a})": [
-      "<<phrase::not_prefix.sentence_intro>> <<sentence::(¬{A}{a} v ¬{B}{a})>>"
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}{a} v ¬{B}{a})>>"
     ],
 
 
@@ -1638,11 +1638,11 @@
 
 
     "(Ex): {A}x": [
-      "<<phrase::some_prefix.sentence_intro>>, <<sentence::{A}it>>",
+      "<<phrase::some_prefix.sentence_intro>> <<sentence::{A}it>>",
       "<<sentence::{A}something>>"
     ],
     "(Ex): ¬{A}x": [
-      "<<phrase::some_prefix.sentence_intro>>, <<sentence::¬{A}it>>",
+      "<<phrase::some_prefix.sentence_intro>> <<sentence::¬{A}it>>",
       "__<<sentence::¬{A}something>>",
       "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
@@ -1947,11 +1947,11 @@
 
     "(x): {A}x": [
       "<<sentence::{A}everything>>",
-      "<<phrase::every_prefix.sentence_intro>>, <<sentence::{A}it>>"
+      "<<phrase::every_prefix.sentence_intro>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x": [
       "__<<sentence::¬{A}everything>>",
-      "<<phrase::every_prefix.sentence_intro>>, <<sentence::¬{A}it>>",
+      "<<phrase::every_prefix.sentence_intro>> <<sentence::¬{A}it>>",
       "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
 
@@ -2703,7 +2703,7 @@
       "<<clause::verb::{A}everything>>"
     ],
     "¬{A}everything": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::{A}everything>>",
+      "<<phrase::not_prefix.sentence_intro>> <<sentence::{A}everything>>",
       "<<clause::verb::¬{A}everything>>"
     ],
 
@@ -3162,16 +3162,17 @@
 
 
       "¬({A} & {B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::({A} & {B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} & {B})>>",
+          "__comment: the template is too difficult to parse with multiple commas."
       ],
       "¬(¬{A} & {B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::¬({A} & {B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬({A} & {B})>>"
       ],
       "¬({A} & ¬{B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::({A} & ¬{B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} & ¬{B})>>"
       ],
       "¬(¬{A} & ¬{B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::(¬{A} & ¬{B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::(¬{A} & ¬{B})>>"
       ],
 
 
@@ -3190,16 +3191,16 @@
 
 
       "¬({A} v {B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::({A} v {B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} v {B})>>"
       ],
       "¬(¬{A} v {B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::¬({A} v {B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬({A} v {B})>>"
       ],
       "¬({A} v ¬{B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::({A} v ¬{B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} v ¬{B})>>"
       ],
       "¬(¬{A} v ¬{B}).event_occurrence": [
-          "that <<phrase::not_prefix.sentence_intro>> <<clause::verb::(¬{A} v ¬{B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::(¬{A} v ¬{B})>>"
       ],
 
 
