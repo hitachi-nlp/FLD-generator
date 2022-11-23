@@ -128,12 +128,10 @@ def test_generate_dataset():
 
         # 'fallback.unknown_interprands.negative_tree',
         # 'fallback.negative_tree.unknown_interprands',
-        'fallback.negative_tree.various_form',
+        # 'fallback.negative_tree.various_form',
         # 'fallback.various_form.negative_tree',
 
-        # 'mixture.unknown_interprands.negative_tree',
-        # 'mixture.various_form.negative_tree',
-        # 'mixture.negative_tree.unknown_interprands',
+        'mixture.negative_tree.simplified_formula.various_form',
 
         generator=generator,
         sample_prototype_formulas_from_tree=True,

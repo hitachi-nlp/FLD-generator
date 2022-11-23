@@ -58,6 +58,14 @@ class ProofTreeGenerationFailure(FormalLogicExceptionBase):
     pass
 
 
+class GenerateStemFailure(ProofTreeGenerationFailure):
+    pass
+
+
+class ExtendBranchesFailure(ProofTreeGenerationFailure):
+    pass
+
+
 _REFERENCE_ARGUMENTS = [
     Argument(
         [Formula('{A}')],
@@ -265,51 +273,42 @@ class ProofTreeGenerator:
                 self._generate_stem,
                 func_args=[depth],
                 func_kwargs={},
-                retry_exception_class=ProofTreeGenerationFailure,
+                retry_exception_class=GenerateStemFailure,
                 max_retry=max_retry,
                 timeout=timeout,
                 logger=logger,
                 log_title='generate_stem()',
             )
         except RetryAndTimeoutFailure as e:
-            raise ProofTreeGenerationFailure(str(e))
+            raise GenerateStemFailure(str(e))
 
     def extend_branches(self,
-                        generate_initial_tree_fn: Callable[[], ProofTree],
-                        # proof_tree: ProofTree,
+                        proof_tree: ProofTree,
                         branch_extension_steps: int,
                         depth_limit: Optional[int] = None,
                         max_retry=100,
                         timeout=5) -> ProofTree:
-        """ extend branches of the tree
-
-        Please make sure that generate_initial_tree_fn generate a completely new tree each time it is called.
-        The reason is the following:
-        (i) The current implementation of _extend_branches modifies the original tree.
-        (ii) We try _extend_branches() multiple times if failed. Each trial needs a new tree.
-
-        This is just the limiation of implications.
-        For example we can omit generate_initial_tree_fn and use proof_tree as the argument,
-        if we implement proof_tree.copy().
-        However, the implementation of proof_tree.copy() cost a little and for now, we decided to bypass that.
-        """
         try:
             return run_with_timeout_retry(
                 self._extend_branches,
-                func_args=[generate_initial_tree_fn, branch_extension_steps],
+                func_args=[proof_tree, branch_extension_steps],
                 func_kwargs={'depth_limit': depth_limit},
-                retry_exception_class=ProofTreeGenerationFailure,
+                retry_exception_class=ExtendBranchesFailure,
                 max_retry=max_retry,
                 timeout=timeout,
                 logger=logger,
                 log_title='extend_branches()',
             )
         except RetryAndTimeoutFailure as e:
-            raise ProofTreeGenerationFailure(str(e))
+            raise ExtendBranchesFailure(str(e))
 
     def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)
-        proof_tree = self._extend_branches(lambda : proof_tree, branch_extension_steps, depth_limit=proof_tree.depth)
+        try:
+            proof_tree = self.extend_branches(proof_tree, branch_extension_steps, depth_limit=proof_tree.depth)
+        except ExtendBranchesFailure as e:
+            logger.warning('extend_branches() failed. Will return tree without branch extension. The error was the following:\n%s', str(e))
+
         return proof_tree
 
     def _generate_stem(self, depth: int) -> ProofTree:
@@ -322,10 +321,10 @@ class ProofTreeGenerator:
                               disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis)
 
     def _extend_branches(self,
-                         generate_initial_tree_fn: Callable[[], ProofTree],
+                         proof_tree: ProofTree,
                          branch_extension_steps: int,
                          depth_limit: Optional[int] = None) -> ProofTree:
-        return _extend_branches(generate_initial_tree_fn(),
+        return _extend_branches(proof_tree,
                                 self.arguments,
                                 branch_extension_steps,
                                 PREDICATES,
@@ -551,12 +550,12 @@ def _generate_stem(arguments: List[Argument],
                     'rejection stats   :',
                     rejection_stats_msg,
                 ])
-                raise ProofTreeGenerationFailure(msg)
+                raise GenerateStemFailure(msg)
 
         if is_tree_done:
 
             if disallow_contradiction_as_hypothesis and proof_tree.root_node.formula.rep == CONTRADICTION:
-                raise ProofTreeGenerationFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
+                raise GenerateStemFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
 
             _check_leaf_consistency(proof_tree)
 
@@ -582,6 +581,7 @@ def _extend_branches(proof_tree: ProofTree,
     (iii) Add the psemises of the chosen argument into tree.
     (iv) Repeat (ii) and (iii)
     """
+    proof_tree = proof_tree.copy()
 
     cur_step = 0
     while True:
@@ -715,7 +715,7 @@ def _extend_branches(proof_tree: ProofTree,
                 rejection_stats_msg,
 
             ])
-            raise ProofTreeGenerationFailure(msg)
+            raise ExtendBranchesFailure(msg)
 
     _check_leaf_consistency(proof_tree)
     return proof_tree

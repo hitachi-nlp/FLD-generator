@@ -3606,9 +3606,9 @@ _DATASET_SETTINGS = {
         'branch_extension_steps': _to_range(0, 3),
 
 
-        'distractor': 'fallback.negative_tree.various_form',
+        'distractor': 'mixture.negative_tree.simplified_formula.various_form',
         'try_negated_hypothesis_first': False,  # set as True if complication=0.0
-        'num_distractors': _to_range(0, 5),
+        'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
 
@@ -3621,8 +3621,8 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'train': 10000,
             'test': 1000,
+            'train': 10000,
         }
     },
 

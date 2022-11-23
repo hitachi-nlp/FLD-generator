@@ -156,7 +156,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
     def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
         logger.info('==== (SameFormUnkownInterprandsDistractor) Try to generate %d distractors ====', size)
         if size == 0:
-            return []
+            return [], {}
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
@@ -174,7 +174,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                     size,
                     len(distractor_formulas),
                 )
-                return distractor_formulas
+                return distractor_formulas, {}
 
             if len(distractor_formulas) >= size:
                 break
@@ -304,7 +304,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
     def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
         logger.info('==== (VariousFormUnkownInterprandsDistractor) Try to generate %d distractors ====', size)
         if size == 0:
-            return []
+            return [], {}
 
         leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
         original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
@@ -508,7 +508,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
     def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
         logger.info('==== (SimplifiedFormulaDistractor) Try to generate %d distractors ====', size)
         if size == 0:
-            return []
+            return [], {}
 
         leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
         original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
@@ -608,21 +608,6 @@ class NegativeTreeDistractor(FormulaDistractor):
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
-        def generate_initial_negative_tree() -> ProofTree:
-            try:
-                if initial_sampling == 'negated_hypothesis':
-                    root_formula = negate(proof_tree.root_node.formula)
-                elif initial_sampling == 'various_form':
-                    distractors, _ = self._various_form_distractor.generate(proof_tree, 1)
-                    if len(distractors) == 0:
-                        raise FormulaDistractorGenerationFailure('Could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
-                    else:
-                        root_formula = distractors[0]
-            except ContradictionNegationError as e:
-                raise ProofTreeGenerationFailure(str(e))
-            if self.generator.elim_dneg:
-                root_formula = eliminate_double_negation(root_formula)
-            return ProofTree([ProofNode(root_formula)])
 
         n_trial = 0
         the_most_distractor_nodes: List[ProofNode] = []
@@ -646,8 +631,23 @@ class NegativeTreeDistractor(FormulaDistractor):
             logger.info('-- (NegativeTreeDistractor) trial=%d    branch_extension_steps=%d', n_trial, branch_extension_steps)
 
             try:
+                if initial_sampling == 'negated_hypothesis':
+                    try:
+                        negative_tree_root_formula = negate(proof_tree.root_node.formula)
+                    except ContradictionNegationError as e:
+                        raise FormulaDistractorGenerationFailure(str(e))
+                elif initial_sampling == 'various_form':
+                    distractors, _ = self._various_form_distractor.generate(proof_tree, 1)
+                    if len(distractors) == 0:
+                        raise FormulaDistractorGenerationFailure('Could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
+                    else:
+                        negative_tree_root_formula = distractors[0]
+                if self.generator.elim_dneg:
+                    negative_tree_root_formula = eliminate_double_negation(negative_tree_root_formula)
+                negative_tree = ProofTree([ProofNode(negative_tree_root_formula)])
+
                 negative_tree = self.generator.extend_branches(
-                    generate_initial_negative_tree,
+                    negative_tree,
                     branch_extension_steps,
                     max_retry=self.generator_max_retry,
                 )
@@ -764,7 +764,15 @@ class MixtureDistractor(FormulaDistractor):
         others = {}
         for distractor, _size in zip(self._distractors, sizes):
             try:
+                logger.info('(MixtureDistractor) try to sample %d formulas from %s',
+                            _size,
+                            str(distractor))
+
                 _distractor_formulas, _others = distractor.generate(proof_tree, _size)
+                # try:
+                #     _distractor_formulas, _others = outputs
+                # except:
+                #     import pudb; pudb.set_trace()
 
                 distractor_formulas += _distractor_formulas
 
@@ -788,7 +796,7 @@ class MixtureDistractor(FormulaDistractor):
             # subsampling will lead to inconsistency for NegativeTreeDistractor
             # return random.sample(distractor_formulas, size), others
 
-            return distractor_formulas
+            return distractor_formulas, others
 
 
 class FallBackDistractor(FormulaDistractor):
@@ -811,7 +819,7 @@ class FallBackDistractor(FormulaDistractor):
     def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
         logger.info('==== (FallBackDistractor) Try to generate %d distractors ====', size)
         if size == 0:
-            return []
+            return [], {}
 
         others = {}
         distractor_formulas: List[Formula] = []
