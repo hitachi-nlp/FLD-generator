@@ -563,7 +563,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                  prototype_formulas: Optional[List[Formula]] = None,
                  try_negated_hypothesis_first=True,
                  generator_max_retry: int = 5,
-                 max_retry: int = 100):
+                 max_retry: int = 30):
         super().__init__()
 
         if generator.complicated_arguments_weight < 0.01:

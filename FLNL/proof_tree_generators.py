@@ -244,7 +244,7 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth: int,
                       branch_extension_steps: int,
-                      max_retry=100,
+                      max_retry=30,
                       timeout=5) -> Optional[ProofTree]:
         if depth == 1:
             logger.info('do only generate_stem() since depth=1 tree can not be extend_branches()')
@@ -266,7 +266,7 @@ class ProofTreeGenerator:
 
     def generate_stem(self,
                       depth: int,
-                      max_retry=100,
+                      max_retry=30,
                       timeout=5) -> Optional[ProofTree]:
         try:
             return run_with_timeout_retry(
@@ -286,7 +286,7 @@ class ProofTreeGenerator:
                         proof_tree: ProofTree,
                         branch_extension_steps: int,
                         depth_limit: Optional[int] = None,
-                        max_retry=100,
+                        max_retry=30,
                         timeout=5) -> ProofTree:
         try:
             return run_with_timeout_retry(
@@ -305,7 +305,10 @@ class ProofTreeGenerator:
     def _generate_tree(self, depth: int, branch_extension_steps: int) -> Optional[ProofTree]:
         proof_tree = self._generate_stem(depth)
         try:
-            proof_tree = self.extend_branches(proof_tree, branch_extension_steps, depth_limit=proof_tree.depth)
+            proof_tree = self.extend_branches(proof_tree,
+                                              branch_extension_steps,
+                                              depth_limit=proof_tree.depth,
+                                              max_retry=10)
         except ExtendBranchesFailure as e:
             logger.warning('extend_branches() failed. Will return tree without branch extension. The error was the following:\n%s', str(e))
 
