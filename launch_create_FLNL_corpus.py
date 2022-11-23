@@ -236,7 +236,7 @@ def main():
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221117.investigation')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221120.negative_tree')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221123.and')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -315,8 +315,9 @@ def main():
         # '20221117__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--20__transl-wide__size-100000',
         # '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000',
 
+        # '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000',
 
-        '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000',
+        '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
     ]
     # dataset_names = dataset_names[::-1]
 

@@ -55,6 +55,7 @@ def generate_complicated_formulas(src_formula: Formula,
 
 
 def generate_simplified_formulas(src_formula: Formula,
+                                 elim_dneg=False,
                                  get_name=False) -> Union[Iterable[Formula], Iterable[Tuple[Formula, str]]]:
     # We will exclude "negation", "and" and "or"
     # For simplicity, we change one element at once
@@ -64,10 +65,15 @@ def generate_simplified_formulas(src_formula: Formula,
     for i_negation_match, negation_match in enumerate(re.finditer(NEGATION, rep)):
         rep_wo_negation = rep[:negation_match.start()] + rep[negation_match.end():]
 
+        simplified_formula = Formula(rep_wo_negation)
+
+        if elim_dneg:
+            simplified_formula = eliminate_double_negation(simplified_formula)
+
         if get_name:
-            yield Formula(rep_wo_negation), f'simplification.not-{_fill_str(i_negation_match)}'
+            yield simplified_formula, f'simplification.not-{_fill_str(i_negation_match)}'
         else:
-            yield Formula(rep_wo_negation)
+            yield simplified_formula
 
     for op in [AND, OR]:
         op_regexp = f'\(([^\)]*) {op} ([^\)]*)\)'
@@ -79,10 +85,15 @@ def generate_simplified_formulas(src_formula: Formula,
 
                 rep_wo_op = rep[:match.start()] + span_text_replaced + rep[match.end():]
 
+                simplified_formula = Formula(rep_wo_op)
+
+                if elim_dneg:
+                    simplified_formula = eliminate_double_negation(simplified_formula)
+
                 if get_name:
-                    yield Formula(rep_wo_op), f'simplification.{op}-{_fill_str(i_match)}.target_term-{_fill_str(i_target)}'
+                    yield simplified_formula, f'simplification.{op}-{_fill_str(i_match)}.target_term-{_fill_str(i_target)}'
                 else:
-                    yield Formula(rep_wo_op)
+                    yield simplified_formula
 
 
 def generate_complication_mappings_from_formula(formulas: List[Formula],

@@ -515,7 +515,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
 
         simplified_formulas: List[Formula] = []
         for node in proof_tree.nodes:
-            for simplified_formula in generate_simplified_formulas(node.formula):
+            for simplified_formula in generate_simplified_formulas(node.formula, elim_dneg=True):
                 if not any(simplified_formula.rep == existing_simplified_formula
                            for existing_simplified_formula in simplified_formulas):
                     simplified_formulas.append(simplified_formula)
@@ -642,8 +642,10 @@ class NegativeTreeDistractor(FormulaDistractor):
                         raise FormulaDistractorGenerationFailure('Could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
                     else:
                         negative_tree_root_formula = distractors[0]
+
                 if self.generator.elim_dneg:
                     negative_tree_root_formula = eliminate_double_negation(negative_tree_root_formula)
+
                 negative_tree = ProofTree([ProofNode(negative_tree_root_formula)])
 
                 negative_tree = self.generator.extend_branches(

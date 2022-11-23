@@ -3554,7 +3554,7 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'fallback.negative_tree.various_form',
-        'try_negated_hypothesis_first': False,  # set as True if complication=0.0
+        'try_negated_hypothesis_first': False,  # set as False if complication=0.0
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3576,7 +3576,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000': {
+    '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': {
 
         'argument_configs': [
             './configs/FLNL/arguments/axiom.pred_only.json',
@@ -3607,8 +3607,8 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
-        'try_negated_hypothesis_first': False,  # set as True if complication=0.0
-        'num_distractors': _to_range(0, 10),
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+        'num_distractors': _to_range(0, 15),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
 
@@ -3671,6 +3671,8 @@ _DATASET_NAME_TO_DEFAULT = {
     '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000': '20221115',
 
     '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000': '20221115',
+
+    '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': '20221115',
 }
 
 

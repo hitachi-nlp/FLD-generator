@@ -125,6 +125,7 @@ def test_various_form_distractor():
         ['({A}{a} v {A}{a})', '({A}{a} v {B}{b})', '({B}{b} v {A}{a})', '({B}{b} v {B}{b})'],
         prototype_formulas=[Formula('({C}{c} v {D}{d})')]
     )
+    
 
 
 def test_simplified_formula_distractor():
@@ -138,6 +139,15 @@ def test_simplified_formula_distractor():
         ],
         5,
     )
+
+    _generate_and_print(
+        distractor,
+        [
+            Formula('¬(¬{A}{a} & {B}{b}) -> ¬{C}{c}'),
+        ],
+        5,
+    )
+
 
 
 if __name__ == '__main__':
