@@ -42,14 +42,15 @@ class FormulaDistractor(ABC):
                  proof_tree: ProofTree,
                  size: int,
                  max_retry: Optional[int] = None,
-                 timeout: Optional[int] = None) -> Tuple[List[Formula], Dict[str, Any]]:
+                 timeout: Optional[int] = None,
+                 no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         max_retry = max_retry or self.default_max_retry
         timeout = timeout or self.default_timeout
         try:
             return run_with_timeout_retry(
                 self._generate,
                 func_args=[proof_tree, size],
-                func_kwargs={},
+                func_kwargs={'no_warning': no_warning},
                 retry_exception_class=FormulaDistractorGenerationFailure,
                 max_retry=max_retry,
                 timeout=timeout,
@@ -70,14 +71,45 @@ class FormulaDistractor(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
+
+
+@profile
+def _is_ok_distractor(distractor_formula: Formula,
+                      distractor_formulas: List[Formula],
+                      proof_tree: ProofTree) -> bool:
+
+    formulas_in_tree = [node.formula for node in proof_tree.nodes]
+    leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
+
+    if not is_formula_new(distractor_formula, distractor_formulas + formulas_in_tree):
+        return False
+
+    if not is_ok_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):  # SLOW: 50%
+        return False
+
+    if not is_consistent_formula_set([distractor_formula] + distractor_formulas):   # SLOW: 20%
+        return False
+
+    # The tree will become inconsistent "by adding" distractor formulas.
+    original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
+    if original_tree_is_consistent and\
+            not is_consistent_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):  # SLOW: 30%
+        return False
+
+    return True
 
 
 class UnkownPASDistractor(FormulaDistractor):
 
+    def __init__(self):
+        raise NotImplementedError('not maintained.')
+
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        if no_warning:
+            raise NotImplementedError()
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
 
         used_zeroary_predicates = sorted({
@@ -153,16 +185,19 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        if no_warning:
+            raise NotImplementedError()
+
         logger.info('==== (SameFormUnkownInterprandsDistractor) Try to generate %d distractors ====', size)
         if size == 0:
             return [], {}
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
-        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
+        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
+        original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
 
-        leaf_formulas = shuffle(leaf_formulas)
+        leaf_formulas_in_tree = shuffle(leaf_formulas_in_tree)
         distractor_formulas: List[Formula] = []
 
         trial = 0
@@ -179,7 +214,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
             if len(distractor_formulas) >= size:
                 break
 
-            src_formula = leaf_formulas[trial % len(leaf_formulas)]
+            src_formula = leaf_formulas_in_tree[trial % len(leaf_formulas_in_tree)]
 
             used_predicates = shuffle(list({pred.rep for pred in src_formula.predicates}))
             used_constants = shuffle(list({pred.rep for pred in src_formula.constants}))
@@ -234,27 +269,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                         print(mapping)
                     transformed_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
-                    if not is_formula_new(transformed_formula,
-                                          distractor_formulas + formulas_in_tree):
-                        continue
-
-                    if not is_ok_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):  # SLOW, called many times
-                        if do_print:
-                            print('!! not is_ok_formula_set()')
-                            # print('    mapping:', mapping)
-                            print('    src_formula:', src_formula)
-                            print('    tgt_predicates:', tgt_predicates)
-                            print('    tgt_constants:', tgt_constants)
-                            print('    transformed_formula:', transformed_formula)
-                            print('    is_senseful:', is_senseful(transformed_formula))
-                        continue
-
-                    if not is_consistent_formula_set([transformed_formula] + distractor_formulas):
-                        continue
-
-                    # The tree will become inconsistent by ADDING distractor formulas.
-                    if original_tree_is_consistent and\
-                            not is_consistent_formula_set([transformed_formula] + distractor_formulas + formulas_in_tree):
+                    if not _is_ok_distractor(transformed_formula, distractor_formulas, proof_tree):
                         continue
 
                     found_formula = transformed_formula
@@ -287,10 +302,17 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
     def __init__(self,
                  prototype_formulas: Optional[List[Formula]] = None,
                  sample_hard_negatives=False,
-                 sample_only_unused_interprands=False):
+                 sample_only_unused_interprands=False,
+                 use_simplified_formulas_as_prototype=False):
         self._prototype_formulas = prototype_formulas
         self._sample_hard_negatives = sample_hard_negatives
         self._sample_only_unused_interprands = sample_only_unused_interprands
+
+        self._use_simplified_formulas_as_prototype = use_simplified_formulas_as_prototype
+        if self._use_simplified_formulas_as_prototype:
+            self._simplify_distractor = SimplifiedFormulaDistractor()
+        else:
+            self._simplify_distractor = None
 
     @property
     def default_max_retry(self) -> int:
@@ -301,34 +323,36 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        if no_warning:
+            raise NotImplementedError()
+
         logger.info('==== (VariousFormUnkownInterprandsDistractor) Try to generate %d distractors ====', size)
         if size == 0:
             return [], {}
 
-        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
-        original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
+        formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
         used_PASs = {PAS.rep
-                     for formula in leaf_formulas_in_tree
+                     for formula in formulas_in_tree
                      for PAS in formula.PASs}
         used_pairs = {(PAS.predicates[0].rep, PAS.constants[0].rep)
-                      for formula in leaf_formulas_in_tree
+                      for formula in formulas_in_tree
                       for PAS in formula.PASs
                       if len(PAS.constants) > 0}
 
         num_zeroary_predicates = {zeroary_predicate.rep
-                                  for formula in leaf_formulas_in_tree
+                                  for formula in formulas_in_tree
                                   for zeroary_predicate in formula.zeroary_predicates}
         num_unary_predicates = {unary_predicate.rep
-                                for formula in leaf_formulas_in_tree
+                                for formula in formulas_in_tree
                                 for unary_predicate in formula.unary_predicates}
 
         used_predicates = {pred.rep
-                           for formula in leaf_formulas_in_tree
+                           for formula in formulas_in_tree
                            for pred in formula.predicates}
         used_constants = {constant.rep
-                          for formula in leaf_formulas_in_tree
+                          for formula in formulas_in_tree
                           for constant in formula.constants}
 
         unused_predicates = set(PREDICATES) - set(used_predicates)
@@ -339,6 +363,11 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
             logger.info('sample from %d prototype formulas specified by the user', len(prototype_formulas))
         else:
             prototype_formulas = [node.formula for node in proof_tree.nodes]
+            if self._use_simplified_formulas_as_prototype:
+                simplified_formulas = self._simplify_distractor.generate(proof_tree, 9999, no_warning=True)[0]
+                prototype_formulas.extend(simplified_formulas)
+                # print('!!!')
+                # print(simplified_formulas)
             logger.info('sample from %d prototype formulas found in the tree', len(prototype_formulas))
 
         # FIXME: this is logic only works for trees where the predicate arity is the same for all the formulas.
@@ -460,10 +489,6 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                 ):
                     distractor_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
-                    if not is_formula_new(distractor_formula,
-                                          distractor_formulas + leaf_formulas_in_tree):
-                        continue
-
                     if all(distractor_PAS.rep in used_PASs
                            for distractor_PAS in distractor_formula.PASs):
                         # if all the distractor PASs are in tree,
@@ -471,15 +496,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                         # we want to prevent such possiblity.
                         continue
 
-                    if not is_ok_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):  # SLOW, called many times
-                        continue
-
-                    if not is_consistent_formula_set([distractor_formula] + distractor_formulas):
-                        continue
-
-                    # The tree will become inconsistent by ADDING distractor formulas.
-                    if original_tree_is_consistent and\
-                            not is_consistent_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):
+                    if not _is_ok_distractor(distractor_formula, distractor_formulas, proof_tree):
                         continue
 
                     found_formula = distractor_formula
@@ -505,13 +522,13 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         logger.info('==== (SimplifiedFormulaDistractor) Try to generate %d distractors ====', size)
         if size == 0:
             return [], {}
 
-        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
-        original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
+        formulas_in_tree = [node.formula for node in proof_tree.nodes]
+        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
 
         simplified_formulas: List[Formula] = []
         for node in proof_tree.nodes:
@@ -525,29 +542,18 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
             if len(distractor_formulas) >= size:
                 break
 
-            if not is_formula_new(distractor_formula,
-                                  distractor_formulas + leaf_formulas_in_tree):
-                continue
-
-            if not is_ok_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):  # SLOW, called many times
-                continue
-
-            if not is_consistent_formula_set([distractor_formula] + distractor_formulas):
-                continue
-
-            # The tree will become inconsistent by ADDING distractor formulas.
-            if original_tree_is_consistent and\
-                    not is_consistent_formula_set([distractor_formula] + distractor_formulas + leaf_formulas_in_tree):
+            if not _is_ok_distractor(distractor_formula, distractor_formulas, proof_tree):
                 continue
 
             distractor_formulas.append(distractor_formula)
 
         if len(distractor_formulas) < size:
-            logger.warning(
-                '(SimplifiedFormulaDistractor) Could not generate %d distractor formulas. return only %d distractors.',
-                size,
-                len(distractor_formulas),
-            )
+            if not no_warning:
+                logger.warning(
+                    '(SimplifiedFormulaDistractor) Could not generate %d distractor formulas. return only %d distractors.',
+                    size,
+                    len(distractor_formulas),
+                )
 
         return distractor_formulas, {}
 
@@ -586,7 +592,10 @@ class NegativeTreeDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        if no_warning:
+            raise NotImplementedError()
+
         if self._try_negated_hypothesis_first:
             distractors, others = self._generate_with_initial_sampling(proof_tree, size, 'negated_hypothesis')
             if len(distractors) == 0:
@@ -626,7 +635,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 return the_most_distractor_formulas, {'negative_tree': the_most_tree, 'negative_tree_missing_nodes': [node for node in the_most_tree.leaf_nodes if node not in the_most_distractor_nodes]}
 
             # gradually increase the number of extension steps to find the "just in" size tree.
-            branch_extension_steps_factor = min(0.5 + 0.1 * n_trial, max_branch_extension_factor)
+            branch_extension_steps_factor = min(0.5 + 0.3 * n_trial, max_branch_extension_factor)
             branch_extension_steps = math.ceil(size * branch_extension_steps_factor)
             logger.info('-- (NegativeTreeDistractor) trial=%d    branch_extension_steps=%d', n_trial, branch_extension_steps)
 
@@ -651,6 +660,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 negative_tree = self.generator.extend_branches(
                     negative_tree,
                     branch_extension_steps,
+                    ng_formulas=[node.formula for node in proof_tree.nodes],
                     max_retry=self.generator_max_retry,
                 )
             except ProofTreeGenerationFailure as e:
@@ -686,21 +696,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 if len(distractor_formulas) >= size:
                     break
 
-                if not is_formula_new(distractor_formula,
-                                      distractor_formulas + formulas_in_tree):
-                    continue
-
-                if not is_ok_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
-                    continue
-
-                # We do not check the consistency between distractor_formulas.
-                # They must be consistent since they comes from the leaf nodes of the generated tree, which guarantee the consistency.
-
-                # We check the formulas become inconsistent by ADDING distractor_formulas to the original tree.
-                # This logic have false negative, the case where the original tree is inconsistent AND adding distractors yields another inconsistency.
-                # Since the detection of such logic is complicated and such case is rare, we abandon the detection.
-                if original_tree_is_consistent and\
-                        not is_consistent_formula_set([distractor_formula] + distractor_formulas + formulas_in_tree):
+                if not _is_ok_distractor(distractor_formula, distractor_formulas, proof_tree):
                     continue
 
                 distractor_formulas.append(distractor_formula)
@@ -741,7 +737,10 @@ class MixtureDistractor(FormulaDistractor):
             timeout_sum += distractor.default_max_retry * distractor.default_timeout
         return timeout_sum
 
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        if no_warning:
+            raise NotImplementedError()
+
         logger.info('==== (MixtureDistractor) Try to generate %d distractors ====', size)
         if size == 0:
             return [], {}
@@ -818,7 +817,10 @@ class FallBackDistractor(FormulaDistractor):
             timeout_sum += distractor.default_max_retry * distractor.default_timeout
         return timeout_sum
 
-    def _generate(self, proof_tree: ProofTree, size: int) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        if no_warning:
+            raise NotImplementedError()
+
         logger.info('==== (FallBackDistractor) Try to generate %d distractors ====', size)
         if size == 0:
             return [], {}
@@ -869,6 +871,7 @@ AVAILABLE_DISTRACTORS = [
 def build(type_: str,
           generator: Optional[ProofTreeGenerator] = None,
           sample_hard_negatives=False,
+          use_simplified_formulas_as_prototype=False,
           sample_prototype_formulas_from_tree=False,
           try_negated_hypothesis_first=False):
 
@@ -894,6 +897,7 @@ def build(type_: str,
         return VariousFormUnkownInterprandsDistractor(
             prototype_formulas=prototype_formulas,
             sample_hard_negatives=sample_hard_negatives,
+            use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
         )
     elif type_ == 'negative_tree':
         if generator is None:
@@ -939,6 +943,7 @@ def build(type_: str,
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
+                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
                 ),
             ]
         )
@@ -949,6 +954,7 @@ def build(type_: str,
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
+                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
                 ),
                 NegativeTreeDistractor(
                     generator,
@@ -970,6 +976,7 @@ def build(type_: str,
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
+                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
                 ),
             ]
         )

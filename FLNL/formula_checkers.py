@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Set, Iterable
+from typing import List, Optional, Set, Iterable, Dict, Tuple
 import logging
 
 from .formula import (
@@ -11,6 +11,7 @@ from .formula import (
     NEGATION,
     CONSTANTS,
 )
+import kern_profiler
 
 logger = logging.getLogger(__name__)
 
@@ -19,15 +20,18 @@ def is_consistent(formula: Formula) -> bool:
     return not _is_inconsistent(formula)
 
 
+@profile
 def is_consistent_set(formulas: List[Formula]) -> bool:
     """ consistent = satisfiable in formal meaning. """
     return not _is_inconsistent_set(formulas)
 
 
+@profile
 def is_predicate_arity_consistent(formula: Formula) -> bool:
     return is_predicate_arity_consistent_set([formula])
 
 
+@profile
 def is_predicate_arity_consistent_set(formulas: List[Formula]) -> bool:
     unary_predicates = {pred.rep
                         for formula in formulas
@@ -38,34 +42,31 @@ def is_predicate_arity_consistent_set(formulas: List[Formula]) -> bool:
     return len(unary_predicates.intersection(zeroary_predicates)) == 0
 
 
+@profile
 def is_senseful(formula: Formula) -> bool:
     return not _is_nonsense(formula)
 
 
+@profile
 def is_senseful_set(formulas: List[Formula]) -> bool:
-    # for formula in formulas:
-    #     if not is_senseful(formula):
-    #         print('not senseful:', formula)
     return all(is_senseful(formula) for formula in formulas)
 
 
+@profile
 def is_ok(formula: Formula) -> bool:
-    return all([
-        is_senseful(formula),
-        is_predicate_arity_consistent(formula),
-        # is_consistent(formula),  # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
-    ])
+    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
+    return is_senseful(formula)\
+        and is_predicate_arity_consistent(formula)
 
 
-# HONOKA: SLOW, called many times
+@profile
 def is_ok_set(formulas: List[Formula]) -> bool:
-    return all([
-        is_senseful_set(formulas),   # HONOKA: passしない．
-        is_predicate_arity_consistent_set(formulas),
-        # is_consistent_set(formulas),    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
-    ])
+    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
+    return is_senseful_set(formulas)\
+        and is_predicate_arity_consistent_set(formulas)
 
 
+@profile
 def is_new(formula: Formula,
            existing_formulas: List[Formula]) -> bool:
     for _ in _search_formulas([formula], existing_formulas):
@@ -73,6 +74,7 @@ def is_new(formula: Formula,
     return True
 
 
+@profile
 def _search_formulas(formulas: List[Formula],
                      existing_formulas: List[Formula]) -> Iterable[Formula]:
     for formula in formulas:
@@ -81,6 +83,7 @@ def _search_formulas(formulas: List[Formula],
                 yield existing_formula
 
 
+@profile
 def _is_inconsistent(formula: Formula) -> bool:
     """ A formula is inconsistent if for any interpretation it can not be true.
 
@@ -101,6 +104,10 @@ def _is_inconsistent(formula: Formula) -> bool:
     ))
 
 
+_is_inconsistent_set_cache: Dict[str, bool] = {}
+_is_inconsistent_set_cache_size = 10000000
+
+@profile
 def _is_inconsistent_set(formulas: List[Formula]) -> bool:
     """ Detect whether a set of formulas is inconsistent, i.e., whether, for any interpretation, they can not be true at the same time.
 
@@ -133,8 +140,19 @@ def _is_inconsistent_set(formulas: List[Formula]) -> bool:
     """
     formulas = [eliminate_double_negation(formula) for formula in formulas]
 
+    cache = _is_inconsistent_set_cache
+    cache_size = _is_inconsistent_set_cache_size
+    if len(cache) >= cache_size:
+        cache = {}
+    cache_key = formulas[0].rep if len(formulas) == 1 else None
+
+    if cache_key is not None and cache_key in cache:
+        return cache[cache_key]
+
     # Check whether any of formulas are inconsistent by itself.
     if any((_is_inconsistent(formula) for formula in formulas)):
+        if cache_key is not None:
+            cache[cache_key] = True
         return True
 
     # Check whether some PAS (like "Ga") appear both as true and as false in formulas.
@@ -155,11 +173,20 @@ def _is_inconsistent_set(formulas: List[Formula]) -> bool:
                 that_bools = _get_boolean_values(that_formula, PAS)
                 if ('T' in this_bools and 'F' in that_bools)\
                         or ('F' in this_bools and 'T' in that_bools):
+                    if cache_key is not None:
+                        cache[cache_key] = True
                     return True
 
+    if cache_key is not None:
+        cache[cache_key] = False
     return False
 
 
+_is_nonsense_cache: Dict[str, bool] = {}
+_is_nonsense_cache_size = 10000000
+
+
+@profile
 def _is_nonsense(formula: Formula) -> bool:
     """ Detect fomula which is nonsense.
 
@@ -177,9 +204,21 @@ def _is_nonsense(formula: Formula) -> bool:
         ({A} -> {A})
         (¬{A} -> ¬{A})
     """
+    rep = formula.rep
+
+    cache = _is_nonsense_cache
+    cache_size = _is_nonsense_cache_size
+    if len(cache) >= cache_size:
+        cache = {}
+    cache_key = formula.rep
+
+    if cache_key in cache:
+        return cache[cache_key]
+
     formula = eliminate_double_negation(formula)
 
     if formula.premise is None and _is_inconsistent_set([formula]):
+        cache[cache_key] = True
         return True
 
     # detect fromulas like: {A} -> ¬{A}
@@ -191,26 +230,34 @@ def _is_nonsense(formula: Formula) -> bool:
             if ('T' in bool_in_conclusion and 'F' in bool_in_premise)\
                     or ('F' in bool_in_conclusion and 'T' in bool_in_premise):
                 # this block means "contradiction getween premise and conclusion"
+                cache[cache_key] = True
                 return True
 
             # this block is like "A -> A", "A -> (A & B)" -> This is OK, for example, &
             if ('T' in bool_in_conclusion and 'T' in bool_in_premise)\
                     or ('F' in bool_in_conclusion and 'F' in bool_in_premise):
+                cache[cache_key] = True
                 return True
     else:
         pass
 
     # detect fromulas like: ({A} v {A})
     for op in [AND, OR, IMPLICATION]:
-        match = re.search(f'[^ ]* {op} [^ ]*', formula.rep)
+        match = re.search(f'[^ ]* {op} [^ ]*', rep)
         if match is not None:
             left, right = match.group().lstrip('(').rstrip(')').split(f' {op} ')
             if left == right:
+                cache[cache_key] = True
                 return True
 
+    cache[cache_key] = False
     return False
 
 
+_get_boolean_values_cache: Dict[Tuple[str, str], Set[str]] = {}
+_get_boolean_values_cache_size = 10000000
+
+@profile
 def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
     """ Detect the boolean values of PASs which is neccesary for the given formula to be true.
 
@@ -222,6 +269,15 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
         * When we extend formula patterns, we must update this function
         * It might be more robust to use external solvers like tableau generators.
     """
+    cache = _get_boolean_values_cache
+    cache_size = _get_boolean_values_cache_size
+    if len(cache) >= cache_size:
+        cache = {}
+    cache_key = (formula.rep, PAS.rep)
+
+    if cache_key in cache:
+        return cache[cache_key]
+
     if len(PAS.predicates) != 1:
         raise ValueError(f'PAS must have exactly one predicate. actual: {PAS}')
 
@@ -238,16 +294,20 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
             bound_PAS = Formula(PAS.rep.replace(variable.rep, constant))
             booleans_on_bound_formula = _get_boolean_values(bound_formula, bound_PAS)
             if len(booleans_on_bound_formula) >= 1:
+                cache[cache_key] = booleans_on_bound_formula
                 return booleans_on_bound_formula
-        return {}
+        cache[cache_key] = set()
+        return set()
 
     # e.g.) formula: "(Ex): {B}x -> {A}x"     PAS: "{A}x"
     if len(formula.existential_variables) == 1 and PAS.variables[0].rep in [v.rep for v in formula.existential_variables]:
         # We can not determine
         # since we regard "x" without quantification denotes all the constants.
-        return {}
+        cache[cache_key] = set()
+        return set()
 
     if PAS.rep not in [_pa.rep for _pa in formula.PASs]:  # SLOW, called many times
+        cache[cache_key] = set()
         return set()
 
     values = set()
@@ -312,4 +372,5 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
                        rep)
         # raise NotImplementedError(f'Please add patterns to handle {rep}')
 
+    cache[cache_key] = values
     return values

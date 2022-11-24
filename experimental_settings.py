@@ -3628,6 +3628,61 @@ _DATASET_SETTINGS = {
 
 
 
+
+
+    '20221124.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': {
+
+        'argument_configs': [
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        'complication': 0.3,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'distractor': 'mixture.negative_tree.simplified_formula.various_form',
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+        'use_simplified_tree_formulas_as_distractor_prototype': True,
+        'num_distractors': _to_range(0, 15),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 1000,
+            'train': 10000,
+        }
+    },
+
+
+
 }
 
 

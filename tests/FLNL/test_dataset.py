@@ -28,7 +28,7 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 10000) -> None:
+                     num_dataset: int = 100) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
@@ -129,12 +129,13 @@ def test_generate_dataset():
         # 'fallback.unknown_interprands.negative_tree',
         # 'fallback.negative_tree.unknown_interprands',
         # 'fallback.negative_tree.various_form',
-        # 'fallback.various_form.negative_tree',
+        'fallback.various_form.negative_tree',
 
-        'mixture.negative_tree.simplified_formula.various_form',
+        # 'mixture.negative_tree.simplified_formula.various_form',
 
         generator=generator,
         sample_prototype_formulas_from_tree=True,
+        use_simplified_formulas_as_prototype=True,
         sample_hard_negatives=True,
         try_negated_hypothesis_first=True,
     )
@@ -163,7 +164,7 @@ def test_generate_dataset():
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
-                              num_distractors=[5],
+                              num_distractors=[15],
                               # num_translation_distractors=[0],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 

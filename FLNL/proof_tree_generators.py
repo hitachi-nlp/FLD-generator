@@ -286,13 +286,14 @@ class ProofTreeGenerator:
                         proof_tree: ProofTree,
                         branch_extension_steps: int,
                         depth_limit: Optional[int] = None,
+                        ng_formulas: Optional[List[Formula]] = None,
                         max_retry=30,
                         timeout=5) -> ProofTree:
         try:
             return run_with_timeout_retry(
                 self._extend_branches,
                 func_args=[proof_tree, branch_extension_steps],
-                func_kwargs={'depth_limit': depth_limit},
+                func_kwargs={'depth_limit': depth_limit, 'ng_formulas': ng_formulas},
                 retry_exception_class=ExtendBranchesFailure,
                 max_retry=max_retry,
                 timeout=timeout,
@@ -326,13 +327,15 @@ class ProofTreeGenerator:
     def _extend_branches(self,
                          proof_tree: ProofTree,
                          branch_extension_steps: int,
-                         depth_limit: Optional[int] = None) -> ProofTree:
+                         depth_limit: Optional[int] = None,
+                         ng_formulas: Optional[List[Formula]] = None) -> ProofTree:
         return _extend_branches(proof_tree,
                                 self.arguments,
                                 branch_extension_steps,
                                 PREDICATES,
                                 CONSTANTS,
                                 depth_limit=depth_limit,
+                                ng_formulas=ng_formulas,
                                 argument_weights=self.argument_weights,
                                 elim_dneg=self.elim_dneg)
 
@@ -575,7 +578,8 @@ def _extend_branches(proof_tree: ProofTree,
                      argument_weights: Optional[Dict[Argument, float]] = None,
                      depth_limit: Optional[int] = None,
                      elim_dneg=False,
-                     allow_reference_arguments_when_depth_1=True) -> ProofTree:
+                     allow_reference_arguments_when_depth_1=True,
+                     ng_formulas: Optional[List[Formula]] = None) -> ProofTree:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
     The steps are:
@@ -585,6 +589,7 @@ def _extend_branches(proof_tree: ProofTree,
     (iv) Repeat (ii) and (iii)
     """
     proof_tree = proof_tree.copy()
+    ng_formulas = ng_formulas or []
 
     cur_step = 0
     while True:
@@ -685,7 +690,7 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
                             continue
 
-                        if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree):
+                        if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1

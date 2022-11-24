@@ -43,6 +43,7 @@ def load_dataset(argument_config: List[str],
                  distractor: str,
                  num_distractors: List[int],
                  sample_distractor_formulas_from_tree: bool,
+                 use_simplified_tree_formulas_as_distractor_prototype: bool,
                  sample_hard_negative_distractors: bool,
                  dont_try_negative_hypothesis: bool,
                  add_subj_obj_swapped_distractor: bool,
@@ -72,6 +73,7 @@ def load_dataset(argument_config: List[str],
         _distractor = build_distractor(distractor,
                                        generator=generator,
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
+                                       use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
                                        sample_hard_negatives=sample_hard_negative_distractors,
                                        try_negated_hypothesis_first=not dont_try_negative_hypothesis)
         logger.info('------------------- building distractor done! ----------------')
@@ -181,6 +183,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
+@click.option('--use-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
 @click.option('--dont-try-negative-hypothesis', type=bool, is_flag=True)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
@@ -212,6 +215,7 @@ def main(output_path,
          distractor,
          num_distractors,
          sample_distractor_formulas_from_tree,
+         use_simplified_tree_formulas_as_distractor_prototype,
          sample_hard_negative_distractors,
          dont_try_negative_hypothesis,
          add_subj_obj_swapped_distractor,
@@ -274,6 +278,7 @@ def main(output_path,
                         distractor,
                         num_distractors,
                         sample_distractor_formulas_from_tree,
+                        use_simplified_tree_formulas_as_distractor_prototype,
                         sample_hard_negative_distractors,
                         dont_try_negative_hypothesis,
                         add_subj_obj_swapped_distractor,
