@@ -28,7 +28,7 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 300) -> None:
     logger.info('\n\n')
     logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
@@ -141,15 +141,15 @@ def test_generate_dataset():
     )
 
     # SLOW
-    # translation_distractor = build_translation_distractor(
-    #     'word_swap',
-    #     word_bank=word_bank,
-    # )
+    translation_distractor = build_translation_distractor(
+        'word_swap',
+        word_bank=word_bank,
+    )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
-        translation_distractor=None,
+        translation_distractor=translation_distractor,
         fallback_from_formula_to_translation_distractor=True,
         translator=translator,
         add_subj_obj_swapped_distractor=True,
@@ -158,14 +158,14 @@ def test_generate_dataset():
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              _to_range(1, 5),
+                              _to_range(1, 8),
                               _to_range(0, 5),
                               depth_1_weight=2.0,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
                               num_distractors=[15],
-                              # num_translation_distractors=[0],
+                              num_translation_distractors=[5],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 
     generate_dataset(dataset)

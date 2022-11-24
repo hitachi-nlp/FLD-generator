@@ -86,7 +86,7 @@ def make_dataset(dataset_name: str,
     )
     logger.addHandler(create_file_handler(output_dir / 'log.txt'))
 
-    min_size_per_job = 100    # too small value might be slow.
+    min_size_per_job = 300    # too small value might be slow.
     for split, size in settings['split_sizes'].items():
         size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
 

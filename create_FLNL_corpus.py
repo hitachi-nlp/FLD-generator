@@ -149,7 +149,6 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
     logger.info('--------------- distractors --------------')
     logger.info('\n' + pformat(distractors))
 
-
     logger.info('\n')
     logger.info('--------------- translation distractors --------------')
     logger.info('\n' + pformat(translation_distractors))
@@ -195,7 +194,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--num-workers', type=int, default=1)
-@click.option('--min-size-per-worker', type=int, default=100)
+@click.option('--min-size-per-worker', type=int, default=1000)   # single thread: data load = 2min, generation = 300 instances / 8min    vs    multithread: data load = 20min, generation = 5 x 300 instances / 8min
 @click.option('--batch-size-per-worker', type=int, default=10000)
 @click.option('--seed', type=int, default=0)
 def main(output_path,
