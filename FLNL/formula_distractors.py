@@ -193,9 +193,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
         if size == 0:
             return [], {}
 
-        formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
-        original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
 
         leaf_formulas_in_tree = shuffle(leaf_formulas_in_tree)
         distractor_formulas: List[Formula] = []
@@ -527,9 +525,6 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
         if size == 0:
             return [], {}
 
-        formulas_in_tree = [node.formula for node in proof_tree.nodes]
-        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
-
         simplified_formulas: List[Formula] = []
         for node in proof_tree.nodes:
             for simplified_formula in generate_simplified_formulas(node.formula, elim_dneg=True):
@@ -568,8 +563,8 @@ class NegativeTreeDistractor(FormulaDistractor):
                  generator: ProofTreeGenerator,
                  prototype_formulas: Optional[List[Formula]] = None,
                  try_negated_hypothesis_first=True,
-                 generator_max_retry: int = 5,
-                 max_retry: int = 30):
+                 max_branch_extension_steps=10,
+                 extend_branches_max_retry: int = 5):
         super().__init__()
 
         if generator.complicated_arguments_weight < 0.01:
@@ -579,9 +574,9 @@ class NegativeTreeDistractor(FormulaDistractor):
             prototype_formulas=prototype_formulas,
             sample_only_unused_interprands=True,
         )
-        self._try_negated_hypothesis_first = try_negated_hypothesis_first
-        self.generator_max_retry = generator_max_retry
-        self.max_retry = max_retry
+        self.try_negated_hypothesis_first = try_negated_hypothesis_first
+        self.max_branch_extension_steps = max_branch_extension_steps
+        self.extend_branches_max_retry = extend_branches_max_retry
 
     @property
     def default_max_retry(self) -> int:
@@ -596,7 +591,7 @@ class NegativeTreeDistractor(FormulaDistractor):
         if no_warning:
             raise NotImplementedError()
 
-        if self._try_negated_hypothesis_first:
+        if self.try_negated_hypothesis_first:
             distractors, others = self._generate_with_initial_sampling(proof_tree, size, 'negated_hypothesis')
             if len(distractors) == 0:
                 logger.info('creating negative tree with negated hypothesis root not failed. Will try root node sampled from various forms.')
@@ -614,29 +609,11 @@ class NegativeTreeDistractor(FormulaDistractor):
         if size == 0:
             return [], {'negative_tree': None, 'negative_tree_missing_nodes': None}
 
-        formulas_in_tree = [node.formula for node in proof_tree.nodes]
-        original_tree_is_consistent = is_consistent_formula_set(formulas_in_tree)
-
-
         n_trial = 0
-        the_most_distractor_nodes: List[ProofNode] = []
-        the_most_distractor_formulas: List[Formula] = []
-        the_most_tree: Optional[ProofTree] = None
-        max_branch_extension_factor = 3.0
         while True:
-            if n_trial >= self.max_retry:
-                logger.warning(
-                    '(NegativeTreeDistractor) Could not generate %d distractor formulas. return only %d distractors.',
-                    size,
-                    len(the_most_distractor_formulas),
-                )
-                if the_most_tree is not None:
-                    logger.info('The negative tree is the following:\n%s', the_most_tree.format_str)
-                return the_most_distractor_formulas, {'negative_tree': the_most_tree, 'negative_tree_missing_nodes': [node for node in the_most_tree.leaf_nodes if node not in the_most_distractor_nodes]}
-
-            # gradually increase the number of extension steps to find the "just in" size tree.
-            branch_extension_steps_factor = min(0.5 + 0.3 * n_trial, max_branch_extension_factor)
-            branch_extension_steps = math.ceil(size * branch_extension_steps_factor)
+           # gradually increase the number of extension steps to find the "just in" size tree.
+            max_branch_extension_steps = 10
+            branch_extension_steps = min(size + n_trial * 2, max_branch_extension_steps)
             logger.info('-- (NegativeTreeDistractor) trial=%d    branch_extension_steps=%d', n_trial, branch_extension_steps)
 
             try:
@@ -661,36 +638,27 @@ class NegativeTreeDistractor(FormulaDistractor):
                     negative_tree,
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
-                    max_retry=self.generator_max_retry,
+                    max_retry=self.extend_branches_max_retry,
                 )
             except ProofTreeGenerationFailure as e:
                 raise FormulaDistractorGenerationFailure(str(e))
 
-            leaf_nodes = negative_tree.leaf_nodes
-            if len(leaf_nodes) - 1 == 0:
-                n_trial += 1
-                logger.info('(NegativeTreeDistractor) Continue to the next trial since no negatieve leaf formulas are found.')
+            negative_leaf_nodes = negative_tree.leaf_nodes
+            if len(negative_leaf_nodes) - 1 < size and branch_extension_steps < self.max_branch_extension_steps:
+                logger.info('(NegativeTreeDistractor) Continue to the next trial with increased branch_extension_steps, since number of negatieve leaf formulas - 1 = %d < size=%d',
+                            len(negative_leaf_nodes) - 1,
+                            size)
                 continue
-
-            elif len(leaf_nodes) - 1 < size:
-                if branch_extension_steps_factor < max_branch_extension_factor:
-                    logger.info('(NegativeTreeDistractor) Continue to the next trial with increased tree size, since number of negatieve leaf formulas %d < size=%d',
-                                len(leaf_nodes) - 1,
-                                size)
-                    n_trial += 1
-                    continue
-            # else:
-            #     logger.info('%d formulas in negative tree found. We will select appropriate ones from these formulas.', len(neg_leaf_formulas))
 
             distractor_formulas: List[Formula] = []
             distractor_nodes: List[ProofNode] = []
             # We sample at most len(leaf_nodes) - 1, since at least one distractor must be excluded so that the negated hypothesis can not be derived.
             if initial_sampling == 'negated_hypothesis':
-                leaf_node_at_most = len(leaf_nodes) - 1  # should exclude at least one
+                leaf_node_at_most = len(negative_leaf_nodes) - 1  # should exclude at least one
             elif initial_sampling == 'various_form':
-                leaf_node_at_most = random.sample([len(leaf_nodes) - 1, len(leaf_nodes)], 1)[0]
+                leaf_node_at_most = random.sample([len(negative_leaf_nodes) - 1, len(negative_leaf_nodes)], 1)[0]
 
-            for distractor_node in random.sample(leaf_nodes, leaf_node_at_most):
+            for distractor_node in random.sample(negative_leaf_nodes, leaf_node_at_most):
                 distractor_formula = distractor_node.formula
 
                 if len(distractor_formulas) >= size:
@@ -702,22 +670,13 @@ class NegativeTreeDistractor(FormulaDistractor):
                 distractor_formulas.append(distractor_formula)
                 distractor_nodes.append(distractor_node)
 
-            if len(distractor_formulas) > len(the_most_distractor_formulas):
-                the_most_tree = negative_tree
-                the_most_distractor_nodes = distractor_nodes
-                the_most_distractor_formulas = distractor_formulas
-
-            if len(the_most_distractor_formulas) >= size:
+            if len(distractor_formulas) >= size:
                 logger.info('(NegativeTreeDistractor) generating %d formulas succeeded!', size)
-                if the_most_tree is not None:
-                    logger.info('The negative tree is the following:\n%s', the_most_tree.format_str)
-                return the_most_distractor_formulas, {'negative_tree': the_most_tree, 'negative_tree_missing_nodes': [node for node in the_most_tree.leaf_nodes if node not in the_most_distractor_nodes]}
             else:
-                logger.info('(NegativeTreeDistractor) Continue to the next trial since, only %d (< size=%d) negative leaf formulas are appropriate.',
-                            len(distractor_formulas),
-                            size)
-                n_trial += 1
-                continue
+                logger.info('(NegativeTreeDistractor) return only [%d / %d] formulas', len(distractor_formulas), size)
+            if negative_tree is not None:
+                logger.info('The negative tree is the following:\n%s', negative_tree.format_str)
+            return distractor_formulas, {'negative_tree': negative_tree, 'negative_tree_missing_nodes': [node for node in negative_tree.leaf_nodes if node not in distractor_nodes]}
 
 
 class MixtureDistractor(FormulaDistractor):

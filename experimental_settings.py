@@ -3677,7 +3677,7 @@ _DATASET_SETTINGS = {
 
         'split_sizes': {
             'test': 1000,
-            'train': 10000,
+            # 'train': 10000,
         }
     },
 
@@ -3728,6 +3728,8 @@ _DATASET_NAME_TO_DEFAULT = {
     '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000': '20221115',
 
     '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': '20221115',
+
+    '20221124.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': '20221115',
 }
 
 
