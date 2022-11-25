@@ -207,14 +207,14 @@ class TemplatedTranslator(Translator):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
 
         zeroary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, int(self.words_per_type * 1 / 3))\
-            + self._sample(transitive_verb_PASs, int(self.words_per_type * 2 / 3))\
+            + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
+            + self._sample(transitive_verb_PASs, int(self.words_per_type * 4 / 3))\
             + self._sample(event_nouns, int(self.words_per_type))
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
         unary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, int(self.words_per_type * 1 / 3))\
-            + self._sample(transitive_verb_PASs, int(self.words_per_type * 2 / 3))\
+            + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
+            + self._sample(transitive_verb_PASs, int(self.words_per_type * 4 / 3))\
             + self._sample(nouns, int(self.words_per_type))
         unary_predicates = sorted({word for word in unary_predicates})
 
