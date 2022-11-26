@@ -2995,45 +2995,45 @@
 
 
       "{A}something": [
-        "something <<phrase::{A}predicate>>"
+        "<<phrase::something>> <<phrase::{A}predicate>>"
       ],
       "¬{A}something": [
-        "something <<phrase::¬{A}predicate>>"
+        "<<phrase::something>> <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}something & {B}something)": [
-          "something <<phrase::({A} & {B})predicate>>",
+          "<<phrase::something>> <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::and_also>> <<clause::verb::{B}it>>"
       ],
       "(¬{A}something & {B}something)": [
-          "something <<phrase::(¬{A} & {B})predicate>>",
+          "<<phrase::something>> <<phrase::(¬{A} & {B})predicate>>",
           "<<clause::verb::¬{A}something>> <<phrase::and_but>> <<clause::verb::{B}it>>"
       ],
       "({A}something & ¬{B}something)": [
-          "something <<phrase::({A} & ¬{B})predicate>>",
+          "<<phrase::something>> <<phrase::({A} & ¬{B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::and_but>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}something & ¬{B}something)": [
-          "something <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<phrase::something>> <<phrase::(¬{A} & ¬{B})predicate>>",
           "<<clause::verb::¬{A}something>> <<phrase::and_also>> <<clause::verb::¬{B}it>>"
       ],
 
 
       "({A}something v {B}something)": [
-          "something <<phrase::({A} v {B})predicate>>",
+          "<<phrase::something>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}something>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}something v {B}something)": [
-          "something <<phrase::(¬{A} v {B})predicate>>",
+          "<<phrase::something>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}something>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}something v ¬{B}something)": [
-          "something <<phrase::({A} v ¬{B})predicate>>",
+          "<<phrase::something>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}something>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}something v ¬{B}something)": [
-          "something <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<phrase::something>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}something>> or <<clause::verb::¬{B}it>> or both"
       ],
 
@@ -3042,39 +3042,39 @@
 
 
       "{A}everything": [
-        "everything <<phrase::{A}predicate>>"
+        "<<phrase::everything>> <<phrase::{A}predicate>>"
       ],
       "¬{A}everything": [
         "<<phrase::not_prefix.sentence_intro>> <<clause::verb::{A}everything>>",
-        "everything <<phrase::¬{A}predicate>>"
+        "<<phrase::everything>> <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}everything & {B}everything)": [
-          "everything <<phrase::({A} & {B})predicate>>"
+          "<<phrase::everything>> <<phrase::({A} & {B})predicate>>"
       ],
       "(¬{A}everything & {B}everything)": [
-          "everything <<phrase::(¬{A} & {B})predicate>>"
+          "<<phrase::everything>> <<phrase::(¬{A} & {B})predicate>>"
       ],
       "({A}everything & ¬{B}everything)": [
-          "everything <<phrase::({A} & ¬{B})predicate>>"
+          "<<phrase::everything>> <<phrase::({A} & ¬{B})predicate>>"
       ],
       "(¬{A}everything & ¬{B}everything)": [
-          "everything <<phrase::(¬{A} & ¬{B})predicate>>"
+          "<<phrase::everything>> <<phrase::(¬{A} & ¬{B})predicate>>"
       ],
 
 
       "({A}everything v {B}everything)": [
-          "everything <<phrase::({A} v {B})predicate>>"
+          "<<phrase::everything>> <<phrase::({A} v {B})predicate>>"
       ],
       "(¬{A}everything v {B}everything)": [
-          "everything <<phrase::(¬{A} v {B})predicate>>"
+          "<<phrase::everything>> <<phrase::(¬{A} v {B})predicate>>"
       ],
       "({A}everything v ¬{B}everything)": [
-          "everything <<phrase::({A} v ¬{B})predicate>>"
+          "<<phrase::everything>> <<phrase::({A} v ¬{B})predicate>>"
       ],
       "(¬{A}everything v ¬{B}everything)": [
-          "everything <<phrase::(¬{A} v ¬{B})predicate>>"
+          "<<phrase::everything>> <<phrase::(¬{A} v ¬{B})predicate>>"
       ],
 
 
@@ -3277,55 +3277,55 @@
 
 
       "{A}something.set": [
-        "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing",
-        "something <<phrase::{A}post_modifier>>",
+        "<<phrase::a_all>> <<phrase::{A}pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::{A}post_modifier>>",
 
         "<<phrase::{A}a_noun>>"
       ],
 
       "¬{A}something.set": [
-        "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing",
-        "something <<phrase::¬{A}post_modifier>>",
+        "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::¬{A}post_modifier>>",
 
         "<<phrase::¬{A}a_noun>>"
       ],
 
       
       "({A}something & {B}something).set": [
-        "<<phrase::a_all>> <<phrase::({A} & {B})pre_modifier>> thing",
-        "something <<phrase::({A} & {B})post_modifier>>",
+        "<<phrase::a_all>> <<phrase::({A} & {B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::({A} & {B})post_modifier>>",
 
-        "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing <<phrase::{B}post_modifier>>",
+        "<<phrase::a_all>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
 
         "<<phrase::a_all>> <<phrase::{B}pre_modifier>> <<phrase::{A}noun>>",
         "<<phrase::{A}a_noun>> <<phrase::{B}post_modifier>>"
       ],
 
       "(¬{A}something & {B}something).set": [
-        "<<phrase::a_all>> <<phrase::(¬{A} & {B})pre_modifier>> thing",
-        "something <<phrase::(¬{A} & {B})post_modifier>>",
+        "<<phrase::a_all>> <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::(¬{A} & {B})post_modifier>>",
 
-        "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing <<phrase::{B}post_modifier>>",
+        "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
 
         "<<phrase::a_all>> <<phrase::{B}pre_modifier>> <<phrase::¬{A}noun>>",
         "<<phrase::¬{A}a_noun>> <<phrase::{B}post_modifier>>"
       ],
 
       "({A}something & ¬{B}something).set": [
-        "<<phrase::a_all>> <<phrase::({A} & ¬{B})pre_modifier>> thing",
-        "something <<phrase::({A} & ¬{B})post_modifier>>",
+        "<<phrase::a_all>> <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::({A} & ¬{B})post_modifier>>",
 
-        "<<phrase::a_all>> <<phrase::{A}pre_modifier>> thing <<phrase::¬{B}post_modifier>>",
+        "<<phrase::a_all>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
 
         "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> <<phrase::{A}noun>>",
         "<<phrase::{A}a_noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
       "(¬{A}something & ¬{B}something).set": [
-        "<<phrase::a_all>> <<phrase::(¬{A} & ¬{B})pre_modifier>> thing",
-        "something <<phrase::(¬{A} & ¬{B})post_modifier>>",
+        "<<phrase::a_all>> <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
-        "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> thing <<phrase::¬{B}post_modifier>>",
+        "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
 
         "<<phrase::a_all>> <<phrase::¬{B}pre_modifier>> <<phrase::¬{A}noun>>",
         "<<phrase::¬{A}a_noun>> <<phrase::¬{B}post_modifier>>"
@@ -3333,23 +3333,23 @@
 
 
       "({A}something v {B}something).set": [
-        "<<phrase::a_all>> <<phrase::({A} v {B})pre_modifier>> thing",
-        "something <<phrase::({A} v {B})post_modifier>>"
+        "<<phrase::a_all>> <<phrase::({A} v {B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
       "(¬{A}something v {B}something).set": [
-        "<<phrase::a_all>> <<phrase::(¬{A} v {B})pre_modifier>> thing",
-        "something <<phrase::(¬{A} v {B})post_modifier>>"
+        "<<phrase::a_all>> <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
       "({A}something v ¬{B}something).set": [
-        "<<phrase::a_all>> <<phrase::({A} v ¬{B})pre_modifier>> thing",
-        "something <<phrase::({A} v ¬{B})post_modifier>>"
+        "<<phrase::a_all>> <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
       "(¬{A}something v ¬{B}something).set": [
-        "<<phrase::a_all>> <<phrase::(¬{A} v ¬{B})pre_modifier>> thing",
-        "something <<phrase::(¬{A} v ¬{B})post_modifier>>"
+        "<<phrase::a_all>> <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::thing>>",
+        "<<phrase::something>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ]
 
 
@@ -3722,7 +3722,7 @@
     "a_all": [
       "a",
       "all",
-      "__comment: we can not add all to here since it will lead to something like 'all red thing is xx'"
+      "__comment: we can not add all to here since it will lead to something like 'all red <<phrase::thing>> is xx'"
     ],
 
     "is_a_kind_of": [
@@ -3774,13 +3774,30 @@
     ],
 
     "some_prefix.sentence_intro": [
-       "for something",
-       "there is something such that",
-       "there exists something such that"
+       "for <<phrase::something>>",
+       "there is <<phrase::something>> such that",
+       "there exists <<phrase::something>> such that"
     ],
+
     "every_prefix.sentence_intro" : [
-      "for everything"
+      "for <<phrase::everything>>"
+    ],
+
+    "something": [
+      "something",
+      "someone"
+    ],
+
+    "everything": [
+      "everything",
+      "everyone"
+    ],
+
+    "thing": [
+      "thing",
+      "people"
     ]
+
 
   }
 
