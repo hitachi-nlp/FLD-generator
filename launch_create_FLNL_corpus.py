@@ -240,7 +240,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221123.and')
 
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221124.and.simplified_formula_in_various_formulas')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221125.full')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221125.full')
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221126.transl')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -325,7 +326,8 @@ def main():
 
         # '20221124.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
 
-        '20221125.full__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
+        # '20221125.full__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
+        '20221126.transl__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-30000',
     ]
     # dataset_names = dataset_names[::-1]
 
