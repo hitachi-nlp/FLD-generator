@@ -392,16 +392,20 @@ class TemplatedTranslator(Translator):
         translation_fixed = translation
 
         def fix_all_thing_is(translation: str, src_pred: str, dst_pred: str) -> str:
-            if re.match('.*all .*things? {src_pred}.*', translation):
+            if re.match(f'.*all .*things? {src_pred}.*', translation):
                 translation_fixed = re.sub(f'(.*)all (.*)things? {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
                 return translation_fixed
             else:
                 return translation
 
+        translation_fixed = fix_all_thing_is(translation_fixed, 'is an', 'are')
         translation_fixed = fix_all_thing_is(translation_fixed, 'is a', 'are')
         translation_fixed = fix_all_thing_is(translation_fixed, 'is', 'are')
+
+        translation_fixed = fix_all_thing_is(translation_fixed, 'was an', 'were')
         translation_fixed = fix_all_thing_is(translation_fixed, 'was a', 'were')
         translation_fixed = fix_all_thing_is(translation_fixed, 'was', 'wer')
+
         translation_fixed = fix_all_thing_is(translation_fixed, 'does', 'do')
 
         # all kind thing squashes apple -> all kind thing squash apple
