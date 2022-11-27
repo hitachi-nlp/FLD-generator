@@ -280,6 +280,7 @@ class NLProofSDataset:
 
             # make output json
             label = _make_instance_label(proof_stance, self.world_assump)
+            negative_label = _make_instance_label(negative_proof_stance, self.world_assump) if negative_proof_stance is not None else None
             dataset_json = {
                 'hypothesis': hypothesis,
                 'context': context,
@@ -290,6 +291,7 @@ class NLProofSDataset:
                 'negative_hypothesis': negative_hypothesis,
                 'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
                 'negative_proof_stance': negative_proof_stance.value if negative_proof_stance is not None else None,
+                'negative_answer': negative_label,
 
                 'original_tree_depth': proof_tree.depth,
 
