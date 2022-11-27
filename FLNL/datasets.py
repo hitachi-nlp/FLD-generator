@@ -178,7 +178,8 @@ class NLProofSDataset:
     @profile
     def generate(self,
                  size: int,
-                 conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True,
+                 conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
+                 conclude_hypothesis_from_random_sent_if_proof_is_unknown=True,
                  add_randome_sentence_if_context_is_null=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], List[str], Dict[str, Any]]]:
         """ Generate dataset
 
@@ -233,6 +234,7 @@ class NLProofSDataset:
 
                 add_randome_sentence_if_context_is_null=add_randome_sentence_if_context_is_null,
                 conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
+                conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
             )
 
             negative_tree = others.get('negative_tree', None)
@@ -257,7 +259,8 @@ class NLProofSDataset:
                     id2node=id2node,
 
                     add_randome_sentence_if_context_is_null=add_randome_sentence_if_context_is_null,
-                    conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True,
+                    conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
+                    conclude_hypothesis_from_random_sent_if_proof_is_unknown=True,
                 )
 
                 for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
@@ -363,7 +366,8 @@ class NLProofSDataset:
                    translation_distractors: Optional[List[str]] = None,
 
                    add_randome_sentence_if_context_is_null=False,
-                   conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True) -> Tuple[str, Optional[str], Dict[Node, str], Dict[str, Node]]:
+                   conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
+                   conclude_hypothesis_from_random_sent_if_proof_is_unknown=True) -> Tuple[str, Optional[str], Dict[Node, str], Dict[str, Node]]:
 
         dead_leaf_nodes = dead_leaf_nodes or []
         missing_leaf_nodes = missing_leaf_nodes or []
@@ -410,6 +414,7 @@ class NLProofSDataset:
             id2node,
             proof_stance,
             conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
+            conclude_hypothesis_from_random_sent_if_proof_is_unknown,
         )
 
         return context_text, proof_text, node2id, id2node
@@ -566,7 +571,8 @@ class NLProofSDataset:
                          node2id: Dict[Node, str],
                          id2node: Dict[str, Node],
                          proof_stance: ProofStance,
-                         conclude_hypothesis_from_subtree_roots_if_proof_is_unknown: bool) -> Optional[str]:
+                         conclude_hypothesis_from_subtree_roots_if_proof_is_unknown: bool,
+                         conclude_hypothesis_from_random_sent_if_proof_is_unknown: bool) -> Optional[str]:
         # make proof string
         proof_elems = []
         for node in proof_tree.depth_first_traverse():
@@ -603,39 +609,45 @@ class NLProofSDataset:
 
             proof_elems.append(proof_text)
 
-        if proof_stance == ProofStance.UNKNOWN and conclude_hypothesis_from_subtree_roots_if_proof_is_unknown:
-            subtree_root_nodes: List[Node] = []
-            for node in transformed_proof_nodes:
-                _is_root = True
+        if proof_stance == ProofStance.UNKNOWN:
+            if conclude_hypothesis_from_subtree_roots_if_proof_is_unknown and conclude_hypothesis_from_random_sent_if_proof_is_unknown:
+                raise ValueError()
 
-                for other_node in transformed_proof_nodes:
-                    if other_node == node:
-                        continue
+            if conclude_hypothesis_from_subtree_roots_if_proof_is_unknown:
+                subtree_root_nodes: List[Node] = []
+                for node in transformed_proof_nodes:
+                    _is_root = True
 
-                    if node in other_node.descendants:
-                        _is_root = False
-                        break
+                    for other_node in transformed_proof_nodes:
+                        if other_node == node:
+                            continue
 
-                if _is_root:
-                    subtree_root_nodes.append(node)
+                        if node in other_node.descendants:
+                            _is_root = False
+                            break
 
-            # We do not consider leaf nodes.
-            # Since ther are indistinguishable from formula_distractors, the prover can not specify them.
-            subtree_root_nodes_wo_leaf = [node
-                                          for node in subtree_root_nodes
-                                          if not self._is_leaf(node, proof_tree)]
+                    if _is_root:
+                        subtree_root_nodes.append(node)
 
-            if len(subtree_root_nodes_wo_leaf) == 0:
-                # XXX: we fixed this to avoid making sent1 too frequent.
-                # rare case but possible when all the subtrees are leaf
-                # in that case, we use sent1 as a proxy.
-                # node_ids = ['sent1']
+                # We do not consider leaf nodes.
+                # Since ther are indistinguishable from formula_distractors, the prover can not specify them.
+                subtree_root_nodes_wo_leaf = [node
+                                              for node in subtree_root_nodes
+                                              if not self._is_leaf(node, proof_tree)]
+
+                if len(subtree_root_nodes_wo_leaf) == 0:
+                    sent_ids = [id_ for id_ in id2node.keys() if id_.startswith('sent')]
+                    hypothesis_premises = random.sample(sent_ids, 1)
+                else:
+                    hypothesis_premises = [node2id[node] for node in subtree_root_nodes_wo_leaf]
+
+                proof_elems.append(' & '.join(hypothesis_premises) + ' -> hypothesis')
+
+            elif conclude_hypothesis_from_random_sent_if_proof_is_unknown:
 
                 sent_ids = [id_ for id_ in id2node.keys() if id_.startswith('sent')]
-                node_ids = random.sample(sent_ids, 1)
-            else:
-                node_ids = [node2id[node] for node in subtree_root_nodes_wo_leaf]
-            proof_elems.append(' & '.join(node_ids) + ' -> hypothesis')
+                hypothesis_premises = random.sample(sent_ids, 1)
+                proof_elems.append(' & '.join(hypothesis_premises) + ' -> hypothesis')
 
         if len(proof_elems) == 0:
             return None
