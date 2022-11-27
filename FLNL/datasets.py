@@ -179,7 +179,7 @@ class NLProofSDataset:
     def generate(self,
                  size: int,
                  conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
-                 conclude_hypothesis_from_random_sent_if_proof_is_unknown=True,
+                 conclude_hypothesis_from_random_sent_if_proof_is_unknown=False,
                  add_randome_sentence_if_context_is_null=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], List[str], Dict[str, Any]]]:
         """ Generate dataset
 
@@ -260,7 +260,7 @@ class NLProofSDataset:
 
                     add_randome_sentence_if_context_is_null=add_randome_sentence_if_context_is_null,
                     conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
-                    conclude_hypothesis_from_random_sent_if_proof_is_unknown=True,
+                    conclude_hypothesis_from_random_sent_if_proof_is_unknown=False
                 )
 
                 for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
@@ -308,15 +308,19 @@ class NLProofSDataset:
                 sample_stats[f'proof_stance.{proof_stance.value}'] = 1
                 sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
                 sample_stats['word_count_context'] = len(context.split(' '))
-                sample_stats['word_count_proof'] = len(proof_text.split(' '))
-                sample_stats['word_count_all'] = sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']
+                sample_stats['word_count_proof'] = len(proof_text.split(' ')) if proof_text is not None else None
+                sample_stats['word_count_all'] = (sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']) if sample_stats['word_count_proof'] is not None else None
                 sample_stats['tree'] = 1
 
                 for name, count in sample_stats.items():
+                    if count is None:
+                        continue
                     sample_cum_stats[name] += count
 
                 for name, count in sample_stats.items():
                     if name.find('argument') >= 0 or name.find('translation') >= 0:
+                        continue
+                    if count is None:
                         continue
                     all_sample_stats[name].append(count)
 
@@ -367,7 +371,7 @@ class NLProofSDataset:
 
                    add_randome_sentence_if_context_is_null=False,
                    conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
-                   conclude_hypothesis_from_random_sent_if_proof_is_unknown=True) -> Tuple[str, Optional[str], Dict[Node, str], Dict[str, Node]]:
+                   conclude_hypothesis_from_random_sent_if_proof_is_unknown=False) -> Tuple[str, Optional[str], Dict[Node, str], Dict[str, Node]]:
 
         dead_leaf_nodes = dead_leaf_nodes or []
         missing_leaf_nodes = missing_leaf_nodes or []
