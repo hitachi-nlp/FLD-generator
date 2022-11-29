@@ -284,7 +284,7 @@ class NLProofSDataset:
             dataset_json = {
                 'hypothesis': hypothesis,
                 'context': context,
-                'proofs': [proof_text],
+                'proofs': [proof_text] if proof_text is not None else [],
                 'proof_stance': proof_stance.value,
                 'answer': label,
 
