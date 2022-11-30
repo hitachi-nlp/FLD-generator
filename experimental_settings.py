@@ -3792,6 +3792,62 @@ _DATASET_SETTINGS = {
 
 
 
+    '20221130.transl__arg-AA__frml-smpl__tree-1__dist-5__transl_dist--5__transl-wide__size-30000': {
+
+        'argument_configs': [
+            # './configs/FLNL/arguments/axiom.pred_only.json',
+            # './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/AACorpus.pred_arg.json',
+        ],
+        'quantification': 0.0,  # can not be used with AACorpus
+
+        'complication': 0.5,
+
+
+        'depths': _to_range(1, 1),
+        'branch_extension_steps': _to_range(0, 0),
+
+
+        'distractor': 'various_form',
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+        'use_simplified_tree_formulas_as_distractor_prototype': True,
+        'num_distractors': _to_range(0, 15),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 10),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 1000,
+            # 'train': 1000,
+            # 'train': 30000,
+        }
+    },
+
+
+
 
 
 }
@@ -3844,6 +3900,7 @@ _DATASET_NAME_TO_DEFAULT = {
 
     '20221125.full__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': '20221115',
     '20221126.transl__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-30000': '20221115',
+    '20221130.transl__arg-AA__frml-smpl__tree-1__dist-5__transl_dist--5__transl-wide__size-30000': '20221115',
 }
 
 

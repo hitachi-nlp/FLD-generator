@@ -1,0 +1,66 @@
+[
+  {
+      "id": "generalized_modus_ponens.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "{A}{a}"
+      ],
+      "conclusion": "{B}{a}"
+  },
+  {
+      "id": "generalized_contraposition.pred_arg",
+      "premises": [
+          "(x): {A}x -> ¬{B}x"
+      ],
+      "conclusion": "(x): {B}x -> ¬{A}x"
+  },
+  {
+      "id": "hypothetical_syllogism_1.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "(x): {B}x -> {C}x"
+      ],
+      "conclusion": "(x): {A}x -> {C}x"
+  },
+  {
+      "id": "hypothetical_syllogism_2.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "(x): ¬{C}x -> ¬{B}x"
+      ],
+      "conclusion": "(x): {A}x -> {C}x"
+  },
+  {
+      "id": "hypothetical_syllogism_3.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "(Ex): ({C}x & ¬{B}x)"
+      ],
+      "conclusion": "(Ex): ({C}x & ¬{A}x)"
+  },
+  {
+      "id": "generalized_modus_tollens.pred_arg",
+      "premises": [
+          "(x): {A}x -> {B}x",
+          "¬{B}{a}"
+      ],
+      "conclusion": "¬{A}{a}"
+  },
+  {
+      "id": "__disjunctive_syllogism.pred_arg",
+      "premises": [
+          "(x): {A}x -> ({B}x v {C}x)",
+          "(x): {A}x -> ¬{B}x"
+      ],
+      "conclusion": "(x): {A}x -> {C}x"
+  },
+  {
+      "id": "__generalized_dilemma.pred_arg",
+      "premises": [
+          "(x): {A}x -> ({B}x v {C}x)",
+          "(x): {B}x -> {D}x",
+          "(x): {C}x -> {D}x"
+      ],
+      "conclusion": "(x): {A}x -> {D}x"
+  }
+]
