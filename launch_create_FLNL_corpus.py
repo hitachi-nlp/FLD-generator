@@ -338,10 +338,10 @@ def main():
 
 
 
-        '20221203.first_exp__arg-RT__frml-smpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
-        '20221203.first_exp__arg-RT__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
-        '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        '20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000',
+        # '20221203.first_exp__arg-RT__frml-smpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-RT__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000',
         '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
         '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
         '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
@@ -353,11 +353,8 @@ def main():
     # num_jobs_for_datasets = 3
     # num_jobs_per_dataset = 60
 
-    num_jobs_for_datasets = 3
-    num_jobs_per_dataset = 60
-
-    # num_jobs_for_datasets = 8
-    # num_jobs_per_dataset = 20
+    num_jobs_for_datasets = 2
+    num_jobs_per_dataset = 90
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
