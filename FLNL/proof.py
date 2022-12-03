@@ -170,7 +170,7 @@ class ProofTree:
             return None
 
         nodes_wo_parent = [node for node in self._nodes
-                           if node.parent is None]
+                           if node.parent is None and node.assump_parent is None]
         if len(nodes_wo_parent) == 0:
             return None
         elif len(nodes_wo_parent) == 1:
@@ -235,11 +235,11 @@ class ProofTree:
 
     def copy(self) -> 'ProofTree':
         nodes = self.nodes
-        assump_nodes = []
-        for node in nodes:
-            for assump_child in node.assump_children:
-                if assump_child not in assump_nodes:
-                    assump_nodes.append(assump_child)
+        # assump_nodes = []
+        # for node in nodes:
+        #     for assump_child in node.assump_children:
+        #         if assump_child not in assump_nodes:
+        #             assump_nodes.append(assump_child)
 
         orig_nodes_to_orig_parents = {orig_node: orig_node.parent for orig_node in nodes}
         orig_nodes_to_orig_children = {orig_node: orig_node.children for orig_node in nodes}
@@ -255,7 +255,8 @@ class ProofTree:
         copy_nodes_to_orig_nodes = {}
 
         copy_nodes = []
-        for orig_node in nodes + assump_nodes:
+        # for orig_node in nodes + assump_nodes:
+        for orig_node in nodes:
             copy_node = ProofNode(orig_node.formula, argument=orig_node.argument)
 
             orig_nodes_to_copy_nodes[orig_node] = copy_node
@@ -305,10 +306,11 @@ class ProofTree:
                 for copy_child in copy_assump_children:
                     copy_node.add_assump_child(copy_child, force=True)
 
-        copy_nodes_wo_assump = []
-        for copy_node in copy_nodes:
-            orig_node = copy_nodes_to_orig_nodes[copy_node]
-            if orig_node not in assump_nodes:
-                copy_nodes_wo_assump.append(copy_node)
+        # copy_nodes_wo_assump = []
+        # for copy_node in copy_nodes:
+        #     orig_node = copy_nodes_to_orig_nodes[copy_node]
+        #     if orig_node not in assump_nodes:
+        #         copy_nodes_wo_assump.append(copy_node)
 
-        return ProofTree(nodes=copy_nodes_wo_assump)
+        # return ProofTree(nodes=copy_nodes_wo_assump)
+        return ProofTree(nodes=copy_nodes)

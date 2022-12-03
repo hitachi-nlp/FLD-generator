@@ -23,7 +23,7 @@ def test_tree_copy():
     n2.set_parent(n4)
     n3.set_parent(n4)
 
-    orig_tree = ProofTree(nodes=[n0, n1, n2, n3, n4])
+    orig_tree = ProofTree(nodes=[n0, n1, n2, n3, n4, n_assump])
     copy_tree = orig_tree.copy()
 
     orig_tree_traversed_nodes = list(orig_tree.depth_first_traverse())
