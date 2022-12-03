@@ -205,10 +205,14 @@ class NLProofSDataset:
 
             proof_stance = self._sample_proof_stance()
 
+            if len(proof_tree.leaf_nodes) == 0:
+                # For some very rare case, this occurs.
+                # Since we do not expect this behaviour, we raise error for future debug
+                raise Exception(proof_tree.format_str)
+
             if proof_stance == ProofStance.UNKNOWN:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
-                dead_leaf_nodes = random.sample(proof_tree.leaf_nodes,
-                                                max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
+                dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
             elif proof_stance == ProofStance.PROOF:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = []

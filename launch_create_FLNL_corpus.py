@@ -243,8 +243,10 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221125.full')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221126.transl')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221126.transl.no_hypothesis_in_unknown_proofs')
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221129.transl.wo_hypothesis_in_unknown')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221129.transl.wo_hypothesis_in_unknown')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221130.arg-AA')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221203.first_exp')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -330,20 +332,32 @@ def main():
         # '20221124.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
 
         # '20221125.full__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
-        '20221126.transl__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-30000',
+        # '20221126.transl__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-30000',
 
         # '20221130.transl__arg-AA__frml-smpl__tree-1__dist-5__transl_dist--5__transl-wide__size-30000',
+
+
+
+        '20221203.first_exp__arg-RT__frml-smpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
+        '20221203.first_exp__arg-RT__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
+        '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        '20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000',
+        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
+        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
+        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000',
+
     ]
     # dataset_names = dataset_names[::-1]
 
     # num_jobs_for_datasets = 3
     # num_jobs_per_dataset = 60
 
-    # num_jobs_for_datasets = 2
-    # num_jobs_per_dataset = 90
+    num_jobs_for_datasets = 3
+    num_jobs_per_dataset = 60
 
-    num_jobs_for_datasets = 1
-    num_jobs_per_dataset = 100
+    # num_jobs_for_datasets = 8
+    # num_jobs_per_dataset = 20
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')

@@ -184,9 +184,11 @@ class ProofTree:
 
         See https://www.baeldung.com/cs/binary-tree-height#definition.
         """
-
-        return max([self.get_node_depth(leaf_node)
-                    for leaf_node in self.leaf_nodes])
+        if len(self.leaf_nodes) == 0:
+            return 0
+        else:
+            return max([self.get_node_depth(leaf_node)
+                        for leaf_node in self.leaf_nodes])
 
     def get_node_depth(self, node: ProofNode) -> int:
         """ The depth of a node in a binary tree is the total number of edges from the root node to the target node.
