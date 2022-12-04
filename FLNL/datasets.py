@@ -660,6 +660,12 @@ class NLProofSDataset:
                 hypothesis_premises = random.sample(sent_ids, 1)
                 proof_elems.append(' & '.join(hypothesis_premises) + ' -> hypothesis')
 
+            if len(proof_elems) > 0 and proof_elems[-1].find('void ->') >= 0:
+                # if the final step of proof for unknown is "void -> assump"
+                # it does not have enought context to deducu such step.
+                # Thus, we exclude the step.
+                proof_elems = proof_elems[:-1]
+
         if len(proof_elems) == 0:
             return None
         else:
