@@ -4524,7 +4524,7 @@ _DATASET_NAME_TO_DEFAULT = {
 
 
 def get_dataset_setting(name: str) -> Dict:
-    setting = _DEFAULT_DATASET_SETTINGS[_DATASET_NAME_TO_DEFAULT[name]]
+    setting = copy.deepcopy(_DEFAULT_DATASET_SETTINGS[_DATASET_NAME_TO_DEFAULT[name]])
     setting.update(copy.deepcopy(_DATASET_SETTINGS[name]))
     return setting
 
