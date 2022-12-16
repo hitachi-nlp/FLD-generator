@@ -51,6 +51,7 @@ class ProofTreeGenerationPipeline:
             branch_extension_steps: int,
             num_distractors: int,
             num_translation_distractors: int,
+            depth_1_reference_weight: Optional[float] = None,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
         others = {}
 
@@ -63,7 +64,9 @@ class ProofTreeGenerationPipeline:
         while True:
             logger.info('========================== generating proof tree... ============================')
             try:
-                proof_tree = self.generator.generate_tree(depth, branch_extension_steps)
+                proof_tree = self.generator.generate_tree(depth,
+                                                          branch_extension_steps,
+                                                          depth_1_reference_weight=depth_1_reference_weight)
             except ProofTreeGenerationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
             logger.info('========================== generating proof tree done! ============================')

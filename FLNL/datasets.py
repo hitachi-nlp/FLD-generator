@@ -137,7 +137,8 @@ class NLProofSDataset:
                  world_assump: str,
                  depths: List[int],
                  branch_extension_steps: List[int],
-                 depth_1_weight=1.0,
+                 depth_weights: List[float] = None,
+                 depth_1_reference_weight: Optional[float] = None,
                  unknown_ratio: float = 1 / 3.,
                  use_collapsed_translation_nodes_for_unknown_tree=False,
                  word_bank: Optional[WordBank] = None,
@@ -155,12 +156,16 @@ class NLProofSDataset:
             raise ValueError()
         self.depths = depths
 
-        depth_weights = [
-            depth_1_weight * (1 / len(depths)) if depth == 1 else (1 / len(depths))
-            for depth in depths
-        ]
+        if depth_weights is not None:
+            if len(depth_weights) != len(depths):
+                raise ValueError()
+        else:
+            depth_weights = [1.0] * len(depths)
         depth_weights = [weight / sum(depth_weights) for weight in depth_weights]
         self._depth_weights = depth_weights
+        logger.info('using depth weight: %s', str(self._depth_weights))
+
+        self._depth_1_reference_weight = depth_1_reference_weight
 
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
@@ -200,6 +205,7 @@ class NLProofSDataset:
                 _branch_extension_steps,
                 _num_distractors,
                 _num_translation_distractors,
+                depth_1_reference_weight=self._depth_1_reference_weight,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 

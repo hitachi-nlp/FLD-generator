@@ -55,7 +55,7 @@ def load_dataset(argument_config: List[str],
                  unknown_ratio: float,
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
                  depths: List[int],
-                 depth_1_weight: float,
+                 depth_distribution: str,
                  branch_extension_steps: List[int]):
     generator = build_generator(
         argument_config,
@@ -108,12 +108,25 @@ def load_dataset(argument_config: List[str],
         add_subj_obj_swapped_distractor=add_subj_obj_swapped_distractor,
     )
 
+    if depth_distribution == 'flat':
+        depth_weights = None
+        depth_1_reference_weight = None
+    elif depth_distribution == 'ruletaker.ours.20221202':
+        if set(depths) != set([1, 2, 3]):
+            raise ValueError(f'depths {depths} is not consistent with ruletaker.ours.20221202.')
+        # see "depth分布" of experiments.md
+        depth_weights = [0.40, 0.15, 0.12]
+        depth_1_reference_weight = 0.23 / (0.23 + 0.17)
+    else:
+        raise ValueError(f'Unknown depth distribution {depth_distribution}')
+
     return NLProofSDataset(pipeline,
                            proof_stances,
                            world_assump,
                            depths,
                            branch_extension_steps,
-                           depth_1_weight=depth_1_weight,
+                           depth_weights=depth_weights,
+                           depth_1_reference_weight=depth_1_reference_weight,
                            num_distractors=num_distractors,
                            num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
@@ -174,7 +187,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
-@click.option('--depth-1-weight', type=float, default=1.0)
+@click.option('--depth-distribution', type=click.Choice(['flat', 'ruletaker.ours.20221202']))
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
@@ -206,7 +219,7 @@ def main(output_path,
          translation_volume_to_weight,
          size,
          depths,
-         depth_1_weight,
+         depth_distribution,
          branch_extension_steps,
          complication,
          quantification,
@@ -289,7 +302,7 @@ def main(output_path,
                         unknown_ratio,
                         use_collapsed_translation_nodes_for_unknown_tree,
                         depths,
-                        depth_1_weight,
+                        depth_distribution,
                         branch_extension_steps,
                     )
                 )

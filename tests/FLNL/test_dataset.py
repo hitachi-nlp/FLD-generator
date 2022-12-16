@@ -162,7 +162,6 @@ def test_generate_dataset_AACorpus():
                               'OWA',
                               _to_range(1, 1),
                               _to_range(0, 0),
-                              depth_1_weight=2.0,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
@@ -264,12 +263,15 @@ def test_generate_dataset():
         add_subj_obj_swapped_distractor=True,
     )
 
+    # depths = _to_range(1, 5)
+    depths = _to_range(1, 2)
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
-                              _to_range(1, 5),
+                              depths,
                               _to_range(0, 5),
-                              depth_1_weight=2.0,
+                              depth_weights = [1.0] * len(depths),
+                              depth_1_reference_weight=None,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,

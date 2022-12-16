@@ -57,6 +57,7 @@ def make_dataset(dataset_name: str,
             'quantification',
 
             'depths',
+            'depth_distribution'
             'branch_extension_steps',
 
             'distractor',
@@ -134,7 +135,8 @@ def make_dataset(dataset_name: str,
                 maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
 
                 f'--depths \'{json.dumps(job_settings["depths"])}\'',
-                f'--depth-1-weight {settings["depth_1_weight"]}' if settings.get("depth_1_weight", None) is not None else '',
+                maybe_option('--depth-distribution', settings.get("depth_distribution", None)),
+                maybe_option('--depth-1-reference-weight', settings.get("depth_1_reference_weight", None)),
                 f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                 f'--complication {job_settings["complication"]}',
                 f'--quantification {job_settings["quantification"]}',
@@ -347,8 +349,16 @@ def main():
         # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
         # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000',
 
-        '20221203.first_exp__arg-RT__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
+        # '20221203.first_exp__arg-RT__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
+
+        # # ---------------------------------- 20221216 additional experiments ------------------------------------
+        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLNL__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
+
+        # ---------------------------------- 20221216 dpth-RT ------------------------------------
+        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
 
     ]
     # dataset_names = dataset_names[::-1]
