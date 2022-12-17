@@ -4594,7 +4594,7 @@ _DATASET_SETTINGS = {
 
 
     # ---------------------------------- 20221216 dpth-RT ------------------------------------
-    '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-10__dataset_size-100000': {
+    '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': {
 
         'argument_configs': [
             # './configs/FLNL/arguments/AACorpus.pred_arg.json',
@@ -4625,15 +4625,15 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'fallback.various_form.negative_tree',
-        'use_simplified_tree_formulas_as_distractor_prototype': True,
-        'sample_distractor_formulas_from_tree': True,
-        'sample_hard_negatives': True,
-        'fallback_from_formula_to_translation_distractor': True,
+        'use_simplified_tree_formulas_as_distractor_prototype': False,
+        'sample_distractor_formulas_from_tree': False,
+        'sample_hard_negatives': False,
+        'fallback_from_formula_to_translation_distractor': False,
 
 
         'num_distractors': _to_range(0, 10),
         'reused_object_nouns_max_factor': 1.0,
-        'add_subj_obj_swapped_distractor': True,
+        'add_subj_obj_swapped_distractor': False,
 
 
         'num_translation_distractors': _to_range(0, 0),
@@ -4649,7 +4649,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 1000,
+            # 'test': 1000,
             'train': 100000,
         }
     },
@@ -4766,6 +4766,9 @@ _DATASET_NAME_TO_DEFAULT = {
 
     # ---------------------------------- 20221216 dpth-RT ------------------------------------
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT': '20221203',
+
+    # ---------------------------------- 20221217.back_to_the_past ------------------------------------
+    '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': '20221203', 
 }
 
 

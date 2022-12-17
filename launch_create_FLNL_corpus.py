@@ -248,7 +248,9 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221129.transl.wo_hypothesis_in_unknown')
     # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221130.arg-AA')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221203.first_exp')
+    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221203.first_exp')
+
+    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221217.back_to_the_past')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -359,8 +361,10 @@ def main():
         # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
 
         # ---------------------------------- 20221216 dpth-RT ------------------------------------
-        '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
+        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
 
+        # ---------------------------------- 20221217.back_to_the_past ------------------------------------
+        '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000',
     ]
     # dataset_names = dataset_names[::-1]
 
