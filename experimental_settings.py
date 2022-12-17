@@ -4593,6 +4593,67 @@ _DATASET_SETTINGS = {
 
 
 
+    # ---------------------------------- 20221216 dpth-RT ------------------------------------
+    '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-10__dataset_size-100000': {
+
+        'argument_configs': [
+            # './configs/FLNL/arguments/AACorpus.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.pred_only.json',
+            './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+
+        'complication': 0.3,
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+
+
+        'distractor': 'fallback.various_form.negative_tree',
+        'use_simplified_tree_formulas_as_distractor_prototype': True,
+        'sample_distractor_formulas_from_tree': True,
+        'sample_hard_negatives': True,
+        'fallback_from_formula_to_translation_distractor': True,
+
+
+        'num_distractors': _to_range(0, 10),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depths': _to_range(1, 10),
+        'branch_extension_steps': _to_range(1, 5),
+
+
+        'split_sizes': {
+            'test': 1000,
+            'train': 100000,
+        }
+    },
+
 
 
 
