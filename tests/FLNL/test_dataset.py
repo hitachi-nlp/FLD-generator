@@ -193,24 +193,28 @@ def test_generate_dataset():
    
     generator = build_generator(
         [
+            # './configs/FLNL/arguments/AACorpus.pred_arg.json',
+
             './configs/FLNL/arguments/axiom.pred_only.json',
             './configs/FLNL/arguments/axiom.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.and_or.pred_only.json',
-            './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLNL/arguments/axiom.negation.pred_only.json',
-            './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
 
-            # -- we exclude the below for speed --
-            './configs/FLNL/arguments/theorem.pred_only.json',
-            './configs/FLNL/arguments/theorem.pred_arg.json',
+            # # -- we exclude the below for speed --
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
 
-            './configs/FLNL/arguments/theorem.and_or.pred_only.json',
-            './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.G_MP.pred_arg.json',
 
 
             # -- not tested. may not work --
