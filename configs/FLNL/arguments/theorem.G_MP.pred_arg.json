@@ -3,7 +3,7 @@
       "id": "generalized_modus_ponens.pred_arg",
       "premises": [
           "(x): {A}x -> {B}x",
-          "(x): {A}{a}"
+          "{A}{a}"
       ],
       "conclusion": "{B}{a}"
   }
