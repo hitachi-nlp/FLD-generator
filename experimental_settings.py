@@ -4756,6 +4756,64 @@ _DATASET_SETTINGS = {
 
 
 
+    '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP': {
+
+        'argument_configs': [
+            # './configs/FLNL/arguments/AACorpus.pred_arg.json',
+
+            './configs/FLNL/arguments/axiom.pred_only.json',
+            './configs/FLNL/arguments/axiom.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.and_or.pred_only.json',
+            # './configs/FLNL/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/FLNL/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/FLNL/arguments/axiom.negation.pred_only.json',
+            # './configs/FLNL/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.pred_only.json',
+            # './configs/FLNL/arguments/theorem.pred_arg.json',
+
+            # './configs/FLNL/arguments/theorem.and_or.pred_only.json',
+            # './configs/FLNL/arguments/theorem.and_or.pred_arg.json',
+
+            './configs/FLNL/arguments/theorem.G_MP.pred_arg.json',
+        ],
+        'quantification': 0.2,
+
+        
+        'complication': 0.5,
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+
+
+        'num_distractors': _to_range(0, 15),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 1000,
+            'train': 30000,
+        }
+    },
+
+
+
+
     # ---------------------------------- 20221217.back_to_the_past ------------------------------------
 
     '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': {
@@ -4933,6 +4991,8 @@ _DATASET_NAME_TO_DEFAULT = {
 
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP': '20221203',
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT': '20221203',
+
+    '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP': '20221203', 
 
     # ---------------------------------- 20221217.back_to_the_past ------------------------------------
     '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': '20221203', 
