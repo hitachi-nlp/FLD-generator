@@ -36,4 +36,4 @@ In the above command, each option correspond to one design aspect, as follows:
 * `proof-stances`   : possible proof stance of each example
 * `world-assump`   : the world assumption (Open World Assumption vs Closed World Assumption)
 
-See the [source](./create_FLD_corpus.py) for full options.
+See the [source](https://github.com/hitachi-nlp/FLD-generator/blob/bd946e1ee77d394101af9145cd235752b38899da/create_FLD_corpus.py#L177) for full options.
