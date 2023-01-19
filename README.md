@@ -36,4 +36,4 @@ In the above command, each option correspond to one design aspect, as follows:
 * `proof-stances`   : possible proof stance of each example
 * `world-assump`   : the world assumption (Open World Assumption vs Closed World Assumption)
 
-See the source for full options.
+See the [source](./create_FLD_corpus.py) for full options.

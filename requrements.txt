@@ -8,8 +8,3 @@ transformers
 py-timeout
 # pyinflect
 lemminflect
-
-script_engine@git+https://github.com/HonoMi/script-engine.git@master
-lab@git+https://github.com/HonoMi/lab.git@master
-logger_setup@git+https://github.com/HonoMi/python-logger-setup.git@master
-kern_profiler@git+https://github.com/HonoMi/kern-profiler.git@master
