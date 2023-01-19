@@ -1,5 +1,7 @@
 # FLD Generator
-Code for generating FLD corpus.
+Code for generating FLD corpus.  
+
+The module is designed as controllable and/or extensible by options or external template files to generate various patterns of corpora.
 
 ## Installation
 `pip install -r ./requrements.txt`
