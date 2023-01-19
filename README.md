@@ -2,12 +2,10 @@
 Code for generating FLD corpus.
 
 ## Installation
-1. `pip install -r ./requrements.txt`
+`pip install -r ./requrements.txt`
 
 ## How to use
-The main script is `./create_FLD_corpus.py`, which takes various options that specify the design of corpora.  
-
-Typical commands will be like:
+The main script is `./create_FLD_corpus.py`, which takes various options that specify the design of corpora, such as:
 ```sh
 python ./create_FLD_corpus.py\
     <output_dir>\
@@ -27,7 +25,7 @@ python ./create_FLD_corpus.py\
     --num-workers 5\
     --seed 0 
 ```
-In the above command, each option specify the followings:
+In the above command, each option correspond to one design aspect, as follows:
 * `ac`              : argument (deduction rule) configuration files
 * `tc`              : natural language translation config files
 * `depths`          : the depths of proof trees
@@ -37,4 +35,5 @@ In the above command, each option specify the followings:
 * `num-distractors`     : possible number of distractors in each example
 * `proof-stances`   : possible proof stance of each example
 * `world-assump`   : the world assumption (Open World Assumption vs Closed World Assumption)
+
 See the source for full options.
