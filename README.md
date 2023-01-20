@@ -43,4 +43,4 @@ In the above command, each option correspond to one design aspect, as follows:
 See the [source](https://github.com/hitachi-nlp/FLD-generator/blob/bd946e1ee77d394101af9145cd235752b38899da/create_FLD_corpus.py#L177) for full options.
 
 ## Citation
-Wait for NLP(2023) proceedings to be opened.
+Wait for [NLP2023](https://www.anlp.jp/nlp2023/) proceedings to be opened.
