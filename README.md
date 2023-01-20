@@ -1,8 +1,8 @@
 # FLD Generator
 Code for generating FLD corpus.  
 
-The module is designed as controllable and/or extensible by options or external template files.
-This enables us to generate various patterns of corpora for pursueing better design of corpora.
+The module is designed as controllable and extensible by options and external template files, in order to generate various patterns of corpora.
+This enables analysis for pursueing better design of corpora.
 
 
 ## Installation
