@@ -41,6 +41,3 @@ In the above command, each option correspond to one design aspect, as follows:
 * `world-assump`   : the world assumption (Open World Assumption vs Closed World Assumption)
 
 See the [source](./create_FLD_corpus.py) for full options.
-
-## Citation
-Wait for [NLP2023](https://www.anlp.jp/nlp2023/) proceedings to be opened.
