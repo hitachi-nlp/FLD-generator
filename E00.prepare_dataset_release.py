@@ -11,17 +11,34 @@ logger = logging.getLogger(__name__)
 def main():
     setup_logger(level=logging.INFO)
 
-    OUTPUT_DIR = './outputs/E00.prepare_dataset_release.py/20220119.release_for_NLP/'
+    # OUTPUT_DIR = './outputs/E00.prepare_dataset_release.py/20220119.release_for_NLP/'
+    # datasets = [
+    #     ('sFLD-impl', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP'),
+    #     ('sFLD-crit', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000'),
+    #     ('sFLD-axiom', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT'),
 
+    #     ('FLD.D5', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000'),
+    #     ('FLD-impl', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP'),
+    #     ('FLD', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000'),
+    #     ('FLD-star', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000'),
+    # ]
+
+    OUTPUT_DIR = './outputs/E00.prepare_dataset_release.py/20230123.release_for_ICML/'
     datasets = [
         ('sFLD-impl', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP'),
         ('sFLD-crit', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000'),
         ('sFLD-axiom', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT'),
 
         ('FLD.D5', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000'),
-        ('FLD-impl', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP'),
-        ('FLD', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000'),
-        ('FLD-star', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000'),
+
+        ('FLD-impl.0', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP'),
+        ('FLD-impl.1', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-8__dataset_size-30000.G_MP'),
+
+        ('FLD.0', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000'),
+        ('FLD.1', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000'),
+        ('FLD.2', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000'),
+        ('FLD.3', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000'),
+        ('FLD.4', './outputs/10.create_FLNL_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000'),
     ]
 
     for dataset_name, top_dir in datasets:
