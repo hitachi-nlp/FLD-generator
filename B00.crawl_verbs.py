@@ -43,7 +43,7 @@ def scrape_word_list(url: str) -> Iterable[str]:
 
 
 @click.command()
-@click.option('--output-dir', default='./word_banks/english')
+@click.option('--output-dir', default='./res/word_banks/english')
 def main(output_dir):
     setup_logger(do_stderr=True, level=logging.INFO)
     output_dir = Path(output_dir)

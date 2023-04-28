@@ -27,11 +27,11 @@ def build(
 
     if lang == EnglishWordBank.language:
         if transitive_verbs_path is None:
-            transitive_verbs_path = './word_banks/english/transitive_verbs.txt'
+            transitive_verbs_path = './res/word_banks/english/transitive_verbs.txt'
         transitive_verbs = set(line.strip('\n') for line in open(transitive_verbs_path))
 
         if intransitive_verbs_path is None:
-            intransitive_verbs_path = './word_banks/english/intransitive_verbs.txt'
+            intransitive_verbs_path = './res/word_banks/english/intransitive_verbs.txt'
         intransitive_verbs = set(line.strip('\n') for line in open(intransitive_verbs_path))
 
         return EnglishWordBank(

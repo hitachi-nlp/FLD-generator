@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @click.option('--input-dir',
               type=str,
               default='/groups/1/gca50126/honoka/work/projects/NLProofS/data/proofwriter-dataset-V2020.12.3/preprocessed_OWA/depth-3ext')
-@click.option('--output-path', default='./outputs/C00.build_ruletaker_vocab/vocab.json')
+@click.option('--output-path', default='./outputs/A00.build_ruletaker_vocab/vocab.json')
 def main(output_path,
          input_dir):
     input_dir = Path(input_dir)

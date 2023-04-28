@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def main():
     setup_logger(level=logging.INFO)
 
-    # OUTPUT_DIR = './outputs/E00.prepare_dataset_release.py/20220119.release_for_NLP/'
+    # OUTPUT_DIR = './outputs/C00.prepare_dataset_release.py/20220119.release_for_NLP/'
     # datasets = [
     #     ('sFLD-impl', './outputs/10.create_FLD_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP'),
     #     ('sFLD-crit', './outputs/10.create_FLD_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000'),
@@ -23,7 +23,7 @@ def main():
     #     ('FLD-star', './outputs/10.create_FLD_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000'),
     # ]
 
-    OUTPUT_DIR = './outputs/E00.prepare_dataset_release.py/20230123.release_for_ICML/'
+    OUTPUT_DIR = './outputs/C00.prepare_dataset_release.py/20230123.release_for_ICML/'
     datasets = [
         ('sFLD-impl', './outputs/10.create_FLD_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP'),
         ('sFLD-crit', './outputs/10.create_FLD_corpus/20221203.first_exp/dataset_name=20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000'),
