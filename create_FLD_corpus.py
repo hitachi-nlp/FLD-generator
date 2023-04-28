@@ -12,17 +12,17 @@ import click
 from tqdm import tqdm
 import dill
 
-from FLNL.translators import build as build_translator
-from FLNL.word_banks import build_wordnet_wordbank
-from FLNL.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
-from FLNL.argument import Argument
-from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLNL.proof_tree_generators import build as build_generator
-from FLNL.datasets import NLProofSDataset
-from FLNL.proof import ProofTree
-from FLNL.utils import nested_merge
-from FLNL.formula_distractors import build as build_distractor
-from FLNL.translation_distractors import build as build_translation_distractor
+from FLD.translators import build as build_translator
+from FLD.word_banks import build_wordnet_wordbank
+from FLD.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
+from FLD.argument import Argument
+from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLD.proof_tree_generators import build as build_generator
+from FLD.datasets import NLProofSDataset
+from FLD.proof import ProofTree
+from FLD.utils import nested_merge
+from FLD.formula_distractors import build as build_distractor
+from FLD.translation_distractors import build as build_translation_distractor
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -181,7 +181,7 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
               multiple=True, default=[])
 @click.option('--translation-config', '--tc',
               multiple=True,
-              default=['./configs/FLNL/translations/thing.json'])
+              default=['./configs/FLD/translations/thing.json'])
 @click.option('--use-fixed-translation', type=bool, is_flag=True)
 @click.option('--reused-object-nouns-max-factor', type=float, default=0.0)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)

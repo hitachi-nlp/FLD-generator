@@ -2,17 +2,17 @@ from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
 
-from FLNL.formula import Formula, NEGATION, eliminate_double_negation
-from FLNL.proof import ProofTree, ProofNode
-from FLNL.proof_tree_generators import ProofTreeGenerator
-from FLNL.formula_distractors import FormulaDistractor
-from FLNL.translators.base import Translator
-from FLNL.utils import flatten_dict
-from FLNL.exception import FormalLogicExceptionBase
-from FLNL.proof_tree_generators import ProofTreeGenerationFailure
-from FLNL.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
-from FLNL.translation_distractors import TranslationDistractor
-from FLNL.translators import TranslationFailure
+from FLD.formula import Formula, NEGATION, eliminate_double_negation
+from FLD.proof import ProofTree, ProofNode
+from FLD.proof_tree_generators import ProofTreeGenerator
+from FLD.formula_distractors import FormulaDistractor
+from FLD.translators.base import Translator
+from FLD.utils import flatten_dict
+from FLD.exception import FormalLogicExceptionBase
+from FLD.proof_tree_generators import ProofTreeGenerationFailure
+from FLD.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
+from FLD.translation_distractors import TranslationDistractor
+from FLD.translators import TranslationFailure
 import kern_profiler
 
 logger = logging.getLogger(__name__)

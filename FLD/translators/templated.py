@@ -13,18 +13,18 @@ from functools import lru_cache
 import math
 
 from tqdm import tqdm
-from FLNL.utils import nested_merge
-from FLNL.formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
-from FLNL.word_banks.base import WordBank, ATTR
-from FLNL.interpretation import (
+from FLD.utils import nested_merge
+from FLD.formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
+from FLD.word_banks.base import WordBank, ATTR
+from FLD.interpretation import (
     generate_mappings_from_formula,
     generate_mappings_from_predicates_and_constants,
     interpret_formula,
     formula_can_not_be_identical_to,
 )
-from FLNL.utils import make_combination, chained_sampling_from_weighted_iterators
-from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
-from FLNL.utils import starts_with_vowel_sound, compress, decompress
+from FLD.utils import make_combination, chained_sampling_from_weighted_iterators
+from FLD.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
+from FLD.utils import starts_with_vowel_sound, compress, decompress
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import kern_profiler
 

@@ -1,7 +1,7 @@
 from typing import List
 from pprint import pprint
 from collections import defaultdict
-from FLNL.utils import (
+from FLD.utils import (
     weighted_sampling,
     weighted_shuffle,
     nested_merge,

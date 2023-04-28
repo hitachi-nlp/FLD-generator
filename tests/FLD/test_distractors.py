@@ -3,9 +3,9 @@ import statistics
 import math
 import logging
 
-from FLNL.proof import ProofTree, ProofNode
-from FLNL.formula import Formula
-from FLNL.formula_distractors import (
+from FLD.proof import ProofTree, ProofNode
+from FLD.formula import Formula
+from FLD.formula_distractors import (
     FormulaDistractor,
     UnkownPASDistractor,
     SameFormUnkownInterprandsDistractor,

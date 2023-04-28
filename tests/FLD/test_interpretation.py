@@ -1,5 +1,5 @@
 from typing import List
-from FLNL.interpretation import (
+from FLD.interpretation import (
     _expand_op,
     generate_quantifier_axiom_arguments,
     formula_is_identical_to,
@@ -10,9 +10,9 @@ from FLNL.interpretation import (
     generate_partially_quantifier_arguments,
     generate_simplified_formulas,
 )
-from FLNL.proof_tree_generators import generate_mappings_from_formula
-from FLNL.formula import Formula
-from FLNL.argument import Argument
+from FLD.proof_tree_generators import generate_mappings_from_formula
+from FLD.formula import Formula
+from FLD.argument import Argument
 
 
 # TODO: update this test code to be consistent with add_complicated_arguments=True

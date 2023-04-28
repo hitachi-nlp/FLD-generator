@@ -6,7 +6,7 @@ from string import Template
 
 import click
 from logger_setup import setup as setup_logger
-from FLNL.formula import AND, OR, NOT
+from FLD.formula import AND, OR, NOT
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ def main():
 
     convert_config(
         './configs.org/conf_syllogistic_corpus-02.json',
-        './configs/FLNL/sentence_translations/syllogistic_corpus-02.domains.json',
+        './configs/FLD/sentence_translations/syllogistic_corpus-02.domains.json',
     )
 
 

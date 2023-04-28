@@ -7,8 +7,8 @@ import nltk
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
-from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
-from FLNL.utils import starts_with_vowel_sound
+from FLD.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLD.utils import starts_with_vowel_sound
 
 logger = logging.getLogger(__name__)
 

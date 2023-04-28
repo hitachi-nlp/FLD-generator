@@ -14,11 +14,11 @@ The main script is `./create_FLD_corpus.py`, which takes various options that sp
 python ./create_FLD_corpus.py\
     <output_dir>\
     <dataset_size>\
-    --ac ./configs/FLNL/arguments/axiom.pred_only.json\
-    --ac ./configs/FLNL/arguments/axiom.pred_arg.json\
-    --ac ./configs/FLNL/arguments/theorem.G_MP.pred_arg.json\
-    --tc ./configs/FLNL/translations/thing.json\
-    --tc ./configs/FLNL/translations/thing.sentence_negation.json\
+    --ac ./configs/FLD/arguments/axiom.pred_only.json\
+    --ac ./configs/FLD/arguments/axiom.pred_arg.json\
+    --ac ./configs/FLD/arguments/theorem.G_MP.pred_arg.json\
+    --tc ./configs/FLD/translations/thing.json\
+    --tc ./configs/FLD/translations/thing.sentence_negation.json\
     --depths '[1, 2, 3, 4, 5]'\
     --complication 0.5\
     --quantification 0.2\

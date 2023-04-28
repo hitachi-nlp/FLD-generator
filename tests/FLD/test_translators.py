@@ -1,9 +1,9 @@
 from typing import List
 import logging
 
-from FLNL.formula import Formula
-from FLNL.translators import build as build_translator
-from FLNL.word_banks import build_wordnet_wordbank
+from FLD.formula import Formula
+from FLD.translators import build as build_translator
+from FLD.word_banks import build_wordnet_wordbank
 from logger_setup import setup as setup_logger
 
 
@@ -12,8 +12,8 @@ def test_templated_translator():
 
     translator = build_translator(
         [
-            './configs/FLNL/translations/thing.json',
-            './configs/FLNL/translations/thing.sentence_negation.json',
+            './configs/FLD/translations/thing.json',
+            './configs/FLD/translations/thing.sentence_negation.json',
         ],
         build_wordnet_wordbank('eng'),
         use_fixed_translation=False,

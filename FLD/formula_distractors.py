@@ -25,7 +25,7 @@ from .formula_checkers import (
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure
-from FLNL.utils import run_with_timeout_retry, RetryAndTimeoutFailure
+from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure
 import kern_profiler
 
 

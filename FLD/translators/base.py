@@ -2,10 +2,10 @@ from typing import List, Dict, Optional, Tuple
 from abc import abstractmethod, ABC
 import logging
 
-from FLNL.formula import Formula
+from FLD.formula import Formula
 
-from FLNL.exception import FormalLogicExceptionBase
-from FLNL.utils import run_with_timeout_retry, RetryAndTimeoutFailure
+from FLD.exception import FormalLogicExceptionBase
+from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure
 
 logger = logging.getLogger(__name__)
 

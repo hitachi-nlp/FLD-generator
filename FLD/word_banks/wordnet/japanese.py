@@ -2,7 +2,7 @@ from typing import Optional, Iterable, List
 import re
 import logging
 
-from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLD.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from .base import WordNetWordBank
 

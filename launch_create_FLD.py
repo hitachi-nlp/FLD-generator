@@ -100,7 +100,7 @@ def make_dataset(dataset_name: str,
             _num_jobs = num_jobs
         size_per_job = math.ceil(size_with_margin / _num_jobs)
 
-        logger.info('============================== [launch_create_FLNL_corpus.py] Generating dataset for %s split ============================', split)
+        logger.info('============================== [launch_create_FLD_corpus.py] Generating dataset for %s split ============================', split)
         logger.info('size: %d', size)
         logger.info('size_with_margin: %d', size_with_margin)
         logger.info('num_jobs: %d', _num_jobs)
@@ -121,7 +121,7 @@ def make_dataset(dataset_name: str,
             save_params(job_settings, job_output_dir)
 
             command = ' '.join([
-                'python ./create_FLNL_corpus.py',
+                'python ./create_FLD_corpus.py',
 
                 f'{job_output_path}',
                 str(int(size_per_job)),
@@ -215,42 +215,42 @@ def make_dataset(dataset_name: str,
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
-    logger.info('============================== [launch_create_FLNL_corpus.py] start! ============================')
+    logger.info('============================== [launch_create_FLD_corpus.py] start! ============================')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221007.add-axioms-theorems')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221011.beat_ruletaker')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/debug')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221012.beat_ruletaker')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221026.enhance')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221027.enhance.fix')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.enhance.fix_translation')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221028.dist-var')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221101.various_datasets')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221107.more_distractive')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221007.add-axioms-theorems')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/debug')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221011.beat_ruletaker')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/debug')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221012.beat_ruletaker')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221026.enhance')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221027.enhance.fix')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221028.enhance.fix_translation')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221028.dist-var')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221101.various_datasets')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221107.more_distractive')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221112.various_negatives')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221112.various_negatives')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.new_steps')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.debug.parallel')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221115.new_steps')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221115.debug.parallel')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221115.steps')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221116.fix_translation')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221115.steps')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221116.fix_translation')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221117.investigation')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221117.investigation')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221123.and')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221123.and')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221124.and.simplified_formula_in_various_formulas')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221125.full')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221126.transl')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221126.transl.no_hypothesis_in_unknown_proofs')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221129.transl.wo_hypothesis_in_unknown')
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221130.arg-AA')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221124.and.simplified_formula_in_various_formulas')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221125.full')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221126.transl')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221126.transl.no_hypothesis_in_unknown_proofs')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221129.transl.wo_hypothesis_in_unknown')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221130.arg-AA')
 
-    output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221203.first_exp')
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20221203.first_exp')
 
-    # output_top_dir = Path('./outputs/10.create_FLNL_corpus/20221217.back_to_the_past')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221217.back_to_the_past')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -346,24 +346,24 @@ def main():
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
         # '20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000',
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000',
 
         # ---------------------------------- 20221215 additional experiments ------------------------------------
         # '20221203.first_exp__arg-RT__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
 
         # ---------------------------------- 20221216 additional experiments ------------------------------------
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLNL__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLD__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
 
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-8__dataset_size-30000.G_MP',
 
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
-        # '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
+        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
 
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP',
 
@@ -371,7 +371,7 @@ def main():
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000.G_MP',
 
         # ---------------------------------- 20221217.back_to_the_past ------------------------------------
-        # '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000',
+        # '20221217.back_to_the_past__arg-FLD__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -408,7 +408,7 @@ def main():
 
     Parallel(n_jobs=num_jobs_for_datasets, backend='threading')(jobs)
 
-    logger.info('============================== [launch_create_FLNL_corpus.py] done! ============================')
+    logger.info('============================== [launch_create_FLD_corpus.py] done! ============================')
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 import re
 from typing import List, Optional
 
-from FLNL.exception import FormalLogicExceptionBase
+from FLD.exception import FormalLogicExceptionBase
 import kern_profiler
 
 

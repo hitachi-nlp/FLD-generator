@@ -1,5 +1,5 @@
-from FLNL.proof import ProofNode, ProofTree
-from FLNL.formula import Formula
+from FLD.proof import ProofNode, ProofTree
+from FLD.formula import Formula
 from pprint import pprint
 
 

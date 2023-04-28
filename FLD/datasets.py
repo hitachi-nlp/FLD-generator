@@ -9,14 +9,14 @@ import copy
 from collections import defaultdict
 from pprint import pprint
 
-from FLNL.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
-from FLNL.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLNL.formula import Formula
-from FLNL.proof import ProofTree, ProofNode
-from FLNL.utils import flatten_dict, weighted_sampling
-from FLNL.translators.base import Translator
-from FLNL.word_banks.base import WordBank
-from FLNL.translation_distractors import build as build_translation_distractor
+from FLD.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
+from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLD.formula import Formula
+from FLD.proof import ProofTree, ProofNode
+from FLD.utils import flatten_dict, weighted_sampling
+from FLD.translators.base import Translator
+from FLD.word_banks.base import WordBank
+from FLD.translation_distractors import build as build_translation_distractor
 import kern_profiler
 
 logger = logging.getLogger(__name__)

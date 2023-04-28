@@ -1,6 +1,6 @@
 from typing import List, Optional, Iterable, Dict
 
-from FLNL.word_banks import build_wordnet_wordbank, POS, ATTR, get_form_types
+from FLD.word_banks import build_wordnet_wordbank, POS, ATTR, get_form_types
 import logging
 
 from logger_setup import setup as setup_logger

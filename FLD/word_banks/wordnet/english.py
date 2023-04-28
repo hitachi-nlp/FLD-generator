@@ -5,10 +5,10 @@ import logging
 # from pyinflect import getInflection
 from lemminflect import getInflection, getLemma
 
-from FLNL.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLD.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
-from FLNL.utils import starts_with_vowel_sound
+from FLD.utils import starts_with_vowel_sound
 from .base import WordNetWordBank
 
 logger = logging.getLogger(__name__)
