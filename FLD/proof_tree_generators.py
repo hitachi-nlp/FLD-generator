@@ -140,13 +140,13 @@ class ProofTreeGenerator:
         complicated_arguments: List[Argument] = []
         if complicated_arguments_weight > 0.0:
             for argument in arguments:
-                for quantifier_argument, _, name in generate_complicated_arguments(argument,
-                                                                                   elim_dneg=elim_dneg,
-                                                                                   suppress_op_expansion_if_exists=True,
-                                                                                   get_name=True):
-                    if _is_argument_new(quantifier_argument, arguments + complicated_arguments):  # SLOW
-                        quantifier_argument.id += f'.{name}'
-                        complicated_arguments.append(quantifier_argument)
+                for complicated_argument, _, name in generate_complicated_arguments(argument,
+                                                                                    elim_dneg=elim_dneg,
+                                                                                    suppress_op_expansion_if_exists=True,
+                                                                                    get_name=True):
+                    if _is_argument_new(complicated_argument, arguments + complicated_arguments):  # SLOW
+                        complicated_argument.id += f'.{name}'
+                        complicated_arguments.append(complicated_argument)
 
         quantified_arguments: List[Argument] = []
         if quantifier_arguments_weight > 0.0:
