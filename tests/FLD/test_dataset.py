@@ -73,8 +73,8 @@ def test_generate_dataset_AACorpus():
 
     translator = build_translator(
         [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         word_bank,
         use_fixed_translation=False,
@@ -86,36 +86,36 @@ def test_generate_dataset_AACorpus():
    
     generator = build_generator(
         [
-            # './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
             # -- we exclude the below for speed --
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/AACorpus.pred_arg.json',
+            './configs/arguments/AACorpus.pred_arg.json',
 
             # -- not tested. may not work --
-            # './configs/FLD/arguments/universal_theorem.axiom.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.theorem.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.pred_arg.json',
+            # './configs/arguments/universal_theorem.theorem.pred_arg.json',
 
             # not that important universal theorems
-            # './configs/FLD/arguments/universal_theorem.axiom.and_or.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.axiom.implication_intro.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.axiom.negation.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.theorem.and_or.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.and_or.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.negation.pred_arg.json',
+            # './configs/arguments/universal_theorem.theorem.and_or.pred_arg.json',
         ],
         elim_dneg=True,
         complication=0.3,
@@ -180,8 +180,8 @@ def test_generate_dataset():
 
     translator = build_translator(
         [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         word_bank,
         use_fixed_translation=False,
@@ -193,39 +193,39 @@ def test_generate_dataset():
    
     generator = build_generator(
         [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
             # # -- we exclude the below for speed --
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
 
 
             # -- not tested. may not work --
-            # './configs/FLD/arguments/universal_theorem.axiom.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.theorem.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.pred_arg.json',
+            # './configs/arguments/universal_theorem.theorem.pred_arg.json',
 
             # not that important universal theorems
-            # './configs/FLD/arguments/universal_theorem.axiom.and_or.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.axiom.implication_intro.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.axiom.negation.pred_arg.json',
-            # './configs/FLD/arguments/universal_theorem.theorem.and_or.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.and_or.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/universal_theorem.axiom.negation.pred_arg.json',
+            # './configs/arguments/universal_theorem.theorem.and_or.pred_arg.json',
         ],
         elim_dneg=True,
         complication=0.3,

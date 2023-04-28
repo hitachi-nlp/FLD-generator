@@ -14,17 +14,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -36,8 +36,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -48,17 +48,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -70,8 +70,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -83,17 +83,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -105,8 +105,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -118,17 +118,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -140,8 +140,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -153,17 +153,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -175,8 +175,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -187,17 +187,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -209,8 +209,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -221,17 +221,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -243,8 +243,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -265,17 +265,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -287,8 +287,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -300,17 +300,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -322,8 +322,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -335,17 +335,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -357,8 +357,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -370,17 +370,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -392,8 +392,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -404,17 +404,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -426,8 +426,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -446,17 +446,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -468,8 +468,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -481,17 +481,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.0,
@@ -503,8 +503,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -516,17 +516,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -538,8 +538,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -551,17 +551,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -573,8 +573,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -585,17 +585,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -607,8 +607,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -619,19 +619,19 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/axiom.pred_arg.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            # './configs/FLD/arguments/theorem.pred_arg.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -643,8 +643,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'limit_vocab_size_per_type': None,
         'reused_object_nouns_max_factor': 0.0,
@@ -656,19 +656,19 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -680,8 +680,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'limit_vocab_size_per_type': None,
     },
@@ -692,19 +692,19 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
         ],
 
         'complication': 0.3,
@@ -716,8 +716,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 0.5,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -729,17 +729,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -751,8 +751,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -763,17 +763,17 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
 
-            './configs/FLD/arguments/axiom.pred_arg.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
 
-            './configs/FLD/arguments/theorem.pred_arg.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -785,8 +785,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -798,23 +798,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -826,8 +826,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -838,23 +838,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -866,8 +866,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -879,23 +879,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -907,8 +907,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -920,23 +920,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -948,8 +948,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -962,23 +962,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -990,8 +990,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
@@ -1003,23 +1003,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1031,8 +1031,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
@@ -1044,23 +1044,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1072,8 +1072,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
@@ -1085,23 +1085,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1113,8 +1113,8 @@ _DATASET_SETTINGS = {
         'distractor_factor': 1.0,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
@@ -1141,23 +1141,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1169,8 +1169,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1191,23 +1191,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1219,8 +1219,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1241,23 +1241,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1269,8 +1269,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1291,23 +1291,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1319,8 +1319,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1341,23 +1341,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1369,8 +1369,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1392,23 +1392,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1420,8 +1420,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1442,23 +1442,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1470,8 +1470,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1492,23 +1492,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1520,8 +1520,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1542,23 +1542,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1570,8 +1570,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1592,23 +1592,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1620,8 +1620,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1647,23 +1647,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1675,8 +1675,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1697,23 +1697,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1725,8 +1725,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1747,23 +1747,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1775,8 +1775,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1797,23 +1797,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1825,8 +1825,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1847,23 +1847,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1875,8 +1875,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -1898,23 +1898,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1926,8 +1926,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
@@ -1950,23 +1950,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -1978,8 +1978,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
@@ -2000,23 +2000,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -2028,8 +2028,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
@@ -2058,23 +2058,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -2086,8 +2086,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -2108,23 +2108,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -2136,8 +2136,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -2158,23 +2158,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -2186,8 +2186,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 5),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -2208,23 +2208,23 @@ _DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
 
         'complication': 0.3,
@@ -2236,8 +2236,8 @@ _DATASET_SETTINGS = {
         'num_distractors': _to_range(1, 10),
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
@@ -2271,23 +2271,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.0,
         'quantification': 0.0,
@@ -2303,8 +2303,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': True,
@@ -2327,23 +2327,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2359,8 +2359,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': True,
@@ -2383,23 +2383,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2415,8 +2415,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2439,23 +2439,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2471,8 +2471,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2495,23 +2495,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2527,8 +2527,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2551,23 +2551,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2583,8 +2583,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2607,23 +2607,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2642,8 +2642,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2666,23 +2666,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2701,8 +2701,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2732,23 +2732,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2772,8 +2772,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2798,23 +2798,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2838,8 +2838,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2864,23 +2864,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2904,8 +2904,8 @@ _DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -2930,23 +2930,23 @@ _DATASET_SETTINGS = {
 
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'complication': 0.3,
         'quantification': 0.2,
@@ -2970,8 +2970,8 @@ _DATASET_SETTINGS = {
         'use_collapsed_translation_nodes_for_unknown_tree': False,
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
@@ -3011,23 +3011,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3067,23 +3067,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3122,23 +3122,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3178,23 +3178,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3235,23 +3235,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3291,23 +3291,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3347,23 +3347,23 @@ _DATASET_SETTINGS = {
     '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3415,23 +3415,23 @@ _DATASET_SETTINGS = {
     '20221117__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--20__transl-wide__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3469,23 +3469,23 @@ _DATASET_SETTINGS = {
     '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3526,23 +3526,23 @@ _DATASET_SETTINGS = {
     '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3579,23 +3579,23 @@ _DATASET_SETTINGS = {
     '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3633,23 +3633,23 @@ _DATASET_SETTINGS = {
     '20221124.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3687,23 +3687,23 @@ _DATASET_SETTINGS = {
     '20221125.full__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3741,23 +3741,23 @@ _DATASET_SETTINGS = {
     '20221126.transl__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-30000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3795,25 +3795,25 @@ _DATASET_SETTINGS = {
     '20221130.transl__arg-AA__frml-smpl__tree-1__dist-5__transl_dist--5__transl-wide__size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/AACorpus.pred_arg.json',
+            './configs/arguments/AACorpus.pred_arg.json',
         ],
         'quantification': 0.0,  # can not be used with AACorpus
 
@@ -3860,25 +3860,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-smpl__dist-0__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3914,25 +3914,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -3968,25 +3968,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4022,25 +4022,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000': {
 
         'argument_configs': [
-            './configs/FLD/arguments/AACorpus.pred_arg.json',
+            './configs/arguments/AACorpus.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.pred_only.json',
-            # './configs/FLD/arguments/axiom.pred_arg.json',
+            # './configs/arguments/axiom.pred_only.json',
+            # './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.0,  # can not be used with AACorpus
 
@@ -4080,25 +4080,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4135,25 +4135,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4190,25 +4190,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4244,25 +4244,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4310,25 +4310,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4373,25 +4373,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4426,25 +4426,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4485,25 +4485,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4538,27 +4538,27 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4593,27 +4593,27 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-8__dataset_size-30000.G_MP': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4648,27 +4648,27 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4704,25 +4704,25 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4759,27 +4759,27 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4815,27 +4815,27 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000.G_MP': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4873,27 +4873,27 @@ _DATASET_SETTINGS = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000.G_MP': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            # './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/FLD/arguments/axiom.negation.pred_only.json',
-            # './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.pred_only.json',
-            # './configs/FLD/arguments/theorem.pred_arg.json',
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
 
-            # './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            # './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.G_MP.pred_arg.json',
+            './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -4933,25 +4933,25 @@ _DATASET_SETTINGS = {
     '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': {
 
         'argument_configs': [
-            # './configs/FLD/arguments/AACorpus.pred_arg.json',
+            # './configs/arguments/AACorpus.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.pred_only.json',
-            './configs/FLD/arguments/axiom.pred_arg.json',
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.and_or.pred_only.json',
-            './configs/FLD/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.implication_intro.pred_only.json',
-            './configs/FLD/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            './configs/FLD/arguments/axiom.negation.pred_only.json',
-            './configs/FLD/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.pred_only.json',
-            './configs/FLD/arguments/theorem.pred_arg.json',
+            './configs/arguments/theorem.pred_only.json',
+            './configs/arguments/theorem.pred_arg.json',
 
-            './configs/FLD/arguments/theorem.and_or.pred_only.json',
-            './configs/FLD/arguments/theorem.and_or.pred_arg.json',
+            './configs/arguments/theorem.and_or.pred_only.json',
+            './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
 
@@ -5013,8 +5013,8 @@ _DEFAULT_DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
 
@@ -5038,8 +5038,8 @@ _DEFAULT_DATASET_SETTINGS = {
 
 
         'translation_configs': [
-            './configs/FLD/translations/thing.json',
-            './configs/FLD/translations/thing.sentence_negation.json',
+            './configs/translations/thing.json',
+            './configs/translations/thing.sentence_negation.json',
         ],
         'translation_volume_to_weight': 'sqrt',
 
