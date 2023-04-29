@@ -214,7 +214,7 @@ def test_generate_dataset():
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/arguments/theorem.G_MP.pred_arg.json',
+            # './configs/arguments/theorem.G_MP.pred_arg.json',
 
 
             # -- not tested. may not work --

@@ -172,6 +172,7 @@ class ProofTreeGenerator:
 
             for argument_type in [
                     'universal_quantifier_elim',
+                    # 'universal_quantifier_intro',
 
                     # we do not use existential_quantifier_intro since it has no chainable_args without existential_quantifier_elim, which is not implemented yet.
                     # 'existential_quantifier_intro',
@@ -245,111 +246,132 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth: int,
                       branch_extension_steps: int,
-                      depth_1_reference_weight: Optional[float] = None,
-                      max_retry=30,
-                      timeout=5) -> Optional[ProofTree]:
-        if depth == 1:
-            logger.info('do only generate_stem() since depth=1 tree can not be extend_branches()')
-            return self.generate_stem(depth, depth_1_reference_weight=depth_1_reference_weight, max_retry=max_retry, timeout=timeout)
-        else:
-            try:
-                return run_with_timeout_retry(
-                    self._generate_tree,
-                    func_args=[depth, branch_extension_steps],
-                    func_kwargs={'depth_1_reference_weight': depth_1_reference_weight},
-                    retry_exception_class=ProofTreeGenerationFailure,
-                    max_retry=max_retry,
-                    timeout=timeout,
-                    logger=logger,
-                    log_title='generate_tree()',
-                )
-            except RetryAndTimeoutFailure as e:
-                raise ProofTreeGenerationFailure(str(e))
+                      **kwargs) -> Optional[ProofTree]:
+        return _generate_tree_with_timeout_retry(
+            self.arguments,
+            depth,
+            branch_extension_steps,
+            argument_weights=self.argument_weights,
+            elim_dneg=self.elim_dneg,
+            disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
+            **kwargs,
+        )
 
-    def generate_stem(self,
-                      depth: int,
-                      depth_1_reference_weight: Optional[float] = None,
-                      max_retry=30,
-                      timeout=5) -> Optional[ProofTree]:
-        try:
-            return run_with_timeout_retry(
-                self._generate_stem,
-                func_args=[depth],
-                func_kwargs={'depth_1_reference_weight': depth_1_reference_weight},
-                retry_exception_class=GenerateStemFailure,
-                max_retry=max_retry,
-                timeout=timeout,
-                logger=logger,
-                log_title='generate_stem()',
-            )
-        except RetryAndTimeoutFailure as e:
-            raise GenerateStemFailure(str(e))
+    def generate_stem(self, depth: int, **kwargs) -> ProofTree:
+        return _generate_stem_with_retry(self.arguments,
+                                         depth,
+                                         argument_weights=self.argument_weights,
+                                         elim_dneg=self.elim_dneg,
+                                         disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
+                                         **kwargs)
 
     def extend_branches(self,
                         proof_tree: ProofTree,
                         branch_extension_steps: int,
-                        depth_limit: Optional[int] = None,
-                        ng_formulas: Optional[List[Formula]] = None,
-                        max_retry=30,
-                        timeout=5) -> ProofTree:
-        try:
-            return run_with_timeout_retry(
-                self._extend_branches,
-                func_args=[proof_tree, branch_extension_steps],
-                func_kwargs={'depth_limit': depth_limit, 'ng_formulas': ng_formulas},
-                retry_exception_class=ExtendBranchesFailure,
-                max_retry=max_retry,
-                timeout=timeout,
-                logger=logger,
-                log_title='extend_branches()',
-            )
-        except RetryAndTimeoutFailure as e:
-            raise ExtendBranchesFailure(str(e))
+                        **kwargs) -> ProofTree:
+        return _extend_branches_with_timeout_retry(proof_tree,
+                                                   self.arguments,
+                                                   branch_extension_steps,
+                                                   argument_weights=self.argument_weights,
+                                                   elim_dneg=self.elim_dneg,
+                                                   **kwargs)
 
-    def _generate_tree(self, depth: int, branch_extension_steps: int, depth_1_reference_weight: Optional[float] = None) -> Optional[ProofTree]:
-        proof_tree = self._generate_stem(depth, depth_1_reference_weight=depth_1_reference_weight)
+
+def _generate_tree_with_timeout_retry(*args,
+                                      max_retry=30,
+                                      timeout=5,
+                                      **kwargs) -> Optional[ProofTree]:
+    try:
+        return run_with_timeout_retry(
+            _generate_tree,
+            func_args=args,
+            func_kwargs=kwargs,
+            retry_exception_class=ProofTreeGenerationFailure,
+            max_retry=max_retry,
+            timeout=timeout,
+            logger=logger,
+            log_title='generate_tree()',
+        )
+    except RetryAndTimeoutFailure as e:
+        raise ProofTreeGenerationFailure(str(e))
+
+
+
+
+def _generate_tree(arguments: List[Argument],
+                   depth: int,
+                   branch_extension_steps: int,
+                   argument_weights: Optional[Dict[Argument, float]] = None,
+                   depth_1_reference_weight: Optional[float] = None,
+                   elim_dneg=False,
+                   ng_formulas: Optional[List[Formula]] = None,
+                   disallow_contradiction_as_hypothesis=False,
+                   allow_reference_arguments_when_depth_1=True) -> Optional[ProofTree]:
+    proof_tree = _generate_stem(arguments,
+                                depth,
+                                argument_weights=argument_weights,
+                                depth_1_reference_weight=depth_1_reference_weight,
+                                elim_dneg=elim_dneg,
+                                disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis)
+    if depth != 1:
         try:
-            proof_tree = self.extend_branches(proof_tree,
-                                              branch_extension_steps,
-                                              depth_limit=proof_tree.depth,
-                                              max_retry=10)
+            proof_tree = _extend_branches_with_timeout_retry(proof_tree,
+                                                             arguments,
+                                                             branch_extension_steps,
+                                                             argument_weights=argument_weights,
+                                                             depth_limit=proof_tree.depth,
+                                                             elim_dneg=elim_dneg,
+                                                             allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
+                                                             ng_formulas=ng_formulas,
+                                                             max_retry=10)
         except ExtendBranchesFailure as e:
             logger.warning('extend_branches() failed. Will return tree without branch extension. The error was the following:\n%s', str(e))
 
-        return proof_tree
+    return proof_tree
 
-    def _generate_stem(self,
-                       depth: int,
-                       depth_1_reference_weight: Optional[float] = None) -> ProofTree:
-        return _generate_stem(self.arguments,
-                              depth,
-                              PREDICATES,
-                              CONSTANTS,
-                              argument_weights=self.argument_weights,
-                              depth_1_reference_weight=depth_1_reference_weight,
-                              elim_dneg=self.elim_dneg,
-                              disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis)
 
-    def _extend_branches(self,
-                         proof_tree: ProofTree,
-                         branch_extension_steps: int,
-                         depth_limit: Optional[int] = None,
-                         ng_formulas: Optional[List[Formula]] = None) -> ProofTree:
-        return _extend_branches(proof_tree,
-                                self.arguments,
-                                branch_extension_steps,
-                                PREDICATES,
-                                CONSTANTS,
-                                depth_limit=depth_limit,
-                                ng_formulas=ng_formulas,
-                                argument_weights=self.argument_weights,
-                                elim_dneg=self.elim_dneg)
+def _generate_stem_with_retry(*args,
+                              max_retry=30,
+                              timeout=5,
+                              **kwargs) -> Optional[ProofTree]:
+    try:
+        return run_with_timeout_retry(
+            _generate_stem,
+            func_args=args,
+            func_kwargs=kwargs,
+            retry_exception_class=GenerateStemFailure,
+            max_retry=max_retry,
+            timeout=timeout,
+            logger=logger,
+            log_title='generate_stem()',
+        )
+    except RetryAndTimeoutFailure as e:
+        raise GenerateStemFailure(str(e))
+
+
+def _extend_branches_with_timeout_retry(*args,
+                                        timeout=5,
+                                        max_retry=30,
+                                        **kwargs) -> ProofTree:
+    try:
+        return run_with_timeout_retry(
+            _extend_branches,
+            func_args=args,
+            func_kwargs=kwargs,
+            retry_exception_class=ExtendBranchesFailure,
+            max_retry=max_retry,
+            timeout=timeout,
+            logger=logger,
+            log_title='extend_branches()',
+        )
+    except RetryAndTimeoutFailure as e:
+        raise ExtendBranchesFailure(str(e))
 
 
 def _generate_stem(arguments: List[Argument],
                    depth: int,
-                   predicate_pool: List[str],
-                   constant_pool: List[str],
+                   predicate_pool: List[str] = PREDICATES,
+                   constant_pool: List[str] = CONSTANTS,
                    argument_weights: Optional[Dict[Argument, float]] = None,
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
@@ -418,11 +440,6 @@ def _generate_stem(arguments: List[Argument],
                         except StopIteration:
                             iter_non_reference = argument_sampling_non_reference()
                             arg = next(iter_non_reference)
-                    # logger.warning('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  depth=%d,    rand=%f,  depth_1_reference_weight=%f,  chosen_argument=%s',
-                    #                depth,
-                    #                rand,
-                    #                depth_1_reference_weight,
-                    #                arg.id)
                     yield arg
         else:
             argument_sampling = argument_sampling_all
@@ -621,8 +638,8 @@ def _generate_stem(arguments: List[Argument],
 def _extend_branches(proof_tree: ProofTree,
                      arguments: List[Argument],
                      num_steps: int,
-                     predicate_pool: List[str],
-                     constant_pool: List[str],
+                     predicate_pool: List[str] = PREDICATES,
+                     constant_pool: List[str] = CONSTANTS,
                      argument_weights: Optional[Dict[Argument, float]] = None,
                      depth_limit: Optional[int] = None,
                      elim_dneg=False,
