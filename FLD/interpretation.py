@@ -465,11 +465,19 @@ def interpret_argument(arg: Argument,
         for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
         if premise in arg.assumptions
     }
+
+    interpreted_unconditioned_constants = [
+        interpret_formula(constant, mapping,
+                          quantifier_types=quantifier_types, elim_dneg=elim_dneg)
+        for constant in arg.unconditioned_constants
+    ]
+
     interpreted_conclusion = interpret_formula(arg.conclusion, mapping,
                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
                     interpreted_assumptions,
+                    unconditioned_constants=interpreted_unconditioned_constants,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -477,9 +485,9 @@ def interpret_argument(arg: Argument,
 
 @profile
 def interpret_formula(formula: Formula,
-                       mapping: Dict[str, str],
-                       quantifier_types: Dict[str, str] = None,
-                       elim_dneg=False) -> Formula:
+                      mapping: Dict[str, str],
+                      quantifier_types: Dict[str, str] = None,
+                      elim_dneg=False) -> Formula:
 
     interpreted_formula = _expand_op(
         Formula(
@@ -679,29 +687,38 @@ def argument_is_identical_to(this_argument: Argument,
     # early rejections by premises
     if len(this_argument.premises) != len(that_argument.premises):
         return False
-    if any(
-        all(_formula_can_not_be_identical_to(this_premise, that_premise)
-            for that_premise in that_argument.premises)
-        for this_premise in this_argument.premises
-    ):
+    if len(this_argument.premises) >= 1:
+        if any(
+            all(_formula_can_not_be_identical_to(this_premise, that_premise)
+                for that_premise in that_argument.premises)
+            for this_premise in this_argument.premises
+        ):
+            return False
+        for this_premise in this_argument.premises:
+            if this_premise not in this_argument.assumptions:
+                continue
+
+            this_assumption = this_argument.assumptions[this_premise]
+
+            that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
+                                if that_premise in that_argument.assumptions]
+
+            if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
+                       for that_assumption in that_assumptions):
+                return False
+
+    # early rejections by unconditioned_constants
+    if len(this_argument.unconditioned_constants) != len(that_argument.unconditioned_constants):
         return False
-    for this_premise in this_argument.premises:
-        if this_premise not in this_argument.assumptions:
-            continue
-
-        this_assumption = this_argument.assumptions[this_premise]
-
-        that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
-                            if that_premise in that_argument.assumptions]
-
-        if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
-                   for that_assumption in that_assumptions):
+    if len(this_argument.unconditioned_constants) >= 1:
+        if any(
+            all(_formula_can_not_be_identical_to(this_constant, that_constant)
+                for that_constant in that_argument.unconditioned_constants)
+            for this_constant in this_argument.unconditioned_constants
+        ):
             return False
 
-    def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
-        return this_argument.conclusion.rep == that_argument.conclusion.rep
-
-    def is_premises_same(this_argument: Argument, that_argument: Argument) -> bool:
+    def is_premises_and_assumptions_same(this_argument: Argument, that_argument: Argument) -> bool:
         _is_premises_same = False
         for premise_indexes in permutations(range(len(that_argument.premises))):
             that_premises_permuted = [that_argument.premises[i] for i in premise_indexes]
@@ -723,6 +740,13 @@ def argument_is_identical_to(this_argument: Argument,
                     continue
         return _is_premises_same
 
+    def is_unconditioned_constants_same(this_argument: Argument, that_argument: Argument) -> bool:
+        return set(constant.rep for constant in this_argument.unconditioned_constants)\
+            == set(constant.rep for constant in that_argument.unconditioned_constants)
+
+    def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
+        return this_argument.conclusion.rep == that_argument.conclusion.rep
+
     # check the exact identification condition.
     for mapping in generate_mappings_from_argument(this_argument,
                                                    that_argument,
@@ -730,14 +754,17 @@ def argument_is_identical_to(this_argument: Argument,
                                                    allow_many_to_one=allow_many_to_oneg):
         this_argument_interpreted = interpret_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
+        # XXX: DO NOT change the order of validation. It is now ordered as "faster former"
         if is_conclusion_same(this_argument_interpreted, that_argument)\
-                and is_premises_same(this_argument_interpreted, that_argument):
+                and is_unconditioned_constants_same(this_argument_interpreted, that_argument)\
+                and is_premises_and_assumptions_same(this_argument_interpreted, that_argument):
             return True
 
     # It is possible that no mappings are found (e.g. when no predicate and constants are in arguments)
     # but the arguments are the same from the beggining
     if is_conclusion_same(this_argument, that_argument)\
-            and is_premises_same(this_argument, that_argument):
+            and is_unconditioned_constants_same(this_argument, that_argument)\
+            and is_premises_and_assumptions_same(this_argument, that_argument):
         return True
 
     return False
