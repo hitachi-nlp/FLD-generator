@@ -544,8 +544,8 @@ def _expand_op(formula: Formula) -> Formula:
 
 @profile
 def _interpret_rep(rep: str,
-                    mapping: Dict[str, str],
-                    elim_dneg=False) -> str:
+                   mapping: Dict[str, str],
+                   elim_dneg=False) -> str:
     interpreted_rep = rep
 
     if len(mapping) >= 1:
@@ -797,16 +797,34 @@ def generate_quantifier_axiom_arguments(
             for src, tgt in quantifier_mapping.items()
         }
 
-        if argument_type == 'universal_quantifier_elim':
+        if argument_type.startswith('universal_'):
             quantifier_formula = Formula(f'({quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
-            argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
-            argument = Argument(
-                [quantifier_formula],
-                de_quantifier_formula,
-                {},
-                id = argument_id,
-            )
+
+            if argument_type == 'universal_quantifier_elim':
+                argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
+                argument = Argument(
+                    [quantifier_formula],
+                    de_quantifier_formula,
+                    {},
+                    id = argument_id,
+                )
+            elif argument_type == 'universal_quantifier_intro':
+                quantified_constant_reps = list(
+                    set([constant.rep for constant in de_quantifier_formula.constants])\
+                    - set([constant.rep for constant in quantifier_formula.constants])
+                )
+                quantified_constants = [Formula(rep) for rep in quantified_constant_reps]
+
+                argument_id = f'{id_prefix}.quantifier_axiom.universal_intro-{i}' if id_prefix is not None else f'quantifier_axiom.universal_intro-{i}'
+                argument = Argument(
+                    [de_quantifier_formula],
+                    quantifier_formula,
+                    {},
+                    unconditioned_constants=quantified_constants,
+                    id=argument_id,
+                )
+
         elif argument_type == 'existential_quantifier_intro':
             quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)

@@ -297,6 +297,88 @@ def test_generate_quantifier_axiom_arguments():
         quantify_all_at_once=True
     )
 
+    # ----------- universal_quantifier_intro --------------
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('{F}{a} -> {G}{a}'),
+        [
+            Argument(
+                [Formula('{F}{a} -> {G}{a}')],
+                Formula('(x): {F}x -> {G}x'),
+                {},
+                unconditioned_constants=[Formula('{a}')]
+            ),
+        ]
+    )
+
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('({F}{i} v {G}{b}) -> {H}{c}')],
+                Formula('(x): ({F}x v {G}{b}) -> {H}{c}'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{i}) -> {H}{c}')],
+                Formula('(x): ({F}{a} v {G}x) -> {H}{c}'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
+                Formula('(x): ({F}{a} v {G}{b}) -> {H}x'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
+                Formula('(x): ({F}x v {G}x) -> {H}{c}'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{i} v {G}{b}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}{b}) -> {H}x'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}{a} v {G}x) -> {H}x'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}x) -> {H}x'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+
+        ]
+    )
+
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}x) -> {H}x'),
+                {},
+                unconditioned_constants=[Formula('{i}')]
+            ),
+
+        ],
+        quantify_all_at_once=True
+    )
+
     # ----------- existential_quantifier_intro --------------
     check_generation(
         'existential_quantifier_intro',
@@ -697,7 +779,7 @@ if __name__ == '__main__':
     # test_formula_can_not_be_identical_to()
     test_argument_is_identical_to()
 
-    # test_generate_quantifier_axiom_arguments()
+    test_generate_quantifier_axiom_arguments()
 
     # test_generate_quantifier_formulas()
     # # test_generate_quantifier_arguments()
