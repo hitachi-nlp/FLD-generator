@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Tuple
+from typing import List, Optional, Dict, Tuple, List
 
 from .formula import Formula, DERIVE
 
@@ -9,6 +9,7 @@ class Argument:
                  premises: List[Formula],
                  conclusion: Formula,
                  assumptions: Dict[Formula, Formula],
+                 unconditioned_constants: Optional[List[Formula]] = None,
                  id: Optional[str] = None,
                  base_scheme_group: Optional[str] = None,
                  scheme_variant: Optional[str] = None):
@@ -16,12 +17,20 @@ class Argument:
         self.conclusion = conclusion
         self.assumptions = assumptions
 
+        if unconditioned_constants is not None:
+            for constant in unconditioned_constants:
+                if constant.rep != constant.constants[0].rep:
+                    raise ValueError(f'The unconditioned formula {constant.rep} must be a single constant')
+            self.unconditioned_constants = unconditioned_constants
+        else:
+            self.unconditioned_constants = []
+
         self.id = id
         self.base_scheme_group = base_scheme_group
         self.scheme_variant = scheme_variant
 
     def __str__(self) -> str:
-        return f'Argument(id="{self.id}", assumptions={str(self.assumptions)}, premises={str(self.premises)}, conclusion={str(self.conclusion)})'
+        return f'Argument(id="{self.id}", assumptions={str(self.assumptions)}, premises={str(self.premises)}, conclusion={str(self.conclusion)}, unconditioned_constants={str(self.unconditioned_constants)})'
 
     def __repr__(self) -> str:
         return str(self)
@@ -31,6 +40,7 @@ class Argument:
         return self.premises\
             + [self.assumptions[premise] for premise in self.premises
                if premise in self.assumptions]\
+            + self.unconditioned_constants\
             + [self.conclusion]
 
     @classmethod
@@ -40,11 +50,13 @@ class Argument:
 
         assumptions = [(Formula(rep) if rep is not None else None) for rep in assumption_reps]
         premises = [Formula(rep) for rep in premise_reps]
+        unconditioned_constants = [Formula(rep) for rep in json_dict.get('unconditioned', [])]
         return Argument(
             premises,
             Formula(json_dict['conclusion']),
             {premise: assumption for premise, assumption in zip(premises, assumptions)
              if assumption is not None},
+            unconditioned_constants=unconditioned_constants,
             id=json_dict['id'],
             base_scheme_group=json_dict.get('base_scheme_group', None),
             scheme_variant=json_dict.get('scheme_variant', None),
@@ -63,6 +75,7 @@ class Argument:
             'id': self.id,
             'base_scheme_group': self.base_scheme_group,
             'scheme_variant': self.scheme_variant,
+            'unconditioned': [constant.rep for constant in self.unconditioned_constants],
             'premises': [
                 (premise.rep if premise not in self.assumptions else f'{self.assumptions[premise].rep} {DERIVE} {premise.rep}')
                 for premise in self.premises

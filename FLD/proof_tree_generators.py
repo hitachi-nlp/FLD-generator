@@ -164,6 +164,7 @@ class ProofTreeGenerator:
         quantifier_axiom_arguments: List[Argument] = []
         if quantifier_axiom_arguments_weight > 0.0:
             unique_formulas: List[Formula] = []
+
             for argument in arguments + complicated_arguments:
                 for formula in argument.all_formulas:
                     if all(not formula_is_identical_to(formula, existent_formula) for existent_formula in unique_formulas):
@@ -178,7 +179,10 @@ class ProofTreeGenerator:
                 for i_formula, formula in enumerate(unique_formulas):
                     if len(formula.variables) > 0:
                         continue
-                    for quantifier_axiom_argument in generate_quantifier_axiom_arguments(argument_type, formula, id_prefix=f'fomula-{str(i_formula).zfill(6)}', quantify_all_at_once=quantify_all_at_once):
+                    for quantifier_axiom_argument in generate_quantifier_axiom_arguments(argument_type,
+                                                                                         formula,
+                                                                                         id_prefix=f'fomula-{str(i_formula).zfill(6)}',
+                                                                                         quantify_all_at_once=quantify_all_at_once):
                         if _is_argument_new(quantifier_axiom_argument, arguments + complicated_arguments + quantifier_axiom_arguments):
                             quantifier_axiom_arguments.append(quantifier_axiom_argument)
 
