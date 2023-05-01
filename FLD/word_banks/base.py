@@ -1,6 +1,7 @@
 from typing import Optional, Iterable, List, Union
 from enum import Enum
 from abc import ABC, abstractmethod
+from itertools import chain
 
 
 class POS(Enum):
@@ -57,12 +58,28 @@ def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
 
 class WordBank(ABC):
 
-    @abstractmethod
     def get_words(self) -> Iterable[str]:
-        pass
+        yield from chain(self.get_unconditioned_constant_words(), self._get_real_words())
 
     @abstractmethod
+    def _get_real_words(self) -> Iterable[str]:
+        pass
+
+    def get_unconditioned_constant_words(self) -> Iterable[str]:
+        return self._unconditioned_constant_words
+
+    @property
+    @abstractmethod
+    def _unconditioned_constant_words(self) -> List[str]:
+        pass
+
     def get_pos(self, word: str) -> List[POS]:
+        if word in self._unconditioned_constant_words:
+            return [POS.NOUN]
+        return self._get_pos(word)
+
+    @abstractmethod
+    def _get_pos(self, word: str) -> List[POS]:
         pass
 
     def change_word_form(self,

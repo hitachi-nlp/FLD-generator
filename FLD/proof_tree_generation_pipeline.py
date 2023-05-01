@@ -13,6 +13,7 @@ from FLD.proof_tree_generators import ProofTreeGenerationFailure
 from FLD.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
 from FLD.translation_distractors import TranslationDistractor
 from FLD.translators import TranslationFailure
+from FLD.utils import build_bounded_msg
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -52,6 +53,7 @@ class ProofTreeGenerationPipeline:
             num_distractors: int,
             num_translation_distractors: int,
             depth_1_reference_weight: Optional[float] = None,
+            force_fix_illegal_unconditioned_constants=False,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
         others = {}
 
@@ -61,21 +63,27 @@ class ProofTreeGenerationPipeline:
         if depth < 1:
             raise ValueError('depth must be >= 1')
 
+        def _bouded_log(message: str) -> None:
+            logger.info(build_bounded_msg('%-35s', 4), message)
+
         while True:
-            logger.info('========================== generating proof tree... ============================')
+            _bouded_log('generating proof tree...')
             try:
-                proof_tree = self.generator.generate_tree(depth,
-                                                          branch_extension_steps,
-                                                          depth_1_reference_weight=depth_1_reference_weight)
+                proof_tree = self.generator.generate_tree(
+                    depth,
+                    branch_extension_steps,
+                    depth_1_reference_weight=depth_1_reference_weight,
+                    force_fix_illegal_unconditioned_constants=force_fix_illegal_unconditioned_constants,
+                )
             except ProofTreeGenerationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
-            logger.info('========================== generating proof tree done! ============================')
+            _bouded_log('generating proof tree done!')
 
             if proof_tree is None:
                 logger.info('tree not generated. Will retry.')
                 continue
 
-            logger.info('========================== generating distractor... ============================')
+            _bouded_log('generating distractor...')
             is_formula_distractor_failed = False
             if num_distractors > 0:
                 if self.distractor is not None:
@@ -98,14 +106,14 @@ class ProofTreeGenerationPipeline:
                     raise ValueError('could not generate distractors since distractor was not specified in the constructor.')
             else:
                 formula_distractors = []
-            logger.info('========================== generating distractor done! ============================')
+            _bouded_log('generating distractor done!')
 
             root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 
             if self.translator is not None:
-                logger.info('========================== translating... ============================')
+                _bouded_log('translating...')
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
                 leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
@@ -117,8 +125,11 @@ class ProofTreeGenerationPipeline:
                 all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
                 try:
-                    named_translations, translator_stats = self.translator.translate(all_formulas,
-                                                                                     raise_if_translation_not_found=raise_if_translation_not_found)
+                    named_translations, translator_stats = self.translator.translate(
+                        all_formulas,
+                        list(proof_tree.unconditioned_constants),
+                        raise_if_translation_not_found=raise_if_translation_not_found,
+                    )
                 except TranslationFailure as e:
                     raise ProofTreeGenerationPipelineFailure(str(e))
 
@@ -136,9 +147,9 @@ class ProofTreeGenerationPipeline:
                         logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
                         formula_distractors.append(SO_swap_formula)
                     
-                logger.info('========================== translating done! ============================')
+                _bouded_log('translating done!')
 
-            logger.info('========================== generating translation_distractor... ============================')
+            _bouded_log('generating translation_distractor...')
             if num_translation_distractors > 0 or (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
                 if (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
                     _num_translation_distractors = num_translation_distractors + num_distractors
@@ -159,7 +170,7 @@ class ProofTreeGenerationPipeline:
                     raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
             else:
                 translation_distractors = []
-            logger.info('========================== generating translation_distractor done! ============================')
+            _bouded_log('generating translation_distractor done!')
 
             if self.log_stats:
                 stats = self._get_stats(proof_tree, formula_distractors, translator_stats)

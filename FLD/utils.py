@@ -5,6 +5,7 @@ from typing import Dict, Any, List, Iterable
 import random
 import logging
 import zlib
+from pprint import pformat
 
 from nltk.corpus import cmudict
 import timeout_decorator
@@ -119,25 +120,36 @@ def run_with_timeout_retry(
     func_args = func_args or []
     func_kwargs = func_kwargs or {}
     max_retry = max_retry or 99999
-    timeout = timeout or 99999
+    # timeout = timeout or 99999
+    timeout = 99999
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
-    logger.info('=================== run_with_timeout_retry (%s) [max_retry=%d] ==================', log_title, max_retry)
+    def _bouded_log(i_trial: int, message: str):
+        logger.info(
+            build_bounded_msg('run_with_timeout_retry for %-20s [%d/%d] %s', 0),
+            f'"{log_title or "None"}"',
+            i_trial,
+            max_retry,
+            message,
+        )
+
     for i_trial in range(0, max_retry):
         exception_msg = None
         try:
             result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
-            logger.info('-- succeeded!')
+            _bouded_log(i_trial, '[succeeded]')
             return result
         except TimeoutError as e:
             exception_msg = f'TimeoutError(timeout={timeout})'
         except retry_exception_class as e:
             exception_msg = str(e)
         if exception_msg is not None:
-            logger.info('-------- trial [%d/%d] failed with the following exception -----------', i_trial + 1, max_retry)
+            _bouded_log(i_trial, '[failed] due to the folllowing error')
             logger.info('\n%s', exception_msg)
-    raise RetryAndTimeoutFailure(f'[failed] run_with_timeout_retry ({log_title}) [max_retry={max_retry}]')
+        else:
+            _bouded_log(i_trial, '[failed]')
+    raise RetryAndTimeoutFailure(f'run_with_timeout_retry for "{str(log_title)}" [{i_trial}/{max_retry}] failed')
 
 
 def compress(text: str) -> bytes:
@@ -194,3 +206,61 @@ def chained_sampling_from_weighted_iterators(iterators: List[Iterable[Any]], wei
             if math.isclose(sum_weights, 0):
                 return
             normalized_weights = [weight / sum_weights for weight in aliving_weights]
+
+
+def build_bounded_msg(msg: str, level: int) -> str:
+    if level == 0:
+        return f'---------- {msg<:40} ----------'
+    elif level == 1:
+        return f'========== {msg<:40} =========='
+    elif level == 2:
+        return f'********** {msg<:40} **********'
+    elif level == 3:
+        return f'---------------------------------- {msg<:40} ----------------------------------'
+    elif level == 4:
+        return f'================================== {msg<:40} =================================='
+    elif level == 5:
+        return f'********************************** {msg<:40} **********************************'
+    else:
+        raise ValueError()
+
+
+def log_results(logger,
+                nlproof_json: Optional[Dict] = None,
+                proof_tree = None,
+                distractors: Optional[List[str]] = None,
+                translation_distractors: Optional[List[str]] = None,
+                stats: Optional[Dict] = None):
+    logger.info(build_bounded_msg('results', 4))
+    
+    if proof_tree is not None:
+        logger.info('\n')
+        logger.info(build_bounded_msg('proof tree', 3))
+
+        logger.info('\n')
+        logger.info('\n' + proof_tree.format_str)
+
+    if distractors is not None:
+        logger.info('\n')
+        logger.info(build_bounded_msg('distractors', 3))
+        logger.info('\n' + pformat(distractors))
+
+    if translation_distractors is not None:
+        logger.info('\n')
+        logger.info(build_bounded_msg('translation distractors', 3))
+        logger.info('\n' + pformat(translation_distractors))
+
+    if nlproof_json is not None:
+        logger.info('\n')
+        logger.info(build_bounded_msg('NLProofs json', 3))
+        logger.info('\n' + pformat(nlproof_json))
+
+    if stats is not None:
+        logger.info('\n')
+        logger.info(build_bounded_msg('stats', 3))
+        for key in ['avg.word_count_all']:
+            if key in stats:
+                logger.info('%s: %s', key, stats[key])
+
+
+    logger.info('\n\n')

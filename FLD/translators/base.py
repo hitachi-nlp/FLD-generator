@@ -1,6 +1,8 @@
 from typing import List, Dict, Optional, Tuple
+import re
 from abc import abstractmethod, ABC
 import logging
+from string import ascii_uppercase
 
 from FLD.formula import Formula
 
@@ -45,6 +47,7 @@ class Translator(ABC):
 
     def translate(self,
                   formulas: List[Formula],
+                  unconditioned_constant_formulas: List[Formula],
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
                   timeout: Optional[int] = 10) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
@@ -52,7 +55,7 @@ class Translator(ABC):
         try:
             return run_with_timeout_retry(
                 self._translate,
-                func_args=[formulas],
+                func_args=[formulas, unconditioned_constant_formulas],
                 func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
                 retry_exception_class=TranslationFailure,
                 max_retry=max_retry,
@@ -64,6 +67,8 @@ class Translator(ABC):
             raise TranslationFailure(str(e))
 
     @abstractmethod
-    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str]]],
-                                                                                                Dict[str, int]]:
+    def _translate(self,
+                   formulas: List[Formula],
+                   unconditioned_constant_formulas: List[Formula],
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
         pass

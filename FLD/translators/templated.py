@@ -161,9 +161,11 @@ class TemplatedTranslator(Translator):
                     word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
 
         logger.info('loading nouns ...')
+        unconditioned_constant_nouns = set(word_bank.get_unconditioned_constant_words())
         nouns = sorted({
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+            if word not in unconditioned_constant_nouns
         })
 
         logger.info('loading event nouns ...')
@@ -203,8 +205,8 @@ class TemplatedTranslator(Translator):
         logger.info('making transitive verb and object combinations ...')
         transitive_verb_PASs = []
         for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
-            for pred in self._sample(nouns, 1000):
-                transitive_verb_PASs.append(self._pair_word_with_obj(verb, pred))
+            for obj in self._sample(nouns, 1000):
+                transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
 
         zeroary_predicates = self._sample(adjs, self.words_per_type)\
             + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
@@ -249,7 +251,10 @@ class TemplatedTranslator(Translator):
         return '____'.join([sentence_key, nl])
 
     @profile
-    def _translate(self, formulas: List[Formula], raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+    def _translate(self,
+                   formulas: List[Formula],
+                   unconditioned_constant_formulas: List[Formula],
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
@@ -262,7 +267,7 @@ class TemplatedTranslator(Translator):
         translation_names: List[Optional[str]] = []
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
-        interp_mapping = self._choose_interp_mapping(formulas)
+        interp_mapping = self._choose_interp_mapping(formulas, unconditioned_constant_formulas)
 
         for formula in formulas:
             # find translation key
@@ -784,7 +789,7 @@ class TemplatedTranslator(Translator):
         return corrected_sentence
 
     @profile
-    def _choose_interp_mapping(self, formulas: List[Formula]) -> Dict[str, str]:
+    def _choose_interp_mapping(self, formulas: List[Formula], unconditioned_constant_formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
                                    for predicate in formula.zeroary_predicates})
@@ -792,6 +797,7 @@ class TemplatedTranslator(Translator):
                                  for formula in formulas
                                  for predicate in formula.unary_predicates})
         constants = list({constant.rep for formula in formulas for constant in formula.constants})
+        unconditioned_constants = sorted({constant.rep for constant in unconditioned_constant_formulas})
 
         adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
         if self.reused_object_nouns_max_factor > 0.0:
@@ -822,6 +828,8 @@ class TemplatedTranslator(Translator):
             if len(entity_nouns) >= entity_noun_size:
                 break
 
+        unconditioned_constant_nouns = sorted(self._word_bank.get_unconditioned_constant_words())[:len(unconditioned_constants)]
+
         # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
         zeroary_mapping = next(
             generate_mappings_from_predicates_and_constants(
@@ -844,6 +852,10 @@ class TemplatedTranslator(Translator):
                     entity_nouns,
                     shuffle=True,
                     allow_many_to_one=False,
+                    constraints={
+                        unconditioned_constant: unconditioned_constant_noun
+                        for unconditioned_constant, unconditioned_constant_noun in zip(unconditioned_constants, unconditioned_constant_nouns)
+                    }
                 )
             )
         except:

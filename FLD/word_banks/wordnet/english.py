@@ -1,6 +1,7 @@
 from typing import Optional, Iterable, List, Dict, Iterable
 import re
 import logging
+from string import ascii_uppercase
 
 # from pyinflect import getInflection
 from lemminflect import getInflection, getLemma
@@ -24,6 +25,11 @@ class EnglishWordBank(WordNetWordBank):
         VerbForm.S: 'VBZ',
     }
 
+    __unconditioned_constant_words  = [
+        f'THING-{alphabet}'
+        for alphabet in ascii_uppercase
+    ]
+
     def __init__(self,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
@@ -32,6 +38,10 @@ class EnglishWordBank(WordNetWordBank):
 
         self._transitive_verbs = set(verb.lower() for verb in transitive_verbs) if transitive_verbs is not None else None
         self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
+
+    @property
+    def _unconditioned_constant_words(self) -> List[str]:
+        return self.__unconditioned_constant_words
 
     def get_lemma(self, word: str) -> str:
         # TODO: pos other than VERB

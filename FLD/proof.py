@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional, Iterable, Union
+from typing import List, Tuple, Optional, Iterable, Union, Dict
 from collections import defaultdict
 from copy import copy
 from .formula import Formula
@@ -213,6 +213,14 @@ class ProofTree:
             yield from self.depth_first_traverse(start_node=child_node, depth=depth + 1)
         yield start_node
 
+    @property
+    def unconditioned_constants(self) -> Iterable[Formula]:
+        for node in self.nodes:
+            if node.argument is None or node.argument.unconditioned_constants is None:
+                continue
+            for constant in node.argument.unconditioned_constants:
+                yield constant
+
     def __repr__(self):
         return 'ProofTree(...)'
 
@@ -233,7 +241,7 @@ class ProofTree:
         # rep += '\n)'
         return rep
 
-    def copy(self) -> 'ProofTree':
+    def copy(self, return_alignment=False) -> Union['ProofTree', Tuple['ProofTree', Dict['ProofNode', 'ProofNode']]]:
         nodes = self.nodes
         # assump_nodes = []
         # for node in nodes:
@@ -313,4 +321,8 @@ class ProofTree:
         #         copy_nodes_wo_assump.append(copy_node)
 
         # return ProofTree(nodes=copy_nodes_wo_assump)
-        return ProofTree(nodes=copy_nodes)
+
+        if return_alignment:
+            return ProofTree(nodes=copy_nodes), orig_nodes_to_copy_nodes
+        else:
+            return ProofTree(nodes=copy_nodes)

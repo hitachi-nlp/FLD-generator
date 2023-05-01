@@ -61,10 +61,10 @@ class WordNetWordBank(WordBank):
             lemma_str = lemma.name()
             yield lemma_str, syn.pos()
 
-    def get_words(self) -> Iterable[str]:
+    def _get_real_words(self) -> Iterable[str]:
         yield from sorted(self._cached_word_set)
 
-    def get_pos(self, word: str) -> List[POS]:
+    def _get_pos(self, word: str) -> List[POS]:
         word = self.get_lemma(word)
         wb_POSs = {
             (self._pos_wn_to_wb[syn.pos()] if syn.pos() in self._pos_wn_to_wb else POS.UNK)

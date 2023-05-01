@@ -57,7 +57,7 @@ def generate_complicated_formulas(src_formula: Formula,
 def generate_simplified_formulas(src_formula: Formula,
                                  elim_dneg=False,
                                  get_name=False) -> Union[Iterable[Formula], Iterable[Tuple[Formula, str]]]:
-    # We will exclude "negation", "and" and "or"
+    # We will exclude negation, conjunction and disjunction from the src_formula.
     # For simplicity, we change one element at once
 
     rep = src_formula.rep
