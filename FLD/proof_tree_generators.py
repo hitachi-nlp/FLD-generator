@@ -36,7 +36,12 @@ from .interpretation import (
 # from .utils import DelayedLogger
 from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
-from .utils import weighted_shuffle, run_with_timeout_retry, RetryAndTimeoutFailure
+from .utils import (
+    weighted_shuffle,
+    run_with_timeout_retry,
+    RetryAndTimeoutFailure,
+    build_bounded_msg,
+)
 
 from .formula import (
     IMPLICATION,
@@ -935,6 +940,8 @@ def _fix_illegal_unconditioned_constants(
     elim_dneg=False,
 ) -> ProofTree:
 
+    logger.info(build_bounded_msg('[start] _fix_illegal_unconditioned_constants()', 3))
+
     original_depth = proof_tree.depth
 
     def find_one_illegal_constant(_proof_tree: ProofTree) -> Tuple[Optional[Formula],
@@ -958,7 +965,7 @@ def _fix_illegal_unconditioned_constants(
     all_is_fixed = False
     while True:
         node_is_fixed = False
-        for _ in range(0, fix_trial_per_node):
+        for i_trial in range(0, fix_trial_per_node):
             proof_tree_tmp, fixed_nodes_to_tmp_nodes = proof_tree_fixed.copy(return_alignment=True)
             leaf_nodes = set(proof_tree_tmp.leaf_nodes)
 
@@ -966,6 +973,8 @@ def _fix_illegal_unconditioned_constants(
             if constant is None:  # fixed all
                 all_is_fixed = True
                 break
+
+            logger.info(f'[{i_trial}/{fix_trial_per_node}] _fix_illegal_unconditioned_constants() try to fix a illegal leaf node {str(illegal_node)} with unconditioned constant {str(constant.rep)}')
 
             if illegal_node in leaf_nodes:
                 try:
@@ -1007,7 +1016,9 @@ def _fix_illegal_unconditioned_constants(
         if all_is_fixed:
             break
 
-        if not node_is_fixed:
+        if node_is_fixed:
+            logger.info(build_bounded_msg(f'_fix_illegal_unconditioned_constants() fixed a illegal leaf node {str(illegal_node)} with unconditioned constant {str(constant.rep)}', 2))
+        else:
             raise FixIllegalUnconditionedConstantFailure(
                 build_exception_msg(illegal_node, 'root_node', constant, postfix=f'with trial={fix_trial_per_node}')
             )
@@ -1016,6 +1027,8 @@ def _fix_illegal_unconditioned_constants(
         logger.warning('_fix_illegal_unconditioned_constants() altered the depth of the tree from %d -> %d',
                        original_depth,
                        proof_tree_fixed.depth)
+
+    logger.info(build_bounded_msg('[succeeded] _fix_illegal_unconditioned_constants()', 3))
 
     return proof_tree_fixed
 
@@ -1030,35 +1043,39 @@ def _validate_illegal_unconditioned_constants(
 ) -> ProofTree:
 
     if force_fix_illegal_unconditioned_constants:
-        try:
-            proof_tree = _fix_illegal_unconditioned_constants(
-                proof_tree,
-                arguments=arguments,
-                elim_dneg=elim_dneg,
-            )
-        except FixIllegalUnconditionedConstantFailure as e:
-            raise exception_cls('_fix_illegal_unconditioned_constants() failed. the original message is:' + '\n' + str(e))
+        is_illegal, msg = _is_unconditioned_constants_illegal(proof_tree)
+        if is_illegal:
+            try:
+                proof_tree = _fix_illegal_unconditioned_constants(
+                    proof_tree,
+                    arguments=arguments,
+                    elim_dneg=elim_dneg,
+                )
+            except FixIllegalUnconditionedConstantFailure as e:
+                raise exception_cls('_fix_illegal_unconditioned_constants() failed. the original message is:' + '\n' + str(e))
 
     if not allow_illegal_unconditioned_constants:
-        _check_illegal_unconditioned_constants(proof_tree, ExtendBranchesFailure)
+        is_illegal, msg = _is_unconditioned_constants_illegal(proof_tree)
+        if is_illegal:
+            raise ExtendBranchesFailure(msg)
 
     return proof_tree
 
 
-def _check_illegal_unconditioned_constants(
+def _is_unconditioned_constants_illegal(
     proof_tree: ProofTree,
-    exception_cls,
-) -> None:
+) -> Tuple[bool, Optional[str]]:
 
     leaf_nodes = set(proof_tree.leaf_nodes)
 
     for constant, illegal_node in _find_illegal_unconditioned_constants(proof_tree):
         if illegal_node in leaf_nodes:
-            raise exception_cls(f'The unconditioned constant {constant.rep} is used at a leaf node {str(illegal_node)}.')
+            return True, f'The unconditioned constant {constant.rep} is used at a leaf node {str(illegal_node)}.'
         elif illegal_node is proof_tree.root_node:
-            raise exception_cls(f'The unconditioned constant {constant.rep} is used at the root node {str(illegal_node)}.')
+            return True, f'The unconditioned constant {constant.rep} is used at the root node {str(illegal_node)}.'
         else:
             raise Exception()
+    return False, None
 
 
 def _find_illegal_unconditioned_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:

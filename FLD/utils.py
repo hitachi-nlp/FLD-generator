@@ -128,7 +128,7 @@ def run_with_timeout_retry(
         logger.info(
             build_bounded_msg('run_with_timeout_retry for %-20s [%d/%d] %s', 0),
             f'"{log_title or "None"}"',
-            i_trial,
+            i_trial + 1,
             max_retry,
             message,
         )
@@ -209,17 +209,17 @@ def chained_sampling_from_weighted_iterators(iterators: List[Iterable[Any]], wei
 
 def build_bounded_msg(msg: str, level: int) -> str:
     if level == 0:
-        return f'---------- {msg<:40} ----------'
+        return f'---------- {msg:<40} ----------'
     elif level == 1:
-        return f'========== {msg<:40} =========='
+        return f'========== {msg:<40} =========='
     elif level == 2:
-        return f'********** {msg<:40} **********'
+        return f'********** {msg:<40} **********'
     elif level == 3:
-        return f'---------------------------------- {msg<:40} ----------------------------------'
+        return f'---------------------------------- {msg:<40} ----------------------------------'
     elif level == 4:
-        return f'================================== {msg<:40} =================================='
+        return f'================================== {msg:<40} =================================='
     elif level == 5:
-        return f'********************************** {msg<:40} **********************************'
+        return f'********************************** {msg:<40} **********************************'
     else:
         raise ValueError()
 
