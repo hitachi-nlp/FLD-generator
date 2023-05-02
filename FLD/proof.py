@@ -214,11 +214,11 @@ class ProofTree:
         yield start_node
 
     @property
-    def unconditioned_constants(self) -> Iterable[Formula]:
+    def intermediate_constants(self) -> Iterable[Formula]:
         for node in self.nodes:
-            if node.argument is None or node.argument.unconditioned_constants is None:
+            if node.argument is None or node.argument.intermediate_constants is None:
                 continue
-            for constant in node.argument.unconditioned_constants:
+            for constant in node.argument.intermediate_constants:
                 yield constant
 
     def __repr__(self):

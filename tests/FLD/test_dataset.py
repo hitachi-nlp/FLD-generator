@@ -246,7 +246,7 @@ def test_generate_dataset():
                               _to_range(1, 5),
                               depth_weights = [1.0] * len(depths),
                               depth_1_reference_weight=None,
-                              force_fix_illegal_unconditioned_constants=True,
+                              force_fix_illegal_intermediate_constants=True,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,

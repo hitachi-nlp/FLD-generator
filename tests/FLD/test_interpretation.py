@@ -176,13 +176,13 @@ def test_argument_is_identical_to():
             [Formula('{A}{a}')],
             Formula('(x): {A}x'),
             {},
-            unconditioned_constants=[Formula('{a}')]
+            intermediate_constants=[Formula('{a}')]
         ),
         Argument(
             [Formula('{B}{b}')],
             Formula('(x): {B}x'),
             {},
-            unconditioned_constants=[Formula('{b}')]
+            intermediate_constants=[Formula('{b}')]
         ),
         allow_many_to_oneg=False,
     )
@@ -192,13 +192,13 @@ def test_argument_is_identical_to():
             [Formula('{A}{a}')],
             Formula('(x): {A}x'),
             {},
-            unconditioned_constants=[Formula('{a}')]
+            intermediate_constants=[Formula('{a}')]
         ),
         Argument(
             [Formula('{B}{b}')],
             Formula('(x): {C}x'),
             {},
-            unconditioned_constants=[Formula('{b}')]
+            intermediate_constants=[Formula('{b}')]
         ),
         allow_many_to_oneg=False,
     )
@@ -306,7 +306,7 @@ def test_generate_quantifier_axiom_arguments():
                 [Formula('{F}{a} -> {G}{a}')],
                 Formula('(x): {F}x -> {G}x'),
                 {},
-                unconditioned_constants=[Formula('{a}')]
+                intermediate_constants=[Formula('{a}')]
             ),
         ]
     )
@@ -319,19 +319,19 @@ def test_generate_quantifier_axiom_arguments():
                 [Formula('({F}{i} v {G}{b}) -> {H}{c}')],
                 Formula('(x): ({F}x v {G}{b}) -> {H}{c}'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
             Argument(
                 [Formula('({F}{a} v {G}{i}) -> {H}{c}')],
                 Formula('(x): ({F}{a} v {G}x) -> {H}{c}'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
             Argument(
                 [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
                 Formula('(x): ({F}{a} v {G}{b}) -> {H}x'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
 
 
@@ -339,26 +339,26 @@ def test_generate_quantifier_axiom_arguments():
                 [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
                 Formula('(x): ({F}x v {G}x) -> {H}{c}'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
             Argument(
                 [Formula('({F}{i} v {G}{b}) -> {H}{i}')],
                 Formula('(x): ({F}x v {G}{b}) -> {H}x'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
             Argument(
                 [Formula('({F}{a} v {G}{i}) -> {H}{i}')],
                 Formula('(x): ({F}{a} v {G}x) -> {H}x'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
 
             Argument(
                 [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
                 Formula('(x): ({F}x v {G}x) -> {H}x'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
 
         ]
@@ -372,7 +372,7 @@ def test_generate_quantifier_axiom_arguments():
                 [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
                 Formula('(x): ({F}x v {G}x) -> {H}x'),
                 {},
-                unconditioned_constants=[Formula('{i}')]
+                intermediate_constants=[Formula('{i}')]
             ),
 
         ],

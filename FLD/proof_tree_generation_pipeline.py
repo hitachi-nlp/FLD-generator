@@ -53,7 +53,7 @@ class ProofTreeGenerationPipeline:
             num_distractors: int,
             num_translation_distractors: int,
             depth_1_reference_weight: Optional[float] = None,
-            force_fix_illegal_unconditioned_constants=False,
+            force_fix_illegal_intermediate_constants=False,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
         others = {}
 
@@ -73,7 +73,7 @@ class ProofTreeGenerationPipeline:
                     depth,
                     branch_extension_steps,
                     depth_1_reference_weight=depth_1_reference_weight,
-                    force_fix_illegal_unconditioned_constants=force_fix_illegal_unconditioned_constants,
+                    force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
             except ProofTreeGenerationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
@@ -127,7 +127,7 @@ class ProofTreeGenerationPipeline:
                 try:
                     named_translations, translator_stats = self.translator.translate(
                         all_formulas,
-                        list(proof_tree.unconditioned_constants),
+                        list(proof_tree.intermediate_constants),
                         raise_if_translation_not_found=raise_if_translation_not_found,
                     )
                 except TranslationFailure as e:

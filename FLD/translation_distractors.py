@@ -84,9 +84,9 @@ class WordSwapDistractor(TranslationDistractor):
 
     @profile
     def _generate(self, translations: List[str], size: int) -> List[str]:
-        unconditioned_constants = list(self._word_bank.get_unconditioned_constant_words())
+        intermediate_constants = list(self._word_bank.get_intermediate_constant_words())
         translations = [transl for transl in translations
-                        if all(transl.find(unconditioned_constant) < 0 for unconditioned_constant in unconditioned_constants)]
+                        if all(transl.find(intermediate_constant) < 0 for intermediate_constant in intermediate_constants)]
 
         if len(translations) == 0 or size == 0:
             return []

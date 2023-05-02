@@ -14,7 +14,7 @@ class JapaneseWordBank(WordNetWordBank):
     language = 'jpn'
 
     @property
-    def _unconditioned_constant_words(self) -> List[str]:
+    def _intermediate_constant_words(self) -> List[str]:
         raise NotImplementedError()
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:

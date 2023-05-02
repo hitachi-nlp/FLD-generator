@@ -59,22 +59,22 @@ def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
 class WordBank(ABC):
 
     def get_words(self) -> Iterable[str]:
-        yield from chain(self.get_unconditioned_constant_words(), self._get_real_words())
+        yield from chain(self.get_intermediate_constant_words(), self._get_real_words())
 
     @abstractmethod
     def _get_real_words(self) -> Iterable[str]:
         pass
 
-    def get_unconditioned_constant_words(self) -> Iterable[str]:
-        return self._unconditioned_constant_words
+    def get_intermediate_constant_words(self) -> Iterable[str]:
+        return self._intermediate_constant_words
 
     @property
     @abstractmethod
-    def _unconditioned_constant_words(self) -> List[str]:
+    def _intermediate_constant_words(self) -> List[str]:
         pass
 
     def get_pos(self, word: str) -> List[POS]:
-        if word in self._unconditioned_constant_words:
+        if word in self._intermediate_constant_words:
             return [POS.NOUN]
         return self._get_pos(word)
 

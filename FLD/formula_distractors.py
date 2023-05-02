@@ -115,10 +115,10 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             not is_consistent_formula_set([new_distractor] + existing_distractors + leaf_formulas_in_tree):  # SLOW: 30%
         return False
 
-    unconditioned_constant_reps = {constant.rep for constant in proof_tree.unconditioned_constants}
+    intermediate_constant_reps = {constant.rep for constant in proof_tree.intermediate_constants}
     for distractor_constant in new_distractor.constants:
-        if distractor_constant.rep in unconditioned_constant_reps:
-            # raise FormulaDistractorGenerationFailure(f'The unconditioned_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
+        if distractor_constant.rep in intermediate_constant_reps:
+            # raise FormulaDistractorGenerationFailure(f'The intermediate_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
             return False
 
     return True
@@ -242,10 +242,10 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
             used_unused_predicates = shuffle(used_predicates + unused_predicates)
             used_unused_constants = shuffle(used_constants + unused_constants)
 
-            unconditioned_constant_reps = {constant.rep for constant in proof_tree.unconditioned_constants}
+            intermediate_constant_reps = {constant.rep for constant in proof_tree.intermediate_constants}
 
-            def remove_unconditioned_constants(constants: List[Formula]) -> List[Formula]:
-                return [constant for constant in constants if constant not in unconditioned_constant_reps]
+            def remove_intermediate_constants(constants: List[Formula]) -> List[Formula]:
+                return [constant for constant in constants if constant not in intermediate_constant_reps]
 
             # It is possible that (used_predicates, used_constants) pair produces a new formula,
             # e.g., "{B}{b} -> {A}{a}" when src_formula is "{A}{a} -> {B}{b}"
@@ -257,17 +257,17 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                 # is more distractive than the inverse pair.
                 # Thus, we sample it more often than the inverseed pair,
                 tgt_space = [
-                    # (used_predicates, remove_unconditioned_constants(used_constants)),
-                    (used_unused_predicates, remove_unconditioned_constants(used_constants)),
-                    (used_unused_predicates, remove_unconditioned_constants(used_unused_constants)),
-                    (unused_predicates, remove_unconditioned_constants(unused_constants)),
+                    # (used_predicates, remove_intermediate_constants(used_constants)),
+                    (used_unused_predicates, remove_intermediate_constants(used_constants)),
+                    (used_unused_predicates, remove_intermediate_constants(used_unused_constants)),
+                    (unused_predicates, remove_intermediate_constants(unused_constants)),
                 ]
             else:
                 tgt_space = [
-                    # (used_predicates, remove_unconditioned_constants(used_constants)),
-                    (used_predicates, remove_unconditioned_constants(used_unused_constants)),
-                    (used_unused_predicates, remove_unconditioned_constants(used_unused_constants)),
-                    (unused_predicates, remove_unconditioned_constants(unused_constants)),
+                    # (used_predicates, remove_intermediate_constants(used_constants)),
+                    (used_predicates, remove_intermediate_constants(used_unused_constants)),
+                    (used_unused_predicates, remove_intermediate_constants(used_unused_constants)),
+                    (unused_predicates, remove_intermediate_constants(unused_constants)),
                 ]
 
             do_print = False
@@ -466,10 +466,10 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
             used_unused_predicates_samples = shuffle(used_predicates_samples + unused_predicates_samples)
             used_unused_constants_samples = shuffle(used_constants_samples + unused_constants_samples)
 
-            unconditioned_constant_reps = {constant.rep for constant in proof_tree.unconditioned_constants}
+            intermediate_constant_reps = {constant.rep for constant in proof_tree.intermediate_constants}
 
-            def remove_unconditioned_constants(constants: List[Formula]) -> List[Formula]:
-                return [constant for constant in constants if constant not in unconditioned_constant_reps]
+            def remove_intermediate_constants(constants: List[Formula]) -> List[Formula]:
+                return [constant for constant in constants if constant not in intermediate_constant_reps]
 
             tgt_space = []
             if not self._sample_only_unused_interprands:
@@ -479,21 +479,21 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                     # We guess, however, that such transoformation leads to many inconsistent or not senseful formula set, as the above.
                     # thus here, we make it as optional.
                     tgt_space.extend([
-                        (used_paired_predicates_samples, remove_unconditioned_constants(used_paired_constants_samples)),
-                        (used_predicates_samples, remove_unconditioned_constants(used_constants_samples)),
+                        (used_paired_predicates_samples, remove_intermediate_constants(used_paired_constants_samples)),
+                        (used_predicates_samples, remove_intermediate_constants(used_constants_samples)),
                     ])
                 if trial % 2 == 0:
                     tgt_space.extend([
-                        (used_predicates_samples, remove_unconditioned_constants(used_unused_constants_samples)),
-                        (used_unused_predicates_samples, remove_unconditioned_constants(used_unused_constants_samples)),
+                        (used_predicates_samples, remove_intermediate_constants(used_unused_constants_samples)),
+                        (used_unused_predicates_samples, remove_intermediate_constants(used_unused_constants_samples)),
                     ])
                 else:
                     tgt_space.extend([
-                        (used_unused_predicates_samples, remove_unconditioned_constants(used_constants_samples)),
-                        (used_unused_predicates_samples, remove_unconditioned_constants(used_unused_constants_samples)),
+                        (used_unused_predicates_samples, remove_intermediate_constants(used_constants_samples)),
+                        (used_unused_predicates_samples, remove_intermediate_constants(used_unused_constants_samples)),
                     ])
             tgt_space.extend([
-                (unused_predicates_samples, remove_unconditioned_constants(unused_constants_samples))
+                (unused_predicates_samples, remove_intermediate_constants(unused_constants_samples))
             ])
 
             is_found = False
@@ -651,7 +651,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
                     max_retry=self.extend_branches_max_retry,
-                    force_fix_illegal_unconditioned_constants=True,
+                    force_fix_illegal_intermediate_constants=True,
                 )
             except ProofTreeGenerationFailure as e:
                 raise FormulaDistractorGenerationFailure(str(e))

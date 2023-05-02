@@ -71,11 +71,11 @@ class ExtendBranchesFailure(ProofTreeGenerationFailure):
     pass
 
 
-class FixIllegalUnconditionedConstantFailure(ProofTreeGenerationFailure):
+class FixIllegalIntermediateConstantFailure(ProofTreeGenerationFailure):
     pass
 
 
-class IllegalUnconditionedConstantError(ProofTreeGenerationFailure):
+class IllegalIntermediateConstantError(ProofTreeGenerationFailure):
     pass
 
 
@@ -322,8 +322,8 @@ def _generate_tree(arguments: List[Argument],
                    ng_formulas: Optional[List[Formula]] = None,
                    disallow_contradiction_as_hypothesis=False,
                    allow_reference_arguments_when_depth_1=True,
-                   force_fix_illegal_unconditioned_constants=False,
-                   allow_illegal_unconditioned_constants=False) -> Optional[ProofTree]:
+                   force_fix_illegal_intermediate_constants=False,
+                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     proof_tree = _generate_stem(
         arguments,
         depth,
@@ -332,9 +332,9 @@ def _generate_tree(arguments: List[Argument],
         elim_dneg=elim_dneg,
         disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis,
 
-        # since the branch extension may recover the illegal unconditioned constants.
-        force_fix_illegal_unconditioned_constants = force_fix_illegal_unconditioned_constants if depth == 1 else False,
-        allow_illegal_unconditioned_constants = allow_illegal_unconditioned_constants if depth == 1 else False,
+        # since the branch extension may recover the illegal intermediate constants.
+        force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants if depth == 1 else False,
+        allow_illegal_intermediate_constants = allow_illegal_intermediate_constants if depth == 1 else False,
     )
     if depth > 1:
         try:
@@ -347,8 +347,8 @@ def _generate_tree(arguments: List[Argument],
                 elim_dneg=elim_dneg,
                 ng_formulas=ng_formulas,
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
-                force_fix_illegal_unconditioned_constants=force_fix_illegal_unconditioned_constants,
-                allow_illegal_unconditioned_constants=allow_illegal_unconditioned_constants,
+                force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
+                allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,
             )
         except ExtendBranchesFailure as e:
@@ -356,9 +356,9 @@ def _generate_tree(arguments: List[Argument],
                                            msg=f'because of the following error:\n{str(e)}'))
 
             # The following is needed since it is possible that the _extend_branches_with_timeout_retry did nothing.
-            proof_tree = _validate_illegal_unconditioned_constants(
-                force_fix_illegal_unconditioned_constants,
-                allow_illegal_unconditioned_constants,
+            proof_tree = _validate_illegal_intermediate_constants(
+                force_fix_illegal_intermediate_constants,
+                allow_illegal_intermediate_constants,
                 ExtendBranchesFailure,
                 proof_tree,
                 arguments=arguments,
@@ -414,8 +414,8 @@ def _generate_stem(arguments: List[Argument],
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
-                   force_fix_illegal_unconditioned_constants=False,
-                   allow_illegal_unconditioned_constants=False) -> Optional[ProofTree]:
+                   force_fix_illegal_intermediate_constants=False,
+                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -428,10 +428,10 @@ def _generate_stem(arguments: List[Argument],
     if depth < 1:
         raise ValueError('depth must be >= 2')
 
-    def _my_validate_illegal_unconditioned_constants(proof_tree: ProofTree) -> ProofTree:
-        return _validate_illegal_unconditioned_constants(
-            force_fix_illegal_unconditioned_constants,
-            allow_illegal_unconditioned_constants,
+    def _my_validate_illegal_intermediate_constants(proof_tree: ProofTree) -> ProofTree:
+        return _validate_illegal_intermediate_constants(
+            force_fix_illegal_intermediate_constants,
+            allow_illegal_intermediate_constants,
             GenerateStemFailure,
             proof_tree,
             arguments=arguments,
@@ -681,7 +681,7 @@ def _generate_stem(arguments: List[Argument],
                 raise GenerateStemFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
 
             _check_leaf_consistency(proof_tree)
-            proof_tree = _my_validate_illegal_unconditioned_constants(proof_tree)
+            proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
 
     raise Exception('Unexpected')
@@ -698,8 +698,8 @@ def _extend_branches(proof_tree: ProofTree,
                      elim_dneg=False,
                      allow_reference_arguments_when_depth_1=True,
                      ng_formulas: Optional[List[Formula]] = None,
-                     allow_illegal_unconditioned_constants=False,
-                     force_fix_illegal_unconditioned_constants=False,
+                     allow_illegal_intermediate_constants=False,
+                     force_fix_illegal_intermediate_constants=False,
                      return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
@@ -710,10 +710,10 @@ def _extend_branches(proof_tree: ProofTree,
     (iv) Repeat (ii) and (iii)
     """
 
-    def _my_validate_illegal_unconditioned_constants(proof_tree: ProofTree) -> ProofTree:
-        return _validate_illegal_unconditioned_constants(
-            force_fix_illegal_unconditioned_constants,
-            allow_illegal_unconditioned_constants,
+    def _my_validate_illegal_intermediate_constants(proof_tree: ProofTree) -> ProofTree:
+        return _validate_illegal_intermediate_constants(
+            force_fix_illegal_intermediate_constants,
+            allow_illegal_intermediate_constants,
             ExtendBranchesFailure,
             proof_tree,
             arguments=arguments,
@@ -774,7 +774,7 @@ def _extend_branches(proof_tree: ProofTree,
 
             _check_leaf_consistency(proof_tree)
 
-            proof_tree = _my_validate_illegal_unconditioned_constants(proof_tree)
+            proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
 
         is_leaf_node_done = False
@@ -892,7 +892,7 @@ def _extend_branches(proof_tree: ProofTree,
             raise ExtendBranchesFailure(msg)
 
     _check_leaf_consistency(proof_tree)
-    proof_tree = _my_validate_illegal_unconditioned_constants(proof_tree)
+    proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
 
     if return_alignment:
         return proof_tree, orig_nodes_to_copy_nodes
@@ -938,14 +938,14 @@ def _check_leaf_consistency(proof_tree: ProofTree) -> None:
     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
 
 
-def _fix_illegal_unconditioned_constants(
+def _fix_illegal_intermediate_constants(
     proof_tree: ProofTree,
     arguments: Optional[List[Argument]] = None,
     elim_dneg=False,
 ) -> ProofTree:
 
     def _make_pretty_msg(*args, **kwargs) -> str:
-        return make_pretty_msg(*args, title='_fix_illegal_unconditioned_constants()', **kwargs)
+        return make_pretty_msg(*args, title='_fix_illegal_intermediate_constants()', **kwargs)
 
     logger.info(_make_pretty_msg(status='start', boundary_level=3))
 
@@ -953,7 +953,7 @@ def _fix_illegal_unconditioned_constants(
 
     def find_one_illegal_constant(_proof_tree: ProofTree) -> Tuple[Optional[Formula],
                                                                    Optional[ProofNode]]:
-        for constant, illegal_node in _find_illegal_unconditioned_constants(_proof_tree):
+        for constant, illegal_node in _find_illegal_intermediate_constants(_proof_tree):
             return constant, illegal_node
         return None, None
 
@@ -965,7 +965,7 @@ def _fix_illegal_unconditioned_constants(
         return all(node.formula.rep.find(constant.rep) < 0 for node in descendant_leaf_nodes)
 
     def build_exception_msg(illegal_node: ProofNode, node_type: str, constant: Formula, postfix='') -> str:
-        return f'fixing a illegal leaf node {str(illegal_node)} with unconditioned constant "{constant.rep}" failed' + postfix
+        return f'fixing a illegal leaf node {str(illegal_node)} with intermediate constant "{constant.rep}" failed' + postfix
 
     proof_tree_fixed = proof_tree.copy()
     fix_trial_per_node = 30
@@ -982,7 +982,7 @@ def _fix_illegal_unconditioned_constants(
                 break
 
             def _make_pretty_msg_for_fix(status: Optional[str] = None, msg: Optional[str] = None) -> str:
-                return _make_pretty_msg(trial=i_trial, status=status, subtitle=f'fix a illegal node {str(illegal_node)} with unconditioned constant {str(constant.rep)}',
+                return _make_pretty_msg(trial=i_trial, status=status, subtitle=f'fix a illegal node {str(illegal_node)} with intermediate constant {str(constant.rep)}',
                                         max_trial=fix_trial_per_node, boundary_level=2,
                                         msg=msg)
 
@@ -1000,19 +1000,19 @@ def _fix_illegal_unconditioned_constants(
                         elim_dneg=elim_dneg,
                         allow_reference_arguments_when_depth_1=False,
 
-                        force_fix_illegal_unconditioned_constants=False,
-                        allow_illegal_unconditioned_constants=True,
+                        force_fix_illegal_intermediate_constants=False,
+                        allow_illegal_intermediate_constants=True,
                         return_alignment=True,
 
                         timeout=5,
                         max_retry=5,
                     )
                 except ExtendBranchesFailure as e:
-                    raise FixIllegalUnconditionedConstantFailure(_make_pretty_msg_for_fix(msg='caused by the following error \n' + str(e)))
+                    raise FixIllegalIntermediateConstantFailure(_make_pretty_msg_for_fix(msg='caused by the following error \n' + str(e)))
 
             elif illegal_node is proof_tree.root_node:
                 # TODO: implement here using _generate_stem() with universal_intro arguments
-                raise FixIllegalUnconditionedConstantFailure(_make_pretty_msg_for_fix(msg='because the fix for a root node is not implement yet'))
+                raise FixIllegalIntermediateConstantFailure(_make_pretty_msg_for_fix(msg='because the fix for a root node is not implement yet'))
             else:
                 raise Exception()
 
@@ -1027,10 +1027,10 @@ def _fix_illegal_unconditioned_constants(
         if node_is_fixed:
             logger.info(_make_pretty_msg_for_fix(status='success'))
         else:
-            raise FixIllegalUnconditionedConstantFailure(
+            raise FixIllegalIntermediateConstantFailure(
                 _make_pretty_msg(status='failure',
                                  trial=i_trial, max_trial=fix_trial_per_node, boundary_level=2,
-                                 msg=f'failed to fix a illegal leaf node {str(illegal_node)} with unconditioned constant {str(constant.rep)}'))
+                                 msg=f'failed to fix a illegal leaf node {str(illegal_node)} with intermediate constant {str(constant.rep)}'))
 
     if proof_tree_fixed.depth != original_depth:
         logger.warning(_make_pretty_msg(trial=i_trial, max_trial=fix_trial_per_node, boundary_level=2,
@@ -1041,60 +1041,60 @@ def _fix_illegal_unconditioned_constants(
     return proof_tree_fixed
 
 
-def _validate_illegal_unconditioned_constants(
-    force_fix_illegal_unconditioned_constants: bool,
-    allow_illegal_unconditioned_constants: bool,
+def _validate_illegal_intermediate_constants(
+    force_fix_illegal_intermediate_constants: bool,
+    allow_illegal_intermediate_constants: bool,
     exception_cls,
     proof_tree: ProofTree,
     arguments: Optional[List[Argument]] = None,
     elim_dneg=False
 ) -> ProofTree:
 
-    if force_fix_illegal_unconditioned_constants:
-        is_illegal, msg = _is_unconditioned_constants_illegal(proof_tree)
+    if force_fix_illegal_intermediate_constants:
+        is_illegal, msg = _is_intermediate_constants_illegal(proof_tree)
         if is_illegal:
             try:
-                proof_tree = _fix_illegal_unconditioned_constants(
+                proof_tree = _fix_illegal_intermediate_constants(
                     proof_tree,
                     arguments=arguments,
                     elim_dneg=elim_dneg,
                 )
-            except FixIllegalUnconditionedConstantFailure as e:
-                raise exception_cls('_fix_illegal_unconditioned_constants() failed. the original message is:' + '\n' + str(e))
+            except FixIllegalIntermediateConstantFailure as e:
+                raise exception_cls('_fix_illegal_intermediate_constants() failed. the original message is:' + '\n' + str(e))
 
-    if not allow_illegal_unconditioned_constants:
-        is_illegal, msg = _is_unconditioned_constants_illegal(proof_tree)
+    if not allow_illegal_intermediate_constants:
+        is_illegal, msg = _is_intermediate_constants_illegal(proof_tree)
         if is_illegal:
             raise ExtendBranchesFailure(msg)
 
     return proof_tree
 
 
-def _is_unconditioned_constants_illegal(
+def _is_intermediate_constants_illegal(
     proof_tree: ProofTree,
 ) -> Tuple[bool, Optional[str]]:
 
     leaf_nodes = set(proof_tree.leaf_nodes)
 
-    for constant, illegal_node in _find_illegal_unconditioned_constants(proof_tree):
+    for constant, illegal_node in _find_illegal_intermediate_constants(proof_tree):
         if illegal_node in leaf_nodes:
-            return True, f'The unconditioned constant {constant.rep} is used at a leaf node {str(illegal_node)}.'
+            return True, f'The intermediate constant {constant.rep} is used at a leaf node {str(illegal_node)}.'
         elif illegal_node is proof_tree.root_node:
-            return True, f'The unconditioned constant {constant.rep} is used at the root node {str(illegal_node)}.'
+            return True, f'The intermediate constant {constant.rep} is used at the root node {str(illegal_node)}.'
         else:
             raise Exception()
     return False, None
 
 
-def _find_illegal_unconditioned_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
-    for constant in proof_tree.unconditioned_constants:
+def _find_illegal_intermediate_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
+    for constant in proof_tree.intermediate_constants:
         for leaf_node in proof_tree.leaf_nodes:
             if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
                 yield constant, leaf_node
 
     root_node = proof_tree.root_node
     if root_node is not None:
-        for constant in proof_tree.unconditioned_constants:
+        for constant in proof_tree.intermediate_constants:
             if constant.rep in [root_constant.rep for root_constant in root_node.formula.constants]:
                 yield constant, leaf_node
 

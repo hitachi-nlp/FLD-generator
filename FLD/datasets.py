@@ -139,7 +139,7 @@ class NLProofSDataset:
                  branch_extension_steps: List[int],
                  depth_weights: List[float] = None,
                  depth_1_reference_weight: Optional[float] = None,
-                 force_fix_illegal_unconditioned_constants=False,
+                 force_fix_illegal_intermediate_constants=False,
                  unknown_ratio: float = 1 / 3.,
                  use_collapsed_translation_nodes_for_unknown_tree=False,
                  word_bank: Optional[WordBank] = None,
@@ -167,7 +167,7 @@ class NLProofSDataset:
         logger.info('using depth weight: %s', str(self._depth_weights))
 
         self._depth_1_reference_weight = depth_1_reference_weight
-        self._force_fix_illegal_unconditioned_constants = force_fix_illegal_unconditioned_constants
+        self._force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants
 
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
@@ -211,7 +211,7 @@ class NLProofSDataset:
                 _num_distractors,
                 _num_translation_distractors,
                 depth_1_reference_weight=self._depth_1_reference_weight,
-                force_fix_illegal_unconditioned_constants=self._force_fix_illegal_unconditioned_constants,
+                force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 

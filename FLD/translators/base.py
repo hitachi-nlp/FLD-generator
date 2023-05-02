@@ -47,7 +47,7 @@ class Translator(ABC):
 
     def translate(self,
                   formulas: List[Formula],
-                  unconditioned_constant_formulas: List[Formula],
+                  intermediate_constant_formulas: List[Formula],
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
                   timeout: Optional[int] = 10) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
@@ -55,7 +55,7 @@ class Translator(ABC):
         try:
             return run_with_timeout_retry(
                 self._translate,
-                func_args=[formulas, unconditioned_constant_formulas],
+                func_args=[formulas, intermediate_constant_formulas],
                 func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
                 retry_exception_class=TranslationFailure,
                 max_retry=max_retry,
@@ -69,6 +69,6 @@ class Translator(ABC):
     @abstractmethod
     def _translate(self,
                    formulas: List[Formula],
-                   unconditioned_constant_formulas: List[Formula],
+                   intermediate_constant_formulas: List[Formula],
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
         pass

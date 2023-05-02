@@ -25,7 +25,7 @@ class EnglishWordBank(WordNetWordBank):
         VerbForm.S: 'VBZ',
     }
 
-    __unconditioned_constant_words  = [
+    __intermediate_constant_words  = [
         f'THING-{alphabet}'
         for alphabet in ascii_uppercase
     ]
@@ -40,8 +40,8 @@ class EnglishWordBank(WordNetWordBank):
         self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
 
     @property
-    def _unconditioned_constant_words(self) -> List[str]:
-        return self.__unconditioned_constant_words
+    def _intermediate_constant_words(self) -> List[str]:
+        return self.__intermediate_constant_words
 
     def get_lemma(self, word: str) -> str:
         # TODO: pos other than VERB

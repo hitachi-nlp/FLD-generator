@@ -466,10 +466,10 @@ def interpret_argument(arg: Argument,
         if premise in arg.assumptions
     }
 
-    interpreted_unconditioned_constants = [
+    interpreted_intermediate_constants = [
         interpret_formula(constant, mapping,
                           quantifier_types=quantifier_types, elim_dneg=elim_dneg)
-        for constant in arg.unconditioned_constants
+        for constant in arg.intermediate_constants
     ]
 
     interpreted_conclusion = interpret_formula(arg.conclusion, mapping,
@@ -477,7 +477,7 @@ def interpret_argument(arg: Argument,
     return Argument(interpreted_premises,
                     interpreted_conclusion,
                     interpreted_assumptions,
-                    unconditioned_constants=interpreted_unconditioned_constants,
+                    intermediate_constants=interpreted_intermediate_constants,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -707,14 +707,14 @@ def argument_is_identical_to(this_argument: Argument,
                        for that_assumption in that_assumptions):
                 return False
 
-    # early rejections by unconditioned_constants
-    if len(this_argument.unconditioned_constants) != len(that_argument.unconditioned_constants):
+    # early rejections by intermediate_constants
+    if len(this_argument.intermediate_constants) != len(that_argument.intermediate_constants):
         return False
-    if len(this_argument.unconditioned_constants) >= 1:
+    if len(this_argument.intermediate_constants) >= 1:
         if any(
             all(_formula_can_not_be_identical_to(this_constant, that_constant)
-                for that_constant in that_argument.unconditioned_constants)
-            for this_constant in this_argument.unconditioned_constants
+                for that_constant in that_argument.intermediate_constants)
+            for this_constant in this_argument.intermediate_constants
         ):
             return False
 
@@ -740,9 +740,9 @@ def argument_is_identical_to(this_argument: Argument,
                     continue
         return _is_premises_same
 
-    def is_unconditioned_constants_same(this_argument: Argument, that_argument: Argument) -> bool:
-        return set(constant.rep for constant in this_argument.unconditioned_constants)\
-            == set(constant.rep for constant in that_argument.unconditioned_constants)
+    def is_intermediate_constants_same(this_argument: Argument, that_argument: Argument) -> bool:
+        return set(constant.rep for constant in this_argument.intermediate_constants)\
+            == set(constant.rep for constant in that_argument.intermediate_constants)
 
     def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
         return this_argument.conclusion.rep == that_argument.conclusion.rep
@@ -756,14 +756,14 @@ def argument_is_identical_to(this_argument: Argument,
 
         # XXX: DO NOT change the order of validation. It is now ordered as "faster former"
         if is_conclusion_same(this_argument_interpreted, that_argument)\
-                and is_unconditioned_constants_same(this_argument_interpreted, that_argument)\
+                and is_intermediate_constants_same(this_argument_interpreted, that_argument)\
                 and is_premises_and_assumptions_same(this_argument_interpreted, that_argument):
             return True
 
     # It is possible that no mappings are found (e.g. when no predicate and constants are in arguments)
     # but the arguments are the same from the beggining
     if is_conclusion_same(this_argument, that_argument)\
-            and is_unconditioned_constants_same(this_argument, that_argument)\
+            and is_intermediate_constants_same(this_argument, that_argument)\
             and is_premises_and_assumptions_same(this_argument, that_argument):
         return True
 
@@ -821,7 +821,7 @@ def generate_quantifier_axiom_arguments(
                     [de_quantifier_formula],
                     quantifier_formula,
                     {},
-                    unconditioned_constants=quantified_constants,
+                    intermediate_constants=quantified_constants,
                     id=argument_id,
                 )
 

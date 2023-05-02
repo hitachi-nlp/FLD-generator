@@ -22,7 +22,7 @@ def test_argument():
         },
         {
             "id": "universal_intro.pred_arg",
-            "unconditioned": [
+            "intermediate": [
                 "{a}"
             ],
             "premises": [

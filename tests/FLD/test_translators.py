@@ -28,14 +28,14 @@ def test_templated_translator():
 
     def show_translations(formulas: List[Formula],
                           trial: int,
-                          unconditioned_constant_formulas: Optional[List[Formula]] = None) -> None:
+                          intermediate_constant_formulas: Optional[List[Formula]] = None) -> None:
         print('\n\n\n================   translate  ================')
         for i_trial in range(0, trial):
             print()
             print(f'---------- trial={i_trial} ----------')
-            translations, _ = translator.translate(formulas, unconditioned_constant_formulas or [])
+            translations, _ = translator.translate(formulas, intermediate_constant_formulas or [])
             for formula, (_, translation, _) in zip(formulas, translations):
-                print(formula, f'with unconditioned {unconditioned_constant_formulas}', '  ->  ', translation)
+                print(formula, f'with intermediate {intermediate_constant_formulas}', '  ->  ', translation)
 
     # show_translations(
     #     [
@@ -92,7 +92,7 @@ def test_templated_translator():
             Formula('{F}{f} -> {G}{g}'),
         ],
         100,
-        unconditioned_constant_formulas=[Formula('{a}'), Formula('{d}')],
+        intermediate_constant_formulas=[Formula('{a}'), Formula('{d}')],
     )
 
 
