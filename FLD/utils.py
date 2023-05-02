@@ -120,8 +120,7 @@ def run_with_timeout_retry(
     func_args = func_args or []
     func_kwargs = func_kwargs or {}
     max_retry = max_retry or 99999
-    # timeout = timeout or 99999
-    timeout = 99999
+    timeout = timeout or 99999
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
