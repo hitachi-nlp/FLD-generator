@@ -13,7 +13,7 @@ from FLD.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD.formula import Formula
 from FLD.proof import ProofTree, ProofNode
-from FLD.utils import flatten_dict, weighted_sampling, build_bounded_msg
+from FLD.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD.translators.base import Translator
 from FLD.word_banks.base import WordBank
 from FLD.translation_distractors import build as build_translation_distractor
@@ -196,7 +196,7 @@ class NLProofSDataset:
         all_sample_stats = defaultdict(list)
         for i_sample in range(size):
             logger.info('\n\n')
-            logger.info(build_bounded_msg('generating a dataset instance ...', 5))
+            logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))
 
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]

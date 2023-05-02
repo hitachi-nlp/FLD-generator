@@ -13,7 +13,7 @@ from FLD.proof_tree_generators import ProofTreeGenerationFailure
 from FLD.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
 from FLD.translation_distractors import TranslationDistractor
 from FLD.translators import TranslationFailure
-from FLD.utils import build_bounded_msg
+from FLD.utils import make_pretty_msg
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -63,11 +63,11 @@ class ProofTreeGenerationPipeline:
         if depth < 1:
             raise ValueError('depth must be >= 1')
 
-        def _bouded_log(message: str) -> None:
-            logger.info(build_bounded_msg('%-35s', 4), message)
+        def _make_pretty_log(title: str, status: str) -> str:
+            return make_pretty_msg(title=title, status=status, boundary_level=4)
 
         while True:
-            _bouded_log('generating proof tree...')
+            logger.info(_make_pretty_log('generate proof tree', 'start'))
             try:
                 proof_tree = self.generator.generate_tree(
                     depth,
@@ -77,13 +77,13 @@ class ProofTreeGenerationPipeline:
                 )
             except ProofTreeGenerationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
-            _bouded_log('generating proof tree done!')
+            logger.info(_make_pretty_log('generate proof tree', 'finish'))
 
             if proof_tree is None:
                 logger.info('tree not generated. Will retry.')
                 continue
 
-            _bouded_log('generating distractor...')
+            logger.info(_make_pretty_log('generate distractors', 'start'))
             is_formula_distractor_failed = False
             if num_distractors > 0:
                 if self.distractor is not None:
@@ -106,14 +106,14 @@ class ProofTreeGenerationPipeline:
                     raise ValueError('could not generate distractors since distractor was not specified in the constructor.')
             else:
                 formula_distractors = []
-            _bouded_log('generating distractor done!')
+            logger.info(_make_pretty_log('generate distractors', 'finish'))
 
             root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 
             if self.translator is not None:
-                _bouded_log('translating...')
+                logger.info(_make_pretty_log('generate translations', 'start'))
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
                 leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
@@ -146,10 +146,9 @@ class ProofTreeGenerationPipeline:
                     if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                         logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
                         formula_distractors.append(SO_swap_formula)
-                    
-                _bouded_log('translating done!')
+                logger.info(_make_pretty_log('generate translations', 'finish'))
 
-            _bouded_log('generating translation_distractor...')
+            logger.info(_make_pretty_log('generate translation distractors', 'start'))
             if num_translation_distractors > 0 or (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
                 if (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
                     _num_translation_distractors = num_translation_distractors + num_distractors
@@ -170,7 +169,7 @@ class ProofTreeGenerationPipeline:
                     raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
             else:
                 translation_distractors = []
-            _bouded_log('generating translation_distractor done!')
+            logger.info(_make_pretty_log('generate translation distractors', 'finish'))
 
             if self.log_stats:
                 stats = self._get_stats(proof_tree, formula_distractors, translator_stats)

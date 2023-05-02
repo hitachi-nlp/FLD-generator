@@ -40,7 +40,7 @@ from .utils import (
     weighted_shuffle,
     run_with_timeout_retry,
     RetryAndTimeoutFailure,
-    build_bounded_msg,
+    make_pretty_msg,
 )
 
 from .formula import (
@@ -146,7 +146,7 @@ class ProofTreeGenerator:
                         universal_theorem_argument_factor: float,
                         reference_argument_factor: float,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
-        logger.info('-- loading arguments ....')
+        logger.info(make_pretty_msg(title='load arguments', status='start', boundary_level=0))
 
         arguments = _REFERENCE_ARGUMENTS + arguments
 
@@ -250,7 +250,7 @@ class ProofTreeGenerator:
             for argument, weight in _argument_weights.items()
         }
 
-        logger.info('------- loaded arguments ------')
+        logger.info(make_pretty_msg(title='load arguments', status='finish', boundary_level=0))
         for argument in _arguments:
             logger.info('weight: %f    %s', _argument_weights[argument], str(argument))
 
@@ -352,7 +352,8 @@ def _generate_tree(arguments: List[Argument],
                 max_retry=10,
             )
         except ExtendBranchesFailure as e:
-            logger.warning('extend_branches() failed. Will return tree without branch extension. The error was the following:\n%s', str(e))
+            logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
+                                           msg=f'because of the following error:\n{str(e)}'))
 
             # The following is needed since it is possible that the _extend_branches_with_timeout_retry did nothing.
             proof_tree = _validate_illegal_unconditioned_constants(
@@ -426,7 +427,7 @@ def _generate_stem(arguments: List[Argument],
     """
     if depth < 1:
         raise ValueError('depth must be >= 2')
-        
+
     def _my_validate_illegal_unconditioned_constants(proof_tree: ProofTree) -> ProofTree:
         return _validate_illegal_unconditioned_constants(
             force_fix_illegal_unconditioned_constants,
@@ -708,7 +709,7 @@ def _extend_branches(proof_tree: ProofTree,
     (iii) Add the psemises of the chosen argument into tree.
     (iv) Repeat (ii) and (iii)
     """
-    
+
     def _my_validate_illegal_unconditioned_constants(proof_tree: ProofTree) -> ProofTree:
         return _validate_illegal_unconditioned_constants(
             force_fix_illegal_unconditioned_constants,
@@ -768,7 +769,9 @@ def _extend_branches(proof_tree: ProofTree,
                                   if proof_tree.get_node_depth(node) < depth_limit]
 
         if len(_target_leaf_nodes) == 0:
-            logger.warning('Couldn\'t extend branch since the we have found no target leaf nodes')
+            logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
+                                           msg='couldn\'t extend branch because we found no target leaf nodes'))
+
             _check_leaf_consistency(proof_tree)
 
             proof_tree = _my_validate_illegal_unconditioned_constants(proof_tree)
@@ -901,7 +904,8 @@ def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
     is_already_added = False
     for existent_argument in arguments:
         if argument_is_identical_to(argument, existent_argument):
-            logger.info('-- Argument is identical to the already added argument. Will be skipped. --')
+            logger.info(make_pretty_msg(boundary_level=0,
+                                        msg='argument is identical to the already added argument. will be skipped.'))
             logger.info('tried to add  : %s', str(argument))
             logger.info('already added : %s', str(existent_argument))
             is_already_added = True
@@ -940,7 +944,10 @@ def _fix_illegal_unconditioned_constants(
     elim_dneg=False,
 ) -> ProofTree:
 
-    logger.info(build_bounded_msg('[start] _fix_illegal_unconditioned_constants()', 3))
+    def _make_pretty_msg(*args, **kwargs) -> str:
+        return make_pretty_msg(*args, title='_fix_illegal_unconditioned_constants()', **kwargs)
+
+    logger.info(_make_pretty_msg(status='start', boundary_level=3))
 
     original_depth = proof_tree.depth
 
@@ -974,7 +981,12 @@ def _fix_illegal_unconditioned_constants(
                 all_is_fixed = True
                 break
 
-            logger.info(f'[{i_trial}/{fix_trial_per_node}] _fix_illegal_unconditioned_constants() try to fix a illegal leaf node {str(illegal_node)} with unconditioned constant {str(constant.rep)}')
+            def _make_pretty_msg_for_fix(status: Optional[str] = None, msg: Optional[str] = None) -> str:
+                return _make_pretty_msg(trial=i_trial, status=status, subtitle=f'fix a illegal node {str(illegal_node)} with unconditioned constant {str(constant.rep)}',
+                                        max_trial=fix_trial_per_node, boundary_level=2,
+                                        msg=msg)
+
+            logger.info(_make_pretty_msg_for_fix(status='start'))
 
             if illegal_node in leaf_nodes:
                 try:
@@ -996,15 +1008,11 @@ def _fix_illegal_unconditioned_constants(
                         max_retry=5,
                     )
                 except ExtendBranchesFailure as e:
-                    raise FixIllegalUnconditionedConstantFailure(
-                        build_exception_msg(illegal_node, 'leaf_node', constant, postfix='due to the following error \n' + str(e))
-                    )
+                    raise FixIllegalUnconditionedConstantFailure(_make_pretty_msg_for_fix(msg='caused by the following error \n' + str(e)))
 
             elif illegal_node is proof_tree.root_node:
                 # TODO: implement here using _generate_stem() with universal_intro arguments
-                raise FixIllegalUnconditionedConstantFailure(
-                    build_exception_msg(illegal_node, 'root_node', constant, postfix='because it is not implement yet')
-                )
+                raise FixIllegalUnconditionedConstantFailure(_make_pretty_msg_for_fix(msg='because the fix for a root node is not implement yet'))
             else:
                 raise Exception()
 
@@ -1017,18 +1025,18 @@ def _fix_illegal_unconditioned_constants(
             break
 
         if node_is_fixed:
-            logger.info(build_bounded_msg(f'_fix_illegal_unconditioned_constants() fixed a illegal leaf node {str(illegal_node)} with unconditioned constant {str(constant.rep)}', 2))
+            logger.info(_make_pretty_msg_for_fix(status='success'))
         else:
             raise FixIllegalUnconditionedConstantFailure(
-                build_exception_msg(illegal_node, 'root_node', constant, postfix=f'with trial={fix_trial_per_node}')
-            )
+                _make_pretty_msg(status='failure',
+                                 trial=i_trial, max_trial=fix_trial_per_node, boundary_level=2,
+                                 msg=f'failed to fix a illegal leaf node {str(illegal_node)} with unconditioned constant {str(constant.rep)}'))
 
     if proof_tree_fixed.depth != original_depth:
-        logger.warning('_fix_illegal_unconditioned_constants() altered the depth of the tree from %d -> %d',
-                       original_depth,
-                       proof_tree_fixed.depth)
+        logger.warning(_make_pretty_msg(trial=i_trial, max_trial=fix_trial_per_node, boundary_level=2,
+                       msg=f'altered the depth of the tree from {original_depth} -> {proof_tree_fixed.depth}'))
 
-    logger.info(build_bounded_msg('[succeeded] _fix_illegal_unconditioned_constants()', 3))
+    logger.info(_make_pretty_msg(status='success', trial=i_trial, max_trial=fix_trial_per_node, boundary_level=3))
 
     return proof_tree_fixed
 

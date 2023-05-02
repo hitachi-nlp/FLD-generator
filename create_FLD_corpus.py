@@ -23,7 +23,7 @@ from FLD.proof import ProofTree
 from FLD.utils import nested_merge
 from FLD.formula_distractors import build as build_distractor
 from FLD.translation_distractors import build as build_translation_distractor
-from FLD.utils import build_bounded_msg, log_results
+from FLD.utils import _build_bounded_msg, log_results
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -66,40 +66,40 @@ def load_dataset(argument_config: List[str],
         quantification=quantification,
     )
 
-    logger.info(build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
+    logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
     word_bank = build_wordnet_wordbank('eng')
-    logger.info(build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
+    logger.info(_build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
 
     if any(size > 0 for size in num_distractors):
-        logger.info(build_bounded_msg(f'{"[start] building distractor":<30}', 3))
+        logger.info(_build_bounded_msg(f'{"[start] building distractor":<30}', 3))
         _distractor = build_distractor(distractor,
                                        generator=generator,
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                        use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
                                        sample_hard_negatives=sample_hard_negative_distractors,
                                        try_negated_hypothesis_first=not dont_try_negative_hypothesis)
-        logger.info(build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
+        logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
 
     if any(size > 0 for size in num_translation_distractors) or fallback_from_formula_to_translation_distractor:
-        logger.info(build_bounded_msg(f'{"[start] building translation distractor":<30}', 3))
+        logger.info(_build_bounded_msg(f'{"[start] building translation distractor":<30}', 3))
         _translation_distractor = build_translation_distractor(
             translation_distractor,
             word_bank=word_bank,
         )
-        logger.info(build_bounded_msg(f'{"[finish] building translation distractor":<30}', 3))
+        logger.info(_build_bounded_msg(f'{"[finish] building translation distractor":<30}', 3))
     else:
         _translation_distractor = None
 
-    logger.info(build_bounded_msg(f'{"[start] building translator":<30}', 3))
+    logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
     translator = build_translator(translation_config,
                                   word_bank,
                                   use_fixed_translation=use_fixed_translation,
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight)
-    logger.info(build_bounded_msg(f'{"[finish] building translator":<30}', 3))
+    logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     pipeline = ProofTreeGenerationPipeline(
         generator,

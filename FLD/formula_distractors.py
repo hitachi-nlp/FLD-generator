@@ -25,7 +25,7 @@ from .formula_checkers import (
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure
-from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure, build_bounded_msg
+from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure, make_pretty_msg
 import kern_profiler
 
 
@@ -47,7 +47,7 @@ class FormulaDistractor(ABC):
         max_retry = max_retry or self.default_max_retry
         timeout = timeout or self.default_timeout
         try:
-            self._log(logging.INFO, f'try to generate {size} distractors', boundary=True)
+            self._log(logging.INFO, f'try to generate {size} distractors', boundary_level=1)
 
             formula_distractors, stats = run_with_timeout_retry(
                 self._generate,
@@ -81,10 +81,8 @@ class FormulaDistractor(ABC):
     def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
 
-    def _log(self, log_level, msg: str, boundary=False):
-        msg = f'[{self.__class__.__name__:<25}] {msg}'
-        if boundary:
-            msg = build_bounded_msg(msg, 0)
+    def _log(self, log_level, msg: str, boundary_level: Optional[int] = None):
+        msg = make_pretty_msg(title=self.__class__.__name__, msg=msg, boundary_level=boundary_level)
 
         if log_level in ['info', logging.INFO]:
             logger.info(msg)
@@ -683,10 +681,6 @@ class NegativeTreeDistractor(FormulaDistractor):
                 distractor_formulas.append(distractor_formula)
                 distractor_nodes.append(distractor_node)
 
-            # if len(distractor_formulas) >= size:
-            #     logger.info('(NegativeTreeDistractor) generating %d formulas succeeded!', size)
-            # else:
-            #     logger.info('(NegativeTreeDistractor) return only [%d / %d] formulas', len(distractor_formulas), size)
             if negative_tree is not None:
                 self._log(logging.INFO, f'The negative tree is the following:\n{negative_tree.format_str}')
             return distractor_formulas, {'negative_tree': negative_tree, 'negative_tree_missing_nodes': [node for node in negative_tree.leaf_nodes if node not in distractor_nodes]}
@@ -835,15 +829,21 @@ def build(type_: str,
     if type_.find('various_form') >= 0 and not sample_prototype_formulas_from_tree:
         if generator is not None:
             prototype_formulas = []
-            logger.info('collecting prototype formulas from arguments to build the distractor ...')
+            logger.info(make_pretty_msg(title='build distractor',
+                                        status='start',
+                                        msg='collecting prototype formulas from arguments to build the distractor ...', boundary_level=0))
             for argument in generator.arguments:
                 for formula in argument.all_formulas:
                     if all(not formula_is_identical_to(formula, existent_formula)
                            for existent_formula in prototype_formulas):
                         prototype_formulas.append(formula)
-            logger.info('collecting prototype formulas from arguments to build the distractor done!')
+            logger.info(make_pretty_msg(title='build distractor',
+                                        status='finish',
+                                        msg='collecting prototype formulas from arguments to build the distractor', boundary_level=0))
+
         else:
-            logger.warning('generator is not specified. Thus, the VariousFormUnkownInterprandsDistractor will use formulas in tree as prototype formulas.')
+            logger.warning(make_pretty_msg(title='build distractor',
+                                           msg='generator is not specified. Thus, the VariousFormUnkownInterprandsDistractor will use formulas in tree as prototype formulas.', boundary_level=0))
 
     if type_ == 'unknown_PAS':
         return UnkownPASDistractor()

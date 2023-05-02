@@ -24,7 +24,7 @@ from FLD.interpretation import (
 )
 from FLD.utils import make_combination, chained_sampling_from_weighted_iterators
 from FLD.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
-from FLD.utils import starts_with_vowel_sound, compress, decompress
+from FLD.utils import starts_with_vowel_sound, compress, decompress, make_pretty_msg
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import kern_profiler
 
@@ -86,7 +86,7 @@ class TemplatedTranslator(Translator):
             for key, val in sorted(self._translations.items(),
                                    key=lambda key_val: calc_formula_specificity(Formula(key_val[0])))[::-1]
         ))
-        logger.debug('---- loaded translations ----')
+        logger.debug(make_pretty_msg(title='loaded translations', boundary_level=0))
         for key, nls in self._translations.items():
             logger.debug('translation key = "%s"', key)
             for nl in nls:
