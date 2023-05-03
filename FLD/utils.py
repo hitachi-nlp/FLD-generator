@@ -125,7 +125,7 @@ def run_with_timeout_retry(
 
     def _make_pretty_msg(i_trial: int, status: str, msg: Optional[str] = None):
         return make_pretty_msg(title='run_with_timeout_retry', status=status, subtitle=str(log_title),
-                               trial=i_trial, max_trial=max_retry, boundary_level=0,
+                               trial=i_trial + 1, max_trial=max_retry, boundary_level=0,
                                msg=msg)
 
     for i_trial in range(0, max_retry):
