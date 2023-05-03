@@ -71,6 +71,18 @@ class ExtendBranchesFailure(ProofTreeGenerationFailure):
     pass
 
 
+class ProofTreeGenerationImpossible(FormalLogicExceptionBase):
+    pass
+
+
+class GenerateStemImpossible(ProofTreeGenerationImpossible):
+    pass
+
+
+class ExtendBranchesImpossible(ProofTreeGenerationImpossible):
+    pass
+
+
 class FixIllegalIntermediateConstantFailure(ProofTreeGenerationFailure):
     pass
 
@@ -187,7 +199,7 @@ class ProofTreeGenerator:
                     'universal_quantifier_elim',
                     'universal_quantifier_intro',
 
-                    # we do not use existential_quantifier_intro since it has no chainable_args without existential_quantifier_elim, which is not implemented yet.
+                    # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
                     # 'existential_quantifier_intro',
             ]:
                 for i_formula, formula in enumerate(unique_formulas):
@@ -311,6 +323,8 @@ def _generate_tree_with_timeout_retry(*args,
         )
     except RetryAndTimeoutFailure as e:
         raise ProofTreeGenerationFailure(str(e))
+    except ProofTreeGenerationImpossible as e:
+        raise ProofTreeGenerationFailure(str(e))
 
 
 def _generate_tree(arguments: List[Argument],
@@ -385,6 +399,8 @@ def _generate_stem_with_timeout_retry(*args,
         )
     except RetryAndTimeoutFailure as e:
         raise GenerateStemFailure(str(e))
+    except GenerateStemImpossible as e:
+        raise GenerateStemFailure(str(e))
 
 
 def _extend_branches_with_timeout_retry(*args,
@@ -403,6 +419,8 @@ def _extend_branches_with_timeout_retry(*args,
             log_title='extend_branches()',
         )
     except RetryAndTimeoutFailure as e:
+        raise ExtendBranchesFailure(str(e))
+    except ExtendBranchesImpossible as e:
         raise ExtendBranchesFailure(str(e))
 
 
@@ -473,6 +491,31 @@ def _generate_stem(arguments: List[Argument],
         for arg in _shuffle_arguments(arguments, weights=argument_weights):
             yield arg
 
+    def find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
+        for descendant in node.descendants:
+            if descendant.is_leaf and descendant.assump_parent is None:
+                yield descendant
+
+    def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
+        cur_possible_assumption_nodes = set(find_possible_assumption_nodes(node))
+        for arg in arguments:
+            one_premise_matched = False
+            for premise in arg.premises:
+                if not formula_is_identical_to(premise, node.formula):
+                    continue
+
+                if premise in arg.assumptions:
+                    assumption = arg.assumptions[premise]
+                    if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
+                               for cur_assumption_node in cur_possible_assumption_nodes):
+                        continue
+
+                one_premise_matched = True
+                break
+
+            if one_premise_matched:
+                yield arg
+
     if depth == 1:
         if depth_1_reference_weight is not None:
             def argument_sampling():
@@ -522,37 +565,17 @@ def _generate_stem(arguments: List[Argument],
             leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
             cur_conclusion = cur_conclusion_node.formula
-            cur_possible_assumption_nodes = [node
-                                             for node in cur_conclusion_node.descendants
-                                             if node.is_leaf and node.assump_parent is None]
+            cur_possible_assumption_nodes = list(find_possible_assumption_nodes(cur_conclusion_node))
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
-            # Choose next argument
-            chainable_args = []
-            for arg in arguments:
-                one_premise_matched = False
-                for premise in arg.premises:
-                    if not formula_is_identical_to(premise, cur_conclusion):
-                        continue
+            linkable_args = list(find_linkable_arguments(cur_conclusion_node))
 
-                    if premise in arg.assumptions:
-                        assumption = arg.assumptions[premise]
-                        if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
-                                   for cur_assumption_node in cur_possible_assumption_nodes):
-                            continue
-
-                    one_premise_matched = True
-                    break
-
-                if one_premise_matched:
-                    chainable_args.append(arg)
-
-            if len(chainable_args) == 0:
-                rejection_stats['len(chainable_args) == 0'] += 1
+            if len(linkable_args) == 0:
+                rejection_stats['len(linkable_args) == 0'] += 1
 
             is_arg_done = False
             next_arg_pulled = None
-            for next_arg in _shuffle_arguments(chainable_args, argument_weights):
+            for next_arg in _shuffle_arguments(linkable_args, argument_weights):
                 if is_arg_done:
                     break
                 log_traces.append(f'   |   | next_arg {next_arg}')
@@ -577,7 +600,7 @@ def _generate_stem(arguments: List[Argument],
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
 
-                        if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
+                        if premise_pulled.rep != cur_conclusion.rep:  # linkable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
                             continue
 
@@ -720,6 +743,12 @@ def _extend_branches(proof_tree: ProofTree,
             elim_dneg=elim_dneg,
         )
 
+    def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
+        for arg in arguments:
+            if formula_is_identical_to(arg.conclusion, node.formula)\
+                    and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
+                yield arg
+
     orig_leaf_nodes = set(proof_tree.leaf_nodes)
     if start_leaf_nodes is not None:
         for start_leaf_node in start_leaf_nodes:
@@ -777,6 +806,16 @@ def _extend_branches(proof_tree: ProofTree,
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
 
+        is_linkable_any = False
+        for target_node in _target_leaf_nodes:
+            for linkable_arg in find_linkable_arguments(target_node):
+                is_linkable_any = True
+                break
+            if is_linkable_any:
+                break
+        if not is_linkable_any:
+            raise ExtendBranchesImpossible(f'No linkable arguments found for target leaf nodes {str(_target_leaf_nodes)}')
+
         is_leaf_node_done = False
         next_arg_pulled = None
         target_leaf_node = None
@@ -792,15 +831,11 @@ def _extend_branches(proof_tree: ProofTree,
             target_leaf_node = leaf_node
 
             # Choose next argument
-            chainable_args = [
-                arg for arg in arguments
-                if formula_is_identical_to(arg.conclusion, leaf_node.formula)
-                and len(arg.assumptions) == 0  # by it's logic, the argument with premise assumptions can not be applied in branch extension
-            ]
-            if len(chainable_args) == 0:
-                rejection_stats['len(chainable_args) == 0'] += 1
+            linkable_args = list(find_linkable_arguments(leaf_node))
+            if len(linkable_args) == 0:
+                rejection_stats['len(linkable_args) == 0'] += 1
 
-            for next_arg in _shuffle_arguments(chainable_args, weights=argument_weights):
+            for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
                     continue
 
