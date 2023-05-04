@@ -61,7 +61,7 @@ class FormulaDistractor(ABC):
             )
 
             if not no_warning and len(formula_distractors) < size:
-                self._log(logging.WARNING, f'could not generate {size} distractors. return only {len(formula_distractors)} distractors.')
+                self._log(logging.WARNING, f'could not generate {size} distractors. return only {len(formula_distractors)} distractors.', boundary_level=2)
 
             return formula_distractors, stats
         except RetryAndTimeoutFailure as e:
@@ -81,7 +81,7 @@ class FormulaDistractor(ABC):
     def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
 
-    def _log(self, log_level, msg: str, boundary_level: Optional[int] = None):
+    def _log(self, log_level, msg: str, boundary_level = 1):
         msg = make_pretty_msg(title=self.__class__.__name__, msg=msg, boundary_level=boundary_level)
 
         if log_level in ['info', logging.INFO]:
@@ -624,7 +624,7 @@ class NegativeTreeDistractor(FormulaDistractor):
         n_trial = 0
         while True:
             # gradually increase the number of extension steps to find the "just in" size tree.
-            branch_extension_steps = min(size + n_trial * 2, self.max_branch_extension_steps)
+            branch_extension_steps = min(size + (n_trial + 1) * 2, self.max_branch_extension_steps)
             self._log(logging.INFO, f'trial={n_trial}  branch_extension_steps={branch_extension_steps}')
 
             try:
@@ -684,6 +684,7 @@ class NegativeTreeDistractor(FormulaDistractor):
             if negative_tree is not None:
                 self._log(logging.INFO, f'The negative tree is the following:\n{negative_tree.format_str}', boundary_level=2)
 
+            # self._log(logging.INFO, f'{len(distractor_formulas)} distractors are in the negative tree', boundary_level=2)
             return distractor_formulas, {'negative_tree': negative_tree, 'negative_tree_missing_nodes': [node for node in negative_tree.leaf_nodes if node not in distractor_nodes]}
 
 
