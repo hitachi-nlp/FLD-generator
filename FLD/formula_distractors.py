@@ -609,11 +609,10 @@ class NegativeTreeDistractor(FormulaDistractor):
         if size == 0:
             return [], {'negative_tree': None, 'negative_tree_missing_nodes': None}
 
-        max_branch_extension_steps = 10
         n_trial = 0
         while True:
             # gradually increase the number of extension steps to find the "just in" size tree.
-            branch_extension_steps = min(size + n_trial * 2, max_branch_extension_steps)
+            branch_extension_steps = min(size + n_trial * 2, self.max_branch_extension_steps)
             logger.info('-- (NegativeTreeDistractor) trial=%d    branch_extension_steps=%d', n_trial, branch_extension_steps)
 
             try:
