@@ -321,7 +321,7 @@ class ProofTreeGenerator:
 
 def _generate_tree_with_timeout_retry(*args,
                                       max_retry=30,
-                                      timeout=5,
+                                      timeout=10,  # 5 + 5
                                       **kwargs) -> Optional[ProofTree]:
     try:
         return run_with_timeout_retry(

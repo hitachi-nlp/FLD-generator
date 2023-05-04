@@ -8,5 +8,3 @@
     * allow_many_to_oneg
     * interp_ -> interpret
     * test/FLD -> test
-    * chainable -> jointable
-
