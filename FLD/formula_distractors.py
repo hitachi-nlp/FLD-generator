@@ -24,7 +24,7 @@ from .formula_checkers import (
 )
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
-from .proof_tree_generators import ProofTreeGenerationFailure
+from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
 from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure, make_pretty_msg
 import kern_profiler
 
@@ -47,7 +47,7 @@ class FormulaDistractor(ABC):
         max_retry = max_retry or self.default_max_retry
         timeout = timeout or self.default_timeout
         try:
-            self._log(logging.INFO, f'try to generate {size} distractors', boundary_level=1)
+            self._log(logging.INFO, f'try to generate {size} distractors', boundary_level=2)
 
             formula_distractors, stats = run_with_timeout_retry(
                 self._generate,
@@ -346,7 +346,6 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         if no_warning:
             raise NotImplementedError()
 
-        self._log(logging.INFO, f'try to generate {size} distractors')
         if size == 0:
             return [], {}
 
@@ -613,6 +612,7 @@ class NegativeTreeDistractor(FormulaDistractor):
             distractors, others = self._generate_with_initial_sampling(proof_tree, size, 'various_form')
         return distractors, others
 
+    @profile
     def _generate_with_initial_sampling(self,
                                         proof_tree: ProofTree,
                                         size: int,
@@ -653,7 +653,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                     max_retry=self.extend_branches_max_retry,
                     force_fix_illegal_intermediate_constants=True,
                 )
-            except ProofTreeGenerationFailure as e:
+            except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
                 raise FormulaDistractorGenerationFailure(str(e))
 
             negative_leaf_nodes = negative_tree.leaf_nodes
@@ -682,7 +682,8 @@ class NegativeTreeDistractor(FormulaDistractor):
                 distractor_nodes.append(distractor_node)
 
             if negative_tree is not None:
-                self._log(logging.INFO, f'The negative tree is the following:\n{negative_tree.format_str}')
+                self._log(logging.INFO, f'The negative tree is the following:\n{negative_tree.format_str}', boundary_level=2)
+
             return distractor_formulas, {'negative_tree': negative_tree, 'negative_tree_missing_nodes': [node for node in negative_tree.leaf_nodes if node not in distractor_nodes]}
 
 
@@ -730,8 +731,6 @@ class MixtureDistractor(FormulaDistractor):
         others = {}
         for distractor, _size in zip(self._distractors, sizes):
             try:
-                self._log(logging.INFO, f'try to sample {_size} formulas from {str(distractor)}')
-
                 _distractor_formulas, _others = distractor.generate(proof_tree, _size)
                 # try:
                 #     _distractor_formulas, _others = outputs

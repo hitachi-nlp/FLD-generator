@@ -9,7 +9,7 @@ from FLD.formula_distractors import FormulaDistractor
 from FLD.translators.base import Translator
 from FLD.utils import flatten_dict
 from FLD.exception import FormalLogicExceptionBase
-from FLD.proof_tree_generators import ProofTreeGenerationFailure
+from FLD.proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
 from FLD.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
 from FLD.translation_distractors import TranslationDistractor
 from FLD.translators import TranslationFailure
@@ -75,7 +75,7 @@ class ProofTreeGenerationPipeline:
                     depth_1_reference_weight=depth_1_reference_weight,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
-            except ProofTreeGenerationFailure as e:
+            except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
             logger.info(_make_pretty_log('generate proof tree', 'finish'))
 

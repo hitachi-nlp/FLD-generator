@@ -59,6 +59,15 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
+# see  [failure_loop](./docs/axioms_theorems.md)
+_DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP = True
+
+
+def _is_failure_loop_univ_intro_argument(argument: Argument) -> bool:
+    return argument.id.find('universal_intro') >= 0\
+        and argument.premises[0].rep.find(IMPLICATION) >= 0
+
+
 class ProofTreeGenerationFailure(FormalLogicExceptionBase):
     pass
 
@@ -84,6 +93,10 @@ class ExtendBranchesImpossible(ProofTreeGenerationImpossible):
 
 
 class FixIllegalIntermediateConstantFailure(ProofTreeGenerationFailure):
+    pass
+
+
+class FixIllegalIntermediateConstantImpossible(FormalLogicExceptionBase):
     pass
 
 
@@ -323,8 +336,8 @@ def _generate_tree_with_timeout_retry(*args,
         )
     except RetryAndTimeoutFailure as e:
         raise ProofTreeGenerationFailure(str(e))
-    except ProofTreeGenerationImpossible as e:
-        raise ProofTreeGenerationFailure(str(e))
+    # except ProofTreeGenerationImpossible as e:
+    #     raise ProofTreeGenerationFailure(str(e))
 
 
 def _generate_tree(arguments: List[Argument],
@@ -365,7 +378,7 @@ def _generate_tree(arguments: List[Argument],
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,
             )
-        except ExtendBranchesFailure as e:
+        except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg=f'because of the following error:\n{str(e)}'))
 
@@ -375,7 +388,8 @@ def _generate_tree(arguments: List[Argument],
                 allow_illegal_intermediate_constants,
                 ExtendBranchesFailure,
                 proof_tree,
-                arguments=arguments,
+                arguments,
+                argument_weights=argument_weights,
                 elim_dneg=elim_dneg,
             )
 
@@ -399,8 +413,8 @@ def _generate_stem_with_timeout_retry(*args,
         )
     except RetryAndTimeoutFailure as e:
         raise GenerateStemFailure(str(e))
-    except GenerateStemImpossible as e:
-        raise GenerateStemFailure(str(e))
+    # except GenerateStemImpossible as e:
+    #     raise GenerateStemFailure(str(e))
 
 
 def _extend_branches_with_timeout_retry(*args,
@@ -420,8 +434,8 @@ def _extend_branches_with_timeout_retry(*args,
         )
     except RetryAndTimeoutFailure as e:
         raise ExtendBranchesFailure(str(e))
-    except ExtendBranchesImpossible as e:
-        raise ExtendBranchesFailure(str(e))
+    # except ExtendBranchesImpossible as e:
+    #     raise ExtendBranchesFailure(str(e))
 
 
 def _generate_stem(arguments: List[Argument],
@@ -452,7 +466,8 @@ def _generate_stem(arguments: List[Argument],
             allow_illegal_intermediate_constants,
             GenerateStemFailure,
             proof_tree,
-            arguments=arguments,
+            arguments,
+            argument_weights=argument_weights,
             elim_dneg=elim_dneg,
         )
 
@@ -498,6 +513,7 @@ def _generate_stem(arguments: List[Argument],
 
     def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
         cur_possible_assumption_nodes = set(find_possible_assumption_nodes(node))
+
         for arg in arguments:
             one_premise_matched = False
             for premise in arg.premises:
@@ -544,6 +560,10 @@ def _generate_stem(arguments: List[Argument],
     for cur_arg in argument_sampling():  # try all the argument as starting point
         if len(cur_arg.assumptions) > 0:
             # the node with assumptions can not be used as the first node.
+            continue
+
+        if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
+                and _is_failure_loop_univ_intro_argument(cur_arg):
             continue
 
         proof_tree = ProofTree()
@@ -625,6 +645,11 @@ def _generate_stem(arguments: List[Argument],
                                 break
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
+
+                            # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
+                            # if is_intermediate_constants_used:
+                            #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
+                            #     continue
 
                             if not is_argument_senseful(next_arg_pulled):
                                 rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
@@ -710,6 +735,21 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
+@profile
+def find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Iterable[Argument]:
+    for arg in arguments:
+
+        if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
+                and _is_failure_loop_univ_intro_argument(arg):
+            continue
+
+        # SLOW, called many times -> but this is as the old
+        if formula_is_identical_to(arg.conclusion, node.formula)\
+                and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
+            yield arg
+
+
+@profile
 def _extend_branches(proof_tree: ProofTree,
                      arguments: List[Argument],
                      num_steps: int,
@@ -723,6 +763,7 @@ def _extend_branches(proof_tree: ProofTree,
                      ng_formulas: Optional[List[Formula]] = None,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
+                     return_at_best=False,
                      return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
@@ -739,15 +780,10 @@ def _extend_branches(proof_tree: ProofTree,
             allow_illegal_intermediate_constants,
             ExtendBranchesFailure,
             proof_tree,
-            arguments=arguments,
+            arguments,
+            argument_weights=argument_weights,
             elim_dneg=elim_dneg,
         )
-
-    def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
-        for arg in arguments:
-            if formula_is_identical_to(arg.conclusion, node.formula)\
-                    and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
-                yield arg
 
     orig_leaf_nodes = set(proof_tree.leaf_nodes)
     if start_leaf_nodes is not None:
@@ -806,15 +842,16 @@ def _extend_branches(proof_tree: ProofTree,
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
 
-        is_linkable_any = False
-        for target_node in _target_leaf_nodes:
-            for linkable_arg in find_linkable_arguments(target_node):
-                is_linkable_any = True
-                break
-            if is_linkable_any:
-                break
-        if not is_linkable_any:
-            raise ExtendBranchesImpossible(f'No linkable arguments found for target leaf nodes {str(_target_leaf_nodes)}')
+        if cur_step == 0:
+            is_linkable_any = False
+            for target_node in _target_leaf_nodes:
+                for linkable_arg in find_linkable_arguments(arguments, target_node):
+                    is_linkable_any = True
+                    break
+                if is_linkable_any:
+                    break
+            if not is_linkable_any:
+                raise ExtendBranchesImpossible(f'No linkable arguments found for target leaf nodes {str(_target_leaf_nodes)}')
 
         is_leaf_node_done = False
         next_arg_pulled = None
@@ -831,7 +868,7 @@ def _extend_branches(proof_tree: ProofTree,
             target_leaf_node = leaf_node
 
             # Choose next argument
-            linkable_args = list(find_linkable_arguments(leaf_node))
+            linkable_args = list(find_linkable_arguments(arguments, leaf_node))
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
 
@@ -876,6 +913,11 @@ def _extend_branches(proof_tree: ProofTree,
                     ):
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
+                        # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
+                        # if is_intermediate_constants_used:
+                        #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
+                        #     continue
+
                         if not is_argument_senseful(next_arg_pulled):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                             continue
@@ -894,6 +936,13 @@ def _extend_branches(proof_tree: ProofTree,
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
+
+                            # # "¬{B}{bq} -> ({CP}{bq} & {FH}{bq})",
+                            # leaf_node_rep = leaf_node.formula.rep
+                            # if leaf_node_rep.find('->') >= 0 and leaf_node_rep.find('&') >= 0 and leaf_node_rep.find('}{') >= 0:
+                            #     import pudb
+                            #     pudb.set_trace()
+
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
@@ -924,7 +973,14 @@ def _extend_branches(proof_tree: ProofTree,
                 rejection_stats_msg,
 
             ])
-            raise ExtendBranchesFailure(msg)
+            if return_at_best:
+                logger.info(msg)
+                if return_alignment:
+                    return proof_tree, orig_nodes_to_copy_nodes
+                else:
+                    return proof_tree
+            else:
+                raise ExtendBranchesFailure(msg)
 
     _check_leaf_consistency(proof_tree)
     proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
@@ -973,11 +1029,47 @@ def _check_leaf_consistency(proof_tree: ProofTree) -> None:
     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
 
 
+def _is_intermediate_constants_used(next_arg_pulled: Argument,
+                                    proof_tree: ProofTree) -> Tuple[bool, Optional[str], Optional[ProofNode]]:
+    for constant in next_arg_pulled.intermediate_constants:
+        for leaf_node in proof_tree.leaf_nodes:
+            if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
+                return True, constant.rep, leaf_node
+    return False, None, None
+
+
+@profile
 def _fix_illegal_intermediate_constants(
     proof_tree: ProofTree,
     arguments: Optional[List[Argument]] = None,
+    argument_weights: Optional[Dict[Argument, float]] = None,
+    argument_weight_bias_factor=100,
     elim_dneg=False,
 ) -> ProofTree:
+    if len(list((_find_illegal_intermediate_constants(proof_tree)))) >= 3:
+        raise FixIllegalIntermediateConstantImpossible('We do not fix tree with more than 3 illegal node because it is unlikely this fix will succeed, or otherwise it is too slow.')
+
+    if argument_weights is not None:
+
+        def get_biase_fator(argument_id: str) -> float:
+            if argument_id.find('universal_elim') >= 0:
+                return argument_weight_bias_factor
+            elif argument_id.find('universal_intro') >= 0:
+                return 1 / argument_weight_bias_factor
+            else:
+                return 1.0
+
+        argument_weights_biased: Dict[Argument, float] = {
+            argument: weight * get_biase_fator(argument.id)
+            for argument, weight in argument_weights.items()
+        }
+        _weight_sum = sum(argument_weights_biased.values())
+
+        for argument, weight in argument_weights_biased.items():
+            argument_weights_biased[argument] = weight / _weight_sum
+    else:
+        argument_weights_biased = {argument: 1.0 / len(arguments)
+                                   for argument in arguments}
 
     def _make_pretty_msg(*args, **kwargs) -> str:
         return make_pretty_msg(*args, title='_fix_illegal_intermediate_constants()', **kwargs)
@@ -1017,19 +1109,20 @@ def _fix_illegal_intermediate_constants(
                 break
 
             def _make_pretty_msg_for_fix(status: Optional[str] = None, msg: Optional[str] = None) -> str:
-                return _make_pretty_msg(trial=i_trial, status=status, subtitle=f'fix a illegal node {str(illegal_node)} with intermediate constant {str(constant.rep)}',
-                                        max_trial=fix_trial_per_node, boundary_level=2,
+                return _make_pretty_msg(trial=i_trial, status=status,
+                                        subtitle=f'node={str(illegal_node)}, constant="{str(constant.rep)}"',
+                                        max_trial=fix_trial_per_node, boundary_level=1,
                                         msg=msg)
 
-            logger.info(_make_pretty_msg_for_fix(status='start'))
-
             if illegal_node in leaf_nodes:
+                num_steps = i_trial / 6 + 1
                 try:
                     proof_tree_tmp_maybe_fixed, alignment = _extend_branches_with_timeout_retry(
                         proof_tree_tmp,
                         arguments,
-                        random.randint(1, 5),
+                        num_steps,
 
+                        argument_weights=argument_weights_biased,
                         depth_limit=None,
                         start_leaf_nodes=[illegal_node],
                         elim_dneg=elim_dneg,
@@ -1039,49 +1132,56 @@ def _fix_illegal_intermediate_constants(
                         allow_illegal_intermediate_constants=True,
                         return_alignment=True,
 
+                        return_at_best=True,
                         timeout=5,
                         max_retry=5,
                     )
                 except ExtendBranchesFailure as e:
-                    raise FixIllegalIntermediateConstantFailure(_make_pretty_msg_for_fix(msg='caused by the following error \n' + str(e)))
+                    logger.info(_make_pretty_msg_for_fix(status='failure', msg=f'will try next. failed in branch extension due to:\n{str(e)}'))
+                    continue
+                except ExtendBranchesImpossible as e:
+                    raise FixIllegalIntermediateConstantImpossible(
+                        _make_pretty_msg(status='failure', msg=f'the original error:\n{str(e)}')
+                    )
 
             elif illegal_node is proof_tree.root_node:
                 # TODO: implement here using _generate_stem() with universal_intro arguments
-                raise FixIllegalIntermediateConstantFailure(_make_pretty_msg_for_fix(msg='because the fix for a root node is not implement yet'))
+                raise FixIllegalIntermediateConstantImpossible(_make_pretty_msg_for_fix(msg='because the fix for a root node is not implement yet'))
             else:
                 raise Exception()
 
             if is_fixed(constant, alignment[illegal_node], proof_tree_tmp_maybe_fixed):
+                logger.info(_make_pretty_msg_for_fix(status='success'))
                 node_is_fixed = True
                 proof_tree_fixed = proof_tree_tmp_maybe_fixed
                 break
+            else:
+                logger.info(_make_pretty_msg_for_fix(status='failure', msg='will try next. succeeded in branch extension but not in fixing the illegality.'))
 
         if all_is_fixed:
             break
 
-        if node_is_fixed:
-            logger.info(_make_pretty_msg_for_fix(status='success'))
-        else:
+        if not node_is_fixed:
             raise FixIllegalIntermediateConstantFailure(
-                _make_pretty_msg(status='failure',
-                                 trial=i_trial, max_trial=fix_trial_per_node, boundary_level=2,
-                                 msg=f'failed to fix a illegal leaf node {str(illegal_node)} with intermediate constant {str(constant.rep)}'))
+                _make_pretty_msg(status='failure')
+            )
 
     if proof_tree_fixed.depth != original_depth:
-        logger.warning(_make_pretty_msg(trial=i_trial, max_trial=fix_trial_per_node, boundary_level=2,
-                       msg=f'altered the depth of the tree from {original_depth} -> {proof_tree_fixed.depth}'))
+        logger.warning(_make_pretty_msg(msg=f'altered the depth of the tree from {original_depth} -> {proof_tree_fixed.depth}'))
 
-    logger.info(_make_pretty_msg(status='success', trial=i_trial, max_trial=fix_trial_per_node, boundary_level=3))
+    logger.info(_make_pretty_msg(status='success', boundary_level=3))
 
     return proof_tree_fixed
 
 
+@profile
 def _validate_illegal_intermediate_constants(
     force_fix_illegal_intermediate_constants: bool,
     allow_illegal_intermediate_constants: bool,
     exception_cls,
     proof_tree: ProofTree,
-    arguments: Optional[List[Argument]] = None,
+    arguments: List[Argument],
+    argument_weights: Optional[Dict[Argument, float]] = None,
     elim_dneg=False
 ) -> ProofTree:
 
@@ -1092,9 +1192,10 @@ def _validate_illegal_intermediate_constants(
                 proof_tree = _fix_illegal_intermediate_constants(
                     proof_tree,
                     arguments=arguments,
+                    argument_weights=argument_weights,
                     elim_dneg=elim_dneg,
                 )
-            except FixIllegalIntermediateConstantFailure as e:
+            except (FixIllegalIntermediateConstantFailure, FixIllegalIntermediateConstantImpossible) as e:
                 raise exception_cls('_fix_illegal_intermediate_constants() failed. the original message is:' + '\n' + str(e))
 
     if not allow_illegal_intermediate_constants:
