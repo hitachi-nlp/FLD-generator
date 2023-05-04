@@ -621,10 +621,10 @@ class NegativeTreeDistractor(FormulaDistractor):
         if size == 0:
             return [], {'negative_tree': None, 'negative_tree_missing_nodes': None}
 
+        max_branch_extension_steps = 10
         n_trial = 0
         while True:
             # gradually increase the number of extension steps to find the "just in" size tree.
-            max_branch_extension_steps = 10
             branch_extension_steps = min(size + n_trial * 2, max_branch_extension_steps)
             self._log(logging.INFO, f'trial={n_trial}  branch_extension_steps={branch_extension_steps}')
 
@@ -659,6 +659,7 @@ class NegativeTreeDistractor(FormulaDistractor):
             negative_leaf_nodes = negative_tree.leaf_nodes
             if len(negative_leaf_nodes) - 1 < size and branch_extension_steps < self.max_branch_extension_steps:
                 self._log(logging.INFO, f'continue to the next trial with increased branch_extension_steps, since number of negatieve leaf formulas - 1 = {len(negative_leaf_nodes) - 1} < size={size}')
+                n_trial += 1
                 continue
 
             distractor_formulas: List[Formula] = []
