@@ -831,7 +831,7 @@ def generate_quantifier_axiom_arguments(
         elif argument_type == 'existential_quantifier_intro':
             quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
-            argument_id = f'{id_prefix}.quantifier_axiom.existential_elim--{i}' if id_prefix is not None else f'quantifier_axiom.existential_elim--{i}'
+            argument_id = f'{id_prefix}.quantifier_axiom.existential_intro--{i}' if id_prefix is not None else f'quantifier_axiom.existential_intro--{i}'
             argument = Argument(
                 [de_quantifier_formula],
                 quantifier_formula,
