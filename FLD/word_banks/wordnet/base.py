@@ -8,7 +8,7 @@ import nltk
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
 from FLD.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
-from FLD.utils import starts_with_vowel_sound
+from FLD.utils import starts_with_vowel_sound, make_pretty_msg
 
 logger = logging.getLogger(__name__)
 
@@ -61,10 +61,10 @@ class WordNetWordBank(WordBank):
             lemma_str = lemma.name()
             yield lemma_str, syn.pos()
 
-    def get_words(self) -> Iterable[str]:
+    def _get_real_words(self) -> Iterable[str]:
         yield from sorted(self._cached_word_set)
 
-    def get_pos(self, word: str) -> List[POS]:
+    def _get_pos(self, word: str) -> List[POS]:
         word = self.get_lemma(word)
         wb_POSs = {
             (self._pos_wn_to_wb[syn.pos()] if syn.pos() in self._pos_wn_to_wb else POS.UNK)

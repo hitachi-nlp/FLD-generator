@@ -1,5 +1,6 @@
 from typing import List, Iterable, Optional
 from abc import abstractmethod, ABC
+import re
 import random
 import logging
 
@@ -83,6 +84,10 @@ class WordSwapDistractor(TranslationDistractor):
 
     @profile
     def _generate(self, translations: List[str], size: int) -> List[str]:
+        intermediate_constants = list(self._word_bank.get_intermediate_constant_words())
+        translations = [transl for transl in translations
+                        if all(transl.find(intermediate_constant) < 0 for intermediate_constant in intermediate_constants)]
+
         if len(translations) == 0 or size == 0:
             return []
         

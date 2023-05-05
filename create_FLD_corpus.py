@@ -23,6 +23,7 @@ from FLD.proof import ProofTree
 from FLD.utils import nested_merge
 from FLD.formula_distractors import build as build_distractor
 from FLD.translation_distractors import build as build_translation_distractor
+from FLD.utils import _build_bounded_msg, log_results
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -39,6 +40,7 @@ def load_dataset(argument_config: List[str],
                  translation_volume_to_weight: str,
                  complication: float,
                  quantification: float,
+                 quantifier_axioms: Optional[List[str]],
                  keep_dneg: bool,
                  distractor: str,
                  num_distractors: List[int],
@@ -56,48 +58,50 @@ def load_dataset(argument_config: List[str],
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
                  depths: List[int],
                  depth_distribution: str,
+                 force_fix_illegal_unconditioned_constants: bool,
                  branch_extension_steps: List[int]):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
         complication=complication,
         quantification=quantification,
+        quantifier_axioms=quantifier_axioms,
     )
 
-    logger.info('------------------- building wordnet ----------------')
+    logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
     word_bank = build_wordnet_wordbank('eng')
-    logger.info('------------------- building wordnet done! ----------------')
+    logger.info(_build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
 
     if any(size > 0 for size in num_distractors):
-        logger.info('------------------- building distractor ----------------')
+        logger.info(_build_bounded_msg(f'{"[start] building distractor":<30}', 3))
         _distractor = build_distractor(distractor,
                                        generator=generator,
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                        use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
                                        sample_hard_negatives=sample_hard_negative_distractors,
                                        try_negated_hypothesis_first=not dont_try_negative_hypothesis)
-        logger.info('------------------- building distractor done! ----------------')
+        logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
 
     if any(size > 0 for size in num_translation_distractors) or fallback_from_formula_to_translation_distractor:
-        logger.info('------------------- building translation distractor ----------------')
+        logger.info(_build_bounded_msg(f'{"[start] building translation distractor":<30}', 3))
         _translation_distractor = build_translation_distractor(
             translation_distractor,
             word_bank=word_bank,
         )
-        logger.info('------------------- building translation distractor done! ----------------')
+        logger.info(_build_bounded_msg(f'{"[finish] building translation distractor":<30}', 3))
     else:
         _translation_distractor = None
 
-    logger.info('------------------- building translator ----------------')
+    logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
     translator = build_translator(translation_config,
                                   word_bank,
                                   use_fixed_translation=use_fixed_translation,
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight)
-    logger.info('------------------- building translator done! ----------------')
+    logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
@@ -127,6 +131,7 @@ def load_dataset(argument_config: List[str],
                            branch_extension_steps,
                            depth_weights=depth_weights,
                            depth_1_reference_weight=depth_1_reference_weight,
+                           force_fix_illegal_unconditioned_constants=force_fix_illegal_unconditioned_constants,
                            num_distractors=num_distractors,
                            num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
@@ -146,32 +151,12 @@ def generate_instances(size: int, *args):
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):  # HONOKA: we can't pass here
         data.append((nlproof_json, proof_tree, distractors, translation_distractors))
         _final_stats = stats
-        log(logger, nlproof_json, proof_tree, distractors, translation_distractors)
+        log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
+                    distractors=distractors, translation_distractors=translation_distractors,
+                    stats=stats)
     logger.debug('[pass or not checking for finding the cause of hangups] 02')
+
     return data, _final_stats
-
-
-def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str], translation_distractors: List[str]):
-    logger.info('\n')
-    logger.info('--------------- tree --------------')
-
-    logger.info('\n')
-    logger.info('\n' + proof_tree.format_str)
-
-    logger.info('\n')
-    logger.info('--------------- distractors --------------')
-    logger.info('\n' + pformat(distractors))
-
-    logger.info('\n')
-    logger.info('--------------- translation distractors --------------')
-    logger.info('\n' + pformat(translation_distractors))
-
-    logger.info('\n')
-    logger.info('--------------- NLProofs json --------------')
-    logger.info('\n' + pformat(nlproof_json))
-
-    logger.info('\n\n')
-    logger.info('=================== generating proof tree =========================')
 
 
 @click.command()
@@ -188,9 +173,14 @@ def log(logger, nlproof_json: Dict, proof_tree: ProofTree, distractors: List[str
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
 @click.option('--depth-distribution', type=click.Choice(['flat', 'ruletaker.ours.20221202']))
+@click.option('--force-fix-illegal-unconditioned-constants', is_flag=True)
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
+@click.option('--quantifier-axiom', multiple=True, default=None)
+@click.option('--translation-config', '--tc',
+              multiple=True,
+              default=['./configs/translations/thing.json'])
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
@@ -220,9 +210,11 @@ def main(output_path,
          size,
          depths,
          depth_distribution,
+         force_fix_illegal_unconditioned_constants,
          branch_extension_steps,
          complication,
          quantification,
+         quantifier_axiom,
          keep_dneg,
          distractor,
          num_distractors,
@@ -286,6 +278,7 @@ def main(output_path,
                         translation_volume_to_weight,
                         complication,
                         quantification,
+                        quantifier_axiom,
                         keep_dneg,
                         distractor,
                         num_distractors,
@@ -303,6 +296,7 @@ def main(output_path,
                         use_collapsed_translation_nodes_for_unknown_tree,
                         depths,
                         depth_distribution,
+                        force_fix_illegal_unconditioned_constants,
                         branch_extension_steps,
                     )
                 )

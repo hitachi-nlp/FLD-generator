@@ -3,7 +3,7 @@ import json
 import logging
 import math
 from collections import defaultdict
-from typing import List, Optional, Any, Iterable, Tuple, Dict, Union, Callable
+from typing import List, Optional, Any, Iterable, Tuple, Dict, Union, Callable, Optional, Set
 from pprint import pformat, pprint
 import logging
 
@@ -36,7 +36,12 @@ from .interpretation import (
 # from .utils import DelayedLogger
 from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
-from .utils import weighted_shuffle, run_with_timeout_retry, RetryAndTimeoutFailure
+from .utils import (
+    weighted_shuffle,
+    run_with_timeout_retry,
+    RetryAndTimeoutFailure,
+    make_pretty_msg,
+)
 
 from .formula import (
     IMPLICATION,
@@ -54,6 +59,15 @@ import kern_profiler
 logger = logging.getLogger(__name__)
 
 
+# see  [failure_loop](./docs/axioms_theorems.md)
+_DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP = True
+
+
+def _is_failure_loop_univ_intro_argument(argument: Argument) -> bool:
+    return argument.id.find('universal_intro') >= 0\
+        and argument.premises[0].rep.find(IMPLICATION) >= 0
+
+
 class ProofTreeGenerationFailure(FormalLogicExceptionBase):
     pass
 
@@ -63,6 +77,30 @@ class GenerateStemFailure(ProofTreeGenerationFailure):
 
 
 class ExtendBranchesFailure(ProofTreeGenerationFailure):
+    pass
+
+
+class ProofTreeGenerationImpossible(FormalLogicExceptionBase):
+    pass
+
+
+class GenerateStemImpossible(ProofTreeGenerationImpossible):
+    pass
+
+
+class ExtendBranchesImpossible(ProofTreeGenerationImpossible):
+    pass
+
+
+class FixIllegalIntermediateConstantFailure(ProofTreeGenerationFailure):
+    pass
+
+
+class FixIllegalIntermediateConstantImpossible(FormalLogicExceptionBase):
+    pass
+
+
+class IllegalIntermediateConstantError(ProofTreeGenerationFailure):
     pass
 
 
@@ -90,6 +128,7 @@ class ProofTreeGenerator:
                  complicated_arguments_weight=0.0,
                  quantifier_arguments_weight=0.0,
                  quantifier_axiom_arguments_weight=0.0,
+                 quantifier_axioms: Optional[List[str]] = None,
                  quantify_all_at_once=True,
                  or_arguments_factor=0.2,  # or is not that impotant for NLI
                  existential_arguments_factor=0.2,  # existential quantifier is not that impotant for NLI
@@ -110,6 +149,7 @@ class ProofTreeGenerator:
             complicated_arguments_weight=self._complicated_arguments_weight,
             quantifier_arguments_weight=quantifier_arguments_weight,
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
+            quantifier_axioms=quantifier_axioms,
             quantify_all_at_once=quantify_all_at_once,
             or_arguments_factor=or_arguments_factor,
             existential_arguments_factor=existential_arguments_factor,
@@ -127,13 +167,14 @@ class ProofTreeGenerator:
                         complicated_arguments_weight: float,
                         quantifier_arguments_weight: float,
                         quantifier_axiom_arguments_weight: float,
+                        quantifier_axioms: Optional[List[str]],
                         quantify_all_at_once: bool,
                         or_arguments_factor: float,
                         existential_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         reference_argument_factor: float,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
-        logger.info('-- loading arguments ....')
+        logger.info(make_pretty_msg(title='load arguments', status='start', boundary_level=0))
 
         arguments = _REFERENCE_ARGUMENTS + arguments
 
@@ -169,16 +210,15 @@ class ProofTreeGenerator:
                     if all(not formula_is_identical_to(formula, existent_formula) for existent_formula in unique_formulas):
                         unique_formulas.append(formula)
 
-            for argument_type in [
-                    'universal_quantifier_elim',
-
-                    # we do not use existential_quantifier_intro since it has no chainable_args without existential_quantifier_elim, which is not implemented yet.
-                    # 'existential_quantifier_intro',
-            ]:
+            quantifier_axioms = quantifier_axioms or []
+            for argument_type in quantifier_axioms:
                 for i_formula, formula in enumerate(unique_formulas):
                     if len(formula.variables) > 0:
                         continue
-                    for quantifier_axiom_argument in generate_quantifier_axiom_arguments(argument_type, formula, id_prefix=f'fomula-{str(i_formula).zfill(6)}', quantify_all_at_once=quantify_all_at_once):
+                    for quantifier_axiom_argument in generate_quantifier_axiom_arguments(argument_type,
+                                                                                         formula,
+                                                                                         id_prefix=f'fomula-{str(i_formula).zfill(6)}',
+                                                                                         quantify_all_at_once=quantify_all_at_once):
                         if _is_argument_new(quantifier_axiom_argument, arguments + complicated_arguments + quantifier_axiom_arguments):
                             quantifier_axiom_arguments.append(quantifier_axiom_argument)
 
@@ -232,7 +272,7 @@ class ProofTreeGenerator:
             for argument, weight in _argument_weights.items()
         }
 
-        logger.info('------- loaded arguments ------')
+        logger.info(make_pretty_msg(title='load arguments', status='finish', boundary_level=0))
         for argument in _arguments:
             logger.info('weight: %f    %s', _argument_weights[argument], str(argument))
 
@@ -241,115 +281,170 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth: int,
                       branch_extension_steps: int,
-                      depth_1_reference_weight: Optional[float] = None,
-                      max_retry=30,
-                      timeout=5) -> Optional[ProofTree]:
-        if depth == 1:
-            logger.info('do only generate_stem() since depth=1 tree can not be extend_branches()')
-            return self.generate_stem(depth, depth_1_reference_weight=depth_1_reference_weight, max_retry=max_retry, timeout=timeout)
-        else:
-            try:
-                return run_with_timeout_retry(
-                    self._generate_tree,
-                    func_args=[depth, branch_extension_steps],
-                    func_kwargs={'depth_1_reference_weight': depth_1_reference_weight},
-                    retry_exception_class=ProofTreeGenerationFailure,
-                    max_retry=max_retry,
-                    timeout=timeout,
-                    logger=logger,
-                    log_title='generate_tree()',
-                )
-            except RetryAndTimeoutFailure as e:
-                raise ProofTreeGenerationFailure(str(e))
+                      **kwargs) -> Optional[ProofTree]:
+        return _generate_tree_with_timeout_retry(
+            self.arguments,
+            depth,
+            branch_extension_steps,
+            argument_weights=self.argument_weights,
+            elim_dneg=self.elim_dneg,
+            disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
+            **kwargs,
+        )
 
-    def generate_stem(self,
-                      depth: int,
-                      depth_1_reference_weight: Optional[float] = None,
-                      max_retry=30,
-                      timeout=5) -> Optional[ProofTree]:
-        try:
-            return run_with_timeout_retry(
-                self._generate_stem,
-                func_args=[depth],
-                func_kwargs={'depth_1_reference_weight': depth_1_reference_weight},
-                retry_exception_class=GenerateStemFailure,
-                max_retry=max_retry,
-                timeout=timeout,
-                logger=logger,
-                log_title='generate_stem()',
-            )
-        except RetryAndTimeoutFailure as e:
-            raise GenerateStemFailure(str(e))
+    def generate_stem(self, depth: int, **kwargs) -> ProofTree:
+        return _generate_stem_with_timeout_retry(
+            self.arguments,
+            depth,
+            argument_weights=self.argument_weights,
+            elim_dneg=self.elim_dneg,
+            disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
+            **kwargs,
+        )
 
     def extend_branches(self,
                         proof_tree: ProofTree,
                         branch_extension_steps: int,
-                        depth_limit: Optional[int] = None,
-                        ng_formulas: Optional[List[Formula]] = None,
-                        max_retry=30,
-                        timeout=5) -> ProofTree:
+                        **kwargs) -> ProofTree:
+        return _extend_branches_with_timeout_retry(
+            proof_tree,
+            self.arguments,
+            branch_extension_steps,
+            argument_weights=self.argument_weights,
+            elim_dneg=self.elim_dneg,
+            **kwargs,
+        )
+
+
+def _generate_tree_with_timeout_retry(*args,
+                                      max_retry=30,
+                                      timeout=10,  # 5 + 5
+                                      **kwargs) -> Optional[ProofTree]:
+    try:
+        return run_with_timeout_retry(
+            _generate_tree,
+            func_args=args,
+            func_kwargs=kwargs,
+            retry_exception_class=ProofTreeGenerationFailure,
+            max_retry=max_retry,
+            timeout=timeout,
+            logger=logger,
+            log_title='generate_tree()',
+        )
+    except RetryAndTimeoutFailure as e:
+        raise ProofTreeGenerationFailure(str(e))
+    # except ProofTreeGenerationImpossible as e:
+    #     raise ProofTreeGenerationFailure(str(e))
+
+
+def _generate_tree(arguments: List[Argument],
+                   depth: int,
+                   branch_extension_steps: int,
+                   argument_weights: Optional[Dict[Argument, float]] = None,
+                   depth_1_reference_weight: Optional[float] = None,
+                   elim_dneg=False,
+                   ng_formulas: Optional[List[Formula]] = None,
+                   disallow_contradiction_as_hypothesis=False,
+                   allow_reference_arguments_when_depth_1=True,
+                   force_fix_illegal_intermediate_constants=False,
+                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
+    proof_tree = _generate_stem(
+        arguments,
+        depth,
+        argument_weights=argument_weights,
+        depth_1_reference_weight=depth_1_reference_weight,
+        elim_dneg=elim_dneg,
+        disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis,
+
+        # since the branch extension may recover the illegal intermediate constants.
+        force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants if depth == 1 else False,
+        allow_illegal_intermediate_constants = allow_illegal_intermediate_constants if depth == 1 else False,
+    )
+    if depth > 1:
         try:
-            return run_with_timeout_retry(
-                self._extend_branches,
-                func_args=[proof_tree, branch_extension_steps],
-                func_kwargs={'depth_limit': depth_limit, 'ng_formulas': ng_formulas},
-                retry_exception_class=ExtendBranchesFailure,
-                max_retry=max_retry,
-                timeout=timeout,
-                logger=logger,
-                log_title='extend_branches()',
+            proof_tree = _extend_branches_with_timeout_retry(
+                proof_tree,
+                arguments,
+                branch_extension_steps,
+                argument_weights=argument_weights,
+                depth_limit=proof_tree.depth,
+                elim_dneg=elim_dneg,
+                ng_formulas=ng_formulas,
+                allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
+                force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
+                allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
+                max_retry=10,
             )
-        except RetryAndTimeoutFailure as e:
-            raise ExtendBranchesFailure(str(e))
+        except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
+            logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
+                                           msg=f'because of the following error:\n{str(e)}'))
 
-    def _generate_tree(self, depth: int, branch_extension_steps: int, depth_1_reference_weight: Optional[float] = None) -> Optional[ProofTree]:
-        proof_tree = self._generate_stem(depth, depth_1_reference_weight=depth_1_reference_weight)
-        try:
-            proof_tree = self.extend_branches(proof_tree,
-                                              branch_extension_steps,
-                                              depth_limit=proof_tree.depth,
-                                              max_retry=10)
-        except ExtendBranchesFailure as e:
-            logger.warning('extend_branches() failed. Will return tree without branch extension. The error was the following:\n%s', str(e))
+            # The following is needed since it is possible that the _extend_branches_with_timeout_retry did nothing.
+            proof_tree = _validate_illegal_intermediate_constants(
+                force_fix_illegal_intermediate_constants,
+                allow_illegal_intermediate_constants,
+                ExtendBranchesFailure,
+                proof_tree,
+                arguments,
+                argument_weights=argument_weights,
+                elim_dneg=elim_dneg,
+            )
 
-        return proof_tree
+    return proof_tree
 
-    def _generate_stem(self,
-                       depth: int,
-                       depth_1_reference_weight: Optional[float] = None) -> ProofTree:
-        return _generate_stem(self.arguments,
-                              depth,
-                              PREDICATES,
-                              CONSTANTS,
-                              argument_weights=self.argument_weights,
-                              depth_1_reference_weight=depth_1_reference_weight,
-                              elim_dneg=self.elim_dneg,
-                              disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis)
 
-    def _extend_branches(self,
-                         proof_tree: ProofTree,
-                         branch_extension_steps: int,
-                         depth_limit: Optional[int] = None,
-                         ng_formulas: Optional[List[Formula]] = None) -> ProofTree:
-        return _extend_branches(proof_tree,
-                                self.arguments,
-                                branch_extension_steps,
-                                PREDICATES,
-                                CONSTANTS,
-                                depth_limit=depth_limit,
-                                ng_formulas=ng_formulas,
-                                argument_weights=self.argument_weights,
-                                elim_dneg=self.elim_dneg)
+def _generate_stem_with_timeout_retry(*args,
+                                      max_retry=30,
+                                      timeout=5,
+                                      **kwargs) -> Optional[ProofTree]:
+    try:
+        return run_with_timeout_retry(
+            _generate_stem,
+            func_args=args,
+            func_kwargs=kwargs,
+            retry_exception_class=GenerateStemFailure,
+            max_retry=max_retry,
+            timeout=timeout,
+            logger=logger,
+            log_title='generate_stem()',
+        )
+    except RetryAndTimeoutFailure as e:
+        raise GenerateStemFailure(str(e))
+    # except GenerateStemImpossible as e:
+    #     raise GenerateStemFailure(str(e))
+
+
+def _extend_branches_with_timeout_retry(*args,
+                                        timeout=5,
+                                        max_retry=30,
+                                        **kwargs) -> ProofTree:
+    try:
+        return run_with_timeout_retry(
+            _extend_branches,
+            func_args=args,
+            func_kwargs=kwargs,
+            retry_exception_class=ExtendBranchesFailure,
+            max_retry=max_retry,
+            timeout=timeout,
+            logger=logger,
+            log_title='extend_branches()',
+        )
+    except RetryAndTimeoutFailure as e:
+        raise ExtendBranchesFailure(str(e))
+    # except ExtendBranchesImpossible as e:
+    #     raise ExtendBranchesFailure(str(e))
 
 
 def _generate_stem(arguments: List[Argument],
                    depth: int,
-                   predicate_pool: List[str],
-                   constant_pool: List[str],
+                   predicate_pool: List[str] = PREDICATES,
+                   constant_pool: List[str] = CONSTANTS,
                    argument_weights: Optional[Dict[Argument, float]] = None,
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
-                   disallow_contradiction_as_hypothesis=False) -> Optional[ProofTree]:
+                   disallow_contradiction_as_hypothesis=False,
+                   force_fix_illegal_intermediate_constants=False,
+                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -359,6 +454,19 @@ def _generate_stem(arguments: List[Argument],
     (iv) Add the premises of the argument chosen in (iii)
     (v) Repeat (iii) - (iv).
     """
+    if depth < 1:
+        raise ValueError('depth must be >= 2')
+
+    def _my_validate_illegal_intermediate_constants(proof_tree: ProofTree) -> ProofTree:
+        return _validate_illegal_intermediate_constants(
+            force_fix_illegal_intermediate_constants,
+            allow_illegal_intermediate_constants,
+            GenerateStemFailure,
+            proof_tree,
+            arguments,
+            argument_weights=argument_weights,
+            elim_dneg=elim_dneg,
+        )
 
     def update(premise_nodes: List[ProofNode],
                assumption_nodes: List[Optional[ProofNode]],
@@ -395,6 +503,32 @@ def _generate_stem(arguments: List[Argument],
         for arg in _shuffle_arguments(arguments, weights=argument_weights):
             yield arg
 
+    def find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
+        for descendant in node.descendants:
+            if descendant.is_leaf and descendant.assump_parent is None:
+                yield descendant
+
+    def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
+        cur_possible_assumption_nodes = set(find_possible_assumption_nodes(node))
+
+        for arg in arguments:
+            one_premise_matched = False
+            for premise in arg.premises:
+                if not formula_is_identical_to(premise, node.formula):
+                    continue
+
+                if premise in arg.assumptions:
+                    assumption = arg.assumptions[premise]
+                    if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
+                               for cur_assumption_node in cur_possible_assumption_nodes):
+                        continue
+
+                one_premise_matched = True
+                break
+
+            if one_premise_matched:
+                yield arg
+
     if depth == 1:
         if depth_1_reference_weight is not None:
             def argument_sampling():
@@ -414,11 +548,6 @@ def _generate_stem(arguments: List[Argument],
                         except StopIteration:
                             iter_non_reference = argument_sampling_non_reference()
                             arg = next(iter_non_reference)
-                    # logger.warning('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  depth=%d,    rand=%f,  depth_1_reference_weight=%f,  chosen_argument=%s',
-                    #                depth,
-                    #                rand,
-                    #                depth_1_reference_weight,
-                    #                arg.id)
                     yield arg
         else:
             argument_sampling = argument_sampling_all
@@ -428,6 +557,10 @@ def _generate_stem(arguments: List[Argument],
     for cur_arg in argument_sampling():  # try all the argument as starting point
         if len(cur_arg.assumptions) > 0:
             # the node with assumptions can not be used as the first node.
+            continue
+
+        if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
+                and _is_failure_loop_univ_intro_argument(cur_arg):
             continue
 
         proof_tree = ProofTree()
@@ -449,37 +582,17 @@ def _generate_stem(arguments: List[Argument],
             leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
             cur_conclusion = cur_conclusion_node.formula
-            cur_possible_assumption_nodes = [node
-                                             for node in cur_conclusion_node.descendants
-                                             if node.is_leaf and node.assump_parent is None]
+            cur_possible_assumption_nodes = list(find_possible_assumption_nodes(cur_conclusion_node))
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
-            # Choose next argument
-            chainable_args = []
-            for arg in arguments:
-                one_premise_matched = False
-                for premise in arg.premises:
-                    if not formula_is_identical_to(premise, cur_conclusion):
-                        continue
+            linkable_args = list(find_linkable_arguments(cur_conclusion_node))
 
-                    if premise in arg.assumptions:
-                        assumption = arg.assumptions[premise]
-                        if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
-                                   for cur_assumption_node in cur_possible_assumption_nodes):
-                            continue
-
-                    one_premise_matched = True
-                    break
-
-                if one_premise_matched:
-                    chainable_args.append(arg)
-
-            if len(chainable_args) == 0:
-                rejection_stats['len(chainable_args) == 0'] += 1
+            if len(linkable_args) == 0:
+                rejection_stats['len(linkable_args) == 0'] += 1
 
             is_arg_done = False
             next_arg_pulled = None
-            for next_arg in _shuffle_arguments(chainable_args, argument_weights):
+            for next_arg in _shuffle_arguments(linkable_args, argument_weights):
                 if is_arg_done:
                     break
                 log_traces.append(f'   |   | next_arg {next_arg}')
@@ -504,7 +617,7 @@ def _generate_stem(arguments: List[Argument],
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
 
-                        if premise_pulled.rep != cur_conclusion.rep:  # chainable or not
+                        if premise_pulled.rep != cur_conclusion.rep:  # linkable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
                             continue
 
@@ -529,6 +642,11 @@ def _generate_stem(arguments: List[Argument],
                                 break
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
+
+                            # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
+                            # if is_intermediate_constants_used:
+                            #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
+                            #     continue
 
                             if not is_argument_senseful(next_arg_pulled):
                                 rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
@@ -608,22 +726,42 @@ def _generate_stem(arguments: List[Argument],
                 raise GenerateStemFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
 
             _check_leaf_consistency(proof_tree)
-
+            proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
 
     raise Exception('Unexpected')
 
 
+@profile
+def find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Iterable[Argument]:
+    for arg in arguments:
+
+        if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
+                and _is_failure_loop_univ_intro_argument(arg):
+            continue
+
+        # SLOW, called many times -> but this is as the old
+        if formula_is_identical_to(arg.conclusion, node.formula)\
+                and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
+            yield arg
+
+
+@profile
 def _extend_branches(proof_tree: ProofTree,
                      arguments: List[Argument],
                      num_steps: int,
-                     predicate_pool: List[str],
-                     constant_pool: List[str],
+                     start_leaf_nodes: Optional[List[ProofNode]] = None,
+                     predicate_pool: List[str] = PREDICATES,
+                     constant_pool: List[str] = CONSTANTS,
                      argument_weights: Optional[Dict[Argument, float]] = None,
                      depth_limit: Optional[int] = None,
                      elim_dneg=False,
                      allow_reference_arguments_when_depth_1=True,
-                     ng_formulas: Optional[List[Formula]] = None) -> ProofTree:
+                     ng_formulas: Optional[List[Formula]] = None,
+                     allow_illegal_intermediate_constants=False,
+                     force_fix_illegal_intermediate_constants=False,
+                     return_at_best=False,
+                     return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
     The steps are:
@@ -632,7 +770,28 @@ def _extend_branches(proof_tree: ProofTree,
     (iii) Add the psemises of the chosen argument into tree.
     (iv) Repeat (ii) and (iii)
     """
-    proof_tree = proof_tree.copy()
+
+    def _my_validate_illegal_intermediate_constants(proof_tree: ProofTree) -> ProofTree:
+        return _validate_illegal_intermediate_constants(
+            force_fix_illegal_intermediate_constants,
+            allow_illegal_intermediate_constants,
+            ExtendBranchesFailure,
+            proof_tree,
+            arguments,
+            argument_weights=argument_weights,
+            elim_dneg=elim_dneg,
+        )
+
+    orig_leaf_nodes = set(proof_tree.leaf_nodes)
+    if start_leaf_nodes is not None:
+        for start_leaf_node in start_leaf_nodes:
+            if start_leaf_node not in orig_leaf_nodes:
+                raise ValueError('start_leaf_node {start_leaf_node} is not a leaf node.')
+
+    proof_tree, orig_nodes_to_copy_nodes = proof_tree.copy(return_alignment=True)
+    if start_leaf_nodes is not None:
+        start_leaf_nodes = [orig_nodes_to_copy_nodes[orig_node] for orig_node in start_leaf_nodes]
+
     ng_formulas = ng_formulas or []
 
     cur_step = 0
@@ -643,22 +802,58 @@ def _extend_branches(proof_tree: ProofTree,
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
         leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
-        leaf_nodes = [
+        current_leaf_nodes = [
             node for node in proof_tree.leaf_nodes
             if node.assump_parent is None  # assumptions shoud keep beeing leaf
         ]
+
+        if start_leaf_nodes is not None:
+            # The latter for when the tree is updated
+            _target_leaf_nodes = []
+            for start_leaf_node in start_leaf_nodes:
+                if start_leaf_node.is_leaf:
+                    _target_leaf_nodes.append(start_leaf_node)
+                else:
+                    _target_leaf_nodes.extend([descendant_node
+                                               for descendant_node in start_leaf_node.descendants
+                                               if descendant_node.is_leaf])
+
+            if len(_target_leaf_nodes) == 0:
+                if return_alignment:
+                    return proof_tree, orig_nodes_to_copy_nodes
+                else:
+                    return proof_tree
+        else:
+            _target_leaf_nodes = current_leaf_nodes
+
         if depth_limit is not None:
-            leaf_nodes = [node for node in leaf_nodes
-                          if proof_tree.get_node_depth(node) < depth_limit]
-        if len(leaf_nodes) == 0:
-            logger.warning('Couldn\'t extend branch since the tree have no leaf nodes under depth limit %d.', depth_limit)
+            _target_leaf_nodes = [node for node in _target_leaf_nodes
+                                  if proof_tree.get_node_depth(node) < depth_limit]
+
+        if len(_target_leaf_nodes) == 0:
+            logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
+                                           msg='couldn\'t extend branch because we found no target leaf nodes'))
+
             _check_leaf_consistency(proof_tree)
+
+            proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
+
+        if cur_step == 0:
+            is_linkable_any = False
+            for target_node in _target_leaf_nodes:
+                for linkable_arg in find_linkable_arguments(arguments, target_node):
+                    is_linkable_any = True
+                    break
+                if is_linkable_any:
+                    break
+            if not is_linkable_any:
+                raise ExtendBranchesImpossible(f'No linkable arguments found for target leaf nodes {str(_target_leaf_nodes)}')
 
         is_leaf_node_done = False
         next_arg_pulled = None
         target_leaf_node = None
-        for leaf_node in _shuffle(leaf_nodes):
+        for leaf_node in _shuffle(_target_leaf_nodes):
             log_traces = []
             rejection_stats = defaultdict(int)
 
@@ -670,15 +865,11 @@ def _extend_branches(proof_tree: ProofTree,
             target_leaf_node = leaf_node
 
             # Choose next argument
-            chainable_args = [
-                arg for arg in arguments
-                if formula_is_identical_to(arg.conclusion, leaf_node.formula)
-                and len(arg.assumptions) == 0  # by it's logic, the argument with premise assumptions can not be applied in branch extension
-            ]
-            if len(chainable_args) == 0:
-                rejection_stats['len(chainable_args) == 0'] += 1
+            linkable_args = list(find_linkable_arguments(arguments, leaf_node))
+            if len(linkable_args) == 0:
+                rejection_stats['len(linkable_args) == 0'] += 1
 
-            for next_arg in _shuffle_arguments(chainable_args, weights=argument_weights):
+            for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
                     continue
 
@@ -719,6 +910,11 @@ def _extend_branches(proof_tree: ProofTree,
                     ):
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
+                        # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
+                        # if is_intermediate_constants_used:
+                        #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
+                        #     continue
+
                         if not is_argument_senseful(next_arg_pulled):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                             continue
@@ -737,6 +933,7 @@ def _extend_branches(proof_tree: ProofTree,
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
+
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
@@ -767,17 +964,30 @@ def _extend_branches(proof_tree: ProofTree,
                 rejection_stats_msg,
 
             ])
-            raise ExtendBranchesFailure(msg)
+            if return_at_best:
+                logger.info(msg)
+                if return_alignment:
+                    return proof_tree, orig_nodes_to_copy_nodes
+                else:
+                    return proof_tree
+            else:
+                raise ExtendBranchesFailure(msg)
 
     _check_leaf_consistency(proof_tree)
-    return proof_tree
+    proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
+
+    if return_alignment:
+        return proof_tree, orig_nodes_to_copy_nodes
+    else:
+        return proof_tree
 
 
 def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
     is_already_added = False
     for existent_argument in arguments:
         if argument_is_identical_to(argument, existent_argument):
-            logger.info('-- Argument is identical to the already added argument. Will be skipped. --')
+            logger.info(make_pretty_msg(boundary_level=0,
+                                        msg='argument is identical to the already added argument. will be skipped.'))
             logger.info('tried to add  : %s', str(argument))
             logger.info('already added : %s', str(existent_argument))
             is_already_added = True
@@ -810,6 +1020,212 @@ def _check_leaf_consistency(proof_tree: ProofTree) -> None:
     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
 
 
+def _is_intermediate_constants_used(next_arg_pulled: Argument,
+                                    proof_tree: ProofTree) -> Tuple[bool, Optional[str], Optional[ProofNode]]:
+    for constant in next_arg_pulled.intermediate_constants:
+        for leaf_node in proof_tree.leaf_nodes:
+            if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
+                return True, constant.rep, leaf_node
+    return False, None, None
+
+
+@profile
+def _fix_illegal_intermediate_constants(
+    proof_tree: ProofTree,
+    arguments: Optional[List[Argument]] = None,
+    argument_weights: Optional[Dict[Argument, float]] = None,
+    argument_weight_bias_factor=100,
+    elim_dneg=False,
+) -> ProofTree:
+    if len(list((_find_illegal_intermediate_constants(proof_tree)))) >= 3:
+        raise FixIllegalIntermediateConstantImpossible('We do not fix tree with more than 3 illegal node because it is unlikely this fix will succeed, or otherwise it is too slow.')
+
+    if argument_weights is not None:
+
+        def get_biase_fator(argument_id: str) -> float:
+            if argument_id.find('universal_elim') >= 0:
+                return argument_weight_bias_factor
+            elif argument_id.find('universal_intro') >= 0:
+                return 1 / argument_weight_bias_factor
+            else:
+                return 1.0
+
+        argument_weights_biased: Dict[Argument, float] = {
+            argument: weight * get_biase_fator(argument.id)
+            for argument, weight in argument_weights.items()
+        }
+        _weight_sum = sum(argument_weights_biased.values())
+
+        for argument, weight in argument_weights_biased.items():
+            argument_weights_biased[argument] = weight / _weight_sum
+    else:
+        argument_weights_biased = {argument: 1.0 / len(arguments)
+                                   for argument in arguments}
+
+    def _make_pretty_msg(*args, **kwargs) -> str:
+        return make_pretty_msg(*args, title='_fix_illegal_intermediate_constants()', **kwargs)
+
+    logger.info(_make_pretty_msg(status='start', boundary_level=3))
+
+    original_depth = proof_tree.depth
+
+    def find_one_illegal_constant(_proof_tree: ProofTree) -> Tuple[Optional[Formula],
+                                                                   Optional[ProofNode]]:
+        for constant, illegal_node in _find_illegal_intermediate_constants(_proof_tree):
+            return constant, illegal_node
+        return None, None
+
+    def is_fixed(constant: Formula, illegal_node: ProofNode, proof_tree_tmp: ProofTree) -> bool:
+        descendant_leaf_nodes = [
+            node for node in illegal_node.descendants
+            if node in proof_tree_tmp.leaf_nodes
+        ]
+        return all(node.formula.rep.find(constant.rep) < 0 for node in descendant_leaf_nodes)
+
+    def build_exception_msg(illegal_node: ProofNode, node_type: str, constant: Formula, postfix='') -> str:
+        return f'fixing a illegal leaf node {str(illegal_node)} with intermediate constant "{constant.rep}" failed' + postfix
+
+    proof_tree_fixed = proof_tree.copy()
+    fix_trial_per_node = 30
+    all_is_fixed = False
+    while True:
+        node_is_fixed = False
+        for i_trial in range(0, fix_trial_per_node):
+            proof_tree_tmp, fixed_nodes_to_tmp_nodes = proof_tree_fixed.copy(return_alignment=True)
+            leaf_nodes = set(proof_tree_tmp.leaf_nodes)
+
+            constant, illegal_node = find_one_illegal_constant(proof_tree_tmp)
+            if constant is None:  # fixed all
+                all_is_fixed = True
+                break
+
+            def _make_pretty_msg_for_fix(status: Optional[str] = None, msg: Optional[str] = None) -> str:
+                return _make_pretty_msg(trial=i_trial, status=status,
+                                        subtitle=f'node={str(illegal_node)}, constant="{str(constant.rep)}"',
+                                        max_trial=fix_trial_per_node, boundary_level=1,
+                                        msg=msg)
+
+            if illegal_node in leaf_nodes:
+                num_steps = i_trial / 6 + 1
+                try:
+                    proof_tree_tmp_maybe_fixed, alignment = _extend_branches_with_timeout_retry(
+                        proof_tree_tmp,
+                        arguments,
+                        num_steps,
+
+                        argument_weights=argument_weights_biased,
+                        depth_limit=None,
+                        start_leaf_nodes=[illegal_node],
+                        elim_dneg=elim_dneg,
+                        allow_reference_arguments_when_depth_1=False,
+
+                        force_fix_illegal_intermediate_constants=False,
+                        allow_illegal_intermediate_constants=True,
+                        return_alignment=True,
+
+                        return_at_best=True,
+                        timeout=5,
+                        max_retry=5,
+                    )
+                except ExtendBranchesFailure as e:
+                    logger.info(_make_pretty_msg_for_fix(status='failure', msg=f'will try next. failed in branch extension due to:\n{str(e)}'))
+                    continue
+                except ExtendBranchesImpossible as e:
+                    raise FixIllegalIntermediateConstantImpossible(
+                        _make_pretty_msg(status='failure', msg=f'the original error:\n{str(e)}')
+                    )
+
+            elif illegal_node is proof_tree.root_node:
+                # TODO: implement here using _generate_stem() with universal_intro arguments
+                raise FixIllegalIntermediateConstantImpossible(_make_pretty_msg_for_fix(msg='because the fix for a root node is not implement yet'))
+            else:
+                raise Exception()
+
+            if is_fixed(constant, alignment[illegal_node], proof_tree_tmp_maybe_fixed):
+                logger.info(_make_pretty_msg_for_fix(status='success'))
+                node_is_fixed = True
+                proof_tree_fixed = proof_tree_tmp_maybe_fixed
+                break
+            else:
+                logger.info(_make_pretty_msg_for_fix(status='failure', msg='will try next. succeeded in branch extension but not in fixing the illegality.'))
+
+        if all_is_fixed:
+            break
+
+        if not node_is_fixed:
+            raise FixIllegalIntermediateConstantFailure(
+                _make_pretty_msg(status='failure')
+            )
+
+    if proof_tree_fixed.depth != original_depth:
+        logger.warning(_make_pretty_msg(msg=f'altered the depth of the tree from {original_depth} -> {proof_tree_fixed.depth}'))
+
+    logger.info(_make_pretty_msg(status='success', boundary_level=3))
+
+    return proof_tree_fixed
+
+
+@profile
+def _validate_illegal_intermediate_constants(
+    force_fix_illegal_intermediate_constants: bool,
+    allow_illegal_intermediate_constants: bool,
+    exception_cls,
+    proof_tree: ProofTree,
+    arguments: List[Argument],
+    argument_weights: Optional[Dict[Argument, float]] = None,
+    elim_dneg=False
+) -> ProofTree:
+
+    if force_fix_illegal_intermediate_constants:
+        is_illegal, msg = _is_intermediate_constants_illegal(proof_tree)
+        if is_illegal:
+            try:
+                proof_tree = _fix_illegal_intermediate_constants(
+                    proof_tree,
+                    arguments=arguments,
+                    argument_weights=argument_weights,
+                    elim_dneg=elim_dneg,
+                )
+            except (FixIllegalIntermediateConstantFailure, FixIllegalIntermediateConstantImpossible) as e:
+                raise exception_cls('_fix_illegal_intermediate_constants() failed. the original message is:' + '\n' + str(e))
+
+    if not allow_illegal_intermediate_constants:
+        is_illegal, msg = _is_intermediate_constants_illegal(proof_tree)
+        if is_illegal:
+            raise ExtendBranchesFailure(msg)
+
+    return proof_tree
+
+
+def _is_intermediate_constants_illegal(
+    proof_tree: ProofTree,
+) -> Tuple[bool, Optional[str]]:
+
+    leaf_nodes = set(proof_tree.leaf_nodes)
+
+    for constant, illegal_node in _find_illegal_intermediate_constants(proof_tree):
+        if illegal_node in leaf_nodes:
+            return True, f'The intermediate constant {constant.rep} is used at a leaf node {str(illegal_node)}.'
+        elif illegal_node is proof_tree.root_node:
+            return True, f'The intermediate constant {constant.rep} is used at the root node {str(illegal_node)}.'
+        else:
+            raise Exception()
+    return False, None
+
+
+def _find_illegal_intermediate_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
+    for constant in proof_tree.intermediate_constants:
+        for leaf_node in proof_tree.leaf_nodes:
+            if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
+                yield constant, leaf_node
+
+    root_node = proof_tree.root_node
+    if root_node is not None:
+        for constant in proof_tree.intermediate_constants:
+            if constant.rep in [root_constant.rep for root_constant in root_node.formula.constants]:
+                yield constant, leaf_node
+
+
 def load_arguments(config_paths: List[str]) -> List[Argument]:
     arguments = []
     for config_path in config_paths:
@@ -822,12 +1238,14 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
 def build(config_paths: List[str],
           elim_dneg=False,
           complication=0.0,
-          quantification=0.0):
+          quantification=0.0,
+          quantifier_axioms: Optional[List[str]] = None):
     arguments = load_arguments(config_paths)
     generator = ProofTreeGenerator(
         arguments,
         elim_dneg=elim_dneg,
         complicated_arguments_weight=complication,
         quantifier_axiom_arguments_weight=quantification,
+        quantifier_axioms=quantifier_axioms,
     )
     return generator

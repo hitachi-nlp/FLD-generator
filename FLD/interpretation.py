@@ -57,7 +57,7 @@ def generate_complicated_formulas(src_formula: Formula,
 def generate_simplified_formulas(src_formula: Formula,
                                  elim_dneg=False,
                                  get_name=False) -> Union[Iterable[Formula], Iterable[Tuple[Formula, str]]]:
-    # We will exclude "negation", "and" and "or"
+    # We will exclude negation, conjunction and disjunction from the src_formula.
     # For simplicity, we change one element at once
 
     rep = src_formula.rep
@@ -465,11 +465,19 @@ def interpret_argument(arg: Argument,
         for premise, interpreted_premise in zip(arg.premises, interpreted_premises)
         if premise in arg.assumptions
     }
+
+    interpreted_intermediate_constants = [
+        interpret_formula(constant, mapping,
+                          quantifier_types=quantifier_types, elim_dneg=elim_dneg)
+        for constant in arg.intermediate_constants
+    ]
+
     interpreted_conclusion = interpret_formula(arg.conclusion, mapping,
                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
     return Argument(interpreted_premises,
                     interpreted_conclusion,
                     interpreted_assumptions,
+                    intermediate_constants=interpreted_intermediate_constants,
                     id=arg.id,
                     base_scheme_group=arg.base_scheme_group,
                     scheme_variant=arg.scheme_variant)
@@ -477,9 +485,9 @@ def interpret_argument(arg: Argument,
 
 @profile
 def interpret_formula(formula: Formula,
-                       mapping: Dict[str, str],
-                       quantifier_types: Dict[str, str] = None,
-                       elim_dneg=False) -> Formula:
+                      mapping: Dict[str, str],
+                      quantifier_types: Dict[str, str] = None,
+                      elim_dneg=False) -> Formula:
 
     interpreted_formula = _expand_op(
         Formula(
@@ -536,8 +544,8 @@ def _expand_op(formula: Formula) -> Formula:
 
 @profile
 def _interpret_rep(rep: str,
-                    mapping: Dict[str, str],
-                    elim_dneg=False) -> str:
+                   mapping: Dict[str, str],
+                   elim_dneg=False) -> str:
     interpreted_rep = rep
 
     if len(mapping) >= 1:
@@ -679,29 +687,38 @@ def argument_is_identical_to(this_argument: Argument,
     # early rejections by premises
     if len(this_argument.premises) != len(that_argument.premises):
         return False
-    if any(
-        all(_formula_can_not_be_identical_to(this_premise, that_premise)
-            for that_premise in that_argument.premises)
-        for this_premise in this_argument.premises
-    ):
+    if len(this_argument.premises) >= 1:
+        if any(
+            all(_formula_can_not_be_identical_to(this_premise, that_premise)
+                for that_premise in that_argument.premises)
+            for this_premise in this_argument.premises
+        ):
+            return False
+        for this_premise in this_argument.premises:
+            if this_premise not in this_argument.assumptions:
+                continue
+
+            this_assumption = this_argument.assumptions[this_premise]
+
+            that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
+                                if that_premise in that_argument.assumptions]
+
+            if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
+                       for that_assumption in that_assumptions):
+                return False
+
+    # early rejections by intermediate_constants
+    if len(this_argument.intermediate_constants) != len(that_argument.intermediate_constants):
         return False
-    for this_premise in this_argument.premises:
-        if this_premise not in this_argument.assumptions:
-            continue
-
-        this_assumption = this_argument.assumptions[this_premise]
-
-        that_assumptions = [that_argument.assumptions[that_premise] for that_premise in that_argument.premises
-                            if that_premise in that_argument.assumptions]
-
-        if not any(not _formula_can_not_be_identical_to(this_assumption, that_assumption)
-                   for that_assumption in that_assumptions):
+    if len(this_argument.intermediate_constants) >= 1:
+        if any(
+            all(_formula_can_not_be_identical_to(this_constant, that_constant)
+                for that_constant in that_argument.intermediate_constants)
+            for this_constant in this_argument.intermediate_constants
+        ):
             return False
 
-    def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
-        return this_argument.conclusion.rep == that_argument.conclusion.rep
-
-    def is_premises_same(this_argument: Argument, that_argument: Argument) -> bool:
+    def is_premises_and_assumptions_same(this_argument: Argument, that_argument: Argument) -> bool:
         _is_premises_same = False
         for premise_indexes in permutations(range(len(that_argument.premises))):
             that_premises_permuted = [that_argument.premises[i] for i in premise_indexes]
@@ -723,6 +740,13 @@ def argument_is_identical_to(this_argument: Argument,
                     continue
         return _is_premises_same
 
+    def is_intermediate_constants_same(this_argument: Argument, that_argument: Argument) -> bool:
+        return set(constant.rep for constant in this_argument.intermediate_constants)\
+            == set(constant.rep for constant in that_argument.intermediate_constants)
+
+    def is_conclusion_same(this_argument: Argument, that_argument: Argument) -> bool:
+        return this_argument.conclusion.rep == that_argument.conclusion.rep
+
     # check the exact identification condition.
     for mapping in generate_mappings_from_argument(this_argument,
                                                    that_argument,
@@ -730,14 +754,17 @@ def argument_is_identical_to(this_argument: Argument,
                                                    allow_many_to_one=allow_many_to_oneg):
         this_argument_interpreted = interpret_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
+        # XXX: DO NOT change the order of validation. It is now ordered as "faster former"
         if is_conclusion_same(this_argument_interpreted, that_argument)\
-                and is_premises_same(this_argument_interpreted, that_argument):
+                and is_intermediate_constants_same(this_argument_interpreted, that_argument)\
+                and is_premises_and_assumptions_same(this_argument_interpreted, that_argument):
             return True
 
     # It is possible that no mappings are found (e.g. when no predicate and constants are in arguments)
     # but the arguments are the same from the beggining
     if is_conclusion_same(this_argument, that_argument)\
-            and is_premises_same(this_argument, that_argument):
+            and is_intermediate_constants_same(this_argument, that_argument)\
+            and is_premises_and_assumptions_same(this_argument, that_argument):
         return True
 
     return False
@@ -754,6 +781,9 @@ def generate_quantifier_axiom_arguments(
     Examples:
         See the test codes.
     """
+    available_arguments = ['universal_quantifier_intro', 'universal_quantifier_elim', 'existential_quantifier_intro', 'existential_quantifier_elim']
+    if argument_type not in available_arguments:
+        raise ValueError(f'Unsupported quantifier axiom {argument_type}')
     if len(formula.variables) > 0:
         raise NotImplementedError('Multiple quantifier is not supported yet.')
 
@@ -770,16 +800,34 @@ def generate_quantifier_axiom_arguments(
             for src, tgt in quantifier_mapping.items()
         }
 
-        if argument_type == 'universal_quantifier_elim':
+        if argument_type.startswith('universal_'):
             quantifier_formula = Formula(f'({quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
-            argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
-            argument = Argument(
-                [quantifier_formula],
-                de_quantifier_formula,
-                {},
-                id = argument_id,
-            )
+
+            if argument_type == 'universal_quantifier_elim':
+                argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
+                argument = Argument(
+                    [quantifier_formula],
+                    de_quantifier_formula,
+                    {},
+                    id = argument_id,
+                )
+            elif argument_type == 'universal_quantifier_intro':
+                quantified_constant_reps = list(
+                    set([constant.rep for constant in de_quantifier_formula.constants])\
+                    - set([constant.rep for constant in quantifier_formula.constants])
+                )
+                quantified_constants = [Formula(rep) for rep in quantified_constant_reps]
+
+                argument_id = f'{id_prefix}.quantifier_axiom.universal_intro-{i}' if id_prefix is not None else f'quantifier_axiom.universal_intro-{i}'
+                argument = Argument(
+                    [de_quantifier_formula],
+                    quantifier_formula,
+                    {},
+                    intermediate_constants=quantified_constants,
+                    id=argument_id,
+                )
+
         elif argument_type == 'existential_quantifier_intro':
             quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
             de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)

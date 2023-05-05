@@ -13,7 +13,7 @@ from FLD.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD.formula import Formula
 from FLD.proof import ProofTree, ProofNode
-from FLD.utils import flatten_dict, weighted_sampling
+from FLD.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD.translators.base import Translator
 from FLD.word_banks.base import WordBank
 from FLD.translation_distractors import build as build_translation_distractor
@@ -36,7 +36,7 @@ class WorldAssumption(Enum):
 def _generate_random_sentence(translator: Translator):
     acceptable_formula_reps = translator.acceptable_formulas
     for formula_rep in random.sample(acceptable_formula_reps, len(acceptable_formula_reps)):
-        nls, _ = translator.translate([Formula(formula_rep)])
+        nls, _ = translator.translate([Formula(formula_rep)], [])
         if nls[0][1] is not None:
             return nls[0][1]
     return 'Love Love LoveLive!'
@@ -139,6 +139,7 @@ class NLProofSDataset:
                  branch_extension_steps: List[int],
                  depth_weights: List[float] = None,
                  depth_1_reference_weight: Optional[float] = None,
+                 force_fix_illegal_intermediate_constants=False,
                  unknown_ratio: float = 1 / 3.,
                  use_collapsed_translation_nodes_for_unknown_tree=False,
                  word_bank: Optional[WordBank] = None,
@@ -166,6 +167,7 @@ class NLProofSDataset:
         logger.info('using depth weight: %s', str(self._depth_weights))
 
         self._depth_1_reference_weight = depth_1_reference_weight
+        self._force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants
 
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
@@ -193,6 +195,9 @@ class NLProofSDataset:
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
         for i_sample in range(size):
+            logger.info('\n\n')
+            logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))
+
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]
 
@@ -206,6 +211,7 @@ class NLProofSDataset:
                 _num_distractors,
                 _num_translation_distractors,
                 depth_1_reference_weight=self._depth_1_reference_weight,
+                force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 

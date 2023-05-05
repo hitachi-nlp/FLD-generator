@@ -7,7 +7,7 @@ from pprint import pformat
 
 from FLD.formula import Formula
 from FLD.argument import Argument
-from FLD.proof_tree_generators import build as build_generator, ProofTreeGenerator
+from FLD.proof_tree_generators import build as build_generator
 from FLD.formula_distractors import build as build_distractor
 from FLD.translation_distractors import build as build_translation_distractor
 from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
@@ -18,7 +18,7 @@ from FLD.translators import (
     TemplatedTranslator,
 )
 from FLD.interpretation import formula_is_identical_to
-from FLD.utils import nested_merge
+from FLD.utils import nested_merge, log_results
 from logger_setup import setup as setup_logger
 
 logger = logging.getLogger(__name__)
@@ -29,40 +29,10 @@ RAISE_IF_TRANSLATION_NOT_FOUND = True
 
 def generate_dataset(dataset: NLProofSDataset,
                      num_dataset: int = 10000) -> None:
-    logger.info('\n\n')
-    logger.info('=================== generating proof tree =========================')
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
-
-        logger.info('\n')
-        logger.info('--------------- tree --------------')
-
-        logger.info('\n')
-        logger.info('\n' + proof_tree.format_str)
-
-        logger.info('\n')
-        logger.info('--------------- formula distractors --------------')
-        logger.info('\n' + pformat(distractors))
-
-        logger.info('\n')
-        logger.info('--------------- translation distractors --------------')
-        logger.info('\n' + pformat(translation_distractors))
-
-        logger.info('\n')
-        logger.info('--------------- NLProofs json --------------')
-        logger.info('\n' + pformat(nlproof_json))
-
-        logger.info('\n')
-        logger.info('--------------- stats --------------')
-        for key in ['avg.word_count_all']:
-            if key in stats:
-                logger.info('%s: %s', key, stats[key])
-        # logger.info(dict(stats))
-        # logger.info('\n' + pformat(stats))
-
-        logger.info('\n\n')
-        logger.info('=================== generating proof tree =========================')
-
-        # f_out.write(json.dumps(nlproof_json) + '\n')
+        log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
+                    distractors=distractors, translation_distractors=translation_distractors,
+                    stats=stats)
 
 
 def test_generate_dataset_AACorpus():
@@ -120,6 +90,13 @@ def test_generate_dataset_AACorpus():
         elim_dneg=True,
         complication=0.3,
         quantification=0.0,
+        quantifier_axioms=[
+            'universal_quantifier_elim',
+            # 'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ]
     )
 
     distractor = build_distractor(
@@ -198,14 +175,14 @@ def test_generate_dataset():
             './configs/arguments/axiom.pred_only.json',
             './configs/arguments/axiom.pred_arg.json',
 
-            # './configs/arguments/axiom.and_or.pred_only.json',
-            # './configs/arguments/axiom.and_or.pred_arg.json',
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
 
-            # './configs/arguments/axiom.implication_intro.pred_only.json',
-            # './configs/arguments/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
 
-            # './configs/arguments/axiom.negation.pred_only.json',
-            # './configs/arguments/axiom.negation.pred_arg.json',
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
 
             # # -- we exclude the below for speed --
             # './configs/arguments/theorem.pred_only.json',
@@ -214,7 +191,7 @@ def test_generate_dataset():
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
-            './configs/arguments/theorem.G_MP.pred_arg.json',
+            # './configs/arguments/theorem.G_MP.pred_arg.json',
 
 
             # -- not tested. may not work --
@@ -230,6 +207,13 @@ def test_generate_dataset():
         elim_dneg=True,
         complication=0.3,
         quantification=0.2,
+        quantifier_axioms=[
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ]
     )
 
     distractor = build_distractor(
@@ -239,10 +223,10 @@ def test_generate_dataset():
 
         # 'fallback.unknown_interprands.negative_tree',
         # 'fallback.negative_tree.unknown_interprands',
-        'fallback.negative_tree.various_form',
+        # 'fallback.negative_tree.various_form',
         # 'fallback.various_form.negative_tree',
 
-        # 'mixture.negative_tree.simplified_formula.various_form',
+        'mixture.negative_tree.simplified_formula.various_form',
 
         generator=generator,
         sample_prototype_formulas_from_tree=True,
@@ -268,18 +252,19 @@ def test_generate_dataset():
     )
 
     # depths = _to_range(1, 5)
-    depths = _to_range(1, 2)
+    depths = _to_range(1, 5)
     dataset = NLProofSDataset(pipeline,
                               ['PROOF', 'DISPROOF', 'UNKNOWN'],
                               'OWA',
                               depths,
-                              _to_range(0, 5),
+                              _to_range(1, 5),
                               depth_weights = [1.0] * len(depths),
                               depth_1_reference_weight=None,
+                              force_fix_illegal_intermediate_constants=True,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
-                              num_distractors=[15],
+                              num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
                               raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
 

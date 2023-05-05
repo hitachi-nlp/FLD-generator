@@ -5003,6 +5003,13 @@ _DEFAULT_DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
         'unknown_ratio': 0.33,
 
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            # 'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ],
 
         'sample_distractor_formulas_from_tree': True,
         'sample_hard_negatives': True,
@@ -5026,6 +5033,13 @@ _DEFAULT_DATASET_SETTINGS = {
         'proof_stances': ['PROOF', 'DISPROOF', 'UNKNOWN'],
         'unknown_ratio': 0.33,
 
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            # 'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ],
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
         'use_simplified_tree_formulas_as_distractor_prototype': True,

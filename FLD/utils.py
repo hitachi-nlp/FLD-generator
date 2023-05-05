@@ -1,10 +1,10 @@
 from typing import Optional, Callable, List, Iterable, Any
 import math
-import logging
 from typing import Dict, Any, List, Iterable
 import random
 import logging
 import zlib
+from pprint import pformat
 
 from nltk.corpus import cmudict
 import timeout_decorator
@@ -120,24 +120,33 @@ def run_with_timeout_retry(
     func_kwargs = func_kwargs or {}
     max_retry = max_retry or 99999
     timeout = timeout or 99999
+    # timeout = 99999
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
-    logger.info('=================== run_with_timeout_retry (%s) [max_retry=%d] ==================', log_title, max_retry)
+    def _make_pretty_msg(i_trial: int, status: str, msg: Optional[str] = None):
+        return make_pretty_msg(title='run_with_timeout_retry', status=status, subtitle=str(log_title),
+                               trial=i_trial + 1, max_trial=max_retry, boundary_level=0,
+                               msg=msg)
+
     for i_trial in range(0, max_retry):
         exception_msg = None
         try:
             result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
-            logger.info('-- succeeded!')
+            logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
             return result
         except TimeoutError as e:
             exception_msg = f'TimeoutError(timeout={timeout})'
         except retry_exception_class as e:
             exception_msg = str(e)
+
         if exception_msg is not None:
-            logger.info('-------- trial [%d/%d] failed with the following exception -----------', i_trial + 1, max_retry)
-            logger.info('\n%s', exception_msg)
-    raise RetryAndTimeoutFailure(f'[failed] run_with_timeout_retry ({log_title}) [max_retry={max_retry}]')
+            logger.info(_make_pretty_msg(i_trial, 'failure',
+                                         msg=f'this is caused by the folllowing error\n{str(exception_msg)}'))
+        else:
+            logger.info(_make_pretty_msg(i_trial, 'failure'))
+
+    raise RetryAndTimeoutFailure(_make_pretty_msg(i_trial, 'failure'))
 
 
 def compress(text: str) -> bytes:
@@ -194,3 +203,94 @@ def chained_sampling_from_weighted_iterators(iterators: List[Iterable[Any]], wei
             if math.isclose(sum_weights, 0):
                 return
             normalized_weights = [weight / sum_weights for weight in aliving_weights]
+
+
+def _build_bounded_msg(msg: str, level: int) -> str:
+    if level == 0:
+        return f'---------- {msg:<40} ----------'
+    elif level == 1:
+        return f'========== {msg:<40} =========='
+    elif level == 2:
+        return f'********** {msg:<40} **********'
+    elif level == 3:
+        return f'---------------------------------- {msg:<40} ----------------------------------'
+    elif level == 4:
+        return f'================================== {msg:<40} =================================='
+    elif level == 5:
+        return f'********************************** {msg:<40} **********************************'
+    else:
+        raise ValueError()
+
+
+def log_results(logger,
+                nlproof_json: Optional[Dict] = None,
+                proof_tree = None,
+                distractors: Optional[List[str]] = None,
+                translation_distractors: Optional[List[str]] = None,
+                stats: Optional[Dict] = None):
+    logger.info(make_pretty_msg(title='results', boundary_level=4))
+
+    if proof_tree is not None:
+        logger.info('\n')
+        logger.info(make_pretty_msg(title='proof tree', boundary_level=3))
+        logger.info('\n')
+        logger.info('\n' + proof_tree.format_str)
+
+    if distractors is not None:
+        logger.info('\n')
+        logger.info(make_pretty_msg(title='distractors', boundary_level=3))
+        logger.info('\n' + pformat(distractors))
+
+    if translation_distractors is not None:
+        logger.info('\n')
+        logger.info(make_pretty_msg(title='translation distractors', boundary_level=3))
+        logger.info('\n' + pformat(translation_distractors))
+
+    if nlproof_json is not None:
+        logger.info('\n')
+        logger.info(make_pretty_msg(title='NLProofs json', boundary_level=3))
+        logger.info('\n' + pformat(nlproof_json))
+
+    if stats is not None:
+        logger.info('\n')
+        logger.info(make_pretty_msg(title='stats', boundary_level=3))
+        for key in ['avg.word_count_all']:
+            if key in stats:
+                logger.info('%s: %s', key, stats[key])
+
+    logger.info('\n\n')
+
+
+def make_pretty_msg(title: Optional[str] = None,
+                    status: Optional[str] = None,
+                    subtitle: Optional[str] = None,
+                    trial: Optional[int] = None,
+                    max_trial: Optional[int] = None,
+                    msg: Optional[str] = None,
+                    boundary_level: Optional[int] = None):
+    log_msg = ''
+
+    if title is not None:
+        log_msg += f'{"[" + title + "]":<25}'
+
+    if status is not None:
+        if status not in ['success', 'failure', 'start', 'finish']:
+            raise ValueError(f'Unsupported status {status}')
+        log_msg += f'  {"[" + status + "]":<10}'
+
+    if subtitle is not None:
+        log_msg += f'  {"[" + subtitle + "]":<25}'
+
+    if trial is not None:
+        if max_trial is not None:
+            log_msg += f'  {"[" + str(trial):^3s}/{str(max_trial) + "]":^3s}'
+        else:
+            log_msg += f'  {"[" + str(trial) + "]":^4s}'
+
+    if msg is not None:
+        log_msg += f'  {msg:<50}'
+
+    if boundary_level is not None:
+        log_msg = _build_bounded_msg(log_msg, boundary_level)
+
+    return log_msg

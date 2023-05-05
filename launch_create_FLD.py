@@ -140,6 +140,7 @@ def make_dataset(dataset_name: str,
                 f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                 f'--complication {job_settings["complication"]}',
                 f'--quantification {job_settings["quantification"]}',
+                _make_multiple_value_option('--quantifier-axiom', job_settings['quantifier_axioms']),
 
                 f'--distractor {job_settings["distractor"]}',
                 f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',

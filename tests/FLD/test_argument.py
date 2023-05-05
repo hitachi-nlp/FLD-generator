@@ -19,6 +19,16 @@ def test_argument():
                 "({A} v {B})"
             ],
             "conclusion": "{C}"
+        },
+        {
+            "id": "universal_intro.pred_arg",
+            "intermediate": [
+                "{a}"
+            ],
+            "premises": [
+                "{A}{a}",
+            ],
+            "conclusion": "(x): {A}x"
         }
     ]
 

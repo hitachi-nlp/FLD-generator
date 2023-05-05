@@ -171,6 +171,38 @@ def test_argument_is_identical_to():
 
     )
 
+    assert argument_is_identical_to(
+        Argument(
+            [Formula('{A}{a}')],
+            Formula('(x): {A}x'),
+            {},
+            intermediate_constants=[Formula('{a}')]
+        ),
+        Argument(
+            [Formula('{B}{b}')],
+            Formula('(x): {B}x'),
+            {},
+            intermediate_constants=[Formula('{b}')]
+        ),
+        allow_many_to_oneg=False,
+    )
+
+    assert not argument_is_identical_to(
+        Argument(
+            [Formula('{A}{a}')],
+            Formula('(x): {A}x'),
+            {},
+            intermediate_constants=[Formula('{a}')]
+        ),
+        Argument(
+            [Formula('{B}{b}')],
+            Formula('(x): {C}x'),
+            {},
+            intermediate_constants=[Formula('{b}')]
+        ),
+        allow_many_to_oneg=False,
+    )
+
 
 def test_generate_quantifier_axiom_arguments():
 
@@ -179,7 +211,8 @@ def test_generate_quantifier_axiom_arguments():
                          expected_arguments: List[Argument],
                          quantify_all_at_once=False):
         generated_arguments = list(
-            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once))
+            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once)
+        )
         print()
         print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
 
@@ -258,6 +291,88 @@ def test_generate_quantifier_axiom_arguments():
                 [Formula('(x): ({F}x v {G}x) -> {H}x')],
                 Formula('({F}{i} v {G}{i}) -> {H}{i}'),
                 {},
+            ),
+
+        ],
+        quantify_all_at_once=True
+    )
+
+    # ----------- universal_quantifier_intro --------------
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('{F}{a} -> {G}{a}'),
+        [
+            Argument(
+                [Formula('{F}{a} -> {G}{a}')],
+                Formula('(x): {F}x -> {G}x'),
+                {},
+                intermediate_constants=[Formula('{a}')]
+            ),
+        ]
+    )
+
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('({F}{i} v {G}{b}) -> {H}{c}')],
+                Formula('(x): ({F}x v {G}{b}) -> {H}{c}'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{i}) -> {H}{c}')],
+                Formula('(x): ({F}{a} v {G}x) -> {H}{c}'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
+                Formula('(x): ({F}{a} v {G}{b}) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
+                Formula('(x): ({F}x v {G}x) -> {H}{c}'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{i} v {G}{b}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}{b}) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}{a} v {G}x) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}x) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+
+        ]
+    )
+
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}x) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
             ),
 
         ],
@@ -662,11 +777,11 @@ if __name__ == '__main__':
     # test_expand_op()
     # test_formula_is_identical_to()
     # test_formula_can_not_be_identical_to()
-    # test_argument_is_identical_to()
+    test_argument_is_identical_to()
 
-    # test_generate_quantifier_axiom_arguments()
+    test_generate_quantifier_axiom_arguments()
 
     # test_generate_quantifier_formulas()
     # # test_generate_quantifier_arguments()
 
-    test_generate_simplified_formulas()
+    # test_generate_simplified_formulas()

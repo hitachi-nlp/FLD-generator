@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import logging
 
 from FLD.formula import Formula
@@ -26,14 +26,16 @@ def test_templated_translator():
         # volume_to_weight='inv_linear',
     )
 
-    def show_translations(formulas: List[Formula], trial: int) -> None:
+    def show_translations(formulas: List[Formula],
+                          trial: int,
+                          intermediate_constant_formulas: Optional[List[Formula]] = None) -> None:
         print('\n\n\n================   translate  ================')
         for i_trial in range(0, trial):
             print()
             print(f'---------- trial={i_trial} ----------')
-            translations, _ = translator.translate(formulas)
-            for formula, (_, translation) in zip(formulas, translations):
-                print(formula, '  ->  ', translation)
+            translations, _ = translator.translate(formulas, intermediate_constant_formulas or [])
+            for formula, (_, translation, _) in zip(formulas, translations):
+                print(formula, f'with intermediate {intermediate_constant_formulas}', '  ->  ', translation)
 
     # show_translations(
     #     [
@@ -81,6 +83,16 @@ def test_templated_translator():
             Formula('(x): {C}x -> {D}x'),
         ],
         100
+    )
+
+    show_translations(
+        [
+            Formula('{A}{a} -> {B}{b}'),
+            Formula('{C}{c} -> {D}{d}'),
+            Formula('{F}{f} -> {G}{g}'),
+        ],
+        100,
+        intermediate_constant_formulas=[Formula('{a}'), Formula('{d}')],
     )
 
 
