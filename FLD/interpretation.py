@@ -789,11 +789,13 @@ def generate_quantifier_axiom_arguments(
 
     de_quantifier_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
     for i, quantifier_mapping in enumerate(generate_quantifier_mappings([formula], quantify_all_at_once=quantify_all_at_once)):
-        quantifier_variables = [tgt for src, tgt in quantifier_mapping.items()
-                                if src != tgt]
+        quantifier_variables = {tgt for src, tgt in quantifier_mapping.items()
+                                if src != tgt}
         if len(quantifier_variables) == 0:
             continue
-        quantifier_variable = quantifier_variables[0]
+        elif len(quantifier_variables) >= 2:
+            raise NotImplementedError()
+        quantifier_variable = list(quantifier_variables)[0]
 
         de_quantifier_mapping = {
             src: (de_quantifier_constant if tgt == quantifier_variable else src)

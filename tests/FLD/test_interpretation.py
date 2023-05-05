@@ -777,7 +777,7 @@ if __name__ == '__main__':
     # test_expand_op()
     # test_formula_is_identical_to()
     # test_formula_can_not_be_identical_to()
-    test_argument_is_identical_to()
+    # test_argument_is_identical_to()
 
     test_generate_quantifier_axiom_arguments()
 
