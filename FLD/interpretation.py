@@ -775,6 +775,7 @@ def generate_quantifier_axiom_arguments(
     formula: Formula,
     id_prefix: Optional[str] = None,
     quantify_all_at_once=False,
+    e_elim_conclusion_formula_prototype: Optional[Formula] = None,
 ) -> Iterable[Argument]:
     """
 
@@ -802,9 +803,12 @@ def generate_quantifier_axiom_arguments(
             for src, tgt in quantifier_mapping.items()
         }
 
+        xyz_formula = interpret_formula(formula, quantifier_mapping)
+        abc_formula = interpret_formula(formula, de_quantifier_mapping)
+
         if argument_type.startswith('universal_'):
-            quantifier_formula = Formula(f'({quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
-            de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
+            quantifier_formula = Formula(f'({quantifier_variable}): {xyz_formula.rep}')
+            de_quantifier_formula = abc_formula
 
             if argument_type == 'universal_quantifier_elim':
                 argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
@@ -831,8 +835,8 @@ def generate_quantifier_axiom_arguments(
                 )
 
         elif argument_type == 'existential_quantifier_intro':
-            quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
-            de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
+            quantifier_formula = Formula(f'(E{quantifier_variable}): {xyz_formula.rep}')
+            de_quantifier_formula = abc_formula
             argument_id = f'{id_prefix}.quantifier_axiom.existential_intro--{i}' if id_prefix is not None else f'quantifier_axiom.existential_intro--{i}'
             argument = Argument(
                 [de_quantifier_formula],
@@ -840,8 +844,41 @@ def generate_quantifier_axiom_arguments(
                 {},
                 id = argument_id,
             )
+
         else:
-            raise ValueError()
+            if e_elim_conclusion_formula_prototype is None:
+                raise ValueError()
+            used_predicate_reps = {predicate.rep for predicate in xyz_formula.predicates}
+            unused_predicate_reps = [predicate_rep for predicate_rep in PREDICATES if predicate_rep not in used_predicate_reps]
+
+            used_constant_reps = {constant.rep for constant in xyz_formula.constants}
+            unused_constant_reps = [constant_rep for constant_rep in CONSTANTS if constant_rep not in used_constant_reps]
+
+            # remove predicate and constant used by quantifier formulas.
+            e_elim_conclusion_formula_unentangled: Optional[Formula] = None
+            for mapping in generate_mappings_from_predicates_and_constants(
+                [p.rep for p in e_elim_conclusion_formula_prototype.predicates],
+                [c.rep for c in e_elim_conclusion_formula_prototype.constants],
+                unused_predicate_reps,
+                unused_constant_reps,
+                allow_many_to_one=False,
+            ):
+                e_elim_conclusion_formula_unentangled = interpret_formula(e_elim_conclusion_formula_prototype, mapping)
+                break
+            if e_elim_conclusion_formula_unentangled is None:
+                raise Exception()
+
+            existential_quantifier_formula = Formula(f'(E{quantifier_variable}): {xyz_formula.rep}')
+            universal_quantifier_formula = Formula(f'({quantifier_variable}): ({xyz_formula.rep}) {IMPLICATION} {e_elim_conclusion_formula_unentangled.rep}')
+
+            conclusion_id = str(e_elim_conclusion_formula_prototype)
+            argument_id = f'{id_prefix}.quantifier_axiom.existential_elim--{i}.conclusion--{conclusion_id}' if id_prefix is not None else f'quantifier_axiom.existential_elim--{i}.conclusion--{conclusion_id}'
+            argument = Argument(
+                [existential_quantifier_formula, universal_quantifier_formula],
+                e_elim_conclusion_formula_unentangled,
+                {},
+                id = argument_id,
+            )
 
         yield argument
 

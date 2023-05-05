@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from FLD.interpretation import (
     _expand_op,
     generate_quantifier_axiom_arguments,
@@ -209,9 +209,11 @@ def test_generate_quantifier_axiom_arguments():
     def check_generation(argument_type: str,
                          formula: Formula,
                          expected_arguments: List[Argument],
-                         quantify_all_at_once=False):
+                         quantify_all_at_once=False,
+                         e_elim_conclusion_formula: Optional[Formula] = None):
         generated_arguments = list(
-            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once)
+            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once,
+                                                e_elim_conclusion_formula_prototype=e_elim_conclusion_formula)
         )
         print()
         print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
@@ -449,6 +451,82 @@ def test_generate_quantifier_axiom_arguments():
             ),
         ],
         quantify_all_at_once=True,
+    )
+
+    # ----------- existential_quantifier_elim --------------
+    check_generation(
+        'existential_quantifier_elim',
+        Formula('{F}{a} -> {G}{a}'),
+        [
+            Argument(
+                [Formula('(Ex): {F}x -> {G}x'), Formula('(x): ({F}x -> {G}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+        ],
+        e_elim_conclusion_formula=Formula('{F}{a}')
+    )
+
+    check_generation(
+        'existential_quantifier_elim',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('(Ex): ({F}x v {G}{b}) -> {H}{c}'), Formula('(x): (({F}x v {G}{b}) -> {H}{c}) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+            Argument(
+                [Formula('(Ex): ({F}{a} v {G}x) -> {H}{c}'), Formula('(x): (({F}{a} v {G}x) -> {H}{c}) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+            Argument(
+                [Formula('(Ex): ({F}{a} v {G}{b}) -> {H}x'), Formula('(x): (({F}{a} v {G}{b}) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+
+
+            Argument(
+                [Formula('(Ex): ({F}x v {G}x) -> {H}{c}'), Formula('(x): (({F}x v {G}x) -> {H}{c}) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+            Argument(
+                [Formula('(Ex): ({F}x v {G}{b}) -> {H}x'), Formula('(x): (({F}x v {G}{b}) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+            Argument(
+                [Formula('(Ex): ({F}{a} v {G}x) -> {H}x'), Formula('(x): (({F}{a} v {G}x) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+
+            Argument(
+                [Formula('(Ex): ({F}x v {G}x) -> {H}x'), Formula('(x): (({F}x v {G}x) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+
+        ],
+        e_elim_conclusion_formula=Formula('{F}{a}'),
+    )
+
+    check_generation(
+        'existential_quantifier_elim',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('(Ex): ({F}x v {G}x) -> {H}x'), Formula('(x): (({F}x v {G}x) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+
+        ],
+        quantify_all_at_once=True,
+        e_elim_conclusion_formula=Formula('{F}{a}'),
     )
 
 
