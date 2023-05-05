@@ -781,6 +781,9 @@ def generate_quantifier_axiom_arguments(
     Examples:
         See the test codes.
     """
+    available_arguments = ['universal_quantifier_intro', 'universal_quantifier_elim', 'existential_quantifier_intro', 'existential_quantifier_elim']
+    if argument_type not in available_arguments:
+        raise ValueError(f'Unsupported quantifier axiom {argument_type}')
     if len(formula.variables) > 0:
         raise NotImplementedError('Multiple quantifier is not supported yet.')
 

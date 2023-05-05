@@ -128,6 +128,7 @@ class ProofTreeGenerator:
                  complicated_arguments_weight=0.0,
                  quantifier_arguments_weight=0.0,
                  quantifier_axiom_arguments_weight=0.0,
+                 quantifier_axioms: Optional[List[str]] = None,
                  quantify_all_at_once=True,
                  or_arguments_factor=0.2,  # or is not that impotant for NLI
                  existential_arguments_factor=0.2,  # existential quantifier is not that impotant for NLI
@@ -148,6 +149,7 @@ class ProofTreeGenerator:
             complicated_arguments_weight=self._complicated_arguments_weight,
             quantifier_arguments_weight=quantifier_arguments_weight,
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
+            quantifier_axioms=quantifier_axioms,
             quantify_all_at_once=quantify_all_at_once,
             or_arguments_factor=or_arguments_factor,
             existential_arguments_factor=existential_arguments_factor,
@@ -165,6 +167,7 @@ class ProofTreeGenerator:
                         complicated_arguments_weight: float,
                         quantifier_arguments_weight: float,
                         quantifier_axiom_arguments_weight: float,
+                        quantifier_axioms: Optional[List[str]],
                         quantify_all_at_once: bool,
                         or_arguments_factor: float,
                         existential_arguments_factor: float,
@@ -202,19 +205,13 @@ class ProofTreeGenerator:
         quantifier_axiom_arguments: List[Argument] = []
         if quantifier_axiom_arguments_weight > 0.0:
             unique_formulas: List[Formula] = []
-
             for argument in arguments + complicated_arguments:
                 for formula in argument.all_formulas:
                     if all(not formula_is_identical_to(formula, existent_formula) for existent_formula in unique_formulas):
                         unique_formulas.append(formula)
 
-            for argument_type in [
-                    'universal_quantifier_elim',
-                    'universal_quantifier_intro',
-
-                    # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
-                    # 'existential_quantifier_intro',
-            ]:
+            quantifier_axioms = quantifier_axioms or []
+            for argument_type in quantifier_axioms:
                 for i_formula, formula in enumerate(unique_formulas):
                     if len(formula.variables) > 0:
                         continue
@@ -937,12 +934,6 @@ def _extend_branches(proof_tree: ProofTree,
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
 
-                            # # "¬{B}{bq} -> ({CP}{bq} & {FH}{bq})",
-                            # leaf_node_rep = leaf_node.formula.rep
-                            # if leaf_node_rep.find('->') >= 0 and leaf_node_rep.find('&') >= 0 and leaf_node_rep.find('}{') >= 0:
-                            #     import pudb
-                            #     pudb.set_trace()
-
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
@@ -1247,12 +1238,14 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
 def build(config_paths: List[str],
           elim_dneg=False,
           complication=0.0,
-          quantification=0.0):
+          quantification=0.0,
+          quantifier_axioms: Optional[List[str]] = None):
     arguments = load_arguments(config_paths)
     generator = ProofTreeGenerator(
         arguments,
         elim_dneg=elim_dneg,
         complicated_arguments_weight=complication,
         quantifier_axiom_arguments_weight=quantification,
+        quantifier_axioms=quantifier_axioms,
     )
     return generator

@@ -7,7 +7,7 @@ from pprint import pformat
 
 from FLD.formula import Formula
 from FLD.argument import Argument
-from FLD.proof_tree_generators import build as build_generator, ProofTreeGenerator
+from FLD.proof_tree_generators import build as build_generator
 from FLD.formula_distractors import build as build_distractor
 from FLD.translation_distractors import build as build_translation_distractor
 from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
@@ -90,6 +90,13 @@ def test_generate_dataset_AACorpus():
         elim_dneg=True,
         complication=0.3,
         quantification=0.0,
+        quantifier_axioms=[
+            'universal_quantifier_elim',
+            # 'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ]
     )
 
     distractor = build_distractor(
@@ -200,6 +207,13 @@ def test_generate_dataset():
         elim_dneg=True,
         complication=0.3,
         quantification=0.2,
+        quantifier_axioms=[
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ]
     )
 
     distractor = build_distractor(

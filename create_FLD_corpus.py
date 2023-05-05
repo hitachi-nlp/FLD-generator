@@ -40,6 +40,7 @@ def load_dataset(argument_config: List[str],
                  translation_volume_to_weight: str,
                  complication: float,
                  quantification: float,
+                 quantifier_axioms: Optional[List[str]],
                  keep_dneg: bool,
                  distractor: str,
                  num_distractors: List[int],
@@ -64,6 +65,7 @@ def load_dataset(argument_config: List[str],
         elim_dneg=not keep_dneg,
         complication=complication,
         quantification=quantification,
+        quantifier_axioms=quantifier_axioms,
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
@@ -175,6 +177,10 @@ def generate_instances(size: int, *args):
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
+@click.option('--quantifier-axiom', multiple=True, default=None)
+@click.option('--translation-config', '--tc',
+              multiple=True,
+              default=['./configs/translations/thing.json'])
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
@@ -208,6 +214,7 @@ def main(output_path,
          branch_extension_steps,
          complication,
          quantification,
+         quantifier_axiom,
          keep_dneg,
          distractor,
          num_distractors,
@@ -271,6 +278,7 @@ def main(output_path,
                         translation_volume_to_weight,
                         complication,
                         quantification,
+                        quantifier_axiom,
                         keep_dneg,
                         distractor,
                         num_distractors,
