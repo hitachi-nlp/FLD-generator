@@ -146,6 +146,9 @@ class ProofTreeGenerator:
         self._complicated_arguments_weight = complicated_arguments_weight
         self.arguments, self.argument_weights = self._load_arguments(
             arguments,
+            max_PASs_per_formula=3,
+            max_implication_per_formula=1,
+            max_and_or_per_formula=1,
             complicated_arguments_weight=self._complicated_arguments_weight,
             quantifier_arguments_weight=quantifier_arguments_weight,
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
@@ -164,6 +167,9 @@ class ProofTreeGenerator:
 
     def _load_arguments(self,
                         arguments: List[Argument],
+                        max_PASs_per_formula: Optional[int],
+                        max_implication_per_formula: Optional[int],
+                        max_and_or_per_formula: Optional[int],
                         complicated_arguments_weight: float,
                         quantifier_arguments_weight: float,
                         quantifier_axiom_arguments_weight: float,
@@ -178,13 +184,31 @@ class ProofTreeGenerator:
 
         arguments = _REFERENCE_ARGUMENTS + arguments
 
+        def _is_numbers_ok_formula(formula: Formula) -> bool:
+            if max_PASs_per_formula is not None and len(list(formula.PASs)) > max_PASs_per_formula:
+                return False
+            if max_implication_per_formula is not None and formula.rep.count(IMPLICATION) > max_implication_per_formula:
+                return False
+            if max_and_or_per_formula is not None and formula.rep.count(AND) + formula.rep.count(OR) > max_and_or_per_formula:
+                return False
+            return True
+
+        def _is_numbers_ok_argument(argument: Argument) -> bool:
+            all_formulas = argument.premises + [argument.conclusion] + list(argument.assumptions.values())
+            if any(not _is_numbers_ok_formula(formula) for formula in all_formulas):
+                return False
+            return True
+
         complicated_arguments: List[Argument] = []
         if complicated_arguments_weight > 0.0:
             for argument in arguments:
                 for complicated_argument, _, name in generate_complicated_arguments(argument,
                                                                                     elim_dneg=elim_dneg,
                                                                                     suppress_op_expansion_if_exists=True,
+                                                                                    # suppress_op_expansion_if_exists=False,
                                                                                     get_name=True):
+                    if not _is_numbers_ok_argument(complicated_argument):
+                        continue
                     if _is_argument_new(complicated_argument, arguments + complicated_arguments):  # SLOW
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
@@ -198,6 +222,8 @@ class ProofTreeGenerator:
                                                                                                 elim_dneg=elim_dneg,
                                                                                                 quantify_all_at_once_in_a_formula=True,  # current translation config does not support formulas such as (x) Ax v Ba
                                                                                                 get_name=True):
+                        if not _is_numbers_ok_argument(quantifier_argument):
+                            continue
                         if _is_argument_new(quantifier_argument, arguments + complicated_arguments + quantified_arguments):
                             quantified_arguments.append(quantifier_argument)
                             quantifier_argument.id += f'.{name}'
@@ -219,6 +245,8 @@ class ProofTreeGenerator:
                                                                                          formula,
                                                                                          id_prefix=f'fomula-{str(i_formula).zfill(6)}',
                                                                                          quantify_all_at_once=quantify_all_at_once):
+                        if not _is_numbers_ok_argument(quantifier_axiom_argument):
+                            continue
                         if _is_argument_new(quantifier_axiom_argument, arguments + complicated_arguments + quantifier_axiom_arguments):
                             quantifier_axiom_arguments.append(quantifier_axiom_argument)
 
