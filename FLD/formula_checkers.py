@@ -300,11 +300,13 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
         return set()
 
     # e.g.) formula: "(Ex): {B}x -> {A}x"     PAS: "{A}x"
-    if len(formula.existential_variables) == 1 and PAS.variables[0].rep in [v.rep for v in formula.existential_variables]:
-        # We can not determine
-        # since we regard "x" without quantification denotes all the constants.
-        cache[cache_key] = set()
-        return set()
+    if len(formula.existential_variables) == 1:
+        formula_variables = {v.rep for v in formula.existential_variables}
+        if any(target_v in formula_variables for target_v in PAS.variables):
+            # We can not determine
+            # since we regard "x" without quantification denotes all the constants.
+            cache[cache_key] = set()
+            return set()
 
     if PAS.rep not in [_pa.rep for _pa in formula.PASs]:  # SLOW, called many times
         cache[cache_key] = set()
