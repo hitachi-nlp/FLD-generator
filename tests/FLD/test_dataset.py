@@ -4,6 +4,7 @@ import random
 from typing import List, Optional
 import logging
 from pprint import pformat
+import glob
 
 from FLD.formula import Formula
 from FLD.argument import Argument
@@ -42,10 +43,7 @@ def test_generate_dataset_AACorpus():
     word_bank = build_wordnet_wordbank('eng')
 
     translator = build_translator(
-        [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        glob.glob('./configs/translations/thing/**.json'),
         word_bank,
         use_fixed_translation=False,
         reused_object_nouns_max_factor=1.0,
@@ -156,10 +154,7 @@ def test_generate_dataset():
     word_bank = build_wordnet_wordbank('eng')
 
     translator = build_translator(
-        [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        glob.glob('./configs/translations/thing/**.json'),
         word_bank,
         use_fixed_translation=False,
         reused_object_nouns_max_factor=1.0,

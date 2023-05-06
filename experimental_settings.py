@@ -1,9 +1,13 @@
 from typing import Dict, List, Any
+import glob
 import copy
 
 
 def _to_range(begin: int, end: int) -> List[int]:
     return list(range(begin, end + 1))
+
+
+_TRANSLATION_THING_CONFIGS = glob.glob('./configs/translations/thing/**.json')
 
 
 _DATASET_SETTINGS = {
@@ -35,10 +39,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -69,10 +70,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -94,7 +92,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -104,10 +101,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -129,7 +123,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -139,10 +132,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -164,7 +154,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -174,10 +163,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -198,7 +184,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -208,10 +193,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -232,7 +214,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -242,10 +223,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -276,7 +254,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -286,10 +263,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -311,7 +285,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -321,10 +294,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -346,7 +316,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -356,10 +325,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -381,7 +347,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -391,10 +356,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -415,7 +377,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -425,10 +386,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -457,7 +415,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -467,10 +424,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -492,7 +446,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -502,10 +455,7 @@ _DATASET_SETTINGS = {
         'distractor': 'unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -527,7 +477,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -537,10 +486,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -562,7 +508,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -572,10 +517,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -596,7 +538,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -606,10 +547,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -632,7 +570,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/axiom.implication_intro.pred_only.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -642,10 +579,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'limit_vocab_size_per_type': None,
         'reused_object_nouns_max_factor': 0.0,
     },
@@ -669,7 +603,6 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/axiom.implication_intro.pred_only.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -679,10 +612,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'limit_vocab_size_per_type': None,
     },
 
@@ -705,7 +635,6 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/axiom.implication_intro.pred_only.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -715,10 +644,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 0.5,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -740,7 +666,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -750,10 +675,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -774,7 +696,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -784,10 +705,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -815,7 +733,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -825,10 +742,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -855,7 +769,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -865,10 +778,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -896,7 +806,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -906,10 +815,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -937,7 +843,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -947,10 +852,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
     },
@@ -979,7 +881,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -989,10 +890,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
@@ -1020,7 +918,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1030,10 +927,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
@@ -1061,7 +955,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1071,10 +964,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
@@ -1102,7 +992,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1112,10 +1001,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'distractor_factor': 1.0,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': 100,
     },
@@ -1158,7 +1044,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1168,10 +1053,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1208,7 +1090,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1218,10 +1099,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1258,7 +1136,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1268,10 +1145,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1308,7 +1182,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1318,10 +1191,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1358,7 +1228,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1368,10 +1237,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.negative_tree.unknown_interprands',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1409,7 +1275,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1419,10 +1284,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1459,7 +1321,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1469,10 +1330,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1509,7 +1367,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1519,10 +1376,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1559,7 +1413,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1569,10 +1422,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1609,7 +1459,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1619,10 +1468,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1664,7 +1510,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1674,10 +1519,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1714,7 +1556,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1724,10 +1565,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1764,7 +1602,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1774,10 +1611,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1814,7 +1648,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1824,10 +1657,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1864,7 +1694,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1874,10 +1703,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
 
@@ -1915,7 +1741,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1925,10 +1750,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
 
@@ -1967,7 +1789,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -1977,10 +1798,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
 
@@ -2017,7 +1835,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -2027,10 +1844,7 @@ _DATASET_SETTINGS = {
         'distractor': 'mixture.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.5,
         'limit_vocab_size_per_type': None,
 
@@ -2075,7 +1889,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -2085,10 +1898,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
         'translation_volume_to_weight': 'linear',
@@ -2125,7 +1935,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -2135,10 +1944,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.unknown_interprands.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
         'translation_volume_to_weight': 'sqrt',
@@ -2175,7 +1981,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -2185,10 +1990,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(1, 5),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
         'translation_volume_to_weight': 'linear',
@@ -2225,7 +2027,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
 
         'complication': 0.3,
         'quantification': 0.2,
@@ -2235,10 +2036,7 @@ _DATASET_SETTINGS = {
         'distractor': 'fallback.various_form.negative_tree',
         'num_distractors': _to_range(1, 10),
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'reused_object_nouns_max_factor': 0.0,
         'limit_vocab_size_per_type': None,
         'translation_volume_to_weight': 'linear',
@@ -2288,7 +2086,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -2302,10 +2099,7 @@ _DATASET_SETTINGS = {
         'reused_object_nouns_max_factor': 0.0,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': True,
         'limit_vocab_size_per_type': 100,
@@ -2344,7 +2138,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2358,10 +2151,7 @@ _DATASET_SETTINGS = {
         'reused_object_nouns_max_factor': 0.0,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': True,
         'limit_vocab_size_per_type': 100,
@@ -2400,7 +2190,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2414,10 +2203,7 @@ _DATASET_SETTINGS = {
         'reused_object_nouns_max_factor': 0.0,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2456,7 +2242,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2470,10 +2255,7 @@ _DATASET_SETTINGS = {
         'reused_object_nouns_max_factor': 0.0,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2512,7 +2294,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2526,10 +2307,7 @@ _DATASET_SETTINGS = {
         'reused_object_nouns_max_factor': 1.0,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2568,7 +2346,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2582,10 +2359,7 @@ _DATASET_SETTINGS = {
         'reused_object_nouns_max_factor': 1.0,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2624,7 +2398,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2641,10 +2414,7 @@ _DATASET_SETTINGS = {
         'add_subj_obj_swapped_distractor': True,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2683,7 +2453,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2700,10 +2469,7 @@ _DATASET_SETTINGS = {
         'add_subj_obj_swapped_distractor': True,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2749,7 +2515,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2771,10 +2536,7 @@ _DATASET_SETTINGS = {
         'use_collapsed_translation_nodes_for_unknown_tree': False,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2815,7 +2577,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2837,10 +2598,7 @@ _DATASET_SETTINGS = {
         'use_collapsed_translation_nodes_for_unknown_tree': True,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2881,7 +2639,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2903,10 +2660,7 @@ _DATASET_SETTINGS = {
         'use_collapsed_translation_nodes_for_unknown_tree': False,
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -2947,7 +2701,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2969,10 +2722,7 @@ _DATASET_SETTINGS = {
 
         'use_collapsed_translation_nodes_for_unknown_tree': False,
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
@@ -3028,7 +2778,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.0,
@@ -3084,7 +2833,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3139,7 +2887,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3195,7 +2942,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3252,7 +2998,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3308,7 +3053,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -3364,7 +3108,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -3432,7 +3175,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3486,7 +3228,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3543,7 +3284,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3596,7 +3336,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3650,7 +3389,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3704,7 +3442,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.5,
@@ -3758,7 +3495,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         'complication': 0.5,
@@ -3814,7 +3550,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/AACorpus.pred_arg.json',
-        ],
         'quantification': 0.0,  # can not be used with AACorpus
 
         'complication': 0.5,
@@ -3879,7 +3614,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -3933,7 +3667,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -3987,7 +3720,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4041,7 +3773,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.0,  # can not be used with AACorpus
 
 
@@ -4099,7 +3830,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4154,7 +3884,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         
@@ -4209,7 +3938,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4263,7 +3991,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4329,7 +4056,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4392,7 +4118,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4445,7 +4170,6 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4504,7 +4228,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4559,7 +4282,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4614,7 +4336,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4669,7 +4390,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4723,7 +4443,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4780,7 +4499,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
-        ],
         'quantification': 0.2,
 
         
@@ -4836,7 +4554,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4894,7 +4611,6 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -4952,7 +4668,6 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
         'quantification': 0.2,
 
 
@@ -5009,7 +4724,6 @@ _DEFAULT_DATASET_SETTINGS = {
 
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             # 'existential_quantifier_intro',
-        ],
 
         'sample_distractor_formulas_from_tree': True,
         'sample_hard_negatives': True,
@@ -5019,10 +4733,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_distractor': 'word_swap',
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
 
     },
@@ -5039,7 +4750,6 @@ _DEFAULT_DATASET_SETTINGS = {
 
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             # 'existential_quantifier_intro',
-        ],
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
         'use_simplified_tree_formulas_as_distractor_prototype': True,
@@ -5051,10 +4761,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_distractor': 'word_swap',
 
 
-        'translation_configs': [
-            './configs/translations/thing.json',
-            './configs/translations/thing.sentence_negation.json',
-        ],
+        'translation_configs': _TRANSLATION_THING_CONFIGS,
         'translation_volume_to_weight': 'sqrt',
 
 

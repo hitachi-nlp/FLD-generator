@@ -1,0 +1,121 @@
+{
+
+  "sentence": {
+
+    "¬((Ex): {A}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x>>"],
+    "¬((Ex): ¬{A}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x>>"],
+
+
+    "¬((Ex): ({A}x & {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x & {B}x)>>"],
+    "¬((Ex): (¬{A}x & {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x & {B}x)>>"],
+    "¬((Ex): ({A}x & ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x & ¬{B}x)>>"],
+    "¬((Ex): (¬{A}x & ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x & ¬{B}x)>>"],
+
+
+    "¬((Ex): ¬({A}x & {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x & {B}x)>>"],
+    "¬((Ex): ¬(¬{A}x & {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x & {B}x)>>"],
+    "¬((Ex): ¬({A}x & ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x & ¬{B}x)>>"],
+    "¬((Ex): ¬(¬{A}x & ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>"],
+
+
+    "¬((Ex): ({A}x v {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x v {B}x)>>"],
+    "¬((Ex): (¬{A}x v {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x v {B}x)>>"],
+    "¬((Ex): ({A}x v ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x v ¬{B}x)>>"],
+    "¬((Ex): (¬{A}x v ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x v ¬{B}x)>>"],
+
+
+    "¬((Ex): ¬({A}x v {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x v {B}x)>>"],
+    "¬((Ex): ¬(¬{A}x v {B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x v {B}x)>>"],
+    "¬((Ex): ¬({A}x v ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x v ¬{B}x)>>"],
+    "¬((Ex): ¬(¬{A}x v ¬{B}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>"],
+
+
+    "¬((Ex): {A}x -> {B}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> {B}x>>"],
+    "¬((Ex): ¬{A}x -> {B}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> {B}x>>"],
+    "¬((Ex): {A}x -> ¬{B}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬{B}x>>"],
+    "¬((Ex): ¬{A}x -> ¬{B}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬{B}x>>"],
+
+
+    "¬((Ex): ({A}x & {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x & {B}x) -> {C}x>>"],
+    "¬((Ex): (¬{A}x & {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x & {B}x) -> {C}x>>"],
+    "¬((Ex): ({A}x & ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x & ¬{B}x) -> {C}x>>"],
+    "¬((Ex): ({A}x & {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x & {B}x) -> ¬{C}x>>"],
+    "¬((Ex): (¬{A}x & ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x & ¬{B}x) -> {C}x>>"],
+    "¬((Ex): (¬{A}x & {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x & {B}x) -> ¬{C}x>>"],
+    "¬((Ex): ({A}x & ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x & ¬{B}x) -> ¬{C}x>>"],
+    "¬((Ex): (¬{A}x & ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x & ¬{B}x) -> ¬{C}x>>"],
+
+
+    "¬((Ex): {A}x -> ({B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ({B}x & {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ({B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ({B}x & {C}x)>>"],
+    "¬((Ex): {A}x -> (¬{B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> (¬{B}x & {C}x)>>"],
+    "¬((Ex): {A}x -> ({B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ({B}x & ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> (¬{B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> (¬{B}x & {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ({B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ({B}x & ¬{C}x)>>"],
+    "¬((Ex): {A}x -> (¬{B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> (¬{B}x & ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> (¬{B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> (¬{B}x & ¬{C}x)>>"],
+
+
+    "¬((Ex): ¬({A}x & {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x & {B}x) -> {C}x>>"],
+    "¬((Ex): ¬(¬{A}x & {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x & {B}x) -> {C}x>>"],
+    "¬((Ex): ¬({A}x & ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x & ¬{B}x) -> {C}x>>"],
+    "¬((Ex): ¬({A}x & {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x & {B}x) -> ¬{C}x>>"],
+    "¬((Ex): ¬(¬{A}x & ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x & ¬{B}x) -> {C}x>>"],
+    "¬((Ex): ¬(¬{A}x & {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x & {B}x) -> ¬{C}x>>"],
+    "¬((Ex): ¬({A}x & ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x & ¬{B}x) -> ¬{C}x>>"],
+    "¬((Ex): ¬(¬{A}x & ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x & ¬{B}x) -> ¬{C}x>>"],
+
+
+    "¬((Ex): {A}x -> ¬({B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬({B}x & {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬({B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬({B}x & {C}x)>>"],
+    "¬((Ex): {A}x -> ¬(¬{B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬(¬{B}x & {C}x)>>"],
+    "¬((Ex): {A}x -> ¬({B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬({B}x & ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬(¬{B}x & {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬(¬{B}x & {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬({B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬({B}x & ¬{C}x)>>"],
+    "¬((Ex): {A}x -> ¬(¬{B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬(¬{B}x & ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬(¬{B}x & ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬(¬{B}x & ¬{C}x)>>"],
+
+
+
+    "¬((Ex): ({A}x v {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x v {B}x) -> {C}x>>"],
+    "¬((Ex): (¬{A}x v {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x v {B}x) -> {C}x>>"],
+    "¬((Ex): ({A}x v ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x v ¬{B}x) -> {C}x>>"],
+    "¬((Ex): ({A}x v {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x v {B}x) -> ¬{C}x>>"],
+    "¬((Ex): (¬{A}x v ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x v ¬{B}x) -> {C}x>>"],
+    "¬((Ex): (¬{A}x v {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x v {B}x) -> ¬{C}x>>"],
+    "¬((Ex): ({A}x v ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ({A}x v ¬{B}x) -> ¬{C}x>>"],
+    "¬((Ex): (¬{A}x v ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): (¬{A}x v ¬{B}x) -> ¬{C}x>>"],
+
+
+    "¬((Ex): {A}x -> ({B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ({B}x v {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ({B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ({B}x v {C}x)>>"],
+    "¬((Ex): {A}x -> (¬{B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> (¬{B}x v {C}x)>>"],
+    "¬((Ex): {A}x -> ({B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ({B}x v ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> (¬{B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> (¬{B}x v {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ({B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ({B}x v ¬{C}x)>>"],
+    "¬((Ex): {A}x -> (¬{B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> (¬{B}x v ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> (¬{B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> (¬{B}x v ¬{C}x)>>"],
+
+
+    "¬((Ex): ¬({A}x v {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x v {B}x) -> {C}x>>"],
+    "¬((Ex): ¬(¬{A}x v {B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x v {B}x) -> {C}x>>"],
+    "¬((Ex): ¬({A}x v ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x v ¬{B}x) -> {C}x>>"],
+    "¬((Ex): ¬({A}x v {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x v {B}x) -> ¬{C}x>>"],
+    "¬((Ex): ¬(¬{A}x v ¬{B}x) -> {C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x v ¬{B}x) -> {C}x>>"],
+    "¬((Ex): ¬(¬{A}x v {B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x v {B}x) -> ¬{C}x>>"],
+    "¬((Ex): ¬({A}x v ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬({A}x v ¬{B}x) -> ¬{C}x>>"],
+    "¬((Ex): ¬(¬{A}x v ¬{B}x) -> ¬{C}x)": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬(¬{A}x v ¬{B}x) -> ¬{C}x>>"],
+
+
+    "¬((Ex): {A}x -> ¬({B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬({B}x v {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬({B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬({B}x v {C}x)>>"],
+    "¬((Ex): {A}x -> ¬(¬{B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬(¬{B}x v {C}x)>>"],
+    "¬((Ex): {A}x -> ¬({B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬({B}x v ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬(¬{B}x v {C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬(¬{B}x v {C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬({B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬({B}x v ¬{C}x)>>"],
+    "¬((Ex): {A}x -> ¬(¬{B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): {A}x -> ¬(¬{B}x v ¬{C}x)>>"],
+    "¬((Ex): ¬{A}x -> ¬(¬{B}x v ¬{C}x))": ["<<phrase::not_prefix.sentence_intro>>, <<sentence::(Ex): ¬{A}x -> ¬(¬{B}x v ¬{C}x)>>"]
+
+  }
+
+}

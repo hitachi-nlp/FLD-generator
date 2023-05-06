@@ -1,0 +1,72 @@
+{
+
+  "sentence": {
+
+
+    "{A}something": [
+      "<<clause::verb::{A}something>>"
+    ],
+    "¬{A}something": [
+      "<<phrase::not_prefix.sentence_intro>> <<sentence::{A}something>>",
+      "<<clause::verb::¬{A}something>>"
+    ],
+
+
+    "({A}something & {B}something)": [
+      "<<clause::verb::({A}something & {B}something)>>"
+    ],
+    "(¬{A}something & {B}something)": [
+      "<<clause::verb::(¬{A}something & {B}something)>>"
+    ],
+    "({A}something & ¬{B}something)": [
+      "<<clause::verb::({A}something & ¬{B}something)>>"
+    ],
+    "(¬{A}something & ¬{B}something)": [
+      "<<clause::verb::(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "¬({A}something & {B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}something & {B}something)>>"
+    ],
+    "¬(¬{A}something & {B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}something & {B}something)>>"
+    ],
+    "¬({A}something & ¬{B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}something & ¬{B}something)>>"
+    ],
+    "¬(¬{A}something & ¬{B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "({A}something v {B}something)": [
+      "<<clause::verb::({A}something v {B}something)>>"
+    ],
+    "(¬{A}something v {B}something)": [
+      "<<clause::verb::(¬{A}something v {B}something)>>"
+    ],
+    "({A}something v ¬{B}something)": [
+      "<<clause::verb::({A}something v ¬{B}something)>>"
+    ],
+    "(¬{A}something v ¬{B}something)": [
+      "<<clause::verb::(¬{A}something v ¬{B}something)>>"
+    ],
+
+
+    "¬({A}something v {B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}something v {B}something)>>"
+    ],
+    "¬(¬{A}something v {B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}something v {B}something)>>"
+    ],
+    "¬({A}something v ¬{B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}something v ¬{B}something)>>"
+    ],
+    "¬(¬{A}something v ¬{B}something)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}something v ¬{B}something)>>"
+    ]
+
+  }
+
+}
