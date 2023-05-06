@@ -154,6 +154,7 @@ class ProofTreeGenerator:
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
             quantifier_axioms=quantifier_axioms,
             quantify_all_at_once=quantify_all_at_once,
+            allow_generating_heterogeneous_arity_formulas=False,
             or_arguments_factor=or_arguments_factor,
             existential_arguments_factor=existential_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
@@ -175,11 +176,14 @@ class ProofTreeGenerator:
                         quantifier_axiom_arguments_weight: float,
                         quantifier_axioms: Optional[List[str]],
                         quantify_all_at_once: bool,
+                        allow_generating_heterogeneous_arity_formulas: bool,
                         or_arguments_factor: float,
                         existential_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         reference_argument_factor: float,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
+        if allow_generating_heterogeneous_arity_formulas:
+            raise NotImplementedError()
         logger.info(make_pretty_msg(title='load arguments', status='start', boundary_level=0))
 
         arguments = _REFERENCE_ARGUMENTS + arguments
@@ -237,14 +241,41 @@ class ProofTreeGenerator:
                         unique_formulas.append(formula)
 
             quantifier_axioms = quantifier_axioms or []
-            for argument_type in quantifier_axioms:
+            for axiom_type in quantifier_axioms:
                 for i_formula, formula in enumerate(unique_formulas):
                     if len(formula.variables) > 0:
                         continue
-                    for quantifier_axiom_argument in generate_quantifier_axiom_arguments(argument_type,
-                                                                                         formula,
-                                                                                         id_prefix=f'fomula-{str(i_formula).zfill(6)}',
-                                                                                         quantify_all_at_once=quantify_all_at_once):
+
+                    if axiom_type == 'existential_quantifier_elim':
+                        def _generate_quantifier_axiom_arguments():
+                            for i_other_formula, other_formula in enumerate(unique_formulas):
+                                if len(other_formula.variables) > 0:
+                                    continue
+                                if not allow_generating_heterogeneous_arity_formulas:
+                                    if len(formula.zeroary_predicates) > 0 and len(formula.unary_predicates) > 0:
+                                        raise NotImplementedError()
+                                    if len(other_formula.zeroary_predicates) > 0 and len(other_formula.unary_predicates) > 0:
+                                        raise NotImplementedError()
+                                    if len(formula.zeroary_predicates) > 0 and len(other_formula.unary_predicates) > 0:
+                                        continue
+                                    if len(formula.unary_predicates) > 0 and len(other_formula.zeroary_predicates) > 0:
+                                        continue
+                                for quantifier_axiom_argument in generate_quantifier_axiom_arguments(axiom_type,
+                                                                                                     formula,
+                                                                                                     id_prefix=f'fomula-{str(i_formula).zfill(6)}.other_fomula-{str(i_other_formula).zfill(6)}',
+                                                                                                     quantify_all_at_once=quantify_all_at_once,
+                                                                                                     e_elim_conclusion_formula_prototype=other_formula):
+                                    yield quantifier_axiom_argument
+
+                    else:
+                        def _generate_quantifier_axiom_arguments():
+                            for quantifier_axiom_argument in generate_quantifier_axiom_arguments(axiom_type,
+                                                                                                 formula,
+                                                                                                 id_prefix=f'fomula-{str(i_formula).zfill(6)}',
+                                                                                                 quantify_all_at_once=quantify_all_at_once):
+                                yield quantifier_axiom_argument
+
+                    for quantifier_axiom_argument in _generate_quantifier_axiom_arguments():
                         if not _is_numbers_ok_argument(quantifier_axiom_argument):
                             continue
                         if _is_argument_new(quantifier_axiom_argument, arguments + complicated_arguments + quantifier_axiom_arguments):

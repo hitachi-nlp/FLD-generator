@@ -25,9 +25,6 @@ from logger_setup import setup as setup_logger
 logger = logging.getLogger(__name__)
 
 
-RAISE_IF_TRANSLATION_NOT_FOUND = True
-
-
 def generate_dataset(dataset: NLProofSDataset,
                      num_dataset: int = 10000) -> None:
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
@@ -142,7 +139,7 @@ def test_generate_dataset_AACorpus():
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
-                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
+                              raise_if_translation_not_found=True)
 
     generate_dataset(dataset)
 
@@ -207,7 +204,8 @@ def test_generate_dataset():
             'universal_quantifier_intro',
 
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
-            # 'existential_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
         ]
     )
 
@@ -261,7 +259,7 @@ def test_generate_dataset():
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
-                              raise_if_translation_not_found=RAISE_IF_TRANSLATION_NOT_FOUND)
+                              raise_if_translation_not_found=False)
 
     generate_dataset(dataset)
 
@@ -270,6 +268,5 @@ if __name__ == '__main__':
     random.seed(0)
     setup_logger(level=logging.INFO)
 
-    RAISE_IF_TRANSLATION_NOT_FOUND = False
     # test_generate_dataset_AACorpus()
     test_generate_dataset()
