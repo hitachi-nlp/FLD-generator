@@ -359,13 +359,6 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                       for PAS in formula.PASs
                       if len(PAS.constants) > 0}
 
-        num_zeroary_predicates = {zeroary_predicate.rep
-                                  for formula in formulas_in_tree
-                                  for zeroary_predicate in formula.zeroary_predicates}
-        num_unary_predicates = {unary_predicate.rep
-                                for formula in formulas_in_tree
-                                for unary_predicate in formula.unary_predicates}
-
         used_predicates = {pred.rep
                            for formula in formulas_in_tree
                            for pred in formula.predicates}
@@ -390,23 +383,19 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
             self._log(logging.INFO, f'sample from len(prototype_formulas) prototype formulas found in the tree')
 
         # FIXME: this is logic only works for trees where the predicate arity is the same for all the formulas.
-        if num_zeroary_predicates > num_unary_predicates:
-            tree_predicate_type = 'zeroary'
-        elif num_zeroary_predicates < num_unary_predicates:
-            tree_predicate_type = 'unary'
-        elif num_zeroary_predicates == num_unary_predicates:
-            tree_predicate_type = 'unknown'
+        num_zeroary_predicates = len({zeroary_predicate.rep
+                                     for formula in formulas_in_tree
+                                     for zeroary_predicate in formula.zeroary_predicates})
+        num_unary_predicates = len({unary_predicate.rep
+                                   for formula in formulas_in_tree
+                                   for unary_predicate in formula.unary_predicates})
+        if num_zeroary_predicates != 0 and num_unary_predicates != 0:
+            raise NotImplementedError()
 
-        # max_PASs_per_formula = 3
-        # if tree_predicate_type == 'zeroary':
-        #     estimated_predicates_required = size * max_PASs_per_formula
-        #     estimated_constants_required = size * max_PASs_per_formula
-        # elif tree_predicate_type == 'unary':
-        #     estimated_predicates_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
-        #     estimated_constants_required = int(math.ceil(math.sqrt(size * max_PASs_per_formula)))
-        # elif tree_predicate_type == 'unknown':
-        #     estimated_predicates_required = size * max_PASs_per_formula
-        #     estimated_constants_required = size * max_PASs_per_formula
+        if num_zeroary_predicates > 0:
+            tree_predicate_type = 'zeroary'
+        elif num_unary_predicates > 0:
+            tree_predicate_type = 'unary'
 
         def sample_arity_typed_formula():
             # sample a formula the predicate arity of which is consistent of formulas in tree for speedup.
