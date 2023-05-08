@@ -129,6 +129,7 @@ class ProofTreeGenerator:
                  quantifier_arguments_weight=0.0,
                  quantifier_axiom_arguments_weight=0.0,
                  quantifier_axioms: Optional[List[str]] = None,
+                 quantify_implication_premise_conclusion_at_once=False,
                  quantify_all_at_once=True,
                  or_arguments_factor=0.2,  # or is not that impotant for NLI
                  existential_arguments_factor=0.2,  # existential quantifier is not that impotant for NLI
@@ -153,6 +154,7 @@ class ProofTreeGenerator:
             quantifier_arguments_weight=quantifier_arguments_weight,
             quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
             quantifier_axioms=quantifier_axioms,
+            quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
             quantify_all_at_once=quantify_all_at_once,
             allow_generating_heterogeneous_arity_formulas=False,
             or_arguments_factor=or_arguments_factor,
@@ -175,6 +177,7 @@ class ProofTreeGenerator:
                         quantifier_arguments_weight: float,
                         quantifier_axiom_arguments_weight: float,
                         quantifier_axioms: Optional[List[str]],
+                        quantify_implication_premise_conclusion_at_once: bool,
                         quantify_all_at_once: bool,
                         allow_generating_heterogeneous_arity_formulas: bool,
                         or_arguments_factor: float,
@@ -221,11 +224,13 @@ class ProofTreeGenerator:
         if quantifier_arguments_weight > 0.0:
             for argument in arguments + complicated_arguments:
                 for quantifier_type in ['universal', 'existential']:
-                    for quantifier_argument, _, name in generate_partially_quantifier_arguments(argument,
-                                                                                                quantifier_type,
-                                                                                                elim_dneg=elim_dneg,
-                                                                                                quantify_all_at_once_in_a_formula=True,  # current translation config does not support formulas such as (x) Ax v Ba
-                                                                                                get_name=True):
+                    for quantifier_argument, _, name in generate_partially_quantifier_arguments(
+                            argument,
+                            quantifier_type,
+                            elim_dneg=elim_dneg,
+                            quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+                            quantify_all_at_once_in_a_formula=True,  # current translation config does not support formulas such as (x) Ax v Ba
+                            get_name=True):
                         if not _is_numbers_ok_argument(quantifier_argument):
                             continue
                         if _is_argument_new(quantifier_argument, arguments + complicated_arguments + quantified_arguments):
@@ -260,19 +265,23 @@ class ProofTreeGenerator:
                                         continue
                                     if len(formula.unary_predicates) > 0 and len(other_formula.zeroary_predicates) > 0:
                                         continue
-                                for quantifier_axiom_argument in generate_quantifier_axiom_arguments(axiom_type,
-                                                                                                     formula,
-                                                                                                     id_prefix=f'fomula-{str(i_formula).zfill(6)}.other_fomula-{str(i_other_formula).zfill(6)}',
-                                                                                                     quantify_all_at_once=quantify_all_at_once,
-                                                                                                     e_elim_conclusion_formula_prototype=other_formula):
+                                for quantifier_axiom_argument in generate_quantifier_axiom_arguments(
+                                        axiom_type,
+                                        formula,
+                                        id_prefix=f'fomula-{str(i_formula).zfill(6)}.other_fomula-{str(i_other_formula).zfill(6)}',
+                                        quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+                                        quantify_all_at_once=quantify_all_at_once,
+                                        e_elim_conclusion_formula_prototype=other_formula):
                                     yield quantifier_axiom_argument
 
                     else:
                         def _generate_quantifier_axiom_arguments():
-                            for quantifier_axiom_argument in generate_quantifier_axiom_arguments(axiom_type,
-                                                                                                 formula,
-                                                                                                 id_prefix=f'fomula-{str(i_formula).zfill(6)}',
-                                                                                                 quantify_all_at_once=quantify_all_at_once):
+                            for quantifier_axiom_argument in generate_quantifier_axiom_arguments(
+                                    axiom_type,
+                                    formula,
+                                    id_prefix=f'fomula-{str(i_formula).zfill(6)}',
+                                    quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+                                    quantify_all_at_once=quantify_all_at_once):
                                 yield quantifier_axiom_argument
 
                     for quantifier_axiom_argument in _generate_quantifier_axiom_arguments():

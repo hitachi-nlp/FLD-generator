@@ -774,6 +774,7 @@ def generate_quantifier_axiom_arguments(
     argument_type: str,
     formula: Formula,
     id_prefix: Optional[str] = None,
+    quantify_implication_premise_conclusion_at_once=False,
     quantify_all_at_once=False,
     e_elim_conclusion_formula_prototype: Optional[Formula] = None,
 ) -> Iterable[Argument]:
@@ -786,12 +787,27 @@ def generate_quantifier_axiom_arguments(
     if argument_type not in available_arguments:
         raise ValueError(f'Unsupported quantifier axiom {argument_type}')
     if len(formula.variables) > 0:
-        raise NotImplementedError('Multiple quantifier is not supported yet.')
+        raise NotImplementedError()
+    if quantify_implication_premise_conclusion_at_once and quantify_all_at_once:
+        raise ValueError('if quantify_implication_premise_conclusion_at_once=True, then quantify_all_at_once must be False')
+    if quantify_implication_premise_conclusion_at_once and formula.rep.count(IMPLICATION) >= 2:
+        raise NotImplementedError()
+
+    def is_constant_only(formula: Formula) -> bool:
+        return len(formula.constants) > 0 and len(formula.variables) == 0
+
+    def is_variable_only(formula: Formula) -> bool:
+        return len(formula.variables) > 0 and len(formula.constants) == 0
+
+    def is_individual_type_single(formula: Formula) -> bool:
+        return is_constant_only(formula) or is_variable_only(formula)
 
     de_quantifier_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
     for i, quantifier_mapping in enumerate(generate_quantifier_mappings([formula], quantify_all_at_once=quantify_all_at_once)):
-        quantifier_variables = {tgt for src, tgt in quantifier_mapping.items()
-                                if src != tgt}
+        quantifier_variables = {
+            tgt for src, tgt in quantifier_mapping.items()
+            if src != tgt
+        }
         if len(quantifier_variables) == 0:
             continue
         elif len(quantifier_variables) >= 2:
@@ -805,6 +821,10 @@ def generate_quantifier_axiom_arguments(
 
         xyz_formula = interpret_formula(formula, quantifier_mapping)
         abc_formula = interpret_formula(formula, de_quantifier_mapping)
+
+        if quantify_implication_premise_conclusion_at_once\
+                and (not is_individual_type_single(xyz_formula.premise) or not is_individual_type_single(xyz_formula.conclusion)):
+            continue
 
         if argument_type.startswith('universal_'):
             quantifier_formula = Formula(f'({quantifier_variable}): {xyz_formula.rep}')
@@ -885,6 +905,7 @@ def generate_quantifier_axiom_arguments(
 def generate_partially_quantifier_arguments(src_arg: Argument,
                                             quantifier_type: str,
                                             elim_dneg=False,
+                                            quantify_implication_premise_conclusion_at_once=False,
                                             quantify_all_at_once=False,
                                             quantify_all_at_once_in_a_formula=False,
                                             get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
@@ -895,6 +916,8 @@ def generate_partially_quantifier_arguments(src_arg: Argument,
     """
     # XXX: We should not quantify the conclusion since such arguments do not hold
     raise NotImplementedError()
+    if quantify_implication_premise_conclusion_at_once:
+        raise NotImplementedError()
 
     for mapping, name in generate_quantifier_mappings(src_arg.all_formulas,
                                                       quantify_all_at_once=quantify_all_at_once,

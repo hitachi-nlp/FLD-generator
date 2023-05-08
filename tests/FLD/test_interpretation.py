@@ -209,14 +209,18 @@ def test_generate_quantifier_axiom_arguments():
     def check_generation(argument_type: str,
                          formula: Formula,
                          expected_arguments: List[Argument],
+                         quantify_implication_premise_conclusion_at_once=False,
                          quantify_all_at_once=False,
-                         e_elim_conclusion_formula: Optional[Formula] = None):
-        generated_arguments = list(
-            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test', quantify_all_at_once=quantify_all_at_once,
-                                                e_elim_conclusion_formula_prototype=e_elim_conclusion_formula)
-        )
+                         e_elim_conclusion_formula_prototype: Optional[Formula] = None):
         print()
-        print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
+        print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}, quantify_implication_premise_conclusion_at_once={quantify_implication_premise_conclusion_at_once}) ------')
+
+        generated_arguments = list(
+            generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test',
+                                                quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+                                                quantify_all_at_once=quantify_all_at_once,
+                                                e_elim_conclusion_formula_prototype=e_elim_conclusion_formula_prototype)
+        )
 
         assert(len(generated_arguments) == len(expected_arguments))
         for generated_argument in generated_arguments:
@@ -283,6 +287,29 @@ def test_generate_quantifier_axiom_arguments():
             ),
 
         ]
+    )
+
+    check_generation(
+        'universal_quantifier_elim',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('(x): ({F}x v {G}x) -> {H}{c}')],
+                Formula('({F}{i} v {G}{i}) -> {H}{c}'),
+                {},
+            ),
+            Argument(
+                [Formula('(x): ({F}{a} v {G}{b}) -> {H}x')],
+                Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+                {},
+            ),
+            Argument(
+                [Formula('(x): ({F}x v {G}x) -> {H}x')],
+                Formula('({F}{i} v {G}{i}) -> {H}{i}'),
+                {},
+            ),
+        ],
+        quantify_implication_premise_conclusion_at_once=True,
     )
 
     check_generation(
@@ -371,6 +398,32 @@ def test_generate_quantifier_axiom_arguments():
         Formula('({F}{a} v {G}{b}) -> {H}{c}'),
         [
             Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
+                Formula('(x): ({F}x v {G}x) -> {H}{c}'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
+                Formula('(x): ({F}{a} v {G}{b}) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(x): ({F}x v {G}x) -> {H}x'),
+                {},
+                intermediate_constants=[Formula('{i}')]
+            ),
+        ],
+        quantify_implication_premise_conclusion_at_once=True,
+    )
+
+    check_generation(
+        'universal_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
                 [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
                 Formula('(x): ({F}x v {G}x) -> {H}x'),
                 {},
@@ -445,6 +498,31 @@ def test_generate_quantifier_axiom_arguments():
         Formula('({F}{a} v {G}{b}) -> {H}{c}'),
         [
             Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{c}')],
+                Formula('(Ex): ({F}x v {G}x) -> {H}{c}'),
+                {},
+            ),
+
+            Argument(
+                [Formula('({F}{a} v {G}{b}) -> {H}{i}')],
+                Formula('(Ex): ({F}{a} v {G}{b}) -> {H}x'),
+                {},
+            ),
+
+            Argument(
+                [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
+                Formula('(Ex): ({F}x v {G}x) -> {H}x'),
+                {},
+            ),
+        ],
+        quantify_implication_premise_conclusion_at_once=True,
+    )
+
+    check_generation(
+        'existential_quantifier_intro',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
                 [Formula('({F}{i} v {G}{i}) -> {H}{i}')],
                 Formula('(Ex): ({F}x v {G}x) -> {H}x'),
                 {},
@@ -464,7 +542,7 @@ def test_generate_quantifier_axiom_arguments():
                 {},
             ),
         ],
-        e_elim_conclusion_formula=Formula('{F}{a}')
+        e_elim_conclusion_formula_prototype=Formula('{F}{a}')
     )
 
     check_generation(
@@ -511,7 +589,33 @@ def test_generate_quantifier_axiom_arguments():
             ),
 
         ],
-        e_elim_conclusion_formula=Formula('{F}{a}'),
+        e_elim_conclusion_formula_prototype=Formula('{F}{a}'),
+    )
+
+    check_generation(
+        'existential_quantifier_elim',
+        Formula('({F}{a} v {G}{b}) -> {H}{c}'),
+        [
+            Argument(
+                [Formula('(Ex): ({F}x v {G}x) -> {H}{c}'), Formula('(x): (({F}x v {G}x) -> {H}{c}) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+
+            Argument(
+                [Formula('(Ex): ({F}{a} v {G}{b}) -> {H}x'), Formula('(x): (({F}{a} v {G}{b}) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+
+            Argument(
+                [Formula('(Ex): ({F}x v {G}x) -> {H}x'), Formula('(x): (({F}x v {G}x) -> {H}x) -> {K}{k}')],
+                Formula('{K}{k}'),
+                {},
+            ),
+        ],
+        quantify_implication_premise_conclusion_at_once=True,
+        e_elim_conclusion_formula_prototype=Formula('{F}{a}'),
     )
 
     check_generation(
@@ -523,10 +627,9 @@ def test_generate_quantifier_axiom_arguments():
                 Formula('{K}{k}'),
                 {},
             ),
-
         ],
         quantify_all_at_once=True,
-        e_elim_conclusion_formula=Formula('{F}{a}'),
+        e_elim_conclusion_formula_prototype=Formula('{F}{a}'),
     )
 
 
@@ -537,13 +640,13 @@ def test_generate_quantifier_formulas():
                          expected_formulas: List[Formula],
                          quantify_all_at_once=False):
 
+        print()
+        print(f'--------- quantifier_axiom_formulas {type_} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
+
         quantified_formulas = [
             formula
             for formula, _ in generate_quantifier_formulas(formula, type_, quantify_all_at_once=quantify_all_at_once)
         ]
-
-        print()
-        print(f'--------- quantifier_axiom_formulas {type_} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
 
         assert(len(quantified_formulas) == len(expected_formulas))
         for generated_formula in quantified_formulas:
@@ -596,11 +699,12 @@ def test_generate_quantifier_arguments():
                          expected_arguments: List[Argument],
                          quantify_all_at_once=False,
                          quantify_all_at_once_in_a_formula=False):
+        print()
+        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}, quantify_all_at_once_in_a_formula={quantify_all_at_once_in_a_formula}) ------')
+
         generated_arguments = list(
             generate_partially_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
         )
-        print()
-        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}, quantify_all_at_once_in_a_formula={quantify_all_at_once_in_a_formula}) ------')
 
         for generated_argument, _ in generated_arguments:
             print(f'{str(generated_argument)}')
