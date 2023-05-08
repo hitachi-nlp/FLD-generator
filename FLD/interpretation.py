@@ -983,10 +983,10 @@ def generate_quantifier_mappings(formulas: List[Formula],
                 mapping[src_constant] = tgt_constant_rep
                 yield mapping
 
-    constants = {c.rep for formula in formulas for c in formula.constants}
+    constants = sorted({c.rep for formula in formulas for c in formula.constants})[::-1]
     i = 0
-    for mapping in enum_all_quantifier_mappings(list(constants)):
-        quantifier_variables = [tgt for src, tgt in mapping.items()
+    for mapping in enum_all_quantifier_mappings(constants):
+        quantifier_variables = [tgt for src, tgt in sorted(mapping.items())
                                 if src != tgt and tgt in VARIABLES]
         if len(quantifier_variables) == 0:
             continue
