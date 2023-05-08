@@ -229,7 +229,7 @@ class NLProofSDataset:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = []
             elif proof_stance == ProofStance.DISPROOF:
-                hypothesis = root_negation_formula.translation or root_negation_formula.translation.rep
+                hypothesis = root_negation_formula.translation or root_negation_formula.rep
                 dead_leaf_nodes = []
 
             missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
