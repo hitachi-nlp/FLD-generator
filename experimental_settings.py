@@ -92,6 +92,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
 
         'complication': 0.0,
         'quantification': 0.0,
@@ -123,7 +124,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -154,7 +155,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -184,7 +185,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -214,7 +215,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -254,7 +255,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -285,7 +286,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -316,7 +317,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -347,7 +348,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -377,7 +378,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -415,7 +416,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -446,7 +447,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -477,7 +478,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -508,7 +509,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -538,7 +539,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -570,7 +571,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/axiom.implication_intro.pred_only.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -603,7 +604,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/axiom.implication_intro.pred_only.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -635,7 +636,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/axiom.implication_intro.pred_only.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -666,7 +667,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -696,7 +697,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.pred_arg.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -733,7 +734,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -769,7 +770,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -806,7 +807,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -843,7 +844,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -881,7 +882,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -918,7 +919,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -955,7 +956,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -992,7 +993,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1044,7 +1045,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1090,7 +1091,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1136,7 +1137,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1182,7 +1183,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1228,7 +1229,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1275,7 +1276,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1321,7 +1322,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1367,7 +1368,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1413,7 +1414,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1459,7 +1460,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1510,7 +1511,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1556,7 +1557,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1602,7 +1603,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1648,7 +1649,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1694,7 +1695,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1741,7 +1742,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1789,7 +1790,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1835,7 +1836,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1889,7 +1890,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1935,7 +1936,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -1981,7 +1982,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2027,7 +2028,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
-
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2086,6 +2087,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.0,
         'quantification': 0.0,
 
@@ -2138,6 +2140,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2190,6 +2193,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2242,6 +2246,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2294,6 +2299,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2346,6 +2352,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2398,6 +2405,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2453,6 +2461,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2515,6 +2524,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2577,6 +2587,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2639,6 +2650,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2701,6 +2713,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'complication': 0.3,
         'quantification': 0.2,
 
@@ -2778,6 +2791,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.0,
@@ -2833,6 +2847,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -2887,6 +2902,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -2942,6 +2958,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -2998,6 +3015,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3053,6 +3071,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3108,6 +3127,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3175,6 +3195,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3228,6 +3249,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3284,6 +3306,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3336,6 +3359,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3389,6 +3413,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.3,
@@ -3442,6 +3467,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.5,
@@ -3495,6 +3521,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
         'complication': 0.5,
@@ -3550,6 +3577,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/AACorpus.pred_arg.json',
+        ],
         'quantification': 0.0,  # can not be used with AACorpus
 
         'complication': 0.5,
@@ -3614,6 +3642,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3667,6 +3696,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3720,6 +3750,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3773,6 +3804,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.0,  # can not be used with AACorpus
 
 
@@ -3830,6 +3862,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3884,9 +3917,10 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
-        
+
         'complication': 0.5,
         'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
@@ -3938,6 +3972,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -3991,6 +4026,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4056,6 +4092,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4118,6 +4155,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4170,6 +4208,7 @@ _DATASET_SETTINGS = {
 
             # './configs/arguments/theorem.and_or.pred_only.json',
             # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4228,6 +4267,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4282,6 +4322,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4336,6 +4377,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4390,6 +4432,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4443,6 +4486,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4499,9 +4543,10 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
         'quantification': 0.2,
 
-        
+
         'complication': 0.5,
         'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
@@ -4554,6 +4599,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4611,6 +4657,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
 
             './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4668,6 +4715,7 @@ _DATASET_SETTINGS = {
 
             './configs/arguments/theorem.and_or.pred_only.json',
             './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
         'quantification': 0.2,
 
 
@@ -4724,6 +4772,7 @@ _DEFAULT_DATASET_SETTINGS = {
 
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             # 'existential_quantifier_intro',
+        ],
 
         'sample_distractor_formulas_from_tree': True,
         'sample_hard_negatives': True,
@@ -4750,6 +4799,7 @@ _DEFAULT_DATASET_SETTINGS = {
 
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             # 'existential_quantifier_intro',
+        ],
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
         'use_simplified_tree_formulas_as_distractor_prototype': True,
@@ -4827,13 +4877,13 @@ _DATASET_NAME_TO_DEFAULT = {
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP': '20221203',
     '20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT': '20221203',
 
-    '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP': '20221203', 
+    '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP': '20221203',
 
     '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000.G_MP': '20221203',
-    '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000.G_MP': '20221203', 
+    '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000.G_MP': '20221203',
 
     # ---------------------------------- 20221217.back_to_the_past ------------------------------------
-    '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': '20221203', 
+    '20221217.back_to_the_past__arg-FLNL__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000': '20221203',
 }
 
 
