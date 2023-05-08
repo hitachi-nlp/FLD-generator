@@ -822,9 +822,10 @@ def generate_quantifier_axiom_arguments(
         xyz_formula = interpret_formula(formula, quantifier_mapping)
         abc_formula = interpret_formula(formula, de_quantifier_mapping)
 
-        if quantify_implication_premise_conclusion_at_once\
-                and (not is_individual_type_single(xyz_formula.premise) or not is_individual_type_single(xyz_formula.conclusion)):
-            continue
+        if quantify_implication_premise_conclusion_at_once:
+            if (xyz_formula.premise is not None and not is_individual_type_single(xyz_formula.premise))\
+                    or (xyz_formula.conclusion is not None and not is_individual_type_single(xyz_formula.conclusion)):
+                continue
 
         if argument_type.startswith('universal_'):
             quantifier_formula = Formula(f'({quantifier_variable}): {xyz_formula.rep}')

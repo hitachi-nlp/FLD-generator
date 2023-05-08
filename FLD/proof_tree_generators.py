@@ -133,6 +133,7 @@ class ProofTreeGenerator:
                  quantify_all_at_once=True,
                  or_arguments_factor=0.2,  # or is not that impotant for NLI
                  existential_arguments_factor=0.2,  # existential quantifier is not that impotant for NLI
+                 universal_arguments_factor=1.0,
                  universal_theorem_argument_factor=1.0,
                  reference_argument_factor=3.0,  # reference argument is impotant
                  elim_dneg=False,
@@ -159,6 +160,7 @@ class ProofTreeGenerator:
             allow_generating_heterogeneous_arity_formulas=False,
             or_arguments_factor=or_arguments_factor,
             existential_arguments_factor=existential_arguments_factor,
+            universal_arguments_factor=universal_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
             reference_argument_factor=reference_argument_factor,
             elim_dneg=elim_dneg,
@@ -182,6 +184,7 @@ class ProofTreeGenerator:
                         allow_generating_heterogeneous_arity_formulas: bool,
                         or_arguments_factor: float,
                         existential_arguments_factor: float,
+                        universal_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         reference_argument_factor: float,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
@@ -229,7 +232,7 @@ class ProofTreeGenerator:
                             quantifier_type,
                             elim_dneg=elim_dneg,
                             quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
-                            quantify_all_at_once_in_a_formula=True,  # current translation config does not support formulas such as (x) Ax v Ba
+                            quantify_all_at_once_in_a_formula=quantify_all_at_once,  # current translation config does not support formulas such as (x) Ax v Ba
                             get_name=True):
                         if not _is_numbers_ok_argument(quantifier_argument):
                             continue
@@ -247,48 +250,49 @@ class ProofTreeGenerator:
 
             quantifier_axioms = quantifier_axioms or []
             for axiom_type in quantifier_axioms:
-                for i_formula, formula in enumerate(unique_formulas):
-                    if len(formula.variables) > 0:
-                        continue
 
-                    if axiom_type == 'existential_quantifier_elim':
-                        def _generate_quantifier_axiom_arguments():
-                            for i_other_formula, other_formula in enumerate(unique_formulas):
-                                if len(other_formula.variables) > 0:
+                if axiom_type == 'existential_quantifier_elim':
+                    def _generate_quantifier_axiom_arguments(i_formula: int, formula: Formula):
+                        for i_other_formula, other_formula in enumerate(unique_formulas):
+                            if len(other_formula.variables) > 0:
+                                continue
+                            if not allow_generating_heterogeneous_arity_formulas:
+                                if len(formula.zeroary_predicates) > 0 and len(formula.unary_predicates) > 0:
+                                    raise NotImplementedError()
+                                if len(other_formula.zeroary_predicates) > 0 and len(other_formula.unary_predicates) > 0:
+                                    raise NotImplementedError()
+                                if len(formula.zeroary_predicates) > 0 and len(other_formula.unary_predicates) > 0:
                                     continue
-                                if not allow_generating_heterogeneous_arity_formulas:
-                                    if len(formula.zeroary_predicates) > 0 and len(formula.unary_predicates) > 0:
-                                        raise NotImplementedError()
-                                    if len(other_formula.zeroary_predicates) > 0 and len(other_formula.unary_predicates) > 0:
-                                        raise NotImplementedError()
-                                    if len(formula.zeroary_predicates) > 0 and len(other_formula.unary_predicates) > 0:
-                                        continue
-                                    if len(formula.unary_predicates) > 0 and len(other_formula.zeroary_predicates) > 0:
-                                        continue
-                                for quantifier_axiom_argument in generate_quantifier_axiom_arguments(
-                                        axiom_type,
-                                        formula,
-                                        id_prefix=f'fomula-{str(i_formula).zfill(6)}.other_fomula-{str(i_other_formula).zfill(6)}',
-                                        quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
-                                        quantify_all_at_once=quantify_all_at_once,
-                                        e_elim_conclusion_formula_prototype=other_formula):
-                                    yield quantifier_axiom_argument
-
-                    else:
-                        def _generate_quantifier_axiom_arguments():
+                                if len(formula.unary_predicates) > 0 and len(other_formula.zeroary_predicates) > 0:
+                                    continue
                             for quantifier_axiom_argument in generate_quantifier_axiom_arguments(
                                     axiom_type,
                                     formula,
-                                    id_prefix=f'fomula-{str(i_formula).zfill(6)}',
+                                    id_prefix=f'fomula-{str(i_formula).zfill(6)}.other_fomula-{str(i_other_formula).zfill(6)}',
                                     quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
-                                    quantify_all_at_once=quantify_all_at_once):
+                                    quantify_all_at_once=quantify_all_at_once,
+                                    e_elim_conclusion_formula_prototype=other_formula):
                                 yield quantifier_axiom_argument
 
-                    for quantifier_axiom_argument in _generate_quantifier_axiom_arguments():
+                else:
+                    def _generate_quantifier_axiom_arguments(i_formula: int, formula: Formula):
+                        for quantifier_axiom_argument in generate_quantifier_axiom_arguments(
+                                axiom_type,
+                                formula,
+                                id_prefix=f'fomula-{str(i_formula).zfill(6)}',
+                                quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+                                quantify_all_at_once=quantify_all_at_once):
+                            yield quantifier_axiom_argument
+
+                for i_formula, formula in enumerate(unique_formulas):
+                    if len(formula.variables) > 0:
+                        continue
+                    for quantifier_axiom_argument in _generate_quantifier_axiom_arguments(i_formula, formula):
                         if not _is_numbers_ok_argument(quantifier_axiom_argument):
                             continue
                         if _is_argument_new(quantifier_axiom_argument, arguments + complicated_arguments + quantifier_axiom_arguments):
                             quantifier_axiom_arguments.append(quantifier_axiom_argument)
+        # raise
 
         def calc_argument_weight(argument: Argument) -> float:
             if argument in arguments:
@@ -312,7 +316,10 @@ class ProofTreeGenerator:
             return any(is_or_formula(formula) for formula in argument.all_formulas)
 
         def is_existential_argument(argument: Argument) -> bool:
-            return argument.id.startswith('existential')
+            return argument.id.startswith('existential') and not argument.id.startswith('existential_theorem')
+
+        def is_universal_argument(argument: Argument) -> bool:
+            return argument.id.startswith('universal') and not argument.id.startswith('universal_theorem')
 
         def is_universal_theorem_argument(argument: Argument) -> bool:
             return argument.id.startswith('universal_theorem')
@@ -327,6 +334,11 @@ class ProofTreeGenerator:
 
         _argument_weights = {
             argument: (weight * existential_arguments_factor if is_existential_argument(argument) else weight)
+            for argument, weight in _argument_weights.items()
+        }
+
+        _argument_weights = {
+            argument: (weight * universal_arguments_factor if is_universal_argument(argument) else weight)
             for argument, weight in _argument_weights.items()
         }
 
@@ -1304,16 +1316,14 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
 
 
 def build(config_paths: List[str],
-          elim_dneg=False,
           complication=0.0,
           quantification=0.0,
-          quantifier_axioms: Optional[List[str]] = None):
+          **kwargs):
     arguments = load_arguments(config_paths)
     generator = ProofTreeGenerator(
         arguments,
-        elim_dneg=elim_dneg,
         complicated_arguments_weight=complication,
         quantifier_axiom_arguments_weight=quantification,
-        quantifier_axioms=quantifier_axioms,
+        **kwargs,
     )
     return generator

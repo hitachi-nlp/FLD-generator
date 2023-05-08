@@ -41,6 +41,8 @@ def load_dataset(argument_config: List[str],
                  complication: float,
                  quantification: float,
                  quantifier_axioms: Optional[List[str]],
+                 quantify_implication_premise_conclusion_at_once: Optional[bool],
+                 quantify_all_at_once: Optional[bool],
                  keep_dneg: bool,
                  distractor: str,
                  num_distractors: List[int],
@@ -66,6 +68,8 @@ def load_dataset(argument_config: List[str],
         complication=complication,
         quantification=quantification,
         quantifier_axioms=quantifier_axioms,
+        quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+        quantify_all_at_once=quantify_all_at_once,
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
@@ -178,9 +182,10 @@ def generate_instances(size: int, *args):
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
 @click.option('--quantifier-axiom', multiple=True, default=None)
-@click.option('--translation-config', '--tc',
-              multiple=True,
+@click.option('--translation-config', '--tc', multiple=True,
               default=['./configs/translations/thing.json'])
+@click.option('--quantify_implication_premise_conclusion_at_once', is_flag=True)
+@click.option('--quantify_all_at_once', is_flag=True)
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
@@ -215,6 +220,8 @@ def main(output_path,
          complication,
          quantification,
          quantifier_axiom,
+         quantify_implication_premise_conclusion_at_once,
+         quantify_all_at_once,
          keep_dneg,
          distractor,
          num_distractors,
@@ -279,6 +286,8 @@ def main(output_path,
                         complication,
                         quantification,
                         quantifier_axiom,
+                        quantify_implication_premise_conclusion_at_once,
+                        quantify_all_at_once,
                         keep_dneg,
                         distractor,
                         num_distractors,

@@ -92,8 +92,8 @@ def test_generate_dataset_AACorpus():
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             # 'existential_quantifier_intro',
         ],
-        quantify_implication_premise_conclusion_at_once=True,
-        quantify_all_at_once=False,
+        quantify_implication_premise_conclusion_at_once=False,
+        quantify_all_at_once=True,
     )
 
     distractor = build_distractor(
@@ -208,7 +208,10 @@ def test_generate_dataset():
             # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             'existential_quantifier_intro',
             'existential_quantifier_elim',
-        ]
+        ],
+        quantify_implication_premise_conclusion_at_once=True,
+        quantify_all_at_once=False,
+
     )
 
     distractor = build_distractor(

@@ -33,6 +33,7 @@ _DATASET_SETTINGS = {
 
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [5],
@@ -64,6 +65,7 @@ _DATASET_SETTINGS = {
 
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -96,6 +98,7 @@ _DATASET_SETTINGS = {
 
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -127,6 +130,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -158,6 +162,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -188,6 +193,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -218,6 +224,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -258,6 +265,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -289,6 +297,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -320,6 +329,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -351,6 +361,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -381,6 +392,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -419,6 +431,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -450,6 +463,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -481,6 +495,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [1],
         'branch_extension_steps': [0],
@@ -512,6 +527,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -542,6 +558,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -574,6 +591,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -607,6 +625,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -639,6 +658,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -670,6 +690,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -700,6 +721,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -737,6 +759,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -773,6 +796,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -810,6 +834,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [10],
         'branch_extension_steps': [5],
@@ -847,6 +872,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [1, 2, 3],
         'branch_extension_steps': [3],
@@ -885,6 +911,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [3],
         'branch_extension_steps': [3],
@@ -922,6 +949,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [5],
         'branch_extension_steps': [3],
@@ -959,6 +987,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [10],
         'branch_extension_steps': [5],
@@ -996,6 +1025,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': [1, 2, 3],
         'branch_extension_steps': [3],
@@ -1048,6 +1078,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1094,6 +1125,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1140,6 +1172,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1186,6 +1219,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1232,6 +1266,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1279,6 +1314,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1325,6 +1361,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1371,6 +1408,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1417,6 +1455,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1463,6 +1502,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1514,6 +1554,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1560,6 +1601,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1606,6 +1648,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1652,6 +1695,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1698,6 +1742,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1745,6 +1790,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1793,6 +1839,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 3),
         'branch_extension_steps': _to_range(1, 3),
@@ -1839,6 +1886,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1893,6 +1941,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1939,6 +1988,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -1985,6 +2035,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -2031,6 +2082,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'depths': _to_range(1, 8),
         'branch_extension_steps': _to_range(1, 5),
@@ -2090,6 +2142,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.0,
         'quantification': 0.0,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 3),
@@ -2143,6 +2196,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 3),
@@ -2196,6 +2250,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 3),
@@ -2249,6 +2304,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2302,6 +2358,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2355,6 +2412,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2408,6 +2466,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 3),
@@ -2464,6 +2523,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2527,6 +2587,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2590,6 +2651,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2653,6 +2715,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 10),
@@ -2716,6 +2779,7 @@ _DATASET_SETTINGS = {
         ],
         'complication': 0.3,
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'depths': _to_range(1, 3),
@@ -2793,6 +2857,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.0,
 
@@ -2849,6 +2914,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -2904,6 +2970,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -2960,6 +3027,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3017,6 +3085,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3073,6 +3142,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.3,
@@ -3129,6 +3199,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.3,
@@ -3197,6 +3268,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3251,6 +3323,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3308,6 +3381,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3361,6 +3435,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3415,6 +3490,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.3,
 
@@ -3469,6 +3545,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.5,
 
@@ -3523,6 +3600,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
         'complication': 0.5,
 
@@ -3579,6 +3657,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/AACorpus.pred_arg.json',
         ],
         'quantification': 0.0,  # can not be used with AACorpus
+        'quantify_all_at_once': True,
 
         'complication': 0.5,
 
@@ -3644,6 +3723,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.0,
@@ -3698,6 +3778,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -3752,6 +3833,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -3806,6 +3888,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.0,  # can not be used with AACorpus
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -3864,6 +3947,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -3919,6 +4003,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -3974,6 +4059,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4028,6 +4114,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4094,6 +4181,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.0,
@@ -4157,6 +4245,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4210,6 +4299,7 @@ _DATASET_SETTINGS = {
             # './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.0,
@@ -4269,6 +4359,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4324,6 +4415,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4379,6 +4471,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4434,6 +4527,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4488,6 +4582,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4545,6 +4640,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4601,6 +4697,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4659,6 +4756,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.G_MP.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.5,
@@ -4717,6 +4815,7 @@ _DATASET_SETTINGS = {
             './configs/arguments/theorem.and_or.pred_arg.json',
         ],
         'quantification': 0.2,
+        'quantify_all_at_once': True,
 
 
         'complication': 0.3,
