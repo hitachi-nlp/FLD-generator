@@ -55,6 +55,8 @@ def make_dataset(dataset_name: str,
 
             'complication',
             'quantification',
+            'quantify_implication_premise_conclusion_at_once',
+            'quantify_all_at_once',
 
             'depths',
             'depth_distribution',
@@ -141,6 +143,8 @@ def make_dataset(dataset_name: str,
                 f'--complication {job_settings["complication"]}',
                 f'--quantification {job_settings["quantification"]}',
                 _make_multiple_value_option('--quantifier-axiom', job_settings['quantifier_axioms']),
+                '--quantify-implication-premise-conclusion-at-once' if settings.get("quantify_implication_premise_conclusion_at_once", False) else '',
+                '--quantify-all-at-once' if settings.get("quantify_all_at_once", False) else '',
 
                 f'--distractor {job_settings["distractor"]}',
                 f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',

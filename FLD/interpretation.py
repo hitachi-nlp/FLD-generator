@@ -774,7 +774,9 @@ def generate_quantifier_axiom_arguments(
     argument_type: str,
     formula: Formula,
     id_prefix: Optional[str] = None,
+    quantify_implication_premise_conclusion_at_once=False,
     quantify_all_at_once=False,
+    e_elim_conclusion_formula_prototype: Optional[Formula] = None,
 ) -> Iterable[Argument]:
     """
 
@@ -785,24 +787,49 @@ def generate_quantifier_axiom_arguments(
     if argument_type not in available_arguments:
         raise ValueError(f'Unsupported quantifier axiom {argument_type}')
     if len(formula.variables) > 0:
-        raise NotImplementedError('Multiple quantifier is not supported yet.')
+        raise NotImplementedError()
+    if quantify_implication_premise_conclusion_at_once and quantify_all_at_once:
+        raise ValueError('if quantify_implication_premise_conclusion_at_once=True, then quantify_all_at_once must be False')
+    if quantify_implication_premise_conclusion_at_once and formula.rep.count(IMPLICATION) >= 2:
+        raise NotImplementedError()
+
+    def is_constant_only(formula: Formula) -> bool:
+        return len(formula.constants) > 0 and len(formula.variables) == 0
+
+    def is_variable_only(formula: Formula) -> bool:
+        return len(formula.variables) > 0 and len(formula.constants) == 0
+
+    def is_individual_type_single(formula: Formula) -> bool:
+        return is_constant_only(formula) or is_variable_only(formula)
 
     de_quantifier_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
     for i, quantifier_mapping in enumerate(generate_quantifier_mappings([formula], quantify_all_at_once=quantify_all_at_once)):
-        quantifier_variables = [tgt for src, tgt in quantifier_mapping.items()
-                                if src != tgt]
+        quantifier_variables = {
+            tgt for src, tgt in quantifier_mapping.items()
+            if src != tgt
+        }
         if len(quantifier_variables) == 0:
             continue
-        quantifier_variable = quantifier_variables[0]
+        elif len(quantifier_variables) >= 2:
+            raise NotImplementedError()
+        quantifier_variable = list(quantifier_variables)[0]
 
         de_quantifier_mapping = {
             src: (de_quantifier_constant if tgt == quantifier_variable else src)
             for src, tgt in quantifier_mapping.items()
         }
 
+        xyz_formula = interpret_formula(formula, quantifier_mapping)
+        abc_formula = interpret_formula(formula, de_quantifier_mapping)
+
+        if quantify_implication_premise_conclusion_at_once:
+            if (xyz_formula.premise is not None and not is_individual_type_single(xyz_formula.premise))\
+                    or (xyz_formula.conclusion is not None and not is_individual_type_single(xyz_formula.conclusion)):
+                continue
+
         if argument_type.startswith('universal_'):
-            quantifier_formula = Formula(f'({quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
-            de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
+            quantifier_formula = Formula(f'({quantifier_variable}): {xyz_formula.rep}')
+            de_quantifier_formula = abc_formula
 
             if argument_type == 'universal_quantifier_elim':
                 argument_id = f'{id_prefix}.quantifier_axiom.universal_elim-{i}' if id_prefix is not None else f'quantifier_axiom.universal_elim-{i}'
@@ -829,8 +856,8 @@ def generate_quantifier_axiom_arguments(
                 )
 
         elif argument_type == 'existential_quantifier_intro':
-            quantifier_formula = Formula(f'(E{quantifier_variable}): ' + interpret_formula(formula, quantifier_mapping).rep)
-            de_quantifier_formula = interpret_formula(formula, de_quantifier_mapping)
+            quantifier_formula = Formula(f'(E{quantifier_variable}): {xyz_formula.rep}')
+            de_quantifier_formula = abc_formula
             argument_id = f'{id_prefix}.quantifier_axiom.existential_intro--{i}' if id_prefix is not None else f'quantifier_axiom.existential_intro--{i}'
             argument = Argument(
                 [de_quantifier_formula],
@@ -838,8 +865,40 @@ def generate_quantifier_axiom_arguments(
                 {},
                 id = argument_id,
             )
-        else:
-            raise ValueError()
+
+        elif argument_type == 'existential_quantifier_elim':
+            if e_elim_conclusion_formula_prototype is None:
+                raise ValueError()
+            used_predicate_reps = {predicate.rep for predicate in xyz_formula.predicates}
+            unused_predicate_reps = [predicate_rep for predicate_rep in PREDICATES if predicate_rep not in used_predicate_reps]
+
+            used_constant_reps = {constant.rep for constant in xyz_formula.constants}
+            unused_constant_reps = [constant_rep for constant_rep in CONSTANTS if constant_rep not in used_constant_reps]
+
+            # remove predicate and constant used by quantifier formulas.
+            e_elim_conclusion_formula_unentangled: Optional[Formula] = None
+            for mapping in generate_mappings_from_predicates_and_constants(
+                [p.rep for p in e_elim_conclusion_formula_prototype.predicates],
+                [c.rep for c in e_elim_conclusion_formula_prototype.constants],
+                unused_predicate_reps,
+                unused_constant_reps,
+                allow_many_to_one=False,
+            ):
+                e_elim_conclusion_formula_unentangled = interpret_formula(e_elim_conclusion_formula_prototype, mapping)
+                break
+            if e_elim_conclusion_formula_unentangled is None:
+                raise Exception()
+
+            existential_quantifier_formula = Formula(f'(E{quantifier_variable}): {xyz_formula.rep}')
+            universal_quantifier_formula = Formula(f'({quantifier_variable}): {xyz_formula.rep} {IMPLICATION} {e_elim_conclusion_formula_unentangled.rep}')
+
+            argument_id = f'{id_prefix}.quantifier_axiom.existential_elim--{i}' if id_prefix is not None else f'quantifier_axiom.existential_elim--{i}'
+            argument = Argument(
+                [existential_quantifier_formula, universal_quantifier_formula],
+                e_elim_conclusion_formula_unentangled,
+                {},
+                id = argument_id,
+            )
 
         yield argument
 
@@ -847,6 +906,7 @@ def generate_quantifier_axiom_arguments(
 def generate_partially_quantifier_arguments(src_arg: Argument,
                                             quantifier_type: str,
                                             elim_dneg=False,
+                                            quantify_implication_premise_conclusion_at_once=False,
                                             quantify_all_at_once=False,
                                             quantify_all_at_once_in_a_formula=False,
                                             get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
@@ -857,6 +917,8 @@ def generate_partially_quantifier_arguments(src_arg: Argument,
     """
     # XXX: We should not quantify the conclusion since such arguments do not hold
     raise NotImplementedError()
+    if quantify_implication_premise_conclusion_at_once:
+        raise NotImplementedError()
 
     for mapping, name in generate_quantifier_mappings(src_arg.all_formulas,
                                                       quantify_all_at_once=quantify_all_at_once,
@@ -945,10 +1007,10 @@ def generate_quantifier_mappings(formulas: List[Formula],
                 mapping[src_constant] = tgt_constant_rep
                 yield mapping
 
-    constants = {c.rep for formula in formulas for c in formula.constants}
+    constants = sorted({c.rep for formula in formulas for c in formula.constants})[::-1]
     i = 0
-    for mapping in enum_all_quantifier_mappings(list(constants)):
-        quantifier_variables = [tgt for src, tgt in mapping.items()
+    for mapping in enum_all_quantifier_mappings(constants):
+        quantifier_variables = [tgt for src, tgt in sorted(mapping.items())
                                 if src != tgt and tgt in VARIABLES]
         if len(quantifier_variables) == 0:
             continue

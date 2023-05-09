@@ -1,6 +1,6 @@
 from typing import Optional, Callable, List, Iterable, Any
 import math
-from typing import Dict, Any, List, Iterable
+from typing import Dict, Any, List, Iterable, Set
 import random
 import logging
 import zlib
@@ -120,7 +120,6 @@ def run_with_timeout_retry(
     func_kwargs = func_kwargs or {}
     max_retry = max_retry or 99999
     timeout = timeout or 99999
-    # timeout = 99999
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
