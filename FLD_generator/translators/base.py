@@ -4,10 +4,10 @@ from abc import abstractmethod, ABC
 import logging
 from string import ascii_uppercase
 
-from FLD.formula import Formula
+from FLD_generator.formula import Formula
 
-from FLD.exception import FormalLogicExceptionBase
-from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure
+from FLD_generator.exception import FormalLogicExceptionBase
+from FLD_generator.utils import run_with_timeout_retry, RetryAndTimeoutFailure
 
 logger = logging.getLogger(__name__)
 

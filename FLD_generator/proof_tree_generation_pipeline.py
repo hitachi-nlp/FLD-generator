@@ -2,18 +2,18 @@ from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
 
-from FLD.formula import Formula, NEGATION, eliminate_double_negation
-from FLD.proof import ProofTree, ProofNode
-from FLD.proof_tree_generators import ProofTreeGenerator
-from FLD.formula_distractors import FormulaDistractor
-from FLD.translators.base import Translator
-from FLD.utils import flatten_dict
-from FLD.exception import FormalLogicExceptionBase
-from FLD.proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
-from FLD.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
-from FLD.translation_distractors import TranslationDistractor
-from FLD.translators import TranslationFailure
-from FLD.utils import make_pretty_msg
+from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation
+from FLD_generator.proof import ProofTree, ProofNode
+from FLD_generator.proof_tree_generators import ProofTreeGenerator
+from FLD_generator.formula_distractors import FormulaDistractor
+from FLD_generator.translators.base import Translator
+from FLD_generator.utils import flatten_dict
+from FLD_generator.exception import FormalLogicExceptionBase
+from FLD_generator.proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
+from FLD_generator.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
+from FLD_generator.translation_distractors import TranslationDistractor
+from FLD_generator.translators import TranslationFailure
+from FLD_generator.utils import make_pretty_msg
 import kern_profiler
 
 logger = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
 from typing import List
-from FLD.formula import Formula
-from FLD.formula_checkers import (
+from FLD_generator.formula import Formula
+from FLD_generator.formula_checkers import (
     # _search_inconsistent_subformula,
     _get_boolean_values,
 

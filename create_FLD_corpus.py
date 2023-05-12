@@ -12,18 +12,18 @@ import click
 from tqdm import tqdm
 import dill
 
-from FLD.translators import build as build_translator
-from FLD.word_banks import build_wordnet_wordbank
-from FLD.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
-from FLD.argument import Argument
-from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLD.proof_tree_generators import build as build_generator
-from FLD.datasets import NLProofSDataset
-from FLD.proof import ProofTree
-from FLD.utils import nested_merge
-from FLD.formula_distractors import build as build_distractor
-from FLD.translation_distractors import build as build_translation_distractor
-from FLD.utils import _build_bounded_msg, log_results
+from FLD_generator.translators import build as build_translator
+from FLD_generator.word_banks import build_wordnet_wordbank
+from FLD_generator.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
+from FLD_generator.argument import Argument
+from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLD_generator.proof_tree_generators import build as build_generator
+from FLD_generator.datasets import NLProofSDataset
+from FLD_generator.proof import ProofTree
+from FLD_generator.utils import nested_merge
+from FLD_generator.formula_distractors import build as build_distractor
+from FLD_generator.translation_distractors import build as build_translation_distractor
+from FLD_generator.utils import _build_bounded_msg, log_results
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger

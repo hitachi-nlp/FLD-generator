@@ -6,20 +6,20 @@ import logging
 from pprint import pformat
 import glob
 
-from FLD.formula import Formula
-from FLD.argument import Argument
-from FLD.proof_tree_generators import build as build_generator
-from FLD.formula_distractors import build as build_distractor
-from FLD.translation_distractors import build as build_translation_distractor
-from FLD.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLD.datasets import NLProofSDataset
-from FLD.word_banks import build_wordnet_wordbank
-from FLD.translators import (
+from FLD_generator.formula import Formula
+from FLD_generator.argument import Argument
+from FLD_generator.proof_tree_generators import build as build_generator
+from FLD_generator.formula_distractors import build as build_distractor
+from FLD_generator.translation_distractors import build as build_translation_distractor
+from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
+from FLD_generator.datasets import NLProofSDataset
+from FLD_generator.word_banks import build_wordnet_wordbank
+from FLD_generator.translators import (
     build as build_translator,
     TemplatedTranslator,
 )
-from FLD.interpretation import formula_is_identical_to
-from FLD.utils import nested_merge, log_results
+from FLD_generator.interpretation import formula_is_identical_to
+from FLD_generator.utils import nested_merge, log_results
 from logger_setup import setup as setup_logger
 
 logger = logging.getLogger(__name__)

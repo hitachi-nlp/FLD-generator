@@ -5,9 +5,9 @@ import random
 import logging
 
 from .exception import FormalLogicExceptionBase
-from FLD.utils import run_with_timeout_retry, RetryAndTimeoutFailure
-from FLD.word_banks.base import WordBank
-from FLD.word_banks import POS, ATTR
+from FLD_generator.utils import run_with_timeout_retry, RetryAndTimeoutFailure
+from FLD_generator.word_banks.base import WordBank
+from FLD_generator.word_banks import POS, ATTR
 import kern_profiler
 
 

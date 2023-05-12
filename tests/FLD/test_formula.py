@@ -1,5 +1,5 @@
 from typing import List, Set
-from FLD.formula import Formula, negate
+from FLD_generator.formula import Formula, negate
 
 
 def test_formula():

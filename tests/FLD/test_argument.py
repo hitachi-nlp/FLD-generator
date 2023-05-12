@@ -1,4 +1,4 @@
-from FLD.argument import Argument
+from FLD_generator.argument import Argument
 from pprint import pprint
 
 

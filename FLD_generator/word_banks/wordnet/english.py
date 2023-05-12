@@ -6,10 +6,10 @@ from string import ascii_uppercase
 # from pyinflect import getInflection
 from lemminflect import getInflection, getLemma
 
-from FLD.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLD_generator.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from nltk.corpus import wordnet as wn
-from FLD.utils import starts_with_vowel_sound
+from FLD_generator.utils import starts_with_vowel_sound
 from .base import WordNetWordBank
 
 logger = logging.getLogger(__name__)

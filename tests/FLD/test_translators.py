@@ -1,9 +1,9 @@
 from typing import List, Optional
 import logging
 
-from FLD.formula import Formula
-from FLD.translators import build as build_translator
-from FLD.word_banks import build_wordnet_wordbank
+from FLD_generator.formula import Formula
+from FLD_generator.translators import build as build_translator
+from FLD_generator.word_banks import build_wordnet_wordbank
 from logger_setup import setup as setup_logger
 
 
