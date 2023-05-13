@@ -197,7 +197,7 @@ def generate_instances(size: int, *args):
 @click.option('--translation-distractor', default='word_swap')
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 @click.option('--num-translation-distractors', type=str, default=json.dumps([5]))
-@click.option('--proof-stances', type=str, default=json.dumps(['PROOF', 'DISPROOF', 'UNKNOWN']))
+@click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)

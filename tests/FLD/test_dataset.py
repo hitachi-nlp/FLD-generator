@@ -132,7 +132,7 @@ def test_generate_dataset_AACorpus():
     )
 
     dataset = NLProofSDataset(pipeline,
-                              ['PROOF', 'DISPROOF', 'UNKNOWN'],
+                              ['PROVED', 'DISPROVED', 'UNKNOWN'],
                               'OWA',
                               _to_range(1, 1),
                               _to_range(0, 0),
@@ -252,7 +252,7 @@ def test_generate_dataset():
     # depths = _to_range(1, 5)
     depths = _to_range(1, 5)
     dataset = NLProofSDataset(pipeline,
-                              ['PROOF', 'DISPROOF', 'UNKNOWN'],
+                              ['PROVED', 'DISPROVED', 'UNKNOWN'],
                               'OWA',
                               depths,
                               _to_range(1, 5),
@@ -264,6 +264,7 @@ def test_generate_dataset():
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              version='0.1',
                               raise_if_translation_not_found=False)
 
     generate_dataset(dataset)

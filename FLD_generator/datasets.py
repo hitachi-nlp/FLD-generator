@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 class ProofStance(Enum):
-    PROOF = 'PROOF'
-    DISPROOF = 'DISPROOF'
+    PROVED = 'PROVED'
+    DISPROVED = 'DISPROVED'
     UNKNOWN = 'UNKNOWN'
 
 
@@ -42,23 +42,49 @@ def _generate_random_sentence(translator: Translator):
     return 'Love Love LoveLive!'
 
 
-def _make_instance_label(proof_stance: ProofStance, world_assump: WorldAssumption) -> Union[bool, str]:
-    if world_assump == WorldAssumption.CWA:
-        if proof_stance == ProofStance.PROOF:
-            return True
-        elif proof_stance == ProofStance.DISPROOF:
-            return False
-        elif proof_stance == ProofStance.UNKNOWN:
-            return False
+def _make_instance_label(proof_stance: ProofStance,
+                         world_assump: WorldAssumption,
+                         version: str = '0.0') -> Any:
+    if version == '0.0':
+        if world_assump == WorldAssumption.CWA:
+            if proof_stance == ProofStance.PROVED:
+                return True
+            elif proof_stance == ProofStance.DISPROVED:
+                return False
+            elif proof_stance == ProofStance.UNKNOWN:
+                return False
+            else:
+                raise ValueError()
+        elif world_assump == WorldAssumption.OWA:
+            if proof_stance == ProofStance.PROVED:
+                return True
+            elif proof_stance == ProofStance.DISPROVED:
+                return False
+            elif proof_stance == ProofStance.UNKNOWN:
+                return 'Unknown'
+            else:
+                raise ValueError()
         else:
             raise ValueError()
-    elif world_assump == WorldAssumption.OWA:
-        if proof_stance == ProofStance.PROOF:
-            return True
-        elif proof_stance == ProofStance.DISPROOF:
-            return False
-        elif proof_stance == ProofStance.UNKNOWN:
-            return 'Unknown'
+    elif version == '0.1':
+        if world_assump == WorldAssumption.CWA:
+            if proof_stance == ProofStance.PROVED:
+                return 'PROVED'
+            elif proof_stance == ProofStance.DISPROVED:
+                return 'DISPROVED'
+            elif proof_stance == ProofStance.UNKNOWN:
+                return 'DISPROVED'
+            else:
+                raise ValueError()
+        elif world_assump == WorldAssumption.OWA:
+            if proof_stance == ProofStance.PROVED:
+                return 'PROVED'
+            elif proof_stance == ProofStance.DISPROVED:
+                return 'DISPROVED'
+            elif proof_stance == ProofStance.UNKNOWN:
+                return 'UNKNOWN'
+            else:
+                raise ValueError()
         else:
             raise ValueError()
     else:
@@ -145,6 +171,7 @@ class NLProofSDataset:
                  word_bank: Optional[WordBank] = None,
                  num_distractors: Optional[List[int]] = None,
                  num_translation_distractors: Optional[List[int]] = None,
+                 version: str = '0.0',
                  log_stats=False,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
@@ -174,6 +201,7 @@ class NLProofSDataset:
         self.num_translation_distractors = num_translation_distractors or [0]
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
+        self.version = version
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
         self.use_collapsed_translation_nodes_for_unknown_tree = use_collapsed_translation_nodes_for_unknown_tree
@@ -225,10 +253,10 @@ class NLProofSDataset:
             if proof_stance == ProofStance.UNKNOWN:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
-            elif proof_stance == ProofStance.PROOF:
+            elif proof_stance == ProofStance.PROVED:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = []
-            elif proof_stance == ProofStance.DISPROOF:
+            elif proof_stance == ProofStance.DISPROVED:
                 hypothesis = root_negation_formula.translation or root_negation_formula.rep
                 dead_leaf_nodes = []
 
@@ -258,7 +286,7 @@ class NLProofSDataset:
                 missing_nodes_of_negative_tree = others['negative_tree_missing_nodes']
 
                 if len(missing_nodes_of_negative_tree) == 0:
-                    negative_proof_stance = ProofStance.PROOF
+                    negative_proof_stance = ProofStance.PROVED
                 else:
                     negative_proof_stance = ProofStance.UNKNOWN
 
@@ -295,9 +323,11 @@ class NLProofSDataset:
                     proof_depth = proof_tree.depth
 
             # make output json
-            label = _make_instance_label(proof_stance, self.world_assump)
-            negative_label = _make_instance_label(negative_proof_stance, self.world_assump) if negative_proof_stance is not None else None
+            label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
+            negative_label = _make_instance_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
             dataset_json = {
+                '__version__': self.version,
+
                 'hypothesis': hypothesis,
                 'context': context,
                 'proofs': [proof_text] if proof_text is not None else [],
@@ -368,9 +398,9 @@ class NLProofSDataset:
             return ProofStance.UNKNOWN
         else:
             if random.random() < 1 / 2.:
-                return ProofStance.PROOF
+                return ProofStance.PROVED
             else:
-                return ProofStance.DISPROOF
+                return ProofStance.DISPROVED
 
     def _make_text(self,
 
@@ -440,7 +470,6 @@ class NLProofSDataset:
         )
 
         return context_text, proof_text, node2id, id2node
-
 
     def _divide_into_missing_and_collapsed_nodes(self, dead_leaf_nodes: List[ProofNode]) -> Tuple[List[ProofNode], List[ProofNode]]:
         missing_leaf_nodes = []
