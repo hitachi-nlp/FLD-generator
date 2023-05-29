@@ -522,10 +522,24 @@ class TemplatedTranslator(Translator):
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
 
-        for resolved_nl, condition in chained_sampling_from_weighted_iterators(
-            iterators,
-            [volume_to_weight(volume) for volume in volumes]
-        ):
+        if block_shuffle:
+            def generate():
+                for resolved_nl, condition in chained_sampling_from_weighted_iterators(
+                    iterators,
+                    [volume_to_weight(volume) for volume in volumes]
+                ):
+                    yield resolved_nl, condition
+
+        else:
+            def generate():
+                for iterator in iterators:
+                    for resolved_nl, condition in iterator:
+                        yield resolved_nl, condition
+
+        for resolved_nl, condition in generate():
+            if resolved_nl.find('thus') >= 0:
+                import pudb; pudb.set_trace()
+
             condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
                 condition,
                 interp_mapping,
