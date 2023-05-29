@@ -60,7 +60,7 @@ def load_dataset(argument_config: List[str],
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
                  depths: List[int],
                  depth_distribution: str,
-                 force_fix_illegal_unconditioned_constants: bool,
+                 force_fix_illegal_intermediate_constants: bool,
                  branch_extension_steps: List[int]):
     generator = build_generator(
         argument_config,
@@ -135,7 +135,7 @@ def load_dataset(argument_config: List[str],
                            branch_extension_steps,
                            depth_weights=depth_weights,
                            depth_1_reference_weight=depth_1_reference_weight,
-                           force_fix_illegal_unconditioned_constants=force_fix_illegal_unconditioned_constants,
+                           force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                            num_distractors=num_distractors,
                            num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
@@ -177,7 +177,7 @@ def generate_instances(size: int, *args):
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
 @click.option('--depth-distribution', type=click.Choice(['flat', 'ruletaker.ours.20221202']))
-@click.option('--force-fix-illegal-unconditioned-constants', is_flag=True)
+@click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
 @click.option('--quantification', type=float, default=0.0)
@@ -215,7 +215,7 @@ def main(output_path,
          size,
          depths,
          depth_distribution,
-         force_fix_illegal_unconditioned_constants,
+         force_fix_illegal_intermediate_constants,
          branch_extension_steps,
          complication,
          quantification,
@@ -305,7 +305,7 @@ def main(output_path,
                         use_collapsed_translation_nodes_for_unknown_tree,
                         depths,
                         depth_distribution,
-                        force_fix_illegal_unconditioned_constants,
+                        force_fix_illegal_intermediate_constants,
                         branch_extension_steps,
                     )
                 )
