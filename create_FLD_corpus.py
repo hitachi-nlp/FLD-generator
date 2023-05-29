@@ -184,8 +184,8 @@ def generate_instances(size: int, *args):
 @click.option('--quantifier-axiom', multiple=True, default=None)
 @click.option('--translation-config', '--tc', multiple=True,
               default=['./configs/translations/thing.json'])
-@click.option('--quantify_implication_premise_conclusion_at_once', is_flag=True)
-@click.option('--quantify_all_at_once', is_flag=True)
+@click.option('--quantify-implication-premise-conclusion-at_once', is_flag=True)
+@click.option('--quantify-all-at-once', is_flag=True)
 @click.option('--keep-dneg', is_flag=True, default=False)
 @click.option('--distractor', default='unknown_interprands')
 @click.option('--num-distractors', type=str, default=json.dumps([5]))

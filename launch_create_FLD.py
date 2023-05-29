@@ -83,6 +83,8 @@ def make_dataset(dataset_name: str,
 
             'num_workers_per_job',
 
+            'quantifier_axioms',
+
             'world_assump',
         ],
         save_params=True
@@ -222,40 +224,10 @@ def main():
     setup_logger(level=logging.INFO)
     logger.info('============================== [launch_create_FLD_corpus.py] start! ============================')
 
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221007.add-axioms-theorems')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/debug')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221011.beat_ruletaker')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/debug')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221012.beat_ruletaker')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221026.enhance')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221027.enhance.fix')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221028.enhance.fix_translation')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221028.dist-var')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221101.various_datasets')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221107.more_distractive')
-
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221112.various_negatives')
-
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221115.new_steps')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221115.debug.parallel')
-
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221115.steps')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221116.fix_translation')
-
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221117.investigation')
-
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221123.and')
-
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221124.and.simplified_formula_in_various_formulas')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221125.full')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221126.transl')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221126.transl.no_hypothesis_in_unknown_proofs')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221129.transl.wo_hypothesis_in_unknown')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221130.arg-AA')
-
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20221203.first_exp')
-
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221203.first_exp')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221217.back_to_the_past')
+
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230529.use_fixed_translation_for_LLM')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -367,12 +339,12 @@ def main():
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-8__dataset_size-30000.G_MP',
 
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
+        '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
         # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
 
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP',
 
-        '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000.G_MP',
+        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000.G_MP',
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000.G_MP',
 
         # ---------------------------------- 20221217.back_to_the_past ------------------------------------
