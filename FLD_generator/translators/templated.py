@@ -537,8 +537,6 @@ class TemplatedTranslator(Translator):
                         yield resolved_nl, condition
 
         for resolved_nl, condition in generate():
-            if resolved_nl.find('thus') >= 0:
-                import pudb; pudb.set_trace()
 
             condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
                 condition,
