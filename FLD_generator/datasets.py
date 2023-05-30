@@ -634,7 +634,7 @@ class NLProofSDataset:
         return ' '.join([
             f'{id_}: {self._get_sent_from_node(node)}'
             for id_, node in sorted(context_id2nodes.items(),
-                                    key=lambda id_, node: int(re.sub('sent([0-9]*)', f'\g<1>', id_)))
+                                    key=lambda id_node: int(re.sub('sent([0-9]*)', r'\g<1>', id_node[0])))
             
         ])
 
