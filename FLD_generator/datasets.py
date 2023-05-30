@@ -91,6 +91,23 @@ def _make_instance_label(proof_stance: ProofStance,
         raise ValueError()
 
 
+def _make_proof_stance_label(proof_stance: ProofStance,
+                             version: str = '0.0') -> Any:
+    if version == '0.0':
+        if proof_stance == ProofStance.PROVED:
+            return 'PROOF'
+        elif proof_stance == ProofStance.DISPROVED:
+            return 'DISPROOF'
+        elif proof_stance == ProofStance.UNKNOWN:
+            return 'UNKNOWN'
+        else:
+            raise ValueError()
+    elif version == '0.1':
+        return proof_stance.value
+    else:
+        raise ValueError()
+
+
 class _DistractorFakeNode(ABC):
 
     @property
@@ -325,18 +342,20 @@ class NLProofSDataset:
             # make output json
             label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
             negative_label = _make_instance_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
+            stance_label = _make_proof_stance_label(proof_stance, version=self.version)
+            negative_stance_label = _make_proof_stance_label(negative_proof_stance, version=self.version) if negative_proof_stance is not None else None
             dataset_json = {
                 '__version__': self.version,
 
                 'hypothesis': hypothesis,
                 'context': context,
                 'proofs': [proof_text] if proof_text is not None else [],
-                'proof_stance': proof_stance.value,
+                'proof_stance': stance_label,
                 'answer': label,
 
                 'negative_hypothesis': negative_hypothesis,
                 'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
-                'negative_proof_stance': negative_proof_stance.value if negative_proof_stance is not None else None,
+                'negative_proof_stance': negative_stance_label,
                 'negative_answer': negative_label,
 
                 'original_tree_depth': proof_tree.depth,
