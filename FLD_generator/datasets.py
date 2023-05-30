@@ -628,10 +628,14 @@ class NLProofSDataset:
         return _node2id, _id2node
 
     def _make_context_text(self, id2node: Dict[str, Node], missing_leaf_nodes: List[ProofNode]) -> str:
+        context_id2nodes = {id_: node for id_, node in id2node.items()
+                            if id_.startswith('sent') and node not in missing_leaf_nodes}
+
         return ' '.join([
             f'{id_}: {self._get_sent_from_node(node)}'
-            for id_, node in sorted(id2node.items())
-            if id_.startswith('sent') and node not in missing_leaf_nodes
+            for id_, node in sorted(context_id2nodes.items(),
+                                    key=lambda id_, node: int(re.sub('sent([0-9]*)', f'\g<1>', id_)))
+            
         ])
 
     def _make_proof_text(self,
