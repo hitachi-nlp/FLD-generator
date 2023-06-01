@@ -339,7 +339,7 @@ def main():
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-8__dataset_size-30000.G_MP',
 
-        '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
+        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
         # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
 
         # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP',
@@ -349,6 +349,10 @@ def main():
 
         # ---------------------------------- 20221217.back_to_the_past ------------------------------------
         # '20221217.back_to_the_past__arg-FLD__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000',
+
+        # ---------------------------------- 20230529.use_fixed_translation_for_LLM ------------------------------------
+        '20230529.use_fixed_translation_for_LLM.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
+        # '20230529.use_fixed_translation_for_LLM.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
     ]
     # dataset_names = dataset_names[::-1]
 

@@ -65,11 +65,11 @@
       ],
       "(¬{A}{a} & {B}{a})set_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}set_subj>> <<phrase::and_but>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}{a}set_subj>> <<phrase::but_and>> <<clause::verb::{B}it>>"
       ],
       "({A}{a} & ¬{B}{a})set_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}set_subj>> <<phrase::and_but>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}{a}set_subj>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}{a} & ¬{B}{a})set_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -111,11 +111,11 @@
       ],
       "(¬{A}{a} & {B}{a})unique_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}unique_subj>> <<phrase::and_but>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}{a}unique_subj>> <<phrase::but_and>> <<clause::verb::{B}it>>"
       ],
       "({A}{a} & ¬{B}{a})unique_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}unique_subj>> <<phrase::and_but>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}{a}unique_subj>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}{a} & ¬{B}{a})unique_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -159,11 +159,11 @@
       ],
       "(¬{A}something & {B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}something>> <<phrase::and_but>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}something>> <<phrase::but_and>> <<clause::verb::{B}it>>"
       ],
       "({A}something & ¬{B}something)": [
           "<<phrase::something>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}something>> <<phrase::and_but>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}something>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}something & ¬{B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -248,11 +248,11 @@
       ],
       "(¬{A}it & {B}it)": [
           "it <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}it>> <<phrase::and_but>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}it>> <<phrase::but_and>> <<clause::verb::{B}it>>"
       ],
       "({A}it & ¬{B}it)": [
           "it <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}it>> <<phrase::and_but>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}it>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}it & ¬{B}it)": [
           "it <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -317,7 +317,7 @@
           "__comment: the template is too difficult to parse with multiple commas."
       ],
       "¬(¬{A} & {B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬({A} & {B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬(¬{A} & {B})>>"
       ],
       "¬({A} & ¬{B}).event_occurrence": [
           "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} & ¬{B})>>"
@@ -345,7 +345,7 @@
           "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} v {B})>>"
       ],
       "¬(¬{A} v {B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬({A} v {B})>>"
+          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬(¬{A} v {B})>>"
       ],
       "¬({A} v ¬{B}).event_occurrence": [
           "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} v ¬{B})>>"

@@ -77,17 +77,17 @@
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>>"
     ],
     "(¬{A} & {B})predicate": [
-      "<<phrase::{A}predicate>> <<phrase::and_also>> <<phrase::{B}predicate>>",
+      "<<phrase::¬{A}predicate>> <<phrase::but_and>> <<phrase::{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::{B}a_noun>>"
     ],
     "({A} & ¬{B})predicate": [
-      "<<phrase::{A}predicate>> <<phrase::and_also>> <<phrase::{B}predicate>>",
+      "<<phrase::{A}predicate>> <<phrase::but_and>> <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
     ],
     "(¬{A} & ¬{B})predicate": [
-      "<<phrase::{A}predicate>> <<phrase::and_also>> <<phrase::{B}predicate>>",
+      "<<phrase::¬{A}predicate>> <<phrase::and_also>> <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
     ],
@@ -232,10 +232,10 @@
       "<<phrase::{A}pre_modifier>> <<phrase::and_also>> <<phrase::{B}pre_modifier>>"
     ],
     "(¬{A} & {B})pre_modifier": [
-      "<<phrase::¬{A}pre_modifier>> <<phrase::and_but>> <<phrase::{B}pre_modifier>>"
+      "<<phrase::¬{A}pre_modifier>> <<phrase::but_and>> <<phrase::{B}pre_modifier>>"
     ],
     "({A} & ¬{B})pre_modifier": [
-      "<<phrase::{A}pre_modifier>> <<phrase::and_but>> <<phrase::¬{B}pre_modifier>>"
+      "<<phrase::{A}pre_modifier>> <<phrase::but_and>> <<phrase::¬{B}pre_modifier>>"
     ],
     "(¬{A} & ¬{B})pre_modifier": [
       "<<phrase::¬{A}pre_modifier>> <<phrase::and_also>> <<phrase::¬{B}pre_modifier>>"
@@ -258,10 +258,10 @@
       "<<phrase::{A}post_modifier>> <<phrase::and_also>> <<phrase::{B}post_modifier>>"
     ],
     "(¬{A} & {B})post_modifier": [
-      "<<phrase::¬{A}post_modifier>> <<phrase::and_but>> <<phrase::{B}post_modifier>>"
+      "<<phrase::¬{A}post_modifier>> <<phrase::but_and>> <<phrase::{B}post_modifier>>"
     ],
     "({A} & ¬{B})post_modifier": [
-      "<<phrase::{A}post_modifier>> <<phrase::and_but>> <<phrase::¬{B}post_modifier>>"
+      "<<phrase::{A}post_modifier>> <<phrase::but_and>> <<phrase::¬{B}post_modifier>>"
     ],
     "(¬{A} & ¬{B})post_modifier": [
       "<<phrase::¬{A}post_modifier>> <<phrase::and_also>> <<phrase::¬{B}post_modifier>>"
@@ -286,7 +286,7 @@
       "and also"
     ],
 
-    "and_but": [
+    "but_and": [
       "and",
       "but"
     ],
