@@ -345,7 +345,7 @@ class NLProofSDataset:
             stance_label = _make_proof_stance_label(proof_stance, version=self.version)
             negative_stance_label = _make_proof_stance_label(negative_proof_stance, version=self.version) if negative_proof_stance is not None else None
             dataset_json = {
-                '__version__': self.version,
+                'version': self.version,
 
                 'hypothesis': hypothesis,
                 'context': context,
