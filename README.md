@@ -1,93 +1,43 @@
-# Artificial Argument Corpus
+# FLD Generator
+Code for generating FLD corpus.  
 
-Code for generating the synthetic argumentative texts in the paper ["Critical Thinking for Language Models"](https://arxiv.org/pdf/2009.07185), accepted for IWCS 2021.
-
-> G Betz, C Voigt and K Richardson: *Critical Thinking for Language Models*, IWCS 2021
-
-This repository doesn't contain the actual datasets used in the paper, which, however, [can be downloaded here](https://bwsyncandshare.kit.edu/s/97FCrJECJKWxawD). 
-
-The trained models are released via at Hugging Face's [model hub](https://huggingface.co/debatelab).
+The module is designed as controllable and extensible as possible by options and external template files in order to generate various patterns of corpora.
+This enables analysis for pursuing the better design of corpora.
 
 
-## Pipeline
+## Installation
+`pip install -r ./requrements.txt`
 
-![Pipeline](https://debatelab.github.io/assets/img/pipeline.png)
-
-#### Step 1
-
-In step 1, a formal argument scheme is chosen from the given config file (`conf_syllogistic_corpus-01.json` or `conf_syllogistic_corpus-02.json`), such as
-
-```json
-{
-    "id": "mb1",
-    "base_scheme_group": "Modus barbara",
-    "scheme_variant": "negation_variant",
-    "scheme": [
-        ["(x): ¬${A}x -> ${B}x", {"A": "${F}", "B": "${G}"}],
-        ["¬${A}${a}", {"A": "${F}", "a": "${a}"}],
-        ["${A}${a}", {"A": "${G}", "a": "${a}"}]
-    ],
-    "predicate-placeholders": ["F","G"],
-    "entity-placeholders": ["a"]
-}
+## How to use
+The main script is `./create_FLD_corpus.py`, which takes various options that specify the design of corpora, such as:
+```sh
+python ./create_FLD_corpus.py\
+    <output_dir>\
+    <dataset_size>\
+    --ac ./configs/arguments/axiom.pred_only.json\
+    --ac ./configs/arguments/axiom.pred_arg.json\
+    --ac ./configs/arguments/theorem.G_MP.pred_arg.json\
+    --tc ./configs/translations/thing.json\
+    --tc ./configs/translations/thing.sentence_negation.json\
+    --depths '[1, 2, 3, 4, 5]'\
+    --complication 0.5\
+    --quantification 0.2\
+    --distractor mixture.negative_tree.simplified_formula.various_form\
+    --num-distractors '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]'\
+    --proof-stances '["PROOF", "DISPROOF", "UNKNOWN"]'\
+    --world-assump OWA\
+    --num-workers 5\
+    --seed 0 
 ```
+In the above command, each option correspond to one design aspect, as follows:
+* `ac`              : argument (deduction rule) configuration files
+* `tc`              : natural language translation config files
+* `depths`          : the depths of proof trees
+* `complication`    : the ratio of complex formulas included in the dataset
+* `quantification`  : the ratio of quantification formulas (i.e., formulas that use ∀,∃)
+* `distractors`     : type of distractor
+* `num-distractors`     : possible number of distractors in each example
+* `proof-stances`   : possible proof stance of each example
+* `world-assump`   : the world assumption (Open World Assumption vs Closed World Assumption)
 
-#### Step 2
-
-Next, each symbolic formula in the selected inference is replaced with a natural-language sentence scheme, e.g.
-
-```json
-{
-    "scheme": [
-        "If someone is not a ${F}, then they are a ${G}.",
-        "${a} isn't a ${F}",
-        "${a} is a ${G}"
-    ],
-    "predicate-placeholders": ["F","G"],
-    "entity-placeholders": ["a"]
-}
-```
-while appropriate translations of symbolic formulas to natural-language sentence schemes are retrieved from the config file, e.g.:
-
-```json
-{
-    "(x): ¬${A}x -> ${B}x" : [
-        "Whoever is not a ${A} is a ${B}. ",
-        "Nobody is neither a ${A} nor a ${B}. "
-    ]
-}
-```
-
-#### Step 3
-
-In step 3, appropriate substitutions for the schemes' placeholders are retrieved from the config file, such as
-
-```json
-{
-    "F": "supporter of FC Liverpool",
-    "G": "fan of Tottenham Hotspurs",
-    "a": "Mila"
-}
-```
-
-Substitutes for predicate placeholders are actually generated from a binary predicate (x *is a supporter of* y) and an object term (*FC Liverpool*).
-
-The config files (`conf_syllogistic_corpus-01.json` or `conf_syllogistic_corpus-02.json`) contain five (training and testing) respectively two (testing only) different domains: `female_relatives`, `male_relatives`, `football_fans`, `consumers_personalcare` and `chemical_ingredients`; `dinos` and `philosophers`.
-
-Each domain used for training provides at least several hundreds of (complex) predicates. 
-
-
-#### Step 4
-
-The premises are mixed.
-
-#### Step 5
-
-The argument (premise-conclusion list) is, finally, rendered as text paragraph by framing the argument and prepending premise and conclusion indicators to the corresponding sentences. These items are retrieved from the config file, too.
-
-
-
-## Requirements
-
-`create_trainfiles.py` requires, as is, that [spgutenberg](https://github.com/pgcorpus/gutenberg) and [Reuters trc2](https://trec.nist.gov/data/reuters/reuters.html) be available. 
-
+See the [source](./create_FLD_corpus.py) for full options.

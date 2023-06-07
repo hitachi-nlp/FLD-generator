@@ -6,6 +6,7 @@ nltk
 joblib
 transformers
 py-timeout
+timeout-decorator
 # pyinflect
 lemminflect
 

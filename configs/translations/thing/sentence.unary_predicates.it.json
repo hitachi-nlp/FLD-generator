@@ -1,0 +1,72 @@
+{
+
+  "sentence": {
+
+
+    "{A}it": [
+      "<<clause::verb::{A}it>>"
+    ],
+    "¬{A}it": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::{A}it>>",
+      "<<clause::verb::¬{A}it>>"
+    ],
+
+
+    "({A}it & {B}it)": [
+      "<<clause::verb::({A}it & {B}it)>>"
+    ],
+    "(¬{A}it & {B}it)": [
+      "<<clause::verb::(¬{A}it & {B}it)>>"
+    ],
+    "({A}it & ¬{B}it)": [
+      "<<clause::verb::({A}it & ¬{B}it)>>"
+    ],
+    "(¬{A}it & ¬{B}it)": [
+      "<<clause::verb::(¬{A}it & ¬{B}it)>>"
+    ],
+
+
+    "¬({A}it & {B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}it & {B}it)>>"
+    ],
+    "¬(¬{A}it & {B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}it & {B}it)>>"
+    ],
+    "¬({A}it & ¬{B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}it & ¬{B}it)>>"
+    ],
+    "¬(¬{A}it & ¬{B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}it & ¬{B}it)>>"
+    ],
+
+
+    "({A}it v {B}it)": [
+      "<<clause::verb::({A}it v {B}it)>>"
+    ],
+    "(¬{A}it v {B}it)": [
+      "<<clause::verb::(¬{A}it v {B}it)>>"
+    ],
+    "({A}it v ¬{B}it)": [
+      "<<clause::verb::({A}it v ¬{B}it)>>"
+    ],
+    "(¬{A}it v ¬{B}it)": [
+      "<<clause::verb::(¬{A}it v ¬{B}it)>>"
+    ],
+
+
+    "¬({A}it v {B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}it v {B}it)>>"
+    ],
+    "¬(¬{A}it v {B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}it v {B}it)>>"
+    ],
+    "¬({A}it v ¬{B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A}it v ¬{B}it)>>"
+    ],
+    "¬(¬{A}it v ¬{B}it)": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A}it v ¬{B}it)>>"
+    ]
+
+  }
+
+}

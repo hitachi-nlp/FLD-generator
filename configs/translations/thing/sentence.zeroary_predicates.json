@@ -1,0 +1,636 @@
+{
+
+  "sentence": {
+
+    "{A}": [
+      "<<clause::verb::{A}>>"
+    ],
+    "¬{A}": [
+      "<<clause::verb::¬{A}>>"
+    ],
+
+
+    "({A} & {B})": [
+      "<<clause::verb::({A} & {B})>>"
+    ],
+    "(¬{A} & {B})": [
+      "<<clause::verb::(¬{A} & {B})>>"
+    ],
+    "({A} & ¬{B})": [
+      "<<clause::verb::({A} & ¬{B})>>"
+    ],
+    "(¬{A} & ¬{B})": [
+      "<<clause::verb::(¬{A} & ¬{B})>>"
+    ],
+
+
+    "¬({A} & {B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} & {B})>>"
+    ],
+    "¬(¬{A} & {B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} & {B})>>"
+    ],
+    "¬({A} & ¬{B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} & ¬{B})>>"
+    ],
+    "¬(¬{A} & ¬{B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} & ¬{B})>>"
+    ],
+
+
+    "({A} v {B})": [
+      "<<clause::verb::({A} v {B})>>"
+    ],
+    "(¬{A} v {B})": [
+      "<<clause::verb::(¬{A} v {B})>>"
+    ],
+    "({A} v ¬{B})": [
+      "<<clause::verb::({A} v ¬{B})>>"
+    ],
+    "(¬{A} v ¬{B})": [
+      "<<clause::verb::(¬{A} v ¬{B})>>"
+    ],
+
+
+    "¬({A} v {B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} v {B})>>"
+    ],
+    "¬(¬{A} v {B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} v {B})>>"
+    ],
+    "¬({A} v ¬{B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} v ¬{B})>>"
+    ],
+    "¬(¬{A} v ¬{B})": [
+      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} v ¬{B})>>"
+    ],
+
+
+
+    "{A} -> {B}": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::{B}>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::{B}>>",
+
+      "<<sentence::{B}>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{B}.event_occurrence>>",
+      "<<clause::noun::{B}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> {B}": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::{B}>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::{B}>>",
+
+      "<<sentence::{B}>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{B}.event_occurrence>>",
+      "<<clause::noun::{B}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "{A} -> ¬{B}": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬{B}>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬{B}>>",
+
+      "<<sentence::¬{B}>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.event_occurrence>>",
+      "<<clause::noun::¬{B}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{B}.event_occurrence>>",
+      "<<clause::noun::{B}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> ¬{B}": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬{B}>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬{B}>>",
+
+      "<<sentence::¬{B}>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{B}.event_occurrence>>",
+      "<<clause::noun::¬{B}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{B}.event_occurrence>>",
+      "<<clause::noun::{B}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+
+
+    "({A} & {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} & {B})>>, <<sentence::{C}>>",
+      "<<sentence::({A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::({A} & {B})>>",
+
+      "<<clause::noun::({A} & {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} & {B}).event_occurrence>>"
+    ],
+    "(¬{A} & {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} & {B})>>, <<sentence::{C}>>",
+      "<<sentence::(¬{A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} & {B})>>",
+
+      "<<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} & {B}).event_occurrence>>"
+    ],
+    "({A} & ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} & ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::({A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::({A} & ¬{B})>>",
+
+      "<<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} & ¬{B}).event_occurrence>>"
+    ],
+    "({A} & {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} & {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::({A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::({A} & {B})>>",
+
+      "<<clause::noun::({A} & {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} & {B}).event_occurrence>>",
+
+      "<<clause::noun::({A} & {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::({A} & {B}).event_occurrence>>"
+    ],
+    "(¬{A} & ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} & ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::(¬{A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} & ¬{B})>>",
+
+      "<<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>>"
+    ],
+    "(¬{A} & {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} & {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::(¬{A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} & {B})>>",
+      "<<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} & {B}).event_occurrence>>",
+
+      "<<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::(¬{A} & {B}).event_occurrence>>"
+    ],
+    "({A} & ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} & ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::({A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::({A} & ¬{B})>>",
+      "<<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} & ¬{B}).event_occurrence>>",
+
+      "<<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::({A} & ¬{B}).event_occurrence>>"
+    ],
+    "(¬{A} & ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} & ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::(¬{A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} & ¬{B})>>",
+      "<<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>>",
+
+      "<<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>>"
+    ],
+
+
+    "{A} -> ({B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::({B} & {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} & {C})>>",
+
+      "<<sentence::({B} & {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).event_occurrence>>",
+      "<<clause::noun::({B} & {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> ({B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::({B} & {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} & {C})>>",
+
+      "<<sentence::({B} & {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} & {C}).event_occurrence>>",
+      "<<clause::noun::({B} & {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "{A} -> (¬{B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::(¬{B} & {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} & {C})>>",
+
+      "<<sentence::(¬{B} & {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & {C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} & {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "{A} -> ({B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::({B} & ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} & ¬{C})>>",
+
+      "<<sentence::({B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} & ¬{C}).event_occurrence>>",
+      "<<clause::noun::({B} & ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> (¬{B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::(¬{B} & {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} & {C})>>",
+
+      "<<sentence::(¬{B} & {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & {C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} & {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "¬{A} -> ({B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::({B} & ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} & ¬{C})>>",
+
+      "<<sentence::({B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} & ¬{C}).event_occurrence>>",
+      "<<clause::noun::({B} & ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "{A} -> (¬{B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::(¬{B} & ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} & ¬{C})>>",
+
+      "<<sentence::(¬{B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & ¬{C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} & ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> (¬{B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::(¬{B} & ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} & ¬{C})>>",
+
+      "<<sentence::(¬{B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} & ¬{C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} & ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+
+
+    "¬({A} & {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} & {B})>>, <<sentence::{C}>>",
+      "<<sentence::¬({A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} & {B})>>"
+    ],
+    "¬(¬{A} & {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} & {B})>>, <<sentence::{C}>>",
+      "<<sentence::¬(¬{A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} & {B})>>"
+    ],
+    "¬({A} & ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} & ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::¬({A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} & ¬{B})>>"
+    ],
+    "¬({A} & {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} & {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬({A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} & {B})>>"
+    ],
+    "¬(¬{A} & ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} & ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::¬(¬{A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} & ¬{B})>>"
+    ],
+    "¬(¬{A} & {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} & {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬(¬{A} & {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} & {B})>>"
+    ],
+    "¬({A} & ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} & ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬({A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} & ¬{B})>>"
+    ],
+    "¬(¬{A} & ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} & ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬(¬{A} & ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} & ¬{B})>>"
+    ],
+    
+
+    "{A} -> ¬({B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬({B} & {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} & {C})>>",
+
+      "<<sentence::¬({B} & {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "¬{A} -> ¬({B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬({B} & {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} & {C})>>",
+
+      "<<sentence::¬({B} & {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+    "{A} -> ¬(¬{B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬(¬{B} & {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} & {C})>>",
+
+      "<<sentence::¬(¬{B} & {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "{A} -> ¬({B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬({B} & ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} & ¬{C})>>",
+
+      "<<sentence::¬({B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "¬{A} -> ¬(¬{B} & {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬(¬{B} & {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} & {C})>>",
+
+      "<<sentence::¬(¬{B} & {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+    "¬{A} -> ¬({B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬({B} & ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} & ¬{C})>>",
+
+      "<<sentence::¬({B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+    "{A} -> ¬(¬{B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬(¬{B} & ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} & ¬{C})>>",
+
+      "<<sentence::¬(¬{B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "¬{A} -> ¬(¬{B} & ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬(¬{B} & ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} & ¬{C})>>",
+
+      "<<sentence::¬(¬{B} & ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+
+
+    "({A} v {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} v {B})>>, <<sentence::{C}>>",
+      "<<sentence::({A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::({A} v {B})>>",
+
+      "<<clause::noun::({A} v {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} v {B}).event_occurrence>>"
+    ],
+    "(¬{A} v {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} v {B})>>, <<sentence::{C}>>",
+      "<<sentence::(¬{A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} v {B})>>",
+
+      "<<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} v {B}).event_occurrence>>"
+    ],
+    "({A} v ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} v ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::({A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::({A} v ¬{B})>>",
+
+      "<<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} v ¬{B}).event_occurrence>>"
+    ],
+    "({A} v {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} v {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::({A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::({A} v {B})>>",
+
+      "<<clause::noun::({A} v {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} v {B}).event_occurrence>>",
+
+      "<<clause::noun::({A} v {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::({A} v {B}).event_occurrence>>"
+    ],
+
+
+    "(¬{A} v ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} v ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::(¬{A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} v ¬{B})>>",
+
+      "<<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>>"
+    ],
+    "(¬{A} v {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} v {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::(¬{A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} v {B})>>",
+
+      "<<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} v {B}).event_occurrence>>",
+
+      "<<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::(¬{A} v {B}).event_occurrence>>"
+    ],
+    "({A} v ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::({A} v ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::({A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::({A} v ¬{B})>>",
+
+      "<<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::({A} v ¬{B}).event_occurrence>>",
+
+      "<<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::({A} v ¬{B}).event_occurrence>>"
+    ],
+    "(¬{A} v ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::(¬{A} v ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::(¬{A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::(¬{A} v ¬{B})>>",
+
+      "<<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::cause_verb>> <<clause::noun::¬{C}.event_occurrence>>",
+      "<<clause::noun::¬{C}.event_occurrence>> <<phrase::caused_verb>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>>",
+
+      "<<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::anti_cause_verb>> <<clause::noun::{C}.event_occurrence>>",
+      "<<clause::noun::{C}.event_occurrence>> <<phrase::anti_caused_verb>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>>"
+    ],
+
+
+    "{A} -> ({B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::({B} v {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} v {C})>>",
+
+      "<<sentence::({B} v {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).event_occurrence>>",
+      "<<clause::noun::({B} v {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> ({B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::({B} v {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} v {C})>>",
+
+      "<<sentence::({B} v {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} v {C}).event_occurrence>>",
+      "<<clause::noun::({B} v {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "{A} -> (¬{B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::(¬{B} v {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} v {C})>>",
+
+      "<<sentence::(¬{B} v {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v {C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} v {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "{A} -> ({B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::({B} v ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} v ¬{C})>>",
+
+      "<<sentence::({B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} v ¬{C}).event_occurrence>>",
+      "<<clause::noun::({B} v ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+
+
+    "¬{A} -> (¬{B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::(¬{B} v {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} v {C})>>",
+
+      "<<sentence::(¬{B} v {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v {C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} v {C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "¬{A} -> ({B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::({B} v ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::({B} v ¬{C})>>",
+
+      "<<sentence::({B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::({B} v ¬{C}).event_occurrence>>",
+      "<<clause::noun::({B} v ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+    "{A} -> (¬{B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::(¬{B} v ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} v ¬{C})>>",
+
+      "<<sentence::(¬{B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>",
+
+      "<<clause::noun::{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v ¬{C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} v ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::{A}.event_occurrence>>"
+    ],
+    "¬{A} -> (¬{B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::(¬{B} v ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::(¬{B} v ¬{C})>>",
+
+      "<<sentence::(¬{B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>",
+
+      "<<clause::noun::¬{A}.event_occurrence>> <<phrase::cause_verb>> <<clause::noun::(¬{B} v ¬{C}).event_occurrence>>",
+      "<<clause::noun::(¬{B} v ¬{C}).event_occurrence>> <<phrase::caused_verb>> <<clause::noun::¬{A}.event_occurrence>>"
+    ],
+
+
+    "¬({A} v {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} v {B})>>, <<sentence::{C}>>",
+      "<<sentence::¬({A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} v {B})>>"
+    ],
+    "¬(¬{A} v {B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} v {B})>>, <<sentence::{C}>>",
+      "<<sentence::¬(¬{A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} v {B})>>"
+    ],
+    "¬({A} v ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} v ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::¬({A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} v ¬{B})>>"
+    ],
+    "¬({A} v {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} v {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬({A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} v {B})>>"
+    ],
+    "¬(¬{A} v ¬{B}) -> {C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} v ¬{B})>>, <<sentence::{C}>>",
+      "<<sentence::¬(¬{A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::{C}>>",
+
+      "<<sentence::{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} v ¬{B})>>"
+    ],
+    "¬(¬{A} v {B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} v {B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬(¬{A} v {B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} v {B})>>"
+    ],
+    "¬({A} v ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬({A} v ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬({A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬({A} v ¬{B})>>"
+    ],
+    "¬(¬{A} v ¬{B}) -> ¬{C}": [
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A} v ¬{B})>>, <<sentence::¬{C}>>",
+      "<<sentence::¬(¬{A} v ¬{B})>>, <<phrase::thus_conjunction>> <<sentence::¬{C}>>",
+
+      "<<sentence::¬{C}>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A} v ¬{B})>>"
+    ],
+
+
+    "{A} -> ¬({B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬({B} v {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} v {C})>>",
+
+      "<<sentence::¬({B} v {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "¬{A} -> ¬({B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬({B} v {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} v {C})>>",
+
+      "<<sentence::¬({B} v {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+    "{A} -> ¬(¬{B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬(¬{B} v {C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} v {C})>>",
+
+      "<<sentence::¬(¬{B} v {C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "{A} -> ¬({B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬({B} v ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} v ¬{C})>>",
+
+      "<<sentence::¬({B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "¬{A} -> ¬(¬{B} v {C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬(¬{B} v {C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} v {C})>>",
+
+      "<<sentence::¬(¬{B} v {C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+    "¬{A} -> ¬({B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬({B} v ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬({B} v ¬{C})>>",
+
+      "<<sentence::¬({B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ],
+    "{A} -> ¬(¬{B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::{A}>>, <<sentence::¬(¬{B} v ¬{C})>>",
+      "<<sentence::{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} v ¬{C})>>",
+
+      "<<sentence::¬(¬{B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::{A}>>"
+    ],
+    "¬{A} -> ¬(¬{B} v ¬{C})": [
+      "<<phrase::if_conjunction>> <<sentence::¬{A}>>, <<sentence::¬(¬{B} v ¬{C})>>",
+      "<<sentence::¬{A}>>, <<phrase::thus_conjunction>> <<sentence::¬(¬{B} v ¬{C})>>",
+
+      "<<sentence::¬(¬{B} v ¬{C})>>, <<phrase::if_conjunction>> <<sentence::¬{A}>>"
+    ]
+
+  }
+
+}

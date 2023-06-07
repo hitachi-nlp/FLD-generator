@@ -1,0 +1,439 @@
+{
+
+  "phrase": {
+
+    "{a}noun": [
+      "{a}[NOUN]"
+    ],
+
+
+    "{A}a_event_noun": [
+      "a {A}[NOUN]",
+      "{A}[ADJ.ness]",
+      "{A}[VERB.ing]",
+
+      "__comment: We wanted to exclude [ADJ.ness] since it is not an event. However excluding it will leads to translation not found error."
+    ],
+
+    "¬{A}a_event_noun": [
+      "__a {A}[NOUN]",
+      "{A}[ADJ.neg]ness",
+      "non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+
+    "{A}a_noun": [
+      "__comment: We eliminate ADJ and VERB otherwise the semantic of translations will diverge like (i) is [ADJ] (ii) is [ADJ.ness].",
+      "a {A}[NOUN]",
+      "__{A}[ADJ.ness]",
+      "__{A}[VERB.ing]"
+    ],
+
+    "¬{A}a_noun": [
+      "__a {A}[NOUN]",
+      "__{A}[ADJ.neg]ness",
+      "__non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+    "{A}noun": [
+      "{A}[NOUN]",
+      "__{A}[ADJ.ness]",
+      "__{A}[VERB.ing]"
+    ],
+
+    "¬{A}noun": [
+      "__a {A}[NOUN]",
+      "__{A}[ADJ.neg]ness",
+      "__non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+
+
+
+    "{A}predicate": [
+      "is {A}[ADJ]",
+
+      "{A}[VERB.s]",
+      "<<phrase::will>> {A}[VERB]",
+
+      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>>"
+    ],
+
+    "¬{A}predicate": [
+      "is not {A}[ADJ]",
+      "is {A}[ADJ.neg]",
+
+      "<<phrase::will>> not {A}[VERB]",
+
+      "<<phrase::is_not_a_kind_of>> <<phrase::{A}a_noun>>"
+    ],
+
+    "({A} & {B})predicate": [
+      "<<phrase::{A}predicate>> <<phrase::and_also>> <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>>"
+    ],
+    "(¬{A} & {B})predicate": [
+      "<<phrase::¬{A}predicate>> <<phrase::but_and>> <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::{B}a_noun>>"
+    ],
+    "({A} & ¬{B})predicate": [
+      "<<phrase::{A}predicate>> <<phrase::but_and>> <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
+    ],
+    "(¬{A} & ¬{B})predicate": [
+      "<<phrase::¬{A}predicate>> <<phrase::and_also>> <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
+    ],
+
+    "({A} v {B})predicate": [
+      "either <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both"
+    ],
+    "(¬{A} v {B})predicate": [
+      "either <<phrase::¬{A}predicate>> or <<phrase::{B}predicate>> or both"
+    ],
+    "({A} v ¬{B})predicate": [
+      "either <<phrase::{A}predicate>> or <<phrase::¬{B}predicate>> or both"
+    ],
+    "(¬{A} v ¬{B})predicate": [
+      "either <<phrase::¬{A}predicate>> or <<phrase::¬{B}predicate>> or both"
+    ],
+
+
+
+
+    "{A}to_do": [
+      "to be {A}[ADJ]",
+      "to {A}[VERB]",
+      "to be <<phrase::{A}a_noun>>"
+    ],
+
+    "¬{A}to_do": [
+      "not <<phrase::{A}to_do>>"
+    ],
+
+
+    "({A} & {B})to_do": [
+      "<<phrase::{A}to_do>> and <<phrase::{B}to_do>>"
+    ],
+
+    "(¬{A} & {B})to_do": [
+      "<<phrase::¬{A}to_do>> and <<phrase::{B}to_do>>"
+    ],
+
+    "({A} & ¬{B})to_do": [
+      "<<phrase::{A}to_do>> and <<phrase::¬{B}to_do>>"
+    ],
+
+    "(¬{A} & ¬{B})to_do": [
+      "<<phrase::¬{A}to_do>> and <<phrase::¬{B}to_do>>"
+    ],
+
+
+    "({A} v {B})to_do": [
+      "either <<phrase::{A}to_do>> or <<phrase::{B}to_do>> or both"
+    ],
+
+    "(¬{A} v {B})to_do": [
+      "either <<phrase::¬{A}to_do>> or <<phrase::{B}to_do>> or both"
+    ],
+
+    "({A} v ¬{B})to_do": [
+      "either <<phrase::{A}to_do>> or <<phrase::¬{B}to_do>> or both"
+    ],
+
+    "(¬{A} v ¬{B})to_do": [
+      "either <<phrase::¬{A}to_do>> or <<phrase::¬{B}to_do>> or both"
+    ],
+
+
+
+
+    "{A}doing": [
+      "being {A}[ADJ]",
+      "{A}[VERB.ing]",
+      "being <<phrase::{A}a_noun>>"
+    ],
+
+    "¬{A}doing": [
+      "not <<phrase::{A}doing>>"
+    ],
+
+
+    "({A} & {B})doing": [
+      "<<phrase::{A}doing>> and <<phrase::{B}doing>>"
+    ],
+
+    "(¬{A} & {B})doing": [
+      "<<phrase::¬{A}doing>> and <<phrase::{B}doing>>"
+    ],
+
+    "({A} & ¬{B})doing": [
+      "<<phrase::{A}doing>> and <<phrase::¬{B}doing>>"
+    ],
+
+    "(¬{A} & ¬{B})doing": [
+      "<<phrase::¬{A}doing>> and <<phrase::¬{B}doing>>"
+    ],
+
+
+    "({A} v {B})doing": [
+      "either <<phrase::{A}doing>> or <<phrase::{B}doing>> or both"
+    ],
+
+    "(¬{A} v {B})doing": [
+      "either <<phrase::¬{A}doing>> or <<phrase::{B}doing>> or both"
+    ],
+
+    "({A} v ¬{B})doing": [
+      "either <<phrase::{A}doing>> or <<phrase::¬{B}doing>> or both"
+    ],
+
+    "(¬{A} v ¬{B})doing": [
+      "either <<phrase::¬{A}doing>> or <<phrase::¬{B}doing>> or both"
+    ],
+
+
+
+
+
+
+    "{A}pre_modifier": [
+      "{A}[ADJ]",
+      "__{A}[VERB.ing] __comments: this will lead to 'eating apple dog is nice' which is not appropriate." 
+    ],
+
+    "¬{A}pre_modifier": [
+      "{A}[ADJ.neg]",
+      "non-{A}[ADJ]",
+      "__non-{A}[VERB.ing] __comments: this will lead to 'eating apple dog is nice' which is not appropriate."
+    ],
+
+    "{A}post_modifier": [
+      "{A}[ADJ]",
+      "{A}[VERB.ing]",
+      "that <<phrase::{A}predicate>>"
+    ],
+
+    "¬{A}post_modifier": [
+      "{A}[ADJ.neg]",
+      "not {A}[ADJ]",
+      "not {A}[VERB.ing]",
+      "that <<phrase::¬{A}predicate>>"
+    ],
+
+    "({A} & {B})pre_modifier": [
+      "<<phrase::{A}pre_modifier>> <<phrase::and_also>> <<phrase::{B}pre_modifier>>"
+    ],
+    "(¬{A} & {B})pre_modifier": [
+      "<<phrase::¬{A}pre_modifier>> <<phrase::but_and>> <<phrase::{B}pre_modifier>>"
+    ],
+    "({A} & ¬{B})pre_modifier": [
+      "<<phrase::{A}pre_modifier>> <<phrase::but_and>> <<phrase::¬{B}pre_modifier>>"
+    ],
+    "(¬{A} & ¬{B})pre_modifier": [
+      "<<phrase::¬{A}pre_modifier>> <<phrase::and_also>> <<phrase::¬{B}pre_modifier>>"
+    ],
+
+    "({A} v {B})pre_modifier": [
+      "__either <<phrase::{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
+    ],
+    "(¬{A} v {B})pre_modifier": [
+      "__either <<phrase::¬{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
+    ],
+    "({A} v ¬{B})pre_modifier": [
+      "__either <<phrase::{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
+    ],
+    "(¬{A} v ¬{B})pre_modifier": [
+      "__either <<phrase::¬{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
+    ],
+
+    "({A} & {B})post_modifier": [
+      "<<phrase::{A}post_modifier>> <<phrase::and_also>> <<phrase::{B}post_modifier>>"
+    ],
+    "(¬{A} & {B})post_modifier": [
+      "<<phrase::¬{A}post_modifier>> <<phrase::but_and>> <<phrase::{B}post_modifier>>"
+    ],
+    "({A} & ¬{B})post_modifier": [
+      "<<phrase::{A}post_modifier>> <<phrase::but_and>> <<phrase::¬{B}post_modifier>>"
+    ],
+    "(¬{A} & ¬{B})post_modifier": [
+      "<<phrase::¬{A}post_modifier>> <<phrase::and_also>> <<phrase::¬{B}post_modifier>>"
+    ],
+
+    "({A} v {B})post_modifier": [
+      "either <<phrase::{A}post_modifier>> or <<phrase::{B}post_modifier>> or both"
+    ],
+    "(¬{A} v {B})post_modifier": [
+      "either <<phrase::¬{A}post_modifier>> or <<phrase::{B}post_modifier>> or both"
+    ],
+    "({A} v ¬{B})post_modifier": [
+      "either <<phrase::{A}post_modifier>> or <<phrase::¬{B}post_modifier>> or both"
+    ],
+    "(¬{A} v ¬{B})post_modifier": [
+      "either <<phrase::¬{A}post_modifier>> or <<phrase::¬{B}post_modifier>> or both"
+    ],
+
+
+    "and_also": [
+      "and",
+      "and also"
+    ],
+
+    "but_and": [
+      "and",
+      "but"
+    ],
+
+    "with": [
+      "with",
+      "and"
+    ],
+
+    "will": [
+      "will",
+      "does"
+    ],
+
+    "cause_verb": [
+      "causes",
+      "brings about",
+      "leads to",
+      "results in",
+      "triggers",
+      "invokes",
+      "gives rise to",
+      "promotes",
+      "accelerates"
+    ],
+
+    "caused_verb": [
+      "is caused by",
+      "is brought about by",
+      "__is lead to by",
+      "__results in",
+      "is triggered by",
+      "is invoked by",
+      "originates from",
+      "is accelerated by"
+    ],
+
+    "anti_cause_verb": [
+      "prevents",
+      "stops",
+      "hinders",
+      "avoids",
+      "interferes",
+      "disturbs",
+      "suppresses"
+    ],
+
+    "anti_caused_verb": [
+      "is prevented by",
+      "is stopped by",
+      "is hindered by",
+      "is avoided by",
+      "is interfered by",
+      "is disturbed by",
+      "is suppressed by"
+    ],
+
+    "force": [
+      "forces",
+      "makes"
+    ],
+
+    "keep_from": [
+      "keeps",
+      "prevents",
+      "stops"
+    ],
+
+    "a_all": [
+      "a",
+      "all",
+      "__comment: we can not add all to here since it will lead to something like 'all red <<phrase::thing>> is xx'"
+    ],
+
+    "is_a_kind_of": [
+      "is",
+      "is a kind of",
+      "is an example of"
+    ],
+
+    "is_not_a_kind_of": [
+      "is not",
+      "is not a kind of",
+      "is not an example of"
+    ],
+
+    "if_conjunction": [
+      "if",
+      "when",
+      "as",
+      "because",
+      "since"
+    ],
+
+    "thus_conjunction": [
+      "thus",
+      "therefore",
+      "so that"
+    ],
+
+    "not_prefix.sentence_intro": [
+      "it is not <<phrase::correct_adj>> that",
+      "it is <<phrase::incorrect_adj>> that"
+    ],
+
+    "correct_adj": [
+      "the fact",
+      "true"
+    ],
+
+    "incorrect_adj": [
+      "wrong",
+      "incorrect",
+      "false"
+    ],
+
+    "occur": [
+      "occurs",
+      "happens",
+      "takes its rise"
+    ],
+
+    "some_prefix.sentence_intro": [
+       "for <<phrase::something>>",
+       "there is <<phrase::something>> such that",
+       "there exists <<phrase::something>> such that"
+    ],
+
+    "every_prefix.sentence_intro" : [
+      "for <<phrase::everything>>"
+    ],
+
+    "something": [
+      "something",
+      "someone"
+    ],
+
+    "everything": [
+      "everything",
+      "everyone"
+    ],
+
+    "thing": [
+      "thing",
+      "people"
+    ]
+
+  }
+
+}
