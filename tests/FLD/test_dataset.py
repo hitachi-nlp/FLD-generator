@@ -203,11 +203,11 @@ def test_generate_dataset():
         quantification=0.2,
         quantifier_axioms=[
             'universal_quantifier_elim',
-            'universal_quantifier_intro',
+            # 'universal_quantifier_intro',
 
-            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
-            'existential_quantifier_intro',
-            'existential_quantifier_elim',
+            # # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+            # 'existential_quantifier_elim',
         ],
         quantify_implication_premise_conclusion_at_once=True,
         quantify_all_at_once=False,

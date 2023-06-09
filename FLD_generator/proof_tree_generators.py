@@ -16,6 +16,7 @@ from .formula import (
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
     is_consistent_set as is_consistent_formula_set,
+    is_consistent_set_z3 as is_consistent_formula_set_z3,
     is_new as is_formula_new,
 )
 from .argument import Argument
@@ -398,7 +399,7 @@ class ProofTreeGenerator:
 
 def _generate_tree_with_timeout_retry(*args,
                                       max_retry=30,
-                                      timeout=10,  # 5 + 5
+                                      timeout=9999,  # 5 + 5
                                       **kwargs) -> Optional[ProofTree]:
     try:
         return run_with_timeout_retry(
@@ -475,7 +476,7 @@ def _generate_tree(arguments: List[Argument],
 
 def _generate_stem_with_timeout_retry(*args,
                                       max_retry=30,
-                                      timeout=5,
+                                      timeout=9999,
                                       **kwargs) -> Optional[ProofTree]:
     try:
         return run_with_timeout_retry(
@@ -495,7 +496,7 @@ def _generate_stem_with_timeout_retry(*args,
 
 
 def _extend_branches_with_timeout_retry(*args,
-                                        timeout=5,
+                                        timeout=9999,
                                         max_retry=30,
                                         **kwargs) -> ProofTree:
     try:
@@ -756,6 +757,14 @@ def _generate_stem(arguments: List[Argument],
                                 rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
                                 continue
 
+                            if not is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree):
+                                logger.info('====================== not is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree) =================')
+                                for elem in other_premises + leaf_formulas_in_tree:
+                                    logger.info(str(elem))
+                                rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
+                                is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)
+                                continue
+
                             is_arg_done = True
                             break
 
@@ -1010,6 +1019,14 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
                             continue
 
+                        if not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree):
+                            logger.info('====================== not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree) =================')
+                            for elem in next_arg_pulled.premises + leaf_formulas_in_tree:
+                                logger.info(str(elem))
+                            rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
+                            is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree)
+                            continue
+
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
@@ -1098,6 +1115,7 @@ def _shuffle_arguments(arguments: List[Argument],
 def _check_leaf_consistency(proof_tree: ProofTree) -> None:
     # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
+    assert is_consistent_formula_set_z3([node.formula for node in proof_tree.leaf_nodes])
 
 
 def _is_intermediate_constants_used(next_arg_pulled: Argument,
@@ -1204,7 +1222,7 @@ def _fix_illegal_intermediate_constants(
                         return_alignment=True,
 
                         return_at_best=True,
-                        timeout=5,
+                        timeout=9999,
                         max_retry=5,
                     )
                 except ExtendBranchesFailure as e:

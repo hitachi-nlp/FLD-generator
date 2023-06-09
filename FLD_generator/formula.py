@@ -131,6 +131,18 @@ class Formula:
             return Formula(self.rep.split(f' {IMPLICATION} ')[-1])
 
     @property
+    def quantifiers(self) -> List[str]:
+        return self.existential_quantifiers + self.universal_quantifiers
+
+    @property
+    def existential_quantifiers(self) -> List[str]:
+        return _EXISTENTIAL_QUENTIFIER_REGEXP.findall(self.rep)
+
+    @property
+    def universal_quantifiers(self) -> List[str]:
+        return _UNIVERSAL_QUENTIFIER_REGEXP.findall(self.rep)
+
+    @property
     def wo_quantifier(self) -> 'Formula':
         return Formula(_QUANTIFIER_INTRO_REGEXP.sub('', self.rep))
         # return Formula(self.rep.split(': ')[-1])

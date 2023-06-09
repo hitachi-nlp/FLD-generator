@@ -20,6 +20,7 @@ from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
     is_senseful,
     is_consistent_set as is_consistent_formula_set,
+    is_consistent_set_z3 as is_consistent_formula_set_z3,
     is_new as is_formula_new,
 )
 from .proof_tree_generators import ProofTreeGenerator
@@ -109,10 +110,25 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     if not is_consistent_formula_set([new_distractor] + existing_distractors):   # SLOW: 20%
         return False
 
+    if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
+        logger.info('======================== not is_consistent_formula_set_z3([new_distractor] + existing_distractors) =====================')
+        for dist in [new_distractor] + existing_distractors:
+            logger.info(dist)
+        return False
+
     # The tree will become inconsistent "by adding" distractor formulas.
     original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
     if original_tree_is_consistent and\
             not is_consistent_formula_set([new_distractor] + existing_distractors + leaf_formulas_in_tree):  # SLOW: 30%
+        return False
+
+    # The tree will become inconsistent "by adding" distractor formulas.
+    original_tree_is_consistent = is_consistent_formula_set_z3(leaf_formulas_in_tree)
+    if original_tree_is_consistent and\
+            not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):  # SLOW: 30%
+        logger.info('======================== original_tree_is_consistent ... =====================')
+        for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
+            logger.info(dist)
         return False
 
     intermediate_constant_reps = {constant.rep for constant in proof_tree.intermediate_constants}
@@ -274,7 +290,6 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
             is_found = False
             found_formula = None
             for tgt_predicates, tgt_constants in tgt_space:
-                # import pudb; pudb.set_trace()
                 for mapping in generate_mappings_from_predicates_and_constants(
                     [p.rep for p in src_formula.predicates],
                     [c.rep for c in src_formula.constants],
@@ -722,10 +737,6 @@ class MixtureDistractor(FormulaDistractor):
         for distractor, _size in zip(self._distractors, sizes):
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree, _size)
-                # try:
-                #     _distractor_formulas, _others = outputs
-                # except:
-                #     import pudb; pudb.set_trace()
 
                 distractor_formulas += _distractor_formulas
 

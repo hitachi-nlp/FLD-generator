@@ -2,7 +2,7 @@ import re
 from typing import List, Optional, Set, Iterable, Dict, Tuple
 import logging
 
-from .formula import (
+from FLD_generator.formula import (
     Formula,
     eliminate_double_negation,
     IMPLICATION,
