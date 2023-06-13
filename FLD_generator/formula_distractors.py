@@ -42,6 +42,7 @@ class FormulaDistractor(ABC):
     def generate(self,
                  proof_tree: ProofTree,
                  size: int,
+                 formulas_to_be_sat: Optional[List[Formula]] = None,
                  max_retry: Optional[int] = None,
                  timeout: Optional[int] = None,
                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
@@ -53,7 +54,10 @@ class FormulaDistractor(ABC):
             formula_distractors, stats = run_with_timeout_retry(
                 self._generate,
                 func_args=[proof_tree, size],
-                func_kwargs={'no_warning': no_warning},
+                func_kwargs={
+                    'no_warning': no_warning,
+                    'formulas_to_be_sat': formulas_to_be_sat,
+                },
                 retry_exception_class=FormulaDistractorGenerationFailure,
                 max_retry=max_retry,
                 timeout=timeout,
@@ -79,7 +83,11 @@ class FormulaDistractor(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
 
     def _log(self, log_level, msg: str, boundary_level = 1):
@@ -126,7 +134,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     original_tree_is_consistent = is_consistent_formula_set_z3(leaf_formulas_in_tree)
     if original_tree_is_consistent and\
             not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):  # SLOW: 30%
-        logger.info('======================== original_tree_is_consistent ... =====================')
+        logger.info('======================== original_tree_is_consistent but ... =====================')
         for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
             logger.info(dist)
         return False
@@ -146,7 +154,12 @@ class UnkownPASDistractor(FormulaDistractor):
         raise NotImplementedError('not maintained.')
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
             raise NotImplementedError()
         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
@@ -224,7 +237,12 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
             raise NotImplementedError()
         if size == 0:
@@ -303,7 +321,9 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                         print(mapping)
                     transformed_formula = interpret_formula(src_formula, mapping, elim_dneg=True)
 
-                    if not _new_distractor_formula_is_ok(transformed_formula, distractor_formulas, proof_tree):
+                    if not _new_distractor_formula_is_ok(transformed_formula,
+                                                         distractor_formulas + formulas_to_be_sat,
+                                                         proof_tree):
                         continue
 
                     found_formula = transformed_formula
@@ -357,7 +377,12 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
             raise NotImplementedError()
 
@@ -391,7 +416,10 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         else:
             prototype_formulas = [node.formula for node in proof_tree.nodes]
             if self._use_simplified_formulas_as_prototype:
-                simplified_formulas = self._simplify_distractor.generate(proof_tree, 9999, no_warning=True)[0]
+                simplified_formulas = self._simplify_distractor.generate(proof_tree,
+                                                                         9999,
+                                                                         formulas_to_be_sat=formulas_to_be_sat,
+                                                                         no_warning=True)[0]
                 prototype_formulas.extend(simplified_formulas)
                 # print('!!!')
                 # print(simplified_formulas)
@@ -519,7 +547,9 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                         # we want to prevent such possiblity.
                         continue
 
-                    if not _new_distractor_formula_is_ok(distractor_formula, distractor_formulas, proof_tree):
+                    if not _new_distractor_formula_is_ok(distractor_formula,
+                                                         distractor_formulas + formulas_to_be_sat,
+                                                         proof_tree):
                         continue
 
                     found_formula = distractor_formula
@@ -545,7 +575,12 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if size == 0:
             return [], {}
 
@@ -561,7 +596,9 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
             if len(distractor_formulas) >= size:
                 break
 
-            if not _new_distractor_formula_is_ok(distractor_formula, distractor_formulas, proof_tree):
+            if not _new_distractor_formula_is_ok(distractor_formula,
+                                                 distractor_formulas + formulas_to_be_sat,
+                                                 proof_tree):
                 continue
 
             distractor_formulas.append(distractor_formula)
@@ -603,25 +640,39 @@ class NegativeTreeDistractor(FormulaDistractor):
         return 10
 
     @profile
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
             raise NotImplementedError()
-
         if self.try_negated_hypothesis_first:
-            distractors, others = self._generate_with_initial_sampling(proof_tree, size, 'negated_hypothesis')
+            distractors, others = self._generate_with_initial_sampling(proof_tree,
+                                                                       size,
+                                                                       'negated_hypothesis',
+                                                                       formulas_to_be_sat=formulas_to_be_sat)
             if len(distractors) == 0:
                 self._log(logging.INFO, 'creating negative tree with negated hypothesis root not failed. Will try root node sampled from various forms.')
-                distractors, others = self._generate_with_initial_sampling(proof_tree, size, 'various_form')
+                distractors, others = self._generate_with_initial_sampling(proof_tree,
+                                                                           size,
+                                                                           'various_form',
+                                                                           formulas_to_be_sat=formulas_to_be_sat)
         else:
-            distractors, others = self._generate_with_initial_sampling(proof_tree, size, 'various_form')
+            distractors, others = self._generate_with_initial_sampling(proof_tree,
+                                                                       size,
+                                                                       'various_form',
+                                                                       formulas_to_be_sat=formulas_to_be_sat)
         return distractors, others
 
     @profile
     def _generate_with_initial_sampling(self,
                                         proof_tree: ProofTree,
                                         size: int,
-                                        initial_sampling: str) -> Tuple[List[Formula], Dict[str, Any]]:
-
+                                        initial_sampling: str,
+                                        formulas_to_be_sat: Optional[List[Formula]] = None) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if size == 0:
             return [], {'negative_tree': None, 'negative_tree_missing_nodes': None}
 
@@ -638,7 +689,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                     except ContradictionNegationError as e:
                         raise FormulaDistractorGenerationFailure(str(e))
                 elif initial_sampling == 'various_form':
-                    distractors, _ = self._various_form_distractor.generate(proof_tree, 1)
+                    distractors, _ = self._various_form_distractor.generate(proof_tree, 1, formulas_to_be_sat=formulas_to_be_sat)
                     if len(distractors) == 0:
                         raise FormulaDistractorGenerationFailure('could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
                     else:
@@ -679,7 +730,9 @@ class NegativeTreeDistractor(FormulaDistractor):
                 if len(distractor_formulas) >= size:
                     break
 
-                if not _new_distractor_formula_is_ok(distractor_formula, distractor_formulas, proof_tree):
+                if not _new_distractor_formula_is_ok(distractor_formula,
+                                                     distractor_formulas + formulas_to_be_sat,
+                                                     proof_tree):
                     continue
 
                 distractor_formulas.append(distractor_formula)
@@ -709,7 +762,13 @@ class MixtureDistractor(FormulaDistractor):
             timeout_sum += distractor.default_max_retry * distractor.default_timeout
         return timeout_sum
 
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    @profile
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
             raise NotImplementedError()
 
@@ -736,7 +795,8 @@ class MixtureDistractor(FormulaDistractor):
         others = {}
         for distractor, _size in zip(self._distractors, sizes):
             try:
-                _distractor_formulas, _others = distractor.generate(proof_tree, _size)
+                _distractor_formulas, _others = distractor.generate(proof_tree, _size,
+                                                                    formulas_to_be_sat = formulas_to_be_sat + distractor_formulas)
 
                 distractor_formulas += _distractor_formulas
 
@@ -774,7 +834,13 @@ class FallBackDistractor(FormulaDistractor):
             timeout_sum += distractor.default_max_retry * distractor.default_timeout
         return timeout_sum
 
-    def _generate(self, proof_tree: ProofTree, size: int, no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+    @profile
+    def _generate(self,
+                  proof_tree: ProofTree,
+                  size: int,
+                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
+        formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
             raise NotImplementedError()
 
@@ -787,7 +853,9 @@ class FallBackDistractor(FormulaDistractor):
             if len(distractor_formulas) >= size:
                 break
             try:
-                _distractor_formulas, _others = distractor.generate(proof_tree, size)
+                _distractor_formulas, _others = distractor.generate(proof_tree,
+                                                                    size,
+                                                                    formulas_to_be_sat = formulas_to_be_sat + distractor_formulas)
 
                 distractor_formulas += _distractor_formulas
 
