@@ -2,7 +2,11 @@ from typing import Optional, Tuple, Any, Union, List, Dict
 from collections import defaultdict
 from pprint import pprint
 
-from FLD_generator.formula import Formula
+from FLD_generator.formula import (
+    Formula,
+    IMPLICATION,
+    negate,
+)
 from z3 import (
     DeclareSort,
     BoolSort,
@@ -141,3 +145,21 @@ def check_sat(formulas: List[Formula],
         return ret[0]
     else:
         return ret
+
+
+def is_stronger(this: Formula, that: Formula) -> bool:
+    this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
+    that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')
+    return not check_sat([negate(this_imply_that)]) and check_sat([negate(that_imply_this)])
+
+
+def is_equiv(this: Formula, that: Formula) -> bool:
+    this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
+    that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')
+    return not check_sat([negate(this_imply_that)]) and not check_sat([negate(that_imply_this)])
+
+
+def is_weaker(this: Formula, that: Formula) -> bool:
+    this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
+    that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')
+    return check_sat([negate(this_imply_that)]) and not check_sat([negate(that_imply_this)])

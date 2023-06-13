@@ -21,6 +21,8 @@ from .formula_checkers import (
     is_senseful,
     is_consistent_set as is_consistent_formula_set,
     is_consistent_set_z3 as is_consistent_formula_set_z3,
+    is_stronger_z3,
+    is_equiv_z3,
     is_new as is_formula_new,
 )
 from .proof_tree_generators import ProofTreeGenerator
@@ -108,6 +110,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
 
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
+    hypothesis_formula = proof_tree.root_node.formula
 
     if not is_formula_new(new_distractor, existing_distractors + formulas_in_tree):
         return False
@@ -143,6 +146,14 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     for distractor_constant in new_distractor.constants:
         if distractor_constant.rep in intermediate_constant_reps:
             # raise FormulaDistractorGenerationFailure(f'The intermediate_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
+            return False
+
+    # for tree_formula in leaf_formulas_in_tree + [hypothesis_formula]:
+    for tree_formula in [node.formula for node in proof_tree.nodes]:
+        if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):
+            logger.info('reject new_distractor %s since it is stronger or equals to a leaf formula %s',
+                        new_distractor.rep,
+                        tree_formula.rep)
             return False
 
     return True

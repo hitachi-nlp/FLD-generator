@@ -2,7 +2,13 @@ from typing import List
 from pprint import pprint
 
 from FLD_generator.formula import Formula
-from FLD_generator.formula_checkers.z3_checkers.checkers import parse, check_sat
+from FLD_generator.formula_checkers.z3_checkers.checkers import (
+    parse,
+    check_sat,
+    is_stronger,
+    is_equiv,
+    is_weaker,
+)
 
 
 def test_parse():
@@ -312,6 +318,97 @@ def test_check_sat():
     )
 
 
+def test_strength():
+
+    def _test_strength(this_rep: str, that_rep: str, is_stronger_gold: bool):
+        print('\n\n============ _test_is_stronger() ============')
+        print('\n------------ rep ------------')
+        print(this_rep, that_rep)
+        _is_stronger = is_stronger(
+            this_rep,
+            that_rep,
+        )
+        print('\n------------ is_stronger ------------')
+        print(_is_stronger)
+        assert _is_stronger is is_stronger_gold
+
+        print('\n\n============ _test_is_weaker() ============')
+        print('\n------------ rep ------------')
+        print(this_rep, that_rep)
+        _is_weaker = is_weaker(
+            this_rep,
+            that_rep,
+        )
+        print('\n------------ is_weaker ------------')
+        print(_is_weaker)
+        assert _is_weaker is not is_stronger_gold
+
+    _test_strength(
+        Formula('{A} & {B}'),
+        Formula('{A}'),
+        True,
+    )
+
+    _test_strength(
+        Formula('{A}'),
+        Formula('{A} & {B}'),
+        False,
+    )
+
+    _test_strength(
+        Formula('{A} -> {C}'),
+        Formula('({A} & {B}) -> {C}'),
+        True,
+    )
+
+    _test_strength(
+        Formula('({A} & {B}) -> {C}'),
+        Formula('{A} -> {C}'),
+        False,
+    )
+
+
+def test_equiv():
+
+    def _test_is_equiv(this_rep: str, that_rep: str, is_equiv_gold: bool):
+        print('\n\n============ _test_is_equiv() ============')
+        print('\n------------ rep ------------')
+        print(this_rep, that_rep)
+        _is_equiv = is_equiv(
+            this_rep,
+            that_rep,
+        )
+        print('\n------------ is_equiv ------------')
+        print(_is_equiv)
+        assert _is_equiv is is_equiv_gold
+
+    _test_is_equiv(
+        Formula('({A} & {B})'),
+        Formula('({B} & {A})'),
+        True,
+    )
+
+    _test_is_equiv(
+        Formula('{A}'),
+        Formula('({B} & {A})'),
+        False,
+    )
+
+    _test_is_equiv(
+        Formula('{A} -> {B}'),
+        Formula('¬{B} -> ¬{A}'),
+        True,
+    )
+
+    _test_is_equiv(
+        Formula('{A} -> {B}'),
+        Formula('{B} -> {A}'),
+        False,
+    )
+
+
 if __name__ == '__main__':
     test_parse()
     test_check_sat()
+    test_strength()
+    test_equiv()
