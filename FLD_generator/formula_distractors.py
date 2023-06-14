@@ -25,6 +25,7 @@ from .formula_checkers import (
     is_equiv_z3,
     is_new as is_formula_new,
 )
+from FLD_generator.utils import have_other_proofs
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
@@ -106,7 +107,8 @@ class FormulaDistractor(ABC):
 @profile
 def _new_distractor_formula_is_ok(new_distractor: Formula,
                                   existing_distractors: List[Formula],
-                                  proof_tree: ProofTree) -> bool:
+                                  proof_tree: ProofTree,
+                                  allow_other_proofs=False) -> bool:
 
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
@@ -151,9 +153,34 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     # for tree_formula in leaf_formulas_in_tree + [hypothesis_formula]:
     for tree_formula in [node.formula for node in proof_tree.nodes]:
         if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):
-            logger.info('reject new_distractor %s since it is stronger or equals to a leaf formula %s',
+            logger.info('reject new_distractor %s because it is stronger or equals to a leaf formula %s',
                         new_distractor.rep,
                         tree_formula.rep)
+            return False
+
+    if not allow_other_proofs:
+        _have_other_proofs, droppable_formula = have_other_proofs(
+            leaf_formulas_in_tree,
+            existing_distractors + [new_distractor],
+            hypothesis_formula,
+        )
+        if _have_other_proofs:
+            logger.warning('reject new distractor because new proof exists')
+
+            logger.info('positive formulas:')
+            for formula in leaf_formulas_in_tree:
+                logger.info('    ' + formula.rep)
+
+            logger.info('distractor formulas:')
+            for formula in existing_distractors + [new_distractor]:
+                logger.info('    ' + formula.rep)
+
+            logger.info('droppable formula formulas:')
+            logger.info('    ' + droppable_formula.rep)
+
+            logger.info('hypothesis:')
+            logger.info('    ' + hypothesis_formula.rep)
+
             return False
 
     return True

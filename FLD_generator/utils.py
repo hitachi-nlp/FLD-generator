@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List, Iterable, Any
+from typing import Optional, Callable, List, Iterable, Any, Tuple
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -9,6 +9,8 @@ from pprint import pformat
 from nltk.corpus import cmudict
 import timeout_decorator
 from .exception import FormalLogicExceptionBase
+from FLD_generator.formula import Formula
+from FLD_generator.formula_checkers.z3_checkers import is_provable, is_disprovable
 import kern_profiler
 
 utils_logger = logging.getLogger(__name__)
@@ -293,3 +295,30 @@ def make_pretty_msg(title: Optional[str] = None,
         log_msg = _build_bounded_msg(log_msg, boundary_level)
 
     return log_msg
+
+
+def have_other_proofs(formulas: List[Formula],
+                      distractor_formulas: List[Formula],
+                      hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
+    for remaining_formulas, dropped_formula in _drop_one_element(formulas):
+        if is_provable(remaining_formulas + distractor_formulas, hypothesis):
+            return True, dropped_formula
+    return False, None
+
+
+def have_other_disproofs(formulas: List[Formula],
+                         distractor_formulas: List[Formula],
+                         hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
+    for remaining_formulas, dropped_formula in _drop_one_element(formulas):
+        if is_disprovable(remaining_formulas + distractor_formulas, hypothesis):
+            return True, dropped_formula
+    return False, None
+
+
+def _drop_one_element(elems: List[Any]) -> Iterable[Tuple[List[Any], Any]]:
+    for i_drop in range(len(elems)):
+        dropped_elem = elems[i_drop]
+        remaining_elems = elems[:i_drop] + elems[i_drop + 1:]
+        yield remaining_elems, dropped_elem
+
+

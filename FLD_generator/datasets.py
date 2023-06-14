@@ -17,6 +17,7 @@ from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translation_distractors import build as build_translation_distractor
+from FLD_generator.utils import have_other_proofs, have_other_disproofs
 from FLD_generator.formula_checkers.z3_checkers import (
     is_provable,
     is_disprovable,
