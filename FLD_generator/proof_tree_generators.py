@@ -429,6 +429,7 @@ def _generate_tree(arguments: List[Argument],
                    ng_formulas: Optional[List[Formula]] = None,
                    disallow_contradiction_as_hypothesis=False,
                    allow_reference_arguments_when_depth_1=True,
+                   allow_other_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
                    allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     proof_tree = _generate_stem(
@@ -438,6 +439,7 @@ def _generate_tree(arguments: List[Argument],
         depth_1_reference_weight=depth_1_reference_weight,
         elim_dneg=elim_dneg,
         disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis,
+        allow_other_proofs=allow_other_proofs,
 
         # since the branch extension may recover the illegal intermediate constants.
         force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants if depth == 1 else False,
@@ -453,6 +455,7 @@ def _generate_tree(arguments: List[Argument],
                 depth_limit=proof_tree.depth,
                 elim_dneg=elim_dneg,
                 ng_formulas=ng_formulas,
+                allow_other_proofs=allow_other_proofs,
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
@@ -470,6 +473,7 @@ def _generate_tree(arguments: List[Argument],
                 proof_tree,
                 arguments,
                 argument_weights=argument_weights,
+                allow_other_proofs=allow_other_proofs,
                 elim_dneg=elim_dneg,
             )
 
@@ -526,9 +530,9 @@ def _generate_stem(arguments: List[Argument],
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
+                   allow_other_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
-                   allow_illegal_intermediate_constants=False,
-                   allow_other_proofs=False) -> Optional[ProofTree]:
+                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -1184,6 +1188,7 @@ def _fix_illegal_intermediate_constants(
     arguments: Optional[List[Argument]] = None,
     argument_weights: Optional[Dict[Argument, float]] = None,
     argument_weight_bias_factor=100,
+    allow_other_proofs=False,
     elim_dneg=False,
 ) -> ProofTree:
     if len(list((_find_illegal_intermediate_constants(proof_tree)))) >= 3:
@@ -1266,6 +1271,7 @@ def _fix_illegal_intermediate_constants(
                         depth_limit=None,
                         start_leaf_nodes=[illegal_node],
                         elim_dneg=elim_dneg,
+                        allow_other_proofs=allow_other_proofs,
                         allow_reference_arguments_when_depth_1=False,
 
                         force_fix_illegal_intermediate_constants=False,
@@ -1362,6 +1368,7 @@ def _validate_illegal_intermediate_constants(
     proof_tree: ProofTree,
     arguments: List[Argument],
     argument_weights: Optional[Dict[Argument, float]] = None,
+    allow_other_proofs=False,
     elim_dneg=False
 ) -> ProofTree:
 
@@ -1373,6 +1380,7 @@ def _validate_illegal_intermediate_constants(
                     proof_tree,
                     arguments=arguments,
                     argument_weights=argument_weights,
+                    allow_other_proofs=allow_other_proofs,
                     elim_dneg=elim_dneg,
                 )
             except (FixIllegalIntermediateConstantFailure, FixIllegalIntermediateConstantImpossible) as e:

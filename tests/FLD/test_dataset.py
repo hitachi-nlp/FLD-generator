@@ -141,6 +141,7 @@ def test_generate_dataset_AACorpus():
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              allow_other_proofs=False,
                               raise_if_translation_not_found=True)
 
     generate_dataset(dataset)
@@ -265,6 +266,7 @@ def test_generate_dataset():
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              allow_other_proofs=False,
                               version='0.1',
                               raise_if_translation_not_found=False)
 

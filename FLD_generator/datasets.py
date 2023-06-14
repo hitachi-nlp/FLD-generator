@@ -194,6 +194,7 @@ class NLProofSDataset:
                  word_bank: Optional[WordBank] = None,
                  num_distractors: Optional[List[int]] = None,
                  num_translation_distractors: Optional[List[int]] = None,
+                 allow_other_proofs=False,
                  version: str = '0.0',
                  log_stats=False,
                  raise_if_translation_not_found=True):
@@ -222,6 +223,7 @@ class NLProofSDataset:
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
         self.num_translation_distractors = num_translation_distractors or [0]
+        self.allow_other_proofs = allow_other_proofs
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
         self.version = version
@@ -265,6 +267,7 @@ class NLProofSDataset:
                 _num_distractors,
                 _num_translation_distractors,
                 depth_1_reference_weight=self._depth_1_reference_weight,
+                allow_other_proofs=self.allow_other_proofs,
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
@@ -379,85 +382,85 @@ class NLProofSDataset:
                     proof_depth = proof_tree.depth
 
             # -- check whether another proofs exist --
-
-            all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
-            all_negative_formulas = formula_distractors
-            all_formulas = all_positive_formulas + all_negative_formulas
-            droppable_formulas = []
-            should_skip = False
-            msg = None
-            if proof_stance == ProofStance.PROVED:
-                if is_disprovable(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be disproved.'
-                    should_skip = True
-                elif is_unknown(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
-                    should_skip = True
-                else:
-                    _have_other_proofs, droppable_formula = have_other_proofs(
-                        all_positive_formulas,
-                        all_negative_formulas,
-                        hypothesis_formula,
-                    )
-                    if _have_other_proofs:
-                        msg = '-- skip the sample because we have other proofs'
+            if not self.allow_other_proofs:
+                all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
+                all_negative_formulas = formula_distractors
+                all_formulas = all_positive_formulas + all_negative_formulas
+                droppable_formulas = []
+                should_skip = False
+                msg = None
+                if proof_stance == ProofStance.PROVED:
+                    if is_disprovable(all_formulas, hypothesis_formula):
+                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be disproved.'
                         should_skip = True
-                        droppable_formulas = [droppable_formula]
-                        break
-
-            elif proof_stance == ProofStance.DISPROVED:
-                if is_provable(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved.'
-                    should_skip = True
-                elif is_unknown(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
-                    should_skip = True
-                else:
-                    _have_other_proofs, droppable_formula = have_other_disproofs(
-                        all_positive_formulas,
-                        all_negative_formulas,
-                        hypothesis_formula,
-                    )
-                    if _have_other_proofs:
-                        msg = '-- skip the sample because we have other proofs'
+                    elif is_unknown(all_formulas, hypothesis_formula):
+                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
                         should_skip = True
-                        droppable_formulas = [droppable_formula]
-                        break
+                    else:
+                        _have_other_proofs, droppable_formula = have_other_proofs(
+                            all_positive_formulas,
+                            all_negative_formulas,
+                            hypothesis_formula,
+                        )
+                        if _have_other_proofs:
+                            msg = '-- skip the sample because we have other proofs'
+                            should_skip = True
+                            droppable_formulas = [droppable_formula]
+                            break
 
-            elif proof_stance == ProofStance.UNKNOWN:
-                if not is_unknown(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved or disproved.'
-                    should_skip = True
-            else:
-                raise Exception()
+                elif proof_stance == ProofStance.DISPROVED:
+                    if is_provable(all_formulas, hypothesis_formula):
+                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved.'
+                        should_skip = True
+                    elif is_unknown(all_formulas, hypothesis_formula):
+                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
+                        should_skip = True
+                    else:
+                        _have_other_proofs, droppable_formula = have_other_disproofs(
+                            all_positive_formulas,
+                            all_negative_formulas,
+                            hypothesis_formula,
+                        )
+                        if _have_other_proofs:
+                            msg = '-- skip the sample because we have other proofs'
+                            should_skip = True
+                            droppable_formulas = [droppable_formula]
+                            break
 
-            if should_skip:
-                logger.warning(msg)
+                elif proof_stance == ProofStance.UNKNOWN:
+                    if not is_unknown(all_formulas, hypothesis_formula):
+                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved or disproved.'
+                        should_skip = True
+                else:
+                    raise Exception()
 
-                logger.info('all positive formulas:')
-                for formula in all_positive_formulas:
-                    logger.info('    %s', formula.rep)
+                if should_skip:
+                    logger.warning(msg)
 
-                logger.info('all negative formulas:')
-                for formula in all_negative_formulas:
-                    logger.info('    %s', formula.rep)
+                    logger.info('all positive formulas:')
+                    for formula in all_positive_formulas:
+                        logger.info('    %s', formula.rep)
 
-                logger.info('droppable positive formulas:')
-                for formula in droppable_formulas:
-                    logger.info('    %s', formula.rep)
+                    logger.info('all negative formulas:')
+                    for formula in all_negative_formulas:
+                        logger.info('    %s', formula.rep)
 
-                logger.info('hypothesis:')
-                logger.info('    ' + str(hypothesis_formula.rep))
+                    logger.info('droppable positive formulas:')
+                    for formula in droppable_formulas:
+                        logger.info('    %s', formula.rep)
 
-                logger.info('gold label:')
-                logger.info('    ' + proof_stance.value)
+                    logger.info('hypothesis:')
+                    logger.info('    ' + str(hypothesis_formula.rep))
 
-                logger.info('formula context:')
-                logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
+                    logger.info('gold label:')
+                    logger.info('    ' + proof_stance.value)
 
-                logger.info('formula proof:')
-                logger.info('\n    ' + re.sub(';', '\n    ', str(formula_proof_text)))
-                continue
+                    logger.info('formula context:')
+                    logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
+
+                    logger.info('formula proof:')
+                    logger.info('\n    ' + re.sub(';', '\n    ', str(formula_proof_text)))
+                    continue
 
             # -- make output json --
             label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
@@ -590,9 +593,9 @@ class NLProofSDataset:
                     random_sentence = _generate_random_sentence(self.pipeline.translator)
                 random_sentence = random_sentence or 'LoveLive!!'
                 transformed_proof_and_distractor_nodes = [_FormulaDistractorNode(Formula(random_sentence))]
-                logger.info('Adding a random sentence into context since context have no sentence. The randome sentence is: "%s"', random_sentence)
+                logger.info('Adding a random sentence into context because context have no sentence. The randome sentence is: "%s"', random_sentence)
             else:
-                raise NotImplementedError('We must add something to context since null context will lead to error in NLProofS learning.')
+                raise NotImplementedError('We must add something to context because null context will lead to error in NLProofS learning.')
 
         node2id, id2node = self._make_node_ids(
             transformed_proof_and_distractor_nodes,

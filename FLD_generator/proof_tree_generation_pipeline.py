@@ -56,6 +56,7 @@ class ProofTreeGenerationPipeline:
             branch_extension_steps: int,
             num_distractors: int,
             num_translation_distractors: int,
+            allow_other_proofs=False,
             depth_1_reference_weight: Optional[float] = None,
             force_fix_illegal_intermediate_constants=False,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
@@ -77,6 +78,7 @@ class ProofTreeGenerationPipeline:
                     depth,
                     branch_extension_steps,
                     depth_1_reference_weight=depth_1_reference_weight,
+                    allow_other_proofs=allow_other_proofs,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
             except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
@@ -92,7 +94,8 @@ class ProofTreeGenerationPipeline:
             if num_distractors > 0:
                 if self.distractor is not None:
                     try:
-                        formula_distractors, _others = self.distractor.generate(proof_tree, num_distractors)
+                        formula_distractors, _others = self.distractor.generate(proof_tree, num_distractors,
+                                                                                allow_other_proofs=allow_other_proofs)
                         for _other_key, _other_val in _others.items():
                             if _other_key in others:
                                 raise ValueError(f'Duplicated other key {_other_key}')

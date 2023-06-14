@@ -46,6 +46,7 @@ class FormulaDistractor(ABC):
                  proof_tree: ProofTree,
                  size: int,
                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                 allow_other_proofs=False,
                  max_retry: Optional[int] = None,
                  timeout: Optional[int] = None,
                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
@@ -60,6 +61,7 @@ class FormulaDistractor(ABC):
                 func_kwargs={
                     'no_warning': no_warning,
                     'formulas_to_be_sat': formulas_to_be_sat,
+                    'allow_other_proofs': allow_other_proofs,
                 },
                 retry_exception_class=FormulaDistractorGenerationFailure,
                 max_retry=max_retry,
@@ -90,6 +92,7 @@ class FormulaDistractor(ABC):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
 
@@ -196,6 +199,7 @@ class UnkownPASDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -279,6 +283,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -361,7 +366,8 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
 
                     if not _new_distractor_formula_is_ok(transformed_formula,
                                                          distractor_formulas + formulas_to_be_sat,
-                                                         proof_tree):
+                                                         proof_tree,
+                                                         allow_other_proofs=allow_other_proofs):
                         continue
 
                     found_formula = transformed_formula
@@ -395,7 +401,9 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                  prototype_formulas: Optional[List[Formula]] = None,
                  sample_hard_negatives=False,
                  sample_only_unused_interprands=False,
-                 use_simplified_formulas_as_prototype=False):
+                 use_simplified_formulas_as_prototype=False,
+                 **kwargs):
+        super().__init__(**kwargs)
         self._prototype_formulas = prototype_formulas
         self._sample_hard_negatives = sample_hard_negatives
         self._sample_only_unused_interprands = sample_only_unused_interprands
@@ -419,6 +427,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -457,6 +466,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                 simplified_formulas = self._simplify_distractor.generate(proof_tree,
                                                                          9999,
                                                                          formulas_to_be_sat=formulas_to_be_sat,
+                                                                         allow_other_proofs=allow_other_proofs,
                                                                          no_warning=True)[0]
                 prototype_formulas.extend(simplified_formulas)
                 # print('!!!')
@@ -587,7 +597,8 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
 
                     if not _new_distractor_formula_is_ok(distractor_formula,
                                                          distractor_formulas + formulas_to_be_sat,
-                                                         proof_tree):
+                                                         proof_tree,
+                                                         allow_other_proofs=allow_other_proofs):
                         continue
 
                     found_formula = distractor_formula
@@ -617,6 +628,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if size == 0:
@@ -636,7 +648,8 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
 
             if not _new_distractor_formula_is_ok(distractor_formula,
                                                  distractor_formulas + formulas_to_be_sat,
-                                                 proof_tree):
+                                                 proof_tree,
+                                                 allow_other_proofs=allow_other_proofs):
                 continue
 
             distractor_formulas.append(distractor_formula)
@@ -655,8 +668,9 @@ class NegativeTreeDistractor(FormulaDistractor):
                  prototype_formulas: Optional[List[Formula]] = None,
                  try_negated_hypothesis_first=True,
                  max_branch_extension_steps=10,
-                 extend_branches_max_retry: int = 5):
-        super().__init__()
+                 extend_branches_max_retry: int = 5,
+                 **kwargs):
+        super().__init__(**kwargs)
 
         if generator.complicated_arguments_weight < 0.01:
             raise ValueError('Generator with too small "complicated_arguments_weight" will lead to generation failure, since we try to generate a tree with negated hypothesis, which is only in the complicated arguments.')
@@ -682,6 +696,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -690,18 +705,21 @@ class NegativeTreeDistractor(FormulaDistractor):
             distractors, others = self._generate_with_initial_sampling(proof_tree,
                                                                        size,
                                                                        'negated_hypothesis',
-                                                                       formulas_to_be_sat=formulas_to_be_sat)
+                                                                       formulas_to_be_sat=formulas_to_be_sat,
+                                                                       allow_other_proofs=allow_other_proofs)
             if len(distractors) == 0:
                 self._log(logging.INFO, 'creating negative tree with negated hypothesis root not failed. Will try root node sampled from various forms.')
                 distractors, others = self._generate_with_initial_sampling(proof_tree,
                                                                            size,
                                                                            'various_form',
-                                                                           formulas_to_be_sat=formulas_to_be_sat)
+                                                                           formulas_to_be_sat=formulas_to_be_sat,
+                                                                           allow_other_proofs=allow_other_proofs)
         else:
             distractors, others = self._generate_with_initial_sampling(proof_tree,
                                                                        size,
                                                                        'various_form',
-                                                                       formulas_to_be_sat=formulas_to_be_sat)
+                                                                       formulas_to_be_sat=formulas_to_be_sat,
+                                                                       allow_other_proofs=allow_other_proofs)
         return distractors, others
 
     @profile
@@ -709,6 +727,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                                         proof_tree: ProofTree,
                                         size: int,
                                         initial_sampling: str,
+                                        allow_other_proofs=False,
                                         formulas_to_be_sat: Optional[List[Formula]] = None) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if size == 0:
@@ -727,7 +746,9 @@ class NegativeTreeDistractor(FormulaDistractor):
                     except ContradictionNegationError as e:
                         raise FormulaDistractorGenerationFailure(str(e))
                 elif initial_sampling == 'various_form':
-                    distractors, _ = self._various_form_distractor.generate(proof_tree, 1, formulas_to_be_sat=formulas_to_be_sat)
+                    distractors, _ = self._various_form_distractor.generate(proof_tree, 1,
+                                                                            formulas_to_be_sat=formulas_to_be_sat,
+                                                                            allow_other_proofs=allow_other_proofs)
                     if len(distractors) == 0:
                         raise FormulaDistractorGenerationFailure('could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
                     else:
@@ -770,7 +791,8 @@ class NegativeTreeDistractor(FormulaDistractor):
 
                 if not _new_distractor_formula_is_ok(distractor_formula,
                                                      distractor_formulas + formulas_to_be_sat,
-                                                     proof_tree):
+                                                     proof_tree,
+                                                     allow_other_proofs=allow_other_proofs):
                     continue
 
                 distractor_formulas.append(distractor_formula)
@@ -785,8 +807,8 @@ class NegativeTreeDistractor(FormulaDistractor):
 
 class MixtureDistractor(FormulaDistractor):
 
-    def __init__(self, distractors: List[FormulaDistractor]):
-        super().__init__()
+    def __init__(self, distractors: List[FormulaDistractor], **kwargs):
+        super().__init__(**kwargs)
         self._distractors = distractors
 
     @property
@@ -805,6 +827,7 @@ class MixtureDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -834,7 +857,8 @@ class MixtureDistractor(FormulaDistractor):
         for distractor, _size in zip(self._distractors, sizes):
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree, _size,
-                                                                    formulas_to_be_sat = formulas_to_be_sat + distractor_formulas)
+                                                                    formulas_to_be_sat = formulas_to_be_sat + distractor_formulas,
+                                                                    allow_other_proofs=allow_other_proofs)
 
                 distractor_formulas += _distractor_formulas
 
@@ -857,8 +881,8 @@ class MixtureDistractor(FormulaDistractor):
 
 class FallBackDistractor(FormulaDistractor):
 
-    def __init__(self, distractors: List[FormulaDistractor]):
-        super().__init__()
+    def __init__(self, distractors: List[FormulaDistractor], **kwargs):
+        super().__init__(**kwargs)
         self._distractors = distractors
 
     @property
@@ -877,6 +901,7 @@ class FallBackDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_other_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -893,7 +918,8 @@ class FallBackDistractor(FormulaDistractor):
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree,
                                                                     size,
-                                                                    formulas_to_be_sat = formulas_to_be_sat + distractor_formulas)
+                                                                    formulas_to_be_sat = formulas_to_be_sat + distractor_formulas,
+                                                                    allow_other_proofs=allow_other_proofs)
 
                 distractor_formulas += _distractor_formulas
 
@@ -929,7 +955,8 @@ def build(type_: str,
           sample_hard_negatives=False,
           use_simplified_formulas_as_prototype=False,
           sample_prototype_formulas_from_tree=False,
-          try_negated_hypothesis_first=False):
+          try_negated_hypothesis_first=False,
+          **kwargs):
 
     prototype_formulas: Optional[List[Formula]] = None
     if type_.find('various_form') >= 0 and not sample_prototype_formulas_from_tree:
@@ -952,14 +979,15 @@ def build(type_: str,
                                            msg='generator is not specified. Thus, the VariousFormUnkownInterprandsDistractor will use formulas in tree as prototype formulas.', boundary_level=0))
 
     if type_ == 'unknown_PAS':
-        return UnkownPASDistractor()
+        return UnkownPASDistractor(**kwargs)
     elif type_ == 'unknown_interprands':
-        return SameFormUnkownInterprandsDistractor()
+        return SameFormUnkownInterprandsDistractor(**kwargs)
     elif type_ == 'various_form':
         return VariousFormUnkownInterprandsDistractor(
             prototype_formulas=prototype_formulas,
             sample_hard_negatives=sample_hard_negatives,
             use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
+            **kwargs,
         )
     elif type_ == 'negative_tree':
         if generator is None:
@@ -967,19 +995,22 @@ def build(type_: str,
         return NegativeTreeDistractor(
             generator,
             prototype_formulas=prototype_formulas,
-            try_negated_hypothesis_first=try_negated_hypothesis_first
+            try_negated_hypothesis_first=try_negated_hypothesis_first,
+            **kwargs,
         )
 
     elif type_ == 'fallback.unknown_interprands.negative_tree':
         return FallBackDistractor(
             [
-                SameFormUnkownInterprandsDistractor(),
+                SameFormUnkownInterprandsDistractor(**kwargs),
                 NegativeTreeDistractor(
                     generator,
                     prototype_formulas=prototype_formulas,
-                    try_negated_hypothesis_first=try_negated_hypothesis_first
+                    try_negated_hypothesis_first=try_negated_hypothesis_first,
+                    **kwargs,
                 ),
-            ]
+            ],
+            **kwargs,
         )
 
     elif type_ == 'fallback.negative_tree.unknown_interprands':
@@ -988,10 +1019,12 @@ def build(type_: str,
                 NegativeTreeDistractor(
                     generator,
                     prototype_formulas=prototype_formulas,
-                    try_negated_hypothesis_first=try_negated_hypothesis_first
+                    try_negated_hypothesis_first=try_negated_hypothesis_first,
+                    **kwargs,
                 ),
-                SameFormUnkownInterprandsDistractor(),
-            ]
+                SameFormUnkownInterprandsDistractor(**kwargs),
+            ],
+            **kwargs,
         )
 
     elif type_ == 'fallback.negative_tree.various_form':
@@ -1001,13 +1034,16 @@ def build(type_: str,
                     generator,
                     prototype_formulas=prototype_formulas,
                     try_negated_hypothesis_first=try_negated_hypothesis_first,
+                    **kwargs,
                 ),
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
                     use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
+                    **kwargs,
                 ),
-            ]
+            ],
+            **kwargs,
         )
 
     elif type_ == 'fallback.various_form.negative_tree':
@@ -1017,13 +1053,16 @@ def build(type_: str,
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
                     use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
+                    **kwargs,
                 ),
                 NegativeTreeDistractor(
                     generator,
                     prototype_formulas=prototype_formulas,
-                    try_negated_hypothesis_first=try_negated_hypothesis_first
+                    try_negated_hypothesis_first=try_negated_hypothesis_first,
+                    **kwargs,
                 ),
-            ]
+            ],
+            **kwargs,
         )
 
     elif type_ == 'mixture.negative_tree.simplified_formula.various_form':
@@ -1033,14 +1072,17 @@ def build(type_: str,
                     generator,
                     prototype_formulas=prototype_formulas,
                     try_negated_hypothesis_first=try_negated_hypothesis_first,
+                    **kwargs,
                 ),
-                SimplifiedFormulaDistractor(),
+                SimplifiedFormulaDistractor(**kwargs,),
                 VariousFormUnkownInterprandsDistractor(
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
                     use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
+                    **kwargs,
                 ),
-            ]
+            ],
+            **kwargs,
         )
 
     else:
