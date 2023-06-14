@@ -41,10 +41,14 @@ class ProofTreeGenerationPipeline:
         self.add_subj_obj_swapped_distractor = add_subj_obj_swapped_distractor
 
         self.log_stats = log_stats
-        self.translator.log_stats = log_stats
-
         self._empty_argument_stat = {arg.id: 0 for arg in self.generator.arguments}
-        self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
+
+        if self.translator is not None:
+            self.translator.log_stats = log_stats
+            self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
+        else:
+            self._empty_translation_stat = None
+
 
     @profile
     def run(self,
@@ -112,6 +116,7 @@ class ProofTreeGenerationPipeline:
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 
+            translator_stats = {}
             if self.translator is not None:
                 logger.info(_make_pretty_log('generate translations', 'start'))
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
@@ -235,10 +240,11 @@ class ProofTreeGenerationPipeline:
 
         # translation
         for node in proof_tree.nodes:
-            translation_name = node.formula.translation_name if node.formula.translation_name is not None else '<no_name>'
-            if translation_name not in stats['translation_stats']['name_stats']:
-                stats['translation_stats']['name_stats'][translation_name] = 0
-            stats['translation_stats']['name_stats'][translation_name] += 1
+            if node.formula.translation_name is not None:
+                translation_name = node.formula.translation_name
+                if translation_name not in stats['translation_stats']['name_stats']:
+                    stats['translation_stats']['name_stats'][translation_name] = 0
+                stats['translation_stats']['name_stats'][translation_name] += 1
 
         for key, val in flatten_dict(translator_stats).items():
             stats['translation_stats']['other_stats'][key] = val
