@@ -279,15 +279,30 @@ class NLProofSDataset:
             if proof_stance == ProofStance.UNKNOWN:
                 hypothesis_formula = proof_tree.root_node.formula
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
-                dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
+                could_make_unknown = False
+                for _ in range(10):
+                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                    if is_unknown(
+                        [node.formula for node in proof_tree.leaf_nodes
+                         if node not in dead_leaf_nodes],
+                        hypothesis_formula,
+                    ):
+                        could_make_unknown = True
+                        break
+                if not could_make_unknown:
+                    logger.warning('skip the sample because we could not make UNKNOWN proof by sub-sampling nodes.')
+                    continue
+
             elif proof_stance == ProofStance.PROVED:
                 hypothesis_formula = proof_tree.root_node.formula
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = []
+
             elif proof_stance == ProofStance.DISPROVED:
                 hypothesis_formula = root_negation_formula
                 hypothesis = root_negation_formula.translation or root_negation_formula.rep
                 dead_leaf_nodes = []
+
             alive_leaf_nodes = [node for node in proof_tree.leaf_nodes
                                 if node not in dead_leaf_nodes]
 
