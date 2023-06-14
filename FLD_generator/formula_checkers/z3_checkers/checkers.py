@@ -160,18 +160,25 @@ def is_unknown(facts: List[Formula], hypothesis: Formula) -> bool:
 
 
 def is_stronger(this: Formula, that: Formula) -> bool:
-    this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
-    that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')
-    return not check_sat([negate(this_imply_that)]) and check_sat([negate(that_imply_this)])
+    return _imply(this, that, ignore_tautology=True) and not _imply(that, this, ignore_tautology=True)
 
 
 def is_equiv(this: Formula, that: Formula) -> bool:
-    this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
-    that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')
-    return not check_sat([negate(this_imply_that)]) and not check_sat([negate(that_imply_this)])
+    return _imply(this, that, ignore_tautology=True) and _imply(that, this, ignore_tautology=True)
 
 
 def is_weaker(this: Formula, that: Formula) -> bool:
+    return not _imply(this, that, ignore_tautology=True) and _imply(that, this, ignore_tautology=True)
+
+
+def _imply(this: Formula, that: Formula, ignore_tautology=False) -> bool:
+    if ignore_tautology:
+        if not check_sat([this]):
+            # if this === 0 (i.e., this is always false) then this_imply_that === 1. But we do not regart it as "stronger"
+            return False
+        if not check_sat([negate(that)]):
+            # if that === 1 (i.e., that is always true) then this_imply_that === 1. But we do not regart it as "stronger", too.
+            return False
+
     this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
-    that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')
-    return check_sat([negate(this_imply_that)]) and not check_sat([negate(that_imply_this)])
+    return not check_sat([negate(this_imply_that)])

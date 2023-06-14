@@ -320,7 +320,10 @@ def test_check_sat():
 
 def test_strength():
 
-    def _test_strength(this_rep: str, that_rep: str, is_stronger_gold: bool):
+    def _test_strength(this_rep: str,
+                       that_rep: str,
+                       is_stronger_gold: bool,
+                       is_weaker_gold: bool):
         print('\n\n============ _test_is_stronger() ============')
         print('\n------------ rep ------------')
         print(this_rep, that_rep)
@@ -341,29 +344,40 @@ def test_strength():
         )
         print('\n------------ is_weaker ------------')
         print(_is_weaker)
-        assert _is_weaker is not is_stronger_gold
+        assert _is_weaker is is_weaker_gold
 
     _test_strength(
         Formula('{A} & {B}'),
         Formula('{A}'),
         True,
+        False,
     )
 
     _test_strength(
         Formula('{A}'),
         Formula('{A} & {B}'),
         False,
+        True,
     )
 
     _test_strength(
         Formula('{A} -> {C}'),
         Formula('({A} & {B}) -> {C}'),
         True,
+        False,
     )
 
     _test_strength(
         Formula('({A} & {B}) -> {C}'),
         Formula('{A} -> {C}'),
+        False,
+        True,
+    )
+
+    _test_strength(
+        Formula('{B}{bq} -> ¬{A}{aa}'),
+        Formula('({A}{a} v ¬{A}{a})'),
+        False,
         False,
     )
 
@@ -403,6 +417,12 @@ def test_equiv():
     _test_is_equiv(
         Formula('{A} -> {B}'),
         Formula('{B} -> {A}'),
+        False,
+    )
+
+    _test_is_equiv(
+        Formula('{B}{bq} -> ¬{A}{aa}'),
+        Formula('({A}{a} v ¬{A}{a})'),
         False,
     )
 
