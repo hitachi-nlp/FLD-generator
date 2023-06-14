@@ -383,7 +383,7 @@ class NLProofSDataset:
             all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
             all_negative_formulas = formula_distractors
             all_formulas = all_positive_formulas + all_negative_formulas
-            excluded_formulas = []
+            droppable_formulas = []
             should_skip = False
             msg = None
             if proof_stance == ProofStance.PROVED:
@@ -394,16 +394,16 @@ class NLProofSDataset:
                     msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
                     should_skip = True
                 else:
-                    for i_drop in range(len(all_positive_formulas)):
-                        dropped_positive_formulas = [formula
-                                                     for i, formula in enumerate(all_positive_formulas)
-                                                     if i != i_drop]
-                        excluded_formulas = [all_formulas[i_drop]]
-                        dropped_all_formulas = dropped_positive_formulas + all_negative_formulas
-                        if is_provable(dropped_all_formulas, hypothesis_formula):
-                            msg = '-- skip the sample because we have other proofs'
-                            should_skip = True
-                            break
+                    _have_other_proofs, droppable_formula = have_other_proofs(
+                        all_positive_formulas,
+                        all_negative_formulas,
+                        hypothesis_formula,
+                    )
+                    if _have_other_proofs:
+                        msg = '-- skip the sample because we have other proofs'
+                        should_skip = True
+                        droppable_formulas = [droppable_formula]
+                        break
 
             elif proof_stance == ProofStance.DISPROVED:
                 if is_provable(all_formulas, hypothesis_formula):
@@ -413,16 +413,16 @@ class NLProofSDataset:
                     msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
                     should_skip = True
                 else:
-                    for i_drop in range(len(all_positive_formulas)):
-                        dropped_positive_formulas = [formula
-                                                     for i, formula in enumerate(all_positive_formulas)
-                                                     if i != i_drop]
-                        dropped_all_formulas = dropped_positive_formulas + all_negative_formulas
-                        if is_disprovable(dropped_all_formulas, hypothesis_formula):
-                            msg = '-- skip the sample because we have other proofs'
-                            excluded_formulas = [all_formulas[i_drop]]
-                            should_skip = True
-                            break
+                    _have_other_proofs, droppable_formula = have_other_disproofs(
+                        all_positive_formulas,
+                        all_negative_formulas,
+                        hypothesis_formula,
+                    )
+                    if _have_other_proofs:
+                        msg = '-- skip the sample because we have other proofs'
+                        should_skip = True
+                        droppable_formulas = [droppable_formula]
+                        break
 
             elif proof_stance == ProofStance.UNKNOWN:
                 if not is_unknown(all_formulas, hypothesis_formula):
@@ -442,8 +442,8 @@ class NLProofSDataset:
                 for formula in all_negative_formulas:
                     logger.info('    %s', formula.rep)
 
-                logger.info('excluded positive formulas:')
-                for formula in excluded_formulas:
+                logger.info('droppable positive formulas:')
+                for formula in droppable_formulas:
                     logger.info('    %s', formula.rep)
 
                 logger.info('hypothesis:')

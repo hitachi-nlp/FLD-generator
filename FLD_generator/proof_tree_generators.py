@@ -54,6 +54,8 @@ from .formula import (
     VARIABLES,
     CONTRADICTION,
 )
+from FLD_generator.utils import have_other_proofs
+from .formula_checkers.z3_checkers import is_provable
 import kern_profiler
 
 # _LOG_ONLY_WHEN_FAILED = True
@@ -525,7 +527,8 @@ def _generate_stem(arguments: List[Argument],
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
                    force_fix_illegal_intermediate_constants=False,
-                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
+                   allow_illegal_intermediate_constants=False,
+                   allow_other_proofs=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -671,11 +674,34 @@ def _generate_stem(arguments: List[Argument],
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
 
+            # -- find linkable argument --
             is_arg_done = False
             next_arg_pulled = None
             for next_arg in _shuffle_arguments(linkable_args, argument_weights):
                 if is_arg_done:
-                    break
+                    if allow_other_proofs:
+                        break
+                    else:
+                        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                        added_leaf_formulas = [formula for formula in next_arg_pulled.premises
+                                               if formula.rep == cur_conclusion.rep]
+                        added_root_formula = next_arg_pulled.conclusion
+
+                        is_other_proofs_emerged, logs = _other_proofs_emerged(
+                            leaf_formulas,
+                            added_leaf_formulas,
+                            [],
+                            next_arg_pulled,
+                            added_root_formula
+                        )
+                        if is_other_proofs_emerged:
+                            is_arg_done = False
+                            logger.warning('(_generate_stem) continue to the next argument because other proofs have emerged')
+                            for log in logs:
+                                logger.info(log)
+                            continue
+                        else:
+                            break
                 log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
@@ -768,8 +794,8 @@ def _generate_stem(arguments: List[Argument],
                             is_arg_done = True
                             break
 
+            # -- update tree --
             if is_arg_done:
-
                 # Update
                 next_assumption_nodes = []
                 for i_premise, premise in enumerate(next_arg_pulled.premises):
@@ -849,6 +875,7 @@ def _extend_branches(proof_tree: ProofTree,
                      ng_formulas: Optional[List[Formula]] = None,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
+                     allow_other_proofs=False,
                      return_at_best=False,
                      return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
@@ -963,7 +990,31 @@ def _extend_branches(proof_tree: ProofTree,
                     continue
 
                 if is_leaf_node_done:
-                    break
+                    if allow_other_proofs:
+                        break
+                    else:
+                        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                        added_leaf_formulas = next_arg_pulled.premises
+                        deleted_leaf_node = target_leaf_node.formula
+                        deleted_leaf_node = next_arg_pulled.conclusion
+                        assert target_leaf_node.formula.rep == next_arg_pulled.conclusion.rep
+                        added_root_formula = proof_tree.root_node.formula
+
+                        is_other_proofs_emerged, logs = _other_proofs_emerged(
+                            leaf_formulas,
+                            added_leaf_formulas,
+                            [deleted_leaf_node],
+                            next_arg_pulled,
+                            added_root_formula
+                        )
+                        if is_other_proofs_emerged:
+                            is_leaf_node_done = False
+                            logger.warning('(_extend_branches) continue to the next argument because other proofs have emerged')
+                            for log in logs:
+                                logger.info(log)
+                            continue
+                        else:
+                            break
                 log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
@@ -1039,7 +1090,7 @@ def _extend_branches(proof_tree: ProofTree,
 
         if is_leaf_node_done:
             # Upate tree
-            next_arg_pulled.conclusion = target_leaf_node.formula  # refer to the sampe object
+            next_arg_pulled.conclusion = target_leaf_node.formula  # refer to the same object
             target_leaf_node.argument = next_arg_pulled
             next_premise_nodes = [ProofNode(premise)
                                   for premise in next_arg_pulled.premises]
@@ -1263,6 +1314,46 @@ def _fix_illegal_intermediate_constants(
     return proof_tree_fixed
 
 
+def _other_proofs_emerged(leafs: List[Formula],
+                          new_leafs: List[Formula],
+                          deleted_leafs: List[Formula],
+                          new_argument: Argument,
+                          new_root: Formula) -> Tuple[bool, List[str]]:
+    all_leafs: List[Formula] = [
+        leaf for leaf in leafs + new_leafs
+        if leaf.rep not in [_leaf.rep for _leaf in deleted_leafs]
+    ]
+
+    log_msgs: List[str] = []
+    is_other_proofs, dropped_leaf = have_other_proofs(
+        all_leafs,
+        [],
+        new_root,
+    )
+    if is_other_proofs:
+        log_msgs.append('other proofs have emerged')
+
+        log_msgs.append('all leaf formulas:')
+        for formula in all_leafs:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('this time used argument')
+        for premise in new_argument.premises:
+            log_msgs.append(f'    premise: {premise.rep}')
+        log_msgs.append(f'    conclusion: {new_argument.conclusion.rep}')
+
+        log_msgs.append('droppable formulas:')
+        for formula in [dropped_leaf]:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('hypothesis:')
+        log_msgs.append('    ' + str(new_root))
+
+        return True, log_msgs
+
+    return False, log_msgs
+
+
 @profile
 def _validate_illegal_intermediate_constants(
     force_fix_illegal_intermediate_constants: bool,
@@ -1345,3 +1436,4 @@ def build(config_paths: List[str],
         **kwargs,
     )
     return generator
+
