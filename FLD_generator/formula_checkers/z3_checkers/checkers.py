@@ -147,6 +147,18 @@ def check_sat(formulas: List[Formula],
         return ret
 
 
+def is_provable(facts: List[Formula], hypothesis: Formula) -> bool:
+    return not check_sat(facts + [negate(hypothesis)])
+
+
+def is_disprovable(facts: List[Formula], hypothesis: Formula) -> bool:
+    return not check_sat(facts + [hypothesis])
+
+
+def is_unknown(facts: List[Formula], hypothesis: Formula) -> bool:
+    return not is_provable(facts, hypothesis) and not is_disprovable(facts, hypothesis)
+
+
 def is_stronger(this: Formula, that: Formula) -> bool:
     this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
     that_imply_this = Formula(f'({that.rep}) {IMPLICATION} ({this.rep})')

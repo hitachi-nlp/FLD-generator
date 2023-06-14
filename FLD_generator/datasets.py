@@ -17,7 +17,11 @@ from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translation_distractors import build as build_translation_distractor
-from FLD_generator.formula_checkers import is_consistent_set_z3
+from FLD_generator.formula_checkers.z3_checkers import (
+    is_provable,
+    is_disprovable,
+    is_unknown,
+)
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -34,13 +38,13 @@ class WorldAssumption(Enum):
     OWA = 'OWA'
 
 
-def _generate_random_sentence(translator: Translator):
+def _generate_random_sentence(translator: Translator) -> Optional[str]:
     acceptable_formula_reps = translator.acceptable_formulas
     for formula_rep in random.sample(acceptable_formula_reps, len(acceptable_formula_reps)):
         nls, _ = translator.translate([Formula(formula_rep)], [])
         if nls[0][1] is not None:
             return nls[0][1]
-    return 'Love Love LoveLive!'
+    return None
 
 
 def _make_instance_label(proof_stance: ProofStance,
@@ -360,15 +364,6 @@ class NLProofSDataset:
 
             # -- check whether another proofs exist --
 
-            def is_provable(facts: List[Formula], hypothesis: Formula) -> bool:
-                return not is_consistent_set_z3(facts + [negate(hypothesis)])
-
-            def is_disprovable(facts: List[Formula], hypothesis: Formula) -> bool:
-                return not is_consistent_set_z3(facts + [hypothesis])
-
-            def is_unknown(facts: List[Formula], hypothesis: Formula) -> bool:
-                return not is_provable(facts, hypothesis) and not is_disprovable(facts, hypothesis)
-
             all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
             all_negative_formulas = formula_distractors
             all_formulas = all_positive_formulas + all_negative_formulas
@@ -445,7 +440,7 @@ class NLProofSDataset:
                 logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
 
                 logger.info('formula proof:')
-                logger.info('\n    ' + re.sub(';', '\n    ', formula_proof_text))
+                logger.info('\n    ' + re.sub(';', '\n    ', str(formula_proof_text)))
                 continue
 
             # -- make output json --
@@ -574,7 +569,10 @@ class NLProofSDataset:
 
         if len(transformed_proof_and_distractor_nodes) == 0:
             if add_randome_sentence_if_context_is_null:
-                random_sentence = _generate_random_sentence(self.pipeline.translator)
+                random_sentence = None
+                if self.pipeline.translator is not None:
+                    random_sentence = _generate_random_sentence(self.pipeline.translator)
+                random_sentence = random_sentence or 'LoveLive!!'
                 transformed_proof_and_distractor_nodes = [_FormulaDistractorNode(Formula(random_sentence))]
                 logger.info('Adding a random sentence into context since context have no sentence. The randome sentence is: "%s"', random_sentence)
             else:
@@ -771,7 +769,7 @@ class NLProofSDataset:
             f'{id_}: {node2sent(node)}'
             for id_, node in sorted(context_id2nodes.items(),
                                     key=lambda id_node: int(re.sub('sent([0-9]*)', r'\g<1>', id_node[0])))
-            
+
         ])
 
     def _make_proof_text(self,
