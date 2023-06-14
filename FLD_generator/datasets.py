@@ -358,7 +358,97 @@ class NLProofSDataset:
                 else:
                     proof_depth = proof_tree.depth
 
-            # make output json
+            # -- check whether another proofs exist --
+
+            def is_provable(facts: List[Formula], hypothesis: Formula) -> bool:
+                return not is_consistent_set_z3(facts + [negate(hypothesis)])
+
+            def is_disprovable(facts: List[Formula], hypothesis: Formula) -> bool:
+                return not is_consistent_set_z3(facts + [hypothesis])
+
+            def is_unknown(facts: List[Formula], hypothesis: Formula) -> bool:
+                return not is_provable(facts, hypothesis) and not is_disprovable(facts, hypothesis)
+
+            all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
+            all_negative_formulas = formula_distractors
+            all_formulas = all_positive_formulas + all_negative_formulas
+            excluded_formulas = []
+            should_skip = False
+            msg = None
+            if proof_stance == ProofStance.PROVED:
+                if is_disprovable(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be disproved.'
+                    should_skip = True
+                elif is_unknown(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
+                    should_skip = True
+                else:
+                    for i_drop in range(len(all_positive_formulas)):
+                        dropped_positive_formulas = [formula
+                                                     for i, formula in enumerate(all_positive_formulas)
+                                                     if i != i_drop]
+                        excluded_formulas = [all_formulas[i_drop]]
+                        dropped_all_formulas = dropped_positive_formulas + all_negative_formulas
+                        if is_provable(dropped_all_formulas, hypothesis_formula):
+                            msg = '-- skip the sample because we have other proofs'
+                            should_skip = True
+                            break
+
+            elif proof_stance == ProofStance.DISPROVED:
+                if is_provable(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved.'
+                    should_skip = True
+                elif is_unknown(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
+                    should_skip = True
+                else:
+                    for i_drop in range(len(all_positive_formulas)):
+                        dropped_positive_formulas = [formula
+                                                     for i, formula in enumerate(all_positive_formulas)
+                                                     if i != i_drop]
+                        dropped_all_formulas = dropped_positive_formulas + all_negative_formulas
+                        if is_disprovable(dropped_all_formulas, hypothesis_formula):
+                            msg = '-- skip the sample because we have other proofs'
+                            excluded_formulas = [all_formulas[i_drop]]
+                            should_skip = True
+                            break
+
+            elif proof_stance == ProofStance.UNKNOWN:
+                if not is_unknown(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved or disproved.'
+                    should_skip = True
+            else:
+                raise Exception()
+
+            if should_skip:
+                logger.warning(msg)
+
+                logger.info('all positive formulas:')
+                for formula in all_positive_formulas:
+                    logger.info('    %s', formula.rep)
+
+                logger.info('all negative formulas:')
+                for formula in all_negative_formulas:
+                    logger.info('    %s', formula.rep)
+
+                logger.info('excluded positive formulas:')
+                for formula in excluded_formulas:
+                    logger.info('    %s', formula.rep)
+
+                logger.info('hypothesis:')
+                logger.info('    ' + str(hypothesis_formula.rep))
+
+                logger.info('gold label:')
+                logger.info('    ' + proof_stance.value)
+
+                logger.info('formula context:')
+                logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
+
+                logger.info('formula proof:')
+                logger.info('\n    ' + re.sub(';', '\n    ', formula_proof_text))
+                continue
+
+            # -- make output json --
             label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
             negative_label = _make_instance_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
             stance_label = _make_proof_stance_label(proof_stance, version=self.version)
