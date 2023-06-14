@@ -11,12 +11,13 @@ from pprint import pprint
 
 from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLD_generator.formula import Formula
+from FLD_generator.formula import Formula, negate
 from FLD_generator.proof import ProofTree, ProofNode
 from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translation_distractors import build as build_translation_distractor
+from FLD_generator.formula_checkers import is_consistent_set_z3
 import kern_profiler
 
 logger = logging.getLogger(__name__)
@@ -239,10 +240,12 @@ class NLProofSDataset:
         """
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
-        for i_sample in range(size):
+        i_sample = 0
+        while i_sample < size:
             logger.info('\n\n')
             logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))
 
+            # -- generate settings --
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]
 
@@ -250,6 +253,7 @@ class NLProofSDataset:
             _num_translation_distractors = random.sample(self.num_translation_distractors, 1)[0]
             _branch_extension_steps = random.sample(self.branch_extension_steps, 1)[0]
 
+            # -- make proof tree and distractors  --
             proof_tree, root_negation_formula, formula_distractors, translation_distractors, others, pipeline_stats = self.pipeline.run(
                 depth,
                 _branch_extension_steps,
@@ -260,26 +264,34 @@ class NLProofSDataset:
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
+            # -- sample stance --
             proof_stance = self._sample_proof_stance()
-
             if len(proof_tree.leaf_nodes) == 0:
                 # For some very rare case, this occurs.
                 # Since we do not expect this behaviour, we raise error for future debug
                 raise Exception(proof_tree.format_str)
 
+            # -- sample nodes --
             if proof_stance == ProofStance.UNKNOWN:
+                hypothesis_formula = proof_tree.root_node.formula
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
             elif proof_stance == ProofStance.PROVED:
+                hypothesis_formula = proof_tree.root_node.formula
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = []
             elif proof_stance == ProofStance.DISPROVED:
+                hypothesis_formula = root_negation_formula
                 hypothesis = root_negation_formula.translation or root_negation_formula.rep
                 dead_leaf_nodes = []
+            alive_leaf_nodes = [node for node in proof_tree.leaf_nodes
+                                if node not in dead_leaf_nodes]
 
+            # dead nodes = missing nodes + collapsed nodes
             missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
 
-            context, proof_text, node2id, id2node = self._make_text(
+            # -- make texts --
+            context, formula_context, proof_text, formula_proof_text, node2id, id2node = self._make_text(
                 proof_tree,
                 proof_stance,
 
@@ -298,23 +310,29 @@ class NLProofSDataset:
                 conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
             )
 
+            # -- make negative proofs --
             negative_tree = others.get('negative_tree', None)
             if negative_tree is not None:
-                missing_nodes_of_negative_tree = others['negative_tree_missing_nodes']
+                negative_tree_dead_leaf_nodes = others['negative_tree_missing_nodes']
+                # negative_tree_alive_leaf_nodes = [node for node in negative_tree.leaf_nodes
+                #                                   if node not in negative_tree_dead_leaf_nodes]
+                negative_tree_missing_leaf_nodes = negative_tree_dead_leaf_nodes
+                negative_tree_collapsed_leaf_nodes = []
 
-                if len(missing_nodes_of_negative_tree) == 0:
+                if len(negative_tree_missing_leaf_nodes) == 0:
                     negative_proof_stance = ProofStance.PROVED
                 else:
                     negative_proof_stance = ProofStance.UNKNOWN
 
                 negative_hypothesis = self._get_sent_from_node(negative_tree.root_node)
 
-                negative_context, negateive_proof_text, _, _ = self._make_text(
+                negative_context, formula_negative_context, negateive_proof_text, formula_negateive_proof_text, _, _ = self._make_text(
                     negative_tree,
                     ProofStance.UNKNOWN,
 
-                    dead_leaf_nodes=missing_nodes_of_negative_tree,
-                    missing_leaf_nodes=missing_nodes_of_negative_tree,
+                    dead_leaf_nodes=negative_tree_dead_leaf_nodes,
+                    missing_leaf_nodes=negative_tree_missing_leaf_nodes,
+                    collapsed_leaf_nodes=negative_tree_collapsed_leaf_nodes,
 
                     node2id=node2id,
                     id2node=id2node,
@@ -331,6 +349,7 @@ class NLProofSDataset:
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
 
+            # -- compute depth --
             if proof_stance == ProofStance.UNKNOWN:
                 proof_depth = None
             else:
@@ -349,7 +368,9 @@ class NLProofSDataset:
 
                 'hypothesis': hypothesis,
                 'context': context,
+                'formula_context': formula_context,
                 'proofs': [proof_text] if proof_text is not None else [],
+                'formula_proofs': [formula_proof_text] if formula_proof_text is not None else [],
                 'proof_stance': stance_label,
                 'answer': label,
 
@@ -406,6 +427,7 @@ class NLProofSDataset:
             else:
                 gathered_stats = {}
 
+            i_sample += 1
             yield dataset_json,\
                 proof_tree,\
                 formula_distractors,\
@@ -475,20 +497,36 @@ class NLProofSDataset:
             id2node=id2node,
         )
 
-        context_text = self._make_context_text(id2node, missing_leaf_nodes)
+        def _my_make_context_text(formula_rep: bool) -> str:
+            return self._make_context_text(id2node, missing_leaf_nodes, formula_rep=formula_rep)
 
-        proof_text = self._make_proof_text(
-            proof_tree,
-            transformed_proof_and_distractor_nodes,
-            transformed_proof_nodes,
+        def _my_make_proof_text(formula_rep: bool) -> str:
+            return self._make_proof_text(
+                proof_tree,
+                transformed_proof_and_distractor_nodes,
+                transformed_proof_nodes,
+                node2id,
+                id2node,
+                proof_stance,
+                conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
+                conclude_hypothesis_from_random_sent_if_proof_is_unknown,
+                formula_rep=formula_rep,
+            )
+
+        context_text = _my_make_context_text(False)
+        formula_context_text = _my_make_context_text(True)
+
+        proof_text = _my_make_proof_text(False)
+        formula_proof_text = _my_make_proof_text(True)
+
+        return (
+            context_text,
+            formula_context_text,
+            proof_text,
+            formula_proof_text,
             node2id,
             id2node,
-            proof_stance,
-            conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
-            conclude_hypothesis_from_random_sent_if_proof_is_unknown,
         )
-
-        return context_text, proof_text, node2id, id2node
 
     def _divide_into_missing_and_collapsed_nodes(self, dead_leaf_nodes: List[ProofNode]) -> Tuple[List[ProofNode], List[ProofNode]]:
         missing_leaf_nodes = []
@@ -627,12 +665,20 @@ class NLProofSDataset:
 
         return _node2id, _id2node
 
-    def _make_context_text(self, id2node: Dict[str, Node], missing_leaf_nodes: List[ProofNode]) -> str:
+    def _make_context_text(self,
+                           id2node: Dict[str, Node],
+                           missing_leaf_nodes: List[ProofNode],
+                           formula_rep=False) -> str:
         context_id2nodes = {id_: node for id_, node in id2node.items()
                             if id_.startswith('sent') and node not in missing_leaf_nodes}
 
+        if formula_rep:
+            node2sent = lambda node: node.formula.rep
+        else:
+            node2sent = lambda node: self._get_sent_from_node(node)
+
         return ' '.join([
-            f'{id_}: {self._get_sent_from_node(node)}'
+            f'{id_}: {node2sent(node)}'
             for id_, node in sorted(context_id2nodes.items(),
                                     key=lambda id_node: int(re.sub('sent([0-9]*)', r'\g<1>', id_node[0])))
             
@@ -646,7 +692,8 @@ class NLProofSDataset:
                          id2node: Dict[str, Node],
                          proof_stance: ProofStance,
                          conclude_hypothesis_from_subtree_roots_if_proof_is_unknown: bool,
-                         conclude_hypothesis_from_random_sent_if_proof_is_unknown: bool) -> Optional[str]:
+                         conclude_hypothesis_from_random_sent_if_proof_is_unknown: bool,
+                         formula_rep=False) -> Optional[str]:
         # make proof string
         proof_elems = []
         for node in proof_tree.depth_first_traverse():
@@ -663,7 +710,10 @@ class NLProofSDataset:
                 if self._is_assump(node):
                     premise_str = 'void'
                     assump_id = node2id[node]
-                    conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
+                    if formula_rep:
+                        conclusion_str = f'{assump_id}: {node.formula.rep}'
+                    else:
+                        conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
                 else:
                     continue
 
