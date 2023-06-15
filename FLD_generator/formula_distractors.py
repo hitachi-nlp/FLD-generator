@@ -168,7 +168,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             hypothesis_formula,
         )
         if _have_other_proofs:
-            logger.warning('reject new distractor because new proof exists')
+            logger.warning('reject new distractor because multiple proof exists')
 
             logger.info('positive formulas:')
             for formula in leaf_formulas_in_tree:

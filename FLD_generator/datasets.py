@@ -19,6 +19,7 @@ from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translation_distractors import build as build_translation_distractor
 from FLD_generator.utils import have_other_proofs, have_other_disproofs
 from FLD_generator.formula_checkers.z3_checkers import (
+    check_sat,
     is_provable,
     is_disprovable,
     is_unknown,
@@ -381,11 +382,23 @@ class NLProofSDataset:
                 else:
                     proof_depth = proof_tree.depth
 
+            all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
+            all_negative_formulas = formula_distractors
+            all_formulas = all_positive_formulas + all_negative_formulas
+
+            # -- check whether the formulas are consistent --
+            if not check_sat(all_formulas):
+                logger.warning('-- skip the sample because the formula are inconsistent')
+                logger.info('all positive formulas:')
+                for formula in all_positive_formulas:
+                    logger.info('    %s', formula.rep)
+
+                logger.info('all negative formulas:')
+                for formula in all_negative_formulas:
+                    logger.info('    %s', formula.rep)
+
             # -- check whether multiple proofs exist --
             if not self.allow_other_proofs:
-                all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
-                all_negative_formulas = formula_distractors
-                all_formulas = all_positive_formulas + all_negative_formulas
                 droppable_formulas = []
                 should_skip = False
                 msg = None
