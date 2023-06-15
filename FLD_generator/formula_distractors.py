@@ -127,7 +127,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
         return False
 
     if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
-        logger.info('======================== not is_consistent_formula_set_z3([new_distractor] + existing_distractors) =====================')
+        logger.warning('reject the distractor because adding it will make distractors inconsistent')
         for dist in [new_distractor] + existing_distractors:
             logger.info(dist)
         return False
@@ -142,7 +142,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     original_tree_is_consistent = is_consistent_formula_set_z3(leaf_formulas_in_tree)
     if original_tree_is_consistent and\
             not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):  # SLOW: 30%
-        logger.info('======================== original_tree_is_consistent but ... =====================')
+        logger.warning('reject the distractor because adding it will make leaf formulas and distractors inconsistent')
         for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
             logger.info(dist)
         return False
@@ -156,7 +156,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     # for tree_formula in leaf_formulas_in_tree + [hypothesis_formula]:
     for tree_formula in [node.formula for node in proof_tree.nodes]:
         if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):
-            logger.info('reject new_distractor %s because it is stronger or equals to a leaf formula %s',
+            logger.warning('reject new_distractor %s because it is stronger or equals to a leaf formula %s',
                         new_distractor.rep,
                         tree_formula.rep)
             return False

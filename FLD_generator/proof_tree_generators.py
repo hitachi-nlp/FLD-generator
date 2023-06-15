@@ -788,7 +788,7 @@ def _generate_stem(arguments: List[Argument],
                                 continue
 
                             if not is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree):
-                                logger.info('====================== not is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree) =================')
+                                logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
                                 for elem in other_premises + leaf_formulas_in_tree:
                                     logger.info(str(elem))
                                 rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
@@ -1075,7 +1075,7 @@ def _extend_branches(proof_tree: ProofTree,
                             continue
 
                         if not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree):
-                            logger.info('====================== not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree) =================')
+                            logger.warning('-- (_extend_branches) reject the argument because adding it will make the proof tree inconsistent --')
                             for elem in next_arg_pulled.premises + leaf_formulas_in_tree:
                                 logger.info(str(elem))
                             rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
