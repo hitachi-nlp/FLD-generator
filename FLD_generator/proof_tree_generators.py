@@ -700,7 +700,7 @@ def _generate_stem(arguments: List[Argument],
                         )
                         if is_other_proofs_emerged:
                             is_arg_done = False
-                            logger.warning('(_generate_stem) continue to the next argument because other proofs have emerged')
+                            logger.warning('(_generate_stem) continue to the next argument because multiple proofs have emerged')
                             for log in logs:
                                 logger.info(log)
                             continue
@@ -1013,7 +1013,7 @@ def _extend_branches(proof_tree: ProofTree,
                         )
                         if is_other_proofs_emerged:
                             is_leaf_node_done = False
-                            logger.warning('(_extend_branches) continue to the next argument because other proofs have emerged')
+                            logger.warning('(_extend_branches) continue to the next argument because multiple proofs have emerged')
                             for log in logs:
                                 logger.info(log)
                             continue
@@ -1337,7 +1337,7 @@ def _other_proofs_emerged(leafs: List[Formula],
         new_root,
     )
     if is_other_proofs:
-        log_msgs.append('other proofs have emerged')
+        log_msgs.append('multiple proofs have emerged')
 
         log_msgs.append('all leaf formulas:')
         for formula in all_leafs:

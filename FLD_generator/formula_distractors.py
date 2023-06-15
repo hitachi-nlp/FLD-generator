@@ -390,7 +390,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
     (ii) we sample predicates and constants from the tree, rather than a sampled leaf formula.
     (iii) we reject distractor formula all the PASs of which are the used ones.
 
-    (ii) and (iii) makes distractors more "safe", i.e., fewer chance of having another proof due to the new formulas.
+    (ii) and (iii) makes distractors more "safe", i.e., fewer chance of having multiple proofs due to the new formulas.
     However, this makes distractors less distractive, of course.
 
     We are confident that (i) is better.
@@ -591,7 +591,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                     if all(distractor_PAS.rep in used_PASs
                            for distractor_PAS in distractor_formula.PASs):
                         # if all the distractor PASs are in tree,
-                        # we have high chance of (i) producing nonsens formula set (ii) producing other proof tree.
+                        # we have high chance of (i) producing nonsens formula set (ii) producing multiple proof trees.
                         # we want to prevent such possiblity.
                         continue
 

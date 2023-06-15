@@ -381,7 +381,7 @@ class NLProofSDataset:
                 else:
                     proof_depth = proof_tree.depth
 
-            # -- check whether another proofs exist --
+            # -- check whether multiple proofs exist --
             if not self.allow_other_proofs:
                 all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
                 all_negative_formulas = formula_distractors
@@ -403,7 +403,7 @@ class NLProofSDataset:
                             hypothesis_formula,
                         )
                         if _have_other_proofs:
-                            msg = '-- skip the sample because we have other proofs'
+                            msg = '-- skip the sample because we have multiple proofs'
                             should_skip = True
                             droppable_formulas = [droppable_formula]
                             break
@@ -422,7 +422,7 @@ class NLProofSDataset:
                             hypothesis_formula,
                         )
                         if _have_other_proofs:
-                            msg = '-- skip the sample because we have other proofs'
+                            msg = '-- skip the sample because we have multiple proofs'
                             should_skip = True
                             droppable_formulas = [droppable_formula]
                             break
