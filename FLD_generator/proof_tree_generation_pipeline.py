@@ -169,10 +169,14 @@ class ProofTreeGenerationPipeline:
                 if self.translation_distractor is not None:
                     leaf_translations = [leaf_node.formula.translation for leaf_node in proof_tree.leaf_nodes
                                          if leaf_node.formula.translation is not None]
-                    try:
-                        translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors)
-                    except FormulaDistractorGenerationFailure as e:
-                        raise ProofTreeGenerationPipelineFailure(str(e))
+                    if len(leaf_translations) == 0:
+                        logger.info('can not generate translation distractors because no leaf translations found')
+                        translation_distractors = []
+                    else:
+                        try:
+                            translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors)
+                        except FormulaDistractorGenerationFailure as e:
+                            raise ProofTreeGenerationPipelineFailure(str(e))
                 else:
                     raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
             else:
