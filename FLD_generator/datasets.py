@@ -797,10 +797,14 @@ class NLProofSDataset:
         context_id2nodes = {id_: node for id_, node in id2node.items()
                             if id_.startswith('sent') and node not in missing_leaf_nodes}
 
-        if formula_rep:
-            node2sent = lambda node: node.formula.rep
-        else:
-            node2sent = lambda node: self._get_sent_from_node(node)
+        def node2sent(node) -> str:
+            if formula_rep:
+                if isinstance(node, _TranslationDistractorNode):
+                    return self._get_sent_from_node(node)
+                else:
+                    return node.formula.rep
+            else:
+                return self._get_sent_from_node(node)
 
         return ' '.join([
             f'{id_}: {node2sent(node)}'
