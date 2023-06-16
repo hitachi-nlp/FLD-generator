@@ -688,7 +688,7 @@ def _generate_stem(arguments: List[Argument],
                     else:
                         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                         added_leaf_formulas = [formula for formula in next_arg_pulled.premises
-                                               if formula.rep == cur_conclusion.rep]
+                                               if formula.rep != cur_conclusion.rep]
                         added_root_formula = next_arg_pulled.conclusion
 
                         is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
