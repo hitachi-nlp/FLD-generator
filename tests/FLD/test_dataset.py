@@ -153,16 +153,16 @@ def test_generate_dataset():
 
     word_bank = build_wordnet_wordbank('eng')
 
-    translator = build_translator(
-        glob.glob('./configs/translations/thing/**.json'),
-        word_bank,
-        use_fixed_translation=False,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        volume_to_weight='sqrt',
-        do_translate_to_nl=True,
-    )
-    # translator = None
+    translator = None
+    # translator = build_translator(
+    #     glob.glob('./configs/translations/thing/**.json'),
+    #     word_bank,
+    #     use_fixed_translation=False,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     volume_to_weight='sqrt',
+    #     do_translate_to_nl=True,
+    # )
    
     generator = build_generator(
         [
@@ -237,12 +237,12 @@ def test_generate_dataset():
 
     swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
 
-    # translation_distractor = None
-    translation_distractor = build_translation_distractor(
-        'word_swap',
-        word_bank=word_bank,
-        swap_ng_words=swap_ng_words,
-    )
+    translation_distractor = None
+    # translation_distractor = build_translation_distractor(
+    #     'word_swap',
+    #     word_bank=word_bank,
+    #     swap_ng_words=swap_ng_words,
+    # )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,

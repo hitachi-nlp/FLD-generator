@@ -37,6 +37,7 @@ from FLD_generator.formula_checkers.z3_checkers.intermediates import (
     I_UNIVERSAL,
     I_EXISTS,
 )
+import kern_profiler
 
 _interm_to_z3 = {
     I_IMPLICATION: Implies,
@@ -122,11 +123,23 @@ def parse(rep: str):
     return go(interm)
 
 
+_CHECK_SAT_CACHE = {}
+
+
+@profile
 def check_sat(formulas: List[Formula],
               get_model=False,
               get_parse=False):
+    global _CHECK_SAT_CACHE
+
+    cache_key = tuple(formula.rep for formula in formulas)
+    # model and parse is object, thus we do not cache them.
+    if not get_model and not get_parse and cache_key in _CHECK_SAT_CACHE:
+        return _CHECK_SAT_CACHE[cache_key]
+
     solver = Solver()
     parsed = [parse(formula.rep) for formula in formulas]
+
     solver.add(*parsed)
 
     is_sat = solver.check() == sat
@@ -135,42 +148,52 @@ def check_sat(formulas: List[Formula],
     else:
         model = None
 
-    ret = [is_sat]
-    if get_model:
-        ret.append(model)
-    if get_parse:
-        ret.append(parsed)
+    _CHECK_SAT_CACHE[cache_key] = is_sat
+    if len(_CHECK_SAT_CACHE) >= 100:   # reset
+        _CHECK_SAT_CACHE = {}
 
-    if len(ret) == 1:
-        return ret[0]
-    else:
+    if get_model or get_parse:
+        ret = [is_sat]
+        if get_model:
+            ret.append(model)
+        if get_parse:
+            ret.append(parsed)
         return ret
+    else:
+        return is_sat
 
 
+@profile
 def is_provable(facts: List[Formula], hypothesis: Formula) -> bool:
     return not check_sat(facts + [negate(hypothesis)])
 
 
+@profile
 def is_disprovable(facts: List[Formula], hypothesis: Formula) -> bool:
     return not check_sat(facts + [hypothesis])
 
 
+@profile
 def is_unknown(facts: List[Formula], hypothesis: Formula) -> bool:
     return not is_provable(facts, hypothesis) and not is_disprovable(facts, hypothesis)
 
 
+@profile
 def is_stronger(this: Formula, that: Formula) -> bool:
     return _imply(this, that, ignore_tautology=True) and not _imply(that, this, ignore_tautology=True)
 
 
+@profile
 def is_equiv(this: Formula, that: Formula) -> bool:
     return _imply(this, that, ignore_tautology=True) and _imply(that, this, ignore_tautology=True)
 
 
+@profile
 def is_weaker(this: Formula, that: Formula) -> bool:
     return not _imply(this, that, ignore_tautology=True) and _imply(that, this, ignore_tautology=True)
 
 
+@profile
 def _imply(this: Formula, that: Formula, ignore_tautology=False) -> bool:
     if ignore_tautology:
         if not check_sat([this]):
