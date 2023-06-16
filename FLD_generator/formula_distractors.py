@@ -25,7 +25,7 @@ from .formula_checkers import (
     is_equiv_z3,
     is_new as is_formula_new,
 )
-from FLD_generator.utils import have_other_proofs
+from FLD_generator.utils import provable_from_incomplete_facts
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
@@ -46,7 +46,7 @@ class FormulaDistractor(ABC):
                  proof_tree: ProofTree,
                  size: int,
                  formulas_to_be_sat: Optional[List[Formula]] = None,
-                 allow_other_proofs=False,
+                 allow_smaller_proofs=False,
                  max_retry: Optional[int] = None,
                  timeout: Optional[int] = None,
                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
@@ -61,7 +61,7 @@ class FormulaDistractor(ABC):
                 func_kwargs={
                     'no_warning': no_warning,
                     'formulas_to_be_sat': formulas_to_be_sat,
-                    'allow_other_proofs': allow_other_proofs,
+                    'allow_smaller_proofs': allow_smaller_proofs,
                 },
                 retry_exception_class=FormulaDistractorGenerationFailure,
                 max_retry=max_retry,
@@ -92,7 +92,7 @@ class FormulaDistractor(ABC):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
 
@@ -111,7 +111,7 @@ class FormulaDistractor(ABC):
 def _new_distractor_formula_is_ok(new_distractor: Formula,
                                   existing_distractors: List[Formula],
                                   proof_tree: ProofTree,
-                                  allow_other_proofs=False) -> bool:
+                                  allow_smaller_proofs=False) -> bool:
 
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
@@ -153,7 +153,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             # raise FormulaDistractorGenerationFailure(f'The intermediate_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
             return False
 
-    if not allow_other_proofs:
+    if not allow_smaller_proofs:
         # -- we think this strength check is just less then the "other proof check" below --
         # for tree_formula in [node.formula for node in proof_tree.nodes]:
         #     if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):
@@ -163,13 +163,13 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
         #         return False
 
         # -- other proof check --
-        _have_other_proofs, droppable_formula = have_other_proofs(
+        _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
             leaf_formulas_in_tree,
             existing_distractors + [new_distractor],
             hypothesis_formula,
         )
-        if _have_other_proofs:
-            logger.warning('reject new distractor because multiple proof exists')
+        if _have_smaller_proofs:
+            logger.warning('reject new distractor because smaller proofs exist')
 
             logger.info('positive formulas:')
             for formula in leaf_formulas_in_tree:
@@ -200,7 +200,7 @@ class UnkownPASDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -284,7 +284,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -368,7 +368,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                     if not _new_distractor_formula_is_ok(transformed_formula,
                                                          distractor_formulas + formulas_to_be_sat,
                                                          proof_tree,
-                                                         allow_other_proofs=allow_other_proofs):
+                                                         allow_smaller_proofs=allow_smaller_proofs):
                         continue
 
                     found_formula = transformed_formula
@@ -428,7 +428,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -467,7 +467,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                 simplified_formulas = self._simplify_distractor.generate(proof_tree,
                                                                          9999,
                                                                          formulas_to_be_sat=formulas_to_be_sat,
-                                                                         allow_other_proofs=allow_other_proofs,
+                                                                         allow_smaller_proofs=allow_smaller_proofs,
                                                                          no_warning=True)[0]
                 prototype_formulas.extend(simplified_formulas)
                 # print('!!!')
@@ -599,7 +599,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                     if not _new_distractor_formula_is_ok(distractor_formula,
                                                          distractor_formulas + formulas_to_be_sat,
                                                          proof_tree,
-                                                         allow_other_proofs=allow_other_proofs):
+                                                         allow_smaller_proofs=allow_smaller_proofs):
                         continue
 
                     found_formula = distractor_formula
@@ -629,7 +629,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if size == 0:
@@ -650,7 +650,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
             if not _new_distractor_formula_is_ok(distractor_formula,
                                                  distractor_formulas + formulas_to_be_sat,
                                                  proof_tree,
-                                                 allow_other_proofs=allow_other_proofs):
+                                                 allow_smaller_proofs=allow_smaller_proofs):
                 continue
 
             distractor_formulas.append(distractor_formula)
@@ -697,7 +697,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -707,20 +707,20 @@ class NegativeTreeDistractor(FormulaDistractor):
                                                                        size,
                                                                        'negated_hypothesis',
                                                                        formulas_to_be_sat=formulas_to_be_sat,
-                                                                       allow_other_proofs=allow_other_proofs)
+                                                                       allow_smaller_proofs=allow_smaller_proofs)
             if len(distractors) == 0:
                 self._log(logging.INFO, 'creating negative tree with negated hypothesis root not failed. Will try root node sampled from various forms.')
                 distractors, others = self._generate_with_initial_sampling(proof_tree,
                                                                            size,
                                                                            'various_form',
                                                                            formulas_to_be_sat=formulas_to_be_sat,
-                                                                           allow_other_proofs=allow_other_proofs)
+                                                                           allow_smaller_proofs=allow_smaller_proofs)
         else:
             distractors, others = self._generate_with_initial_sampling(proof_tree,
                                                                        size,
                                                                        'various_form',
                                                                        formulas_to_be_sat=formulas_to_be_sat,
-                                                                       allow_other_proofs=allow_other_proofs)
+                                                                       allow_smaller_proofs=allow_smaller_proofs)
         return distractors, others
 
     @profile
@@ -728,7 +728,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                                         proof_tree: ProofTree,
                                         size: int,
                                         initial_sampling: str,
-                                        allow_other_proofs=False,
+                                        allow_smaller_proofs=False,
                                         formulas_to_be_sat: Optional[List[Formula]] = None) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if size == 0:
@@ -749,7 +749,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 elif initial_sampling == 'various_form':
                     distractors, _ = self._various_form_distractor.generate(proof_tree, 1,
                                                                             formulas_to_be_sat=formulas_to_be_sat,
-                                                                            allow_other_proofs=allow_other_proofs)
+                                                                            allow_smaller_proofs=allow_smaller_proofs)
                     if len(distractors) == 0:
                         raise FormulaDistractorGenerationFailure('could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
                     else:
@@ -794,7 +794,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 if not _new_distractor_formula_is_ok(distractor_formula,
                                                      distractor_formulas + formulas_to_be_sat,
                                                      proof_tree,
-                                                     allow_other_proofs=allow_other_proofs):
+                                                     allow_smaller_proofs=allow_smaller_proofs):
                     continue
 
                 distractor_formulas.append(distractor_formula)
@@ -829,7 +829,7 @@ class MixtureDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -860,7 +860,7 @@ class MixtureDistractor(FormulaDistractor):
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree, _size,
                                                                     formulas_to_be_sat = formulas_to_be_sat + distractor_formulas,
-                                                                    allow_other_proofs=allow_other_proofs)
+                                                                    allow_smaller_proofs=allow_smaller_proofs)
 
                 distractor_formulas += _distractor_formulas
 
@@ -903,7 +903,7 @@ class FallBackDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
-                  allow_other_proofs=False,
+                  allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
         if no_warning:
@@ -921,7 +921,7 @@ class FallBackDistractor(FormulaDistractor):
                 _distractor_formulas, _others = distractor.generate(proof_tree,
                                                                     size,
                                                                     formulas_to_be_sat = formulas_to_be_sat + distractor_formulas,
-                                                                    allow_other_proofs=allow_other_proofs)
+                                                                    allow_smaller_proofs=allow_smaller_proofs)
 
                 distractor_formulas += _distractor_formulas
 

@@ -54,7 +54,7 @@ from .formula import (
     VARIABLES,
     CONTRADICTION,
 )
-from FLD_generator.utils import have_other_proofs
+from FLD_generator.utils import provable_from_incomplete_facts
 from .formula_checkers.z3_checkers import is_provable
 import kern_profiler
 
@@ -429,7 +429,7 @@ def _generate_tree(arguments: List[Argument],
                    ng_formulas: Optional[List[Formula]] = None,
                    disallow_contradiction_as_hypothesis=False,
                    allow_reference_arguments_when_depth_1=True,
-                   allow_other_proofs=False,
+                   allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
                    allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     proof_tree = _generate_stem(
@@ -439,7 +439,7 @@ def _generate_tree(arguments: List[Argument],
         depth_1_reference_weight=depth_1_reference_weight,
         elim_dneg=elim_dneg,
         disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis,
-        allow_other_proofs=allow_other_proofs,
+        allow_smaller_proofs=allow_smaller_proofs,
 
         # since the branch extension may recover the illegal intermediate constants.
         force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants if depth == 1 else False,
@@ -455,7 +455,7 @@ def _generate_tree(arguments: List[Argument],
                 depth_limit=proof_tree.depth,
                 elim_dneg=elim_dneg,
                 ng_formulas=ng_formulas,
-                allow_other_proofs=allow_other_proofs,
+                allow_smaller_proofs=allow_smaller_proofs,
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
@@ -473,7 +473,7 @@ def _generate_tree(arguments: List[Argument],
                 proof_tree,
                 arguments,
                 argument_weights=argument_weights,
-                allow_other_proofs=allow_other_proofs,
+                allow_smaller_proofs=allow_smaller_proofs,
                 elim_dneg=elim_dneg,
             )
 
@@ -530,7 +530,7 @@ def _generate_stem(arguments: List[Argument],
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
-                   allow_other_proofs=False,
+                   allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
                    allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
@@ -683,7 +683,7 @@ def _generate_stem(arguments: List[Argument],
             next_arg_pulled = None
             for next_arg in _shuffle_arguments(linkable_args, argument_weights):
                 if is_arg_done:
-                    if allow_other_proofs:
+                    if allow_smaller_proofs:
                         break
                     else:
                         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
@@ -691,16 +691,16 @@ def _generate_stem(arguments: List[Argument],
                                                if formula.rep == cur_conclusion.rep]
                         added_root_formula = next_arg_pulled.conclusion
 
-                        is_other_proofs_emerged, logs = _other_proofs_emerged(
+                        is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
                             leaf_formulas,
                             added_leaf_formulas,
                             [],
                             next_arg_pulled,
                             added_root_formula
                         )
-                        if is_other_proofs_emerged:
+                        if is_smaller_proofs_emerged:
                             is_arg_done = False
-                            logger.warning('(_generate_stem) continue to the next argument because multiple proofs have emerged')
+                            logger.warning('(_generate_stem) continue to the next argument because smaller proofs have emerged')
                             for log in logs:
                                 logger.info(log)
                             continue
@@ -878,7 +878,7 @@ def _extend_branches(proof_tree: ProofTree,
                      ng_formulas: Optional[List[Formula]] = None,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
-                     allow_other_proofs=False,
+                     allow_smaller_proofs=False,
                      return_at_best=False,
                      return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
@@ -993,7 +993,7 @@ def _extend_branches(proof_tree: ProofTree,
                     continue
 
                 if is_leaf_node_done:
-                    if allow_other_proofs:
+                    if allow_smaller_proofs:
                         break
                     else:
                         leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
@@ -1004,16 +1004,16 @@ def _extend_branches(proof_tree: ProofTree,
                         added_root_formula = proof_tree.root_node.formula
 
                         # SLOW
-                        is_other_proofs_emerged, logs = _other_proofs_emerged(
+                        is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
                             leaf_formulas,
                             added_leaf_formulas,
                             [deleted_leaf_node],
                             next_arg_pulled,
                             added_root_formula
                         )
-                        if is_other_proofs_emerged:
+                        if is_smaller_proofs_emerged:
                             is_leaf_node_done = False
-                            logger.warning('(_extend_branches) continue to the next argument because multiple proofs have emerged')
+                            logger.warning('(_extend_branches) continue to the next argument because smaller proofs have emerged')
                             for log in logs:
                                 logger.info(log)
                             continue
@@ -1188,7 +1188,7 @@ def _fix_illegal_intermediate_constants(
     arguments: Optional[List[Argument]] = None,
     argument_weights: Optional[Dict[Argument, float]] = None,
     argument_weight_bias_factor=100,
-    allow_other_proofs=False,
+    allow_smaller_proofs=False,
     elim_dneg=False,
 ) -> ProofTree:
     if len(list((_find_illegal_intermediate_constants(proof_tree)))) >= 3:
@@ -1271,7 +1271,7 @@ def _fix_illegal_intermediate_constants(
                         depth_limit=None,
                         start_leaf_nodes=[illegal_node],
                         elim_dneg=elim_dneg,
-                        allow_other_proofs=allow_other_proofs,
+                        allow_smaller_proofs=allow_smaller_proofs,
                         allow_reference_arguments_when_depth_1=False,
 
                         force_fix_illegal_intermediate_constants=False,
@@ -1321,24 +1321,24 @@ def _fix_illegal_intermediate_constants(
 
 
 @profile
-def _other_proofs_emerged(leafs: List[Formula],
-                          new_leafs: List[Formula],
-                          deleted_leafs: List[Formula],
-                          new_argument: Argument,
-                          new_root: Formula) -> Tuple[bool, List[str]]:
+def _smaller_proofs_emerged(leafs: List[Formula],
+                            new_leafs: List[Formula],
+                            deleted_leafs: List[Formula],
+                            new_argument: Argument,
+                            new_root: Formula) -> Tuple[bool, List[str]]:
     all_leafs: List[Formula] = [
         leaf for leaf in leafs + new_leafs
         if leaf.rep not in [_leaf.rep for _leaf in deleted_leafs]
     ]
 
     log_msgs: List[str] = []
-    is_other_proofs, dropped_leaf = have_other_proofs(
+    _is_provable, dropped_leaf = provable_from_incomplete_facts(
         all_leafs,
         [],
         new_root,
     )
-    if is_other_proofs:
-        log_msgs.append('multiple proofs have emerged')
+    if _is_provable:
+        log_msgs.append('smaller proofs have emerged')
 
         log_msgs.append('all leaf formulas:')
         for formula in all_leafs:
@@ -1369,7 +1369,7 @@ def _validate_illegal_intermediate_constants(
     proof_tree: ProofTree,
     arguments: List[Argument],
     argument_weights: Optional[Dict[Argument, float]] = None,
-    allow_other_proofs=False,
+    allow_smaller_proofs=False,
     elim_dneg=False
 ) -> ProofTree:
 
@@ -1381,7 +1381,7 @@ def _validate_illegal_intermediate_constants(
                     proof_tree,
                     arguments=arguments,
                     argument_weights=argument_weights,
-                    allow_other_proofs=allow_other_proofs,
+                    allow_smaller_proofs=allow_smaller_proofs,
                     elim_dneg=elim_dneg,
                 )
             except (FixIllegalIntermediateConstantFailure, FixIllegalIntermediateConstantImpossible) as e:
@@ -1445,4 +1445,3 @@ def build(config_paths: List[str],
         **kwargs,
     )
     return generator
-

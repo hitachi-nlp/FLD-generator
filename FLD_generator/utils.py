@@ -298,19 +298,21 @@ def make_pretty_msg(title: Optional[str] = None,
 
 
 @profile
-def have_other_proofs(formulas: List[Formula],
-                      distractor_formulas: List[Formula],
-                      hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
-    for remaining_formulas, dropped_formula in _drop_one_element(formulas):
+def provable_from_incomplete_facts(fact_formulas: List[Formula],
+                                   distractor_formulas: List[Formula],
+                                   hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
+    # XXX: we can not find the other proofs constructed from all the fact_formulas.
+    for remaining_formulas, dropped_formula in _drop_one_element(fact_formulas):
         if is_provable(remaining_formulas + distractor_formulas, hypothesis):
             return True, dropped_formula
     return False, None
 
 
-def have_other_disproofs(formulas: List[Formula],
-                         distractor_formulas: List[Formula],
-                         hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
-    for remaining_formulas, dropped_formula in _drop_one_element(formulas):
+def disprovable_from_incomplete_facts(fact_formulas: List[Formula],
+                                      distractor_formulas: List[Formula],
+                                      hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
+    # XXX: we can not find the other disproofs constructed from all the fact_formulas.
+    for remaining_formulas, dropped_formula in _drop_one_element(fact_formulas):
         if is_disprovable(remaining_formulas + distractor_formulas, hypothesis):
             return True, dropped_formula
     return False, None
@@ -321,5 +323,3 @@ def _drop_one_element(elems: List[Any]) -> Iterable[Tuple[List[Any], Any]]:
         dropped_elem = elems[i_drop]
         remaining_elems = elems[:i_drop] + elems[i_drop + 1:]
         yield remaining_elems, dropped_elem
-
-

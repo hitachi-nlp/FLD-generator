@@ -17,7 +17,7 @@ from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translation_distractors import build as build_translation_distractor
-from FLD_generator.utils import have_other_proofs, have_other_disproofs
+from FLD_generator.utils import provable_from_incomplete_facts, disprovable_from_incomplete_facts
 from FLD_generator.formula_checkers.z3_checkers import (
     check_sat,
     is_provable,
@@ -196,7 +196,7 @@ class NLProofSDataset:
                  word_bank: Optional[WordBank] = None,
                  num_distractors: Optional[List[int]] = None,
                  num_translation_distractors: Optional[List[int]] = None,
-                 allow_other_proofs=False,
+                 allow_smaller_proofs=False,
                  version: str = '0.0',
                  log_stats=False,
                  raise_if_translation_not_found=True):
@@ -225,7 +225,7 @@ class NLProofSDataset:
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
         self.num_translation_distractors = num_translation_distractors or [0]
-        self.allow_other_proofs = allow_other_proofs
+        self.allow_smaller_proofs = allow_smaller_proofs
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
         self.version = version
@@ -273,7 +273,7 @@ class NLProofSDataset:
                 _num_distractors,
                 _num_translation_distractors,
                 depth_1_reference_weight=self._depth_1_reference_weight,
-                allow_other_proofs=self.allow_other_proofs,
+                allow_smaller_proofs=self.allow_smaller_proofs,
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
@@ -402,8 +402,8 @@ class NLProofSDataset:
                 for formula in all_negative_formulas:
                     logger.info('    %s', formula.rep)
 
-            # -- check whether multiple proofs exist --
-            if not self.allow_other_proofs:
+            # -- check whether smaller proofs exist --
+            if not self.allow_smaller_proofs:
                 droppable_formulas = []
                 should_skip = False
                 msg = None
@@ -415,13 +415,13 @@ class NLProofSDataset:
                         msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
                         should_skip = True
                     else:
-                        _have_other_proofs, droppable_formula = have_other_proofs(
+                        _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
                             all_positive_formulas,
                             all_negative_formulas,
                             hypothesis_formula,
                         )
-                        if _have_other_proofs:
-                            msg = '-- skip the sample because we have multiple proofs'
+                        if _have_smaller_proofs:
+                            msg = '-- skip the sample because we have smaller proofs.'
                             should_skip = True
                             droppable_formulas = [droppable_formula]
                             break
@@ -434,13 +434,13 @@ class NLProofSDataset:
                         msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
                         should_skip = True
                     else:
-                        _have_other_proofs, droppable_formula = have_other_disproofs(
+                        _have_smaller_proofs, droppable_formula = disprovable_from_incomplete_facts(
                             all_positive_formulas,
                             all_negative_formulas,
                             hypothesis_formula,
                         )
-                        if _have_other_proofs:
-                            msg = '-- skip the sample because we have multiple proofs'
+                        if _have_smaller_proofs:
+                            msg = '-- skip the sample because we have smaller proofs'
                             should_skip = True
                             droppable_formulas = [droppable_formula]
                             break
