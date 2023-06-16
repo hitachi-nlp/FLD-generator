@@ -204,7 +204,7 @@ def generate_instances(size: int, *args):
 @click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
-@click.option('--swap-ng-words', default='./configs/translation_distractors/swap_ng_words.json')
+@click.option('--swap-ng-words-config', default='./configs/translation_distractors/swap_ng_words.json')
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int, default=1000)   # single thread: data load = 2min, generation = 300 instances / 8min    vs    multithread: data load = 20min, generation = 5 x 300 instances / 8min
 @click.option('--batch-size-per-worker', type=int, default=10000)
@@ -241,7 +241,7 @@ def main(output_path,
          world_assump,
          unknown_ratio,
          use_collapsed_translation_nodes_for_unknown_tree,
-         swap_ng_words,
+         swap_ng_words_config,
          num_workers,
          min_size_per_worker,
          batch_size_per_worker,
@@ -253,7 +253,7 @@ def main(output_path,
     num_distractors = json.loads(num_distractors)
     num_translation_distractors = json.loads(num_translation_distractors)
     proof_stances = json.loads(proof_stances)
-    swap_ng_words = json.load(open(swap_ng_words))
+    swap_ng_words = json.load(open(swap_ng_words_config))
 
     if len(argument_config) == 0:
         raise ValueError()

@@ -71,6 +71,7 @@ def make_dataset(dataset_name: str,
             'add_subj_obj_swapped_distractor',
             'use_collapsed_translation_nodes_for_unknown_tree',
             'fallback_from_formula_to_translation_distractor',
+            'swap_ng_words_config',
 
             'translation_distractor',
             'num_translation_distractors',
@@ -156,6 +157,7 @@ def make_dataset(dataset_name: str,
                 '--dont-try-negative-hypothesis' if job_settings.get('dont_try_negated_hypothesis', False) else '',
                 '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
+                f'--swap-ng-words-config {job_settings["swap_ng_words_config"]}',
 
                 f'--translation-distractor {job_settings["translation_distractor"]}',
                 f'--num-translation-distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
@@ -230,7 +232,7 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230529.use_fixed_translation_for_LLM')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230601.fix_translation')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230615.formula_checkers')
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/debug')
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230616.formula_checkers')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -360,7 +362,11 @@ def main():
 
         # ---------------------------------- 20230615.formula_checkers ------------------------------------
         # '20230615.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
-        '20230615.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
+        # '20230615.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
+
+        # ---------------------------------- 20230616.formula_checkers ------------------------------------
+        '20230616.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
+
     ]
     # dataset_names = dataset_names[::-1]
 
