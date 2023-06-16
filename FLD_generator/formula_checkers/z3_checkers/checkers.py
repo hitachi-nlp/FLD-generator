@@ -164,6 +164,16 @@ def check_sat(formulas: List[Formula],
 
 
 @profile
+def is_tautology(formula: ForAll) -> bool:
+    return not check_sat([negate(formula)])
+
+
+@profile
+def is_contradiction(formula: ForAll) -> bool:
+    return is_tautology(negate(formula))
+
+
+@profile
 def is_provable(facts: List[Formula], hypothesis: Formula) -> bool:
     return not check_sat(facts + [negate(hypothesis)])
 

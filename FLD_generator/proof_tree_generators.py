@@ -55,7 +55,7 @@ from .formula import (
     CONTRADICTION,
 )
 from FLD_generator.utils import provable_from_incomplete_facts
-from .formula_checkers.z3_checkers import is_provable
+from .formula_checkers.z3_checkers import is_provable, is_tautology, is_contradiction
 import kern_profiler
 
 # _LOG_ONLY_WHEN_FAILED = True
@@ -759,6 +759,14 @@ def _generate_stem(arguments: List[Argument],
                             #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
                             #     continue
 
+                            if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                                rejection_stats['any(is_tautology(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                                continue
+
+                            if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                                rejection_stats['any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                                continue
+
                             if not is_argument_senseful(next_arg_pulled):
                                 rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
                                 continue
@@ -1058,6 +1066,14 @@ def _extend_branches(proof_tree: ProofTree,
                         # if is_intermediate_constants_used:
                         #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
                         #     continue
+
+                        if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                            rejection_stats['any(is_tautology(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                            continue
+
+                        if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                            rejection_stats['any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                            continue
 
                         if not is_argument_senseful(next_arg_pulled):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1

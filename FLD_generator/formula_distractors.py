@@ -25,6 +25,7 @@ from .formula_checkers import (
     is_equiv_z3,
     is_new as is_formula_new,
 )
+from .formula_checkers.z3_checkers import is_tautology, is_contradiction
 from FLD_generator.utils import provable_from_incomplete_facts
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
@@ -117,6 +118,9 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
     hypothesis_formula = proof_tree.root_node.formula
 
+    if is_tautology(new_distractor) or is_contradiction(new_distractor):
+        return False
+
     if not is_formula_new(new_distractor, existing_distractors + formulas_in_tree):
         return False
 
@@ -179,7 +183,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             for formula in existing_distractors + [new_distractor]:
                 logger.info('    ' + formula.rep)
 
-            logger.info('droppable formula formulas:')
+            logger.info('droppable formulas:')
             logger.info('    ' + droppable_formula.rep)
 
             logger.info('hypothesis:')
