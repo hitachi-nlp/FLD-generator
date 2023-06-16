@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 1000) -> None:
+                     num_dataset: int = 10000) -> None:
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
         log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
@@ -153,16 +153,16 @@ def test_generate_dataset():
 
     word_bank = build_wordnet_wordbank('eng')
 
-    # translator = None
-    translator = build_translator(
-        glob.glob('./configs/translations/thing/**.json'),
-        word_bank,
-        use_fixed_translation=True,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        volume_to_weight='sqrt',
-        do_translate_to_nl=True,
-    )
+    translator = None
+    # translator = build_translator(
+    #     glob.glob('./configs/translations/thing/**.json'),
+    #     word_bank,
+    #     use_fixed_translation=True,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     volume_to_weight='sqrt',
+    #     do_translate_to_nl=True,
+    # )
    
     generator = build_generator(
         [
@@ -237,12 +237,12 @@ def test_generate_dataset():
 
     swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
 
-    # translation_distractor = None
-    translation_distractor = build_translation_distractor(
-        'word_swap',
-        word_bank=word_bank,
-        swap_ng_words=swap_ng_words,
-    )
+    translation_distractor = None
+    # translation_distractor = build_translation_distractor(
+    #     'word_swap',
+    #     word_bank=word_bank,
+    #     swap_ng_words=swap_ng_words,
+    # )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,

@@ -700,6 +700,7 @@ def _generate_stem(arguments: List[Argument],
                         )
                         if is_smaller_proofs_emerged:
                             is_arg_done = False
+                            next_arg_pulled = None
                             logger.warning('(_generate_stem) continue to the next argument because smaller proofs have emerged')
                             for log in logs:
                                 logger.info(log)
@@ -830,6 +831,16 @@ def _generate_stem(arguments: List[Argument],
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
+
+                _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                    [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+                )
+                if _org__have_smaller_proofs:
+                    import pudb; pudb.set_trace()
+                    _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                        [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+                    )
+
             else:
                 rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
                 log_traces_msg = '\n'.join(log_traces)
@@ -977,17 +988,17 @@ def _extend_branches(proof_tree: ProofTree,
             if not is_linkable_any:
                 raise ExtendBranchesImpossible(f'No linkable arguments found for target leaf nodes {str(_target_leaf_nodes)}')
 
+        target_leaf_node = None
         is_leaf_node_done = False
         next_arg_pulled = None
-        target_leaf_node = None
         for leaf_node in _shuffle(_target_leaf_nodes):
+            if is_leaf_node_done:
+                break
+
             log_traces = []
             rejection_stats = defaultdict(int)
 
             log_traces.append(f'   | leaf_node {leaf_node}')
-
-            if is_leaf_node_done:
-                break
 
             target_leaf_node = leaf_node
 
@@ -1021,6 +1032,7 @@ def _extend_branches(proof_tree: ProofTree,
                         )
                         if is_smaller_proofs_emerged:
                             is_leaf_node_done = False
+                            next_arg_pulled = None
                             logger.warning('(_extend_branches) continue to the next argument because smaller proofs have emerged')
                             for log in logs:
                                 logger.info(log)
@@ -1118,6 +1130,17 @@ def _extend_branches(proof_tree: ProofTree,
                 proof_tree.add_node(premise_node)
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
+
+            _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+            )
+            if _org__have_smaller_proofs:
+                import pudb; pudb.set_trace()
+                _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                    [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+                )
+
+
         else:
             rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
             log_traces_msg = '\n'.join(log_traces)
