@@ -1,4 +1,4 @@
-from typing import List, Iterable, Optional
+from typing import List, Iterable, Optional, Set
 from abc import abstractmethod, ABC
 import re
 import random
@@ -58,7 +58,10 @@ class TranslationDistractor(ABC):
 
 class WordSwapDistractor(TranslationDistractor):
 
-    def __init__(self, word_bank: WordBank, word_swap_prob=0.1):
+    def __init__(self,
+                 word_bank: WordBank,
+                 word_swap_prob=0.1,
+                 swap_ng_words: Optional[Set[str]] = None):
         self._word_bank = word_bank
         self._words = {}
 
@@ -68,6 +71,7 @@ class WordSwapDistractor(TranslationDistractor):
         logger.info('loading words from the wordbank ... done!')
 
         self.word_swap_prob = word_swap_prob
+        self.swap_ng_words = swap_ng_words
 
     def _load_words_by_pos_attrs(self,
                                  word_bank: WordBank,
@@ -114,13 +118,12 @@ class WordSwapDistractor(TranslationDistractor):
         return distractor_translations
 
     def _word_swap_translation(self, transl: str, at_least_one=True) -> Optional[str]:
-        ng_words = ['a', 'the', 'is']
 
         for trial in range(0, 100):
             words = transl.split(' ')
             swapped_words = []
             for word in words:
-                if word in ng_words:
+                if word in self.swap_ng_words:
                     swapped_words.append(word)
                     continue
 
@@ -164,10 +167,18 @@ class WordSwapDistractor(TranslationDistractor):
         return 10
 
 
-def build(type_: str, word_bank: Optional[WordBank] = None):
+def build(type_: str,
+          word_bank: Optional[WordBank] = None,
+          swap_ng_words: Optional[Set[str]] = None):
+
+    swap_ng_words = swap_ng_words or {'a', 'the', 'is'}
+
     if type_ == 'word_swap':
+
         if word_bank is None:
             raise ValueError()
-        return WordSwapDistractor(word_bank)
+
+        return WordSwapDistractor(word_bank, swap_ng_words=swap_ng_words)
+
     else:
         raise ValueError(f'Unknown distractor type {type_}')

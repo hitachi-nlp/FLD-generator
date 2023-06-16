@@ -120,10 +120,10 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     if not is_formula_new(new_distractor, existing_distractors + formulas_in_tree):
         return False
 
-    if not is_ok_formula_set([new_distractor] + existing_distractors + formulas_in_tree):  # SLOW: 50%
+    if not is_ok_formula_set([new_distractor] + existing_distractors + formulas_in_tree):
         return False
 
-    if not is_consistent_formula_set([new_distractor] + existing_distractors):   # SLOW: 20%
+    if not is_consistent_formula_set([new_distractor] + existing_distractors):
         return False
 
     if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
@@ -463,6 +463,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         else:
             prototype_formulas = [node.formula for node in proof_tree.nodes]
             if self._use_simplified_formulas_as_prototype:
+                # SLOW
                 simplified_formulas = self._simplify_distractor.generate(proof_tree,
                                                                          9999,
                                                                          formulas_to_be_sat=formulas_to_be_sat,
@@ -646,6 +647,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
             if len(distractor_formulas) >= size:
                 break
 
+            # SLOW
             if not _new_distractor_formula_is_ok(distractor_formula,
                                                  distractor_formulas + formulas_to_be_sat,
                                                  proof_tree,
@@ -789,6 +791,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 if len(distractor_formulas) >= size:
                     break
 
+                # SLOW
                 if not _new_distractor_formula_is_ok(distractor_formula,
                                                      distractor_formulas + formulas_to_be_sat,
                                                      proof_tree,

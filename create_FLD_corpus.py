@@ -58,6 +58,7 @@ def load_dataset(argument_config: List[str],
                  world_assump: str,
                  unknown_ratio: float,
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
+                 swap_ng_words: Optional[List[str]],
                  depths: List[int],
                  depth_distribution: str,
                  force_fix_illegal_intermediate_constants: bool,
@@ -93,6 +94,7 @@ def load_dataset(argument_config: List[str],
         _translation_distractor = build_translation_distractor(
             translation_distractor,
             word_bank=word_bank,
+            swap_ng_words=swap_ng_words,
         )
         logger.info(_build_bounded_msg(f'{"[finish] building translation distractor":<30}', 3))
     else:
@@ -140,6 +142,7 @@ def load_dataset(argument_config: List[str],
                            num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
                            use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
+                           swap_ng_words=swap_ng_words,
                            word_bank = word_bank if use_collapsed_translation_nodes_for_unknown_tree else None)
 
 
@@ -201,6 +204,7 @@ def generate_instances(size: int, *args):
 @click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
+@click.option('--swap-ng-words', default='./configs/translation_distractors/swap_ng_words.json')
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int, default=1000)   # single thread: data load = 2min, generation = 300 instances / 8min    vs    multithread: data load = 20min, generation = 5 x 300 instances / 8min
 @click.option('--batch-size-per-worker', type=int, default=10000)
@@ -237,6 +241,7 @@ def main(output_path,
          world_assump,
          unknown_ratio,
          use_collapsed_translation_nodes_for_unknown_tree,
+         swap_ng_words,
          num_workers,
          min_size_per_worker,
          batch_size_per_worker,
@@ -248,6 +253,7 @@ def main(output_path,
     num_distractors = json.loads(num_distractors)
     num_translation_distractors = json.loads(num_translation_distractors)
     proof_stances = json.loads(proof_stances)
+    swap_ng_words = json.load(open(swap_ng_words))
 
     if len(argument_config) == 0:
         raise ValueError()
@@ -303,6 +309,7 @@ def main(output_path,
                         world_assump,
                         unknown_ratio,
                         use_collapsed_translation_nodes_for_unknown_tree,
+                        swap_ng_words,
                         depths,
                         depth_distribution,
                         force_fix_illegal_intermediate_constants,

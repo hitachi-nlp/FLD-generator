@@ -116,11 +116,11 @@ def test_generate_dataset_AACorpus():
     )
 
     # SLOW
-    translation_distractor = None
-    # translation_distractor = build_translation_distractor(
-    #     'word_swap',
-    #     word_bank=word_bank,
-    # )
+    # translation_distractor = None
+    translation_distractor = build_translation_distractor(
+        'word_swap',
+        word_bank=word_bank,
+    )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
@@ -153,16 +153,16 @@ def test_generate_dataset():
 
     word_bank = build_wordnet_wordbank('eng')
 
-    # translator = build_translator(
-    #     glob.glob('./configs/translations/thing/**.json'),
-    #     word_bank,
-    #     use_fixed_translation=False,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     volume_to_weight='sqrt',
-    #     do_translate_to_nl=True,
-    # )
-    translator = None
+    translator = build_translator(
+        glob.glob('./configs/translations/thing/**.json'),
+        word_bank,
+        use_fixed_translation=False,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        volume_to_weight='sqrt',
+        do_translate_to_nl=True,
+    )
+    # translator = None
    
     generator = build_generator(
         [
@@ -235,12 +235,14 @@ def test_generate_dataset():
         try_negated_hypothesis_first=True,
     )
 
-    # SLOW
-    translation_distractor = None
-    # translation_distractor = build_translation_distractor(
-    #     'word_swap',
-    #     word_bank=word_bank,
-    # )
+    swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
+
+    # translation_distractor = None
+    translation_distractor = build_translation_distractor(
+        'word_swap',
+        word_bank=word_bank,
+        swap_ng_words=swap_ng_words,
+    )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
@@ -263,6 +265,7 @@ def test_generate_dataset():
                               force_fix_illegal_intermediate_constants=True,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
+                              swap_ng_words=swap_ng_words,
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],

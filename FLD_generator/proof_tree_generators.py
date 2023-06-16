@@ -222,7 +222,7 @@ class ProofTreeGenerator:
                                                                                     get_name=True):
                     if not _is_numbers_ok_argument(complicated_argument):
                         continue
-                    if _is_argument_new(complicated_argument, arguments + complicated_arguments):  # SLOW
+                    if _is_argument_new(complicated_argument, arguments + complicated_arguments):
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
 
@@ -859,7 +859,6 @@ def find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Itera
                 and _is_failure_loop_univ_intro_argument(arg):
             continue
 
-        # SLOW, called many times -> but this is as the old
         if formula_is_identical_to(arg.conclusion, node.formula)\
                 and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
             yield arg

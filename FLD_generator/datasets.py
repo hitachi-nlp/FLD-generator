@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from abc import abstractmethod, ABC
 from statistics import mean, stdev
-from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
+from typing import Dict, List, Optional, Union, Iterable, Tuple, Any, Set
 import logging
 import copy
 from collections import defaultdict
@@ -192,6 +192,7 @@ class NLProofSDataset:
                  force_fix_illegal_intermediate_constants=False,
                  unknown_ratio: float = 1 / 3.,
                  use_collapsed_translation_nodes_for_unknown_tree=False,
+                 swap_ng_words: Optional[Set[str]] = None,
                  word_bank: Optional[WordBank] = None,
                  num_distractors: Optional[List[int]] = None,
                  num_translation_distractors: Optional[List[int]] = None,
@@ -232,7 +233,11 @@ class NLProofSDataset:
 
         self.use_collapsed_translation_nodes_for_unknown_tree = use_collapsed_translation_nodes_for_unknown_tree
         if self.use_collapsed_translation_nodes_for_unknown_tree:
-            self.word_swap_distractor = build_translation_distractor('word_swap', word_bank=word_bank)
+            self.word_swap_distractor = build_translation_distractor(
+                'word_swap',
+                word_bank=word_bank,
+                swap_ng_words=swap_ng_words,
+            )
         else:
             self.word_swap_distractor = None
 

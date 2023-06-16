@@ -308,7 +308,7 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
             cache[cache_key] = set()
             return set()
 
-    if PAS.rep not in [_pa.rep for _pa in formula.PASs]:  # SLOW, called many times
+    if PAS.rep not in [_pa.rep for _pa in formula.PASs]:
         cache[cache_key] = set()
         return set()
 
