@@ -402,83 +402,82 @@ class NLProofSDataset:
                 for formula in all_negative_formulas:
                     logger.info('    %s', formula.rep)
 
-            # -- check whether smaller proofs exist --
-            if not self.allow_smaller_proofs:
-                droppable_formulas = []
-                should_skip = False
-                msg = None
-                if proof_stance == ProofStance.PROVED:
-                    if is_disprovable(all_formulas, hypothesis_formula):
-                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be disproved.'
+            # -- check consistency of proofs --
+            droppable_formulas = []
+            should_skip = False
+            msg = None
+            if proof_stance == ProofStance.PROVED:
+                if is_disprovable(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be disproved.'
+                    should_skip = True
+                elif is_unknown(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
+                    should_skip = True
+                elif not self.allow_smaller_proofs:
+                    _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
+                        all_positive_formulas,
+                        all_negative_formulas,
+                        hypothesis_formula,
+                    )
+                    if _have_smaller_proofs:
+                        msg = '-- skip the sample because we have smaller proofs.'
                         should_skip = True
-                    elif is_unknown(all_formulas, hypothesis_formula):
-                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
+                        droppable_formulas = [droppable_formula]
+                        break
+
+            elif proof_stance == ProofStance.DISPROVED:
+                if is_provable(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved.'
+                    should_skip = True
+                elif is_unknown(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
+                    should_skip = True
+                elif not self.allow_smaller_proofs:
+                    _have_smaller_proofs, droppable_formula = disprovable_from_incomplete_facts(
+                        all_positive_formulas,
+                        all_negative_formulas,
+                        hypothesis_formula,
+                    )
+                    if _have_smaller_proofs:
+                        msg = '-- skip the sample because we have smaller proofs'
                         should_skip = True
-                    else:
-                        _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
-                            all_positive_formulas,
-                            all_negative_formulas,
-                            hypothesis_formula,
-                        )
-                        if _have_smaller_proofs:
-                            msg = '-- skip the sample because we have smaller proofs.'
-                            should_skip = True
-                            droppable_formulas = [droppable_formula]
-                            break
+                        droppable_formulas = [droppable_formula]
+                        break
 
-                elif proof_stance == ProofStance.DISPROVED:
-                    if is_provable(all_formulas, hypothesis_formula):
-                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved.'
-                        should_skip = True
-                    elif is_unknown(all_formulas, hypothesis_formula):
-                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
-                        should_skip = True
-                    else:
-                        _have_smaller_proofs, droppable_formula = disprovable_from_incomplete_facts(
-                            all_positive_formulas,
-                            all_negative_formulas,
-                            hypothesis_formula,
-                        )
-                        if _have_smaller_proofs:
-                            msg = '-- skip the sample because we have smaller proofs'
-                            should_skip = True
-                            droppable_formulas = [droppable_formula]
-                            break
+            elif proof_stance == ProofStance.UNKNOWN:
+                if not is_unknown(all_formulas, hypothesis_formula):
+                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved or disproved.'
+                    should_skip = True
+            else:
+                raise Exception()
 
-                elif proof_stance == ProofStance.UNKNOWN:
-                    if not is_unknown(all_formulas, hypothesis_formula):
-                        msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved or disproved.'
-                        should_skip = True
-                else:
-                    raise Exception()
+            if should_skip:
+                logger.warning(msg)
 
-                if should_skip:
-                    logger.warning(msg)
+                logger.info('all positive formulas:')
+                for formula in all_positive_formulas:
+                    logger.info('    %s', formula.rep)
 
-                    logger.info('all positive formulas:')
-                    for formula in all_positive_formulas:
-                        logger.info('    %s', formula.rep)
+                logger.info('all negative formulas:')
+                for formula in all_negative_formulas:
+                    logger.info('    %s', formula.rep)
 
-                    logger.info('all negative formulas:')
-                    for formula in all_negative_formulas:
-                        logger.info('    %s', formula.rep)
+                logger.info('droppable positive formulas:')
+                for formula in droppable_formulas:
+                    logger.info('    %s', formula.rep)
 
-                    logger.info('droppable positive formulas:')
-                    for formula in droppable_formulas:
-                        logger.info('    %s', formula.rep)
+                logger.info('hypothesis:')
+                logger.info('    ' + str(hypothesis_formula.rep))
 
-                    logger.info('hypothesis:')
-                    logger.info('    ' + str(hypothesis_formula.rep))
+                logger.info('gold label:')
+                logger.info('    ' + proof_stance.value)
 
-                    logger.info('gold label:')
-                    logger.info('    ' + proof_stance.value)
+                logger.info('formula context:')
+                logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
 
-                    logger.info('formula context:')
-                    logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
-
-                    logger.info('formula proof:')
-                    logger.info('\n    ' + re.sub(';', '\n    ', str(formula_proof_text)))
-                    continue
+                logger.info('formula proof:')
+                logger.info('\n    ' + re.sub(';', '\n    ', str(formula_proof_text)))
+                continue
 
             # -- make output json --
             label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
