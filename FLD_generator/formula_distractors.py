@@ -156,7 +156,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     if not allow_other_proofs:
         # -- we think this strength check is just less then the "other proof check" below --
         # for tree_formula in [node.formula for node in proof_tree.nodes]:
-        #     if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):  # SLOW
+        #     if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):
         #         logger.warning('reject new distractor %s because it is stronger or equals to a leaf formula %s',
         #                        new_distractor.rep,
         #                        tree_formula.rep)
@@ -464,7 +464,6 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         else:
             prototype_formulas = [node.formula for node in proof_tree.nodes]
             if self._use_simplified_formulas_as_prototype:
-                # SLOW
                 simplified_formulas = self._simplify_distractor.generate(proof_tree,
                                                                          9999,
                                                                          formulas_to_be_sat=formulas_to_be_sat,
@@ -648,7 +647,6 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
             if len(distractor_formulas) >= size:
                 break
 
-            # SLOW
             if not _new_distractor_formula_is_ok(distractor_formula,
                                                  distractor_formulas + formulas_to_be_sat,
                                                  proof_tree,
@@ -762,6 +760,7 @@ class NegativeTreeDistractor(FormulaDistractor):
 
                 negative_tree = ProofTree([ProofNode(negative_tree_root_formula)])
 
+                # SLOW
                 negative_tree = self.generator.extend_branches(
                     negative_tree,
                     branch_extension_steps,
@@ -792,7 +791,6 @@ class NegativeTreeDistractor(FormulaDistractor):
                 if len(distractor_formulas) >= size:
                     break
 
-                # SLOW
                 if not _new_distractor_formula_is_ok(distractor_formula,
                                                      distractor_formulas + formulas_to_be_sat,
                                                      proof_tree,

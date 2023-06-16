@@ -1003,6 +1003,7 @@ def _extend_branches(proof_tree: ProofTree,
                         assert target_leaf_node.formula.rep == next_arg_pulled.conclusion.rep
                         added_root_formula = proof_tree.root_node.formula
 
+                        # SLOW
                         is_other_proofs_emerged, logs = _other_proofs_emerged(
                             leaf_formulas,
                             added_leaf_formulas,
@@ -1319,6 +1320,7 @@ def _fix_illegal_intermediate_constants(
     return proof_tree_fixed
 
 
+@profile
 def _other_proofs_emerged(leafs: List[Formula],
                           new_leafs: List[Formula],
                           deleted_leafs: List[Formula],

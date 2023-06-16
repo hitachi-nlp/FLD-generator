@@ -297,6 +297,7 @@ def make_pretty_msg(title: Optional[str] = None,
     return log_msg
 
 
+@profile
 def have_other_proofs(formulas: List[Formula],
                       distractor_formulas: List[Formula],
                       hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:

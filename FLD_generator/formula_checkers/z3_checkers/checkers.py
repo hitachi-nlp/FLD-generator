@@ -149,7 +149,7 @@ def check_sat(formulas: List[Formula],
         model = None
 
     _CHECK_SAT_CACHE[cache_key] = is_sat
-    if len(_CHECK_SAT_CACHE) >= 100:   # reset
+    if len(_CHECK_SAT_CACHE) >= 100000:   # reset
         _CHECK_SAT_CACHE = {}
 
     if get_model or get_parse:
