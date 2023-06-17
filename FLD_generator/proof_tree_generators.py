@@ -524,8 +524,6 @@ def _extend_branches_with_timeout_retry(*args,
 
 def _generate_stem(arguments: List[Argument],
                    depth: int,
-                   predicate_pool: List[str] = PREDICATES,
-                   constant_pool: List[str] = CONSTANTS,
                    argument_weights: Optional[Dict[Argument, float]] = None,
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
@@ -679,40 +677,18 @@ def _generate_stem(arguments: List[Argument],
                 rejection_stats['len(linkable_args) == 0'] += 1
 
             # -- find linkable argument --
-            is_arg_done = False
+            is_arg_found = False
             next_arg_pulled = None
             for next_arg in _shuffle_arguments(linkable_args, argument_weights):
-                if is_arg_done:
-                    if allow_smaller_proofs:
-                        break
-                    else:
-                        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                        added_leaf_formulas = [formula for formula in next_arg_pulled.premises
-                                               if formula.rep != cur_conclusion.rep]
-                        added_root_formula = next_arg_pulled.conclusion
+                if is_arg_found:
+                    break
 
-                        is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
-                            leaf_formulas,
-                            added_leaf_formulas,
-                            [],
-                            next_arg_pulled,
-                            added_root_formula
-                        )
-                        if is_smaller_proofs_emerged:
-                            is_arg_done = False
-                            next_arg_pulled = None
-                            logger.warning('(_generate_stem) continue to the next argument because smaller proofs have emerged')
-                            for log in logs:
-                                logger.info(log)
-                            continue
-                        else:
-                            break
                 log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
                 for premise in _shuffle(next_arg.premises):
-                    if is_arg_done:
+                    if is_arg_found:
                         break
                     log_traces.append(f'   |   |   | premise {premise}')
 
@@ -722,8 +698,9 @@ def _generate_stem(arguments: List[Argument],
                         [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
                         shuffle=True,
                     ):
-                        if is_arg_done:
+                        if is_arg_found:
                             break
+
                         premise_pulled = interpret_formula(premise, premise_mapping, elim_dneg=elim_dneg)
                         assumption_pulled = interpret_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
@@ -744,13 +721,24 @@ def _generate_stem(arguments: List[Argument],
                             rejection_stats['not is_ok_formula_set([premise_pulled] + formulas_in_tree)'] += 1
                             continue
 
-                        for mapping in generate_mappings_from_formula(
-                            next_arg.all_formulas,
-                            [Formula(' '.join(constant_pool + predicate_pool))],
-                            constraints=premise_mapping,
-                            shuffle=True,
-                        ):
-                            if is_arg_done:
+                        target_preds, target_consts = _choose_target_preds_consts(proof_tree,
+                                                                                  next_arg,
+                                                                                  constraints=premise_mapping)
+                        for i_mapping_trial, mapping in enumerate(
+                                generate_mappings_from_formula(
+                                next_arg.all_formulas,
+                                # [Formula(' '.join(constant_pool + predicate_pool))],
+                                [Formula(' '.join(rep for rep in target_preds + target_consts))],
+                                constraints=premise_mapping,
+                                allow_many_to_one=False,
+                                shuffle=True,
+                                )):
+                            if i_mapping_trial >= 1:
+                                # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
+                                # we leave this for loop for back reference
+                                break
+
+                            if is_arg_found:
                                 break
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
@@ -804,11 +792,30 @@ def _generate_stem(arguments: List[Argument],
                                 is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)
                                 continue
 
-                            is_arg_done = True
+                            if not allow_smaller_proofs:
+                                leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                                added_leaf_formulas = [formula for formula in next_arg_pulled.premises
+                                                       if formula.rep != cur_conclusion.rep]
+                                added_root_formula = next_arg_pulled.conclusion
+
+                                is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
+                                    leaf_formulas,
+                                    added_leaf_formulas,
+                                    [],
+                                    next_arg_pulled,
+                                    added_root_formula
+                                )
+                                if is_smaller_proofs_emerged:
+                                    logger.warning('(_generate_stem) continue to the next mapping because smaller proofs have emerged')
+                                    for log in logs:
+                                        logger.info(log)
+                                    continue
+
+                            is_arg_found = True
                             break
 
             # -- update tree --
-            if is_arg_done:
+            if is_arg_found:
                 # Update
                 next_assumption_nodes = []
                 for i_premise, premise in enumerate(next_arg_pulled.premises):
@@ -832,14 +839,16 @@ def _generate_stem(arguments: List[Argument],
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
 
-                _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                    [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-                )
-                if _org__have_smaller_proofs:
-                    import pudb; pudb.set_trace()
-                    _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                        [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-                    )
+                # debug code
+                # _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                #     [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+                # )
+                # if _org__have_smaller_proofs:
+                #     import pudb
+                #     pudb.set_trace()
+                #     _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                #         [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+                #     )
 
             else:
                 rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
@@ -888,8 +897,6 @@ def _extend_branches(proof_tree: ProofTree,
                      arguments: List[Argument],
                      num_steps: int,
                      start_leaf_nodes: Optional[List[ProofNode]] = None,
-                     predicate_pool: List[str] = PREDICATES,
-                     constant_pool: List[str] = CONSTANTS,
                      argument_weights: Optional[Dict[Argument, float]] = None,
                      depth_limit: Optional[int] = None,
                      elim_dneg=False,
@@ -1007,38 +1014,15 @@ def _extend_branches(proof_tree: ProofTree,
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
 
+            is_arg_found = False
             for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
+                if is_arg_found:
+                    is_leaf_node_done = True
+                    break
+
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
                     continue
 
-                if is_leaf_node_done:
-                    if allow_smaller_proofs:
-                        break
-                    else:
-                        leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                        added_leaf_formulas = next_arg_pulled.premises
-                        deleted_leaf_node = target_leaf_node.formula
-                        deleted_leaf_node = next_arg_pulled.conclusion
-                        assert target_leaf_node.formula.rep == next_arg_pulled.conclusion.rep
-                        added_root_formula = proof_tree.root_node.formula
-
-                        # SLOW
-                        is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
-                            leaf_formulas,
-                            added_leaf_formulas,
-                            [deleted_leaf_node],
-                            next_arg_pulled,
-                            added_root_formula
-                        )
-                        if is_smaller_proofs_emerged:
-                            is_leaf_node_done = False
-                            next_arg_pulled = None
-                            logger.warning('(_extend_branches) continue to the next argument because smaller proofs have emerged')
-                            for log in logs:
-                                logger.info(log)
-                            continue
-                        else:
-                            break
                 log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
@@ -1047,11 +1031,10 @@ def _extend_branches(proof_tree: ProofTree,
                 # 2. Second, we generate full number of mappings, using the sub-mappings as filters.
                 for conclusion_mapping in generate_mappings_from_formula(
                         [next_arg.conclusion],
-                        # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
                         shuffle=True,
                 ):
-                    if is_leaf_node_done:
+                    if is_arg_found:
                         break
 
                     conclusion_pulled = interpret_formula(next_arg.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
@@ -1066,12 +1049,23 @@ def _extend_branches(proof_tree: ProofTree,
                         rejection_stats['not is_ok_formula_set([conclusion_pulled] + formulas_in_tree)'] += 1
                         continue
 
-                    for mapping in generate_mappings_from_formula(
-                        next_arg.all_formulas,
-                        [Formula(' '.join(constant_pool + predicate_pool))],
-                        constraints=conclusion_mapping,
-                        shuffle=True,
-                    ):
+                    target_preds, target_consts = _choose_target_preds_consts(proof_tree,
+                                                                              next_arg,
+                                                                              constraints=conclusion_mapping)
+                    for i_mapping_trial, mapping in enumerate(
+                            generate_mappings_from_formula(
+                                next_arg.all_formulas,
+                                # [Formula(' '.join(constant_pool + predicate_pool))],
+                                [Formula(' '.join(rep for rep in target_preds + target_consts))],
+                                constraints=conclusion_mapping,
+                                allow_many_to_one=False,
+                                shuffle=True,
+                            )):
+                        if i_mapping_trial >= 1:
+                            # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
+                            # we leave this for loop for back reference
+                            break
+
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
                         # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
@@ -1117,7 +1111,29 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
-                        is_leaf_node_done = True
+                        if not allow_smaller_proofs:
+                            leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                            added_leaf_formulas = next_arg_pulled.premises
+                            deleted_leaf_node = target_leaf_node.formula
+                            deleted_leaf_node = next_arg_pulled.conclusion
+                            assert target_leaf_node.formula.rep == next_arg_pulled.conclusion.rep
+                            added_root_formula = proof_tree.root_node.formula
+
+                            # SLOW
+                            is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
+                                leaf_formulas,
+                                added_leaf_formulas,
+                                [deleted_leaf_node],
+                                next_arg_pulled,
+                                added_root_formula
+                            )
+                            if is_smaller_proofs_emerged:
+                                logger.warning('(_extend_branches) continue to the next mapping because smaller proofs have emerged')
+                                for log in logs:
+                                    logger.info(log)
+                                continue
+
+                        is_arg_found = True
                         break
 
         if is_leaf_node_done:
@@ -1131,15 +1147,16 @@ def _extend_branches(proof_tree: ProofTree,
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
 
-            _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-            )
-            if _org__have_smaller_proofs:
-                import pudb; pudb.set_trace()
-                _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                    [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-                )
-
+            # debug code
+            # _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+            #     [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+            # )
+            # if _org__have_smaller_proofs:
+            #     import pudb
+            #     pudb.set_trace()
+            #     _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+            #         [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
+            #     )
 
         else:
             rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
@@ -1171,6 +1188,42 @@ def _extend_branches(proof_tree: ProofTree,
         return proof_tree, orig_nodes_to_copy_nodes
     else:
         return proof_tree
+
+
+@profile
+def _choose_target_preds_consts(proof_tree: ProofTree,
+                                next_arg: Argument,
+                                constraints: Optional[Dict[str, str]] = None) -> Tuple[List[str], List[str]]:
+    tree_preds = {pred.rep
+                  for node in proof_tree.nodes
+                  for pred in node.formula.predicates}
+
+    tree_consts = {const.rep
+                   for node in proof_tree.nodes
+                   for const in node.formula.constants}
+
+    constraints = constraints or {}
+    constrained_tgt_preds = {pred.rep for rep in constraints.values() for pred in Formula(rep).predicates}
+    constrained_tgt_consts = {const.rep for rep in constraints.values() for const in Formula(rep).constants}
+
+    unconstraned_src_preds = {pred.rep for formula in next_arg.all_formulas
+                              for pred in formula.predicates if pred.rep not in constraints}
+    unconstraned_src_consts = {const.rep for formula in next_arg.all_formulas
+                               for const in formula.constants if const.rep not in constraints}
+
+    already_used_preds = tree_preds.union(constrained_tgt_preds)
+    already_used_consts = tree_consts.union(constrained_tgt_consts)
+
+    vacant_preds = [pred for pred in PREDICATES if pred not in already_used_preds]  # list for sorting
+    vacant_consts = [const for const in CONSTANTS if const not in already_used_consts]  # list for sorting
+
+    tgt_preds = vacant_preds[:len(unconstraned_src_preds)] + list(constrained_tgt_preds)
+    tgt_consts = vacant_consts[:len(unconstraned_src_consts)] + list(constrained_tgt_consts)
+
+    # if len(unconstraned_src_preds) > 0:
+    #     import pudb
+    #     pudb.set_trace()
+    return tgt_preds, tgt_consts
 
 
 def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:

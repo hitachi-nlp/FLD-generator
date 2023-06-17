@@ -53,7 +53,6 @@ class FormulaDistractor(ABC):
                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         max_retry = max_retry or self.default_max_retry
         timeout = timeout or self.default_timeout
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! distractor timeout', timeout)
         try:
             self._log(logging.INFO, f'try to generate {size} distractors', boundary_level=2)
 
@@ -174,10 +173,12 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             hypothesis_formula,
         )
         if _have_smaller_proofs:
-            from pprint import pprint
-            _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(leaf_formulas_in_tree, [], hypothesis_formula)
-            if _org__have_smaller_proofs:
-                import pudb; pudb.set_trace()
+            # debug code
+            # from pprint import pprint
+            # _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(leaf_formulas_in_tree, [], hypothesis_formula)
+            # if _org__have_smaller_proofs:
+            #     import pudb; pudb.set_trace()
+
             logger.warning('reject new distractor because smaller proofs exist')
 
             logger.info('positive formulas:')
