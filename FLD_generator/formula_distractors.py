@@ -173,12 +173,6 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             hypothesis_formula,
         )
         if _have_smaller_proofs:
-            # debug code
-            # from pprint import pprint
-            # _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(leaf_formulas_in_tree, [], hypothesis_formula)
-            # if _org__have_smaller_proofs:
-            #     import pudb; pudb.set_trace()
-
             logger.warning('reject new distractor because smaller proofs exist')
 
             logger.info('positive formulas:')

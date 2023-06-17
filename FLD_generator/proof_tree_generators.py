@@ -839,17 +839,6 @@ def _generate_stem(arguments: List[Argument],
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
 
-                # debug code
-                # _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                #     [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-                # )
-                # if _org__have_smaller_proofs:
-                #     import pudb
-                #     pudb.set_trace()
-                #     _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                #         [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-                #     )
-
             else:
                 rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
                 log_traces_msg = '\n'.join(log_traces)
@@ -1146,17 +1135,6 @@ def _extend_branches(proof_tree: ProofTree,
                 proof_tree.add_node(premise_node)
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
-
-            # debug code
-            # _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-            #     [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-            # )
-            # if _org__have_smaller_proofs:
-            #     import pudb
-            #     pudb.set_trace()
-            #     _org__have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-            #         [node.formula for node in proof_tree.leaf_nodes], [], proof_tree.root_node.formula,
-            #     )
 
         else:
             rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
