@@ -19,7 +19,7 @@ from .interpretation import (
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
     is_senseful,
-    is_consistent_set as is_consistent_formula_set,
+    # is_consistent_set as is_consistent_formula_set,
     is_consistent_set_z3 as is_consistent_formula_set_z3,
     is_stronger_z3,
     is_equiv_z3,
@@ -128,8 +128,8 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     if not is_ok_formula_set([new_distractor] + existing_distractors + formulas_in_tree):
         return False
 
-    if not is_consistent_formula_set([new_distractor] + existing_distractors):
-        return False
+    # if not is_consistent_formula_set([new_distractor] + existing_distractors):
+    #     return False
 
     if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
         logger.warning('reject new distractor because adding it will make distractors inconsistent')
@@ -137,13 +137,13 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             logger.info(dist)
         return False
 
-    # The tree will become inconsistent "by adding" distractor formulas.
-    original_tree_is_consistent = check_org or is_consistent_formula_set(leaf_formulas_in_tree)
-    if check_org and not original_tree_is_consistent:
-        raise Exception()
-    if original_tree_is_consistent and\
-            not is_consistent_formula_set([new_distractor] + existing_distractors + leaf_formulas_in_tree):
-        return False
+    # # The tree will become inconsistent "by adding" distractor formulas.
+    # original_tree_is_consistent = check_org or is_consistent_formula_set(leaf_formulas_in_tree)
+    # if check_org and not original_tree_is_consistent:
+    #     raise Exception()
+    # if original_tree_is_consistent and\
+    #         not is_consistent_formula_set([new_distractor] + existing_distractors + leaf_formulas_in_tree):
+    #     return False
 
     # The tree will become inconsistent "by adding" distractor formulas.
     original_tree_is_consistent = is_consistent_formula_set_z3(leaf_formulas_in_tree)

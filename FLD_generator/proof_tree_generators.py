@@ -15,7 +15,7 @@ from .formula import (
 )
 from .formula_checkers import (
     is_ok_set as is_ok_formula_set,
-    is_consistent_set as is_consistent_formula_set,
+    # is_consistent_set as is_consistent_formula_set,
     is_consistent_set_z3 as is_consistent_formula_set_z3,
     is_new as is_formula_new,
 )
@@ -776,13 +776,13 @@ def _generate_stem(arguments: List[Argument],
                                 rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
                                 continue
 
-                            if not is_consistent_formula_set(other_premises + leaf_formulas_in_tree):
-                                # other_premises can be the leaf of the tree.
-                                # We reject tree with inconsistent formulas.
-                                # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                                # Notice that we stil allow inconsistency between non-leaf nodes
-                                rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
-                                continue
+                            # if not is_consistent_formula_set(other_premises + leaf_formulas_in_tree):
+                            #     # other_premises can be the leaf of the tree.
+                            #     # We reject tree with inconsistent formulas.
+                            #     # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
+                            #     # Notice that we stil allow inconsistency between non-leaf nodes
+                            #     rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
+                            #     continue
 
                             if not is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree):
                                 logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
@@ -1079,12 +1079,12 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
-                        if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
-                            # We reject tree with inconsistent leaf nodes.
-                            # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                            # Notice that we stil allow inconsistency between non-leaf nodes
-                            rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
-                            continue
+                        # if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
+                        #     # We reject tree with inconsistent leaf nodes.
+                        #     # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
+                        #     # Notice that we stil allow inconsistency between non-leaf nodes
+                        #     rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
+                        #     continue
 
                         if not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree):
                             logger.warning('-- (_extend_branches) reject the argument because adding it will make the proof tree inconsistent --')
@@ -1238,7 +1238,7 @@ def _shuffle_arguments(arguments: List[Argument],
 
 def _check_leaf_consistency(proof_tree: ProofTree) -> None:
     # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
-    assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
+    # assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
     assert is_consistent_formula_set_z3([node.formula for node in proof_tree.leaf_nodes])
 
 
