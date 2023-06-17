@@ -746,7 +746,7 @@ def _generate_stem(arguments: List[Argument],
 
                         for mapping in generate_mappings_from_formula(
                             next_arg.all_formulas,
-                            [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
+                            [Formula(' '.join(constant_pool + predicate_pool))],
                             constraints=premise_mapping,
                             shuffle=True,
                         ):
@@ -1068,7 +1068,7 @@ def _extend_branches(proof_tree: ProofTree,
 
                     for mapping in generate_mappings_from_formula(
                         next_arg.all_formulas,
-                        [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
+                        [Formula(' '.join(constant_pool + predicate_pool))],
                         constraints=conclusion_mapping,
                         shuffle=True,
                     ):
