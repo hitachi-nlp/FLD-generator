@@ -1200,9 +1200,6 @@ def _choose_target_preds_consts(proof_tree: ProofTree,
     tgt_preds = vacant_preds[:len(unconstraned_src_preds)] + list(constrained_tgt_preds)
     tgt_consts = vacant_consts[:len(unconstraned_src_consts)] + list(constrained_tgt_consts)
 
-    # if len(unconstraned_src_preds) > 0:
-    #     import pudb
-    #     pudb.set_trace()
     return tgt_preds, tgt_consts
 
 

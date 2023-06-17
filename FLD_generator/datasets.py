@@ -28,6 +28,8 @@ import kern_profiler
 
 logger = logging.getLogger(__name__)
 
+_DUMMY_SENTENCE = 'this is a dummy sntence'
+
 
 class ProofStance(Enum):
     PROVED = 'PROVED'
@@ -375,7 +377,7 @@ class NLProofSDataset:
 
                 for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
                     sent = sent_match.group().rstrip(' ')
-                    if sent not in context:
+                    if sent != _DUMMY_SENTENCE and sent not in context:
                         raise Exception(f'A sentence in the negative context is not in the original context. This is strange. The sentence is as follows: "{sent}"')
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
@@ -610,7 +612,7 @@ class NLProofSDataset:
                 random_sentence = None
                 if self.pipeline.translator is not None:
                     random_sentence = _generate_random_sentence(self.pipeline.translator)
-                random_sentence = random_sentence or 'LoveLive!!'
+                random_sentence = random_sentence or _DUMMY_SENTENCE
                 transformed_proof_and_distractor_nodes = [_FormulaDistractorNode(Formula(random_sentence))]
                 logger.info('Adding a random sentence into context because context have no sentence. The randome sentence is: "%s"', random_sentence)
             else:

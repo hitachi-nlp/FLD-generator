@@ -1,8 +1,11 @@
 # z3 checkers
-* distractor側も，generate()が非効率になっていないか？
-* 新しく加えたチェック部分において、proof_tree.nodes とやっているならば、それはassumpも含んでしまっている。
+* contradictionを出す
+    - proof_tree_generatorsにおいて，contradiction以外の場合，consistentであることを確かめる．
+    - proof_tree_generatorsにおいて，is_consistentチェックを外す．
+* 新しく加えたチェック部分において、proof_tree.nodes とやっているならば、それはassumpも含んでしまっている?
 * checkersの整理
 * speedup
+    * distractor側も，generate()が非効率になっていないか？
 * timeout戻す
 
 ## done
