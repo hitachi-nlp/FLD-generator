@@ -798,12 +798,13 @@ def _generate_stem(arguments: List[Argument],
                                                        if formula.rep != cur_conclusion.rep]
                                 added_root_formula = next_arg_pulled.conclusion
 
-                                is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
+                                is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
                                     leaf_formulas,
                                     added_leaf_formulas,
                                     [],
+                                    added_root_formula,
+                                    proof_tree.root_node.formula,
                                     next_arg_pulled,
-                                    added_root_formula
                                 )
                                 if is_smaller_proofs_emerged:
                                     logger.warning('(_generate_stem) continue to the next mapping because smaller proofs have emerged')
@@ -1109,12 +1110,13 @@ def _extend_branches(proof_tree: ProofTree,
                             added_root_formula = proof_tree.root_node.formula
 
                             # SLOW
-                            is_smaller_proofs_emerged, logs = _smaller_proofs_emerged(
+                            is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
                                 leaf_formulas,
                                 added_leaf_formulas,
                                 [deleted_leaf_node],
+                                added_root_formula,
+                                proof_tree.root_node.formula,
                                 next_arg_pulled,
-                                added_root_formula
                             )
                             if is_smaller_proofs_emerged:
                                 logger.warning('(_extend_branches) continue to the next mapping because smaller proofs have emerged')
@@ -1391,11 +1393,35 @@ def _fix_illegal_intermediate_constants(
 
 
 @profile
-def _smaller_proofs_emerged(leafs: List[Formula],
-                            new_leafs: List[Formula],
-                            deleted_leafs: List[Formula],
-                            new_argument: Argument,
-                            new_root: Formula) -> Tuple[bool, List[str]]:
+def _will_have_smaller_proofs(leafs: List[Formula],
+                              new_leafs: List[Formula],
+                              deleted_leafs: List[Formula],
+                              new_root: Formula,
+                              org_root: Formula,
+                              new_argument: Argument,
+                              check_org=True) -> Tuple[bool, List[str]]:
+    if check_org:
+        org_is_provable, org_dropped_leaf = provable_from_incomplete_facts(
+            leafs,
+            [],
+            org_root,
+        )
+        if org_is_provable:
+            logger.fatal('The original formulas have smaller proofs, as follows. We do not expect this situation because we are checking the new formula everytime it is added.')
+
+            logger.info('leaf formulas:')
+            for formula in leafs:
+                logger.info(f'    {formula.rep}')
+
+            logger.info('droppable formulas:')
+            for formula in [org_dropped_leaf]:
+                logger.info(f'    {formula.rep}')
+
+            logger.info('hypothesis:')
+            logger.info('    ' + str(new_root))
+
+            raise Exception()
+
     all_leafs: List[Formula] = [
         leaf for leaf in leafs + new_leafs
         if leaf.rep not in [_leaf.rep for _leaf in deleted_leafs]
@@ -1408,7 +1434,7 @@ def _smaller_proofs_emerged(leafs: List[Formula],
         new_root,
     )
     if _is_provable:
-        log_msgs.append('smaller proofs have emerged')
+        log_msgs.append('we have smaller proofs')
 
         log_msgs.append('all leaf formulas:')
         for formula in all_leafs:

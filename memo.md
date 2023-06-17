@@ -1,8 +1,5 @@
 # z3 checkers
-* なぜloopにおちいる
-    - leafの時点で別の証明がある．
-        - なぜ？
-        - distractor側は，"leafの時点では無いが"とする．
+* distractor側も，generate()が非効率になっていないか？
 * 新しく加えたチェック部分において、proof_tree.nodes とやっているならば、それはassumpも含んでしまっている。
 * checkersの整理
 * speedup

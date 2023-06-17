@@ -112,7 +112,8 @@ class FormulaDistractor(ABC):
 def _new_distractor_formula_is_ok(new_distractor: Formula,
                                   existing_distractors: List[Formula],
                                   proof_tree: ProofTree,
-                                  allow_smaller_proofs=False) -> bool:
+                                  allow_smaller_proofs=False,
+                                  check_org=True) -> bool:
 
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
@@ -137,13 +138,17 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
         return False
 
     # The tree will become inconsistent "by adding" distractor formulas.
-    original_tree_is_consistent = is_consistent_formula_set(leaf_formulas_in_tree)
+    original_tree_is_consistent = check_org or is_consistent_formula_set(leaf_formulas_in_tree)
+    if check_org and not original_tree_is_consistent:
+        raise Exception()
     if original_tree_is_consistent and\
             not is_consistent_formula_set([new_distractor] + existing_distractors + leaf_formulas_in_tree):
         return False
 
     # The tree will become inconsistent "by adding" distractor formulas.
     original_tree_is_consistent = is_consistent_formula_set_z3(leaf_formulas_in_tree)
+    if check_org and not original_tree_is_consistent:
+        raise Exception()
     if original_tree_is_consistent and\
             not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):
         logger.warning('reject new distractor because adding it will make leaf formulas and distractors inconsistent')
@@ -167,6 +172,31 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
         #         return False
 
         # -- other proof check --
+        if check_org:
+            org_have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
+                leaf_formulas_in_tree,
+                existing_distractors,
+                hypothesis_formula,
+            )
+            if org_have_smaller_proofs:
+                logger.error('the original positive and distractor formulas have smaller proofs, as follows. this foeces to reject the new distractor whatever it is. We do not expect this situation because we are checking the new formula (a leaf or a distractor) everytime it is added.')
+
+                logger.info('positive formulas:')
+                for formula in leaf_formulas_in_tree:
+                    logger.info('    ' + formula.rep)
+
+                logger.info('distractor formulas:')
+                for formula in existing_distractors:
+                    logger.info('    ' + formula.rep)
+
+                logger.info('droppable formulas:')
+                logger.info('    ' + org_droppable_formula.rep)
+
+                logger.info('hypothesis:')
+                logger.info('    ' + hypothesis_formula.rep)
+
+                raise Exception()
+
         _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
             leaf_formulas_in_tree,
             existing_distractors + [new_distractor],
@@ -182,6 +212,9 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             logger.info('distractor formulas:')
             for formula in existing_distractors + [new_distractor]:
                 logger.info('    ' + formula.rep)
+
+            logger.info('added distractor formulas:')
+            logger.info('    ' + new_distractor.rep)
 
             logger.info('droppable formulas:')
             logger.info('    ' + droppable_formula.rep)
