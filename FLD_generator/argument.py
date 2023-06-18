@@ -82,3 +82,7 @@ class Argument:
             ],
             'conclusion': self.conclusion.rep,
         }
+
+
+def can_induce_contradiction(arg: Argument) -> bool:
+    return arg.id.find('negation_elim') >= 0 or arg.id.find('negation_intro') >= 0

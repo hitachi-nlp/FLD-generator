@@ -171,6 +171,19 @@ def make_combination(elem_generators: List[Callable[[], Iterable[Any]]]) -> Iter
                 yield [head_elem] + tail_elems
 
 
+def make_combination_from_iter(elem_generators: List[Iterable[Any]]) -> Iterable[List[Any]]:
+    head_elem_generator = elem_generators[0]
+    tail_elem_generators = elem_generators[1:]
+
+    if len(tail_elem_generators) == 0:
+        for elem in head_elem_generator:
+            yield [elem]
+    else:
+        for head_elem in head_elem_generator:
+            for tail_elems in make_combination_from_iter(tail_elem_generators):
+                yield [head_elem] + tail_elems
+
+
 @profile
 def chained_sampling_from_weighted_iterators(iterators: List[Iterable[Any]], weights: List[float]) -> Iterable[Any]:
     sum_weights = sum(weights)
