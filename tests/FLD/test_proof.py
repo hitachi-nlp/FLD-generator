@@ -3,7 +3,7 @@ from FLD_generator.formula import Formula
 from pprint import pprint
 
 
-def test_tree_copy():
+def test_proof_tree():
     """
     n_assump -> n0 -> n2 -> n4
                 n1 ->
@@ -23,14 +23,18 @@ def test_tree_copy():
     n2.set_parent(n4)
     n3.set_parent(n4)
 
-    orig_tree = ProofTree(nodes=[n0, n1, n2, n3, n4, n_assump])
-    copy_tree = orig_tree.copy()
+    tree = ProofTree(nodes=[n0, n1, n2, n3, n4, n_assump])
 
-    orig_tree_traversed_nodes = list(orig_tree.depth_first_traverse())
+    assert set(tree.leaf_nodes) == {n_assump, n0, n1, n3}
+
+    tree_traversed_nodes = list(tree.depth_first_traverse())
+    assert list(tree_traversed_nodes) == [n0, n1, n2, n3, n4]
+
+    # -- test copy --
+    copy_tree = tree.copy()
     copy_tree_traversed_nodes = list(copy_tree.depth_first_traverse())
-
-    assert len(orig_tree_traversed_nodes) == len(copy_tree_traversed_nodes)
-    for orig_node, copy_node in zip(orig_tree_traversed_nodes, copy_tree_traversed_nodes):
+    assert len(tree_traversed_nodes) == len(copy_tree_traversed_nodes)
+    for orig_node, copy_node in zip(tree_traversed_nodes, copy_tree_traversed_nodes):
         print(orig_node)
         assert orig_node != copy_node\
             and orig_node.formula == copy_node.formula
@@ -45,4 +49,4 @@ def test_tree_copy():
 
 
 if __name__ == '__main__':
-    test_tree_copy()
+    test_proof_tree()
