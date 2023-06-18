@@ -64,10 +64,14 @@
         * 現状はleaf_nodesに含まれている．
     - assump
         1. いったん，現状の仕様でいく．
-        2. [todo] 仕様を固めなおす．
+        2. [rejected] 仕様を固めなおす．
+            - [rejected] 現状で正しい．
             - 現状の課題
                 - .leaf_nodes でassumpもその親も入っている．これは矛盾．
                 - .leaf_nodesではassumpが入っているが，traverseでは入っていない．これも矛盾．
+            - 決めるべきこと
+                - traverse系にassumpを含めるか？
+                - .leaf_nodes は誰をいれるか？
 * [todo] チェック
     - 最終的な証明が無矛盾していないか？ (途中1ステップごとに却下しているので，かならず無矛盾なはず)
     - contradictionが出るか？
