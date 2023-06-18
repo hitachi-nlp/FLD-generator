@@ -31,6 +31,7 @@ from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
 from FLD_generator.utils import run_with_timeout_retry, RetryAndTimeoutFailure, make_pretty_msg
+from FLD_generator.argument import can_induce_contradiction as is_argument_contradiction
 import kern_profiler
 
 
@@ -118,6 +119,8 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
     hypothesis_formula = proof_tree.root_node.formula
+    tree_have_contradiction_arg = any(is_argument_contradiction(node.argument)
+                                      for node in proof_tree.nodes if node.argument is not None)
 
     if is_tautology(new_distractor) or is_contradiction(new_distractor):
         return False
@@ -146,11 +149,11 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     #     return False
 
     # The tree will become inconsistent "by adding" distractor formulas.
-    original_tree_is_consistent = is_consistent_formula_set_z3(leaf_formulas_in_tree)
-    if check_org and not original_tree_is_consistent:
+    original_tree_consistency_is_ok = tree_have_contradiction_arg or is_consistent_formula_set_z3(leaf_formulas_in_tree)
+    if check_org and not original_tree_consistency_is_ok:
         raise Exception()
-    if original_tree_is_consistent and\
-            not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):
+    if original_tree_consistency_is_ok\
+            and not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):
         logger.warning('reject new distractor because adding it will make leaf formulas and distractors inconsistent')
         for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
             logger.info(dist)
@@ -162,16 +165,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             # raise FormulaDistractorGenerationFailure(f'The intermediate_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
             return False
 
-    if not allow_smaller_proofs:
-        # -- we think this strength check is just less then the "other proof check" below --
-        # for tree_formula in [node.formula for node in proof_tree.nodes]:
-        #     if is_stronger_z3(new_distractor, tree_formula) or is_equiv_z3(new_distractor, tree_formula):
-        #         logger.warning('reject new distractor %s because it is stronger or equals to a leaf formula %s',
-        #                        new_distractor.rep,
-        #                        tree_formula.rep)
-        #         return False
-
-        # -- other proof check --
+    if not allow_smaller_proofs and not tree_have_contradiction_arg:
         if check_org:
             org_have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
                 leaf_formulas_in_tree,

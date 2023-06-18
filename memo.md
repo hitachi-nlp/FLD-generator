@@ -57,13 +57,14 @@
 * contradictionは？
     * contradiction argumentの両側にある論理式群同士のみ，矛盾が許される．
     * should_consistent_formula_sets みたいなものを用意すれば良い．
+    * 反論: 「assumpをleafとしない」というだけで終わる気がしてきている．
 * assumpは？
     - step_consistency_checkingに入れて良い．
         * assumpといっても，leaf_nodeの特別なバージョンでしかない．
         * 矛盾が許される場合は，上記の「contradictionは？」で尽くされており，新たに条件を加える必要はない．
         * 現状はleaf_nodesに含まれている．
     - assump
-        1. いったん，現状の仕様でいく．
+        1. 一旦，現状の仕様でいく．
         2. [rejected] 仕様を固めなおす．
             - [rejected] 現状で正しい．
             - 現状の課題

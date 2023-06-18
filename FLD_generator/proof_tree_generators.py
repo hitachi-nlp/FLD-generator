@@ -19,7 +19,7 @@ from .formula_checkers import (
     is_consistent_set_z3 as is_consistent_formula_set_z3,
     is_new as is_formula_new,
 )
-from .argument import Argument
+from .argument import Argument, can_induce_contradiction as can_argument_induce_contradiction
 from .argument_checkers import (
     is_senseful as is_argument_senseful,
 )
@@ -35,7 +35,7 @@ from .interpretation import (
     generate_quantifier_axiom_arguments,
 )
 # from .utils import DelayedLogger
-from .proof import ProofTree, ProofNode
+from .proof import ProofTree, ProofNode, find_must_consistent_node_sets
 from .exception import FormalLogicExceptionBase
 from .utils import (
     weighted_shuffle,
@@ -770,39 +770,52 @@ def _generate_stem(arguments: List[Argument],
 
                             other_premises = [premise for premise in next_arg_pulled.premises
                                               if premise.rep != cur_conclusion.rep]
+
                             if not _is_formulas_new(other_premises, formulas_in_tree):
                                 # If any of other premises already exists in the tree, it will lead to a loop.
                                 # We want to avoid a loop.
                                 rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
                                 continue
 
-                            # if not is_consistent_formula_set(other_premises + leaf_formulas_in_tree):
-                            #     # other_premises can be the leaf of the tree.
-                            #     # We reject tree with inconsistent formulas.
-                            #     # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                            #     # Notice that we stil allow inconsistency between non-leaf nodes
-                            #     rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
-                            #     continue
+                            new_leaf_formulas = [formula for formula in next_arg_pulled.premises
+                                                 if formula.rep != cur_conclusion.rep]
 
-                            if not is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree):
-                                logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
-                                for elem in other_premises + leaf_formulas_in_tree:
-                                    logger.info(str(elem))
-                                rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
-                                is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)
-                                continue
+                            new_leafs_induce_inconsistency = False
+                            if not can_argument_induce_contradiction(next_arg_pulled):
 
-                            if not allow_smaller_proofs:
+                                for must_consistent_nodes in find_must_consistent_node_sets(proof_tree):
+                                    must_consistent_formulas = [node.formula for node in must_consistent_nodes]
+                                    if not is_consistent_formula_set_z3(must_consistent_formulas + new_leaf_formulas):
+                                        new_leafs_induce_inconsistency = True
+                                        break
+
+                                if new_leafs_induce_inconsistency:
+                                    logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
+
+                                    logger.info('formulas in the tree that must be consistent:')
+                                    for formula in must_consistent_formulas:
+                                        logger.info('    %s', formula.rep)
+
+                                    logger.info('added leaf formulas:')
+                                    for formula in new_leaf_formulas:
+                                        logger.info('    %s', formula.rep)
+
+                                    rejection_stats['is_consistent_formula_set_z3(must_consistent_formulas + new_leaf_formulas)'] += 1
+                                    continue
+
+                            tree_have_contradiction_arg = any(can_argument_induce_contradiction(node.argument)
+                                                              for node in proof_tree.nodes if node.argument is not None)
+                            next_arg_is_contradiction = can_argument_induce_contradiction(next_arg_pulled)
+
+                            if not allow_smaller_proofs and not tree_have_contradiction_arg and not next_arg_is_contradiction:
                                 leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                                added_leaf_formulas = [formula for formula in next_arg_pulled.premises
-                                                       if formula.rep != cur_conclusion.rep]
-                                added_root_formula = next_arg_pulled.conclusion
+                                new_root_formula = next_arg_pulled.conclusion
 
                                 is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
                                     leaf_formulas,
-                                    added_leaf_formulas,
+                                    new_leaf_formulas,
                                     [],
-                                    added_root_formula,
+                                    new_root_formula,
                                     proof_tree.root_node.formula,
                                     next_arg_pulled,
                                 )
@@ -862,7 +875,7 @@ def _generate_stem(arguments: List[Argument],
             if disallow_contradiction_as_hypothesis and proof_tree.root_node.formula.rep == CONTRADICTION:
                 raise GenerateStemFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
 
-            _check_leaf_consistency(proof_tree)
+            # _check_leaf_consistency(proof_tree)
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
 
@@ -969,7 +982,7 @@ def _extend_branches(proof_tree: ProofTree,
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg='couldn\'t extend branch because we found no target leaf nodes'))
 
-            _check_leaf_consistency(proof_tree)
+            # _check_leaf_consistency(proof_tree)
 
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
             return proof_tree
@@ -1079,21 +1092,6 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
-                        # if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
-                        #     # We reject tree with inconsistent leaf nodes.
-                        #     # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                        #     # Notice that we stil allow inconsistency between non-leaf nodes
-                        #     rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
-                        #     continue
-
-                        if not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree):
-                            logger.warning('-- (_extend_branches) reject the argument because adding it will make the proof tree inconsistent --')
-                            for elem in next_arg_pulled.premises + leaf_formulas_in_tree:
-                                logger.info(str(elem))
-                            rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
-                            is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree)
-                            continue
-
                         if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
                             # If any of the premises are already in the tree, it will lead to a loop.
                             # We want to avoid a loop.
@@ -1101,20 +1099,41 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
-                        if not allow_smaller_proofs:
+                        # if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
+                        #     # We reject tree with inconsistent leaf nodes.
+                        #     # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
+                        #     # Notice that we stil allow inconsistency between non-leaf nodes
+                        #     rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
+                        #     continue
+
+                        tree_have_contradiction_arg = any(can_argument_induce_contradiction(node.argument)
+                                                          for node in proof_tree.nodes if node.argument is not None)
+                        next_arg_is_contradiction = can_argument_induce_contradiction(next_arg_pulled)
+
+                        if not tree_have_contradiction_arg and not next_arg_is_contradiction\
+                                and not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree):
+                            logger.warning('-- (_extend_branches) reject the argument because adding it will make the proof tree inconsistent --')
+                            for elem in next_arg_pulled.premises + leaf_formulas_in_tree:
+                                logger.info(str(elem))
+                            rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
+                            # import pudb
+                            # pudb.set_trace()
+                            # raise Exception('unexpected because we are using axioms which will not lead to inconsistency (except when contradiction arguments are used)')
+                            continue
+
+                        if not allow_smaller_proofs and not tree_have_contradiction_arg and not next_arg_is_contradiction:
                             leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                            added_leaf_formulas = next_arg_pulled.premises
+                            new_leaf_formulas = next_arg_pulled.premises
                             deleted_leaf_node = target_leaf_node.formula
                             deleted_leaf_node = next_arg_pulled.conclusion
                             assert target_leaf_node.formula.rep == next_arg_pulled.conclusion.rep
-                            added_root_formula = proof_tree.root_node.formula
+                            new_root_formula = proof_tree.root_node.formula
 
-                            # SLOW
                             is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
                                 leaf_formulas,
-                                added_leaf_formulas,
+                                new_leaf_formulas,
                                 [deleted_leaf_node],
-                                added_root_formula,
+                                new_root_formula,
                                 proof_tree.root_node.formula,
                                 next_arg_pulled,
                             )
@@ -1161,7 +1180,7 @@ def _extend_branches(proof_tree: ProofTree,
             else:
                 raise ExtendBranchesFailure(msg)
 
-    _check_leaf_consistency(proof_tree)
+    # _check_leaf_consistency(proof_tree)
     proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
 
     if return_alignment:
@@ -1236,10 +1255,10 @@ def _shuffle_arguments(arguments: List[Argument],
     yield from _shuffle(arguments, weights=_weights)
 
 
-def _check_leaf_consistency(proof_tree: ProofTree) -> None:
-    # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
-    # assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
-    assert is_consistent_formula_set_z3([node.formula for node in proof_tree.leaf_nodes])
+# def _check_leaf_consistency(proof_tree: ProofTree) -> None:
+#     # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
+#     # assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
+#     assert is_consistent_formula_set_z3([node.formula for node in proof_tree.leaf_nodes])
 
 
 def _is_intermediate_constants_used(next_arg_pulled: Argument,
