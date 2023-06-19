@@ -198,6 +198,7 @@ class NLProofSDataset:
                  word_bank: Optional[WordBank] = None,
                  num_distractors: Optional[List[int]] = None,
                  num_translation_distractors: Optional[List[int]] = None,
+                 allow_inconsistency=False,
                  allow_smaller_proofs=False,
                  version: str = '0.0',
                  log_stats=False,
@@ -227,6 +228,7 @@ class NLProofSDataset:
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
         self.num_translation_distractors = num_translation_distractors or [0]
+        self.allow_inconsistency = allow_inconsistency
         self.allow_smaller_proofs = allow_smaller_proofs
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
@@ -277,6 +279,7 @@ class NLProofSDataset:
                 _num_distractors,
                 _num_translation_distractors,
                 depth_1_reference_weight=self._depth_1_reference_weight,
+                allow_inconsistency=self.allow_inconsistency,
                 allow_smaller_proofs=self.allow_smaller_proofs,
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
@@ -377,7 +380,7 @@ class NLProofSDataset:
 
                 for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
                     sent = sent_match.group().rstrip(' ')
-                    if sent != _DUMMY_SENTENCE and sent not in context:
+                    if not sent.find(_DUMMY_SENTENCE) >= 0 and sent not in context:
                         raise Exception(f'A sentence in the negative context is not in the original context. This is strange. The sentence is as follows: "{sent}"')
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
@@ -395,65 +398,41 @@ class NLProofSDataset:
             all_negative_formulas = formula_distractors
             all_formulas = all_positive_formulas + all_negative_formulas
 
-            # -- check whether the formulas are consistent --
-            if not check_sat(all_formulas):
-                logger.warning('-- skip the sample because the formula are inconsistent')
-                logger.info('all positive formulas:')
-                for formula in all_positive_formulas:
-                    logger.info('    %s', formula.rep)
-
-                logger.info('all negative formulas:')
-                for formula in all_negative_formulas:
-                    logger.info('    %s', formula.rep)
-
-            # -- check consistency of proofs --
-            droppable_formulas = []
-            should_skip = False
-            msg = None
             if proof_stance == ProofStance.PROVED:
-                if is_disprovable(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be disproved.'
-                    should_skip = True
-                elif is_unknown(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
-                    should_skip = True
-                elif not self.allow_smaller_proofs:
+                assert is_provable(all_positive_formulas, hypothesis_formula)
+            elif proof_stance == ProofStance.DISPROVED:
+                assert is_disprovable(all_positive_formulas, hypothesis_formula)
+            elif proof_stance == ProofStance.UNKNOWN:
+                assert is_unknown(all_positive_formulas, hypothesis_formula)
+
+            if not self.allow_inconsistency:
+                assert check_sat(all_formulas)
+
+            if not self.allow_smaller_proofs:
+                droppable_formulas = []
+                should_skip = False
+                msg = None
+                if proof_stance == ProofStance.PROVED:
                     _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
                         all_positive_formulas,
                         all_negative_formulas,
                         hypothesis_formula,
                     )
-                    if _have_smaller_proofs:
-                        msg = '-- skip the sample because we have smaller proofs.'
-                        should_skip = True
-                        droppable_formulas = [droppable_formula]
-                        break
+                    assert not _have_smaller_proofs
 
-            elif proof_stance == ProofStance.DISPROVED:
-                if is_provable(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved.'
-                    should_skip = True
-                elif is_unknown(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis is unknown.'
-                    should_skip = True
-                elif not self.allow_smaller_proofs:
+                elif proof_stance == ProofStance.DISPROVED:
                     _have_smaller_proofs, droppable_formula = disprovable_from_incomplete_facts(
                         all_positive_formulas,
                         all_negative_formulas,
                         hypothesis_formula,
                     )
-                    if _have_smaller_proofs:
-                        msg = '-- skip the sample because we have smaller proofs'
-                        should_skip = True
-                        droppable_formulas = [droppable_formula]
-                        break
-
-            elif proof_stance == ProofStance.UNKNOWN:
-                if not is_unknown(all_formulas, hypothesis_formula):
-                    msg = f'-- skip the sample because the label is {proof_stance.value} but the hypothesis can be proved or disproved.'
-                    should_skip = True
-            else:
-                raise Exception()
+                    # should_skip =  True
+                    # if _have_smaller_proofs:
+                    #     msg = '-- skip the sample because we have smaller proofs'
+                    #     should_skip = True
+                    #     droppable_formulas = [droppable_formula]
+                    #     break
+                    assert not _have_smaller_proofs
 
             if should_skip:
                 logger.warning(msg)
@@ -751,13 +730,13 @@ class NLProofSDataset:
                 if self._is_root(node, proof_tree):
                     id_ = 'hypothesis'
 
+                elif self._is_assump(node):
+                    id_ = f'assump{i_assump}'
+                    i_assump += 1
+
                 elif self._is_leaf(node, proof_tree):
-                    if self._is_assump(node):
-                        id_ = f'assump{i_assump}'
-                        i_assump += 1
-                    else:
-                        id_ = f'sent{i_sent}'
-                        i_sent += 1
+                    id_ = f'sent{i_sent}'
+                    i_sent += 1
 
                 elif self._is_distractor(node):
                     id_ = f'sent{i_sent}'
@@ -838,16 +817,16 @@ class NLProofSDataset:
                 premise_str = ' & '.join([f'[{_id}]' for _id in assump_ids] + child_ids)
                 conclusion_str = 'hypothesis'
 
-            elif self._is_leaf(node, proof_tree):
-                if self._is_assump(node):
-                    premise_str = 'void'
-                    assump_id = node2id[node]
-                    if formula_rep:
-                        conclusion_str = f'{assump_id}: {node.formula.rep}'
-                    else:
-                        conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
+            elif self._is_assump(node):
+                premise_str = 'void'
+                assump_id = node2id[node]
+                if formula_rep:
+                    conclusion_str = f'{assump_id}: {node.formula.rep}'
                 else:
-                    continue
+                    conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
+
+            elif self._is_leaf(node, proof_tree):
+                continue
 
             elif self._is_int(node, proof_tree):
                 node_id = node2id[node]
@@ -921,13 +900,14 @@ class NLProofSDataset:
         return isinstance(node, ProofNode) and node == proof_tree.root_node
 
     def _is_leaf(self, node: Node, proof_tree: ProofTree) -> bool:
-        return isinstance(node, ProofNode) and node in proof_tree.leaf_nodes
+        return isinstance(node, ProofNode) and node.is_leaf
 
     def _is_assump(self, node: Node) -> bool:
-        return node.assump_parent is not None
+        return isinstance(node, ProofNode) and node.is_assump
 
     def _is_int(self, node: Node, proof_tree: ProofTree) -> bool:
-        return isinstance(node, ProofNode) and (not self._is_root(node, proof_tree) and not self._is_leaf(node, proof_tree))
+        return isinstance(node, ProofNode)\
+            and (not self._is_root(node, proof_tree) and not self._is_leaf(node, proof_tree) and not self._is_assump(node))
 
     def _is_distractor(self, node: Node) -> bool:
         return isinstance(node, _DistractorFakeNode)

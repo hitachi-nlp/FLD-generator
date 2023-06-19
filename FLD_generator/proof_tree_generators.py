@@ -19,7 +19,7 @@ from .formula_checkers import (
     is_consistent_set_z3 as is_consistent_formula_set_z3,
     is_new as is_formula_new,
 )
-from .argument import Argument, can_induce_contradiction as can_argument_induce_contradiction
+from .argument import Argument
 from .argument_checkers import (
     is_senseful as is_argument_senseful,
 )
@@ -35,7 +35,7 @@ from .interpretation import (
     generate_quantifier_axiom_arguments,
 )
 # from .utils import DelayedLogger
-from .proof import ProofTree, ProofNode, find_must_consistent_node_sets
+from .proof import ProofTree, ProofNode
 from .exception import FormalLogicExceptionBase
 from .utils import (
     weighted_shuffle,
@@ -52,7 +52,7 @@ from .formula import (
     PREDICATES,
     CONSTANTS,
     VARIABLES,
-    CONTRADICTION,
+    is_contradiction_symbol,
 )
 from FLD_generator.utils import provable_from_incomplete_facts
 from .formula_checkers.z3_checkers import is_provable, is_tautology, is_contradiction
@@ -429,6 +429,7 @@ def _generate_tree(arguments: List[Argument],
                    ng_formulas: Optional[List[Formula]] = None,
                    disallow_contradiction_as_hypothesis=False,
                    allow_reference_arguments_when_depth_1=True,
+                   allow_inconsistency=False,
                    allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
                    allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
@@ -439,6 +440,7 @@ def _generate_tree(arguments: List[Argument],
         depth_1_reference_weight=depth_1_reference_weight,
         elim_dneg=elim_dneg,
         disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis,
+        allow_inconsistency=allow_inconsistency,
         allow_smaller_proofs=allow_smaller_proofs,
 
         # since the branch extension may recover the illegal intermediate constants.
@@ -455,6 +457,7 @@ def _generate_tree(arguments: List[Argument],
                 depth_limit=proof_tree.depth,
                 elim_dneg=elim_dneg,
                 ng_formulas=ng_formulas,
+                allow_inconsistency=allow_inconsistency,
                 allow_smaller_proofs=allow_smaller_proofs,
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
@@ -473,6 +476,7 @@ def _generate_tree(arguments: List[Argument],
                 proof_tree,
                 arguments,
                 argument_weights=argument_weights,
+                allow_inconsistency=allow_inconsistency,
                 allow_smaller_proofs=allow_smaller_proofs,
                 elim_dneg=elim_dneg,
             )
@@ -528,6 +532,7 @@ def _generate_stem(arguments: List[Argument],
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
+                   allow_inconsistency=False,
                    allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
                    allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
@@ -591,7 +596,7 @@ def _generate_stem(arguments: List[Argument],
 
     def find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
         for descendant in node.descendants:
-            if descendant.is_leaf and descendant.assump_parent is None:
+            if descendant.is_leaf:
                 yield descendant
 
     def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
@@ -665,7 +670,6 @@ def _generate_stem(arguments: List[Argument],
                 break
 
             formulas_in_tree = [node.formula for node in proof_tree.nodes]
-            leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
             cur_conclusion = cur_conclusion_node.formula
             cur_possible_assumption_nodes = list(find_possible_assumption_nodes(cur_conclusion_node))
@@ -743,16 +747,11 @@ def _generate_stem(arguments: List[Argument],
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
-                            # if is_intermediate_constants_used:
-                            #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
-                            #     continue
-
-                            if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                            if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas):
                                 rejection_stats['any(is_tautology(formula) for formula in next_arg_pulled.all_formulas)'] += 1
                                 continue
 
-                            if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                            if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if not is_contradiction_symbol(formula)):
                                 rejection_stats['any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas)'] += 1
                                 continue
 
@@ -777,53 +776,48 @@ def _generate_stem(arguments: List[Argument],
                                 rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
                                 continue
 
-                            new_leaf_formulas = [formula for formula in next_arg_pulled.premises
-                                                 if formula.rep != cur_conclusion.rep]
+                            if not _is_argument_negation_elim(next_arg_pulled):
+                                org_leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                                new_leaf_formulas = [formula for formula in next_arg_pulled.premises
+                                                     if formula.rep != cur_conclusion.rep]
+                                deleted_leaf_formulas = list(next_arg_pulled.assumptions.values())
+                                new_root_formula = next_arg_pulled.conclusion
 
-                            new_leafs_induce_inconsistency = False
-                            if not can_argument_induce_contradiction(next_arg_pulled):
+                                remaining_leaf_formulas = [formula for formula in org_leaf_formulas + new_leaf_formulas
+                                                           if formula.rep not in {_formula.rep for _formula in deleted_leaf_formulas}]
 
-                                for must_consistent_nodes in find_must_consistent_node_sets(proof_tree):
-                                    must_consistent_formulas = [node.formula for node in must_consistent_nodes]
-                                    if not is_consistent_formula_set_z3(must_consistent_formulas + new_leaf_formulas):
-                                        new_leafs_induce_inconsistency = True
-                                        break
-
-                                if new_leafs_induce_inconsistency:
+                                if not allow_inconsistency and not is_consistent_formula_set_z3(remaining_leaf_formulas):
                                     logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
 
-                                    logger.info('formulas in the tree that must be consistent:')
-                                    for formula in must_consistent_formulas:
+                                    logger.info('original leaf formulas')
+                                    for formula in org_leaf_formulas:
                                         logger.info('    %s', formula.rep)
 
                                     logger.info('added leaf formulas:')
                                     for formula in new_leaf_formulas:
                                         logger.info('    %s', formula.rep)
 
-                                    rejection_stats['is_consistent_formula_set_z3(must_consistent_formulas + new_leaf_formulas)'] += 1
+                                    logger.info('deleted leaf formulas:')
+                                    for formula in deleted_leaf_formulas:
+                                        logger.info('    %s', formula.rep)
+
+                                    rejection_stats['is_consistent_formula_set_z3(leaf_formulas + new_leaf_formulas)'] += 1
                                     continue
 
-                            tree_have_contradiction_arg = any(can_argument_induce_contradiction(node.argument)
-                                                              for node in proof_tree.nodes if node.argument is not None)
-                            next_arg_is_contradiction = can_argument_induce_contradiction(next_arg_pulled)
-
-                            if not allow_smaller_proofs and not tree_have_contradiction_arg and not next_arg_is_contradiction:
-                                leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                                new_root_formula = next_arg_pulled.conclusion
-
-                                is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
-                                    leaf_formulas,
-                                    new_leaf_formulas,
-                                    [],
-                                    new_root_formula,
-                                    proof_tree.root_node.formula,
-                                    next_arg_pulled,
-                                )
-                                if is_smaller_proofs_emerged:
-                                    logger.warning('(_generate_stem) continue to the next mapping because smaller proofs have emerged')
-                                    for log in logs:
-                                        logger.info(log)
-                                    continue
+                                if not allow_smaller_proofs:
+                                    is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
+                                        org_leaf_formulas,
+                                        new_leaf_formulas,
+                                        deleted_leaf_formulas,
+                                        new_root_formula,
+                                        proof_tree.root_node.formula,
+                                        next_arg_pulled,
+                                    )
+                                    if is_smaller_proofs_emerged:
+                                        logger.warning('(_generate_stem) continue to the next mapping because smaller proofs have emerged')
+                                        for log in logs:
+                                            logger.info(log)
+                                        continue
 
                             is_arg_found = True
                             break
@@ -872,8 +866,8 @@ def _generate_stem(arguments: List[Argument],
 
         if is_tree_done:
 
-            if disallow_contradiction_as_hypothesis and proof_tree.root_node.formula.rep == CONTRADICTION:
-                raise GenerateStemFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
+            if disallow_contradiction_as_hypothesis and is_contradiction_symbol(proof_tree.root_node.formula):
+                raise GenerateStemFailure(f'Contradiction {proof_tree.root_node.formula.rep} as the hypothesis is disallowed.')
 
             # _check_leaf_consistency(proof_tree)
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
@@ -907,6 +901,7 @@ def _extend_branches(proof_tree: ProofTree,
                      ng_formulas: Optional[List[Formula]] = None,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
+                     allow_inconsistency=False,
                      allow_smaller_proofs=False,
                      return_at_best=False,
                      return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
@@ -948,12 +943,7 @@ def _extend_branches(proof_tree: ProofTree,
             break
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
-        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
-
-        current_leaf_nodes = [
-            node for node in proof_tree.leaf_nodes
-            if node.assump_parent is None  # assumptions shoud keep beeing leaf
-        ]
+        current_leaf_nodes = proof_tree.leaf_nodes
 
         if start_leaf_nodes is not None:
             # The latter for when the tree is updated
@@ -1076,11 +1066,11 @@ def _extend_branches(proof_tree: ProofTree,
                         #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
                         #     continue
 
-                        if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                        if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas):
                             rejection_stats['any(is_tautology(formula) for formula in next_arg_pulled.all_formulas)'] += 1
                             continue
 
-                        if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if formula.rep != CONTRADICTION):
+                        if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if not is_contradiction_symbol(formula)):
                             rejection_stats['any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas)'] += 1
                             continue
 
@@ -1099,49 +1089,47 @@ def _extend_branches(proof_tree: ProofTree,
                             rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
                             continue
 
-                        # if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
-                        #     # We reject tree with inconsistent leaf nodes.
-                        #     # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                        #     # Notice that we stil allow inconsistency between non-leaf nodes
-                        #     rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
-                        #     continue
-
-                        tree_have_contradiction_arg = any(can_argument_induce_contradiction(node.argument)
-                                                          for node in proof_tree.nodes if node.argument is not None)
-                        next_arg_is_contradiction = can_argument_induce_contradiction(next_arg_pulled)
-
-                        if not tree_have_contradiction_arg and not next_arg_is_contradiction\
-                                and not is_consistent_formula_set_z3(next_arg_pulled.premises + leaf_formulas_in_tree):
-                            logger.warning('-- (_extend_branches) reject the argument because adding it will make the proof tree inconsistent --')
-                            for elem in next_arg_pulled.premises + leaf_formulas_in_tree:
-                                logger.info(str(elem))
-                            rejection_stats['is_consistent_formula_set_z3(other_premises + leaf_formulas_in_tree)'] += 1
-                            # import pudb
-                            # pudb.set_trace()
-                            # raise Exception('unexpected because we are using axioms which will not lead to inconsistency (except when contradiction arguments are used)')
-                            continue
-
-                        if not allow_smaller_proofs and not tree_have_contradiction_arg and not next_arg_is_contradiction:
-                            leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                        if not _is_argument_negation_elim(next_arg_pulled):
+                            org_leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                             new_leaf_formulas = next_arg_pulled.premises
-                            deleted_leaf_node = target_leaf_node.formula
-                            deleted_leaf_node = next_arg_pulled.conclusion
-                            assert target_leaf_node.formula.rep == next_arg_pulled.conclusion.rep
+                            deleted_leaf_formulas = [target_leaf_node.formula] + list(next_arg_pulled.assumptions.values())
                             new_root_formula = proof_tree.root_node.formula
+                            remaining_leaf_formulas = [formula for formula in org_leaf_formulas + new_leaf_formulas
+                                                       if formula.rep not in {_formula.rep for _formula in deleted_leaf_formulas}]
 
-                            is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
-                                leaf_formulas,
-                                new_leaf_formulas,
-                                [deleted_leaf_node],
-                                new_root_formula,
-                                proof_tree.root_node.formula,
-                                next_arg_pulled,
-                            )
-                            if is_smaller_proofs_emerged:
-                                logger.warning('(_extend_branches) continue to the next mapping because smaller proofs have emerged')
-                                for log in logs:
-                                    logger.info(log)
-                                continue
+                            if not allow_inconsistency:
+                                if not is_consistent_formula_set_z3(remaining_leaf_formulas):
+                                    logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
+
+                                    logger.info('original leaf formulas')
+                                    for formula in org_leaf_formulas:
+                                        logger.info('    %s', formula.rep)
+
+                                    logger.info('added leaf formulas:')
+                                    for formula in new_leaf_formulas:
+                                        logger.info('    %s', formula.rep)
+
+                                    logger.info('deleted leaf formulas:')
+                                    for formula in deleted_leaf_formulas:
+                                        logger.info('    %s', formula.rep)
+
+                                    rejection_stats['is_consistent_formula_set_z3([formula for formula in leaf_formulas_org if formula.rep != deleted_leaf_formula.rep] + new_leaf_formulas)'] += 1
+                                    continue
+
+                            if not allow_smaller_proofs:
+                                is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
+                                    org_leaf_formulas,
+                                    new_leaf_formulas,
+                                    deleted_leaf_formulas,
+                                    new_root_formula,
+                                    proof_tree.root_node.formula,
+                                    next_arg_pulled,
+                                )
+                                if is_smaller_proofs_emerged:
+                                    logger.warning('(_extend_branches) continue to the next mapping because smaller proofs have emerged')
+                                    for log in logs:
+                                        logger.info(log)
+                                    continue
 
                         is_arg_found = True
                         break
@@ -1261,13 +1249,13 @@ def _shuffle_arguments(arguments: List[Argument],
 #     assert is_consistent_formula_set_z3([node.formula for node in proof_tree.leaf_nodes])
 
 
-def _is_intermediate_constants_used(next_arg_pulled: Argument,
-                                    proof_tree: ProofTree) -> Tuple[bool, Optional[str], Optional[ProofNode]]:
-    for constant in next_arg_pulled.intermediate_constants:
-        for leaf_node in proof_tree.leaf_nodes:
-            if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
-                return True, constant.rep, leaf_node
-    return False, None, None
+# def _is_intermediate_constants_used(next_arg_pulled: Argument,
+#                                     proof_tree: ProofTree) -> Tuple[bool, Optional[str], Optional[ProofNode]]:
+#     for constant in next_arg_pulled.intermediate_constants:
+#         for leaf_node in proof_tree.leaf_nodes:
+#             if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
+#                 return True, constant.rep, leaf_node
+#     return False, None, None
 
 
 @profile
@@ -1276,6 +1264,7 @@ def _fix_illegal_intermediate_constants(
     arguments: Optional[List[Argument]] = None,
     argument_weights: Optional[Dict[Argument, float]] = None,
     argument_weight_bias_factor=100,
+    allow_inconsistency=False,
     allow_smaller_proofs=False,
     elim_dneg=False,
 ) -> ProofTree:
@@ -1359,6 +1348,8 @@ def _fix_illegal_intermediate_constants(
                         depth_limit=None,
                         start_leaf_nodes=[illegal_node],
                         elim_dneg=elim_dneg,
+
+                        allow_inconsistency=allow_inconsistency,
                         allow_smaller_proofs=allow_smaller_proofs,
                         allow_reference_arguments_when_depth_1=False,
 
@@ -1481,6 +1472,7 @@ def _validate_illegal_intermediate_constants(
     proof_tree: ProofTree,
     arguments: List[Argument],
     argument_weights: Optional[Dict[Argument, float]] = None,
+    allow_inconsistency=False,
     allow_smaller_proofs=False,
     elim_dneg=False
 ) -> ProofTree:
@@ -1493,6 +1485,7 @@ def _validate_illegal_intermediate_constants(
                     proof_tree,
                     arguments=arguments,
                     argument_weights=argument_weights,
+                    allow_inconsistency=allow_inconsistency,
                     allow_smaller_proofs=allow_smaller_proofs,
                     elim_dneg=elim_dneg,
                 )
@@ -1543,6 +1536,14 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
                           for json_obj in json.load(open(config_path))
                           if not json_obj['id'].startswith('__')])
     return arguments
+
+
+def _is_argument_negation_elim(arg: Argument) -> bool:
+    return arg.id.find('negation_elim') >= 0
+
+
+def _is_argument_negation_intro(arg: Argument) -> bool:
+    return arg.id.find('negation_intro') >= 0
 
 
 def build(config_paths: List[str],

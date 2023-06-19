@@ -31,7 +31,6 @@ from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
 from FLD_generator.utils import run_with_timeout_retry, RetryAndTimeoutFailure, make_pretty_msg
-from FLD_generator.argument import can_induce_contradiction as is_argument_contradiction
 import kern_profiler
 
 
@@ -48,6 +47,7 @@ class FormulaDistractor(ABC):
                  proof_tree: ProofTree,
                  size: int,
                  formulas_to_be_sat: Optional[List[Formula]] = None,
+                 allow_inconsistency=False,
                  allow_smaller_proofs=False,
                  max_retry: Optional[int] = None,
                  timeout: Optional[int] = None,
@@ -63,6 +63,7 @@ class FormulaDistractor(ABC):
                 func_kwargs={
                     'no_warning': no_warning,
                     'formulas_to_be_sat': formulas_to_be_sat,
+                    'allow_inconsistency': allow_inconsistency,
                     'allow_smaller_proofs': allow_smaller_proofs,
                 },
                 retry_exception_class=FormulaDistractorGenerationFailure,
@@ -94,6 +95,7 @@ class FormulaDistractor(ABC):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         pass
@@ -113,14 +115,13 @@ class FormulaDistractor(ABC):
 def _new_distractor_formula_is_ok(new_distractor: Formula,
                                   existing_distractors: List[Formula],
                                   proof_tree: ProofTree,
+                                  allow_inconsistency=False,
                                   allow_smaller_proofs=False,
                                   check_org=True) -> bool:
 
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
     hypothesis_formula = proof_tree.root_node.formula
-    tree_have_contradiction_arg = any(is_argument_contradiction(node.argument)
-                                      for node in proof_tree.nodes if node.argument is not None)
 
     if is_tautology(new_distractor) or is_contradiction(new_distractor):
         return False
@@ -131,33 +132,25 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
     if not is_ok_formula_set([new_distractor] + existing_distractors + formulas_in_tree):
         return False
 
-    # if not is_consistent_formula_set([new_distractor] + existing_distractors):
-    #     return False
+    if not allow_inconsistency:
 
-    if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
-        logger.warning('reject new distractor because adding it will make distractors inconsistent')
-        for dist in [new_distractor] + existing_distractors:
-            logger.info(dist)
-        return False
+        if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
+            logger.warning('reject new distractor because adding it will make distractors inconsistent')
+            for dist in [new_distractor] + existing_distractors:
+                logger.info(dist)
+            return False
 
-    # # The tree will become inconsistent "by adding" distractor formulas.
-    # original_tree_is_consistent = check_org or is_consistent_formula_set(leaf_formulas_in_tree)
-    # if check_org and not original_tree_is_consistent:
-    #     raise Exception()
-    # if original_tree_is_consistent and\
-    #         not is_consistent_formula_set([new_distractor] + existing_distractors + leaf_formulas_in_tree):
-    #     return False
-
-    # The tree will become inconsistent "by adding" distractor formulas.
-    original_tree_consistency_is_ok = tree_have_contradiction_arg or is_consistent_formula_set_z3(leaf_formulas_in_tree)
-    if check_org and not original_tree_consistency_is_ok:
-        raise Exception()
-    if original_tree_consistency_is_ok\
-            and not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):
-        logger.warning('reject new distractor because adding it will make leaf formulas and distractors inconsistent')
-        for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
-            logger.info(dist)
-        return False
+        # The tree will become inconsistent "by adding" distractor formulas.
+        # original_tree_consistency_is_ok = tree_have_contradiction_arg or is_consistent_formula_set_z3(leaf_formulas_in_tree)
+        original_tree_consistency_is_ok = is_consistent_formula_set_z3(leaf_formulas_in_tree)
+        if check_org and not original_tree_consistency_is_ok:
+            raise Exception()
+        if original_tree_consistency_is_ok\
+                and not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):
+            logger.warning('reject new distractor because adding it will make leaf formulas and distractors inconsistent')
+            for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
+                logger.info(dist)
+            return False
 
     intermediate_constant_reps = {constant.rep for constant in proof_tree.intermediate_constants}
     for distractor_constant in new_distractor.constants:
@@ -165,7 +158,8 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             # raise FormulaDistractorGenerationFailure(f'The intermediate_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
             return False
 
-    if not allow_smaller_proofs and not tree_have_contradiction_arg:
+    # if not allow_smaller_proofs and not tree_have_contradiction_arg:
+    if not allow_smaller_proofs:
         if check_org:
             org_have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
                 leaf_formulas_in_tree,
@@ -231,6 +225,7 @@ class UnkownPASDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -315,6 +310,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -399,6 +395,7 @@ class SameFormUnkownInterprandsDistractor(FormulaDistractor):
                     if not _new_distractor_formula_is_ok(transformed_formula,
                                                          distractor_formulas + formulas_to_be_sat,
                                                          proof_tree,
+                                                         allow_inconsistency=allow_inconsistency,
                                                          allow_smaller_proofs=allow_smaller_proofs):
                         continue
 
@@ -459,6 +456,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -498,6 +496,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                 simplified_formulas = self._simplify_distractor.generate(proof_tree,
                                                                          9999,
                                                                          formulas_to_be_sat=formulas_to_be_sat,
+                                                                         allow_inconsistency=allow_inconsistency,
                                                                          allow_smaller_proofs=allow_smaller_proofs,
                                                                          no_warning=True)[0]
                 prototype_formulas.extend(simplified_formulas)
@@ -630,6 +629,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
                     if not _new_distractor_formula_is_ok(distractor_formula,
                                                          distractor_formulas + formulas_to_be_sat,
                                                          proof_tree,
+                                                         allow_inconsistency=allow_inconsistency,
                                                          allow_smaller_proofs=allow_smaller_proofs):
                         continue
 
@@ -660,6 +660,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -681,6 +682,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
             if not _new_distractor_formula_is_ok(distractor_formula,
                                                  distractor_formulas + formulas_to_be_sat,
                                                  proof_tree,
+                                                 allow_inconsistency=allow_inconsistency,
                                                  allow_smaller_proofs=allow_smaller_proofs):
                 continue
 
@@ -728,6 +730,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -738,6 +741,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                                                                        size,
                                                                        'negated_hypothesis',
                                                                        formulas_to_be_sat=formulas_to_be_sat,
+                                                                       allow_inconsistency=allow_inconsistency,
                                                                        allow_smaller_proofs=allow_smaller_proofs)
             if len(distractors) == 0:
                 self._log(logging.INFO, 'creating negative tree with negated hypothesis root not failed. Will try root node sampled from various forms.')
@@ -745,12 +749,14 @@ class NegativeTreeDistractor(FormulaDistractor):
                                                                            size,
                                                                            'various_form',
                                                                            formulas_to_be_sat=formulas_to_be_sat,
+                                                                           allow_inconsistency=allow_inconsistency,
                                                                            allow_smaller_proofs=allow_smaller_proofs)
         else:
             distractors, others = self._generate_with_initial_sampling(proof_tree,
                                                                        size,
                                                                        'various_form',
                                                                        formulas_to_be_sat=formulas_to_be_sat,
+                                                                       allow_inconsistency=allow_inconsistency,
                                                                        allow_smaller_proofs=allow_smaller_proofs)
         return distractors, others
 
@@ -759,6 +765,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                                         proof_tree: ProofTree,
                                         size: int,
                                         initial_sampling: str,
+                                        allow_inconsistency=False,
                                         allow_smaller_proofs=False,
                                         formulas_to_be_sat: Optional[List[Formula]] = None) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -780,6 +787,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 elif initial_sampling == 'various_form':
                     distractors, _ = self._various_form_distractor.generate(proof_tree, 1,
                                                                             formulas_to_be_sat=formulas_to_be_sat,
+                                                                            allow_inconsistency=allow_inconsistency,
                                                                             allow_smaller_proofs=allow_smaller_proofs)
                     if len(distractors) == 0:
                         raise FormulaDistractorGenerationFailure('could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor().')
@@ -825,6 +833,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                 if not _new_distractor_formula_is_ok(distractor_formula,
                                                      distractor_formulas + formulas_to_be_sat,
                                                      proof_tree,
+                                                     allow_inconsistency=allow_inconsistency,
                                                      allow_smaller_proofs=allow_smaller_proofs):
                     continue
 
@@ -860,6 +869,7 @@ class MixtureDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -891,6 +901,7 @@ class MixtureDistractor(FormulaDistractor):
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree, _size,
                                                                     formulas_to_be_sat = formulas_to_be_sat + distractor_formulas,
+                                                                    allow_inconsistency=allow_inconsistency,
                                                                     allow_smaller_proofs=allow_smaller_proofs)
 
                 distractor_formulas += _distractor_formulas
@@ -934,6 +945,7 @@ class FallBackDistractor(FormulaDistractor):
                   proof_tree: ProofTree,
                   size: int,
                   formulas_to_be_sat: Optional[List[Formula]] = None,
+                  allow_inconsistency=False,
                   allow_smaller_proofs=False,
                   no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         formulas_to_be_sat = formulas_to_be_sat or []
@@ -952,6 +964,7 @@ class FallBackDistractor(FormulaDistractor):
                 _distractor_formulas, _others = distractor.generate(proof_tree,
                                                                     size,
                                                                     formulas_to_be_sat = formulas_to_be_sat + distractor_formulas,
+                                                                    allow_inconsistency=allow_inconsistency,
                                                                     allow_smaller_proofs=allow_smaller_proofs)
 
                 distractor_formulas += _distractor_formulas

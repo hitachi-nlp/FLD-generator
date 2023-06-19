@@ -220,7 +220,7 @@ def eliminate_double_negation(formula: Formula) -> Formula:
 
 
 def negate(formula: Formula) -> Formula:
-    if formula.rep == CONTRADICTION:
+    if is_contradiction_symbol(formula):
         raise ContradictionNegationError(f'Contradiction {CONTRADICTION} can not be negated.')
 
     def require_outer_brace(formula: Formula) -> bool:
@@ -255,3 +255,7 @@ def negate(formula: Formula) -> Formula:
         return Formula(NEGATION + '(' + formula.rep + ')')
     else:
         return Formula(NEGATION + formula.rep)
+
+
+def is_contradiction_symbol(formula: Formula) -> bool:
+    return formula.rep == CONTRADICTION

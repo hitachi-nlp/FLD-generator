@@ -56,6 +56,7 @@ class ProofTreeGenerationPipeline:
             branch_extension_steps: int,
             num_distractors: int,
             num_translation_distractors: int,
+            allow_inconsistency=False,
             allow_smaller_proofs=False,
             depth_1_reference_weight: Optional[float] = None,
             force_fix_illegal_intermediate_constants=False,
@@ -78,6 +79,7 @@ class ProofTreeGenerationPipeline:
                     depth,
                     branch_extension_steps,
                     depth_1_reference_weight=depth_1_reference_weight,
+                    allow_inconsistency=allow_inconsistency,
                     allow_smaller_proofs=allow_smaller_proofs,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
@@ -95,6 +97,7 @@ class ProofTreeGenerationPipeline:
                 if self.distractor is not None:
                     try:
                         formula_distractors, _others = self.distractor.generate(proof_tree, num_distractors,
+                                                                                allow_inconsistency=allow_inconsistency,
                                                                                 allow_smaller_proofs=allow_smaller_proofs)
                         for _other_key, _other_val in _others.items():
                             if _other_key in others:
@@ -124,7 +127,7 @@ class ProofTreeGenerationPipeline:
                 logger.info(_make_pretty_log('generate translations', 'start'))
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
                 leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
+                assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
 
                 other_formulas = []
                 if others.get('negative_tree', None) is not None:

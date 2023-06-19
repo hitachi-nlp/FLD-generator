@@ -5,7 +5,9 @@ from pprint import pprint
 from FLD_generator.formula import (
     Formula,
     IMPLICATION,
+    CONTRADICTION,
     negate,
+    is_contradiction_symbol,
 )
 from z3 import (
     DeclareSort,
@@ -75,6 +77,8 @@ def _ARGS(arg: str) -> Const:
 
 
 def parse(rep: str):
+    if rep.find(CONTRADICTION) >= 0:
+        raise Exception(f'formula rep {rep} includes contradiction ("{CONTRADICTION}"), which is not supported.')
 
     def go(interm: Union[str, Tuple]):
 
@@ -165,26 +169,38 @@ def check_sat(formulas: List[Formula],
 
 @profile
 def is_tautology(formula: ForAll) -> bool:
+    if is_contradiction_symbol(formula):
+        return False
     return not check_sat([negate(formula)])
 
 
 @profile
 def is_contradiction(formula: ForAll) -> bool:
+    if is_contradiction_symbol(formula):
+        return True
     return is_tautology(negate(formula))
 
 
 @profile
 def is_provable(facts: List[Formula], hypothesis: Formula) -> bool:
+    if is_contradiction_symbol(hypothesis):
+        return not check_sat(facts)
     return not check_sat(facts + [negate(hypothesis)])
 
 
 @profile
 def is_disprovable(facts: List[Formula], hypothesis: Formula) -> bool:
+    if is_contradiction_symbol(hypothesis):
+        raise ValueError(f'we do not have a concept of "disproving the contradiction {hypothesis.rep}", i.e., proving the negated contradiction'
+                         'because we do not have a concept of "negated contradiction"')
     return not check_sat(facts + [hypothesis])
 
 
 @profile
 def is_unknown(facts: List[Formula], hypothesis: Formula) -> bool:
+    if is_contradiction_symbol(hypothesis):
+        # here, "unknown" means "we can not prove contradiction"
+        return not is_provable(facts, hypothesis)
     return not is_provable(facts, hypothesis) and not is_disprovable(facts, hypothesis)
 
 
