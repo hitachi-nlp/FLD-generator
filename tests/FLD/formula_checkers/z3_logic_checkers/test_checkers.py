@@ -2,7 +2,7 @@ from typing import List
 from pprint import pprint
 
 from FLD_generator.formula import Formula
-from FLD_generator.formula_checkers.z3_checkers.checkers import (
+from FLD_generator.formula_checkers.z3_logic_checkers.checkers import (
     parse,
     check_sat,
     is_stronger,
@@ -315,6 +315,58 @@ def test_check_sat():
             '({FP}{am} & {FU}{am})',
         ],
         False,
+    )
+
+    # migrated from original rule based checkers
+    _test_check_sat(
+        [
+            '({A} & ¬{A})',
+        ],
+        False,
+    )
+
+    _test_check_sat(
+        [
+            '({A}{a} & ¬{A}{a})',
+        ],
+        False,
+    )
+
+    _test_check_sat(
+        [
+            '(x): ({A}x & ¬{A}x)',
+        ],
+        False,
+    )
+
+    _test_check_sat(
+        [
+            '(Ex): ({A}x & ¬{A}x)',
+        ],
+        False,
+    )
+
+    _test_check_sat(
+        [
+            '(x): {B} v ({A}x & ¬{A}x)',
+        ],
+        True,
+    )
+
+    _test_check_sat(
+        [
+            '(x): {A}x',
+            '(x): (¬{A}x & {B}x)',
+        ],
+        False,
+    )
+
+    _test_check_sat(
+        [
+            '(Ex): {A}x',
+            '(Ex): (¬{A}x & {B}x)',
+        ],
+        True,
     )
 
 

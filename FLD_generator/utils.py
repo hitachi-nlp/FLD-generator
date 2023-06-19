@@ -6,11 +6,12 @@ import logging
 import zlib
 from pprint import pformat
 
+from FLD_generator.argument import Argument
 from nltk.corpus import cmudict
 import timeout_decorator
 from .exception import FormalLogicExceptionBase
-from FLD_generator.formula import Formula
-from FLD_generator.formula_checkers.z3_checkers import is_provable, is_disprovable
+from FLD_generator.formula import Formula, is_contradiction_symbol
+from FLD_generator.formula_checkers import is_provable, is_disprovable, is_consistent_set as is_consistent_formula_set
 import kern_profiler
 
 utils_logger = logging.getLogger(__name__)
@@ -336,3 +337,96 @@ def _drop_one_element(elems: List[Any]) -> Iterable[Tuple[List[Any], Any]]:
         dropped_elem = elems[i_drop]
         remaining_elems = elems[:i_drop] + elems[i_drop + 1:]
         yield remaining_elems, dropped_elem
+
+
+@profile
+def have_smaller_proofs_with_logs(org_leaf_formulas: List[Formula],
+                                  new_leaf_formulas: List[Formula],
+                                  deleted_leaf_formulas: List[Formula],
+                                  org_hypothesis_formula: Formula,
+                                  new_hypothesis_formula: Formula,
+                                  distractor_formulas: Optional[List[Formula]] = None,
+                                  new_argument: Optional[Argument] = None) -> Tuple[bool, List[str]]:
+    distractor_formulas = distractor_formulas or []
+    remaining_leaf_formulas: List[Formula] = [
+        formula for formula in org_leaf_formulas + new_leaf_formulas
+        if formula.rep not in [_formula.rep for _formula in deleted_leaf_formulas]
+    ]
+
+    log_msgs: List[str] = []
+    _is_provable, droppable_formula = provable_from_incomplete_facts(
+        remaining_leaf_formulas,
+        distractor_formulas,
+        new_hypothesis_formula,
+    )
+    if _is_provable:
+        log_msgs.append('original leafs:')
+        for formula in org_leaf_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        if len(distractor_formulas) > 0:
+            for formula in distractor_formulas:
+                log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('added leafs   :')
+        for formula in new_leaf_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('deleted leafs :')
+        for formula in deleted_leaf_formulas:
+            log_msgs.append(f'   {formula.rep}')
+
+        log_msgs.append('droppable formulas:')
+        for formula in [droppable_formula]:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('original hypothesis :')
+        for formula in [org_hypothesis_formula]:
+            log_msgs.append(f'   {formula.rep}')
+
+        log_msgs.append('new hypothesis      :')
+        for formula in [new_hypothesis_formula]:
+            log_msgs.append(f'   {formula.rep}')
+
+        if new_argument is not None:
+            log_msgs.append('used argument :')
+            for premise in new_argument.premises:
+                log_msgs.append(f'    premise: {premise.rep}')
+            log_msgs.append(f'    conclusion: {new_argument.conclusion.rep}')
+
+        return True, log_msgs
+
+    return False, log_msgs
+
+
+@profile
+def is_consistent_formula_set_with_logs(org_formulas: List[Formula],
+                                        new_formulas: List[Formula],
+                                        deleted_formulas: List[Formula],
+                                        new_argument: Optional[Argument] = None) -> Tuple[bool, List[str]]:
+
+    remaining_formulas = [formula for formula in org_formulas + new_formulas
+                          if formula.rep not in {_formula.rep for _formula in deleted_formulas}]
+    log_msgs: List[str] = []
+    if not is_consistent_formula_set(remaining_formulas):
+        log_msgs.append('original      :')
+        for formula in org_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('added         :')
+        for formula in new_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('deleted       :')
+        for formula in deleted_formulas:
+            log_msgs.append(f'   {formula.rep}')
+
+        if new_argument is not None:
+            log_msgs.append('used argument :')
+            for premise in new_argument.premises:
+                log_msgs.append(f'    premise: {premise.rep}')
+            log_msgs.append(f'    conclusion: {new_argument.conclusion.rep}')
+
+        return False, log_msgs
+
+    return True, log_msgs

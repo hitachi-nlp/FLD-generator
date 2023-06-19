@@ -17,16 +17,14 @@ from .interpretation import (
     generate_simplified_formulas,
 )
 from .formula_checkers import (
-    is_ok_set as is_ok_formula_set,
-    is_senseful,
-    # is_consistent_set as is_consistent_formula_set,
-    is_consistent_set_z3 as is_consistent_formula_set_z3,
-    is_stronger_z3,
-    is_equiv_z3,
+    is_consistent_set as is_consistent_formula_set,
+    is_stronger,
+    is_equiv,
     is_new as is_formula_new,
+    is_trivial as is_formula_trivial,
+    is_predicate_arity_consistent_set as is_predicate_arity_consistent_formula_set,
 )
-from .formula_checkers.z3_checkers import is_tautology, is_contradiction
-from FLD_generator.utils import provable_from_incomplete_facts
+from FLD_generator.utils import provable_from_incomplete_facts, is_consistent_formula_set_with_logs, have_smaller_proofs_with_logs
 from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
@@ -116,100 +114,52 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
                                   existing_distractors: List[Formula],
                                   proof_tree: ProofTree,
                                   allow_inconsistency=False,
-                                  allow_smaller_proofs=False,
-                                  check_org=True) -> bool:
+                                  allow_smaller_proofs=False) -> bool:
 
     formulas_in_tree = [node.formula for node in proof_tree.nodes]
     leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
     hypothesis_formula = proof_tree.root_node.formula
 
-    if is_tautology(new_distractor) or is_contradiction(new_distractor):
+    if is_formula_trivial(new_distractor):
         return False
 
-    if not is_formula_new(new_distractor, existing_distractors + formulas_in_tree):
+    if not is_predicate_arity_consistent_formula_set(formulas_in_tree + existing_distractors + [new_distractor]):
         return False
 
-    if not is_ok_formula_set([new_distractor] + existing_distractors + formulas_in_tree):
+    if not is_formula_new(formulas_in_tree + existing_distractors, new_distractor):
         return False
-
-    if not allow_inconsistency:
-
-        if not is_consistent_formula_set_z3([new_distractor] + existing_distractors):
-            logger.warning('reject new distractor because adding it will make distractors inconsistent')
-            for dist in [new_distractor] + existing_distractors:
-                logger.info(dist)
-            return False
-
-        # The tree will become inconsistent "by adding" distractor formulas.
-        # original_tree_consistency_is_ok = tree_have_contradiction_arg or is_consistent_formula_set_z3(leaf_formulas_in_tree)
-        original_tree_consistency_is_ok = is_consistent_formula_set_z3(leaf_formulas_in_tree)
-        if check_org and not original_tree_consistency_is_ok:
-            raise Exception()
-        if original_tree_consistency_is_ok\
-                and not is_consistent_formula_set_z3([new_distractor] + existing_distractors + leaf_formulas_in_tree):
-            logger.warning('reject new distractor because adding it will make leaf formulas and distractors inconsistent')
-            for dist in [new_distractor] + existing_distractors + leaf_formulas_in_tree:
-                logger.info(dist)
-            return False
 
     intermediate_constant_reps = {constant.rep for constant in proof_tree.intermediate_constants}
     for distractor_constant in new_distractor.constants:
         if distractor_constant.rep in intermediate_constant_reps:
-            # raise FormulaDistractorGenerationFailure(f'The intermediate_constant {distractor_constant.rep} is in a distractor {str(distractor_constant)}')
+            return False
+
+    if not allow_inconsistency:
+        _is_consistent, logs = is_consistent_formula_set_with_logs(
+            leaf_formulas_in_tree,
+            existing_distractors + [new_distractor],
+            [],
+        )
+        if not _is_consistent:
+            logger.warning('reject the new distractor because the formulas are inconsistent')
+            for msg in logs:
+                logger.info(msg)
             return False
 
     # if not allow_smaller_proofs and not tree_have_contradiction_arg:
     if not allow_smaller_proofs:
-        if check_org:
-            org_have_smaller_proofs, org_droppable_formula = provable_from_incomplete_facts(
-                leaf_formulas_in_tree,
-                existing_distractors,
-                hypothesis_formula,
-            )
-            if org_have_smaller_proofs:
-                logger.error('the original positive and distractor formulas have smaller proofs, as follows. this foeces to reject the new distractor whatever it is. We do not expect this situation because we are checking the new formula (a leaf or a distractor) everytime it is added.')
-
-                logger.info('positive formulas:')
-                for formula in leaf_formulas_in_tree:
-                    logger.info('    ' + formula.rep)
-
-                logger.info('distractor formulas:')
-                for formula in existing_distractors:
-                    logger.info('    ' + formula.rep)
-
-                logger.info('droppable formulas:')
-                logger.info('    ' + org_droppable_formula.rep)
-
-                logger.info('hypothesis:')
-                logger.info('    ' + hypothesis_formula.rep)
-
-                raise Exception()
-
-        _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
+        _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
             leaf_formulas_in_tree,
-            existing_distractors + [new_distractor],
+            [],
+            [],
             hypothesis_formula,
+            hypothesis_formula,
+            distractor_formulas=existing_distractors + [new_distractor],
         )
         if _have_smaller_proofs:
-            logger.warning('reject new distractor because smaller proofs exist')
-
-            logger.info('positive formulas:')
-            for formula in leaf_formulas_in_tree:
-                logger.info('    ' + formula.rep)
-
-            logger.info('distractor formulas:')
-            for formula in existing_distractors + [new_distractor]:
-                logger.info('    ' + formula.rep)
-
-            logger.info('added distractor formulas:')
-            logger.info('    ' + new_distractor.rep)
-
-            logger.info('droppable formulas:')
-            logger.info('    ' + droppable_formula.rep)
-
-            logger.info('hypothesis:')
-            logger.info('    ' + hypothesis_formula.rep)
-
+            logger.warning('reject the new distractor because we have smaller proofs')
+            for log in logs:
+                logger.info(log)
             return False
 
     return True

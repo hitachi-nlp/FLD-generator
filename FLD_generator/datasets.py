@@ -17,9 +17,14 @@ from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translation_distractors import build as build_translation_distractor
-from FLD_generator.utils import provable_from_incomplete_facts, disprovable_from_incomplete_facts
-from FLD_generator.formula_checkers.z3_checkers import (
-    check_sat,
+from FLD_generator.utils import (
+    provable_from_incomplete_facts,
+    disprovable_from_incomplete_facts,
+    is_consistent_formula_set_with_logs,
+    have_smaller_proofs_with_logs,
+)
+from FLD_generator.formula_checkers import (
+    is_consistent_set,
     is_provable,
     is_disprovable,
     is_unknown,
@@ -406,61 +411,25 @@ class NLProofSDataset:
                 assert is_unknown(all_positive_formulas, hypothesis_formula)
 
             if not self.allow_inconsistency:
-                assert check_sat(all_formulas)
+                _is_consistent, logs = is_consistent_formula_set_with_logs(
+                    all_formulas, [], [],
+                )
+                if not _is_consistent:
+                    for msg in logs:
+                        logger.info(msg)
+                    raise Exception('Unexpected.')
 
             if not self.allow_smaller_proofs:
-                droppable_formulas = []
-                should_skip = False
-                msg = None
-                if proof_stance == ProofStance.PROVED:
-                    _have_smaller_proofs, droppable_formula = provable_from_incomplete_facts(
-                        all_positive_formulas,
-                        all_negative_formulas,
-                        hypothesis_formula,
-                    )
-                    assert not _have_smaller_proofs
-
-                elif proof_stance == ProofStance.DISPROVED:
-                    _have_smaller_proofs, droppable_formula = disprovable_from_incomplete_facts(
-                        all_positive_formulas,
-                        all_negative_formulas,
-                        hypothesis_formula,
-                    )
-                    # should_skip =  True
-                    # if _have_smaller_proofs:
-                    #     msg = '-- skip the sample because we have smaller proofs'
-                    #     should_skip = True
-                    #     droppable_formulas = [droppable_formula]
-                    #     break
-                    assert not _have_smaller_proofs
-
-            if should_skip:
-                logger.warning(msg)
-
-                logger.info('all positive formulas:')
-                for formula in all_positive_formulas:
-                    logger.info('    %s', formula.rep)
-
-                logger.info('all negative formulas:')
-                for formula in all_negative_formulas:
-                    logger.info('    %s', formula.rep)
-
-                logger.info('droppable positive formulas:')
-                for formula in droppable_formulas:
-                    logger.info('    %s', formula.rep)
-
-                logger.info('hypothesis:')
-                logger.info('    ' + str(hypothesis_formula.rep))
-
-                logger.info('gold label:')
-                logger.info('    ' + proof_stance.value)
-
-                logger.info('formula context:')
-                logger.info(re.sub('sent([0-9]*)', '\n    sent\g<1>', formula_context))
-
-                logger.info('formula proof:')
-                logger.info('\n    ' + re.sub(';', '\n    ', str(formula_proof_text)))
-                continue
+                _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                    all_positive_formulas, [], [],
+                    hypothesis_formula,
+                    hypothesis_formula,
+                    distractor_formulas=all_negative_formulas,
+                )
+                if _have_smaller_proofs:
+                    for log in logs:
+                        logger.info(log)
+                    raise Exception('Unexpected.')
 
             # -- make output json --
             label = _make_instance_label(proof_stance, self.world_assump, version=self.version)

@@ -30,7 +30,7 @@ from z3 import (
     is_true,
     ModelRef,
 )
-from FLD_generator.formula_checkers.z3_checkers.intermediates import (
+from .intermediates import (
     parse as parse_to_intermediate,
     I_IMPLICATION,
     I_AND,
@@ -41,7 +41,7 @@ from FLD_generator.formula_checkers.z3_checkers.intermediates import (
 )
 import kern_profiler
 
-_interm_to_z3 = {
+_interm_to = {
     I_IMPLICATION: Implies,
     I_AND: And,
     I_OR: Or,
@@ -88,14 +88,14 @@ def parse(rep: str):
 
             if isinstance(op, tuple):
                 quant, var = op
-                z3_op = _interm_to_z3[quant]
+                z3_op = _interm_to[quant]
                 assert right is None
 
                 args = [_ARGS(var), go(left)]
 
             else:
 
-                z3_op = _interm_to_z3[op]
+                z3_op = _interm_to[op]
                 assert left is not None
 
                 args = [go(left)]
@@ -231,3 +231,10 @@ def _imply(this: Formula, that: Formula, ignore_tautology=False) -> bool:
 
     this_imply_that = Formula(f'({this.rep}) {IMPLICATION} ({that.rep})')
     return not check_sat([negate(this_imply_that)])
+
+
+@profile
+def is_trivial(formula: Formula) -> bool:
+    if is_contradiction_symbol(formula):
+        return True
+    return is_tautology(formula) or is_contradiction(formula)

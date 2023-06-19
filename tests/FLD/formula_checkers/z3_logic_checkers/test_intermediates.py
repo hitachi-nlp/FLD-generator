@@ -1,4 +1,4 @@
-from FLD_generator.formula_checkers.z3_checkers.intermediates import (
+from FLD_generator.formula_checkers.z3_logic_checkers.intermediates import (
     _find_brace_content,
     parse,
 )

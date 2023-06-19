@@ -14,14 +14,14 @@ from .formula import (
     OR,
 )
 from .formula_checkers import (
-    is_ok_set as is_ok_formula_set,
-    # is_consistent_set as is_consistent_formula_set,
-    is_consistent_set_z3 as is_consistent_formula_set_z3,
+    is_predicate_arity_consistent_set as is_predicate_arity_consistent_formula_set,
+    is_consistent_set as is_consistent_formula_set,
     is_new as is_formula_new,
 )
 from .argument import Argument
 from .argument_checkers import (
-    is_senseful as is_argument_senseful,
+    is_trivial as is_argument_trivial,
+    is_nonsense as is_argument_nonsense,
 )
 from .interpretation import (
     generate_mappings_from_formula,
@@ -42,6 +42,8 @@ from .utils import (
     run_with_timeout_retry,
     RetryAndTimeoutFailure,
     make_pretty_msg,
+    have_smaller_proofs_with_logs,
+    is_consistent_formula_set_with_logs,
 )
 
 from .formula import (
@@ -54,8 +56,6 @@ from .formula import (
     VARIABLES,
     is_contradiction_symbol,
 )
-from FLD_generator.utils import provable_from_incomplete_facts
-from .formula_checkers.z3_checkers import is_provable, is_tautology, is_contradiction
 import kern_profiler
 
 # _LOG_ONLY_WHEN_FAILED = True
@@ -566,10 +566,18 @@ def _generate_stem(arguments: List[Argument],
                proof_tree: ProofTree):
 
         for premise_node in premise_nodes:
-            conclusion_node.add_child(premise_node)
+            try:
+                conclusion_node.add_child(premise_node)
+            except:
+                import pudb
+                pudb.set_trace()
 
         for assumption_node in assumption_nodes:
-            conclusion_node.add_assump_child(assumption_node)
+            try:
+                conclusion_node.add_assump_child(assumption_node)
+            except:
+                import pudb
+                pudb.set_trace()
 
         conclusion_node.argument = argument
 
@@ -656,7 +664,7 @@ def _generate_stem(arguments: List[Argument],
 
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
-        cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
+        cur_premise_nodes = [ProofNode(formula) for formula in cur_arg.premises]
         update(cur_premise_nodes, [], cur_conclusion_node, cur_arg, proof_tree)
 
         is_tree_done = False
@@ -691,21 +699,21 @@ def _generate_stem(arguments: List[Argument],
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
-                for premise in _shuffle(next_arg.premises):
+                for formula in _shuffle(next_arg.premises):
                     if is_arg_found:
                         break
-                    log_traces.append(f'   |   |   | premise {premise}')
+                    log_traces.append(f'   |   |   | premise {formula}')
 
-                    assumption = next_arg.assumptions.get(premise, None)
+                    assumption = next_arg.assumptions.get(formula, None)
                     for premise_mapping in generate_mappings_from_formula(
-                        [premise] + ([assumption] if assumption is not None else []),
+                        [formula] + ([assumption] if assumption is not None else []),
                         [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
                         shuffle=True,
                     ):
                         if is_arg_found:
                             break
 
-                        premise_pulled = interpret_formula(premise, premise_mapping, elim_dneg=elim_dneg)
+                        premise_pulled = interpret_formula(formula, premise_mapping, elim_dneg=elim_dneg)
                         assumption_pulled = interpret_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
@@ -717,12 +725,11 @@ def _generate_stem(arguments: List[Argument],
                         if assumption_pulled is not None:
                             if all(assumption_pulled.rep != cur_assumption_node.formula.rep
                                    for cur_assumption_node in cur_possible_assumption_nodes):
-                                rejection_stats['assumption_pulled.rep != cur_assumption_node.formula.rep'] += 1
+                                rejection_stats['all(assumption_pulled.rep != cur_assumption_node.formula.rep)'] += 1
                                 continue
 
-                        # for early rejection
-                        if not is_ok_formula_set([premise_pulled] + formulas_in_tree):
-                            rejection_stats['not is_ok_formula_set([premise_pulled] + formulas_in_tree)'] += 1
+                        if not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree):
+                            rejection_stats['not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree)'] += 1
                             continue
 
                         target_preds, target_consts = _choose_target_preds_consts(proof_tree,
@@ -731,7 +738,6 @@ def _generate_stem(arguments: List[Argument],
                         for i_mapping_trial, mapping in enumerate(
                                 generate_mappings_from_formula(
                                 next_arg.all_formulas,
-                                # [Formula(' '.join(constant_pool + predicate_pool))],
                                 [Formula(' '.join(rep for rep in target_preds + target_consts))],
                                 constraints=premise_mapping,
                                 allow_many_to_one=False,
@@ -739,7 +745,7 @@ def _generate_stem(arguments: List[Argument],
                                 )):
                             if i_mapping_trial >= 1:
                                 # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
-                                # we leave this for loop for back reference
+                                # we leave this loop for back reference
                                 break
 
                             if is_arg_found:
@@ -747,76 +753,62 @@ def _generate_stem(arguments: List[Argument],
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas):
-                                rejection_stats['any(is_tautology(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                            if is_argument_trivial(next_arg_pulled):
+                                rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
                                 continue
 
-                            if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if not is_contradiction_symbol(formula)):
-                                rejection_stats['any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                            if is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True):
+                                rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                                 continue
 
-                            if not is_argument_senseful(next_arg_pulled):
-                                rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
+                            if not is_predicate_arity_consistent_formula_set(formulas_in_tree + next_arg_pulled.all_formulas):
+                                rejection_stats['is_predicate_arity_consistent_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                                 continue
 
-                            if not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree):
-                                rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
+                            all_new_formulas = [formula for formula in next_arg_pulled.premises + [next_arg_pulled.conclusion]
+                                                if formula.rep != cur_conclusion.rep]
+                            if not _is_formulas_new(formulas_in_tree, all_new_formulas):
+                                rejection_stats['not _is_formulas_new(formulas_in_tree, all_new_formulas)'] += 1
                                 continue
 
-                            if not is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
-                                rejection_stats['not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree)'] += 1
-                                continue
-
-                            other_premises = [premise for premise in next_arg_pulled.premises
-                                              if premise.rep != cur_conclusion.rep]
-
-                            if not _is_formulas_new(other_premises, formulas_in_tree):
-                                # If any of other premises already exists in the tree, it will lead to a loop.
-                                # We want to avoid a loop.
-                                rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
-                                continue
-
-                            if not _is_argument_negation_elim(next_arg_pulled):
+                            if _is_argument_negation_elim(next_arg_pulled):
+                                # negation elim legally introduces inconsistency, and thus smaller proofs.
+                                pass
+                            else:
                                 org_leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                                new_leaf_formulas = [formula for formula in next_arg_pulled.premises
-                                                     if formula.rep != cur_conclusion.rep]
+                                new_leaf_formulas = [formula for formula in next_arg_pulled.premises if formula.rep != cur_conclusion.rep]
                                 deleted_leaf_formulas = list(next_arg_pulled.assumptions.values())
+                                org_root_formula = proof_tree.root_node.formula
                                 new_root_formula = next_arg_pulled.conclusion
 
-                                remaining_leaf_formulas = [formula for formula in org_leaf_formulas + new_leaf_formulas
-                                                           if formula.rep not in {_formula.rep for _formula in deleted_leaf_formulas}]
-
-                                if not allow_inconsistency and not is_consistent_formula_set_z3(remaining_leaf_formulas):
-                                    logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
-
-                                    logger.info('original leaf formulas')
-                                    for formula in org_leaf_formulas:
-                                        logger.info('    %s', formula.rep)
-
-                                    logger.info('added leaf formulas:')
-                                    for formula in new_leaf_formulas:
-                                        logger.info('    %s', formula.rep)
-
-                                    logger.info('deleted leaf formulas:')
-                                    for formula in deleted_leaf_formulas:
-                                        logger.info('    %s', formula.rep)
-
-                                    rejection_stats['is_consistent_formula_set_z3(leaf_formulas + new_leaf_formulas)'] += 1
-                                    continue
-
-                                if not allow_smaller_proofs:
-                                    is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
+                                if not allow_inconsistency:
+                                    _is_consistent, logs = is_consistent_formula_set_with_logs(
                                         org_leaf_formulas,
                                         new_leaf_formulas,
                                         deleted_leaf_formulas,
-                                        new_root_formula,
-                                        proof_tree.root_node.formula,
-                                        next_arg_pulled,
+                                        new_argument=next_arg_pulled,
                                     )
-                                    if is_smaller_proofs_emerged:
-                                        logger.warning('(_generate_stem) continue to the next mapping because smaller proofs have emerged')
+                                    if not _is_consistent:
+                                        logger.warning('-- (_generate_stem) reject the argument because the proof tree formulas are inconsistent --')
+                                        for msg in logs:
+                                            logger.info(msg)
+                                        rejection_stats['_is_consistent_formula_set'] += 1
+                                        continue
+
+                                if not allow_smaller_proofs:
+                                    _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                                        org_leaf_formulas,
+                                        new_leaf_formulas,
+                                        deleted_leaf_formulas,
+                                        org_root_formula,
+                                        new_root_formula,
+                                        new_argument=next_arg_pulled,
+                                    )
+                                    if _have_smaller_proofs:
+                                        logger.warning('-- (_generate_stem) reject the argument because the proof tree have smaller proofs --')
                                         for log in logs:
                                             logger.info(log)
+                                        rejection_stats['_have_smaller_proofs'] += 1
                                         continue
 
                             is_arg_found = True
@@ -826,21 +818,21 @@ def _generate_stem(arguments: List[Argument],
             if is_arg_found:
                 # Update
                 next_assumption_nodes = []
-                for i_premise, premise in enumerate(next_arg_pulled.premises):
-                    if premise.rep == cur_conclusion.rep:
+                for i_premise, formula in enumerate(next_arg_pulled.premises):
+                    if formula.rep == cur_conclusion.rep:
                         next_arg_pulled.premises[i_premise] = cur_conclusion  # refer to the unique object.
-                    if premise in next_arg_pulled.assumptions:
-                        assumption = next_arg_pulled.assumptions[premise]
+                    if formula in next_arg_pulled.assumptions:
+                        assumption = next_arg_pulled.assumptions[formula]
                         for cur_assumption_node in cur_possible_assumption_nodes:
                             if assumption.rep == cur_assumption_node.formula.rep:
-                                next_arg_pulled.assumptions[premise] = cur_assumption_node.formula  # refer to the unique object.
+                                next_arg_pulled.assumptions[formula] = cur_assumption_node.formula  # refer to the unique object.
                                 next_assumption_nodes.append(cur_assumption_node)
 
                 next_conclusion_node = ProofNode(next_arg_pulled.conclusion)
                 next_conclusion_node.argument = next_arg_pulled
                 next_premise_nodes = [
-                    cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
-                    for premise in next_arg_pulled.premises
+                    cur_conclusion_node if formula.rep == cur_conclusion.rep else ProofNode(formula)
+                    for formula in next_arg_pulled.premises
                 ]
                 update(next_premise_nodes, next_assumption_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
 
@@ -1037,9 +1029,8 @@ def _extend_branches(proof_tree: ProofTree,
                         rejection_stats['conclusion_pulled.rep != leaf_node.formula.rep'] += 1
                         continue
 
-                    # for early rejection
-                    if not is_ok_formula_set([conclusion_pulled] + formulas_in_tree):
-                        rejection_stats['not is_ok_formula_set([conclusion_pulled] + formulas_in_tree)'] += 1
+                    if not is_predicate_arity_consistent_formula_set([conclusion_pulled] + formulas_in_tree):
+                        rejection_stats['not is_predicate_arity_consistent_formula_set([conclusion_pulled] + formulas_in_tree)'] += 1
                         continue
 
                     target_preds, target_consts = _choose_target_preds_consts(proof_tree,
@@ -1056,79 +1047,66 @@ def _extend_branches(proof_tree: ProofTree,
                             )):
                         if i_mapping_trial >= 1:
                             # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
-                            # we leave this for loop for back reference
+                            # we leave this loop for back reference
                             break
 
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                        # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
-                        # if is_intermediate_constants_used:
-                        #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
-                        #     continue
-
-                        if any(is_tautology(formula) for formula in next_arg_pulled.all_formulas):
-                            rejection_stats['any(is_tautology(formula) for formula in next_arg_pulled.all_formulas)'] += 1
+                        if is_argument_trivial(next_arg_pulled):
+                            rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
                             continue
 
-                        if any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas if not is_contradiction_symbol(formula)):
-                            rejection_stats['any(is_contradiction(formula) for formula in next_arg_pulled.all_formulas)'] += 1
-                            continue
-
-                        if not is_argument_senseful(next_arg_pulled):
+                        if is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                             continue
 
-                        if not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree):
-                            rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
+                        if not is_predicate_arity_consistent_formula_set(formulas_in_tree + next_arg_pulled.all_formulas):
+                            rejection_stats['not is_predicate_arity_consistent_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
-                        if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
-                            # If any of the premises are already in the tree, it will lead to a loop.
-                            # We want to avoid a loop.
-
-                            rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
+                        all_new_formulas = next_arg_pulled.premises + list(next_arg_pulled.assumptions.values())
+                        if not _is_formulas_new(formulas_in_tree + ng_formulas, all_new_formulas):
+                            rejection_stats['not _is_formulas_new(formulas_in_tree, all_new_formulas)'] += 1
                             continue
 
-                        if not _is_argument_negation_elim(next_arg_pulled):
+                        if _is_argument_negation_elim(next_arg_pulled):
+                            # negation elim legally introduces inconsistency, and thus smaller proofs.
+                            pass
+                        else:
                             org_leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
                             new_leaf_formulas = next_arg_pulled.premises
                             deleted_leaf_formulas = [target_leaf_node.formula] + list(next_arg_pulled.assumptions.values())
+                            org_root_formula = proof_tree.root_node.formula
                             new_root_formula = proof_tree.root_node.formula
-                            remaining_leaf_formulas = [formula for formula in org_leaf_formulas + new_leaf_formulas
-                                                       if formula.rep not in {_formula.rep for _formula in deleted_leaf_formulas}]
 
                             if not allow_inconsistency:
-                                if not is_consistent_formula_set_z3(remaining_leaf_formulas):
-                                    logger.warning('-- (_generate_stem) reject the argument because adding it will make the proof tree inconsistent --')
-
-                                    logger.info('original leaf formulas')
-                                    for formula in org_leaf_formulas:
-                                        logger.info('    %s', formula.rep)
-
-                                    logger.info('added leaf formulas:')
-                                    for formula in new_leaf_formulas:
-                                        logger.info('    %s', formula.rep)
-
-                                    logger.info('deleted leaf formulas:')
-                                    for formula in deleted_leaf_formulas:
-                                        logger.info('    %s', formula.rep)
-
-                                    rejection_stats['is_consistent_formula_set_z3([formula for formula in leaf_formulas_org if formula.rep != deleted_leaf_formula.rep] + new_leaf_formulas)'] += 1
-                                    continue
-
-                            if not allow_smaller_proofs:
-                                is_smaller_proofs_emerged, logs = _will_have_smaller_proofs(
+                                _is_consistent, logs = is_consistent_formula_set_with_logs(
                                     org_leaf_formulas,
                                     new_leaf_formulas,
                                     deleted_leaf_formulas,
-                                    new_root_formula,
-                                    proof_tree.root_node.formula,
-                                    next_arg_pulled,
+                                    new_argument=next_arg_pulled,
                                 )
-                                if is_smaller_proofs_emerged:
-                                    logger.warning('(_extend_branches) continue to the next mapping because smaller proofs have emerged')
+                                if not _is_consistent:
+                                    logger.warning('-- (_extend_branches) reject the argument because the proof tree formulas are inconsistent --')
+                                    for msg in logs:
+                                        logger.info(msg)
+                                    rejection_stats['_is_consistent_formula_set'] += 1
+                                    continue
+
+                            if not allow_smaller_proofs:
+                                _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                                    org_leaf_formulas,
+                                    new_leaf_formulas,
+                                    deleted_leaf_formulas,
+                                    org_root_formula,
+                                    new_root_formula,
+                                    new_argument=next_arg_pulled,
+                                )
+                                if _have_smaller_proofs:
+                                    logger.warning('-- (_extend_branches) reject the argument because the proof tree have smaller proofs --')
                                     for log in logs:
                                         logger.info(log)
+                                    rejection_stats['_have_smaller_proofs'] += 1
                                     continue
 
                         is_arg_found = True
@@ -1224,7 +1202,7 @@ def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:
-    return all((is_formula_new(formula, existing_formulas)
+    return all((is_formula_new(existing_formulas, formula)
                 for formula in formulas))
 
 
@@ -1246,7 +1224,7 @@ def _shuffle_arguments(arguments: List[Argument],
 # def _check_leaf_consistency(proof_tree: ProofTree) -> None:
 #     # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
 #     # assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
-#     assert is_consistent_formula_set_z3([node.formula for node in proof_tree.leaf_nodes])
+#     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
 
 
 # def _is_intermediate_constants_used(next_arg_pulled: Argument,
@@ -1397,71 +1375,6 @@ def _fix_illegal_intermediate_constants(
     logger.info(_make_pretty_msg(status='success', boundary_level=3))
 
     return proof_tree_fixed
-
-
-@profile
-def _will_have_smaller_proofs(leafs: List[Formula],
-                              new_leafs: List[Formula],
-                              deleted_leafs: List[Formula],
-                              new_root: Formula,
-                              org_root: Formula,
-                              new_argument: Argument,
-                              check_org=True) -> Tuple[bool, List[str]]:
-    if check_org:
-        org_is_provable, org_dropped_leaf = provable_from_incomplete_facts(
-            leafs,
-            [],
-            org_root,
-        )
-        if org_is_provable:
-            logger.fatal('The original formulas have smaller proofs, as follows. We do not expect this situation because we are checking the new formula everytime it is added.')
-
-            logger.info('leaf formulas:')
-            for formula in leafs:
-                logger.info(f'    {formula.rep}')
-
-            logger.info('droppable formulas:')
-            for formula in [org_dropped_leaf]:
-                logger.info(f'    {formula.rep}')
-
-            logger.info('hypothesis:')
-            logger.info('    ' + str(new_root))
-
-            raise Exception()
-
-    all_leafs: List[Formula] = [
-        leaf for leaf in leafs + new_leafs
-        if leaf.rep not in [_leaf.rep for _leaf in deleted_leafs]
-    ]
-
-    log_msgs: List[str] = []
-    _is_provable, dropped_leaf = provable_from_incomplete_facts(
-        all_leafs,
-        [],
-        new_root,
-    )
-    if _is_provable:
-        log_msgs.append('we have smaller proofs')
-
-        log_msgs.append('all leaf formulas:')
-        for formula in all_leafs:
-            log_msgs.append(f'    {formula.rep}')
-
-        log_msgs.append('this time used argument')
-        for premise in new_argument.premises:
-            log_msgs.append(f'    premise: {premise.rep}')
-        log_msgs.append(f'    conclusion: {new_argument.conclusion.rep}')
-
-        log_msgs.append('droppable formulas:')
-        for formula in [dropped_leaf]:
-            log_msgs.append(f'    {formula.rep}')
-
-        log_msgs.append('hypothesis:')
-        log_msgs.append('    ' + str(new_root))
-
-        return True, log_msgs
-
-    return False, log_msgs
 
 
 @profile

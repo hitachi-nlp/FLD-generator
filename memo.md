@@ -1,10 +1,4 @@
 # z3 checkers
-* "トップダウンで考える"
-    * 全部リファクタリング．
-* checkersの整理
-    - checkしている部分をきれいにする．
-    - z3じゃない方を消す？
-    - is_consistent_formula_set
 * speedup
     * distractor側も，generate()が非効率になっていないか？
     * checkingの順番
