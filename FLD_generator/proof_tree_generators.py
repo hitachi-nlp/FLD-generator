@@ -620,18 +620,10 @@ def _generate_stem(arguments: List[Argument],
                proof_tree: ProofTree):
 
         for premise_node in premise_nodes:
-            try:
-                conclusion_node.add_child(premise_node)
-            except:
-                import pudb
-                pudb.set_trace()
+            conclusion_node.add_child(premise_node)
 
         for assumption_node in assumption_nodes:
-            try:
-                conclusion_node.add_assump_child(assumption_node)
-            except:
-                import pudb
-                pudb.set_trace()
+            conclusion_node.add_assump_child(assumption_node)
 
         conclusion_node.argument = argument
 

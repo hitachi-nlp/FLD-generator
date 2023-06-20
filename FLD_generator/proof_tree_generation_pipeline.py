@@ -64,7 +64,7 @@ class ProofTreeGenerationPipeline:
 
         reusable_proof_trees = self._reusable_proof_trees[_reuse_key]
         if len(reusable_proof_trees) > 0:
-            idx = random.randint(0, len(reusable_proof_trees))
+            idx = random.randint(0, len(reusable_proof_trees) - 1)
             reusable_proof_tree = reusable_proof_trees[idx]
             reusable_proof_trees.pop(idx)
             logger.fatal('could get tree from cache!!')

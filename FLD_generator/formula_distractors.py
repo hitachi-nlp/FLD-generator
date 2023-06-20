@@ -487,8 +487,6 @@ class NegativeTreeDistractor(FormulaDistractor):
                  generator: ProofTreeGenerator,
                  prototype_formulas: Optional[List[Formula]] = None,
                  try_negated_hypothesis_first=True,
-                 max_branch_extension_steps=10,
-                 extend_branches_max_retry: int = 5,
                  **kwargs):
         super().__init__(**kwargs)
 
@@ -500,8 +498,6 @@ class NegativeTreeDistractor(FormulaDistractor):
             sample_only_unused_interprands=True,
         )
         self.try_negated_hypothesis_first = try_negated_hypothesis_first
-        self.max_branch_extension_steps = max_branch_extension_steps
-        self.extend_branches_max_retry = extend_branches_max_retry
 
     @property
     def default_max_retry(self) -> int:
@@ -556,14 +552,16 @@ class NegativeTreeDistractor(FormulaDistractor):
                                         allow_inconsistency=False,
                                         allow_smaller_proofs=False,
                                         existing_distractors: Optional[List[Formula]] = None) -> Tuple[List[Formula], Dict[str, Any]]:
+
         existing_distractors = existing_distractors or []
         if size == 0:
             return [], {'negative_tree': None, 'negative_tree_missing_nodes': None}
 
         n_trial = 0
+        max_trial = 1  # max_trial >= 2 is too slow, thus we decided not to try multiple times
         while True:
             # gradually increase the number of extension steps to find the "just in" size tree.
-            branch_extension_steps = min(size + (n_trial + 1) * 2, self.max_branch_extension_steps)
+            branch_extension_steps = size + (n_trial + 1) * 5
             self._log(logging.INFO, f'trial={n_trial}  branch_extension_steps={branch_extension_steps}')
 
             try:
@@ -595,17 +593,17 @@ class NegativeTreeDistractor(FormulaDistractor):
                     negative_tree,
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
-                    max_retry=self.extend_branches_max_retry,
+                    max_retry=10,
+                    best_effort=True,
                     force_fix_illegal_intermediate_constants=True,
                 )
             except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
                 raise FormulaDistractorGenerationFailure(str(e))
 
+            n_trial += 1
             negative_leaf_nodes = negative_tree.leaf_nodes
-            # XXX: ここを削ると一気に時間が減る．
-            if len(negative_leaf_nodes) - 1 < size and branch_extension_steps < self.max_branch_extension_steps:
+            if n_trial < max_trial and len(negative_leaf_nodes) - 1 < size:
                 self._log(logging.INFO, f'continue to the next trial with increased branch_extension_steps, since number of negatieve leaf formulas - 1 = {len(negative_leaf_nodes) - 1} < size={size}')
-                n_trial += 1
                 continue
 
             distractor_formulas: List[Formula] = []
@@ -689,7 +687,7 @@ class MixtureDistractor(FormulaDistractor):
 
         distractor_formulas = []
         others = {}
-        for distractor, _size in zip(self._distractors, sizes):
+        for distractor, _size in zip(random.sample(self._distractors, len(self._distractors)), sizes):
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree,
                                                                     _size,

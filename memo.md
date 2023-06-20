@@ -1,12 +1,7 @@
 # z3 checkers
-* speedup
-    * [done] dataset cache
-    * trial
-    * distractor側も，generate()が非効率になっていないか？
-    * checkingの順番
-* timeout -> timeout_per_trial
-* いまset_trace()している場所にバグがあるかもしれない．
+* logを見る．変なのが増えている．
 * timeout戻す
+* warning戻す．
 * ここで重要なものをOSSに移す．
 
 

@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 10000) -> None:
+                     num_dataset: int = 100) -> None:
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
         log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
