@@ -119,7 +119,7 @@ class ProofNode:
 
     @property
     def is_leaf(self) -> bool:
-        return len(self.children) == 0
+        return len(self.children) == 0 and not self.is_assump
 
     @property
     def is_assump(self) -> bool:
@@ -160,7 +160,7 @@ class ProofTree:
     @property
     def leaf_nodes(self) -> List[ProofNode]:
         return [node for node in self._nodes
-                if len(node.children) == 0 and not node.is_assump]
+                if node.is_leaf]
 
     @property
     def root_node(self) -> Optional[ProofNode]:
