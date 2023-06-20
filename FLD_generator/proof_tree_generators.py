@@ -526,6 +526,7 @@ def _extend_branches_with_timeout_retry(*args,
     #     raise ExtendBranchesFailure(str(e))
 
 
+@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
                    argument_weights: Optional[Dict[Argument, float]] = None,
@@ -535,7 +536,8 @@ def _generate_stem(arguments: List[Argument],
                    allow_inconsistency=False,
                    allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
-                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
+                   allow_illegal_intermediate_constants=False,
+                   return_at_best=False) -> Optional[ProofTree]:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -737,12 +739,13 @@ def _generate_stem(arguments: List[Argument],
                                                                                   constraints=premise_mapping)
                         for i_mapping_trial, mapping in enumerate(
                                 generate_mappings_from_formula(
-                                next_arg.all_formulas,
-                                [Formula(' '.join(rep for rep in target_preds + target_consts))],
-                                constraints=premise_mapping,
-                                allow_many_to_one=False,
-                                shuffle=True,
-                                )):
+                                    next_arg.all_formulas,
+                                    [Formula(' '.join(rep for rep in target_preds + target_consts))],
+                                    constraints=premise_mapping,
+                                    allow_many_to_one=False,
+                                    shuffle=True,
+                                )
+                        ):
                             if i_mapping_trial >= 1:
                                 # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
                                 # we leave this loop for back reference
@@ -789,7 +792,7 @@ def _generate_stem(arguments: List[Argument],
                                         new_argument=next_arg_pulled,
                                     )
                                     if not _is_consistent:
-                                        logger.warning('-- (_generate_stem) reject the argument because the proof tree formulas are inconsistent --')
+                                        logger.warning('_generate_stem() reject the argument because the proof tree formulas are inconsistent')
                                         for msg in logs:
                                             logger.info(msg)
                                         rejection_stats['_is_consistent_formula_set'] += 1
@@ -805,7 +808,7 @@ def _generate_stem(arguments: List[Argument],
                                         new_argument=next_arg_pulled,
                                     )
                                     if _have_smaller_proofs:
-                                        logger.warning('-- (_generate_stem) reject the argument because the proof tree have smaller proofs --')
+                                        logger.warning('_generate_stem() reject the argument because the proof tree have smaller proofs')
                                         for log in logs:
                                             logger.info(log)
                                         rejection_stats['_have_smaller_proofs'] += 1
@@ -854,7 +857,13 @@ def _generate_stem(arguments: List[Argument],
                     'rejection stats   :',
                     rejection_stats_msg,
                 ])
-                raise GenerateStemFailure(msg)
+                if return_at_best:
+                    is_tree_done = True
+                    logger.info(msg)
+                    logger.warning('_generate_stem() could not complete the proof tree with the specified depth. return smaller tree.')
+                    break
+                else:
+                    raise GenerateStemFailure(msg)
 
         if is_tree_done:
 
@@ -1087,7 +1096,7 @@ def _extend_branches(proof_tree: ProofTree,
                                     new_argument=next_arg_pulled,
                                 )
                                 if not _is_consistent:
-                                    logger.warning('-- (_extend_branches) reject the argument because the proof tree formulas are inconsistent --')
+                                    logger.warning('_extend_branches() reject the argument because the proof tree formulas are inconsistent')
                                     for msg in logs:
                                         logger.info(msg)
                                     rejection_stats['_is_consistent_formula_set'] += 1
@@ -1103,7 +1112,7 @@ def _extend_branches(proof_tree: ProofTree,
                                     new_argument=next_arg_pulled,
                                 )
                                 if _have_smaller_proofs:
-                                    logger.warning('-- (_extend_branches) reject the argument because the proof tree have smaller proofs --')
+                                    logger.warning('_extend_branches() reject the argument because the proof tree have smaller proofs')
                                     for log in logs:
                                         logger.info(log)
                                     rejection_stats['_have_smaller_proofs'] += 1
@@ -1137,12 +1146,11 @@ def _extend_branches(proof_tree: ProofTree,
                 rejection_stats_msg,
 
             ])
+            logger.info(msg)
             if return_at_best:
                 logger.info(msg)
-                if return_alignment:
-                    return proof_tree, orig_nodes_to_copy_nodes
-                else:
-                    return proof_tree
+                logger.warning('_extend_branches() could not complete the proof tree with the specified steps. return smaller tree.')
+                break
             else:
                 raise ExtendBranchesFailure(msg)
 

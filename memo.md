@@ -6,6 +6,37 @@
 * ここで重要なものをOSSに移す．
 
 
+# retry vs at_most
+* retry
+    - Pros
+        * 木のサイズなどの指定が厳密になる．結果として，データセットの偏りを消せる．
+    - Cons
+        * 計算効率が悪い．
+            * 途中結果が無駄になること．
+                - 途中結果も残しておいて，最大限再利用したい．
+            * 何回もtryする必要がある．
+* at_most
+    - Pros
+        - 計算効率が格段に良い．
+    - Cons
+        - サイズ指定の問題．
+
+## 仕様
+* generate_stem
+    - as_best=True
+* run_with_timeout_retry
+    - option
+        - is_retry_func
+        - is_retry_exception
+        - max_retry
+        - timeout
+    - output
+        - 
+
+## 治す部分
+- generate_stem
+- extend_branches
+- distractor
 
 
 # [todo] 最終チェック

@@ -1,6 +1,7 @@
 from typing import Optional, Tuple, Any, Union, List, Dict
 from collections import defaultdict
 from pprint import pprint
+import logging
 
 from FLD_generator.formula import (
     Formula,
@@ -56,6 +57,8 @@ _Object = DeclareSort('Object')
 _UNARY_PREDICATES_SINGLETON: Dict[str, Function] = {}
 _ZEROARY_PREDICATES_SINGLETON: Dict[str, Bool] = {}
 _ARGS_SINGLETON: Dict[str, Const] = {}
+
+logger = logging.getLogger(__name__)
 
 
 def _UNARY_PREDICATES(pred: str) -> Function:
@@ -128,7 +131,7 @@ def parse(rep: str):
 
 
 _CHECK_SAT_CACHE = {}
-
+_CACHE_SIZE = 1000000
 
 @profile
 def check_sat(formulas: List[Formula],
@@ -136,7 +139,7 @@ def check_sat(formulas: List[Formula],
               get_parse=False):
     global _CHECK_SAT_CACHE
 
-    cache_key = tuple(formula.rep for formula in formulas)
+    cache_key = tuple(sorted(formula.rep for formula in formulas))
     # model and parse is object, thus we do not cache them.
     if not get_model and not get_parse and cache_key in _CHECK_SAT_CACHE:
         return _CHECK_SAT_CACHE[cache_key]
@@ -153,7 +156,7 @@ def check_sat(formulas: List[Formula],
         model = None
 
     _CHECK_SAT_CACHE[cache_key] = is_sat
-    if len(_CHECK_SAT_CACHE) >= 100000:   # reset
+    if len(_CHECK_SAT_CACHE) >= _CACHE_SIZE:   # reset
         _CHECK_SAT_CACHE = {}
 
     if get_model or get_parse:
