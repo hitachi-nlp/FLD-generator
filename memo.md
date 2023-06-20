@@ -1,15 +1,17 @@
 # z3 checkers
-* retry vs best_effort
-* timeout -> timeout_per_trial
 * speedup
+    * [done] dataset cache
+    * trial
     * distractor側も，generate()が非効率になっていないか？
     * checkingの順番
+* timeout -> timeout_per_trial
+* いまset_trace()している場所にバグがあるかもしれない．
 * timeout戻す
 * ここで重要なものをOSSに移す．
 
 
 
-# retry vs best_effort
+# [done] retry vs best_effort
 * retry
     - Pros
         * 木のサイズなどの指定が厳密になる．結果として，データセットの偏りを消せる．

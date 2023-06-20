@@ -364,7 +364,8 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth: int,
                       branch_extension_steps: int,
-                      **kwargs) -> Optional[ProofTree]:
+                      get_all_trial_results=False,
+                      **kwargs) -> Union[ProofTree, List[ProofTree]]:
         trial_result_proof_trees = _generate_tree_with_timeout_retry(
             self.arguments,
             depth,
@@ -374,9 +375,12 @@ class ProofTreeGenerator:
             disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
             **kwargs,
         )
-        return _pick_largest_tree(trial_result_proof_trees)
+        if get_all_trial_results:
+            return trial_result_proof_trees
+        else:
+            return _pick_largest_tree(trial_result_proof_trees)
 
-    def generate_stem(self, depth: int, **kwargs) -> ProofTree:
+    def generate_stem(self, depth: int, get_all_trial_results=False, **kwargs) -> Union[ProofTree, List[ProofTree]]:
         trial_result_proof_trees = _generate_stem_with_timeout_retry(
             self.arguments,
             depth,
@@ -385,12 +389,16 @@ class ProofTreeGenerator:
             disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
             **kwargs,
         )
-        return _pick_largest_tree(trial_result_proof_trees)
+        if get_all_trial_results:
+            return trial_result_proof_trees
+        else:
+            return _pick_largest_tree(trial_result_proof_trees)
 
     def extend_branches(self,
                         proof_tree: ProofTree,
                         branch_extension_steps: int,
-                        **kwargs) -> ProofTree:
+                        get_all_trial_results=False,
+                        **kwargs) -> Union[Tuple[ProofTree, int], List[Tuple[ProofTree, int]]]:
         trial_result_proof_trees = _extend_branches_with_timeout_retry(
             proof_tree,
             self.arguments,
@@ -399,19 +407,26 @@ class ProofTreeGenerator:
             elim_dneg=self.elim_dneg,
             **kwargs,
         )
-        return _pick_largest_tree(trial_result_proof_trees)
+        if get_all_trial_results:
+            return trial_result_proof_trees
+        else:
+            return sorted(trial_result_proof_trees,
+                          key = lambda A_num_step: A_num_step[1])[-1]
 
 
-def _generate_tree_with_timeout_retry(*args,
+def _generate_tree_with_timeout_retry(arguments: List[Argument],
+                                      depth: int,
+                                      *args,
                                       max_retry=30,
                                       timeout=9999,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
         trial_result_proof_trees = run_with_timeout_retry(
             _generate_tree,
-            func_args=args,
+            func_args = [arguments, depth] + list(args),
             func_kwargs=kwargs,
 
+            should_retry_func=lambda proof_tree: proof_tree.depth < depth,
             should_retry_exception=ProofTreeGenerationFailure,
 
             max_retry=max_retry,
@@ -441,7 +456,7 @@ def _generate_tree(arguments: List[Argument],
                    allow_smaller_proofs=False,
                    best_effort=False,
                    force_fix_illegal_intermediate_constants=False,
-                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
+                   allow_illegal_intermediate_constants=False) -> ProofTree:
     proof_tree = _generate_stem(
         arguments,
         depth,
@@ -459,7 +474,7 @@ def _generate_tree(arguments: List[Argument],
     )
     if depth > 1:
         try:
-            trial_result_proof_trees = _extend_branches_with_timeout_retry(
+            trial_results = _extend_branches_with_timeout_retry(
                 proof_tree,
                 arguments,
                 branch_extension_steps,
@@ -475,7 +490,8 @@ def _generate_tree(arguments: List[Argument],
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,
             )
-            proof_tree = _pick_largest_tree(trial_result_proof_trees)
+            proof_tree = sorted(trial_results,
+                                key = lambda A_num_step: A_num_step[1])[-1][0]
         except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg=f'because of the following error:\n{str(e)}'))
@@ -492,7 +508,6 @@ def _generate_tree(arguments: List[Argument],
                 allow_smaller_proofs=allow_smaller_proofs,
                 elim_dneg=elim_dneg,
             )
-
     return proof_tree
 
 
@@ -500,7 +515,9 @@ def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
     return sorted(proof_trees, key=lambda proof_tree: proof_tree.depth)[-1]
 
 
-def _generate_stem_with_timeout_retry(*args,
+def _generate_stem_with_timeout_retry(arguments: List[Argument],
+                                      depth: int,
+                                      *args,
                                       max_retry=30,
                                       timeout=9999,
                                       best_effort=False,
@@ -510,9 +527,10 @@ def _generate_stem_with_timeout_retry(*args,
         _kwargs['best_effort'] = best_effort
         return run_with_timeout_retry(
             _generate_stem,
-            func_args=args,
+            func_args=[arguments, depth] + list(args),
             func_kwargs=_kwargs,
 
+            should_retry_func=lambda proof_tree: proof_tree.depth < depth,
             should_retry_exception=GenerateStemFailure,
 
             max_retry=max_retry,
@@ -528,19 +546,23 @@ def _generate_stem_with_timeout_retry(*args,
     #     raise GenerateStemFailure(str(e))
 
 
-def _extend_branches_with_timeout_retry(*args,
+def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
+                                        arguments: List[Argument],
+                                        num_steps: int,
+                                        *args,
                                         timeout=9999,
                                         max_retry=30,
                                         best_effort=False,
-                                        **kwargs) -> List[ProofTree]:
+                                        **kwargs) -> List[Tuple[ProofTree, int]]:
     try:
         _kwargs = kwargs.copy()
         _kwargs['best_effort'] = best_effort
         return run_with_timeout_retry(
             _extend_branches,
-            func_args=args,
+            func_args=[proof_tree, arguments, num_steps] + list(args),
             func_kwargs=_kwargs,
 
+            should_retry_func = lambda proof_tree_step: proof_tree_step[1] < num_steps,
             should_retry_exception=ExtendBranchesFailure,
 
             max_retry=max_retry,
@@ -902,6 +924,7 @@ def _generate_stem(arguments: List[Argument],
 
             # _check_leaf_consistency(proof_tree)
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
+
             return proof_tree
 
     raise Exception('Unexpected')
@@ -935,7 +958,8 @@ def _extend_branches(proof_tree: ProofTree,
                      allow_inconsistency=False,
                      allow_smaller_proofs=False,
                      best_effort=False,
-                     return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
+                     return_alignment=False) -> Union[Tuple[int, ProofTree],
+                                                      Tuple[ProofTree, int, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
     The steps are:
@@ -989,9 +1013,9 @@ def _extend_branches(proof_tree: ProofTree,
 
             if len(_target_leaf_nodes) == 0:
                 if return_alignment:
-                    return proof_tree, orig_nodes_to_copy_nodes
+                    return proof_tree, cur_step, orig_nodes_to_copy_nodes
                 else:
-                    return proof_tree
+                    return proof_tree, cur_step
         else:
             _target_leaf_nodes = current_leaf_nodes
 
@@ -1006,7 +1030,8 @@ def _extend_branches(proof_tree: ProofTree,
             # _check_leaf_consistency(proof_tree)
 
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
-            return proof_tree
+
+            return proof_tree, cur_step
 
         if cur_step == 0:
             is_linkable_any = False
@@ -1188,9 +1213,9 @@ def _extend_branches(proof_tree: ProofTree,
     proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
 
     if return_alignment:
-        return proof_tree, orig_nodes_to_copy_nodes
+        return proof_tree, cur_step, orig_nodes_to_copy_nodes
     else:
-        return proof_tree
+        return proof_tree, cur_step
 
 
 @profile
@@ -1355,7 +1380,7 @@ def _fix_illegal_intermediate_constants(
             if illegal_node in leaf_nodes:
                 num_steps = i_trial / 6 + 1
                 try:
-                    proof_tree_tmp_maybe_fixed, alignment = _extend_branches_with_timeout_retry(
+                    trial_results = _extend_branches_with_timeout_retry(
                         proof_tree_tmp,
                         arguments,
                         num_steps,
@@ -1377,6 +1402,7 @@ def _fix_illegal_intermediate_constants(
                         timeout=9999,
                         max_retry=5,
                     )
+                    proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]
                 except ExtendBranchesFailure as e:
                     logger.info(_make_pretty_msg_for_fix(status='failure', msg=f'will try next. failed in branch extension due to:\n{str(e)}'))
                     continue

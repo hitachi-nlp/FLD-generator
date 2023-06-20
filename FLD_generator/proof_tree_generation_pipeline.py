@@ -1,6 +1,7 @@
 from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
+import random
 
 from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation
 from FLD_generator.proof import ProofTree, ProofNode
@@ -49,6 +50,43 @@ class ProofTreeGenerationPipeline:
         else:
             self._empty_translation_stat = None
 
+        self._reusable_proof_trees: Dict[Tuple[Any], List[ProofTree]] = defaultdict(list)
+
+    @profile
+    def _reusable_generate(self,
+                           depth: int,
+                           branch_extension_steps: int,
+                           allow_inconsistency=False,
+                           allow_smaller_proofs=False,
+                           depth_1_reference_weight: Optional[float] = None,
+                           force_fix_illegal_intermediate_constants=False) -> ProofTree:
+        _reuse_key = (depth, allow_inconsistency, allow_smaller_proofs, depth_1_reference_weight, force_fix_illegal_intermediate_constants)
+
+        reusable_proof_trees = self._reusable_proof_trees[_reuse_key]
+        if len(reusable_proof_trees) > 0:
+            idx = random.randint(0, len(reusable_proof_trees))
+            reusable_proof_tree = reusable_proof_trees[idx]
+            reusable_proof_trees.pop(idx)
+            logger.fatal('could get tree from cache!!')
+            return reusable_proof_tree
+
+        trial_proof_trees = self.generator.generate_tree(
+            depth,
+            branch_extension_steps,
+            depth_1_reference_weight=depth_1_reference_weight,
+            allow_inconsistency=allow_inconsistency,
+            allow_smaller_proofs=allow_smaller_proofs,
+            best_effort=True,
+            force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
+            get_all_trial_results=True,
+        )
+        trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
+
+        reusable_proof_trees.extend(trial_proof_trees[:-1])
+        if len(reusable_proof_trees) > 100000:
+            self._reusable_proof_trees[_reuse_key]  = []
+
+        return trial_proof_trees[-1]
 
     @profile
     def run(self,
@@ -75,13 +113,12 @@ class ProofTreeGenerationPipeline:
         while True:
             logger.info(_make_pretty_log('generate proof tree', 'start'))
             try:
-                proof_tree = self.generator.generate_tree(
+                proof_tree = self._reusable_generate(
                     depth,
                     branch_extension_steps,
                     depth_1_reference_weight=depth_1_reference_weight,
                     allow_inconsistency=allow_inconsistency,
                     allow_smaller_proofs=allow_smaller_proofs,
-                    best_effort=True,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
             except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:

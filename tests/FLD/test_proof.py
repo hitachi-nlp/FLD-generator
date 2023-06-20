@@ -1,7 +1,7 @@
 from pprint import pprint
 from typing import List
 
-from FLD_generator.proof import ProofNode, ProofTree, find_must_consistent_node_sets
+from FLD_generator.proof import ProofNode, ProofTree
 from FLD_generator.argument import Argument
 from FLD_generator.formula import Formula
 
@@ -50,6 +50,27 @@ def test_proof_tree():
             print('    assump:', orig_assump)
             assert orig_assump != copy_assump\
                 and orig_assump.formula == copy_assump.formula
+
+    """
+    n0 -> n2 ->
+          n3 -> n4
+    n0 --
+
+    where '->' means parent and '--' means assump_parent.
+    """
+
+    n0, _, n2, n3, n4, *_ = _prepare_nodes()
+
+    n0.set_parent(n2)
+    n2.set_parent(n4)
+    n3.set_parent(n4)
+    n3.add_assump_child(n0)
+    tree = ProofTree(nodes=[n0, n2, n3, n4])
+
+    assert set(tree.leaf_nodes) == {n3}
+
+    tree_traversed_nodes = list(tree.depth_first_traverse())
+    assert list(tree_traversed_nodes) == [n0, n2, n3, n4]
 
 
 # def test_find_must_consistent_node_sets():

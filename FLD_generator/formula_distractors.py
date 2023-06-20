@@ -591,8 +591,7 @@ class NegativeTreeDistractor(FormulaDistractor):
 
                 negative_tree = ProofTree([ProofNode(negative_tree_root_formula)])
 
-                # SLOW
-                negative_tree = self.generator.extend_branches(
+                negative_tree, _ = self.generator.extend_branches(
                     negative_tree,
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
