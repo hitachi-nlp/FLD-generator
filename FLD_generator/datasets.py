@@ -16,7 +16,7 @@ from FLD_generator.proof import ProofTree, ProofNode
 from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
-from FLD_generator.translation_distractors import build as build_translation_distractor
+from FLD_generator.translation_distractors import build as build_translation_distractor, TranslationDistractorGenerationFailure
 from FLD_generator.utils import (
     provable_from_incomplete_facts,
     disprovable_from_incomplete_facts,
@@ -611,15 +611,12 @@ class NLProofSDataset:
         for dead_node in dead_leaf_nodes:
             if self.use_collapsed_translation_nodes_for_unknown_tree:
                 if random.random() <= 0.5 and dead_node.formula.translation is not None:
-                    collapased_translations = self.word_swap_distractor.generate(
-                        [dead_node.formula.translation],
-                        1,
-                    )
-
-                    if len(collapased_translations) == 0:
-                        logger.warning('Could not collapse the translation "%s". Will be treated as missing nodes.', dead_node.formula.translation)
-                        missing_leaf_nodes.append(dead_node)
-                    else:
+                    try:
+                        collapased_translations = self.word_swap_distractor.generate(
+                            [dead_node.formula.translation],
+                            1,
+                            best_effort=False,
+                        )
                         collapased_translation = collapased_translations[0]
                         logger.info('Make collapsed translation node as:\norig     : "%s"\ncollapsed: "%s"', dead_node.formula.translation, collapased_translation)
                         dead_node.formula.translation = collapased_translation
@@ -627,6 +624,9 @@ class NLProofSDataset:
                             dead_node.formula.translation_name = dead_node.formula.translation_name + '.collapsed'
 
                         collapsed_leaf_nodes.append(dead_node)
+                    except TranslationDistractorGenerationFailure:
+                        logger.warning('Could not collapse the translation "%s". Will be treated as missing nodes.', dead_node.formula.translation)
+                        missing_leaf_nodes.append(dead_node)
                 else:
                     missing_leaf_nodes.append(dead_node)
             else:

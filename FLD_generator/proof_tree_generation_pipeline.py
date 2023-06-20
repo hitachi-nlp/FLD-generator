@@ -81,6 +81,7 @@ class ProofTreeGenerationPipeline:
                     depth_1_reference_weight=depth_1_reference_weight,
                     allow_inconsistency=allow_inconsistency,
                     allow_smaller_proofs=allow_smaller_proofs,
+                    best_effort=True,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
             except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
@@ -96,9 +97,11 @@ class ProofTreeGenerationPipeline:
             if num_distractors > 0:
                 if self.distractor is not None:
                     try:
-                        formula_distractors, _others = self.distractor.generate(proof_tree, num_distractors,
+                        formula_distractors, _others = self.distractor.generate(proof_tree,
+                                                                                num_distractors,
                                                                                 allow_inconsistency=allow_inconsistency,
-                                                                                allow_smaller_proofs=allow_smaller_proofs)
+                                                                                allow_smaller_proofs=allow_smaller_proofs,
+                                                                                best_effort=True)
                         for _other_key, _other_val in _others.items():
                             if _other_key in others:
                                 raise ValueError(f'Duplicated other key {_other_key}')
@@ -177,7 +180,7 @@ class ProofTreeGenerationPipeline:
                         translation_distractors = []
                     else:
                         try:
-                            translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors)
+                            translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors, best_effort=True)
                         except FormulaDistractorGenerationFailure as e:
                             raise ProofTreeGenerationPipelineFailure(str(e))
                 else:

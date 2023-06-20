@@ -1,4 +1,6 @@
 # z3 checkers
+* retry vs best_effort
+* timeout -> timeout_per_trial
 * speedup
     * distractor側も，generate()が非効率になっていないか？
     * checkingの順番
@@ -6,16 +8,18 @@
 * ここで重要なものをOSSに移す．
 
 
-# retry vs at_most
+
+# retry vs best_effort
 * retry
     - Pros
         * 木のサイズなどの指定が厳密になる．結果として，データセットの偏りを消せる．
+        * 帰り値のサイズを保証できる．
     - Cons
         * 計算効率が悪い．
             * 途中結果が無駄になること．
                 - 途中結果も残しておいて，最大限再利用したい．
             * 何回もtryする必要がある．
-* at_most
+* best_effort
     - Pros
         - 計算効率が格段に良い．
     - Cons
@@ -23,15 +27,28 @@
 
 ## 仕様
 * generate_stem
-    - as_best=True
+    - best_effort=True
 * run_with_timeout_retry
     - option
         - is_retry_func
         - is_retry_exception
         - max_retry
         - timeout
+        - get_all_results
     - output
         - 
+* 呼び出し元
+    - 結果をcacheする．
+
+
+## 手順
+* 一番下の関数にbest_effortを加える．
+* run_with_timeout_retryで
+    - best_effortを指定する．
+    - should_retry_funcを指定する．
+    - 返り値のmaxを取る操作を指定する．
+* 呼び出し元で
+    - best_effortを指定する．
 
 ## 治す部分
 - generate_stem

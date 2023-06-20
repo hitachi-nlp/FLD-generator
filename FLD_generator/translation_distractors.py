@@ -24,20 +24,27 @@ class TranslationDistractor(ABC):
                  translations: List[str],
                  size: int,
                  max_retry: Optional[int] = None,
-                 timeout: Optional[int] = None) -> List[str]:
+                 timeout_per_trial: Optional[int] = None,
+                 best_effort=False) -> List[str]:
         max_retry = max_retry or self.default_max_retry
-        timeout = timeout or self.default_timeout
+        timeout_per_trial = timeout_per_trial or self.default_timeout
         try:
-            return run_with_timeout_retry(
+            trial_results = run_with_timeout_retry(
                 self._generate,
                 func_args=[translations, size],
-                func_kwargs={},
-                retry_exception_class=TranslationDistractorGenerationFailure,
+                func_kwargs={'best_effort': best_effort},
+
+                should_retry_func = lambda distractors: len(distractors) < size,
+                should_retry_exception=TranslationDistractorGenerationFailure,
+
                 max_retry=max_retry,
-                timeout=timeout,
+                timeout_per_trial=timeout_per_trial,
+                best_effort=best_effort,
+
                 logger=logger,
                 log_title='_generate()',
             )
+            return sorted(trial_results, key = lambda distractors: len(distractors))[-1]
         except RetryAndTimeoutFailure as e:
             raise TranslationDistractorGenerationFailure(str(e))
 
@@ -52,7 +59,7 @@ class TranslationDistractor(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, translations: List[str], size: int) -> List[str]:
+    def _generate(self, translations: List[str], size: int, best_effort=False) -> List[str]:
         pass
 
 
@@ -87,7 +94,7 @@ class WordSwapDistractor(TranslationDistractor):
             yield word
 
     @profile
-    def _generate(self, translations: List[str], size: int) -> List[str]:
+    def _generate(self, translations: List[str], size: int, best_effort=False) -> List[str]:
         intermediate_constants = list(self._word_bank.get_intermediate_constant_words())
         translations = [transl for transl in translations
                         if all(transl.find(intermediate_constant) < 0 for intermediate_constant in intermediate_constants)]
@@ -112,9 +119,13 @@ class WordSwapDistractor(TranslationDistractor):
                     return distractor_translations
 
         if len(distractor_translations) < size:
-            logger.warning('WordSwapDistractor could not generate %s distractors. Will return only %d distractors', size, len(distractor_translations))
+            msg = f'WordSwapDistractor could not generate {size} distractors. Will return only {len(distractor_translations)} distractors'
             if is_duplicated_translation_generated:
-                logger.warning('This might be due to that duplicated translation are generated but they are excluded.')
+                msg += '\nThis might be due to that duplicated translation are generated but they are excluded.'
+            if best_effort:
+                logger.warning(msg)
+            else:
+                raise TranslationDistractorGenerationFailure(msg)
         return distractor_translations
 
     def _word_swap_translation(self, transl: str, at_least_one=True) -> Optional[str]:

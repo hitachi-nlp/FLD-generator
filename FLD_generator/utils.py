@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List, Iterable, Any, Tuple
+from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -112,17 +112,24 @@ def run_with_timeout_retry(
     func: Callable,
     func_args: List[Any] = None,
     func_kwargs: Dict[Any, Any] = None,
-    retry_exception_class: Optional[Exception] = None,
+
+    should_retry_func: Callable[[Any], bool] = lambda _: False,
+    should_retry_exception: Optional[Exception] = None,
+
     max_retry: Optional[int] = None,
-    timeout: Optional[int] = None,
+    timeout_per_trial: Optional[int] = None,
+    best_effort=False,
+
     logger = None,
     log_title: Optional[str] = None,
 ) -> Any:
+    if max_retry is not None and max_retry <= 0:
+        raise ValueError()
 
     func_args = func_args or []
     func_kwargs = func_kwargs or {}
     max_retry = max_retry or 99999
-    timeout = timeout or 99999
+    timeout_per_trial = timeout_per_trial or 99999
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
@@ -131,24 +138,34 @@ def run_with_timeout_retry(
                                trial=i_trial + 1, max_trial=max_retry, boundary_level=0,
                                msg=msg)
 
+    trial_results = []
     for i_trial in range(0, max_retry):
-        exception_msg = None
         try:
-            result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
+            timeout_func = timeout_decorator.timeout(timeout_per_trial,
+                                                     timeout_exception=TimeoutError,
+                                                     use_signals=True)(func)
+            result = timeout_func(*func_args, **func_kwargs)
             logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
-            return result
+            trial_results.append(result)
+
+            if not should_retry_func(result):
+                return trial_results
+
+            retry_msg = 'is_retry_func(result)'
+
         except TimeoutError as e:
-            exception_msg = f'TimeoutError(timeout={timeout})'
-        except retry_exception_class as e:
-            exception_msg = str(e)
+            retry_msg = f'TimeoutError(timeout={timeout_per_trial})'
 
-        if exception_msg is not None:
-            logger.info(_make_pretty_msg(i_trial, 'failure',
-                                         msg=f'this is caused by the folllowing error\n{str(exception_msg)}'))
-        else:
-            logger.info(_make_pretty_msg(i_trial, 'failure'))
+        except should_retry_exception as e:
+            retry_msg = str(e)
 
-    raise RetryAndTimeoutFailure(_make_pretty_msg(i_trial, 'failure'))
+        logger.info(_make_pretty_msg(i_trial, 'failure',
+                                     msg=f'this is caused by the folllowing:\n{str(retry_msg)}'))
+
+    if best_effort and len(trial_results) > 0:
+        return trial_results
+    else:
+        raise RetryAndTimeoutFailure(_make_pretty_msg(i_trial, 'failure'))
 
 
 def compress(text: str) -> bytes:
@@ -364,6 +381,7 @@ def have_smaller_proofs_with_logs(org_leaf_formulas: List[Formula],
         for formula in org_leaf_formulas:
             log_msgs.append(f'    {formula.rep}')
 
+        log_msgs.append('distractors   :')
         if len(distractor_formulas) > 0:
             for formula in distractor_formulas:
                 log_msgs.append(f'    {formula.rep}')

@@ -57,9 +57,9 @@ class Translator(ABC):
                 self._translate,
                 func_args=[formulas, intermediate_constant_formulas],
                 func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
-                retry_exception_class=TranslationFailure,
+                should_retry_exception=TranslationFailure,
                 max_retry=max_retry,
-                timeout=timeout,
+                timeout_per_trial=timeout,
                 logger=logger,
                 log_title='_translate()',
             )
