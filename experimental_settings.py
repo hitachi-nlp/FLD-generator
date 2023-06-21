@@ -5183,6 +5183,61 @@ _DATASET_SETTINGS = {
     },
 
 
+    '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems.wo_translation_dist': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'complication': 0.5,
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+
+
+        'num_distractors': _to_range(0, 15),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+        'fallback_from_formula_to_translation_distractor': False,
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+        'swap_ng_words_config': './configs/translation_distractors/swap_ng_words.2023-06-16.json',
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': None,
+
+
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 100,
+            # 'train': 30000,
+        }
+    },
+
 
 }
 
@@ -5326,6 +5381,7 @@ _DATASET_NAME_TO_DEFAULT = {
 
     # ---------------------------------- 20230621.formula_checkers ------------------------------------
     '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems': '20221203',
+    '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems.wo_translation_dist': '20221203',
 
 
 }

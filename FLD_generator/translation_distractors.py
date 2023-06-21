@@ -181,6 +181,8 @@ class WordSwapDistractor(TranslationDistractor):
 def build(type_: str,
           word_bank: Optional[WordBank] = None,
           swap_ng_words: Optional[Set[str]] = None):
+    raise Exception('we should not use translation distractor because it can not ensure that the collapsed sentence can not derive the original hypothesis.'
+                    'For example, "{A}=typhoon & {B}=rain" collapsed to "{A}=typhoon & {B}=cloud" still derives {A}=typhoon.')
 
     swap_ng_words = swap_ng_words or {'a', 'the', 'is'}
 

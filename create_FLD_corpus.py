@@ -150,10 +150,10 @@ def generate_instances(size: int, *args):
     dataset = load_dataset(*args)
     data = []
     agg_stats = defaultdict(int)
-    for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):
+    for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in tqdm(enumerate(dataset.generate(size))):
         data.append((nlproof_json, proof_tree, distractors, translation_distractors))
 
-        log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
+        log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
                     stats=None)
 

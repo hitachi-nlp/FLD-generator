@@ -255,12 +255,15 @@ def _build_bounded_msg(msg: str, level: int) -> str:
 
 
 def log_results(logger,
+                i_sample: Optional[int] = None,
                 nlproof_json: Optional[Dict] = None,
                 proof_tree = None,
                 distractors: Optional[List[str]] = None,
                 translation_distractors: Optional[List[str]] = None,
                 stats: Optional[Dict] = None):
-    logger.info(make_pretty_msg(title='results', boundary_level=4))
+    logger.info(make_pretty_msg(title='results',
+                                subtitle=f'sample = {i_sample}' if i_sample is not None else '',
+                                boundary_level=4))
 
     if proof_tree is not None:
         logger.info('\n')
