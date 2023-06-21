@@ -62,7 +62,7 @@ class Translator(ABC):
                 timeout_per_trial=timeout,
                 logger=logger,
                 log_title='_translate()',
-            )
+            )[-1]
         except RetryAndTimeoutFailure as e:
             raise TranslationFailure(str(e))
 
