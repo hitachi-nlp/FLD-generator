@@ -369,39 +369,39 @@
 
 
 
-      "{A}{a}.set": [
+      "{A}{a}.generic": [
         "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>>",
         "a <<phrase::{a}noun>> <<phrase::{A}post_modifier>>"
       ],
 
-      "¬{A}{a}.set": [
+      "¬{A}{a}.generic": [
         "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>>",
         "a <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>>"
       ],
 
       
-      "({A}{a} & {B}{a}).set": [
+      "({A}{a} & {B}{a}).generic": [
           "a <<phrase::({A} & {B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::({A} & {B})post_modifier>>",
 
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
       ],
 
-      "(¬{A}{a} & {B}{a}).set": [
+      "(¬{A}{a} & {B}{a}).generic": [
           "a <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})post_modifier>>",
 
           "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
       ],
 
-      "({A}{a} & ¬{B}{a}).set": [
+      "({A}{a} & ¬{B}{a}).generic": [
           "a <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})post_modifier>>",
 
           "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
-      "(¬{A}{a} & ¬{B}{a}).set": [
+      "(¬{A}{a} & ¬{B}{a}).generic": [
           "a <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
@@ -409,22 +409,22 @@
       ],
 
 
-      "({A}{a} v {B}{a}).set": [
+      "({A}{a} v {B}{a}).generic": [
           "a <<phrase::({A} v {B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
-      "(¬{A}{a} v {B}{a}).set": [
+      "(¬{A}{a} v {B}{a}).generic": [
           "a <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
-      "({A}{a} v ¬{B}{a}).set": [
+      "({A}{a} v ¬{B}{a}).generic": [
           "a <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
-      "(¬{A}{a} v ¬{B}{a}).set": [
+      "(¬{A}{a} v ¬{B}{a}).generic": [
           "a <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ],
@@ -435,14 +435,14 @@
 
 
 
-      "{A}something.set": [
+      "{A}something.generic": [
         "<<phrase::a_all>> <<phrase::{A}pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::{A}post_modifier>>",
 
         "<<phrase::{A}a_noun>>"
       ],
 
-      "¬{A}something.set": [
+      "¬{A}something.generic": [
         "<<phrase::a_all>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::¬{A}post_modifier>>",
 
@@ -450,7 +450,7 @@
       ],
 
       
-      "({A}something & {B}something).set": [
+      "({A}something & {B}something).generic": [
         "<<phrase::a_all>> <<phrase::({A} & {B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::({A} & {B})post_modifier>>",
 
@@ -460,7 +460,7 @@
         "<<phrase::{A}a_noun>> <<phrase::{B}post_modifier>>"
       ],
 
-      "(¬{A}something & {B}something).set": [
+      "(¬{A}something & {B}something).generic": [
         "<<phrase::a_all>> <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::(¬{A} & {B})post_modifier>>",
 
@@ -470,7 +470,7 @@
         "<<phrase::¬{A}a_noun>> <<phrase::{B}post_modifier>>"
       ],
 
-      "({A}something & ¬{B}something).set": [
+      "({A}something & ¬{B}something).generic": [
         "<<phrase::a_all>> <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::({A} & ¬{B})post_modifier>>",
 
@@ -480,7 +480,7 @@
         "<<phrase::{A}a_noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
-      "(¬{A}something & ¬{B}something).set": [
+      "(¬{A}something & ¬{B}something).generic": [
         "<<phrase::a_all>> <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
@@ -491,22 +491,22 @@
       ],
 
 
-      "({A}something v {B}something).set": [
+      "({A}something v {B}something).generic": [
         "<<phrase::a_all>> <<phrase::({A} v {B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
-      "(¬{A}something v {B}something).set": [
+      "(¬{A}something v {B}something).generic": [
         "<<phrase::a_all>> <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
-      "({A}something v ¬{B}something).set": [
+      "({A}something v ¬{B}something).generic": [
         "<<phrase::a_all>> <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
-      "(¬{A}something v ¬{B}something).set": [
+      "(¬{A}something v ¬{B}something).generic": [
         "<<phrase::a_all>> <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::thing>>",
         "<<phrase::something>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ]
