@@ -332,16 +332,20 @@
 
 
       "({A} v {B}).event_occurrence": [
-          "either <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "either <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+          "that <<clause::verb::({A} v {B})>>"
       ],
       "(¬{A} v {B}).event_occurrence": [
-          "either <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "either <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+          "that <<clause::verb::(¬{A} v {B})>>"
       ],
       "({A} v ¬{B}).event_occurrence": [
-          "either <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "either <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+          "that <<clause::verb::({A} v ¬{B})>>"
       ],
       "(¬{A} v ¬{B}).event_occurrence": [
-          "either <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "either <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+          "that <<clause::verb::(¬{A} v ¬{B})>>"
       ],
 
 
