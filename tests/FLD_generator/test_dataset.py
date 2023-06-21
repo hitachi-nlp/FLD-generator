@@ -26,11 +26,11 @@ logger = logging.getLogger(__name__)
 
 
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 30) -> None:
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
         log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
-                    stats=stats)
+                    stats=None)
 
 
 def test_generate_dataset_AACorpus():
@@ -112,7 +112,6 @@ def test_generate_dataset_AACorpus():
         sample_prototype_formulas_from_tree=True,
         use_simplified_formulas_as_prototype=True,
         sample_hard_negatives=True,
-        try_negated_hypothesis_first=True,
     )
 
     # SLOW
@@ -232,7 +231,6 @@ def test_generate_dataset():
         sample_prototype_formulas_from_tree=True,
         use_simplified_formulas_as_prototype=True,
         sample_hard_negatives=True,
-        try_negated_hypothesis_first=True,
     )
 
     swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))

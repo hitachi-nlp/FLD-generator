@@ -206,7 +206,7 @@ class NLProofSDataset:
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
                  version: str = '0.0',
-                 log_stats=False,
+                 log_stats=True,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 

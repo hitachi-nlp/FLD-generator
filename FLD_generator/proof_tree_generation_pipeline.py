@@ -48,7 +48,7 @@ class ProofTreeGenerationPipeline:
             self.translator.log_stats = log_stats
             self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
         else:
-            self._empty_translation_stat = None
+            self._empty_translation_stat = {}
 
         self._reusable_proof_trees: Dict[Tuple[Any], List[ProofTree]] = defaultdict(list)
 

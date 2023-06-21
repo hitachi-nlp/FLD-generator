@@ -84,7 +84,7 @@ def load_dataset(argument_config: List[str],
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                        use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
                                        sample_hard_negatives=sample_hard_negative_distractors,
-                                       try_negated_hypothesis_first=not dont_try_negative_hypothesis)
+                                       negated_hypothesis_ratio=0.0 if dont_try_negative_hypothesis else 0.5)
         logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
@@ -147,21 +147,17 @@ def load_dataset(argument_config: List[str],
 
 
 def generate_instances(size: int, *args):
-    # logger = logging.getLogger(__name__)
-    logger.debug('[pass or not checking for finding the cause of hangups] 00')  # HONOKA: we pass here
-
-    dataset = load_dataset(*args)  # HONOKA: we pass here
-    logger.debug('[pass or not checking for finding the cause of hangups] 01')
-
+    dataset = load_dataset(*args)
     data = []
     _final_stats = None
-    for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):  # HONOKA: we can't pass here
+    for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):
         data.append((nlproof_json, proof_tree, distractors, translation_distractors))
+
+        # TODO why only final stats? -> maybe, stats is too large?
         _final_stats = stats
         log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
-                    stats=stats)
-    logger.debug('[pass or not checking for finding the cause of hangups] 02')
+                    stats=None)
 
     return data, _final_stats
 
@@ -317,10 +313,8 @@ def main(output_path,
                     )
                 )
 
-            logger.debug('[pass or not checking for finding the cause of hangups] 0')  # HONOKA: we pass here
             logger.info('creating corpus with %d jobs', num_workers)
             instances_list = Parallel(n_jobs=num_workers, backend='multiprocessing')(jobs)
-            logger.debug('[pass or not checking for finding the cause of hangups] 1')  # HONOKA: we can't pass here
 
             cnt = 0
             is_done = False
@@ -345,7 +339,6 @@ def main(output_path,
                 if not name.startswith('cum.'):
                     gathered_stats[name] = gathered_stats[name] / num_jobs[name]
 
-            logger.debug('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
 
             logger.info('=========================== gathered stats (batch=%d) ============================',
                         i_batch)

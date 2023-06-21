@@ -805,6 +805,7 @@ def _generate_stem(arguments: List[Argument],
                                 continue
 
                             if is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True):
+                                # is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True)
                                 rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                                 continue
 
