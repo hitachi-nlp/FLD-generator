@@ -49,7 +49,7 @@ def test_generate_dataset_AACorpus():
     word_bank = build_wordnet_wordbank('eng')
 
     translator = build_translator(
-        glob.glob('./configs/translations/thing/**.json'),
+        glob.glob('./configs/translations/thing.v1/**.json'),
         word_bank,
         use_fixed_translation=True,
         reused_object_nouns_max_factor=1.0,
@@ -163,7 +163,7 @@ def test_generate_dataset():
 
     # translator = None
     translator = build_translator(
-        glob.glob('./configs/translations/thing/**.json'),
+        glob.glob('./configs/translations/thing.v1/**.json'),
         word_bank,
         use_fixed_translation=True,
         reused_object_nouns_max_factor=1.0,
