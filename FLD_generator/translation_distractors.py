@@ -123,7 +123,7 @@ class WordSwapDistractor(TranslationDistractor):
             if is_duplicated_translation_generated:
                 msg += '\nThis might be due to that duplicated translation are generated but they are excluded.'
             if best_effort:
-                logger.warning(msg)
+                logger.info(msg)
             else:
                 raise TranslationDistractorGenerationFailure(msg)
         return distractor_translations

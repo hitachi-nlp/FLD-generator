@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 @profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 10) -> None:
+                     num_dataset: int = 100) -> None:
     # agg_stats: Dict[str, int] = defaultdict(int)
     for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
         log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,

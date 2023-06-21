@@ -169,7 +169,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             [],
         )
         if not _is_consistent:
-            logger.warning('reject the new distractor because the formulas are inconsistent')
+            logger.info('reject the new distractor because the formulas are inconsistent')
             for msg in logs:
                 logger.info(msg)
             return False
@@ -185,7 +185,7 @@ def _new_distractor_formula_is_ok(new_distractor: Formula,
             distractor_formulas=existing_distractors + [new_distractor],
         )
         if _have_smaller_proofs:
-            logger.warning('reject the new distractor because we have smaller proofs')
+            logger.info('reject the new distractor because we have smaller proofs')
             for log in logs:
                 logger.info(log)
             return False

@@ -418,7 +418,7 @@ def _generate_tree_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
                                       max_retry=30,
-                                      timeout=9999,  # 5 + 5
+                                      timeout=10,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
         trial_result_proof_trees = run_with_timeout_retry(
@@ -519,7 +519,7 @@ def _generate_stem_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
                                       max_retry=30,
-                                      timeout=9999,
+                                      timeout=5,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
     try:
@@ -550,7 +550,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         arguments: List[Argument],
                                         num_steps: int,
                                         *args,
-                                        timeout=9999,
+                                        timeout=5,
                                         max_retry=30,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
@@ -837,7 +837,7 @@ def _generate_stem(arguments: List[Argument],
                                         new_argument=next_arg_pulled,
                                     )
                                     if not _is_consistent:
-                                        logger.warning('_generate_stem() reject the argument because the proof tree formulas are inconsistent')
+                                        logger.info('_generate_stem() reject the argument because the proof tree formulas are inconsistent')
                                         for msg in logs:
                                             logger.info(msg)
                                         rejection_stats['_is_consistent_formula_set'] += 1
@@ -853,7 +853,7 @@ def _generate_stem(arguments: List[Argument],
                                         new_argument=next_arg_pulled,
                                     )
                                     if _have_smaller_proofs:
-                                        logger.warning('_generate_stem() reject the argument because the proof tree have smaller proofs')
+                                        logger.info('_generate_stem() reject the argument because the proof tree have smaller proofs')
                                         for log in logs:
                                             logger.info(log)
                                         rejection_stats['_have_smaller_proofs'] += 1
@@ -905,7 +905,7 @@ def _generate_stem(arguments: List[Argument],
                 if best_effort:
                     is_tree_done = True
                     logger.info(msg)
-                    logger.warning('_generate_stem() could not complete the proof tree with the specified depth. return smaller tree.')
+                    logger.info('_generate_stem() could not complete the proof tree with the specified depth. return smaller tree.')
                     break
                 else:
                     raise GenerateStemFailure(msg)
@@ -1144,7 +1144,7 @@ def _extend_branches(proof_tree: ProofTree,
                                     new_argument=next_arg_pulled,
                                 )
                                 if not _is_consistent:
-                                    logger.warning('_extend_branches() reject the argument because the proof tree formulas are inconsistent')
+                                    logger.info('_extend_branches() reject the argument because the proof tree formulas are inconsistent')
                                     for msg in logs:
                                         logger.info(msg)
                                     rejection_stats['_is_consistent_formula_set'] += 1
@@ -1160,7 +1160,7 @@ def _extend_branches(proof_tree: ProofTree,
                                     new_argument=next_arg_pulled,
                                 )
                                 if _have_smaller_proofs:
-                                    logger.warning('_extend_branches() reject the argument because the proof tree have smaller proofs')
+                                    logger.info('_extend_branches() reject the argument because the proof tree have smaller proofs')
                                     for log in logs:
                                         logger.info(log)
                                     rejection_stats['_have_smaller_proofs'] += 1
@@ -1197,7 +1197,7 @@ def _extend_branches(proof_tree: ProofTree,
             logger.info(msg)
             if best_effort:
                 logger.info(msg)
-                logger.warning('_extend_branches() could not complete the proof tree with the specified steps. return smaller tree.')
+                logger.info('_extend_branches() could not complete the proof tree with the specified steps. return smaller tree.')
                 break
             else:
                 raise ExtendBranchesFailure(msg)
@@ -1392,7 +1392,7 @@ def _fix_illegal_intermediate_constants(
                         return_alignment=True,
 
                         best_effort=True,
-                        timeout=9999,
+                        timeout=5,
                         max_retry=5,
                     )
                     proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]
