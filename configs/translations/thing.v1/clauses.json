@@ -65,11 +65,11 @@
       ],
       "(¬{A}{a} & {B}{a})set_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}set_subj>> <<phrase::but_and>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}{a}set_subj>> <<phrase::but>> <<clause::verb::{B}it>>"
       ],
       "({A}{a} & ¬{B}{a})set_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}set_subj>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}{a}set_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}{a} & ¬{B}{a})set_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -111,11 +111,11 @@
       ],
       "(¬{A}{a} & {B}{a})unique_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}unique_subj>> <<phrase::but_and>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}{a}unique_subj>> <<phrase::but>> <<clause::verb::{B}it>>"
       ],
       "({A}{a} & ¬{B}{a})unique_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}unique_subj>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}{a}unique_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}{a} & ¬{B}{a})unique_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -159,11 +159,11 @@
       ],
       "(¬{A}something & {B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}something>> <<phrase::but_and>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}something>> <<phrase::but>> <<clause::verb::{B}it>>"
       ],
       "({A}something & ¬{B}something)": [
           "<<phrase::something>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}something>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}something>> <<phrase::but>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}something & ¬{B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} & ¬{B})predicate>>",
@@ -248,11 +248,11 @@
       ],
       "(¬{A}it & {B}it)": [
           "it <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}it>> <<phrase::but_and>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}it>> <<phrase::but>> <<clause::verb::{B}it>>"
       ],
       "({A}it & ¬{B}it)": [
           "it <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}it>> <<phrase::but_and>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}it>> <<phrase::but>> <<clause::verb::¬{B}it>>"
       ],
       "(¬{A}it & ¬{B}it)": [
           "it <<phrase::(¬{A} & ¬{B})predicate>>",
