@@ -299,16 +299,20 @@
 
 
       "({A} & {B}).event_occurrence": [
-          "<<clause::noun::{A}.event_occurrence>> <<phrase::with>> <<clause::noun::{B}.event_occurrence>>"
+          "__<<clause::noun::{A}.event_occurrence>> <<phrase::with>> <<clause::noun::{B}.event_occurrence>>",
+          "that <<clause::verb::({A} & {B})>>"
       ],
       "(¬{A} & {B}).event_occurrence": [
-          "<<clause::noun::¬{A}.event_occurrence>> <<phrase::with>> <<clause::noun::{B}.event_occurrence>>"
+          "__<<clause::noun::¬{A}.event_occurrence>> <<phrase::with>> <<clause::noun::{B}.event_occurrence>>",
+          "that <<clause::verb::(¬{A} & {B})>>"
       ],
       "({A} & ¬{B}).event_occurrence": [
-          "<<clause::noun::{A}.event_occurrence>> <<phrase::with>> <<clause::noun::¬{B}.event_occurrence>>"
+          "__<<clause::noun::{A}.event_occurrence>> <<phrase::with>> <<clause::noun::¬{B}.event_occurrence>>",
+          "that <<clause::verb::({A} & ¬{B})>>"
       ],
       "(¬{A} & ¬{B}).event_occurrence": [
-          "<<clause::noun::¬{A}.event_occurrence>> <<phrase::with>> <<clause::noun::¬{B}.event_occurrence>>"
+          "__<<clause::noun::¬{A}.event_occurrence>> <<phrase::with>> <<clause::noun::¬{B}.event_occurrence>>",
+          "that <<clause::verb::(¬{A} & ¬{B})>>"
       ],
 
 
