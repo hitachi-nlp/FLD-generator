@@ -57,7 +57,7 @@
       "is {A}[ADJ]",
 
       "{A}[VERB.s]",
-      "<<phrase::does_will>> {A}[VERB]",
+      "<<phrase::does>> {A}[VERB]",
 
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>>"
     ],
@@ -66,7 +66,7 @@
       "is not {A}[ADJ]",
       "is {A}[ADJ.neg]",
 
-      "<<phrase::does_will>> not {A}[VERB]",
+      "<<phrase::does>> not {A}[VERB]",
 
       "<<phrase::is_not_a_kind_of>> <<phrase::{A}a_noun>>"
     ],
@@ -295,9 +295,8 @@
       "and"
     ],
 
-    "does_will": [
-      "does",
-      "will"
+    "does": [
+      "does"
     ],
 
     "cause_verb": [
