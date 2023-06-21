@@ -149,17 +149,20 @@ def load_dataset(argument_config: List[str],
 def generate_instances(size: int, *args):
     dataset = load_dataset(*args)
     data = []
-    _final_stats = None
+    agg_stats = defaultdict(int)
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):
         data.append((nlproof_json, proof_tree, distractors, translation_distractors))
 
-        # TODO why only final stats? -> maybe, stats is too large?
-        _final_stats = stats
         log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
                     stats=None)
 
-    return data, _final_stats
+        if stats is not None:
+            for name, count in stats.items():
+                if count is not None:
+                    agg_stats[name] += count
+
+    return data, agg_stats
 
 
 @click.command()

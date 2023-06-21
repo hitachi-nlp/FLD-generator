@@ -1,10 +1,11 @@
 import json
 
 import random
-from typing import List, Optional
+from typing import List, Optional, Dict
 import logging
 from pprint import pformat
 import glob
+from collections import defaultdict
 
 from FLD_generator.formula import Formula
 from FLD_generator.argument import Argument
@@ -22,15 +23,23 @@ from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results
 from logger_setup import setup as setup_logger
 
+import kern_profiler
+
 logger = logging.getLogger(__name__)
 
 
+@profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 30) -> None:
+                     num_dataset: int = 10) -> None:
+    # agg_stats: Dict[str, int] = defaultdict(int)
     for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
         log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
                     stats=None)
+        # for name, count in stats.items():
+        #     if count is not None:
+        #         agg_stats[name] += count
+    # logger.info(pformat(dict(agg_stats)))
 
 
 def test_generate_dataset_AACorpus():
