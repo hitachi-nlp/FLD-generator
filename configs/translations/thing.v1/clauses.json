@@ -9,7 +9,7 @@
       ],
 
       "¬{A}": [
-        "<<phrase::{A}a_event_noun>> does not occur"
+        "<<phrase::{A}a_event_noun>> <<phrase::does_will>> not occur"
       ],
 
 
@@ -18,11 +18,11 @@
           "<<phrase::{A}a_event_noun>> <<phrase::and_also>> <<phrase::{B}a_event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & {B})": [
-          "<<clause::verb::¬{A}>> <<phrase::and_also>> <<clause::verb::{B}>>",
+          "<<clause::verb::¬{A}>> <<phrase::but>> <<clause::verb::{B}>>",
           "<<phrase::¬{A}a_event_noun>> <<phrase::and_also>> <<phrase::{B}a_event_noun>> <<phrase::occur>>"
       ],
       "({A} & ¬{B})": [
-          "<<clause::verb::{A}>> <<phrase::and_also>> <<clause::verb::¬{B}>>",
+          "<<clause::verb::{A}>> <<phrase::but>> <<clause::verb::¬{B}>>",
           "<<phrase::{A}a_event_noun>> <<phrase::and_also>> <<phrase::¬{B}a_event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & ¬{B})": [
