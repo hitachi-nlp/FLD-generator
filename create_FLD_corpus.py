@@ -14,7 +14,7 @@ import dill
 
 from FLD_generator.translators import build as build_translator
 from FLD_generator.word_banks import build_wordnet_wordbank
-from FLD_generator.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
+from FLD_generator.formula_distractors import FormulaDistractor
 from FLD_generator.argument import Argument
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.proof_tree_generators import build as build_generator
