@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List, Iterable, Any
+from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -6,9 +6,12 @@ import logging
 import zlib
 from pprint import pformat
 
+from FLD_generator.argument import Argument
 from nltk.corpus import cmudict
 import timeout_decorator
 from .exception import FormalLogicExceptionBase
+from FLD_generator.formula import Formula, is_contradiction_symbol
+from FLD_generator.formula_checkers import is_provable, is_disprovable, is_consistent_set as is_consistent_formula_set
 import kern_profiler
 
 utils_logger = logging.getLogger(__name__)
@@ -109,17 +112,24 @@ def run_with_timeout_retry(
     func: Callable,
     func_args: List[Any] = None,
     func_kwargs: Dict[Any, Any] = None,
-    retry_exception_class: Optional[Exception] = None,
+
+    should_retry_func: Callable[[Any], bool] = lambda _: False,
+    should_retry_exception: Optional[Exception] = None,
+
     max_retry: Optional[int] = None,
-    timeout: Optional[int] = None,
+    timeout_per_trial: Optional[int] = None,
+    best_effort=False,
+
     logger = None,
     log_title: Optional[str] = None,
 ) -> Any:
+    if max_retry is not None and max_retry <= 0:
+        raise ValueError()
 
     func_args = func_args or []
     func_kwargs = func_kwargs or {}
     max_retry = max_retry or 99999
-    timeout = timeout or 99999
+    timeout_per_trial = timeout_per_trial or 99999
     logger = logger or utils_logger
     log_title = log_title or str(func)
 
@@ -128,24 +138,34 @@ def run_with_timeout_retry(
                                trial=i_trial + 1, max_trial=max_retry, boundary_level=0,
                                msg=msg)
 
+    trial_results = []
     for i_trial in range(0, max_retry):
-        exception_msg = None
         try:
-            result = timeout_decorator.timeout(timeout, timeout_exception=TimeoutError, use_signals=True)(func)(*func_args, **func_kwargs)
+            timeout_func = timeout_decorator.timeout(timeout_per_trial,
+                                                     timeout_exception=TimeoutError,
+                                                     use_signals=True)(func)
+            result = timeout_func(*func_args, **func_kwargs)
             logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
-            return result
+            trial_results.append(result)
+
+            if not should_retry_func(result):
+                return trial_results
+
+            retry_msg = 'is_retry_func(result)'
+
         except TimeoutError as e:
-            exception_msg = f'TimeoutError(timeout={timeout})'
-        except retry_exception_class as e:
-            exception_msg = str(e)
+            retry_msg = f'TimeoutError(timeout={timeout_per_trial})'
 
-        if exception_msg is not None:
-            logger.info(_make_pretty_msg(i_trial, 'failure',
-                                         msg=f'this is caused by the folllowing error\n{str(exception_msg)}'))
-        else:
-            logger.info(_make_pretty_msg(i_trial, 'failure'))
+        except should_retry_exception as e:
+            retry_msg = str(e)
 
-    raise RetryAndTimeoutFailure(_make_pretty_msg(i_trial, 'failure'))
+        logger.info(_make_pretty_msg(i_trial, 'failure',
+                                     msg=f'this is caused by the folllowing:\n{str(retry_msg)}'))
+
+    if best_effort and len(trial_results) > 0:
+        return trial_results
+    else:
+        raise RetryAndTimeoutFailure(_make_pretty_msg(i_trial, 'failure'))
 
 
 def compress(text: str) -> bytes:
@@ -166,6 +186,19 @@ def make_combination(elem_generators: List[Callable[[], Iterable[Any]]]) -> Iter
     else:
         for head_elem in head_elem_generator():
             for tail_elems in make_combination(tail_elem_generators):
+                yield [head_elem] + tail_elems
+
+
+def make_combination_from_iter(elem_generators: List[Iterable[Any]]) -> Iterable[List[Any]]:
+    head_elem_generator = elem_generators[0]
+    tail_elem_generators = elem_generators[1:]
+
+    if len(tail_elem_generators) == 0:
+        for elem in head_elem_generator:
+            yield [elem]
+    else:
+        for head_elem in head_elem_generator:
+            for tail_elems in make_combination_from_iter(tail_elem_generators):
                 yield [head_elem] + tail_elems
 
 
@@ -222,12 +255,15 @@ def _build_bounded_msg(msg: str, level: int) -> str:
 
 
 def log_results(logger,
+                i_sample: Optional[int] = None,
                 nlproof_json: Optional[Dict] = None,
                 proof_tree = None,
                 distractors: Optional[List[str]] = None,
                 translation_distractors: Optional[List[str]] = None,
                 stats: Optional[Dict] = None):
-    logger.info(make_pretty_msg(title='results', boundary_level=4))
+    logger.info(make_pretty_msg(title='results',
+                                subtitle=f'sample = {i_sample}' if i_sample is not None else '',
+                                boundary_level=4))
 
     if proof_tree is not None:
         logger.info('\n')
@@ -293,3 +329,125 @@ def make_pretty_msg(title: Optional[str] = None,
         log_msg = _build_bounded_msg(log_msg, boundary_level)
 
     return log_msg
+
+
+@profile
+def provable_from_incomplete_facts(fact_formulas: List[Formula],
+                                   distractor_formulas: List[Formula],
+                                   hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
+    # XXX: we can not find the other proofs constructed from all the fact_formulas.
+    for remaining_formulas, dropped_formula in _drop_one_element(fact_formulas):
+        if is_provable(remaining_formulas + distractor_formulas, hypothesis):
+            return True, dropped_formula
+    return False, None
+
+
+def disprovable_from_incomplete_facts(fact_formulas: List[Formula],
+                                      distractor_formulas: List[Formula],
+                                      hypothesis: Formula) -> Tuple[bool, Optional[Formula]]:
+    # XXX: we can not find the other disproofs constructed from all the fact_formulas.
+    for remaining_formulas, dropped_formula in _drop_one_element(fact_formulas):
+        if is_disprovable(remaining_formulas + distractor_formulas, hypothesis):
+            return True, dropped_formula
+    return False, None
+
+
+def _drop_one_element(elems: List[Any]) -> Iterable[Tuple[List[Any], Any]]:
+    for i_drop in range(len(elems)):
+        dropped_elem = elems[i_drop]
+        remaining_elems = elems[:i_drop] + elems[i_drop + 1:]
+        yield remaining_elems, dropped_elem
+
+
+@profile
+def have_smaller_proofs_with_logs(org_leaf_formulas: List[Formula],
+                                  new_leaf_formulas: List[Formula],
+                                  deleted_leaf_formulas: List[Formula],
+                                  org_hypothesis_formula: Formula,
+                                  new_hypothesis_formula: Formula,
+                                  distractor_formulas: Optional[List[Formula]] = None,
+                                  new_argument: Optional[Argument] = None) -> Tuple[bool, List[str]]:
+    distractor_formulas = distractor_formulas or []
+    remaining_leaf_formulas: List[Formula] = [
+        formula for formula in org_leaf_formulas + new_leaf_formulas
+        if formula.rep not in [_formula.rep for _formula in deleted_leaf_formulas]
+    ]
+
+    log_msgs: List[str] = []
+    _is_provable, droppable_formula = provable_from_incomplete_facts(
+        remaining_leaf_formulas,
+        distractor_formulas,
+        new_hypothesis_formula,
+    )
+    if _is_provable:
+        log_msgs.append('original leafs:')
+        for formula in org_leaf_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('distractors   :')
+        if len(distractor_formulas) > 0:
+            for formula in distractor_formulas:
+                log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('added leafs   :')
+        for formula in new_leaf_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('deleted leafs :')
+        for formula in deleted_leaf_formulas:
+            log_msgs.append(f'   {formula.rep}')
+
+        log_msgs.append('droppable formulas:')
+        for formula in [droppable_formula]:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('original hypothesis :')
+        for formula in [org_hypothesis_formula]:
+            log_msgs.append(f'   {formula.rep}')
+
+        log_msgs.append('new hypothesis      :')
+        for formula in [new_hypothesis_formula]:
+            log_msgs.append(f'   {formula.rep}')
+
+        if new_argument is not None:
+            log_msgs.append('used argument :')
+            for premise in new_argument.premises:
+                log_msgs.append(f'    premise: {premise.rep}')
+            log_msgs.append(f'    conclusion: {new_argument.conclusion.rep}')
+
+        return True, log_msgs
+
+    return False, log_msgs
+
+
+@profile
+def is_consistent_formula_set_with_logs(org_formulas: List[Formula],
+                                        new_formulas: List[Formula],
+                                        deleted_formulas: List[Formula],
+                                        new_argument: Optional[Argument] = None) -> Tuple[bool, List[str]]:
+
+    remaining_formulas = [formula for formula in org_formulas + new_formulas
+                          if formula.rep not in {_formula.rep for _formula in deleted_formulas}]
+    log_msgs: List[str] = []
+    if not is_consistent_formula_set(remaining_formulas):
+        log_msgs.append('original      :')
+        for formula in org_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('added         :')
+        for formula in new_formulas:
+            log_msgs.append(f'    {formula.rep}')
+
+        log_msgs.append('deleted       :')
+        for formula in deleted_formulas:
+            log_msgs.append(f'   {formula.rep}')
+
+        if new_argument is not None:
+            log_msgs.append('used argument :')
+            for premise in new_argument.premises:
+                log_msgs.append(f'    premise: {premise.rep}')
+            log_msgs.append(f'    conclusion: {new_argument.conclusion.rep}')
+
+        return False, log_msgs
+
+    return True, log_msgs

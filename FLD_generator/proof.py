@@ -1,10 +1,12 @@
-from typing import List, Tuple, Optional, Iterable, Union, Dict
+from typing import List, Tuple, Optional, Iterable, Union, Dict, Set, Any
 from collections import defaultdict
 from copy import copy
+import logging
+
 from .formula import Formula
 from .argument import Argument
 from .exception import FormalLogicExceptionBase
-import logging
+from FLD_generator.utils import make_combination_from_iter
 
 logger = logging.getLogger(__name__)
 
@@ -117,10 +119,14 @@ class ProofNode:
 
     @property
     def is_leaf(self) -> bool:
-        return len(self.children) == 0
+        return len(self.children) == 0 and not self.is_assump
+
+    @property
+    def is_assump(self) -> bool:
+        return self.assump_parent is not None
 
     def __str__(self) -> str:
-        return f'ProofNode({self.formula})'
+        return f'ProofNode({self.formula}, is_assump={self.is_assump})'
 
     def __repr__(self) -> str:
         return str(self)
@@ -147,14 +153,6 @@ class ProofTree:
             node.delete_child(node_in_tree)
             node.delete_assump_child(node_in_tree)
 
-        # for node_in_tree in self._nodes:
-        #     if node_in_tree.parent == node:
-        #         node_in_tree.delete_parent()
-        #     if node_in_tree.assump_parent == node:
-        #         node_in_tree.delete_assump_parent()
-        #     node_in_tree.delete_child(node)
-        #     node_in_tree.delete_assump_child(node)
-
     @property
     def nodes(self) -> List[ProofNode]:
         return self._nodes
@@ -162,7 +160,7 @@ class ProofTree:
     @property
     def leaf_nodes(self) -> List[ProofNode]:
         return [node for node in self._nodes
-                if len(node.children) == 0]
+                if node.is_leaf]
 
     @property
     def root_node(self) -> Optional[ProofNode]:
@@ -170,7 +168,7 @@ class ProofTree:
             return None
 
         nodes_wo_parent = [node for node in self._nodes
-                           if node.parent is None and node.assump_parent is None]
+                           if node.parent is None and not node.is_assump]
         if len(nodes_wo_parent) == 0:
             return None
         elif len(nodes_wo_parent) == 1:
@@ -326,3 +324,25 @@ class ProofTree:
             return ProofTree(nodes=copy_nodes), orig_nodes_to_copy_nodes
         else:
             return ProofTree(nodes=copy_nodes)
+
+
+# def find_must_consistent_node_sets(node: ProofNode) -> List[Set[ProofNode]]:
+#     if node.is_leaf:
+#         return [set([node])]
+# 
+#     from FLD_generator.proof_tree_generators import _can_argument_induce_contradiction as can_argument_induce_contradiction
+#     if node.argument is not None and can_argument_induce_contradiction(node.argument):
+#         if len(node.children) == 1:
+#             return find_must_consistent_node_sets(node.children[0])
+#         elif len(node.children) == 2:
+#             left_child_consistent_sets: List[Set[ProofNode]] = find_must_consistent_node_sets(node.children[0])
+#             right_child_consistent_sets: List[Set[ProofNode]] = find_must_consistent_node_sets(node.children[1])
+#             return left_child_consistent_sets + right_child_consistent_sets
+#         else:
+#             raise Exception('we think negation arguments only have one or two children. something wrong?')
+#     else:
+#         child_consistent_sets_list: List[List[Set[ProofNode]]] = []
+#         for child in node.children:
+#             child_consistent_sets_list.append(find_must_consistent_node_sets(child))
+#         combinations: List[List[Set[ProofNode]]] = list(make_combination_from_iter(child_consistent_sets_list))
+#         return [set.union(*sets) for sets in combinations]

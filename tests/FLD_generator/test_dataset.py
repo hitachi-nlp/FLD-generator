@@ -1,10 +1,11 @@
 import json
 
 import random
-from typing import List, Optional
+from typing import List, Optional, Dict
 import logging
 from pprint import pformat
 import glob
+from collections import defaultdict
 
 from FLD_generator.formula import Formula
 from FLD_generator.argument import Argument
@@ -22,15 +23,23 @@ from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results
 from logger_setup import setup as setup_logger
 
+import kern_profiler
+
 logger = logging.getLogger(__name__)
 
 
+@profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 10000) -> None:
-    for nlproof_json, proof_tree, distractors, translation_distractors, stats in dataset.generate(num_dataset):
-        log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
+                     num_dataset: int = 100) -> None:
+    # agg_stats: Dict[str, int] = defaultdict(int)
+    for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
+        log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
                     distractors=distractors, translation_distractors=translation_distractors,
-                    stats=stats)
+                    stats=None)
+        # for name, count in stats.items():
+        #     if count is not None:
+        #         agg_stats[name] += count
+    # logger.info(pformat(dict(agg_stats)))
 
 
 def test_generate_dataset_AACorpus():
@@ -42,7 +51,7 @@ def test_generate_dataset_AACorpus():
     translator = build_translator(
         glob.glob('./configs/translations/thing/**.json'),
         word_bank,
-        use_fixed_translation=False,
+        use_fixed_translation=True,
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
         volume_to_weight='sqrt',
@@ -112,15 +121,14 @@ def test_generate_dataset_AACorpus():
         sample_prototype_formulas_from_tree=True,
         use_simplified_formulas_as_prototype=True,
         sample_hard_negatives=True,
-        try_negated_hypothesis_first=True,
     )
 
     # SLOW
-    translation_distractor = None
-    # translation_distractor = build_translation_distractor(
-    #     'word_swap',
-    #     word_bank=word_bank,
-    # )
+    # translation_distractor = None
+    translation_distractor = build_translation_distractor(
+        'word_swap',
+        word_bank=word_bank,
+    )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
@@ -141,6 +149,7 @@ def test_generate_dataset_AACorpus():
                               word_bank=word_bank,
                               num_distractors=[5],
                               num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              allow_smaller_proofs=False,
                               raise_if_translation_not_found=True)
 
     generate_dataset(dataset)
@@ -152,10 +161,11 @@ def test_generate_dataset():
 
     word_bank = build_wordnet_wordbank('eng')
 
+    # translator = None
     translator = build_translator(
         glob.glob('./configs/translations/thing/**.json'),
         word_bank,
-        use_fixed_translation=False,
+        use_fixed_translation=True,
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
         volume_to_weight='sqrt',
@@ -203,11 +213,11 @@ def test_generate_dataset():
         quantification=0.2,
         quantifier_axioms=[
             'universal_quantifier_elim',
-            'universal_quantifier_intro',
+            # 'universal_quantifier_intro',
 
-            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
-            'existential_quantifier_intro',
-            'existential_quantifier_elim',
+            # # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+            # 'existential_quantifier_elim',
         ],
         quantify_implication_premise_conclusion_at_once=True,
         quantify_all_at_once=False,
@@ -230,20 +240,20 @@ def test_generate_dataset():
         sample_prototype_formulas_from_tree=True,
         use_simplified_formulas_as_prototype=True,
         sample_hard_negatives=True,
-        try_negated_hypothesis_first=True,
     )
 
-    # SLOW
-    translation_distractor = None
+    # swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
+    # translation_distractor = None
     # translation_distractor = build_translation_distractor(
     #     'word_swap',
     #     word_bank=word_bank,
+    #     swap_ng_words=swap_ng_words,
     # )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
-        translation_distractor=translation_distractor,
+        # translation_distractor=translation_distractor,
         fallback_from_formula_to_translation_distractor=True,
         translator=translator,
         add_subj_obj_swapped_distractor=True,
@@ -263,7 +273,9 @@ def test_generate_dataset():
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               word_bank=word_bank,
                               num_distractors=[5],
-                              num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              # swap_ng_words=swap_ng_words,
+                              # num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              allow_smaller_proofs=False,
                               version='0.1',
                               raise_if_translation_not_found=False)
 

@@ -1,4 +1,4 @@
-from typing import List, Iterable, Optional
+from typing import List, Iterable, Optional, Set
 from abc import abstractmethod, ABC
 import re
 import random
@@ -24,20 +24,27 @@ class TranslationDistractor(ABC):
                  translations: List[str],
                  size: int,
                  max_retry: Optional[int] = None,
-                 timeout: Optional[int] = None) -> List[str]:
+                 timeout_per_trial: Optional[int] = None,
+                 best_effort=False) -> List[str]:
         max_retry = max_retry or self.default_max_retry
-        timeout = timeout or self.default_timeout
+        timeout_per_trial = timeout_per_trial or self.default_timeout
         try:
-            return run_with_timeout_retry(
+            trial_results = run_with_timeout_retry(
                 self._generate,
                 func_args=[translations, size],
-                func_kwargs={},
-                retry_exception_class=TranslationDistractorGenerationFailure,
+                func_kwargs={'best_effort': best_effort},
+
+                should_retry_func = lambda distractors: len(distractors) < size,
+                should_retry_exception=TranslationDistractorGenerationFailure,
+
                 max_retry=max_retry,
-                timeout=timeout,
+                timeout_per_trial=timeout_per_trial,
+                best_effort=best_effort,
+
                 logger=logger,
                 log_title='_generate()',
             )
+            return sorted(trial_results, key = lambda distractors: len(distractors))[-1]
         except RetryAndTimeoutFailure as e:
             raise TranslationDistractorGenerationFailure(str(e))
 
@@ -52,13 +59,16 @@ class TranslationDistractor(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, translations: List[str], size: int) -> List[str]:
+    def _generate(self, translations: List[str], size: int, best_effort=False) -> List[str]:
         pass
 
 
 class WordSwapDistractor(TranslationDistractor):
 
-    def __init__(self, word_bank: WordBank, word_swap_prob=0.1):
+    def __init__(self,
+                 word_bank: WordBank,
+                 word_swap_prob=0.1,
+                 swap_ng_words: Optional[Set[str]] = None):
         self._word_bank = word_bank
         self._words = {}
 
@@ -68,6 +78,7 @@ class WordSwapDistractor(TranslationDistractor):
         logger.info('loading words from the wordbank ... done!')
 
         self.word_swap_prob = word_swap_prob
+        self.swap_ng_words = swap_ng_words
 
     def _load_words_by_pos_attrs(self,
                                  word_bank: WordBank,
@@ -83,7 +94,7 @@ class WordSwapDistractor(TranslationDistractor):
             yield word
 
     @profile
-    def _generate(self, translations: List[str], size: int) -> List[str]:
+    def _generate(self, translations: List[str], size: int, best_effort=False) -> List[str]:
         intermediate_constants = list(self._word_bank.get_intermediate_constant_words())
         translations = [transl for transl in translations
                         if all(transl.find(intermediate_constant) < 0 for intermediate_constant in intermediate_constants)]
@@ -108,19 +119,22 @@ class WordSwapDistractor(TranslationDistractor):
                     return distractor_translations
 
         if len(distractor_translations) < size:
-            logger.warning('WordSwapDistractor could not generate %s distractors. Will return only %d distractors', size, len(distractor_translations))
+            msg = f'WordSwapDistractor could not generate {size} distractors. Will return only {len(distractor_translations)} distractors'
             if is_duplicated_translation_generated:
-                logger.warning('This might be due to that duplicated translation are generated but they are excluded.')
+                msg += '\nThis might be due to that duplicated translation are generated but they are excluded.'
+            if best_effort:
+                logger.info(msg)
+            else:
+                raise TranslationDistractorGenerationFailure(msg)
         return distractor_translations
 
     def _word_swap_translation(self, transl: str, at_least_one=True) -> Optional[str]:
-        ng_words = ['a', 'the', 'is']
 
         for trial in range(0, 100):
             words = transl.split(' ')
             swapped_words = []
             for word in words:
-                if word in ng_words:
+                if word in self.swap_ng_words:
                     swapped_words.append(word)
                     continue
 
@@ -164,10 +178,20 @@ class WordSwapDistractor(TranslationDistractor):
         return 10
 
 
-def build(type_: str, word_bank: Optional[WordBank] = None):
+def build(type_: str,
+          word_bank: Optional[WordBank] = None,
+          swap_ng_words: Optional[Set[str]] = None):
+    raise Exception('we should not use translation distractor because it can not ensure that the collapsed sentence can not derive the original hypothesis.'
+                    'For example, "{A}=typhoon & {B}=rain" collapsed to "{A}=typhoon & {B}=cloud" still derives {A}=typhoon.')
+
+    swap_ng_words = swap_ng_words or {'a', 'the', 'is'}
+
     if type_ == 'word_swap':
+
         if word_bank is None:
             raise ValueError()
-        return WordSwapDistractor(word_bank)
+
+        return WordSwapDistractor(word_bank, swap_ng_words=swap_ng_words)
+
     else:
         raise ValueError(f'Unknown distractor type {type_}')

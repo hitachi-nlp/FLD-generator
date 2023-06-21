@@ -2,7 +2,7 @@ import re
 from typing import List, Optional, Set, Iterable, Dict, Tuple
 import logging
 
-from .formula import (
+from FLD_generator.formula import (
     Formula,
     eliminate_double_negation,
     IMPLICATION,
@@ -14,21 +14,6 @@ from .formula import (
 import kern_profiler
 
 logger = logging.getLogger(__name__)
-
-
-def is_consistent(formula: Formula) -> bool:
-    return not _is_inconsistent(formula)
-
-
-@profile
-def is_consistent_set(formulas: List[Formula]) -> bool:
-    """ consistent = satisfiable in formal meaning. """
-    return not _is_inconsistent_set(formulas)
-
-
-@profile
-def is_predicate_arity_consistent(formula: Formula) -> bool:
-    return is_predicate_arity_consistent_set([formula])
 
 
 @profile
@@ -43,32 +28,10 @@ def is_predicate_arity_consistent_set(formulas: List[Formula]) -> bool:
 
 
 @profile
-def is_senseful(formula: Formula) -> bool:
-    return not _is_nonsense(formula)
-
-
-@profile
-def is_senseful_set(formulas: List[Formula]) -> bool:
-    return all(is_senseful(formula) for formula in formulas)
-
-
-@profile
-def is_ok(formula: Formula) -> bool:
-    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
-    return is_senseful(formula)\
-        and is_predicate_arity_consistent(formula)
-
-
-@profile
-def is_ok_set(formulas: List[Formula]) -> bool:
-    # inconsistent formula is formally allowed. Otherwise, the negation and contradiction axioms are meaningless
-    return is_senseful_set(formulas)\
-        and is_predicate_arity_consistent_set(formulas)
-
-
-@profile
-def is_new(formula: Formula,
-           existing_formulas: List[Formula]) -> bool:
+def is_new(
+    existing_formulas: List[Formula],
+    formula: Formula,
+) -> bool:
     for _ in _search_formulas([formula], existing_formulas):
         return False
     return True
@@ -106,6 +69,7 @@ def _is_inconsistent(formula: Formula) -> bool:
 
 _is_inconsistent_set_cache: Dict[str, bool] = {}
 _is_inconsistent_set_cache_size = 10000000
+
 
 @profile
 def _is_inconsistent_set(formulas: List[Formula]) -> bool:
@@ -187,23 +151,30 @@ _is_nonsense_cache_size = 10000000
 
 
 @profile
-def _is_nonsense(formula: Formula) -> bool:
+def is_nonsense(formula: Formula,
+                allow_detect_tautology_contradiction=False) -> bool:
     """ Detect fomula which is nonsense.
 
     "Nonsense" means that, in the sense of human commonsense of natural language, the formula is not that useful.
-    The nonsense formulas includes the inconsistent formulas plus following types of formulas:
+    The formulas includes ...:
+        nonsense formulas such as:
+            ({A} & {A})
+            (¬{A} & ¬{A})
+            ({A} -> {A})
+            (¬{A} -> ¬{A})
+
+    XXX: By historical reasons, this module also detect contradiction or tautology as follows:
+    (i) contradiction
         {A} -> ¬{A},
         ¬{A} -> {A}
-
-        ({A} & {A})
-        (¬{A} & ¬{A})
-
+    (ii) tautology
         ({A} v {A})
         (¬{A} v ¬{A})
 
-        ({A} -> {A})
-        (¬{A} -> ¬{A})
     """
+    if not allow_detect_tautology_contradiction:
+        raise NotImplementedError()
+
     rep = formula.rep
 
     cache = _is_nonsense_cache
@@ -257,6 +228,7 @@ def _is_nonsense(formula: Formula) -> bool:
 _get_boolean_values_cache: Dict[Tuple[str, str], Set[str]] = {}
 _get_boolean_values_cache_size = 10000000
 
+
 @profile
 def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
     """ Detect the boolean values of PASs which is neccesary for the given formula to be true.
@@ -308,7 +280,7 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
             cache[cache_key] = set()
             return set()
 
-    if PAS.rep not in [_pa.rep for _pa in formula.PASs]:  # SLOW, called many times
+    if PAS.rep not in [_pa.rep for _pa in formula.PASs]:
         cache[cache_key] = set()
         return set()
 

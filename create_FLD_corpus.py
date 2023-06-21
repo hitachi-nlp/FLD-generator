@@ -14,7 +14,7 @@ import dill
 
 from FLD_generator.translators import build as build_translator
 from FLD_generator.word_banks import build_wordnet_wordbank
-from FLD_generator.formula_distractors import SameFormUnkownInterprandsDistractor, FormulaDistractor
+from FLD_generator.formula_distractors import FormulaDistractor
 from FLD_generator.argument import Argument
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.proof_tree_generators import build as build_generator
@@ -58,6 +58,7 @@ def load_dataset(argument_config: List[str],
                  world_assump: str,
                  unknown_ratio: float,
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
+                 swap_ng_words: Optional[List[str]],
                  depths: List[int],
                  depth_distribution: str,
                  force_fix_illegal_intermediate_constants: bool,
@@ -83,7 +84,7 @@ def load_dataset(argument_config: List[str],
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                        use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
                                        sample_hard_negatives=sample_hard_negative_distractors,
-                                       try_negated_hypothesis_first=not dont_try_negative_hypothesis)
+                                       negated_hypothesis_ratio=0.0 if dont_try_negative_hypothesis else 0.5)
         logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
@@ -93,6 +94,7 @@ def load_dataset(argument_config: List[str],
         _translation_distractor = build_translation_distractor(
             translation_distractor,
             word_bank=word_bank,
+            swap_ng_words=swap_ng_words,
         )
         logger.info(_build_bounded_msg(f'{"[finish] building translation distractor":<30}', 3))
     else:
@@ -140,27 +142,27 @@ def load_dataset(argument_config: List[str],
                            num_translation_distractors=num_translation_distractors,
                            unknown_ratio=unknown_ratio,
                            use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
+                           swap_ng_words=swap_ng_words,
                            word_bank = word_bank if use_collapsed_translation_nodes_for_unknown_tree else None)
 
 
 def generate_instances(size: int, *args):
-    # logger = logging.getLogger(__name__)
-    logger.debug('[pass or not checking for finding the cause of hangups] 00')  # HONOKA: we pass here
-
-    dataset = load_dataset(*args)  # HONOKA: we pass here
-    logger.debug('[pass or not checking for finding the cause of hangups] 01')
-
+    dataset = load_dataset(*args)
     data = []
-    _final_stats = None
-    for nlproof_json, proof_tree, distractors, translation_distractors, stats in tqdm(dataset.generate(size)):  # HONOKA: we can't pass here
+    agg_stats = defaultdict(int)
+    for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in tqdm(enumerate(dataset.generate(size))):
         data.append((nlproof_json, proof_tree, distractors, translation_distractors))
-        _final_stats = stats
-        log_results(logger, nlproof_json=nlproof_json, proof_tree=proof_tree,
-                    distractors=distractors, translation_distractors=translation_distractors,
-                    stats=stats)
-    logger.debug('[pass or not checking for finding the cause of hangups] 02')
 
-    return data, _final_stats
+        log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
+                    distractors=distractors, translation_distractors=translation_distractors,
+                    stats=None)
+
+        if stats is not None:
+            for name, count in stats.items():
+                if count is not None:
+                    agg_stats[name] += count
+
+    return data, agg_stats
 
 
 @click.command()
@@ -201,6 +203,7 @@ def generate_instances(size: int, *args):
 @click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
+@click.option('--swap-ng-words-config', default='./configs/translation_distractors/swap_ng_words.json')
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int, default=1000)   # single thread: data load = 2min, generation = 300 instances / 8min    vs    multithread: data load = 20min, generation = 5 x 300 instances / 8min
 @click.option('--batch-size-per-worker', type=int, default=10000)
@@ -237,6 +240,7 @@ def main(output_path,
          world_assump,
          unknown_ratio,
          use_collapsed_translation_nodes_for_unknown_tree,
+         swap_ng_words_config,
          num_workers,
          min_size_per_worker,
          batch_size_per_worker,
@@ -248,6 +252,7 @@ def main(output_path,
     num_distractors = json.loads(num_distractors)
     num_translation_distractors = json.loads(num_translation_distractors)
     proof_stances = json.loads(proof_stances)
+    swap_ng_words = json.load(open(swap_ng_words_config))
 
     if len(argument_config) == 0:
         raise ValueError()
@@ -303,6 +308,7 @@ def main(output_path,
                         world_assump,
                         unknown_ratio,
                         use_collapsed_translation_nodes_for_unknown_tree,
+                        swap_ng_words,
                         depths,
                         depth_distribution,
                         force_fix_illegal_intermediate_constants,
@@ -310,10 +316,8 @@ def main(output_path,
                     )
                 )
 
-            logger.debug('[pass or not checking for finding the cause of hangups] 0')  # HONOKA: we pass here
             logger.info('creating corpus with %d jobs', num_workers)
             instances_list = Parallel(n_jobs=num_workers, backend='multiprocessing')(jobs)
-            logger.debug('[pass or not checking for finding the cause of hangups] 1')  # HONOKA: we can't pass here
 
             cnt = 0
             is_done = False
@@ -338,7 +342,6 @@ def main(output_path,
                 if not name.startswith('cum.'):
                     gathered_stats[name] = gathered_stats[name] / num_jobs[name]
 
-            logger.debug('[pass or not checking for finding the cause of hangups] 2')  # HONOKA: we can't pass here
 
             logger.info('=========================== gathered stats (batch=%d) ============================',
                         i_batch)

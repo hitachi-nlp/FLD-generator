@@ -14,13 +14,14 @@ from .formula import (
     OR,
 )
 from .formula_checkers import (
-    is_ok_set as is_ok_formula_set,
+    is_predicate_arity_consistent_set as is_predicate_arity_consistent_formula_set,
     is_consistent_set as is_consistent_formula_set,
     is_new as is_formula_new,
 )
 from .argument import Argument
 from .argument_checkers import (
-    is_senseful as is_argument_senseful,
+    is_trivial as is_argument_trivial,
+    is_nonsense as is_argument_nonsense,
 )
 from .interpretation import (
     generate_mappings_from_formula,
@@ -41,6 +42,8 @@ from .utils import (
     run_with_timeout_retry,
     RetryAndTimeoutFailure,
     make_pretty_msg,
+    have_smaller_proofs_with_logs,
+    is_consistent_formula_set_with_logs,
 )
 
 from .formula import (
@@ -51,7 +54,7 @@ from .formula import (
     PREDICATES,
     CONSTANTS,
     VARIABLES,
-    CONTRADICTION,
+    is_contradiction_symbol,
 )
 import kern_profiler
 
@@ -219,7 +222,7 @@ class ProofTreeGenerator:
                                                                                     get_name=True):
                     if not _is_numbers_ok_argument(complicated_argument):
                         continue
-                    if _is_argument_new(complicated_argument, arguments + complicated_arguments):  # SLOW
+                    if _is_argument_new(complicated_argument, arguments + complicated_arguments):
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
 
@@ -361,8 +364,9 @@ class ProofTreeGenerator:
     def generate_tree(self,
                       depth: int,
                       branch_extension_steps: int,
-                      **kwargs) -> Optional[ProofTree]:
-        return _generate_tree_with_timeout_retry(
+                      get_all_trial_results=False,
+                      **kwargs) -> Union[ProofTree, List[ProofTree]]:
+        trial_result_proof_trees = _generate_tree_with_timeout_retry(
             self.arguments,
             depth,
             branch_extension_steps,
@@ -371,9 +375,13 @@ class ProofTreeGenerator:
             disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
             **kwargs,
         )
+        if get_all_trial_results:
+            return trial_result_proof_trees
+        else:
+            return _pick_largest_tree(trial_result_proof_trees)
 
-    def generate_stem(self, depth: int, **kwargs) -> ProofTree:
-        return _generate_stem_with_timeout_retry(
+    def generate_stem(self, depth: int, get_all_trial_results=False, **kwargs) -> Union[ProofTree, List[ProofTree]]:
+        trial_result_proof_trees = _generate_stem_with_timeout_retry(
             self.arguments,
             depth,
             argument_weights=self.argument_weights,
@@ -381,12 +389,17 @@ class ProofTreeGenerator:
             disallow_contradiction_as_hypothesis=self.disallow_contradiction_as_hypothesis,
             **kwargs,
         )
+        if get_all_trial_results:
+            return trial_result_proof_trees
+        else:
+            return _pick_largest_tree(trial_result_proof_trees)
 
     def extend_branches(self,
                         proof_tree: ProofTree,
                         branch_extension_steps: int,
-                        **kwargs) -> ProofTree:
-        return _extend_branches_with_timeout_retry(
+                        get_all_trial_results=False,
+                        **kwargs) -> Union[Tuple[ProofTree, int], List[Tuple[ProofTree, int]]]:
+        trial_result_proof_trees = _extend_branches_with_timeout_retry(
             proof_tree,
             self.arguments,
             branch_extension_steps,
@@ -394,23 +407,36 @@ class ProofTreeGenerator:
             elim_dneg=self.elim_dneg,
             **kwargs,
         )
+        if get_all_trial_results:
+            return trial_result_proof_trees
+        else:
+            return sorted(trial_result_proof_trees,
+                          key = lambda A_num_step: A_num_step[1])[-1]
 
 
-def _generate_tree_with_timeout_retry(*args,
+def _generate_tree_with_timeout_retry(arguments: List[Argument],
+                                      depth: int,
+                                      *args,
                                       max_retry=30,
                                       timeout=10,  # 5 + 5
-                                      **kwargs) -> Optional[ProofTree]:
+                                      **kwargs) -> List[ProofTree]:
     try:
-        return run_with_timeout_retry(
+        trial_result_proof_trees = run_with_timeout_retry(
             _generate_tree,
-            func_args=args,
+            func_args = [arguments, depth] + list(args),
             func_kwargs=kwargs,
-            retry_exception_class=ProofTreeGenerationFailure,
+
+            should_retry_func=lambda proof_tree: proof_tree.depth < depth,
+            should_retry_exception=ProofTreeGenerationFailure,
+
             max_retry=max_retry,
-            timeout=timeout,
+            timeout_per_trial=timeout,
+            best_effort=kwargs.get('best_effort', False),
+
             logger=logger,
             log_title='generate_tree()',
         )
+        return trial_result_proof_trees
     except RetryAndTimeoutFailure as e:
         raise ProofTreeGenerationFailure(str(e))
     # except ProofTreeGenerationImpossible as e:
@@ -426,8 +452,11 @@ def _generate_tree(arguments: List[Argument],
                    ng_formulas: Optional[List[Formula]] = None,
                    disallow_contradiction_as_hypothesis=False,
                    allow_reference_arguments_when_depth_1=True,
+                   allow_inconsistency=False,
+                   allow_smaller_proofs=False,
+                   best_effort=False,
                    force_fix_illegal_intermediate_constants=False,
-                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
+                   allow_illegal_intermediate_constants=False) -> ProofTree:
     proof_tree = _generate_stem(
         arguments,
         depth,
@@ -435,6 +464,9 @@ def _generate_tree(arguments: List[Argument],
         depth_1_reference_weight=depth_1_reference_weight,
         elim_dneg=elim_dneg,
         disallow_contradiction_as_hypothesis=disallow_contradiction_as_hypothesis,
+        allow_inconsistency=allow_inconsistency,
+        allow_smaller_proofs=allow_smaller_proofs,
+        best_effort=best_effort,
 
         # since the branch extension may recover the illegal intermediate constants.
         force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants if depth == 1 else False,
@@ -442,7 +474,7 @@ def _generate_tree(arguments: List[Argument],
     )
     if depth > 1:
         try:
-            proof_tree = _extend_branches_with_timeout_retry(
+            trial_results = _extend_branches_with_timeout_retry(
                 proof_tree,
                 arguments,
                 branch_extension_steps,
@@ -450,11 +482,16 @@ def _generate_tree(arguments: List[Argument],
                 depth_limit=proof_tree.depth,
                 elim_dneg=elim_dneg,
                 ng_formulas=ng_formulas,
+                allow_inconsistency=allow_inconsistency,
+                allow_smaller_proofs=allow_smaller_proofs,
+                best_effort=best_effort,
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,
             )
+            proof_tree = sorted(trial_results,
+                                key = lambda A_num_step: A_num_step[1])[-1][0]
         except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg=f'because of the following error:\n{str(e)}'))
@@ -467,24 +504,39 @@ def _generate_tree(arguments: List[Argument],
                 proof_tree,
                 arguments,
                 argument_weights=argument_weights,
+                allow_inconsistency=allow_inconsistency,
+                allow_smaller_proofs=allow_smaller_proofs,
                 elim_dneg=elim_dneg,
             )
-
     return proof_tree
 
 
-def _generate_stem_with_timeout_retry(*args,
+def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
+    return sorted(proof_trees, key=lambda proof_tree: proof_tree.depth)[-1]
+
+
+def _generate_stem_with_timeout_retry(arguments: List[Argument],
+                                      depth: int,
+                                      *args,
                                       max_retry=30,
                                       timeout=5,
-                                      **kwargs) -> Optional[ProofTree]:
+                                      best_effort=False,
+                                      **kwargs) -> List[ProofTree]:
     try:
+        _kwargs = kwargs.copy()
+        _kwargs['best_effort'] = best_effort
         return run_with_timeout_retry(
             _generate_stem,
-            func_args=args,
-            func_kwargs=kwargs,
-            retry_exception_class=GenerateStemFailure,
+            func_args=[arguments, depth] + list(args),
+            func_kwargs=_kwargs,
+
+            should_retry_func=lambda proof_tree: proof_tree.depth < depth,
+            should_retry_exception=GenerateStemFailure,
+
             max_retry=max_retry,
-            timeout=timeout,
+            timeout_per_trial=timeout,
+            best_effort=best_effort,
+
             logger=logger,
             log_title='generate_stem()',
         )
@@ -494,18 +546,29 @@ def _generate_stem_with_timeout_retry(*args,
     #     raise GenerateStemFailure(str(e))
 
 
-def _extend_branches_with_timeout_retry(*args,
+def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
+                                        arguments: List[Argument],
+                                        num_steps: int,
+                                        *args,
                                         timeout=5,
                                         max_retry=30,
-                                        **kwargs) -> ProofTree:
+                                        best_effort=False,
+                                        **kwargs) -> List[Tuple[ProofTree, int]]:
     try:
+        _kwargs = kwargs.copy()
+        _kwargs['best_effort'] = best_effort
         return run_with_timeout_retry(
             _extend_branches,
-            func_args=args,
-            func_kwargs=kwargs,
-            retry_exception_class=ExtendBranchesFailure,
+            func_args=[proof_tree, arguments, num_steps] + list(args),
+            func_kwargs=_kwargs,
+
+            should_retry_func = lambda proof_tree_step: proof_tree_step[1] < num_steps,
+            should_retry_exception=ExtendBranchesFailure,
+
             max_retry=max_retry,
-            timeout=timeout,
+            timeout_per_trial=timeout,
+            best_effort=best_effort,
+
             logger=logger,
             log_title='extend_branches()',
         )
@@ -515,16 +578,18 @@ def _extend_branches_with_timeout_retry(*args,
     #     raise ExtendBranchesFailure(str(e))
 
 
+@profile
 def _generate_stem(arguments: List[Argument],
                    depth: int,
-                   predicate_pool: List[str] = PREDICATES,
-                   constant_pool: List[str] = CONSTANTS,
                    argument_weights: Optional[Dict[Argument, float]] = None,
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
+                   allow_inconsistency=False,
+                   allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
-                   allow_illegal_intermediate_constants=False) -> Optional[ProofTree]:
+                   allow_illegal_intermediate_constants=False,
+                   best_effort=False) -> ProofTree:
     """ Generate stem of proof tree in a top-down manner.
 
     The steps are:
@@ -585,7 +650,7 @@ def _generate_stem(arguments: List[Argument],
 
     def find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
         for descendant in node.descendants:
-            if descendant.is_leaf and descendant.assump_parent is None:
+            if descendant.is_leaf:
                 yield descendant
 
     def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
@@ -645,7 +710,7 @@ def _generate_stem(arguments: List[Argument],
 
         proof_tree = ProofTree()
         cur_conclusion_node = ProofNode(cur_arg.conclusion)
-        cur_premise_nodes = [ProofNode(premise) for premise in cur_arg.premises]
+        cur_premise_nodes = [ProofNode(formula) for formula in cur_arg.premises]
         update(cur_premise_nodes, [], cur_conclusion_node, cur_arg, proof_tree)
 
         is_tree_done = False
@@ -659,7 +724,6 @@ def _generate_stem(arguments: List[Argument],
                 break
 
             formulas_in_tree = [node.formula for node in proof_tree.nodes]
-            leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
 
             cur_conclusion = cur_conclusion_node.formula
             cur_possible_assumption_nodes = list(find_possible_assumption_nodes(cur_conclusion_node))
@@ -670,29 +734,32 @@ def _generate_stem(arguments: List[Argument],
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
 
-            is_arg_done = False
+            # -- find linkable argument --
+            is_arg_found = False
             next_arg_pulled = None
             for next_arg in _shuffle_arguments(linkable_args, argument_weights):
-                if is_arg_done:
+                if is_arg_found:
                     break
+
                 log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
                 # The outer loops are for speedup: first build mappings on small variabl set and then use it for filtering out the mappings on large variable set.
-                for premise in _shuffle(next_arg.premises):
-                    if is_arg_done:
+                for formula in _shuffle(next_arg.premises):
+                    if is_arg_found:
                         break
-                    log_traces.append(f'   |   |   | premise {premise}')
+                    log_traces.append(f'   |   |   | premise {formula}')
 
-                    assumption = next_arg.assumptions.get(premise, None)
+                    assumption = next_arg.assumptions.get(formula, None)
                     for premise_mapping in generate_mappings_from_formula(
-                        [premise] + ([assumption] if assumption is not None else []),
+                        [formula] + ([assumption] if assumption is not None else []),
                         [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
                         shuffle=True,
                     ):
-                        if is_arg_done:
+                        if is_arg_found:
                             break
-                        premise_pulled = interpret_formula(premise, premise_mapping, elim_dneg=elim_dneg)
+
+                        premise_pulled = interpret_formula(formula, premise_mapping, elim_dneg=elim_dneg)
                         assumption_pulled = interpret_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
@@ -704,85 +771,122 @@ def _generate_stem(arguments: List[Argument],
                         if assumption_pulled is not None:
                             if all(assumption_pulled.rep != cur_assumption_node.formula.rep
                                    for cur_assumption_node in cur_possible_assumption_nodes):
-                                rejection_stats['assumption_pulled.rep != cur_assumption_node.formula.rep'] += 1
+                                rejection_stats['all(assumption_pulled.rep != cur_assumption_node.formula.rep)'] += 1
                                 continue
 
-                        # for early rejection
-                        if not is_ok_formula_set([premise_pulled] + formulas_in_tree):
-                            rejection_stats['not is_ok_formula_set([premise_pulled] + formulas_in_tree)'] += 1
+                        if not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree):
+                            rejection_stats['not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree)'] += 1
                             continue
 
-                        for mapping in generate_mappings_from_formula(
-                            next_arg.all_formulas,
-                            [cur_conclusion] + [Formula(' '.join(constant_pool + predicate_pool))],
-                            constraints=premise_mapping,
-                            shuffle=True,
+                        target_preds, target_consts = _choose_target_preds_consts(proof_tree,
+                                                                                  next_arg,
+                                                                                  constraints=premise_mapping)
+                        for i_mapping_trial, mapping in enumerate(
+                                generate_mappings_from_formula(
+                                    next_arg.all_formulas,
+                                    [Formula(' '.join(rep for rep in target_preds + target_consts))],
+                                    constraints=premise_mapping,
+                                    allow_many_to_one=False,
+                                    shuffle=True,
+                                )
                         ):
-                            if is_arg_done:
+                            if i_mapping_trial >= 1:
+                                # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
+                                # we leave this loop for back reference
+                                break
+
+                            if is_arg_found:
                                 break
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
-                            # if is_intermediate_constants_used:
-                            #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
-                            #     continue
-
-                            if not is_argument_senseful(next_arg_pulled):
-                                rejection_stats['not is_argument_senseful(next_arg_pulled)'] += 1
+                            if is_argument_trivial(next_arg_pulled):
+                                rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
                                 continue
 
-                            if not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree):
-                                rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
+                            if is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True):
+                                # is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True)
+                                rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                                 continue
 
-                            if not is_formula_new(next_arg_pulled.conclusion, formulas_in_tree):
-                                rejection_stats['not _is_formula_new(next_arg_pulled.conclusion, formulas_in_tree)'] += 1
+                            if not is_predicate_arity_consistent_formula_set(formulas_in_tree + next_arg_pulled.all_formulas):
+                                rejection_stats['is_predicate_arity_consistent_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                                 continue
 
-                            other_premises = [premise for premise in next_arg_pulled.premises
-                                              if premise.rep != cur_conclusion.rep]
-                            if not _is_formulas_new(other_premises, formulas_in_tree):
-                                # If any of other premises already exists in the tree, it will lead to a loop.
-                                # We want to avoid a loop.
-                                rejection_stats['not _is_formulas_new(other_premises, formulas_in_tree)'] += 1
+                            all_new_formulas = [formula for formula in next_arg_pulled.premises + [next_arg_pulled.conclusion]
+                                                if formula.rep != cur_conclusion.rep]
+                            if not _is_formulas_new(formulas_in_tree, all_new_formulas):
+                                rejection_stats['not _is_formulas_new(formulas_in_tree, all_new_formulas)'] += 1
                                 continue
 
-                            if not is_consistent_formula_set(other_premises + leaf_formulas_in_tree):
-                                # other_premises can be the leaf of the tree.
-                                # We reject tree with inconsistent formulas.
-                                # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                                # Notice that we stil allow inconsistency between non-leaf nodes
-                                rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
-                                continue
+                            if _is_argument_negation_elim(next_arg_pulled):
+                                # negation elim legally introduces inconsistency, and thus smaller proofs.
+                                pass
+                            else:
+                                org_leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                                new_leaf_formulas = [formula for formula in next_arg_pulled.premises if formula.rep != cur_conclusion.rep]
+                                deleted_leaf_formulas = list(next_arg_pulled.assumptions.values())
+                                org_root_formula = proof_tree.root_node.formula
+                                new_root_formula = next_arg_pulled.conclusion
 
-                            is_arg_done = True
+                                if not allow_inconsistency:
+                                    _is_consistent, logs = is_consistent_formula_set_with_logs(
+                                        org_leaf_formulas,
+                                        new_leaf_formulas,
+                                        deleted_leaf_formulas,
+                                        new_argument=next_arg_pulled,
+                                    )
+                                    if not _is_consistent:
+                                        logger.info('_generate_stem() reject the argument because the proof tree formulas are inconsistent')
+                                        for msg in logs:
+                                            logger.info(msg)
+                                        rejection_stats['_is_consistent_formula_set'] += 1
+                                        continue
+
+                                if not allow_smaller_proofs:
+                                    _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                                        org_leaf_formulas,
+                                        new_leaf_formulas,
+                                        deleted_leaf_formulas,
+                                        org_root_formula,
+                                        new_root_formula,
+                                        new_argument=next_arg_pulled,
+                                    )
+                                    if _have_smaller_proofs:
+                                        logger.info('_generate_stem() reject the argument because the proof tree have smaller proofs')
+                                        for log in logs:
+                                            logger.info(log)
+                                        rejection_stats['_have_smaller_proofs'] += 1
+                                        continue
+
+                            is_arg_found = True
                             break
 
-            if is_arg_done:
-
+            # -- update tree --
+            if is_arg_found:
                 # Update
                 next_assumption_nodes = []
-                for i_premise, premise in enumerate(next_arg_pulled.premises):
-                    if premise.rep == cur_conclusion.rep:
+                for i_premise, formula in enumerate(next_arg_pulled.premises):
+                    if formula.rep == cur_conclusion.rep:
                         next_arg_pulled.premises[i_premise] = cur_conclusion  # refer to the unique object.
-                    if premise in next_arg_pulled.assumptions:
-                        assumption = next_arg_pulled.assumptions[premise]
+                    if formula in next_arg_pulled.assumptions:
+                        assumption = next_arg_pulled.assumptions[formula]
                         for cur_assumption_node in cur_possible_assumption_nodes:
                             if assumption.rep == cur_assumption_node.formula.rep:
-                                next_arg_pulled.assumptions[premise] = cur_assumption_node.formula  # refer to the unique object.
+                                next_arg_pulled.assumptions[formula] = cur_assumption_node.formula  # refer to the unique object.
                                 next_assumption_nodes.append(cur_assumption_node)
 
                 next_conclusion_node = ProofNode(next_arg_pulled.conclusion)
                 next_conclusion_node.argument = next_arg_pulled
                 next_premise_nodes = [
-                    cur_conclusion_node if premise.rep == cur_conclusion.rep else ProofNode(premise)
-                    for premise in next_arg_pulled.premises
+                    cur_conclusion_node if formula.rep == cur_conclusion.rep else ProofNode(formula)
+                    for formula in next_arg_pulled.premises
                 ]
                 update(next_premise_nodes, next_assumption_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
+
             else:
                 rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
                 log_traces_msg = '\n'.join(log_traces)
@@ -798,15 +902,22 @@ def _generate_stem(arguments: List[Argument],
                     'rejection stats   :',
                     rejection_stats_msg,
                 ])
-                raise GenerateStemFailure(msg)
+                if best_effort:
+                    is_tree_done = True
+                    logger.info(msg)
+                    logger.info('_generate_stem() could not complete the proof tree with the specified depth. return smaller tree.')
+                    break
+                else:
+                    raise GenerateStemFailure(msg)
 
         if is_tree_done:
 
-            if disallow_contradiction_as_hypothesis and proof_tree.root_node.formula.rep == CONTRADICTION:
-                raise GenerateStemFailure(f'Contradiction {CONTRADICTION} as the hypothesis is disallowed.')
+            if disallow_contradiction_as_hypothesis and is_contradiction_symbol(proof_tree.root_node.formula):
+                raise GenerateStemFailure(f'Contradiction {proof_tree.root_node.formula.rep} as the hypothesis is disallowed.')
 
-            _check_leaf_consistency(proof_tree)
+            # _check_leaf_consistency(proof_tree)
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
+
             return proof_tree
 
     raise Exception('Unexpected')
@@ -820,7 +931,6 @@ def find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Itera
                 and _is_failure_loop_univ_intro_argument(arg):
             continue
 
-        # SLOW, called many times -> but this is as the old
         if formula_is_identical_to(arg.conclusion, node.formula)\
                 and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
             yield arg
@@ -831,8 +941,6 @@ def _extend_branches(proof_tree: ProofTree,
                      arguments: List[Argument],
                      num_steps: int,
                      start_leaf_nodes: Optional[List[ProofNode]] = None,
-                     predicate_pool: List[str] = PREDICATES,
-                     constant_pool: List[str] = CONSTANTS,
                      argument_weights: Optional[Dict[Argument, float]] = None,
                      depth_limit: Optional[int] = None,
                      elim_dneg=False,
@@ -840,8 +948,11 @@ def _extend_branches(proof_tree: ProofTree,
                      ng_formulas: Optional[List[Formula]] = None,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
-                     return_at_best=False,
-                     return_alignment=False) -> Union[ProofTree, Tuple[ProofTree, Dict[ProofNode, ProcessLookupError]]]:
+                     allow_inconsistency=False,
+                     allow_smaller_proofs=False,
+                     best_effort=False,
+                     return_alignment=False) -> Union[Tuple[int, ProofTree],
+                                                      Tuple[ProofTree, int, Dict[ProofNode, ProcessLookupError]]]:
     """ Extend branches of the proof_tree tree in a bottom-up manner.
 
     The steps are:
@@ -880,12 +991,7 @@ def _extend_branches(proof_tree: ProofTree,
             break
 
         formulas_in_tree = [node.formula for node in proof_tree.nodes]
-        leaf_formulas_in_tree = [node.formula for node in proof_tree.leaf_nodes]
-
-        current_leaf_nodes = [
-            node for node in proof_tree.leaf_nodes
-            if node.assump_parent is None  # assumptions shoud keep beeing leaf
-        ]
+        current_leaf_nodes = proof_tree.leaf_nodes
 
         if start_leaf_nodes is not None:
             # The latter for when the tree is updated
@@ -900,9 +1006,9 @@ def _extend_branches(proof_tree: ProofTree,
 
             if len(_target_leaf_nodes) == 0:
                 if return_alignment:
-                    return proof_tree, orig_nodes_to_copy_nodes
+                    return proof_tree, cur_step, orig_nodes_to_copy_nodes
                 else:
-                    return proof_tree
+                    return proof_tree, cur_step
         else:
             _target_leaf_nodes = current_leaf_nodes
 
@@ -914,10 +1020,11 @@ def _extend_branches(proof_tree: ProofTree,
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg='couldn\'t extend branch because we found no target leaf nodes'))
 
-            _check_leaf_consistency(proof_tree)
+            # _check_leaf_consistency(proof_tree)
 
             proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
-            return proof_tree
+
+            return proof_tree, cur_step
 
         if cur_step == 0:
             is_linkable_any = False
@@ -930,17 +1037,17 @@ def _extend_branches(proof_tree: ProofTree,
             if not is_linkable_any:
                 raise ExtendBranchesImpossible(f'No linkable arguments found for target leaf nodes {str(_target_leaf_nodes)}')
 
+        target_leaf_node = None
         is_leaf_node_done = False
         next_arg_pulled = None
-        target_leaf_node = None
         for leaf_node in _shuffle(_target_leaf_nodes):
+            if is_leaf_node_done:
+                break
+
             log_traces = []
             rejection_stats = defaultdict(int)
 
             log_traces.append(f'   | leaf_node {leaf_node}')
-
-            if is_leaf_node_done:
-                break
 
             target_leaf_node = leaf_node
 
@@ -949,12 +1056,15 @@ def _extend_branches(proof_tree: ProofTree,
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
 
+            is_arg_found = False
             for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
+                if is_arg_found:
+                    is_leaf_node_done = True
+                    break
+
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
                     continue
 
-                if is_leaf_node_done:
-                    break
                 log_traces.append(f'   |   | next_arg {next_arg}')
 
                 # Choose mapping
@@ -963,11 +1073,10 @@ def _extend_branches(proof_tree: ProofTree,
                 # 2. Second, we generate full number of mappings, using the sub-mappings as filters.
                 for conclusion_mapping in generate_mappings_from_formula(
                         [next_arg.conclusion],
-                        # [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
                         [leaf_node.formula],
                         shuffle=True,
                 ):
-                    if is_leaf_node_done:
+                    if is_arg_found:
                         break
 
                     conclusion_pulled = interpret_formula(next_arg.conclusion, conclusion_mapping, elim_dneg=elim_dneg)
@@ -977,52 +1086,92 @@ def _extend_branches(proof_tree: ProofTree,
                         rejection_stats['conclusion_pulled.rep != leaf_node.formula.rep'] += 1
                         continue
 
-                    # for early rejection
-                    if not is_ok_formula_set([conclusion_pulled] + formulas_in_tree):
-                        rejection_stats['not is_ok_formula_set([conclusion_pulled] + formulas_in_tree)'] += 1
+                    if not is_predicate_arity_consistent_formula_set([conclusion_pulled] + formulas_in_tree):
+                        rejection_stats['not is_predicate_arity_consistent_formula_set([conclusion_pulled] + formulas_in_tree)'] += 1
                         continue
 
-                    for mapping in generate_mappings_from_formula(
-                        next_arg.all_formulas,
-                        [leaf_node.formula] + [Formula(' '.join(constant_pool + predicate_pool))],
-                        constraints=conclusion_mapping,
-                        shuffle=True,
-                    ):
+                    target_preds, target_consts = _choose_target_preds_consts(proof_tree,
+                                                                              next_arg,
+                                                                              constraints=conclusion_mapping)
+                    for i_mapping_trial, mapping in enumerate(
+                            generate_mappings_from_formula(
+                                next_arg.all_formulas,
+                                # [Formula(' '.join(constant_pool + predicate_pool))],
+                                [Formula(' '.join(rep for rep in target_preds + target_consts))],
+                                constraints=conclusion_mapping,
+                                allow_many_to_one=False,
+                                shuffle=True,
+                            )):
+                        if i_mapping_trial >= 1:
+                            # only one trial is enough because we have chosen "neccessary and sufficient" target predicates and constraints.
+                            # we leave this loop for back reference
+                            break
+
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                        # is_intermediate_constants_used, illegal_constant, _ = _is_intermediate_constants_used(next_arg_pulled, proof_tree)
-                        # if is_intermediate_constants_used:
-                        #     rejection_stats[f'is_intermediate_constants_used: (constant={illegal_constant})'] += 1
-                        #     continue
+                        if is_argument_trivial(next_arg_pulled):
+                            rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
+                            continue
 
-                        if not is_argument_senseful(next_arg_pulled):
+                        if is_argument_nonsense(next_arg_pulled, allow_detect_tautology_contradiction=True):
                             rejection_stats['is_argument_nonsense(next_arg_pulled)'] += 1
                             continue
 
-                        if not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree):
-                            rejection_stats['not is_ok_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
+                        if not is_predicate_arity_consistent_formula_set(formulas_in_tree + next_arg_pulled.all_formulas):
+                            rejection_stats['not is_predicate_arity_consistent_formula_set(next_arg_pulled.all_formulas + formulas_in_tree)'] += 1
                             continue
 
-                        if not is_consistent_formula_set(next_arg_pulled.premises + leaf_formulas_in_tree):
-                            # We reject tree with inconsistent leaf nodes.
-                            # Such tree is formally allowed, but we think the inconsistent leafs are not senseful in natural language.
-                            # Notice that we stil allow inconsistency between non-leaf nodes
-                            rejection_stats['is_consistent_formula_set(other_premises + leaf_formulas_in_tree)'] += 1
+                        all_new_formulas = next_arg_pulled.premises + list(next_arg_pulled.assumptions.values())
+                        if not _is_formulas_new(formulas_in_tree + ng_formulas, all_new_formulas):
+                            rejection_stats['not _is_formulas_new(formulas_in_tree, all_new_formulas)'] += 1
                             continue
 
-                        if not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree + ng_formulas):
-                            # If any of the premises are already in the tree, it will lead to a loop.
-                            # We want to avoid a loop.
+                        if _is_argument_negation_elim(next_arg_pulled):
+                            # negation elim legally introduces inconsistency, and thus smaller proofs.
+                            pass
+                        else:
+                            org_leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+                            new_leaf_formulas = next_arg_pulled.premises
+                            deleted_leaf_formulas = [target_leaf_node.formula] + list(next_arg_pulled.assumptions.values())
+                            org_root_formula = proof_tree.root_node.formula
+                            new_root_formula = proof_tree.root_node.formula
 
-                            rejection_stats['not _is_formulas_new(next_arg_pulled.premises, formulas_in_tree)'] += 1
-                            continue
+                            if not allow_inconsistency:
+                                _is_consistent, logs = is_consistent_formula_set_with_logs(
+                                    org_leaf_formulas,
+                                    new_leaf_formulas,
+                                    deleted_leaf_formulas,
+                                    new_argument=next_arg_pulled,
+                                )
+                                if not _is_consistent:
+                                    logger.info('_extend_branches() reject the argument because the proof tree formulas are inconsistent')
+                                    for msg in logs:
+                                        logger.info(msg)
+                                    rejection_stats['_is_consistent_formula_set'] += 1
+                                    continue
 
-                        is_leaf_node_done = True
+                            if not allow_smaller_proofs:
+                                _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                                    org_leaf_formulas,
+                                    new_leaf_formulas,
+                                    deleted_leaf_formulas,
+                                    org_root_formula,
+                                    new_root_formula,
+                                    new_argument=next_arg_pulled,
+                                )
+                                if _have_smaller_proofs:
+                                    logger.info('_extend_branches() reject the argument because the proof tree have smaller proofs')
+                                    for log in logs:
+                                        logger.info(log)
+                                    rejection_stats['_have_smaller_proofs'] += 1
+                                    continue
+
+                        is_arg_found = True
                         break
 
         if is_leaf_node_done:
             # Upate tree
-            next_arg_pulled.conclusion = target_leaf_node.formula  # refer to the sampe object
+            next_arg_pulled.conclusion = target_leaf_node.formula  # refer to the same object
             target_leaf_node.argument = next_arg_pulled
             next_premise_nodes = [ProofNode(premise)
                                   for premise in next_arg_pulled.premises]
@@ -1030,6 +1179,7 @@ def _extend_branches(proof_tree: ProofTree,
                 proof_tree.add_node(premise_node)
                 target_leaf_node.add_child(premise_node)
             cur_step += 1
+
         else:
             rejection_stats_msg = '\n'.join([f'    {line}' for line in pformat(dict(rejection_stats)).split('\n')])
             log_traces_msg = '\n'.join(log_traces)
@@ -1044,22 +1194,54 @@ def _extend_branches(proof_tree: ProofTree,
                 rejection_stats_msg,
 
             ])
-            if return_at_best:
+            logger.info(msg)
+            if best_effort:
                 logger.info(msg)
-                if return_alignment:
-                    return proof_tree, orig_nodes_to_copy_nodes
-                else:
-                    return proof_tree
+                logger.info('_extend_branches() could not complete the proof tree with the specified steps. return smaller tree.')
+                break
             else:
                 raise ExtendBranchesFailure(msg)
 
-    _check_leaf_consistency(proof_tree)
+    # _check_leaf_consistency(proof_tree)
     proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
 
     if return_alignment:
-        return proof_tree, orig_nodes_to_copy_nodes
+        return proof_tree, cur_step, orig_nodes_to_copy_nodes
     else:
-        return proof_tree
+        return proof_tree, cur_step
+
+
+@profile
+def _choose_target_preds_consts(proof_tree: ProofTree,
+                                next_arg: Argument,
+                                constraints: Optional[Dict[str, str]] = None) -> Tuple[List[str], List[str]]:
+    tree_preds = {pred.rep
+                  for node in proof_tree.nodes
+                  for pred in node.formula.predicates}
+
+    tree_consts = {const.rep
+                   for node in proof_tree.nodes
+                   for const in node.formula.constants}
+
+    constraints = constraints or {}
+    constrained_tgt_preds = {pred.rep for rep in constraints.values() for pred in Formula(rep).predicates}
+    constrained_tgt_consts = {const.rep for rep in constraints.values() for const in Formula(rep).constants}
+
+    unconstraned_src_preds = {pred.rep for formula in next_arg.all_formulas
+                              for pred in formula.predicates if pred.rep not in constraints}
+    unconstraned_src_consts = {const.rep for formula in next_arg.all_formulas
+                               for const in formula.constants if const.rep not in constraints}
+
+    already_used_preds = tree_preds.union(constrained_tgt_preds)
+    already_used_consts = tree_consts.union(constrained_tgt_consts)
+
+    vacant_preds = [pred for pred in PREDICATES if pred not in already_used_preds]  # list for sorting
+    vacant_consts = [const for const in CONSTANTS if const not in already_used_consts]  # list for sorting
+
+    tgt_preds = vacant_preds[:len(unconstraned_src_preds)] + list(constrained_tgt_preds)
+    tgt_consts = vacant_consts[:len(unconstraned_src_consts)] + list(constrained_tgt_consts)
+
+    return tgt_preds, tgt_consts
 
 
 def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
@@ -1076,7 +1258,7 @@ def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
 
 
 def _is_formulas_new(formulas: List[Formula], existing_formulas: List[Formula]) -> bool:
-    return all((is_formula_new(formula, existing_formulas)
+    return all((is_formula_new(existing_formulas, formula)
                 for formula in formulas))
 
 
@@ -1095,18 +1277,19 @@ def _shuffle_arguments(arguments: List[Argument],
     yield from _shuffle(arguments, weights=_weights)
 
 
-def _check_leaf_consistency(proof_tree: ProofTree) -> None:
-    # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
-    assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
+# def _check_leaf_consistency(proof_tree: ProofTree) -> None:
+#     # We have checked the consistency of the leaf nodes at each step, thus, the leaf nodes must be consistent at the end.
+#     # assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
+#     assert is_consistent_formula_set([node.formula for node in proof_tree.leaf_nodes])
 
 
-def _is_intermediate_constants_used(next_arg_pulled: Argument,
-                                    proof_tree: ProofTree) -> Tuple[bool, Optional[str], Optional[ProofNode]]:
-    for constant in next_arg_pulled.intermediate_constants:
-        for leaf_node in proof_tree.leaf_nodes:
-            if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
-                return True, constant.rep, leaf_node
-    return False, None, None
+# def _is_intermediate_constants_used(next_arg_pulled: Argument,
+#                                     proof_tree: ProofTree) -> Tuple[bool, Optional[str], Optional[ProofNode]]:
+#     for constant in next_arg_pulled.intermediate_constants:
+#         for leaf_node in proof_tree.leaf_nodes:
+#             if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
+#                 return True, constant.rep, leaf_node
+#     return False, None, None
 
 
 @profile
@@ -1115,6 +1298,8 @@ def _fix_illegal_intermediate_constants(
     arguments: Optional[List[Argument]] = None,
     argument_weights: Optional[Dict[Argument, float]] = None,
     argument_weight_bias_factor=100,
+    allow_inconsistency=False,
+    allow_smaller_proofs=False,
     elim_dneg=False,
 ) -> ProofTree:
     if len(list((_find_illegal_intermediate_constants(proof_tree)))) >= 3:
@@ -1188,7 +1373,7 @@ def _fix_illegal_intermediate_constants(
             if illegal_node in leaf_nodes:
                 num_steps = i_trial / 6 + 1
                 try:
-                    proof_tree_tmp_maybe_fixed, alignment = _extend_branches_with_timeout_retry(
+                    trial_results = _extend_branches_with_timeout_retry(
                         proof_tree_tmp,
                         arguments,
                         num_steps,
@@ -1197,16 +1382,20 @@ def _fix_illegal_intermediate_constants(
                         depth_limit=None,
                         start_leaf_nodes=[illegal_node],
                         elim_dneg=elim_dneg,
+
+                        allow_inconsistency=allow_inconsistency,
+                        allow_smaller_proofs=allow_smaller_proofs,
                         allow_reference_arguments_when_depth_1=False,
 
                         force_fix_illegal_intermediate_constants=False,
                         allow_illegal_intermediate_constants=True,
                         return_alignment=True,
 
-                        return_at_best=True,
+                        best_effort=True,
                         timeout=5,
                         max_retry=5,
                     )
+                    proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]
                 except ExtendBranchesFailure as e:
                     logger.info(_make_pretty_msg_for_fix(status='failure', msg=f'will try next. failed in branch extension due to:\n{str(e)}'))
                     continue
@@ -1253,6 +1442,8 @@ def _validate_illegal_intermediate_constants(
     proof_tree: ProofTree,
     arguments: List[Argument],
     argument_weights: Optional[Dict[Argument, float]] = None,
+    allow_inconsistency=False,
+    allow_smaller_proofs=False,
     elim_dneg=False
 ) -> ProofTree:
 
@@ -1264,6 +1455,8 @@ def _validate_illegal_intermediate_constants(
                     proof_tree,
                     arguments=arguments,
                     argument_weights=argument_weights,
+                    allow_inconsistency=allow_inconsistency,
+                    allow_smaller_proofs=allow_smaller_proofs,
                     elim_dneg=elim_dneg,
                 )
             except (FixIllegalIntermediateConstantFailure, FixIllegalIntermediateConstantImpossible) as e:
@@ -1313,6 +1506,14 @@ def load_arguments(config_paths: List[str]) -> List[Argument]:
                           for json_obj in json.load(open(config_path))
                           if not json_obj['id'].startswith('__')])
     return arguments
+
+
+def _is_argument_negation_elim(arg: Argument) -> bool:
+    return arg.id.find('negation_elim') >= 0
+
+
+def _is_argument_negation_intro(arg: Argument) -> bool:
+    return arg.id.find('negation_intro') >= 0
 
 
 def build(config_paths: List[str],

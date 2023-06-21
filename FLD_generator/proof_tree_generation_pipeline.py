@@ -1,6 +1,7 @@
 from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
+import random
 
 from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation
 from FLD_generator.proof import ProofTree, ProofNode
@@ -41,10 +42,51 @@ class ProofTreeGenerationPipeline:
         self.add_subj_obj_swapped_distractor = add_subj_obj_swapped_distractor
 
         self.log_stats = log_stats
-        self.translator.log_stats = log_stats
-
         self._empty_argument_stat = {arg.id: 0 for arg in self.generator.arguments}
-        self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
+
+        if self.translator is not None:
+            self.translator.log_stats = log_stats
+            self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
+        else:
+            self._empty_translation_stat = {}
+
+        self._reusable_proof_trees: Dict[Tuple[Any], List[ProofTree]] = defaultdict(list)
+
+    @profile
+    def _reusable_generate(self,
+                           depth: int,
+                           branch_extension_steps: int,
+                           allow_inconsistency=False,
+                           allow_smaller_proofs=False,
+                           depth_1_reference_weight: Optional[float] = None,
+                           force_fix_illegal_intermediate_constants=False) -> ProofTree:
+        _reuse_key = (depth, allow_inconsistency, allow_smaller_proofs, depth_1_reference_weight, force_fix_illegal_intermediate_constants)
+
+        reusable_proof_trees = self._reusable_proof_trees[_reuse_key]
+        if len(reusable_proof_trees) > 0:
+            idx = random.randint(0, len(reusable_proof_trees) - 1)
+            reusable_proof_tree = reusable_proof_trees[idx]
+            reusable_proof_trees.pop(idx)
+            logger.fatal('could get tree from cache!!')
+            return reusable_proof_tree
+
+        trial_proof_trees = self.generator.generate_tree(
+            depth,
+            branch_extension_steps,
+            depth_1_reference_weight=depth_1_reference_weight,
+            allow_inconsistency=allow_inconsistency,
+            allow_smaller_proofs=allow_smaller_proofs,
+            best_effort=True,
+            force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
+            get_all_trial_results=True,
+        )
+        trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
+
+        reusable_proof_trees.extend(trial_proof_trees[:-1])
+        if len(reusable_proof_trees) > 100000:
+            self._reusable_proof_trees[_reuse_key]  = []
+
+        return trial_proof_trees[-1]
 
     @profile
     def run(self,
@@ -52,6 +94,8 @@ class ProofTreeGenerationPipeline:
             branch_extension_steps: int,
             num_distractors: int,
             num_translation_distractors: int,
+            allow_inconsistency=False,
+            allow_smaller_proofs=False,
             depth_1_reference_weight: Optional[float] = None,
             force_fix_illegal_intermediate_constants=False,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
@@ -69,10 +113,12 @@ class ProofTreeGenerationPipeline:
         while True:
             logger.info(_make_pretty_log('generate proof tree', 'start'))
             try:
-                proof_tree = self.generator.generate_tree(
+                proof_tree = self._reusable_generate(
                     depth,
                     branch_extension_steps,
                     depth_1_reference_weight=depth_1_reference_weight,
+                    allow_inconsistency=allow_inconsistency,
+                    allow_smaller_proofs=allow_smaller_proofs,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
             except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
@@ -88,7 +134,11 @@ class ProofTreeGenerationPipeline:
             if num_distractors > 0:
                 if self.distractor is not None:
                     try:
-                        formula_distractors, _others = self.distractor.generate(proof_tree, num_distractors)
+                        formula_distractors, _others = self.distractor.generate(proof_tree,
+                                                                                num_distractors,
+                                                                                allow_inconsistency=allow_inconsistency,
+                                                                                allow_smaller_proofs=allow_smaller_proofs,
+                                                                                best_effort=True)
                         for _other_key, _other_val in _others.items():
                             if _other_key in others:
                                 raise ValueError(f'Duplicated other key {_other_key}')
@@ -112,11 +162,12 @@ class ProofTreeGenerationPipeline:
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 
+            translator_stats = {}
             if self.translator is not None:
                 logger.info(_make_pretty_log('generate translations', 'start'))
                 all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
                 leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.assump_parent is not None]
+                assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
 
                 other_formulas = []
                 if others.get('negative_tree', None) is not None:
@@ -161,10 +212,14 @@ class ProofTreeGenerationPipeline:
                 if self.translation_distractor is not None:
                     leaf_translations = [leaf_node.formula.translation for leaf_node in proof_tree.leaf_nodes
                                          if leaf_node.formula.translation is not None]
-                    try:
-                        translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors)
-                    except FormulaDistractorGenerationFailure as e:
-                        raise ProofTreeGenerationPipelineFailure(str(e))
+                    if len(leaf_translations) == 0:
+                        logger.info('can not generate translation distractors because no leaf translations found')
+                        translation_distractors = []
+                    else:
+                        try:
+                            translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors, best_effort=True)
+                        except FormulaDistractorGenerationFailure as e:
+                            raise ProofTreeGenerationPipelineFailure(str(e))
                 else:
                     raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
             else:
@@ -235,10 +290,11 @@ class ProofTreeGenerationPipeline:
 
         # translation
         for node in proof_tree.nodes:
-            translation_name = node.formula.translation_name if node.formula.translation_name is not None else '<no_name>'
-            if translation_name not in stats['translation_stats']['name_stats']:
-                stats['translation_stats']['name_stats'][translation_name] = 0
-            stats['translation_stats']['name_stats'][translation_name] += 1
+            if node.formula.translation_name is not None:
+                translation_name = node.formula.translation_name
+                if translation_name not in stats['translation_stats']['name_stats']:
+                    stats['translation_stats']['name_stats'][translation_name] = 0
+                stats['translation_stats']['name_stats'][translation_name] += 1
 
         for key, val in flatten_dict(translator_stats).items():
             stats['translation_stats']['other_stats'][key] = val

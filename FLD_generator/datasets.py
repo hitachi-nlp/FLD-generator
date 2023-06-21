@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from abc import abstractmethod, ABC
 from statistics import mean, stdev
-from typing import Dict, List, Optional, Union, Iterable, Tuple, Any
+from typing import Dict, List, Optional, Union, Iterable, Tuple, Any, Set
 import logging
 import copy
 from collections import defaultdict
@@ -11,15 +11,29 @@ from pprint import pprint
 
 from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLD_generator.formula import Formula
+from FLD_generator.formula import Formula, negate
 from FLD_generator.proof import ProofTree, ProofNode
 from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
 from FLD_generator.word_banks.base import WordBank
-from FLD_generator.translation_distractors import build as build_translation_distractor
+from FLD_generator.translation_distractors import build as build_translation_distractor, TranslationDistractorGenerationFailure
+from FLD_generator.utils import (
+    provable_from_incomplete_facts,
+    disprovable_from_incomplete_facts,
+    is_consistent_formula_set_with_logs,
+    have_smaller_proofs_with_logs,
+)
+from FLD_generator.formula_checkers import (
+    is_consistent_set,
+    is_provable,
+    is_disprovable,
+    is_unknown,
+)
 import kern_profiler
 
 logger = logging.getLogger(__name__)
+
+_DUMMY_SENTENCE = 'this is a dummy sntence'
 
 
 class ProofStance(Enum):
@@ -33,13 +47,13 @@ class WorldAssumption(Enum):
     OWA = 'OWA'
 
 
-def _generate_random_sentence(translator: Translator):
+def _generate_random_sentence(translator: Translator) -> Optional[str]:
     acceptable_formula_reps = translator.acceptable_formulas
     for formula_rep in random.sample(acceptable_formula_reps, len(acceptable_formula_reps)):
         nls, _ = translator.translate([Formula(formula_rep)], [])
         if nls[0][1] is not None:
             return nls[0][1]
-    return 'Love Love LoveLive!'
+    return None
 
 
 def _make_instance_label(proof_stance: ProofStance,
@@ -185,11 +199,14 @@ class NLProofSDataset:
                  force_fix_illegal_intermediate_constants=False,
                  unknown_ratio: float = 1 / 3.,
                  use_collapsed_translation_nodes_for_unknown_tree=False,
+                 swap_ng_words: Optional[Set[str]] = None,
                  word_bank: Optional[WordBank] = None,
                  num_distractors: Optional[List[int]] = None,
                  num_translation_distractors: Optional[List[int]] = None,
+                 allow_inconsistency=False,
+                 allow_smaller_proofs=False,
                  version: str = '0.0',
-                 log_stats=False,
+                 log_stats=True,
                  raise_if_translation_not_found=True):
         self.pipeline = pipeline
 
@@ -216,6 +233,8 @@ class NLProofSDataset:
         self.branch_extension_steps = branch_extension_steps
         self.num_distractors = num_distractors or [0]
         self.num_translation_distractors = num_translation_distractors or [0]
+        self.allow_inconsistency = allow_inconsistency
+        self.allow_smaller_proofs = allow_smaller_proofs
         self.log_stats = log_stats,
         self.pipeline.log_stats = log_stats
         self.version = version
@@ -223,7 +242,11 @@ class NLProofSDataset:
 
         self.use_collapsed_translation_nodes_for_unknown_tree = use_collapsed_translation_nodes_for_unknown_tree
         if self.use_collapsed_translation_nodes_for_unknown_tree:
-            self.word_swap_distractor = build_translation_distractor('word_swap', word_bank=word_bank)
+            self.word_swap_distractor = build_translation_distractor(
+                'word_swap',
+                word_bank=word_bank,
+                swap_ng_words=swap_ng_words,
+            )
         else:
             self.word_swap_distractor = None
 
@@ -239,10 +262,14 @@ class NLProofSDataset:
         """
         sample_cum_stats = defaultdict(int)
         all_sample_stats = defaultdict(list)
-        for i_sample in range(size):
+        i_sample = 0
+        while i_sample < size:
+            # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! i_sample', i_sample)
+
             logger.info('\n\n')
             logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))
 
+            # -- generate settings --
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]
 
@@ -250,36 +277,62 @@ class NLProofSDataset:
             _num_translation_distractors = random.sample(self.num_translation_distractors, 1)[0]
             _branch_extension_steps = random.sample(self.branch_extension_steps, 1)[0]
 
+            # -- make proof tree and distractors  --
             proof_tree, root_negation_formula, formula_distractors, translation_distractors, others, pipeline_stats = self.pipeline.run(
                 depth,
                 _branch_extension_steps,
                 _num_distractors,
                 _num_translation_distractors,
                 depth_1_reference_weight=self._depth_1_reference_weight,
+                allow_inconsistency=self.allow_inconsistency,
+                allow_smaller_proofs=self.allow_smaller_proofs,
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
+            # -- sample stance --
             proof_stance = self._sample_proof_stance()
-
             if len(proof_tree.leaf_nodes) == 0:
                 # For some very rare case, this occurs.
                 # Since we do not expect this behaviour, we raise error for future debug
                 raise Exception(proof_tree.format_str)
 
+            # -- sample nodes --
             if proof_stance == ProofStance.UNKNOWN:
+                hypothesis_formula = proof_tree.root_node.formula
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
-                dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.2)))
+                could_make_unknown = False
+                for _ in range(10):
+                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                    if is_unknown(
+                        [node.formula for node in proof_tree.leaf_nodes
+                         if node not in dead_leaf_nodes],
+                        hypothesis_formula,
+                    ):
+                        could_make_unknown = True
+                        break
+                if not could_make_unknown:
+                    logger.warning('skip the sample because we could not make UNKNOWN proof by sub-sampling nodes.')
+                    continue
+
             elif proof_stance == ProofStance.PROVED:
+                hypothesis_formula = proof_tree.root_node.formula
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 dead_leaf_nodes = []
+
             elif proof_stance == ProofStance.DISPROVED:
+                hypothesis_formula = root_negation_formula
                 hypothesis = root_negation_formula.translation or root_negation_formula.rep
                 dead_leaf_nodes = []
 
+            alive_leaf_nodes = [node for node in proof_tree.leaf_nodes
+                                if node not in dead_leaf_nodes]
+
+            # dead nodes = missing nodes + collapsed nodes
             missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
 
-            context, proof_text, node2id, id2node = self._make_text(
+            # -- make texts --
+            context, formula_context, proof_text, formula_proof_text, node2id, id2node = self._make_text(
                 proof_tree,
                 proof_stance,
 
@@ -298,23 +351,29 @@ class NLProofSDataset:
                 conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
             )
 
+            # -- make negative proofs --
             negative_tree = others.get('negative_tree', None)
             if negative_tree is not None:
-                missing_nodes_of_negative_tree = others['negative_tree_missing_nodes']
+                negative_tree_dead_leaf_nodes = others['negative_tree_missing_nodes']
+                # negative_tree_alive_leaf_nodes = [node for node in negative_tree.leaf_nodes
+                #                                   if node not in negative_tree_dead_leaf_nodes]
+                negative_tree_missing_leaf_nodes = negative_tree_dead_leaf_nodes
+                negative_tree_collapsed_leaf_nodes = []
 
-                if len(missing_nodes_of_negative_tree) == 0:
+                if len(negative_tree_missing_leaf_nodes) == 0:
                     negative_proof_stance = ProofStance.PROVED
                 else:
                     negative_proof_stance = ProofStance.UNKNOWN
 
                 negative_hypothesis = self._get_sent_from_node(negative_tree.root_node)
 
-                negative_context, negateive_proof_text, _, _ = self._make_text(
+                negative_context, formula_negative_context, negateive_proof_text, formula_negateive_proof_text, _, _ = self._make_text(
                     negative_tree,
                     ProofStance.UNKNOWN,
 
-                    dead_leaf_nodes=missing_nodes_of_negative_tree,
-                    missing_leaf_nodes=missing_nodes_of_negative_tree,
+                    dead_leaf_nodes=negative_tree_dead_leaf_nodes,
+                    missing_leaf_nodes=negative_tree_missing_leaf_nodes,
+                    collapsed_leaf_nodes=negative_tree_collapsed_leaf_nodes,
 
                     node2id=node2id,
                     id2node=id2node,
@@ -326,11 +385,12 @@ class NLProofSDataset:
 
                 for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
                     sent = sent_match.group().rstrip(' ')
-                    if sent not in context:
+                    if not sent.find(_DUMMY_SENTENCE) >= 0 and sent not in context:
                         raise Exception(f'A sentence in the negative context is not in the original context. This is strange. The sentence is as follows: "{sent}"')
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
 
+            # -- compute depth --
             if proof_stance == ProofStance.UNKNOWN:
                 proof_depth = None
             else:
@@ -339,7 +399,39 @@ class NLProofSDataset:
                 else:
                     proof_depth = proof_tree.depth
 
-            # make output json
+            all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
+            all_negative_formulas = formula_distractors
+            all_formulas = all_positive_formulas + all_negative_formulas
+
+            if proof_stance == ProofStance.PROVED:
+                assert is_provable(all_positive_formulas, hypothesis_formula)
+            elif proof_stance == ProofStance.DISPROVED:
+                assert is_disprovable(all_positive_formulas, hypothesis_formula)
+            elif proof_stance == ProofStance.UNKNOWN:
+                assert is_unknown(all_positive_formulas, hypothesis_formula)
+
+            if not self.allow_inconsistency:
+                _is_consistent, logs = is_consistent_formula_set_with_logs(
+                    all_formulas, [], [],
+                )
+                if not _is_consistent:
+                    for msg in logs:
+                        logger.info(msg)
+                    raise Exception('Unexpected.')
+
+            if not self.allow_smaller_proofs:
+                _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                    all_positive_formulas, [], [],
+                    hypothesis_formula,
+                    hypothesis_formula,
+                    distractor_formulas=all_negative_formulas,
+                )
+                if _have_smaller_proofs:
+                    for log in logs:
+                        logger.info(log)
+                    raise Exception('Unexpected.')
+
+            # -- make output json --
             label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
             negative_label = _make_instance_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
             stance_label = _make_proof_stance_label(proof_stance, version=self.version)
@@ -349,7 +441,9 @@ class NLProofSDataset:
 
                 'hypothesis': hypothesis,
                 'context': context,
+                'formula_context': formula_context,
                 'proofs': [proof_text] if proof_text is not None else [],
+                'formula_proofs': [formula_proof_text] if formula_proof_text is not None else [],
                 'proof_stance': stance_label,
                 'answer': label,
 
@@ -406,6 +500,7 @@ class NLProofSDataset:
             else:
                 gathered_stats = {}
 
+            i_sample += 1
             yield dataset_json,\
                 proof_tree,\
                 formula_distractors,\
@@ -462,11 +557,14 @@ class NLProofSDataset:
 
         if len(transformed_proof_and_distractor_nodes) == 0:
             if add_randome_sentence_if_context_is_null:
-                random_sentence = _generate_random_sentence(self.pipeline.translator)
+                random_sentence = None
+                if self.pipeline.translator is not None:
+                    random_sentence = _generate_random_sentence(self.pipeline.translator)
+                random_sentence = random_sentence or _DUMMY_SENTENCE
                 transformed_proof_and_distractor_nodes = [_FormulaDistractorNode(Formula(random_sentence))]
-                logger.info('Adding a random sentence into context since context have no sentence. The randome sentence is: "%s"', random_sentence)
+                logger.info('Adding a random sentence into context because context have no sentence. The randome sentence is: "%s"', random_sentence)
             else:
-                raise NotImplementedError('We must add something to context since null context will lead to error in NLProofS learning.')
+                raise NotImplementedError('We must add something to context because null context will lead to error in NLProofS learning.')
 
         node2id, id2node = self._make_node_ids(
             transformed_proof_and_distractor_nodes,
@@ -475,20 +573,36 @@ class NLProofSDataset:
             id2node=id2node,
         )
 
-        context_text = self._make_context_text(id2node, missing_leaf_nodes)
+        def _my_make_context_text(formula_rep: bool) -> str:
+            return self._make_context_text(id2node, missing_leaf_nodes, formula_rep=formula_rep)
 
-        proof_text = self._make_proof_text(
-            proof_tree,
-            transformed_proof_and_distractor_nodes,
-            transformed_proof_nodes,
+        def _my_make_proof_text(formula_rep: bool) -> str:
+            return self._make_proof_text(
+                proof_tree,
+                transformed_proof_and_distractor_nodes,
+                transformed_proof_nodes,
+                node2id,
+                id2node,
+                proof_stance,
+                conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
+                conclude_hypothesis_from_random_sent_if_proof_is_unknown,
+                formula_rep=formula_rep,
+            )
+
+        context_text = _my_make_context_text(False)
+        formula_context_text = _my_make_context_text(True)
+
+        proof_text = _my_make_proof_text(False)
+        formula_proof_text = _my_make_proof_text(True)
+
+        return (
+            context_text,
+            formula_context_text,
+            proof_text,
+            formula_proof_text,
             node2id,
             id2node,
-            proof_stance,
-            conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
-            conclude_hypothesis_from_random_sent_if_proof_is_unknown,
         )
-
-        return context_text, proof_text, node2id, id2node
 
     def _divide_into_missing_and_collapsed_nodes(self, dead_leaf_nodes: List[ProofNode]) -> Tuple[List[ProofNode], List[ProofNode]]:
         missing_leaf_nodes = []
@@ -497,15 +611,12 @@ class NLProofSDataset:
         for dead_node in dead_leaf_nodes:
             if self.use_collapsed_translation_nodes_for_unknown_tree:
                 if random.random() <= 0.5 and dead_node.formula.translation is not None:
-                    collapased_translations = self.word_swap_distractor.generate(
-                        [dead_node.formula.translation],
-                        1,
-                    )
-
-                    if len(collapased_translations) == 0:
-                        logger.warning('Could not collapse the translation "%s". Will be treated as missing nodes.', dead_node.formula.translation)
-                        missing_leaf_nodes.append(dead_node)
-                    else:
+                    try:
+                        collapased_translations = self.word_swap_distractor.generate(
+                            [dead_node.formula.translation],
+                            1,
+                            best_effort=False,
+                        )
                         collapased_translation = collapased_translations[0]
                         logger.info('Make collapsed translation node as:\norig     : "%s"\ncollapsed: "%s"', dead_node.formula.translation, collapased_translation)
                         dead_node.formula.translation = collapased_translation
@@ -513,6 +624,9 @@ class NLProofSDataset:
                             dead_node.formula.translation_name = dead_node.formula.translation_name + '.collapsed'
 
                         collapsed_leaf_nodes.append(dead_node)
+                    except TranslationDistractorGenerationFailure:
+                        logger.warning('Could not collapse the translation "%s". Will be treated as missing nodes.', dead_node.formula.translation)
+                        missing_leaf_nodes.append(dead_node)
                 else:
                     missing_leaf_nodes.append(dead_node)
             else:
@@ -585,13 +699,13 @@ class NLProofSDataset:
                 if self._is_root(node, proof_tree):
                     id_ = 'hypothesis'
 
+                elif self._is_assump(node):
+                    id_ = f'assump{i_assump}'
+                    i_assump += 1
+
                 elif self._is_leaf(node, proof_tree):
-                    if self._is_assump(node):
-                        id_ = f'assump{i_assump}'
-                        i_assump += 1
-                    else:
-                        id_ = f'sent{i_sent}'
-                        i_sent += 1
+                    id_ = f'sent{i_sent}'
+                    i_sent += 1
 
                 elif self._is_distractor(node):
                     id_ = f'sent{i_sent}'
@@ -627,15 +741,27 @@ class NLProofSDataset:
 
         return _node2id, _id2node
 
-    def _make_context_text(self, id2node: Dict[str, Node], missing_leaf_nodes: List[ProofNode]) -> str:
+    def _make_context_text(self,
+                           id2node: Dict[str, Node],
+                           missing_leaf_nodes: List[ProofNode],
+                           formula_rep=False) -> str:
         context_id2nodes = {id_: node for id_, node in id2node.items()
                             if id_.startswith('sent') and node not in missing_leaf_nodes}
 
+        def node2sent(node) -> str:
+            if formula_rep:
+                if isinstance(node, _TranslationDistractorNode):
+                    return self._get_sent_from_node(node)
+                else:
+                    return node.formula.rep
+            else:
+                return self._get_sent_from_node(node)
+
         return ' '.join([
-            f'{id_}: {self._get_sent_from_node(node)}'
+            f'{id_}: {node2sent(node)}'
             for id_, node in sorted(context_id2nodes.items(),
                                     key=lambda id_node: int(re.sub('sent([0-9]*)', r'\g<1>', id_node[0])))
-            
+
         ])
 
     def _make_proof_text(self,
@@ -646,7 +772,8 @@ class NLProofSDataset:
                          id2node: Dict[str, Node],
                          proof_stance: ProofStance,
                          conclude_hypothesis_from_subtree_roots_if_proof_is_unknown: bool,
-                         conclude_hypothesis_from_random_sent_if_proof_is_unknown: bool) -> Optional[str]:
+                         conclude_hypothesis_from_random_sent_if_proof_is_unknown: bool,
+                         formula_rep=False) -> Optional[str]:
         # make proof string
         proof_elems = []
         for node in proof_tree.depth_first_traverse():
@@ -659,13 +786,16 @@ class NLProofSDataset:
                 premise_str = ' & '.join([f'[{_id}]' for _id in assump_ids] + child_ids)
                 conclusion_str = 'hypothesis'
 
-            elif self._is_leaf(node, proof_tree):
-                if self._is_assump(node):
-                    premise_str = 'void'
-                    assump_id = node2id[node]
-                    conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
+            elif self._is_assump(node):
+                premise_str = 'void'
+                assump_id = node2id[node]
+                if formula_rep:
+                    conclusion_str = f'{assump_id}: {node.formula.rep}'
                 else:
-                    continue
+                    conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
+
+            elif self._is_leaf(node, proof_tree):
+                continue
 
             elif self._is_int(node, proof_tree):
                 node_id = node2id[node]
@@ -739,13 +869,14 @@ class NLProofSDataset:
         return isinstance(node, ProofNode) and node == proof_tree.root_node
 
     def _is_leaf(self, node: Node, proof_tree: ProofTree) -> bool:
-        return isinstance(node, ProofNode) and node in proof_tree.leaf_nodes
+        return isinstance(node, ProofNode) and node.is_leaf
 
     def _is_assump(self, node: Node) -> bool:
-        return node.assump_parent is not None
+        return isinstance(node, ProofNode) and node.is_assump
 
     def _is_int(self, node: Node, proof_tree: ProofTree) -> bool:
-        return isinstance(node, ProofNode) and (not self._is_root(node, proof_tree) and not self._is_leaf(node, proof_tree))
+        return isinstance(node, ProofNode)\
+            and (not self._is_root(node, proof_tree) and not self._is_leaf(node, proof_tree) and not self._is_assump(node))
 
     def _is_distractor(self, node: Node) -> bool:
         return isinstance(node, _DistractorFakeNode)
