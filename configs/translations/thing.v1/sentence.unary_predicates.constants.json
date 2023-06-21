@@ -3,25 +3,25 @@
   "sentence": {
 
     "{A}{a}": [
-      "<<clause::verb::{A}{a}unique_subj>>"
+      "<<clause::verb::{A}{a}specific_subj>>"
     ],
     "¬{A}{a}": [
       "<<phrase::not_prefix.sentence_intro>> <<sentence::{A}{a}>>",
-      "<<clause::verb::¬{A}{a}unique_subj>>"
+      "<<clause::verb::¬{A}{a}specific_subj>>"
     ],
 
 
     "({A}{a} & {B}{a})": [
-      "<<clause::verb::({A}{a} & {B}{a})unique_subj>>"
+      "<<clause::verb::({A}{a} & {B}{a})specific_subj>>"
     ],
     "(¬{A}{a} & {B}{a})": [
-      "<<clause::verb::(¬{A}{a} & {B}{a})unique_subj>>"
+      "<<clause::verb::(¬{A}{a} & {B}{a})specific_subj>>"
     ],
     "({A}{a} & ¬{B}{a})": [
-      "<<clause::verb::({A}{a} & ¬{B}{a})unique_subj>>"
+      "<<clause::verb::({A}{a} & ¬{B}{a})specific_subj>>"
     ],
     "(¬{A}{a} & ¬{B}{a})": [
-      "<<clause::verb::(¬{A}{a} & ¬{B}{a})unique_subj>>"
+      "<<clause::verb::(¬{A}{a} & ¬{B}{a})specific_subj>>"
     ],
 
 
@@ -40,16 +40,16 @@
 
 
     "({A}{a} v {B}{a})": [
-      "<<clause::verb::({A}{a} v {B}{a})unique_subj>>"
+      "<<clause::verb::({A}{a} v {B}{a})specific_subj>>"
     ],
     "(¬{A}{a} v {B}{a})": [
-      "<<clause::verb::(¬{A}{a} v {B}{a})unique_subj>>"
+      "<<clause::verb::(¬{A}{a} v {B}{a})specific_subj>>"
     ],
     "({A}{a} v ¬{B}{a})": [
-      "<<clause::verb::({A}{a} v ¬{B}{a})unique_subj>>"
+      "<<clause::verb::({A}{a} v ¬{B}{a})specific_subj>>"
     ],
     "(¬{A}{a} v ¬{B}{a})": [
-      "<<clause::verb::(¬{A}{a} v ¬{B}{a})unique_subj>>"
+      "<<clause::verb::(¬{A}{a} v ¬{B}{a})specific_subj>>"
     ],
 
 
@@ -736,48 +736,48 @@
 
 
     "{A}{a} -> {B}{a}": [
-      "<<phrase::if_conjunction>> <<clause::verb::{A}{a}set_subj>> <<clause::verb::{B}it>>",
-      "<<clause::verb::{A}{a}set_subj>> <<phrase::thus_conjunction>> <<clause::verb::{B}it>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}{a}generic_subj>> <<clause::verb::{B}it>>",
+      "<<clause::verb::{A}{a}generic_subj>> <<phrase::thus_conjunction>> <<clause::verb::{B}it>>",
 
-      "<<clause::verb::{B}{a}set_subj>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
+      "<<clause::verb::{B}{a}generic_subj>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
 
       "<<clause::noun::{A}{a}.set>> <<phrase::{B}predicate>>",
 
-      "<<clause::verb::{A}{a}set_subj>> <<phrase::{B}to_do>>",
-      "<<clause::verb::{B}{a}set_subj>> by <<phrase::{A}doing>>"
+      "<<clause::verb::{A}{a}generic_subj>> <<phrase::{B}to_do>>",
+      "<<clause::verb::{B}{a}generic_subj>> by <<phrase::{A}doing>>"
     ],
     "¬{A}{a} -> {B}{a}": [
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}set_subj>> <<clause::verb::{B}it>>",
-      "<<clause::verb::¬{A}{a}set_subj>> <<phrase::thus_conjunction>> <<clause::verb::{B}it>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}generic_subj>> <<clause::verb::{B}it>>",
+      "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::thus_conjunction>> <<clause::verb::{B}it>>",
 
-      "<<clause::verb::{B}{a}set_subj>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
+      "<<clause::verb::{B}{a}generic_subj>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
 
       "<<clause::noun::¬{A}{a}.set>> <<phrase::{B}predicate>>",
 
-      "<<clause::verb::¬{A}{a}set_subj>> <<phrase::{B}to_do>>",
-      "<<clause::verb::{B}{a}set_subj>> by <<phrase::¬{A}doing>>"
+      "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::{B}to_do>>",
+      "<<clause::verb::{B}{a}generic_subj>> by <<phrase::¬{A}doing>>"
     ],
     "{A}{a} -> ¬{B}{a}": [
-      "<<phrase::if_conjunction>> <<clause::verb::{A}{a}set_subj>> <<clause::verb::¬{B}it>>",
-      "<<clause::verb::{A}{a}set_subj>> <<phrase::thus_conjunction>> <<clause::verb::¬{B}it>>",
+      "<<phrase::if_conjunction>> <<clause::verb::{A}{a}generic_subj>> <<clause::verb::¬{B}it>>",
+      "<<clause::verb::{A}{a}generic_subj>> <<phrase::thus_conjunction>> <<clause::verb::¬{B}it>>",
 
-      "<<clause::verb::¬{B}{a}set_subj>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
+      "<<clause::verb::¬{B}{a}generic_subj>> <<phrase::if_conjunction>> <<clause::verb::{A}it>>",
 
       "<<clause::noun::{A}{a}.set>> <<phrase::¬{B}predicate>>",
 
-      "<<clause::verb::{A}{a}set_subj>> <<phrase::¬{B}to_do>>",
-      "<<clause::verb::¬{B}{a}set_subj>> by <<phrase::{A}doing>>"
+      "<<clause::verb::{A}{a}generic_subj>> <<phrase::¬{B}to_do>>",
+      "<<clause::verb::¬{B}{a}generic_subj>> by <<phrase::{A}doing>>"
     ],
     "¬{A}{a} -> ¬{B}{a}": [
-      "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}set_subj>> <<clause::verb::¬{B}it>>",
-      "<<clause::verb::¬{A}{a}set_subj>> <<phrase::thus_conjunction>> <<clause::verb::¬{B}it>>",
+      "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}generic_subj>> <<clause::verb::¬{B}it>>",
+      "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::thus_conjunction>> <<clause::verb::¬{B}it>>",
 
-      "<<clause::verb::¬{B}{a}set_subj>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
+      "<<clause::verb::¬{B}{a}generic_subj>> <<phrase::if_conjunction>> <<clause::verb::¬{A}it>>",
 
       "<<clause::noun::¬{A}{a}.set>> <<phrase::¬{B}predicate>>",
 
-      "<<clause::verb::¬{A}{a}set_subj>> <<phrase::¬{B}to_do>>",
-      "<<clause::verb::¬{B}{a}set_subj>> by <<phrase::¬{A}doing>>"
+      "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::¬{B}to_do>>",
+      "<<clause::verb::¬{B}{a}generic_subj>> by <<phrase::¬{A}doing>>"
     ],
 
 

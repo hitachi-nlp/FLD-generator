@@ -51,93 +51,93 @@
 
 
 
-      "{A}{a}set_subj": [
+      "{A}{a}generic_subj": [
         "a <<phrase::{a}noun>> <<phrase::{A}predicate>>"
       ],
-      "¬{A}{a}set_subj": [
+      "¬{A}{a}generic_subj": [
         "a <<phrase::{a}noun>> <<phrase::¬{A}predicate>>"
       ],
 
 
-      "({A}{a} & {B}{a})set_subj": [
+      "({A}{a} & {B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} & {B})predicate>>",
-          "<<clause::verb::{A}{a}set_subj>> <<phrase::and_also>> <<clause::verb::{B}it>>"
+          "<<clause::verb::{A}{a}generic_subj>> <<phrase::and_also>> <<clause::verb::{B}it>>"
       ],
-      "(¬{A}{a} & {B}{a})set_subj": [
+      "(¬{A}{a} & {B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}set_subj>> <<phrase::but>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::but>> <<clause::verb::{B}it>>"
       ],
-      "({A}{a} & ¬{B}{a})set_subj": [
+      "({A}{a} & ¬{B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}set_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}{a}generic_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>"
       ],
-      "(¬{A}{a} & ¬{B}{a})set_subj": [
+      "(¬{A}{a} & ¬{B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
-          "<<clause::verb::¬{A}{a}set_subj>> <<phrase::and_also>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::and_also>> <<clause::verb::¬{B}it>>"
       ],
 
 
-      "({A}{a} v {B}{a})set_subj": [
+      "({A}{a} v {B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
-          "<<clause::verb::{A}{a}set_subj>> or <<clause::verb::{B}it>> or both"
+          "<<clause::verb::{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
       ],
-      "(¬{A}{a} v {B}{a})set_subj": [
+      "(¬{A}{a} v {B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
-          "<<clause::verb::¬{A}{a}set_subj>> or <<clause::verb::{B}it>> or both"
+          "<<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
       ],
-      "({A}{a} v ¬{B}{a})set_subj": [
+      "({A}{a} v ¬{B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}set_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<clause::verb::{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
-      "(¬{A}{a} v ¬{B}{a})set_subj": [
+      "(¬{A}{a} v ¬{B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
-          "<<clause::verb::¬{A}{a}set_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
 
 
-      "{A}{a}unique_subj": [
+      "{A}{a}specific_subj": [
         "the <<phrase::{a}noun>> <<phrase::{A}predicate>>"
       ],
-      "¬{A}{a}unique_subj": [
+      "¬{A}{a}specific_subj": [
         "the <<phrase::{a}noun>> <<phrase::¬{A}predicate>>"
       ],
 
 
-      "({A}{a} & {B}{a})unique_subj": [
+      "({A}{a} & {B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} & {B})predicate>>",
-          "<<clause::verb::{A}{a}unique_subj>> <<phrase::and_also>> <<clause::verb::{B}it>>"
+          "<<clause::verb::{A}{a}specific_subj>> <<phrase::and_also>> <<clause::verb::{B}it>>"
       ],
-      "(¬{A}{a} & {B}{a})unique_subj": [
+      "(¬{A}{a} & {B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
-          "<<clause::verb::¬{A}{a}unique_subj>> <<phrase::but>> <<clause::verb::{B}it>>"
+          "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::but>> <<clause::verb::{B}it>>"
       ],
-      "({A}{a} & ¬{B}{a})unique_subj": [
+      "({A}{a} & ¬{B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}unique_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::{A}{a}specific_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>"
       ],
-      "(¬{A}{a} & ¬{B}{a})unique_subj": [
+      "(¬{A}{a} & ¬{B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
-          "<<clause::verb::¬{A}{a}unique_subj>> <<phrase::and_also>> <<clause::verb::¬{B}it>>"
+          "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::and_also>> <<clause::verb::¬{B}it>>"
       ],
 
 
-      "({A}{a} v {B}{a})unique_subj": [
+      "({A}{a} v {B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
-          "<<clause::verb::{A}{a}unique_subj>> or <<clause::verb::{B}it>> or both"
+          "<<clause::verb::{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
       ],
-      "(¬{A}{a} v {B}{a})unique_subj": [
+      "(¬{A}{a} v {B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
-          "<<clause::verb::¬{A}{a}unique_subj>> or <<clause::verb::{B}it>> or both"
+          "<<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
       ],
-      "({A}{a} v ¬{B}{a})unique_subj": [
+      "({A}{a} v ¬{B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
-          "<<clause::verb::{A}{a}unique_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<clause::verb::{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
-      "(¬{A}{a} v ¬{B}{a})unique_subj": [
+      "(¬{A}{a} v ¬{B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
-          "<<clause::verb::¬{A}{a}unique_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
