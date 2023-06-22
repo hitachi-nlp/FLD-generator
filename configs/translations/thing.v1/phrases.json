@@ -456,8 +456,8 @@
       "is suppressed by"
     ],
 
-    "force": [
-      "forces",
+    "__force": [
+      "__forces",
       "makes"
     ],
 
