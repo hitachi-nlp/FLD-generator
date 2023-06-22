@@ -521,13 +521,13 @@
       "__takes its rise"
     ],
 
-    "some_prefix.sentence_intro": [
+    "something_prefix.sentence_intro": [
        "__for <<phrase::something>>",
        "there is <<phrase::something>> such that",
        "there exists <<phrase::something>> such that"
     ],
 
-    "__every_prefix.sentence_intro" : [
+    "__everything_prefix.sentence_intro" : [
        "for <<phrase::everything>>"
     ],
 
