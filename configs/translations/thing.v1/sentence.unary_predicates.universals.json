@@ -7,7 +7,7 @@
       "<<phrase::every_prefix.sentence_intro>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x": [
-      "__<<sentence::¬{A}everything>>",
+      "<<sentence::¬{A}everything>>",
       "<<phrase::every_prefix.sentence_intro>> <<sentence::¬{A}it>>",
       "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
     ],
