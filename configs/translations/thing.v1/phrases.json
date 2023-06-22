@@ -527,7 +527,7 @@
        "there exists <<phrase::something>> such that"
     ],
 
-    "every_prefix.sentence_intro" : [
+    "__every_prefix.sentence_intro" : [
       "for <<phrase::everything>>"
     ],
 
