@@ -528,7 +528,7 @@
     ],
 
     "__every_prefix.sentence_intro" : [
-      "for <<phrase::everything>>"
+       "for <<phrase::everything>>"
     ],
 
     "nothing_prefix.sentence_intro" : [
@@ -538,17 +538,17 @@
 
     "something": [
       "something",
-      "someone"
+      "__someone"
     ],
 
     "everything": [
       "everything",
-      "everyone"
+      "__everyone"
     ],
 
     "nothing": [
       "nothing",
-      "no one"
+      "__no one"
     ],
 
     "thing": [
