@@ -487,10 +487,10 @@
 
     "if_conjunction": [
       "if",
-      "when",
-      "as",
-      "because",
-      "since"
+      "__when",
+      "__as",
+      "__because",
+      "__since"
     ],
 
     "thus_conjunction": [
