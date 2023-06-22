@@ -104,7 +104,7 @@
 
       "__<<clause::noun::{A}{a}.generic>> <<phrase::force>> <<phrase::{b}noun>> <<phrase::¬{B}to_do>>",
 
-      "<<clause::noun::{A}{a}.generic>> <<phrase::keep_from>> <<phrase::{b}noun>> from <<phrase::{B}doing>>"
+      "__<<clause::noun::{A}{a}.generic>> <<phrase::keep_from>> <<phrase::{b}noun>> from <<phrase::{B}doing>>"
 
     ],
     "¬{A}{a} -> ¬{B}{b}": [
@@ -120,7 +120,7 @@
 
       "__<<clause::noun::¬{A}{a}.generic>> <<phrase::force>> <<phrase::{b}noun>> <<phrase::¬{B}to_do>>",
 
-      "<<clause::noun::¬{A}{a}.generic>> <<phrase::keep_from>> <<phrase::{b}noun>> from <<phrase::{B}doing>>"
+      "__<<clause::noun::¬{A}{a}.generic>> <<phrase::keep_from>> <<phrase::{b}noun>> from <<phrase::{B}doing>>"
 
     ],
 
@@ -174,7 +174,7 @@
 
       "__<<clause::noun::({A}{a} & {B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::({A}{a} & {B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::({A}{a} & {B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
     "(¬{A}{a} & ¬{B}{a}) -> {C}{c}": [
@@ -202,7 +202,7 @@
 
       "__<<clause::noun::(¬{A}{a} & {B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::(¬{A}{a} & {B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::(¬{A}{a} & {B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
     "({A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
@@ -218,7 +218,7 @@
 
       "__<<clause::noun::({A}{a} & ¬{B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::({A}{a} & ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::({A}{a} & ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
     "(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}": [
@@ -234,7 +234,7 @@
 
       "__<<clause::noun::(¬{A}{a} & ¬{B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::(¬{A}{a} & ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::(¬{A}{a} & ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
 
@@ -486,7 +486,7 @@
 
       "__<<clause::noun::({A}{a} v {B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::({A}{a} v {B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::({A}{a} v {B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
     "(¬{A}{a} v ¬{B}{a}) -> {C}{c}": [
@@ -526,7 +526,7 @@
 
       "__<<clause::noun::({A}{a} v ¬{B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::({A}{a} v ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::({A}{a} v ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
     "(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}": [
@@ -542,7 +542,7 @@
 
       "__<<clause::noun::(¬{A}{a} v ¬{B}{a}).generic>> <<phrase::force>> <<phrase::{c}noun>> <<phrase::¬{C}to_do>>",
 
-      "<<clause::noun::(¬{A}{a} v ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
+      "__<<clause::noun::(¬{A}{a} v ¬{B}{a}).generic>> <<phrase::keep_from>> <<phrase::{c}noun>> from <<phrase::{C}doing>>"
 
     ],
 
@@ -743,8 +743,8 @@
 
       "<<clause::noun::{A}{a}.generic>> <<phrase::{B}predicate>>",
 
-      "<<clause::verb::{A}{a}generic_subj>> <<phrase::{B}to_do>>",
-      "<<clause::verb::{B}{a}generic_subj>> by <<phrase::{A}doing>>"
+      "__<<clause::verb::{A}{a}generic_subj>> <<phrase::{B}to_do>>",
+      "__<<clause::verb::{B}{a}generic_subj>> by <<phrase::{A}doing>>"
     ],
     "¬{A}{a} -> {B}{a}": [
       "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}generic_subj>> <<clause::verb::{B}it>>",
@@ -754,8 +754,8 @@
 
       "<<clause::noun::¬{A}{a}.generic>> <<phrase::{B}predicate>>",
 
-      "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::{B}to_do>>",
-      "<<clause::verb::{B}{a}generic_subj>> by <<phrase::¬{A}doing>>"
+      "__<<clause::verb::¬{A}{a}generic_subj>> <<phrase::{B}to_do>>",
+      "__<<clause::verb::{B}{a}generic_subj>> by <<phrase::¬{A}doing>>"
     ],
     "{A}{a} -> ¬{B}{a}": [
       "<<phrase::if_conjunction>> <<clause::verb::{A}{a}generic_subj>> <<clause::verb::¬{B}it>>",
@@ -765,8 +765,8 @@
 
       "<<clause::noun::{A}{a}.generic>> <<phrase::¬{B}predicate>>",
 
-      "<<clause::verb::{A}{a}generic_subj>> <<phrase::¬{B}to_do>>",
-      "<<clause::verb::¬{B}{a}generic_subj>> by <<phrase::{A}doing>>"
+      "__<<clause::verb::{A}{a}generic_subj>> <<phrase::¬{B}to_do>>",
+      "__<<clause::verb::¬{B}{a}generic_subj>> by <<phrase::{A}doing>>"
     ],
     "¬{A}{a} -> ¬{B}{a}": [
       "<<phrase::if_conjunction>> <<clause::verb::¬{A}{a}generic_subj>> <<clause::verb::¬{B}it>>",
@@ -776,8 +776,8 @@
 
       "<<clause::noun::¬{A}{a}.generic>> <<phrase::¬{B}predicate>>",
 
-      "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::¬{B}to_do>>",
-      "<<clause::verb::¬{B}{a}generic_subj>> by <<phrase::¬{A}doing>>"
+      "__<<clause::verb::¬{A}{a}generic_subj>> <<phrase::¬{B}to_do>>",
+      "__<<clause::verb::¬{B}{a}generic_subj>> by <<phrase::¬{A}doing>>"
     ],
 
 

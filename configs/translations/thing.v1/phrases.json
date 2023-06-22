@@ -215,94 +215,94 @@
 
 
 
-    "{A}to_do": [
+    "__{A}to_do": [
       "to be {A}[ADJ]",
       "to {A}[VERB]",
       "to be <<phrase::{A}a_noun>>"
     ],
 
-    "¬{A}to_do": [
+    "__¬{A}to_do": [
       "not <<phrase::{A}to_do>>"
     ],
 
 
-    "({A} & {B})to_do": [
+    "__({A} & {B})to_do": [
       "<<phrase::{A}to_do>> and <<phrase::{B}to_do>>"
     ],
 
-    "(¬{A} & {B})to_do": [
+    "__(¬{A} & {B})to_do": [
       "<<phrase::¬{A}to_do>> and <<phrase::{B}to_do>>"
     ],
 
-    "({A} & ¬{B})to_do": [
+    "__({A} & ¬{B})to_do": [
       "<<phrase::{A}to_do>> and <<phrase::¬{B}to_do>>"
     ],
 
-    "(¬{A} & ¬{B})to_do": [
+    "__(¬{A} & ¬{B})to_do": [
       "<<phrase::¬{A}to_do>> and <<phrase::¬{B}to_do>>"
     ],
 
 
-    "({A} v {B})to_do": [
+    "__({A} v {B})to_do": [
       "either <<phrase::{A}to_do>> or <<phrase::{B}to_do>> or both"
     ],
 
-    "(¬{A} v {B})to_do": [
+    "__(¬{A} v {B})to_do": [
       "either <<phrase::¬{A}to_do>> or <<phrase::{B}to_do>> or both"
     ],
 
-    "({A} v ¬{B})to_do": [
+    "__({A} v ¬{B})to_do": [
       "either <<phrase::{A}to_do>> or <<phrase::¬{B}to_do>> or both"
     ],
 
-    "(¬{A} v ¬{B})to_do": [
+    "__(¬{A} v ¬{B})to_do": [
       "either <<phrase::¬{A}to_do>> or <<phrase::¬{B}to_do>> or both"
     ],
 
 
 
 
-    "{A}doing": [
+    "__{A}doing": [
       "being {A}[ADJ]",
       "{A}[VERB.ing]",
       "being <<phrase::{A}a_noun>>"
     ],
 
-    "¬{A}doing": [
+    "__¬{A}doing": [
       "not <<phrase::{A}doing>>"
     ],
 
 
-    "({A} & {B})doing": [
+    "__({A} & {B})doing": [
       "<<phrase::{A}doing>> and <<phrase::{B}doing>>"
     ],
 
-    "(¬{A} & {B})doing": [
+    "__(¬{A} & {B})doing": [
       "<<phrase::¬{A}doing>> and <<phrase::{B}doing>>"
     ],
 
-    "({A} & ¬{B})doing": [
+    "__({A} & ¬{B})doing": [
       "<<phrase::{A}doing>> and <<phrase::¬{B}doing>>"
     ],
 
-    "(¬{A} & ¬{B})doing": [
+    "__(¬{A} & ¬{B})doing": [
       "<<phrase::¬{A}doing>> and <<phrase::¬{B}doing>>"
     ],
 
 
-    "({A} v {B})doing": [
+    "__({A} v {B})doing": [
       "either <<phrase::{A}doing>> or <<phrase::{B}doing>> or both"
     ],
 
-    "(¬{A} v {B})doing": [
+    "__(¬{A} v {B})doing": [
       "either <<phrase::¬{A}doing>> or <<phrase::{B}doing>> or both"
     ],
 
-    "({A} v ¬{B})doing": [
+    "__({A} v ¬{B})doing": [
       "either <<phrase::{A}doing>> or <<phrase::¬{B}doing>> or both"
     ],
 
-    "(¬{A} v ¬{B})doing": [
+    "__(¬{A} v ¬{B})doing": [
       "either <<phrase::¬{A}doing>> or <<phrase::¬{B}doing>> or both"
     ],
 
