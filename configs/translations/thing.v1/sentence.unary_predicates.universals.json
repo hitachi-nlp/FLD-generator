@@ -35,19 +35,19 @@
 
     "(x): ¬({A}x & {B}x)": [
       "__<<sentence::¬({A}everything & {B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it & {B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::({A}it & {B}it)>>"
     ],
     "(x): ¬(¬{A}x & {B}x)": [
       "__<<sentence::¬(¬{A}everything & {B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it & {B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::(¬{A}it & {B}it)>>"
     ],
     "(x): ¬({A}x & ¬{B}x)": [
       "__<<sentence::¬({A}everything & ¬{B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it & ¬{B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::({A}it & ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything & ¬{B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it & ¬{B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::(¬{A}it & ¬{B}it)>>"
     ],
 
 
@@ -71,19 +71,19 @@
 
     "(x): ¬({A}x v {B}x)": [
       "__<<sentence::¬({A}everything v {B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it v {B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::({A}it v {B}it)>>"
     ],
     "(x): ¬(¬{A}x v {B}x)": [
       "__<<sentence::¬(¬{A}everything v {B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it v {B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::(¬{A}it v {B}it)>>"
     ],
     "(x): ¬({A}x v ¬{B}x)": [
       "__<<sentence::¬({A}everything v ¬{B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬({A}it v ¬{B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::({A}it v ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything v ¬{B}everything)>>",
-      "__<<phrase::every_prefix.sentence_intro>>, <<sentence::¬(¬{A}it v ¬{B}it)>>"
+      "<<phrase::nothing_prefix.sentence_intro>>, <<sentence::(¬{A}it v ¬{B}it)>>"
     ],
 
 

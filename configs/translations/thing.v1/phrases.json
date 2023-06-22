@@ -531,6 +531,11 @@
       "for <<phrase::everything>>"
     ],
 
+    "nothing_prefix.sentence_intro" : [
+       "there is <<phrase::nothing>> such that",
+       "there exists <<phrase::nothing>> such that"
+    ],
+
     "something": [
       "something",
       "someone"
@@ -539,6 +544,11 @@
     "everything": [
       "everything",
       "everyone"
+    ],
+
+    "nothing": [
+      "nothing",
+      "no one"
     ],
 
     "thing": [
