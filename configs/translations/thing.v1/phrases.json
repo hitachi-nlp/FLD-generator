@@ -522,7 +522,7 @@
     ],
 
     "some_prefix.sentence_intro": [
-       "for <<phrase::something>>",
+       "__for <<phrase::something>>",
        "there is <<phrase::something>> such that",
        "there exists <<phrase::something>> such that"
     ],
