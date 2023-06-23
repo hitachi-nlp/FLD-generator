@@ -25,16 +25,16 @@
 
 
     "¬({A} & {B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} & {B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A} & {B})>>"
     ],
     "¬(¬{A} & {B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} & {B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A} & {B})>>"
     ],
     "¬({A} & ¬{B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} & ¬{B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A} & ¬{B})>>"
     ],
     "¬(¬{A} & ¬{B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} & ¬{B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A} & ¬{B})>>"
     ],
 
 
@@ -53,16 +53,16 @@
 
 
     "¬({A} v {B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} v {B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A} v {B})>>"
     ],
     "¬(¬{A} v {B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} v {B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A} v {B})>>"
     ],
     "¬({A} v ¬{B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::({A} v ¬{B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A} v ¬{B})>>"
     ],
     "¬(¬{A} v ¬{B})": [
-      "<<phrase::not_prefix.sentence_intro>>, <<sentence::(¬{A} v ¬{B})>>"
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A} v ¬{B})>>"
     ],
 
 

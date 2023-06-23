@@ -348,7 +348,7 @@
         "it <<phrase::{A}predicate>>"
       ],
       "¬{A}it": [
-        "<<phrase::not_prefix.sentence_intro>> <<clause::verb::{A}it>>",
+        "<<phrase::it_is_not_fact_that>> <<clause::verb::{A}it>>",
         "it <<phrase::¬{A}predicate>>"
       ],
 
@@ -452,17 +452,17 @@
 
 
       "¬({A} & {B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} & {B})>>",
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} & {B})>>",
           "__comment: the template is too difficult to parse with multiple commas."
       ],
       "¬(¬{A} & {B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬(¬{A} & {B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::¬(¬{A} & {B})>>"
       ],
       "¬({A} & ¬{B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} & ¬{B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} & ¬{B})>>"
       ],
       "¬(¬{A} & ¬{B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::(¬{A} & ¬{B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::(¬{A} & ¬{B})>>"
       ],
 
 
@@ -493,16 +493,16 @@
 
 
       "¬({A} v {B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} v {B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} v {B})>>"
       ],
       "¬(¬{A} v {B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::¬(¬{A} v {B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::¬(¬{A} v {B})>>"
       ],
       "¬({A} v ¬{B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::({A} v ¬{B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} v ¬{B})>>"
       ],
       "¬(¬{A} v ¬{B}).event_occurrence": [
-          "__that <<phrase::not_prefix.sentence_intro>>, <<clause::verb::(¬{A} v ¬{B})>>"
+          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::(¬{A} v ¬{B})>>"
       ],
 
 

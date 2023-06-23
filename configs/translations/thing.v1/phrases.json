@@ -499,7 +499,7 @@
       "so that"
     ],
 
-    "not_prefix.sentence_intro": [
+    "it_is_not_fact_that": [
       "it is not <<phrase::correct_adj>> that",
       "it is <<phrase::incorrect_adj>> that"
     ],
@@ -521,17 +521,18 @@
       "__takes its rise"
     ],
 
-    "something_prefix.sentence_intro": [
+    "there_is_something_such_that": [
        "__for <<phrase::something>>",
+       # TODO: there is something that is A and B みたいにしたい
        "there is <<phrase::something>> such that",
        "there exists <<phrase::something>> such that"
     ],
 
-    "__everything_prefix.sentence_intro" : [
+    "__for_everything" : [
        "for <<phrase::everything>>"
     ],
 
-    "nothing_prefix.sentence_intro" : [
+    "there_is_nothing_such_that" : [
        "there is <<phrase::nothing>> such that",
        "there exists <<phrase::nothing>> such that"
     ],
