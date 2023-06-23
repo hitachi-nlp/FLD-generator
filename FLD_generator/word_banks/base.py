@@ -38,6 +38,7 @@ class NounForm(Enum):
     NORMAL = 'normal'
     SINGULAR = 's'
     SINGULAR_WITH_PARTICLE = 'swa'
+    PLURAL = 'p'
 
 
 WordForm = Union[AdjForm, VerbForm, NounForm]

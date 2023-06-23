@@ -6,6 +6,10 @@
       "{a}[NOUN]"
     ],
 
+    "{a}nouns": [
+      "__comment: not implemented",
+      "__{a}[NOUN.p]"
+    ],
 
     "{A}a_event_noun": [
       "a {A}[NOUN]",
@@ -43,6 +47,19 @@
 
     "¬{A}noun": [
       "__a {A}[NOUN]",
+      "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+    "{A}nouns": [
+      "comment: not implemented",
+      "__{A}[NOUN.p]",
+      "__{A}[ADJ.ness]",
+      "__{A}[VERB.ing]"
+    ],
+
+    "¬{A}nouns": [
+      "__a {A}[NOUN.p]",
       "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
       "__not {A}[VERB.ing]"
     ],
@@ -521,9 +538,17 @@
       "__takes its rise"
     ],
 
+    "there_is": [
+       "there is",
+       "there exists"
+    ],
+
+    "there_are": [
+       "there are"
+    ],
+
     "there_is_something_such_that": [
        "__for <<phrase::something>>",
-       # TODO: there is something that is A and B みたいにしたい
        "there is <<phrase::something>> such that",
        "there exists <<phrase::something>> such that"
     ],
@@ -554,7 +579,12 @@
 
     "thing": [
       "thing",
-      "people"
+      "__people"
+    ],
+
+    "things": [
+      "things",
+      "__people"
     ]
 
   }

@@ -392,6 +392,27 @@ class TemplatedTranslator(Translator):
 
         return translation
 
+    @profile
+    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
+        """ choose an appropriate indefinite particls, i.e., "a" or "an", depending on the word pronounciation """
+        words = sentence_wo_templates.split(' ')
+        corrected_words = []
+        for i_word, word in enumerate(words):
+            if word.lower() in ['a', 'an']:
+                if len(words) >= i_word + 2:
+                    next_word = words[i_word + 1]
+                    if starts_with_vowel_sound(next_word):
+                        corrected_words.append('an')
+                    else:
+                        corrected_words.append('a')
+                else:
+                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
+                    corrected_words.append(word)
+            else:
+                corrected_words.append(word)
+        corrected_sentence = ' '.join(corrected_words)
+        return corrected_sentence
+
     def _fix_pred_singularity(self, translation: str) -> str:
         # TODO: A and B {is, runs} => currently, we do not have ({A}{a} and {B}{a}) so that we do not this fix.
         translation_fixed = translation
@@ -779,26 +800,6 @@ class TemplatedTranslator(Translator):
                         sentence_with_templates,
                         with_definite)
         return with_definite
-
-    @profile
-    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
-        words = sentence_wo_templates.split(' ')
-        corrected_words = []
-        for i_word, word in enumerate(words):
-            if word.lower() in ['a', 'an']:
-                if len(words) >= i_word + 2:
-                    next_word = words[i_word + 1]
-                    if starts_with_vowel_sound(next_word):
-                        corrected_words.append('an')
-                    else:
-                        corrected_words.append('a')
-                else:
-                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
-                    corrected_words.append(word)
-            else:
-                corrected_words.append(word)
-        corrected_sentence = ' '.join(corrected_words)
-        return corrected_sentence
 
     @profile
     def _choose_interp_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
