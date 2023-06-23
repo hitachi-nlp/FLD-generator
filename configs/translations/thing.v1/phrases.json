@@ -432,45 +432,44 @@
 
     "cause_verb": [
       "causes",
-      "brings about",
-      "leads to",
       "results in",
+      "brings about",
+
+      "yields",
+      "leads to",
       "triggers",
-      "invokes",
-      "gives rise to",
-      "promotes",
-      "accelerates"
+
+      "__invokes",
+      "__gives rise to",
+      "__accelerates",
+      "__promotes"
     ],
 
     "caused_verb": [
       "is caused by",
       "is brought about by",
-      "__is lead to by",
-      "__results in",
+
       "is triggered by",
-      "is invoked by",
-      "originates from",
-      "is accelerated by"
+
+      "__originates from",
+      "__comes from",
+      "__stems from"
     ],
 
     "anti_cause_verb": [
       "prevents",
-      "stops",
-      "hinders",
-      "avoids",
-      "interferes",
-      "disturbs",
-      "suppresses"
+
+      "__stops",
+      "__avoids",
+
+      "__hinders",
+      "__interferes with",
+      "__disturbs",
+      "__suppresses"
     ],
 
     "anti_caused_verb": [
-      "is prevented by",
-      "is stopped by",
-      "is hindered by",
-      "is avoided by",
-      "is interfered by",
-      "is disturbed by",
-      "is suppressed by"
+      "is prevented by"
     ],
 
     "__force": [
@@ -478,7 +477,7 @@
       "makes"
     ],
 
-    "keep_from": [
+    "__keep_from": [
       "keeps",
       "prevents",
       "stops"
