@@ -37,10 +37,10 @@ class Argument:
 
     @property
     def all_formulas(self) -> List[Formula]:
+        # intermediate_constants is not formulas.
         return self.premises\
             + [self.assumptions[premise] for premise in self.premises
                if premise in self.assumptions]\
-            + self.intermediate_constants\
             + [self.conclusion]
 
     @classmethod
