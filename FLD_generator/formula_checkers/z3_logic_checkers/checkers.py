@@ -9,6 +9,7 @@ from FLD_generator.formula import (
     CONTRADICTION,
     negate,
     is_contradiction_symbol,
+    has_contradiction_symbol,
 )
 from z3 import (
     DeclareSort,
@@ -79,9 +80,13 @@ def _ARGS(arg: str) -> Const:
     return _ARGS_SINGLETON[arg]
 
 
+def _raise_with_contradiction(formula: Formula) -> None:
+    if has_contradiction_symbol(formula):
+        raise Exception(f'The formula with the contradiction symbol ("{CONTRADICTION}") is not supported: "{formula.rep}"')
+
+
 def parse(rep: str):
-    if rep.find(CONTRADICTION) >= 0:
-        raise Exception(f'formula rep {rep} includes contradiction ("{CONTRADICTION}"), which is not supported.')
+    _raise_with_contradiction(Formula(rep))
 
     def go(interm: Union[str, Tuple]):
 
@@ -137,6 +142,9 @@ _CACHE_SIZE = 1000000
 def check_sat(formulas: List[Formula],
               get_model=False,
               get_parse=False):
+    for formula in formulas:
+        _raise_with_contradiction(formula)
+
     global _CHECK_SAT_CACHE
 
     cache_key = tuple(sorted(formula.rep for formula in formulas))
