@@ -7,8 +7,9 @@
       "<<clause::verb::{A}something>>"
     ],
     "¬{A}something": [
-      "<<phrase::it_is_not_fact_that>> <<sentence::{A}something>>",
-      "<<clause::verb::¬{A}something>>"
+      "<<clause::verb::¬{A}something>>",
+      "__<<phrase::it_is_not_fact_that>> <<sentence::{A}something>>",
+      "__comment: 'it is not the fact that something {A}' does not mean 'something does not {A}'"
     ],
 
 

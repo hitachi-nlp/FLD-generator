@@ -11,34 +11,24 @@
       "__{a}[NOUN.p]"
     ],
 
-    "{A}a_event_noun": [
-      "a {A}[NOUN]",
-      "{A}[ADJ.ness]",
-      "{A}[VERB.ing]",
 
-      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
+
+
+
+
+
+
+    "{A}noun": [
+      "{A}[NOUN]",
+      "__{A}[ADJ.ness]",
+      "__{A}[VERB.ing]"
     ],
 
-    "¬{A}a_event_noun": [
-      "__a {A}[NOUN]",
-      "{A}[ADJ.neg]ness", "non-{A}[ADJ.ness]",
+    "¬{A}noun": [
+      "__{A}[NOUN]",
+      "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
       "__not {A}[VERB.ing]"
     ],
-
-    "{A}the_event_noun": [
-      "the {A}[NOUN]",
-      "the {A}[ADJ.ness]",
-      "the {A}[VERB.ing]",
-
-      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
-    ],
-
-    "¬{A}the_event_noun": [
-      "__the {A}[NOUN]",
-      "{A}[ADJ.neg]ness", "non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
-    ],
-
 
 
     "{A}a_noun": [
@@ -54,20 +44,9 @@
       "__not {A}[VERB.ing]"
     ],
 
-    "{A}noun": [
-      "{A}[NOUN]",
-      "__{A}[ADJ.ness]",
-      "__{A}[VERB.ing]"
-    ],
-
-    "¬{A}noun": [
-      "__a {A}[NOUN]",
-      "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
-    ],
 
     "{A}nouns": [
-      "comment: not implemented",
+      "__comment: not implemented",
       "__{A}[NOUN.p]",
       "__{A}[ADJ.ness]",
       "__{A}[VERB.ing]"
@@ -82,13 +61,49 @@
 
 
 
+
+
+
+
+    "{A}a_event_noun": [
+      "a {A}[NOUN]",
+      "{A}[ADJ.ness]",
+      "{A}[VERB.ing]",
+
+      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
+    ],
+
+    "¬{A}a_event_noun": [
+      "__a {A}[NOUN]",
+      "{A}[ADJ.neg]ness", "non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+
+    "{A}the_event_noun": [
+      "the {A}[NOUN]",
+      "the {A}[ADJ.ness]",
+      "the {A}[VERB.ing]",
+
+      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
+    ],
+
+    "¬{A}the_event_noun": [
+      "__the {A}[NOUN]",
+      "the {A}[ADJ.neg]ness", "the non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+
+
+
+
     "{A}predicate": [
       "is <<phrase::{A}is_tgt>>",
       "is not <<phrase::{A}is_not_tgt>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>>",
 
-      "{A}[VERB.s]",
-      "<<phrase::does>> {A}[VERB]"
+      "<<phrase::does>> {A}[VERB]", "{A}[VERB.s]"
     ],
 
     "{A}is_tgt": [
@@ -97,8 +112,9 @@
     ],
 
     "{A}is_not_tgt": [
-      "{A}[ADJ.neg]", "__non-{A}[ADJ.neg]"
+      "{A}[ADJ.neg]"
     ],
+
 
     "¬{A}predicate": [
       "is <<phrase::¬{A}is_tgt>>",
@@ -109,13 +125,14 @@
     ],
 
     "¬{A}is_tgt": [
-      "{A}[ADJ.neg]", "__non-{A}[ADJ.neg]"
+      "{A}[ADJ.neg]"
     ],
 
     "¬{A}is_not_tgt": [
       "{A}[ADJ]",
       "<<phrase::{A}a_noun>>"
     ],
+
 
 
     "({A} & {B})predicate": [
@@ -247,97 +264,6 @@
 
 
 
-    "__{A}to_do": [
-      "to be {A}[ADJ]",
-      "to {A}[VERB]",
-      "to be <<phrase::{A}a_noun>>"
-    ],
-
-    "__¬{A}to_do": [
-      "not <<phrase::{A}to_do>>"
-    ],
-
-
-    "__({A} & {B})to_do": [
-      "<<phrase::{A}to_do>> and <<phrase::{B}to_do>>"
-    ],
-
-    "__(¬{A} & {B})to_do": [
-      "<<phrase::¬{A}to_do>> and <<phrase::{B}to_do>>"
-    ],
-
-    "__({A} & ¬{B})to_do": [
-      "<<phrase::{A}to_do>> and <<phrase::¬{B}to_do>>"
-    ],
-
-    "__(¬{A} & ¬{B})to_do": [
-      "<<phrase::¬{A}to_do>> and <<phrase::¬{B}to_do>>"
-    ],
-
-
-    "__({A} v {B})to_do": [
-      "either <<phrase::{A}to_do>> or <<phrase::{B}to_do>> or both"
-    ],
-
-    "__(¬{A} v {B})to_do": [
-      "either <<phrase::¬{A}to_do>> or <<phrase::{B}to_do>> or both"
-    ],
-
-    "__({A} v ¬{B})to_do": [
-      "either <<phrase::{A}to_do>> or <<phrase::¬{B}to_do>> or both"
-    ],
-
-    "__(¬{A} v ¬{B})to_do": [
-      "either <<phrase::¬{A}to_do>> or <<phrase::¬{B}to_do>> or both"
-    ],
-
-
-
-
-    "__{A}doing": [
-      "being {A}[ADJ]",
-      "{A}[VERB.ing]",
-      "being <<phrase::{A}a_noun>>"
-    ],
-
-    "__¬{A}doing": [
-      "not <<phrase::{A}doing>>"
-    ],
-
-
-    "__({A} & {B})doing": [
-      "<<phrase::{A}doing>> and <<phrase::{B}doing>>"
-    ],
-
-    "__(¬{A} & {B})doing": [
-      "<<phrase::¬{A}doing>> and <<phrase::{B}doing>>"
-    ],
-
-    "__({A} & ¬{B})doing": [
-      "<<phrase::{A}doing>> and <<phrase::¬{B}doing>>"
-    ],
-
-    "__(¬{A} & ¬{B})doing": [
-      "<<phrase::¬{A}doing>> and <<phrase::¬{B}doing>>"
-    ],
-
-
-    "__({A} v {B})doing": [
-      "either <<phrase::{A}doing>> or <<phrase::{B}doing>> or both"
-    ],
-
-    "__(¬{A} v {B})doing": [
-      "either <<phrase::¬{A}doing>> or <<phrase::{B}doing>> or both"
-    ],
-
-    "__({A} v ¬{B})doing": [
-      "either <<phrase::{A}doing>> or <<phrase::¬{B}doing>> or both"
-    ],
-
-    "__(¬{A} v ¬{B})doing": [
-      "either <<phrase::¬{A}doing>> or <<phrase::¬{B}doing>> or both"
-    ],
-
 
 
 
@@ -366,6 +292,7 @@
       "that <<phrase::¬{A}predicate>>"
     ],
 
+
     "({A} & {B})pre_modifier": [
       "<<phrase::{A}pre_modifier>> <<phrase::and>> <<phrase::{B}pre_modifier>>"
     ],
@@ -378,6 +305,7 @@
     "(¬{A} & ¬{B})pre_modifier": [
       "<<phrase::¬{A}pre_modifier>> <<phrase::and>> <<phrase::¬{B}pre_modifier>>"
     ],
+
 
     "({A} v {B})pre_modifier": [
       "__either <<phrase::{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
@@ -392,6 +320,8 @@
       "__either <<phrase::¬{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
     ],
 
+
+
     "({A} & {B})post_modifier": [
       "that <<phrase::({A} & {B})predicate>>"
     ],
@@ -405,6 +335,7 @@
       "that <<phrase::(¬{A} & ¬{B})predicate>>"
     ],
 
+
     "({A} v {B})post_modifier": [
       "that <<phrase::({A} v {B})predicate>>"
     ],
@@ -417,6 +348,12 @@
     "(¬{A} v ¬{B})post_modifier": [
       "that <<phrase::(¬{A} v ¬{B})predicate>>"
     ],
+
+
+
+
+
+
 
 
     "and": [
@@ -433,11 +370,6 @@
 
     "but_and": [
       "but",
-      "and"
-    ],
-
-    "with": [
-      "with",
       "and"
     ],
 
@@ -487,23 +419,6 @@
       "is prevented by"
     ],
 
-    "__force": [
-      "__forces",
-      "makes"
-    ],
-
-    "__keep_from": [
-      "keeps",
-      "prevents",
-      "stops"
-    ],
-
-    "a_all": [
-      "a",
-      "all",
-      "__comment: we can not add all to here since it will lead to something like 'all red <<phrase::thing>> is xx'"
-    ],
-
     "is_a_kind_of": [
       "is",
       "is a kind of",
@@ -522,12 +437,6 @@
       "__as",
       "__because",
       "__since"
-    ],
-
-    "thus_conjunction": [
-      "thus",
-      "therefore",
-      "so that"
     ],
 
     "it_is_not_fact_that": [
@@ -565,10 +474,6 @@
        "__for <<phrase::something>>",
        "there is <<phrase::something>> such that",
        "there exists <<phrase::something>> such that"
-    ],
-
-    "__for_everything" : [
-       "for <<phrase::everything>>"
     ],
 
     "there_is_nothing_such_that" : [

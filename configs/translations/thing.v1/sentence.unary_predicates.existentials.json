@@ -10,8 +10,7 @@
     "(Ex): ¬{A}x": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬{A}it>>",
       "<<phrase::there_are>> <<clause::noun::¬{A}things.generic_obj>>",
-      "__<<sentence::¬{A}something>>",
-      "__comment: the comment out is to exclude the inappropriate translation 'it is not the fact that everything {A}'"
+      "<<sentence::¬{A}something>>"
     ],
 
 
@@ -333,229 +332,226 @@
 
 
     "(Ex): {A}{a} -> {B}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::{B}it>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): {B}x>>"
     ],
     "(Ex): ¬{A}{a} -> {B}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::{B}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): {B}x>>"
     ],
     "(Ex): {A}{a} -> ¬{B}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬{B}it>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬{B}x>>"
     ],
     "(Ex): ¬{A}{a} -> ¬{B}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬{B}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬{B}x>>"
     ],
 
 
     "(Ex): ({A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): (¬{A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ({A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ({A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): (¬{A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): (¬{A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ({A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): (¬{A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
 
 
     "(Ex): {A}{a} -> ({B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ({B}x & {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ({B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ({B}x & {C}x)>>"
     ],
     "(Ex): {A}{a} -> (¬{B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): (¬{B}x & {C}x)>>"
     ],
     "(Ex): {A}{a} -> ({B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ({B}x & ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> (¬{B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): (¬{B}x & {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ({B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ({B}x & ¬{C}x)>>"
     ],
     "(Ex): {A}{a} -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): (¬{B}x & ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): (¬{B}x & ¬{C}x)>>"
     ],
 
 
     "(Ex): ¬({A}{a} & {B}{a}) -> {C}x": [
-     "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<sentence::{C}it>>"
+     "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬({A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬({A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ¬({A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
 
 
     "(Ex): {A}{a} -> ¬({B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬({B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬({B}x & {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬({B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬({B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬({B}x & {C}x)>>"
     ],
     "(Ex): {A}{a} -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬(¬{B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x & {C}x)>>"
     ],
     "(Ex): {A}{a} -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬({B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬({B}x & ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬(¬{B}it & {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x & {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬({B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬({B}x & ¬{C}x)>>"
     ],
     "(Ex): {A}{a} -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x & ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬(¬{B}it & ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x & ¬{C}x)>>"
     ],
 
 
 
     "(Ex): ({A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): (¬{A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ({A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ({A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): (¬{A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): (¬{A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ({A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): (¬{A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
 
 
     "(Ex): {A}{a} -> ({B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ({B}x v {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ({B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ({B}x v {C}x)>>"
     ],
     "(Ex): {A}{a} -> (¬{B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): (¬{B}x v {C}x)>>"
     ],
     "(Ex): {A}{a} -> ({B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::({B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ({B}x v ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> (¬{B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): (¬{B}x v {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ({B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::({B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ({B}x v ¬{C}x)>>"
     ],
     "(Ex): {A}{a} -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(¬{B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): (¬{B}x v ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): (¬{B}x v ¬{C}x)>>"
     ],
 
 
     "(Ex): ¬({A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<sentence::{C}it>>"
+     "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬({A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬({A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<sentence::(Ex): {C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ¬({A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
     "(Ex): ¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<sentence::(Ex): ¬{C}x>>"
     ],
 
 
     "(Ex): {A}{a} -> ¬({B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬({B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬({B}x v {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬({B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬({B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬({B}x v {C}x)>>"
     ],
     "(Ex): {A}{a} -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬(¬{B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x v {C}x)>>"
     ],
     "(Ex): {A}{a} -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬({B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬({B}x v ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬(¬{B}it v {C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x v {C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬({B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬({B}x v ¬{C}x)>>"
     ],
     "(Ex): {A}{a} -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x v ¬{C}x)>>"
     ],
     "(Ex): ¬{A}{a} -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::there_is_something_such_that>> <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::¬(¬{B}it v ¬{C}it)>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(Ex): ¬(¬{B}x v ¬{C}x)>>"
     ],
-
-
-
 
 
 

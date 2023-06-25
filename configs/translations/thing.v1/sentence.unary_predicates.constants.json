@@ -148,7 +148,8 @@
       "<<sentence::(¬{B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "¬{A}{a} -> (¬{B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}{b} & ¬{C}{b})>>"
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(¬{B}{b} & ¬{C}{b})>>",
+      "<<sentence::(¬{B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
 
 
