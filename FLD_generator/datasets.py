@@ -383,10 +383,12 @@ class NLProofSDataset:
                     conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
                 )
 
-                for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
-                    sent = sent_match.group().rstrip(' ')
-                    if not sent.find(_DUMMY_SENTENCE) >= 0 and sent not in context:
-                        raise Exception(f'A sentence in the negative context is not in the original context. This is strange. The sentence is as follows: "{sent}"')
+                # it is possible if the distractor_formula is randomly generates. see the implementation of `def _make_text()
+                # for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
+                #     sent = sent_match.group().rstrip(' ')
+                #     if not sent.find(_DUMMY_SENTENCE) >= 0 and sent not in context:
+                #         raise Exception(f'A sentence in the negative context is not in the original context. This is strange. The sentence is as follows: "{sent}"')
+
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
 
@@ -403,12 +405,26 @@ class NLProofSDataset:
             all_negative_formulas = formula_distractors
             all_formulas = all_positive_formulas + all_negative_formulas
 
+            stance_msg = None
             if proof_stance == ProofStance.PROVED:
                 assert is_provable(all_positive_formulas, hypothesis_formula)
+                if not is_provable(all_positive_formulas, hypothesis_formula):
+                    stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and impllies bugs.'
             elif proof_stance == ProofStance.DISPROVED:
                 assert is_disprovable(all_positive_formulas, hypothesis_formula)
+                if not is_disprovable(all_positive_formulas, hypothesis_formula):
+                    stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and impllies bugs.'
             elif proof_stance == ProofStance.UNKNOWN:
                 assert is_unknown(all_positive_formulas, hypothesis_formula)
+                if not is_unknown(all_positive_formulas, hypothesis_formula):
+                    stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and impllies bugs.'
+            if stance_msg is not None:
+                logger.fatal('all_positive_formulas:')
+                for formula in all_negative_formulas:
+                    logger.fatal('    %s', formula.rep)
+                logger.fatal('hypothesis:')
+                logger.fatal('    %s', hypothesis_formula.rep)
+                raise Exception(stance_msg)
 
             if not self.allow_inconsistency:
                 _is_consistent, logs = is_consistent_formula_set_with_logs(
