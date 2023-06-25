@@ -10,7 +10,7 @@ from FLD_generator.argument import Argument
 from nltk.corpus import cmudict
 import timeout_decorator
 from .exception import FormalLogicExceptionBase
-from FLD_generator.formula import Formula, is_contradiction_symbol
+from FLD_generator.formula import Formula
 from FLD_generator.formula_checkers import is_provable, is_disprovable, is_consistent_set as is_consistent_formula_set
 import kern_profiler
 

@@ -259,3 +259,7 @@ def negate(formula: Formula) -> Formula:
 
 def is_contradiction_symbol(formula: Formula) -> bool:
     return formula.rep == CONTRADICTION
+
+
+def has_contradiction_symbol(formula: Formula) -> bool:
+    return formula.rep.find(CONTRADICTION) >= 0

@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 @profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 100) -> None:
+                     num_dataset: int = 1000) -> None:
     # agg_stats: Dict[str, int] = defaultdict(int)
     for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
         log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
@@ -159,6 +159,7 @@ def test_generate_dataset():
     def _to_range(begin: int, end: int) -> List[int]:
         return list(range(begin, end + 1))
 
+    # word_bank = None
     word_bank = build_wordnet_wordbank('eng')
 
     # translator = None
@@ -213,11 +214,11 @@ def test_generate_dataset():
         quantification=0.2,
         quantifier_axioms=[
             'universal_quantifier_elim',
-            # 'universal_quantifier_intro',
+            'universal_quantifier_intro',
 
             # # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
-            # 'existential_quantifier_intro',
-            # 'existential_quantifier_elim',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
         ],
         quantify_implication_premise_conclusion_at_once=True,
         quantify_all_at_once=False,
@@ -271,7 +272,7 @@ def test_generate_dataset():
                               force_fix_illegal_intermediate_constants=True,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
-                              word_bank=word_bank,
+                              # word_bank=word_bank,
                               num_distractors=[5],
                               # swap_ng_words=swap_ng_words,
                               # num_translation_distractors=[5] if translation_distractor is not None else [0],
