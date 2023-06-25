@@ -30,22 +30,22 @@
     "(x): ¬({A}x & {B}x)": [
       "__<<sentence::¬({A}everything & {B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::({A}it & {B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::({A} & {B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::({A}nothing & {B}nothing)generic_obj>>"
     ],
     "(x): ¬(¬{A}x & {B}x)": [
       "__<<sentence::¬(¬{A}everything & {B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::(¬{A}it & {B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::(¬{A} & {B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::(¬{A}nothing & {B}nothing)generic_obj>>"
     ],
     "(x): ¬({A}x & ¬{B}x)": [
       "__<<sentence::¬({A}everything & ¬{B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::({A}it & ¬{B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::({A} & ¬{B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::({A}nothing & ¬{B}nothing)generic_obj>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything & ¬{B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::(¬{A}it & ¬{B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::(¬{A} & ¬{B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::(¬{A}nothing & ¬{B}nothing)generic_obj>>"
     ],
 
 
@@ -66,22 +66,22 @@
     "(x): ¬({A}x v {B}x)": [
       "__<<sentence::¬({A}everything v {B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::({A}it v {B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::({A} v {B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::({A}nothing v {B}nothing)generic_obj>>"
     ],
     "(x): ¬(¬{A}x v {B}x)": [
       "__<<sentence::¬(¬{A}everything v {B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::(¬{A}it v {B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::(¬{A} v {B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::(¬{A}nothing v {B}nothing)generic_obj>>"
     ],
     "(x): ¬({A}x v ¬{B}x)": [
       "__<<sentence::¬({A}everything v ¬{B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::({A}it v ¬{B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::({A} v ¬{B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::({A}nothing v ¬{B}nothing)generic_obj>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything v ¬{B}everything)>>",
       "<<phrase::there_is_nothing_such_that>> <<sentence::(¬{A}it v ¬{B}it)>>",
-      "<<phrase::there_is>> <<clause::noun::(¬{A} v ¬{B})nothing.generic_obj>>"
+      "<<phrase::there_is>> <<clause::noun::(¬{A}nothing v ¬{B}nothing)generic_obj>>"
     ],
 
 
@@ -117,7 +117,7 @@
       "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>",
 
-      "<<clause::noun::({A}something & {B}something).generic_subj>> <<phrase::{C}predicate>>",
+      "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::{C}it>>"
     ],
@@ -125,7 +125,7 @@
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>",
 
-      "<<clause::noun::(¬{A}something & {B}something).generic_subj>> <<phrase::{C}predicate>>",
+      "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::{C}it>>"
     ],
@@ -133,7 +133,7 @@
       "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>",
 
-      "<<clause::noun::({A}something & ¬{B}something).generic_subj>> <<phrase::{C}predicate>>",
+      "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::{C}it>>"
     ],
@@ -141,7 +141,7 @@
       "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>",
 
-      "<<clause::noun::({A}something & {B}something).generic_subj>> <<phrase::¬{C}predicate>>",
+      "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}it>>"
     ],
@@ -149,7 +149,7 @@
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>",
 
-      "<<clause::noun::(¬{A}something & ¬{B}something).generic_subj>> <<phrase::¬{C}predicate>>",
+      "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::{C}it>>"
     ],
@@ -157,15 +157,15 @@
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>",
 
-      "<<clause::noun::(¬{A}something & {B}something).generic_subj>> <<phrase::¬{C}predicate>>",
+      "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{¬A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}it>>"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>",
 
-      "<<clause::noun::({A}something & ¬{B}something).generic_subj>> <<phrase::¬{C}predicate>>",
+      "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::¬{C}it>>"
     ],
@@ -173,7 +173,7 @@
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>",
 
-      "<<clause::noun::(¬{A}something & ¬{B}something).generic_subj>> <<phrase::¬{C}predicate>>",
+      "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
       "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::¬{C}it>>"
     ],
@@ -302,49 +302,49 @@
       "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>",
 
-      "<<clause::noun::({A}something v {B}something).generic_subj>> <<phrase::{C}predicate>>"
+      "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>",
 
-      "<<clause::noun::(¬{A}something v {B}something).generic_subj>> <<phrase::{C}predicate>>"
+      "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>",
 
-      "<<clause::noun::({A}something v ¬{B}something).generic_subj>> <<phrase::{C}predicate>>"
+      "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>",
 
-      "<<clause::noun::({A}something v {B}something).generic_subj>> <<phrase::¬{C}predicate>>"
+      "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>",
 
-      "<<clause::noun::(¬{A}something v ¬{B}something).generic_subj>> <<phrase::{C}predicate>>"
+      "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>",
 
-      "<<clause::noun::(¬{A}something v {B}something).generic_subj>> <<phrase::¬{C}predicate>>"
+      "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>",
 
-      "<<clause::noun::({A}something v ¬{B}something).generic_subj>> <<phrase::¬{C}predicate>>"
+      "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
       "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>",
 
-      "<<clause::noun::(¬{A}something v ¬{B}something).generic_subj>> <<phrase::¬{C}predicate>>"
+      "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
 
 

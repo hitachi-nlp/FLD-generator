@@ -17,88 +17,88 @@
 
     "(Ex): ({A}x & {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::({A}it & {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::({A} & {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::({A}things & {B}things)generic_obj>>",
       "<<sentence::({A}something & {B}something)>>"
     ],
     "(Ex): (¬{A}x & {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::(¬{A}it & {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::(¬{A} & {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::(¬{A}things & {B}things)generic_obj>>",
       "<<sentence::(¬{A}something & {B}something)>>"
     ],
     "(Ex): ({A}x & ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::({A}it & ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::({A} & ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::({A}things & ¬{B}things)generic_obj>>",
       "<<sentence::({A}something & ¬{B}something)>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::(¬{A}it & ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::(¬{A} & ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::(¬{A}things & ¬{B}things)generic_obj>>",
       "<<sentence::(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "(Ex): ¬({A}x & {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬({A}it & {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬({A} & {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬({A}things & {B}things)generic_obj>>",
       "__<<sentence::¬({A}something & {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬(¬{A}it & {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬(¬{A} & {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬(¬{A}things & {B}things)generic_obj>>",
       "__<<sentence::¬(¬{A}something & {B}something)>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬({A}it & ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬({A} & ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬({A}things & ¬{B}things)generic_obj>>",
       "__<<sentence::¬({A}something & ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬(¬{A}it & ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬(¬{A} & ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬(¬{A}things & ¬{B}things)generic_obj>>",
       "__<<sentence::¬(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "(Ex): ({A}x v {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::({A}it v {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::({A} v {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::({A}things v {B}things)generic_obj>>",
       "<<sentence::({A}something v {B}something)>>"
     ],
     "(Ex): (¬{A}x v {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::(¬{A}it v {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::(¬{A} v {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::(¬{A}things v {B}things)generic_obj>>",
       "<<sentence::(¬{A}something v {B}something)>>"
     ],
     "(Ex): ({A}x v ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::({A}it v ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::({A} v ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::({A}things v ¬{B}things)generic_obj>>",
       "<<sentence::({A}something v ¬{B}something)>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::(¬{A}it v ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::(¬{A} v ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::(¬{A}things v ¬{B}things)generic_obj>>",
       "<<sentence::(¬{A}something v ¬{B}something)>>"
     ],
 
 
     "(Ex): ¬({A}x v {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬({A}it v {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬({A} v {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬({A}things v {B}things)generic_obj>>",
       "__<<sentence::¬({A}something v {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬(¬{A}it v {B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬(¬{A} v {B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬(¬{A}things v {B}things)generic_obj>>",
       "__<<sentence::¬(¬{A}something v {B}something)>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬({A}it v ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬({A} v ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬({A}things v ¬{B}things)generic_obj>>",
       "__<<sentence::¬({A}something v ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x)": [
       "<<phrase::there_is_something_such_that>> <<sentence::¬(¬{A}it v ¬{B}it)>>",
-      "<<phrase::there_are>> <<clause::noun::¬(¬{A} v ¬{B})things.generic_obj>>",
+      "<<phrase::there_are>> <<clause::noun::¬(¬{A}things v ¬{B}things)generic_obj>>",
       "__<<sentence::¬(¬{A}something v ¬{B}something)>>"
     ],
 

@@ -25,6 +25,21 @@
       "__not {A}[VERB.ing]"
     ],
 
+    "{A}the_event_noun": [
+      "the {A}[NOUN]",
+      "the {A}[ADJ.ness]",
+      "the {A}[VERB.ing]",
+
+      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
+    ],
+
+    "¬{A}the_event_noun": [
+      "__the {A}[NOUN]",
+      "{A}[ADJ.neg]ness", "non-{A}[ADJ.ness]",
+      "__not {A}[VERB.ing]"
+    ],
+
+
 
     "{A}a_noun": [
       "__comment: We eliminate ADJ and VERB otherwise the semantic of translations will diverge like (i) is [ADJ] (ii) is [ADJ.ness].",
@@ -97,7 +112,7 @@
       "{A}[ADJ.neg]", "__non-{A}[ADJ.neg]"
     ],
 
-    "¬{A}adj.is_not_tgt": [
+    "¬{A}is_not_tgt": [
       "{A}[ADJ]",
       "<<phrase::{A}a_noun>>"
     ],
@@ -468,7 +483,7 @@
       "__suppresses"
     ],
 
-    "prevent_verb": [
+    "prevented_verb": [
       "is prevented by"
     ],
 
