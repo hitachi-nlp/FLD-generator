@@ -1490,10 +1490,13 @@ def _is_intermediate_constants_illegal(
 ) -> Tuple[bool, Optional[str]]:
 
     leaf_nodes = set(proof_tree.leaf_nodes)
+    assump_nodes = set(proof_tree.assump_nodes)
 
     for constant, illegal_node in _find_illegal_intermediate_constants(proof_tree):
         if illegal_node in leaf_nodes:
             return True, f'The intermediate constant {constant.rep} is used at a leaf node {str(illegal_node)}.'
+        elif illegal_node in assump_nodes:
+            return True, f'The intermediate constant {constant.rep} is used at a assumption node {str(illegal_node)}.'
         elif illegal_node is proof_tree.root_node:
             return True, f'The intermediate constant {constant.rep} is used at the root node {str(illegal_node)}.'
         else:
@@ -1502,16 +1505,14 @@ def _is_intermediate_constants_illegal(
 
 
 def _find_illegal_intermediate_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
-    for constant in proof_tree.intermediate_constants:
-        for leaf_node in proof_tree.leaf_nodes:
-            if constant.rep in [leaf_constant.rep for leaf_constant in leaf_node.formula.constants]:
-                yield constant, leaf_node
+    possible_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes
+    if proof_tree.root_node is not None:
+        possible_nodes += [proof_tree.root_node]
 
-    root_node = proof_tree.root_node
-    if root_node is not None:
-        for constant in proof_tree.intermediate_constants:
-            if constant.rep in [root_constant.rep for root_constant in root_node.formula.constants]:
-                yield constant, leaf_node
+    for constant in proof_tree.intermediate_constants:
+        for possible_node in possible_nodes:
+            if constant.rep in [constant.rep for constant in possible_node.formula.constants]:
+                yield constant, possible_node
 
 
 def load_arguments(config_paths: List[str]) -> List[Argument]:

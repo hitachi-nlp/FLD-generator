@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Union, Iterable, Tuple, Any, Set
 import logging
 import copy
 from collections import defaultdict
-from pprint import pprint
+from pprint import pprint, pformat
 
 from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
@@ -407,23 +407,31 @@ class NLProofSDataset:
 
             stance_msg = None
             if proof_stance == ProofStance.PROVED:
-                assert is_provable(all_positive_formulas, hypothesis_formula)
+                # assert is_provable(all_positive_formulas, hypothesis_formula)
                 if not is_provable(all_positive_formulas, hypothesis_formula):
-                    stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and impllies bugs.'
+                    stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and implies bugs.'
             elif proof_stance == ProofStance.DISPROVED:
-                assert is_disprovable(all_positive_formulas, hypothesis_formula)
+                # assert is_disprovable(all_positive_formulas, hypothesis_formula)
                 if not is_disprovable(all_positive_formulas, hypothesis_formula):
-                    stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and impllies bugs.'
+                    stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and implies bugs.'
             elif proof_stance == ProofStance.UNKNOWN:
-                assert is_unknown(all_positive_formulas, hypothesis_formula)
+                # assert is_unknown(all_positive_formulas, hypothesis_formula)
                 if not is_unknown(all_positive_formulas, hypothesis_formula):
-                    stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and impllies bugs.'
+                    stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and implies bugs.'
             if stance_msg is not None:
+                logger.fatal('proof_tree leaf nodes:')
+                logger.fatal(pformat(proof_tree.leaf_nodes))
+
                 logger.fatal('all_positive_formulas:')
                 for formula in all_negative_formulas:
                     logger.fatal('    %s', formula.rep)
+
                 logger.fatal('hypothesis:')
                 logger.fatal('    %s', hypothesis_formula.rep)
+
+                logger.fatal('proof_tree:')
+                logger.fatal(proof_tree.format_str)
+
                 raise Exception(stance_msg)
 
             if not self.allow_inconsistency:

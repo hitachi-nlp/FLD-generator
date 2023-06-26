@@ -29,6 +29,8 @@ def test_proof_tree():
     n3.add_assump_child(n0)
     tree = ProofTree(nodes=[n0, n1, n2, n3, n4])
 
+    assert set(tree.nodes) == {n0, n1, n2, n3, n4}
+
     assert set(tree.leaf_nodes) == {n1, n3}
 
     tree_traversed_nodes = list(tree.depth_first_traverse())
@@ -66,6 +68,8 @@ def test_proof_tree():
     n3.set_parent(n4)
     n3.add_assump_child(n0)
     tree = ProofTree(nodes=[n0, n2, n3, n4])
+
+    assert set(tree.nodes) == {n0, n2, n3, n4}
 
     assert set(tree.leaf_nodes) == {n3}
 

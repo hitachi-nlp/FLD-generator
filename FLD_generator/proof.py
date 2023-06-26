@@ -163,6 +163,11 @@ class ProofTree:
                 if node.is_leaf]
 
     @property
+    def assump_nodes(self) -> List[ProofNode]:
+        return [node for node in self._nodes
+                if node.is_assump]
+
+    @property
     def root_node(self) -> Optional[ProofNode]:
         if len(self._nodes) == 0:
             return None
