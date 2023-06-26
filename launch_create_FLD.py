@@ -92,7 +92,8 @@ def make_dataset(dataset_name: str,
     )
     logger.addHandler(create_file_handler(output_dir / 'log.txt'))
 
-    min_size_per_job = 300    # too small value might be slow.
+    # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
+    min_size_per_job = 900
     for split, size in settings['split_sizes'].items():
         size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
 
@@ -234,6 +235,7 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230615.formula_checkers')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230616.formula_checkers')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230621.formula_checkers')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.measure_speed')
     output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
 
     dataset_names = [

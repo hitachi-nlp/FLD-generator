@@ -205,7 +205,12 @@ def generate_instances(size: int, *args):
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--swap-ng-words-config', default='./configs/translation_distractors/swap_ng_words.json')
 @click.option('--num-workers', type=int, default=1)
-@click.option('--min-size-per-worker', type=int, default=1000)   # single thread: data load = 2min, generation = 300 instances / 8min    vs    multithread: data load = 20min, generation = 5 x 300 instances / 8min
+@click.option('--min-size-per-worker', type=int,
+              # default=1000,
+              default=20,
+              # single thread: data load = 3min , generation = 300 instances / 20min
+              # multithread  : data load = 10min, generation = 300 instances / 6min
+              )
 @click.option('--batch-size-per-worker', type=int, default=10000)
 @click.option('--seed', type=int, default=0)
 def main(output_path,
@@ -350,6 +355,8 @@ def main(output_path,
     with open(str(output_path) + '.stats.json', 'w') as f_out:
         json.dump(dict(gathered_stats), f_out,
                   ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
+
+    logger.info('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! create_FLD_corpus.py DONE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 
 if __name__ == '__main__':
