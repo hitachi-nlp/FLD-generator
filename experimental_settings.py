@@ -8,6 +8,7 @@ def _to_range(begin: int, end: int) -> List[int]:
 
 
 _TRANSLATION_THING_CONFIGS = glob.glob('./configs/translations/thing/**.json')
+_TRANSLATION_THING_CONFIGS_V1 = glob.glob('./configs/translations/thing.v1/**.json')
 
 
 _DATASET_SETTINGS = {
@@ -5239,10 +5240,72 @@ _DATASET_SETTINGS = {
     },
 
 
+
+    '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            # './configs/arguments/axiom.and_or.pred_only.json',
+            # './configs/arguments/axiom.and_or.pred_arg.json',
+
+            # './configs/arguments/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            # './configs/arguments/axiom.negation.pred_only.json',
+            # './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+
+            './configs/arguments/theorem.G_MP.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            # 'universal_quantifier_intro',
+
+            # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
+            # 'existential_quantifier_intro',
+        ],
+
+        'complication': 0.5,
+        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
+
+
+        'num_distractors': _to_range(0, 15),
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+
+        'use_fixed_translation': True,
+        'limit_vocab_size_per_type': 100,
+
+
+        'depth_distribution': 'flat',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 1000,
+            # 'train': 30000,
+        }
+    },
+
 }
 
 
 _DEFAULT_DATASET_SETTINGS = {
+
     '20221115': {
         'world_assump': 'OWA',
         'proof_stances': ['PROVED', 'DISPROVED', 'UNKNOWN'],
@@ -5299,6 +5362,31 @@ _DEFAULT_DATASET_SETTINGS = {
 
 
         'depth_distribution': 'flat',
+
+    },
+
+
+    '20230626.many_bugs_fixed': {
+        'world_assump': 'OWA',
+        'proof_stances': ['PROVED', 'DISPROVED', 'UNKNOWN'],
+        'unknown_ratio': 0.33,
+
+
+        'distractor': 'mixture.negative_tree.simplified_formula.various_form',
+        'use_simplified_tree_formulas_as_distractor_prototype': True,
+        'sample_distractor_formulas_from_tree': True,
+        'sample_hard_negatives': True,
+        'fallback_from_formula_to_translation_distractor': False,
+
+
+        'translation_distractor': 'word_swap',
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+        'swap_ng_words_config': './configs/translation_distractors/swap_ng_words.2023-06-16.json',
+
+
+        'translation_configs': _TRANSLATION_THING_CONFIGS_V1,
+        'translation_volume_to_weight': 'sqrt',
 
     },
 
@@ -5383,6 +5471,8 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems': '20221203',
     '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems.wo_translation_dist': '20221203',
 
+    # ---------------------------------- 20230626.many_bugs_fixed ------------------------------------
+    '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP': '20230626.many_bugs_fixed',
 
 }
 

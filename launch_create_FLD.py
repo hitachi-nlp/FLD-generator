@@ -233,7 +233,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230601.fix_translation')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230615.formula_checkers')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230616.formula_checkers')
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230621.formula_checkers')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230621.formula_checkers')
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -370,7 +371,10 @@ def main():
 
         # ---------------------------------- 20230621.formula_checkers ------------------------------------
         # '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
-        '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems.wo_translation_dist',
+        # '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems.wo_translation_dist',
+
+        # ---------------------------------- 20230626.many_bugs_fixed ------------------------------------
+        '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
 
     ]
     # dataset_names = dataset_names[::-1]
