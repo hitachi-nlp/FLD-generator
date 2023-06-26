@@ -1,0 +1,72 @@
+{
+
+  "sentence": {
+
+    "{A}everything": [
+      "<<clause::verb::{A}everything>>"
+    ],
+    "¬{A}everything": [
+      "<<clause::verb::¬{A}everything>>",
+      "__<<phrase::it_is_not_fact_that>> <<sentence::{A}everything>>",
+      "__comment: 'it is not the fact that everything {A}' does not mean 'everything does not {A}'"
+    ],
+
+
+    "({A}everything & {B}everything)": [
+      "<<clause::verb::({A}everything & {B}everything)>>"
+    ],
+    "(¬{A}everything & {B}everything)": [
+      "<<clause::verb::(¬{A}everything & {B}everything)>>"
+    ],
+    "({A}everything & ¬{B}everything)": [
+      "<<clause::verb::({A}everything & ¬{B}everything)>>"
+    ],
+    "(¬{A}everything & ¬{B}everything)": [
+      "<<clause::verb::(¬{A}everything & ¬{B}everything)>>"
+    ],
+
+
+    "¬({A}everything & {B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}everything & {B}everything)>>"
+    ],
+    "¬(¬{A}everything & {B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}everything & {B}everything)>>"
+    ],
+    "¬({A}everything & ¬{B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}everything & ¬{B}everything)>>"
+    ],
+    "¬(¬{A}everything & ¬{B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}everything & ¬{B}everything)>>"
+    ],
+
+
+    "({A}everything v {B}everything)": [
+      "<<clause::verb::({A}everything v {B}everything)>>"
+    ],
+    "(¬{A}everything v {B}everything)": [
+      "<<clause::verb::(¬{A}everything v {B}everything)>>"
+    ],
+    "({A}everything v ¬{B}everything)": [
+      "<<clause::verb::({A}everything v ¬{B}everything)>>"
+    ],
+    "(¬{A}everything v ¬{B}everything)": [
+      "<<clause::verb::(¬{A}everything v ¬{B}everything)>>"
+    ],
+
+
+    "¬({A}everything v {B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}everything v {B}everything)>>"
+    ],
+    "¬(¬{A}everything v {B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}everything v {B}everything)>>"
+    ],
+    "¬({A}everything v ¬{B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}everything v ¬{B}everything)>>"
+    ],
+    "¬(¬{A}everything v ¬{B}everything)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}everything v ¬{B}everything)>>"
+    ]
+
+  }
+
+}

@@ -1,0 +1,73 @@
+{
+
+  "sentence": {
+
+
+    "{A}something": [
+      "<<clause::verb::{A}something>>"
+    ],
+    "¬{A}something": [
+      "<<clause::verb::¬{A}something>>",
+      "__<<phrase::it_is_not_fact_that>> <<sentence::{A}something>>",
+      "__comment: 'it is not the fact that something {A}' does not mean 'something does not {A}'"
+    ],
+
+
+    "({A}something & {B}something)": [
+      "<<clause::verb::({A}something & {B}something)>>"
+    ],
+    "(¬{A}something & {B}something)": [
+      "<<clause::verb::(¬{A}something & {B}something)>>"
+    ],
+    "({A}something & ¬{B}something)": [
+      "<<clause::verb::({A}something & ¬{B}something)>>"
+    ],
+    "(¬{A}something & ¬{B}something)": [
+      "<<clause::verb::(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "¬({A}something & {B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something & {B}something)>>"
+    ],
+    "¬(¬{A}something & {B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something & {B}something)>>"
+    ],
+    "¬({A}something & ¬{B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something & ¬{B}something)>>"
+    ],
+    "¬(¬{A}something & ¬{B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "({A}something v {B}something)": [
+      "<<clause::verb::({A}something v {B}something)>>"
+    ],
+    "(¬{A}something v {B}something)": [
+      "<<clause::verb::(¬{A}something v {B}something)>>"
+    ],
+    "({A}something v ¬{B}something)": [
+      "<<clause::verb::({A}something v ¬{B}something)>>"
+    ],
+    "(¬{A}something v ¬{B}something)": [
+      "<<clause::verb::(¬{A}something v ¬{B}something)>>"
+    ],
+
+
+    "¬({A}something v {B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something v {B}something)>>"
+    ],
+    "¬(¬{A}something v {B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something v {B}something)>>"
+    ],
+    "¬({A}something v ¬{B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something v ¬{B}something)>>"
+    ],
+    "¬(¬{A}something v ¬{B}something)": [
+      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something v ¬{B}something)>>"
+    ]
+
+  }
+
+}
