@@ -18,11 +18,13 @@ def main():
     engine = SubprocessEngine()
 
     for input_path in input_dir.glob('**/*.jsonl'):
-        if str(input_path).find('job-') >= 0 or not str(input_path).find('train') >= 0:
+        # if str(input_path).find('job-') >= 0 or not str(input_path).find('train') >= 0:
+        if str(input_path).find('job-') >= 0:
             continue
         lab_prams_path = input_path.parent.parent / 'lab.params.json'
         dataset_name = json.load(open(lab_prams_path))['dataset_name']
-        output_path = output_dir / f'dataset_name={dataset_name}.distrib.txt'
+        split = input_path.name.rstrip('.jsonl')
+        output_path = output_dir / f'dataset_name={dataset_name}.{split}.distrib.txt'
         engine.run(
             f'python ./compute_distrib.py {str(input_path)} {str(output_path)}',
             wait_until_finish=True,
