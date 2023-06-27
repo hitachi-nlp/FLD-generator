@@ -227,11 +227,11 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 3
+        return 5
 
     @property
     def default_timeout(self) -> int:
-        return 9999
+        return 10
 
     @profile
     def _generate(self,
@@ -440,7 +440,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
 
     @property
     def default_timeout(self) -> int:
-        return 9999
+        return 10
 
     @profile
     def _generate(self,
@@ -509,11 +509,11 @@ class NegativeTreeDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 3
+        return 5
 
     @property
     def default_timeout(self) -> int:
-        return 9999
+        return 10
 
     @profile
     def generate(self, *args, **kwargs) -> Tuple[List[Formula], Dict[str, Any]]:
@@ -650,7 +650,7 @@ class MixtureDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 1
+        return 3
 
     @property
     def default_timeout(self) -> int:
@@ -723,7 +723,7 @@ class FallBackDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 1
+        return 3
 
     @property
     def default_timeout(self) -> int:

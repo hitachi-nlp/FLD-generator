@@ -93,7 +93,8 @@ def make_dataset(dataset_name: str,
     logger.addHandler(create_file_handler(output_dir / 'log.txt'))
 
     # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
-    min_size_per_job = 900
+    # min_size_per_job = 900
+    min_size_per_job = 300
     for split, size in settings['split_sizes'].items():
         size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
 
@@ -142,7 +143,6 @@ def make_dataset(dataset_name: str,
 
                 f'--depths \'{json.dumps(job_settings["depths"])}\'',
                 maybe_option('--depth-distribution', settings.get("depth_distribution", None)),
-                maybe_option('--depth-1-reference-weight', settings.get("depth_1_reference_weight", None)),
                 f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
                 f'--complication {job_settings["complication"]}',
                 f'--quantification {job_settings["quantification"]}',
@@ -155,7 +155,7 @@ def make_dataset(dataset_name: str,
                 '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
                 '--use-simplified-tree-formulas-as-distractor-prototype' if job_settings.get('use_simplified_tree_formulas_as_distractor_prototype', False) else '',
                 '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
-                '--negated-hypothesis-ratio {job_settings["negated_hypothesis_ratio"]}',
+                f'--negated-hypothesis-ratio {job_settings["negated_hypothesis_ratio"]}',
                 '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
                 f'--swap-ng-words-config {job_settings["swap_ng_words_config"]}',
@@ -377,7 +377,10 @@ def main():
 
         # ---------------------------------- 20230626.many_bugs_fixed ------------------------------------
         # '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
-        '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers',
+        # '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers',
+
+        '20230626.many_bugs_fixed.D3.hard',
+        '20230626.many_bugs_fixed.D8.hard',
 
     ]
     # dataset_names = dataset_names[::-1]

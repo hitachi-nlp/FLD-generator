@@ -127,6 +127,11 @@ def parse(rep: str):
                 arg = None
 
             if arg is not None:
+                # import ctypes
+                # try:
+                #     return _UNARY_PREDICATES(pred)(_ARGS(arg))
+                # except ctypes.ArgumentError as e:
+                #     import pudb; pudb.set_trace()
                 return _UNARY_PREDICATES(pred)(_ARGS(arg))
             else:
                 return _ZEROARY_PREDICATES(pred)

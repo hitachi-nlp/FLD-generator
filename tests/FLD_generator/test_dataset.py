@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 @profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 1000) -> None:
+                     num_dataset: int = 10000) -> None:
     # agg_stats: Dict[str, int] = defaultdict(int)
     for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
         log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
@@ -159,19 +159,19 @@ def test_generate_dataset():
     def _to_range(begin: int, end: int) -> List[int]:
         return list(range(begin, end + 1))
 
-    # word_bank = None
-    word_bank = build_wordnet_wordbank('eng')
+    word_bank = None
+    # word_bank = build_wordnet_wordbank('eng')
 
-    # translator = None
-    translator = build_translator(
-        glob.glob('./configs/translations/thing.v1/**.json'),
-        word_bank,
-        use_fixed_translation=True,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        volume_to_weight='sqrt',
-        do_translate_to_nl=True,
-    )
+    translator = None
+    # translator = build_translator(
+    #     glob.glob('./configs/translations/thing.v1/**.json'),
+    #     word_bank,
+    #     use_fixed_translation=True,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     volume_to_weight='sqrt',
+    #     do_translate_to_nl=True,
+    # )
    
     generator = build_generator(
         [
@@ -211,17 +211,15 @@ def test_generate_dataset():
         ],
         elim_dneg=True,
         complication=0.3,
-        quantification=0.2,
+        quantification=0.5,
         quantifier_axioms=[
             'universal_quantifier_elim',
             'universal_quantifier_intro',
-
-            # # we do not use existential_quantifier_intro since it has no linkable_args without existential_quantifier_elim, which is not implemented yet.
             'existential_quantifier_intro',
             'existential_quantifier_elim',
         ],
-        quantify_implication_premise_conclusion_at_once=True,
-        quantify_all_at_once=False,
+        quantify_implication_premise_conclusion_at_once=False,
+        quantify_all_at_once=True,
 
     )
 
@@ -262,21 +260,27 @@ def test_generate_dataset():
     )
 
     # depths = _to_range(1, 5)
-    depths = _to_range(1, 5)
+    # depths = _to_range(1, 5)
+    depths = _to_range(7, 8)
+
+    branch_extension_steps = _to_range(1, 5)
+
+    num_distractors = _to_range(15, 20)
+
     dataset = NLProofSDataset(pipeline,
                               ['PROVED', 'DISPROVED', 'UNKNOWN'],
                               'OWA',
                               depths,
-                              _to_range(1, 5),
+                              branch_extension_steps,
                               depth_weights = [1.0] * len(depths),
                               depth_1_reference_weight=None,
                               force_fix_illegal_intermediate_constants=True,
                               unknown_ratio=0.333,
                               use_collapsed_translation_nodes_for_unknown_tree=False,
                               # word_bank=word_bank,
-                              num_distractors=[5],
+                              num_distractors=num_distractors,
                               # swap_ng_words=swap_ng_words,
-                              # num_translation_distractors=[5] if translation_distractor is not None else [0],
+                              # num_translation_distractors=_to_range(0, 5) if translation_distractor is not None else [0],
                               allow_smaller_proofs=False,
                               version='0.1',
                               raise_if_translation_not_found=False)

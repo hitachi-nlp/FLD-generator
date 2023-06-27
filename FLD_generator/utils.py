@@ -5,6 +5,7 @@ import random
 import logging
 import zlib
 from pprint import pformat
+from ctypes import ArgumentError
 
 from FLD_generator.argument import Argument
 from nltk.corpus import cmudict
@@ -140,10 +141,10 @@ def run_with_timeout_retry(
 
     trial_results = []
     for i_trial in range(0, max_retry):
+        timeout_func = timeout_decorator.timeout(timeout_per_trial,
+                                                 timeout_exception=TimeoutError,
+                                                 use_signals=True)(func)
         try:
-            timeout_func = timeout_decorator.timeout(timeout_per_trial,
-                                                     timeout_exception=TimeoutError,
-                                                     use_signals=True)(func)
             result = timeout_func(*func_args, **func_kwargs)
             logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
             trial_results.append(result)
@@ -152,6 +153,15 @@ def run_with_timeout_retry(
                 return trial_results
 
             retry_msg = 'is_retry_func(result)'
+
+        except ArgumentError as e:
+            # import pudb; pudb.set_trace()
+            logger.fatal('ArgumentError occurred. We will continue the trials, however, do not know the root cause of this.')
+            logger.info(pformat(func_args))
+            logger.info(pformat(func_kwargs))
+            logger.info(str(timeout_func))
+            logger.info(str(e))
+            retry_msg = ''
 
         except TimeoutError as e:
             retry_msg = f'TimeoutError(timeout={timeout_per_trial})'

@@ -121,6 +121,9 @@ def load_dataset(argument_config: List[str],
     if depth_distribution == 'flat':
         depth_weights = None
         depth_1_reference_weight = None
+    elif depth_distribution == 'flat.no_reference':
+        depth_weights = None
+        depth_1_reference_weight = 0.0
     elif depth_distribution == 'ruletaker.ours.20221202':
         if set(depths) != set([1, 2, 3]):
             raise ValueError(f'depths {depths} is not consistent with ruletaker.ours.20221202.')
@@ -178,7 +181,7 @@ def generate_instances(size: int, *args):
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
-@click.option('--depth-distribution', type=click.Choice(['flat', 'ruletaker.ours.20221202']))
+@click.option('--depth-distribution', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
 @click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
@@ -193,7 +196,7 @@ def generate_instances(size: int, *args):
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--use-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
-@click.option('--negated-hypothesis-ratio', type=float, defaultdict=0.5)
+@click.option('--negated-hypothesis-ratio', type=float, default=0.5)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--translation-distractor', default='word_swap')

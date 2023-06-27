@@ -419,7 +419,7 @@ def _generate_tree_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
                                       max_retry=50,
-                                      timeout=10,  # 5 + 5
+                                      timeout=20,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
         trial_result_proof_trees = run_with_timeout_retry(
@@ -520,7 +520,7 @@ def _generate_stem_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
                                       max_retry=50,
-                                      timeout=5,
+                                      timeout=10,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
     try:
@@ -551,7 +551,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         arguments: List[Argument],
                                         num_steps: int,
                                         *args,
-                                        timeout=5,
+                                        timeout=10,
                                         max_retry=50,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
@@ -1407,7 +1407,7 @@ def _fix_illegal_intermediate_constants(
                         return_alignment=True,
 
                         best_effort=True,
-                        timeout=5,
+                        timeout=10,
                         max_retry=5,
                     )
                     proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]
