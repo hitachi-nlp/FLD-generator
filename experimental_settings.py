@@ -3392,7 +3392,6 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'fallback.negative_tree.various_form',
-        'try_negated_hypothesis_first': False,  # set as False if complication=0.0
         'num_distractors': _to_range(0, 5),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3446,7 +3445,6 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
         'num_distractors': _to_range(0, 15),
         'reused_object_nouns_max_factor': 1.0,
         'add_subj_obj_swapped_distractor': True,
@@ -3501,7 +3499,6 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
         'use_simplified_tree_formulas_as_distractor_prototype': True,
         'num_distractors': _to_range(0, 15),
         'reused_object_nouns_max_factor': 1.0,
@@ -3556,7 +3553,6 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
         'use_simplified_tree_formulas_as_distractor_prototype': True,
         'num_distractors': _to_range(0, 20),
         'reused_object_nouns_max_factor': 1.0,
@@ -3611,7 +3607,6 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
         'use_simplified_tree_formulas_as_distractor_prototype': True,
         'num_distractors': _to_range(0, 15),
         'reused_object_nouns_max_factor': 1.0,
@@ -3668,7 +3663,6 @@ _DATASET_SETTINGS = {
 
 
         'distractor': 'various_form',
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
         'use_simplified_tree_formulas_as_distractor_prototype': True,
         'num_distractors': _to_range(0, 15),
         'reused_object_nouns_max_factor': 1.0,
@@ -3728,7 +3722,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.0,
-        'try_negated_hypothesis_first': False,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 0),
@@ -3783,7 +3776,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 0),
@@ -3838,7 +3830,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -3893,7 +3884,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -3952,7 +3942,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4008,7 +3997,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4064,7 +4052,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4119,7 +4106,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4186,7 +4172,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.0,
-        'try_negated_hypothesis_first': False,  # set as False if complication=0.0 since it have no negation formula
 
         # ---- since complication = 0.0
         'distractor': 'various_form',
@@ -4250,7 +4235,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 0),
@@ -4304,7 +4288,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.0,
-        'try_negated_hypothesis_first': False,  # set as False if complication=0.0 since it have no negation formula
 
         # ---- since complication = 0.0
         'distractor': 'various_form',
@@ -4364,7 +4347,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4420,7 +4402,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4476,7 +4457,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4532,7 +4512,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4587,7 +4566,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4645,7 +4623,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4702,7 +4679,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4761,7 +4737,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4820,7 +4795,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.3,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'distractor': 'fallback.various_form.negative_tree',
@@ -4882,7 +4856,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4937,7 +4910,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -4991,7 +4963,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -5046,7 +5017,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -5102,7 +5072,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -5157,7 +5126,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -5212,7 +5180,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -5278,7 +5245,6 @@ _DATASET_SETTINGS = {
         ],
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 15),
@@ -5339,7 +5305,6 @@ _DATASET_SETTINGS = {
 
 
         'complication': 0.5,
-        'try_negated_hypothesis_first': True,  # set as False if complication=0.0 since it have no negation formula
 
 
         'num_distractors': _to_range(0, 20),
@@ -5363,6 +5328,72 @@ _DATASET_SETTINGS = {
     },
 
 
+
+
+    '20230626.many_bugs_fixed.D3.hard': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 1000,
+            # 'train': 30000,
+        }
+    },
+
+
+
 }
 
 
@@ -5382,6 +5413,7 @@ _DEFAULT_DATASET_SETTINGS = {
         ],
 
         'sample_distractor_formulas_from_tree': True,
+        'negated_hypothesis_ratio': 1.0,
         'sample_hard_negatives': True,
         'fallback_from_formula_to_translation_distractor': True,
 
@@ -5409,6 +5441,7 @@ _DEFAULT_DATASET_SETTINGS = {
         ],
 
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
+        'negated_hypothesis_ratio': 1.0,
         'use_simplified_tree_formulas_as_distractor_prototype': True,
         'sample_distractor_formulas_from_tree': True,
         'sample_hard_negatives': True,
@@ -5434,6 +5467,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'unknown_ratio': 0.33,
 
 
+        'negated_hypothesis_ratio': 0.5,
         'distractor': 'mixture.negative_tree.simplified_formula.various_form',
         'use_simplified_tree_formulas_as_distractor_prototype': True,
         'sample_distractor_formulas_from_tree': True,

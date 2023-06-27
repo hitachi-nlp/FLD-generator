@@ -241,6 +241,7 @@ def test_generate_dataset():
         sample_prototype_formulas_from_tree=True,
         use_simplified_formulas_as_prototype=True,
         sample_hard_negatives=True,
+        negated_hypothesis_ratio=1.0,
     )
 
     # swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))

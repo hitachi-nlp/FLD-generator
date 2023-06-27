@@ -270,8 +270,11 @@ class NLProofSDataset:
             logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))
 
             # -- generate settings --
+            proof_stance = self._sample_proof_stance()
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]
+            if proof_stance == ProofStance.UNKNOWN:
+                depth += 1
 
             _num_distractors = random.sample(self.num_distractors, 1)[0]
             _num_translation_distractors = random.sample(self.num_translation_distractors, 1)[0]
@@ -291,7 +294,6 @@ class NLProofSDataset:
             )
 
             # -- sample stance --
-            proof_stance = self._sample_proof_stance()
             if len(proof_tree.leaf_nodes) == 0:
                 # For some very rare case, this occurs.
                 # Since we do not expect this behaviour, we raise error for future debug
@@ -303,7 +305,8 @@ class NLProofSDataset:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 could_make_unknown = False
                 for _ in range(10):
-                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                    # dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, 1)
                     if is_unknown(
                         [node.formula for node in proof_tree.leaf_nodes
                          if node not in dead_leaf_nodes],
