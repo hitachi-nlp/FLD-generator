@@ -501,8 +501,14 @@ def _generate_tree(arguments: List[Argument],
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,
             )
-            proof_tree = sorted(trial_results,
-                                key = lambda A_num_step: A_num_step[1])[-1][0]
+
+            # picking the tree with the largest extension steps sometimes pick a smaller tree.
+            # thus, we choose the largest tree rather than the largest extension steps
+            # proof_tree = sorted(trial_results,
+            #                     key = lambda A_num_step: A_num_step[1])[-1][0]
+
+            proof_tree = sorted(trial_results, key=lambda tree_step: (tree_step[0].depth, tree_step[1]))[-1]
+
         except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg=f'because of the following error:\n{str(e)}'))
