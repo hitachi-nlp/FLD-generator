@@ -235,8 +235,10 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230615.formula_checkers')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230616.formula_checkers')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230621.formula_checkers')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.measure_speed')
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
+
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
+
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',

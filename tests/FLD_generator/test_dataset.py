@@ -233,7 +233,8 @@ def test_generate_dataset():
         # 'fallback.negative_tree.various_form',
         # 'fallback.various_form.negative_tree',
 
-        'mixture.negative_tree.simplified_formula.various_form',
+        # 'mixture.negative_tree.simplified_formula.various_form',
+        'mixture.negative_tree.negative_tree.simplified_formula.various_form',
 
         generator=generator,
         sample_prototype_formulas_from_tree=True,

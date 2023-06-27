@@ -173,6 +173,7 @@ def run_with_timeout_retry(
                                      msg=f'this is caused by the folllowing:\n{str(retry_msg)}'))
 
     if best_effort and len(trial_results) > 0:
+        logger.info(_make_pretty_msg(i_trial, 'failure', msg='return best effort results'))
         return trial_results
     else:
         raise RetryAndTimeoutFailure(_make_pretty_msg(i_trial, 'failure'))

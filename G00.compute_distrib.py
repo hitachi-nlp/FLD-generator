@@ -14,7 +14,7 @@ def main():
     setup_logger(level=logging.INFO)
 
     input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed/')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230626.for_ICML/')
+    output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed/')
     engine = SubprocessEngine()
 
     for input_path in input_dir.glob('**/*.jsonl'):

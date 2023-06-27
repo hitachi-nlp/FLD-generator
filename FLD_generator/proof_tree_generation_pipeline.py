@@ -170,9 +170,12 @@ class ProofTreeGenerationPipeline:
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
 
                 other_formulas = []
-                if others.get('negative_tree', None) is not None:
-                    negative_tree = others['negative_tree']
-                    other_formulas = [node.formula for node in negative_tree.nodes]
+                if 'mixture_list.negative_tree' in others:
+                    other_formulas = [node.formula
+                                      for negative_tree in others['mixture_list.negative_tree']
+                                      for node in negative_tree.nodes]
+                elif 'negative_tree' in others:
+                    other_formulas = [node.formula for node in others['negative_tree'].nodes]
                 all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
                 try:
