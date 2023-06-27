@@ -418,7 +418,7 @@ class ProofTreeGenerator:
 def _generate_tree_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
-                                      max_retry=30,
+                                      max_retry=50,
                                       timeout=10,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
@@ -519,7 +519,7 @@ def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
 def _generate_stem_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
-                                      max_retry=30,
+                                      max_retry=50,
                                       timeout=5,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
@@ -552,7 +552,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         num_steps: int,
                                         *args,
                                         timeout=5,
-                                        max_retry=30,
+                                        max_retry=50,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
     try:
