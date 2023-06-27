@@ -167,6 +167,7 @@ class ProofTreeGenerator:
             universal_arguments_factor=universal_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
             reference_argument_factor=reference_argument_factor,
+            allow_non_canonical_contradiction_use=False,
             elim_dneg=elim_dneg,
         )
 
@@ -191,6 +192,7 @@ class ProofTreeGenerator:
                         universal_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         reference_argument_factor: float,
+                        allow_non_canonical_contradiction_use: bool,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
         if allow_generating_heterogeneous_arity_formulas:
             raise NotImplementedError()
@@ -311,6 +313,14 @@ class ProofTreeGenerator:
                 raise NotImplementedError()
 
         _arguments = arguments + complicated_arguments + quantified_arguments + quantifier_axiom_arguments
+        if not allow_non_canonical_contradiction_use:
+            # we reject formulas such as "(x): ({A}x & {B}x) -> #F#" due to the folllowing reasons.
+            # (i) we have not yet implemented translations for such formulas
+            # (ii) we have not yet implemented formula checking algorithms for such formulas, due to the technological limitation of z3
+            # Rejecting such formulas does not matter much, because proof by contradiction is not that important in NLP.
+            _arguments = [argument for argument in _arguments
+                          if not argument_has_non_canonical_contradiction_use(argument)]
+
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
         def is_or_formula(formula: Formula) -> bool:
@@ -586,7 +596,7 @@ def _generate_stem(arguments: List[Argument],
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
-                   allow_non_canonical_contradiction_use=False,
+                   # allow_non_canonical_contradiction_use=False,
                    allow_inconsistency=False,
                    allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
@@ -802,13 +812,13 @@ def _generate_stem(arguments: List[Argument],
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
-                                # we reject formulas such as "(x): ({A}x & {B}x) -> #F#" due to the folllowing reasons.
-                                # (i) we have not yet implemented translations for such formulas
-                                # (ii) we have not yet implemented formula checking algorithms for such formulas, due to the technological limitation of z3
-                                # Rejecting such formulas does not matter much, because proof by contradiction is not that important in NLP.
-                                rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
-                                continue
+                            # if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
+                            #     # we reject formulas such as "(x): ({A}x & {B}x) -> #F#" due to the folllowing reasons.
+                            #     # (i) we have not yet implemented translations for such formulas
+                            #     # (ii) we have not yet implemented formula checking algorithms for such formulas, due to the technological limitation of z3
+                            #     # Rejecting such formulas does not matter much, because proof by contradiction is not that important in NLP.
+                            #     rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
+                            #     continue
 
                             if is_argument_trivial(next_arg_pulled):
                                 rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
@@ -959,7 +969,7 @@ def _extend_branches(proof_tree: ProofTree,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
                      allow_inconsistency=False,
-                     allow_non_canonical_contradiction_use=False,
+                     # allow_non_canonical_contradiction_use=False,
                      allow_smaller_proofs=False,
                      best_effort=False,
                      return_alignment=False) -> Union[Tuple[int, ProofTree],
@@ -1120,9 +1130,9 @@ def _extend_branches(proof_tree: ProofTree,
 
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                        if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
-                            rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
-                            continue
+                        # if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
+                        #     rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
+                        #     continue
 
                         if is_argument_trivial(next_arg_pulled):
                             rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
