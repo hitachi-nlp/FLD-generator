@@ -67,7 +67,7 @@ class ProofTreeGenerationPipeline:
             idx = random.randint(0, len(reusable_proof_trees) - 1)
             reusable_proof_tree = reusable_proof_trees[idx]
             reusable_proof_trees.pop(idx)
-            # logger.fatal('could get tree from cache!!')
+            logger.fatal('could get tree from cache!!')
             return reusable_proof_tree
 
         trial_proof_trees = self.generator.generate_tree(
@@ -80,13 +80,17 @@ class ProofTreeGenerationPipeline:
             force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
             get_all_trial_results=True,
         )
-        trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
 
-        reusable_proof_trees.extend(trial_proof_trees[:-1])
+        trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
+        to_be_cached_trees, to_be_return_tree = trial_proof_trees[:-1], trial_proof_trees[-1]
+        to_be_cached_trees = [tree for tree in to_be_cached_trees if tree.depth == depth]
+
+        reusable_proof_trees.extend(to_be_cached_trees)
         if len(reusable_proof_trees) > 100000:
             self._reusable_proof_trees[_reuse_key]  = []
 
-        return trial_proof_trees[-1]
+        return to_be_return_tree
+
 
     @profile
     def run(self,

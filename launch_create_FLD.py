@@ -94,7 +94,8 @@ def make_dataset(dataset_name: str,
 
     # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
     # min_size_per_job = 900
-    min_size_per_job = 300
+    # min_size_per_job = 300
+    min_size_per_job = 150
     for split, size in settings['split_sizes'].items():
         size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
 
@@ -237,8 +238,8 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230621.formula_checkers')
 
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
-
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -384,14 +385,16 @@ def main():
         '20230626.many_bugs_fixed.D3.hard',
         '20230626.many_bugs_fixed.D8.hard',
 
+        '20230626.many_bugs_fixed.D3.hard.dist-trees',
+        '20230626.many_bugs_fixed.D8.hard.dist-trees',
     ]
     # dataset_names = dataset_names[::-1]
 
     # num_jobs_for_datasets = 3
     # num_jobs_per_dataset = 60
 
-    num_jobs_for_datasets = 2
-    num_jobs_per_dataset = 90
+    num_jobs_for_datasets = 4
+    num_jobs_per_dataset = 20
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')

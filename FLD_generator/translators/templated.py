@@ -157,8 +157,7 @@ class TemplatedTranslator(Translator):
                 raise ValueError()
         return flat_config
 
-    def _load_words(self,
-                    word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
+    def _load_words(self, word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
 
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
@@ -224,6 +223,7 @@ class TemplatedTranslator(Translator):
 
         return zeroary_predicates, unary_predicates, constants
 
+    @profile
     def _load_words_by_pos_attrs(self,
                                  word_bank: WordBank,
                                  pos: Optional[POS] = None,

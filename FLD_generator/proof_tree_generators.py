@@ -507,7 +507,7 @@ def _generate_tree(arguments: List[Argument],
             # proof_tree = sorted(trial_results,
             #                     key = lambda A_num_step: A_num_step[1])[-1][0]
 
-            proof_tree = sorted(trial_results, key=lambda tree_step: (tree_step[0].depth, tree_step[1]))[-1]
+            proof_tree = sorted(trial_results, key=lambda tree_step: (tree_step[0].depth, tree_step[1]))[-1][0]
 
         except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,

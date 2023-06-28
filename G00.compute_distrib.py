@@ -32,8 +32,11 @@ def main():
     # input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed/')
     # output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed/')
 
-    input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed.suppress_tree_generation_failure/')
+    # input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed.suppress_tree_generation_failure/')
+
+    input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
+    output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
 
     compute_distrib(input_dir, output_dir)
 
