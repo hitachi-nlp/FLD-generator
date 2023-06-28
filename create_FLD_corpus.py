@@ -211,8 +211,7 @@ def generate_instances(size: int, *args):
 @click.option('--min-size-per-worker', type=int,
               # default=1000,
               default=20,
-              # single thread: data load = 3min , generation = 300 instances / 20min
-              # multithread  : data load = 10min, generation = 300 instances / 6min
+              # multithread  : data load = 4min, generation = 140 instances / 14min = 10 instances / min
               )
 @click.option('--batch-size-per-worker', type=int, default=10000)
 @click.option('--seed', type=int, default=0)

@@ -384,7 +384,7 @@ def main():
         # '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers',
 
         '20230626.many_bugs_fixed.D3.hard',
-        '20230626.many_bugs_fixed.D8.hard',
+        # '20230626.many_bugs_fixed.D8.hard',
 
         # '20230626.many_bugs_fixed.D3.hard.dist-trees',
         # '20230626.many_bugs_fixed.D8.hard.dist-trees',
