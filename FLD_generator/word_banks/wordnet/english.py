@@ -2,6 +2,7 @@ from typing import Optional, Iterable, List, Dict, Iterable
 import re
 import logging
 from string import ascii_uppercase
+from functools import lru_cache
 
 # from pyinflect import getInflection
 from lemminflect import getInflection, getLemma
@@ -13,6 +14,12 @@ from FLD_generator.utils import starts_with_vowel_sound
 from .base import WordNetWordBank
 
 logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1000000)
+def _getLemma(word: str) -> str:
+    # TODO: pos other than VERB
+    return getLemma(word, upos='VERB')[0]
 
 
 class EnglishWordBank(WordNetWordBank):
@@ -43,9 +50,9 @@ class EnglishWordBank(WordNetWordBank):
     def _intermediate_constant_words(self) -> List[str]:
         return self.__intermediate_constant_words
 
+    @profile
     def get_lemma(self, word: str) -> str:
-        # TODO: pos other than VERB
-        return getLemma(word, upos='VERB')[0]
+        return _getLemma(word)
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
         if verb in ['am', 'are', 'is', 'was', 'were']:

@@ -175,6 +175,7 @@ class ProofTreeGenerator:
     def complicated_arguments_weight(self):
         return self._complicated_arguments_weight
 
+    @profile
     def _load_arguments(self,
                         arguments: List[Argument],
                         max_PASs_per_formula: Optional[int],

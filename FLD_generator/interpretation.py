@@ -243,6 +243,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                                                    allow_many_to_one=allow_many_to_one)
 
 
+@profile
 def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
                                                     src_constants: List[str],
                                                     tgt_predicates: List[str],
@@ -281,6 +282,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
             yield mappings
 
 
+@profile
 def _generate_mappings(src_objs: List[Any],
                        tgt_objs: List[Any],
                        constraints: Optional[Dict[Any, Any]] = None,
@@ -352,8 +354,30 @@ def _make_permutations(objs: List[Any],
                 tail_objs = objs
             else:
                 tail_objs = objs.copy()
+
                 while head in tail_objs:
                     tail_objs.remove(head)
+
+                # the samle speed
+                # while True:
+                #     try:
+                #         tail_objs.remove(head)
+                #     except ValueError:
+                #         break
+
+                # slower
+                # for obj in tail_objs:
+                #     if obj == head:
+                #         tail_objs.remove(head)
+
+                # slower
+                # for idx, obj in enumerate(reversed(tail_objs)):
+                #     if obj == head:
+                #         del tail_objs[len(tail_objs) - idx - 1]
+
+                # slower
+                # tail_objs = [obj for obj in objs
+                #              if obj != head]
 
             tail_permutator = _make_permutations(tail_objs,
                                                  length - 1,
@@ -391,64 +415,6 @@ def _make_permutations(objs: List[Any],
                     if shuffle and do_print:
                         print(' ' * indent + '  yield3:', [head] + tail)
                     yield [head] + tail
-
-
-# -- block shuffle version --
-# def _make_permutations(objs: List[Any],
-#                        length: int,
-#                        src_idx=0,
-#                        constraints: Optional[Dict[int, Any]] = None,
-#                        shuffle=False,
-#                        block_size=10000,
-#                        allow_many_to_one=True) -> Iterable[List[Any]]:
-#     """
-# 
-#     shuffle=Trueであって，完全にshuffleできるわけではない．
-#     for head in heads: のループにおいて，headごとにブロック化しているため．
-#     しかし，ここをshuffleしようとすると，generatorではなくlistを作る必要があり，速度が落ちる．
-#     """
-#     if length < 1:
-#         return
-#     if shuffle:
-#         objs = random.sample(objs, len(objs))  # shuffle
-# 
-#     if length == 1:
-#         if constraints is not None and src_idx in constraints:
-#             yield [constraints[src_idx]]
-#         else:
-#             for obj in objs:
-#                 yield [obj]
-#     else:
-#         if constraints is not None and src_idx in constraints:
-#             heads = [constraints[src_idx]]
-#         else:
-#             heads = objs
-# 
-#         block: List[Any] = []
-#         for head in heads:
-#             if allow_many_to_one:
-#                 tail_objs = objs
-#             else:
-#                 tail_objs = objs.copy()
-#                 while head in tail_objs:
-#                     tail_objs.remove(head)
-# 
-#             for tail in _make_permutations(tail_objs,
-#                                            length - 1,
-#                                            src_idx=src_idx + 1,
-#                                            constraints=constraints,
-#                                            shuffle=shuffle,
-#                                            allow_many_to_one=allow_many_to_one):
-#                 if len(block) >= block_size:
-#                     yield from block
-#                     block = []
-# 
-#                 if shuffle:
-#                     block.append([head] + tail)
-#                 else:
-#                     yield [head] + tail
-# 
-#         yield from block
 
 
 @profile
@@ -770,6 +736,7 @@ def argument_is_identical_to(this_argument: Argument,
     return False
 
 
+@profile
 def generate_quantifier_axiom_arguments(
     argument_type: str,
     formula: Formula,
@@ -985,6 +952,7 @@ def generate_quantifier_formulas(src_formula: Formula,
             yield quantifier_formula, quantifier_mapping
 
 
+@profile
 def generate_quantifier_mappings(formulas: List[Formula],
                                  quantify_all_at_once=False,
                                  get_name=False)\

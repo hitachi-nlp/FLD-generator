@@ -60,9 +60,11 @@ class ProofTreeGenerationPipeline:
                            allow_smaller_proofs=False,
                            depth_1_reference_weight: Optional[float] = None,
                            force_fix_illegal_intermediate_constants=False) -> ProofTree:
-        _reuse_key = (depth, allow_inconsistency, allow_smaller_proofs, depth_1_reference_weight, force_fix_illegal_intermediate_constants)
 
-        reusable_proof_trees = self._reusable_proof_trees[_reuse_key]
+        def _get_cache_key(_depth: int) -> Tuple:
+            return (_depth, allow_inconsistency, allow_smaller_proofs, depth_1_reference_weight, force_fix_illegal_intermediate_constants)
+
+        reusable_proof_trees = self._reusable_proof_trees[_get_cache_key(depth)]
         if len(reusable_proof_trees) > 0:
             idx = random.randint(0, len(reusable_proof_trees) - 1)
             reusable_proof_tree = reusable_proof_trees[idx]
@@ -83,11 +85,11 @@ class ProofTreeGenerationPipeline:
 
         trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
         to_be_cached_trees, to_be_return_tree = trial_proof_trees[:-1], trial_proof_trees[-1]
-        to_be_cached_trees = [tree for tree in to_be_cached_trees if tree.depth == depth]
 
-        reusable_proof_trees.extend(to_be_cached_trees)
-        if len(reusable_proof_trees) > 100000:
-            self._reusable_proof_trees[_reuse_key]  = []
+        for to_be_cached_tree in to_be_cached_trees:
+            self._reusable_proof_trees[_get_cache_key(to_be_cached_tree.depth)].append(to_be_cached_tree)
+            if len(self._reusable_proof_trees[_get_cache_key(to_be_cached_tree.depth)]) > 100000:  # max cache size
+                self._reusable_proof_trees[_get_cache_key(to_be_cached_tree.depth)] = []
 
         return to_be_return_tree
 

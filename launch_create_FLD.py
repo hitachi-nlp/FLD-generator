@@ -239,7 +239,8 @@ def main():
 
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -385,8 +386,8 @@ def main():
         '20230626.many_bugs_fixed.D3.hard',
         '20230626.many_bugs_fixed.D8.hard',
 
-        '20230626.many_bugs_fixed.D3.hard.dist-trees',
-        '20230626.many_bugs_fixed.D8.hard.dist-trees',
+        # '20230626.many_bugs_fixed.D3.hard.dist-trees',
+        # '20230626.many_bugs_fixed.D8.hard.dist-trees',
     ]
     # dataset_names = dataset_names[::-1]
 

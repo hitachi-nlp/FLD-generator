@@ -2,6 +2,7 @@ from typing import Optional, Iterable, List, Union
 from enum import Enum
 from abc import ABC, abstractmethod
 from itertools import chain
+from functools import lru_cache
 
 
 class POS(Enum):
@@ -74,6 +75,7 @@ class WordBank(ABC):
     def _intermediate_constant_words(self) -> List[str]:
         pass
 
+    @profile
     def get_pos(self, word: str) -> List[POS]:
         if word in self._intermediate_constant_words:
             return [POS.NOUN]
@@ -114,6 +116,7 @@ class WordBank(ABC):
     def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
         pass
 
+    @lru_cache(1000000)
     def get_attrs(self, word: str) -> List[ATTR]:
         attrs = []
         if POS.VERB in self.get_pos(word) and self._can_be_intransitive_verb(word):

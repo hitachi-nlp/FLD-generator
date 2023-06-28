@@ -155,23 +155,24 @@ def test_generate_dataset_AACorpus():
     generate_dataset(dataset)
 
 
+@profile
 def test_generate_dataset():
     def _to_range(begin: int, end: int) -> List[int]:
         return list(range(begin, end + 1))
 
-    word_bank = None
-    # word_bank = build_wordnet_wordbank('eng')
+    # word_bank = None
+    word_bank = build_wordnet_wordbank('eng')
 
-    translator = None
-    # translator = build_translator(
-    #     glob.glob('./configs/translations/thing.v1/**.json'),
-    #     word_bank,
-    #     use_fixed_translation=True,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     volume_to_weight='sqrt',
-    #     do_translate_to_nl=True,
-    # )
+    # translator = None
+    translator = build_translator(
+        glob.glob('./configs/translations/thing.v1/**.json'),
+        word_bank,
+        use_fixed_translation=True,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        volume_to_weight='sqrt',
+        do_translate_to_nl=True,
+    )
    
     generator = build_generator(
         [
@@ -243,18 +244,18 @@ def test_generate_dataset():
         negated_hypothesis_ratio=1.0,
     )
 
-    # swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
     # translation_distractor = None
-    # translation_distractor = build_translation_distractor(
-    #     'word_swap',
-    #     word_bank=word_bank,
-    #     swap_ng_words=swap_ng_words,
-    # )
+    swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
+    translation_distractor = build_translation_distractor(
+        'word_swap',
+        word_bank=word_bank,
+        swap_ng_words=swap_ng_words,
+    )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
-        # translation_distractor=translation_distractor,
+        translation_distractor=translation_distractor,
         fallback_from_formula_to_translation_distractor=True,
         translator=translator,
         add_subj_obj_swapped_distractor=True,
@@ -262,7 +263,7 @@ def test_generate_dataset():
 
     # depths = _to_range(1, 5)
     # depths = _to_range(1, 5)
-    depths = _to_range(7, 8)
+    depths = _to_range(1, 8)
 
     branch_extension_steps = _to_range(1, 5)
 
