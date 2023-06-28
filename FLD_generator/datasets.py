@@ -292,8 +292,6 @@ class NLProofSDataset:
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
-            # if proof_tree.depth != depth:
-            #     import pudb; pudb.set_trace()
 
             # -- sample stance --
             if len(proof_tree.leaf_nodes) == 0:
@@ -830,7 +828,10 @@ class NLProofSDataset:
                 assump_ids = [node2id[assump_child] for assump_child in node.assump_children]
                 child_ids = [node2id[child] for child in node.children]
                 premise_str = ' & '.join([f'[{_id}]' for _id in assump_ids] + child_ids)
-                conclusion_str = f'{node_id}: {self._get_sent_from_node(node)}'
+                if formula_rep:
+                    conclusion_str = f'{node_id}: {node.formula.rep}'
+                else:
+                    conclusion_str = f'{node_id}: {self._get_sent_from_node(node)}'
 
             elif self._is_distractor(node):
                 continue
