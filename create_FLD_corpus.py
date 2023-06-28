@@ -49,7 +49,7 @@ def load_dataset(argument_config: List[str],
                  sample_distractor_formulas_from_tree: bool,
                  use_simplified_tree_formulas_as_distractor_prototype: bool,
                  sample_hard_negative_distractors: bool,
-                 dont_try_negative_hypothesis: bool,
+                 negated_hypothesis_ratio: float,
                  add_subj_obj_swapped_distractor: bool,
                  translation_distractor: str,
                  fallback_from_formula_to_translation_distractor: bool,
@@ -84,7 +84,7 @@ def load_dataset(argument_config: List[str],
                                        sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
                                        use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
                                        sample_hard_negatives=sample_hard_negative_distractors,
-                                       negated_hypothesis_ratio=0.0 if dont_try_negative_hypothesis else 0.5)
+                                       negated_hypothesis_ratio=negated_hypothesis_ratio)
         logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
@@ -121,6 +121,9 @@ def load_dataset(argument_config: List[str],
     if depth_distribution == 'flat':
         depth_weights = None
         depth_1_reference_weight = None
+    elif depth_distribution == 'flat.no_reference':
+        depth_weights = None
+        depth_1_reference_weight = 0.0
     elif depth_distribution == 'ruletaker.ours.20221202':
         if set(depths) != set([1, 2, 3]):
             raise ValueError(f'depths {depths} is not consistent with ruletaker.ours.20221202.')
@@ -178,7 +181,7 @@ def generate_instances(size: int, *args):
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='linear')
 @click.option('--depths', type=str, default=json.dumps([5]))
-@click.option('--depth-distribution', type=click.Choice(['flat', 'ruletaker.ours.20221202']))
+@click.option('--depth-distribution', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
 @click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
 @click.option('--complication', type=float, default=0.0)
@@ -193,7 +196,7 @@ def generate_instances(size: int, *args):
 @click.option('--num-distractors', type=str, default=json.dumps([5]))
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--use-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
-@click.option('--dont-try-negative-hypothesis', type=bool, is_flag=True)
+@click.option('--negated-hypothesis-ratio', type=float, default=0.5)
 @click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
 @click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--translation-distractor', default='word_swap')
@@ -208,8 +211,7 @@ def generate_instances(size: int, *args):
 @click.option('--min-size-per-worker', type=int,
               # default=1000,
               default=20,
-              # single thread: data load = 3min , generation = 300 instances / 20min
-              # multithread  : data load = 10min, generation = 300 instances / 6min
+              # multithread  : data load = 4min, generation = 140 instances / 14min = 10 instances / min
               )
 @click.option('--batch-size-per-worker', type=int, default=10000)
 @click.option('--seed', type=int, default=0)
@@ -236,7 +238,7 @@ def main(output_path,
          sample_distractor_formulas_from_tree,
          use_simplified_tree_formulas_as_distractor_prototype,
          sample_hard_negative_distractors,
-         dont_try_negative_hypothesis,
+         negated_hypothesis_ratio,
          add_subj_obj_swapped_distractor,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
@@ -304,7 +306,7 @@ def main(output_path,
                         sample_distractor_formulas_from_tree,
                         use_simplified_tree_formulas_as_distractor_prototype,
                         sample_hard_negative_distractors,
-                        dont_try_negative_hypothesis,
+                        negated_hypothesis_ratio,
                         add_subj_obj_swapped_distractor,
                         translation_distractor,
                         fallback_from_formula_to_translation_distractor,

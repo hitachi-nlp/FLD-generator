@@ -270,8 +270,11 @@ class NLProofSDataset:
             logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))
 
             # -- generate settings --
+            proof_stance = self._sample_proof_stance()
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]
+            if proof_stance == ProofStance.UNKNOWN:
+                depth += 1
 
             _num_distractors = random.sample(self.num_distractors, 1)[0]
             _num_translation_distractors = random.sample(self.num_translation_distractors, 1)[0]
@@ -289,9 +292,10 @@ class NLProofSDataset:
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
+            # if proof_tree.depth != depth:
+            #     import pudb; pudb.set_trace()
 
             # -- sample stance --
-            proof_stance = self._sample_proof_stance()
             if len(proof_tree.leaf_nodes) == 0:
                 # For some very rare case, this occurs.
                 # Since we do not expect this behaviour, we raise error for future debug
@@ -303,7 +307,8 @@ class NLProofSDataset:
                 hypothesis = self._get_sent_from_node(proof_tree.root_node)
                 could_make_unknown = False
                 for _ in range(10):
-                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                    # dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, 1)
                     if is_unknown(
                         [node.formula for node in proof_tree.leaf_nodes
                          if node not in dead_leaf_nodes],
@@ -352,11 +357,16 @@ class NLProofSDataset:
             )
 
             # -- make negative proofs --
-            negative_tree = others.get('negative_tree', None)
+            negative_tree = None
+            if 'mixture_list.negative_tree' in others:
+                negative_tree, negative_tree_dead_leaf_nodes = sorted(
+                    zip(others['mixture_list.negative_tree'], others['mixture_list.negative_tree_missing_nodes']),
+                    key = lambda tree_missing_nodes: tree_missing_nodes[0].depth,
+                )[-1]
+            elif 'negative_tree' in others:
+                negative_tree, negative_tree_dead_leaf_nodes = others['negative_tree'], others['negative_tree_missing_nodes']
+
             if negative_tree is not None:
-                negative_tree_dead_leaf_nodes = others['negative_tree_missing_nodes']
-                # negative_tree_alive_leaf_nodes = [node for node in negative_tree.leaf_nodes
-                #                                   if node not in negative_tree_dead_leaf_nodes]
                 negative_tree_missing_leaf_nodes = negative_tree_dead_leaf_nodes
                 negative_tree_collapsed_leaf_nodes = []
 
@@ -367,7 +377,7 @@ class NLProofSDataset:
 
                 negative_hypothesis = self._get_sent_from_node(negative_tree.root_node)
 
-                negative_context, formula_negative_context, negateive_proof_text, formula_negateive_proof_text, _, _ = self._make_text(
+                _, _, negateive_proof_text, _, _, _ = self._make_text(
                     negative_tree,
                     ProofStance.UNKNOWN,
 
@@ -382,12 +392,6 @@ class NLProofSDataset:
                     conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
                     conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
                 )
-
-                # it is possible if the distractor_formula is randomly generates. see the implementation of `def _make_text()
-                # for sent_match in re.finditer(r'sent[0-9]*((?!sent[0-9]).)*', negative_context):
-                #     sent = sent_match.group().rstrip(' ')
-                #     if not sent.find(_DUMMY_SENTENCE) >= 0 and sent not in context:
-                #         raise Exception(f'A sentence in the negative context is not in the original context. This is strange. The sentence is as follows: "{sent}"')
 
             else:
                 negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None

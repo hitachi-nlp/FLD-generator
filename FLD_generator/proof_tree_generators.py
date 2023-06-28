@@ -167,6 +167,7 @@ class ProofTreeGenerator:
             universal_arguments_factor=universal_arguments_factor,
             universal_theorem_argument_factor=universal_theorem_argument_factor,
             reference_argument_factor=reference_argument_factor,
+            allow_non_canonical_contradiction_use=False,
             elim_dneg=elim_dneg,
         )
 
@@ -174,6 +175,7 @@ class ProofTreeGenerator:
     def complicated_arguments_weight(self):
         return self._complicated_arguments_weight
 
+    @profile
     def _load_arguments(self,
                         arguments: List[Argument],
                         max_PASs_per_formula: Optional[int],
@@ -191,6 +193,7 @@ class ProofTreeGenerator:
                         universal_arguments_factor: float,
                         universal_theorem_argument_factor: float,
                         reference_argument_factor: float,
+                        allow_non_canonical_contradiction_use: bool,
                         elim_dneg: bool) -> Tuple[List[Argument], List[Argument]]:
         if allow_generating_heterogeneous_arity_formulas:
             raise NotImplementedError()
@@ -311,6 +314,14 @@ class ProofTreeGenerator:
                 raise NotImplementedError()
 
         _arguments = arguments + complicated_arguments + quantified_arguments + quantifier_axiom_arguments
+        if not allow_non_canonical_contradiction_use:
+            # we reject formulas such as "(x): ({A}x & {B}x) -> #F#" due to the folllowing reasons.
+            # (i) we have not yet implemented translations for such formulas
+            # (ii) we have not yet implemented formula checking algorithms for such formulas, due to the technological limitation of z3
+            # Rejecting such formulas does not matter much, because proof by contradiction is not that important in NLP.
+            _arguments = [argument for argument in _arguments
+                          if not argument_has_non_canonical_contradiction_use(argument)]
+
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
         def is_or_formula(formula: Formula) -> bool:
@@ -418,8 +429,8 @@ class ProofTreeGenerator:
 def _generate_tree_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
-                                      max_retry=30,
-                                      timeout=99999,  # 5 + 5
+                                      max_retry=50,
+                                      timeout=20,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
         trial_result_proof_trees = run_with_timeout_retry(
@@ -491,8 +502,14 @@ def _generate_tree(arguments: List[Argument],
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,
             )
-            proof_tree = sorted(trial_results,
-                                key = lambda A_num_step: A_num_step[1])[-1][0]
+
+            # picking the tree with the largest extension steps sometimes pick a smaller tree.
+            # thus, we choose the largest tree rather than the largest extension steps
+            # proof_tree = sorted(trial_results,
+            #                     key = lambda A_num_step: A_num_step[1])[-1][0]
+
+            proof_tree = sorted(trial_results, key=lambda tree_step: (tree_step[0].depth, tree_step[1]))[-1][0]
+
         except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
                                            msg=f'because of the following error:\n{str(e)}'))
@@ -519,8 +536,8 @@ def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
 def _generate_stem_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
-                                      max_retry=30,
-                                      timeout=99999,
+                                      max_retry=50,
+                                      timeout=10,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
     try:
@@ -551,8 +568,8 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         arguments: List[Argument],
                                         num_steps: int,
                                         *args,
-                                        timeout=99999,
-                                        max_retry=30,
+                                        timeout=10,
+                                        max_retry=50,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
     try:
@@ -586,7 +603,7 @@ def _generate_stem(arguments: List[Argument],
                    depth_1_reference_weight: Optional[float] = None,
                    elim_dneg=False,
                    disallow_contradiction_as_hypothesis=False,
-                   allow_non_canonical_contradiction_use=False,
+                   # allow_non_canonical_contradiction_use=False,
                    allow_inconsistency=False,
                    allow_smaller_proofs=False,
                    force_fix_illegal_intermediate_constants=False,
@@ -802,13 +819,13 @@ def _generate_stem(arguments: List[Argument],
 
                             next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                            if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
-                                # we reject formulas such as "(x): ({A}x & {B}x) -> #F#" due to the folllowing reasons.
-                                # (i) we have not yet implemented translations for such formulas
-                                # (ii) we have not yet implemented formula checking algorithms for such formulas, due to the technological limitation of z3
-                                # Rejecting such formulas does not matter much, because proof by contradiction is not that important in NLP.
-                                rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
-                                continue
+                            # if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
+                            #     # we reject formulas such as "(x): ({A}x & {B}x) -> #F#" due to the folllowing reasons.
+                            #     # (i) we have not yet implemented translations for such formulas
+                            #     # (ii) we have not yet implemented formula checking algorithms for such formulas, due to the technological limitation of z3
+                            #     # Rejecting such formulas does not matter much, because proof by contradiction is not that important in NLP.
+                            #     rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
+                            #     continue
 
                             if is_argument_trivial(next_arg_pulled):
                                 rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
@@ -959,7 +976,7 @@ def _extend_branches(proof_tree: ProofTree,
                      allow_illegal_intermediate_constants=False,
                      force_fix_illegal_intermediate_constants=False,
                      allow_inconsistency=False,
-                     allow_non_canonical_contradiction_use=False,
+                     # allow_non_canonical_contradiction_use=False,
                      allow_smaller_proofs=False,
                      best_effort=False,
                      return_alignment=False) -> Union[Tuple[int, ProofTree],
@@ -1120,9 +1137,9 @@ def _extend_branches(proof_tree: ProofTree,
 
                         next_arg_pulled = interpret_argument(next_arg, mapping, elim_dneg=elim_dneg)
 
-                        if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
-                            rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
-                            continue
+                        # if not allow_non_canonical_contradiction_use and argument_has_non_canonical_contradiction_use(next_arg_pulled):
+                        #     rejection_stats['argument_has_non_canonical_contradiction_use(next_arg_pulled)'] += 1
+                        #     continue
 
                         if is_argument_trivial(next_arg_pulled):
                             rejection_stats['is_argument_trivial(next_arg_pulled)'] += 1
@@ -1407,7 +1424,7 @@ def _fix_illegal_intermediate_constants(
                         return_alignment=True,
 
                         best_effort=True,
-                        timeout=99999,
+                        timeout=10,
                         max_retry=5,
                     )
                     proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]

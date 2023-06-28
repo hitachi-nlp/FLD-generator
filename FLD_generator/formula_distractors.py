@@ -227,11 +227,11 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 3
+        return 5
 
     @property
     def default_timeout(self) -> int:
-        return 9999
+        return 10
 
     @profile
     def _generate(self,
@@ -440,7 +440,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
 
     @property
     def default_timeout(self) -> int:
-        return 9999
+        return 10
 
     @profile
     def _generate(self,
@@ -509,11 +509,11 @@ class NegativeTreeDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 3
+        return 5
 
     @property
     def default_timeout(self) -> int:
-        return 9999
+        return 10
 
     @profile
     def generate(self, *args, **kwargs) -> Tuple[List[Formula], Dict[str, Any]]:
@@ -585,6 +585,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                         )
                         negative_tree_root_formula = various_fomulas[0]
                     except FormulaDistractorGenerationFailure as e:
+                        # HONOKA: seldom pass here
                         raise FormulaDistractorGenerationFailure(f'could not generate the root node of the negative tree by VariousFormUnkownInterprandsDistractor(). The original message is the following:\n{str(e)}')
                 else:
                     raise ValueError(f'Unsupported initial_sampling method "{initial_sampling}"')
@@ -650,7 +651,7 @@ class MixtureDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 1
+        return 3
 
     @property
     def default_timeout(self) -> int:
@@ -675,25 +676,14 @@ class MixtureDistractor(FormulaDistractor):
         if size == 0:
             return [], {}
 
-        sizes: List[int] = []
-        remaining_size = size
-        num_distractors = len(self._distractors)
-        for i_distractor in range(0, num_distractors):
-            if i_distractor == num_distractors - 1:
-                _size = remaining_size
-            else:
-                if remaining_size < 0:
-                    _size = 0
-                else:
-                    _size = random.randint(0, remaining_size)
-                    if _size > remaining_size:
-                        _size = remaining_size
-                    remaining_size -= _size
-            sizes.append(_size)
-
         distractor_formulas = []
-        others = {}
-        for distractor, _size in zip(random.sample(self._distractors, len(self._distractors)), sizes):
+        others = defaultdict(list)
+        remaining_size = size
+        for distractor in random.sample(self._distractors * 3, len(self._distractors) * 3):
+            _size = random.randint(0, remaining_size)
+            if _size == 0:
+                continue
+
             try:
                 _distractor_formulas, _others = distractor.generate(proof_tree,
                                                                     _size,
@@ -703,14 +693,15 @@ class MixtureDistractor(FormulaDistractor):
                                                                     best_effort=best_effort)
 
                 distractor_formulas += _distractor_formulas
+                remaining_size -= len(_distractor_formulas)
 
                 for _other_key, _other_val in _others.items():
-                    if _other_key in others:
-                        raise ValueError(f'Duplicated other key {_other_key}')
-                    others[_other_key] = _other_val
+                    # if _other_key in others:
+                    #     raise ValueError(f'Duplicated other key {_other_key}')
+                    others[f'mixture_list.{_other_key}'].append(_other_val)
 
             except FormulaDistractorGenerationFailure as e:
-                self._log(logging.WARNING, 'generating distractors failed with the following message:\n' + f'{str(e)}')
+                self._log(logging.INFO, f'sub distractor "{str(distractor)}" failed in generating distractors with the following message:' + '\n' + f'{str(e)}')
 
         return distractor_formulas, others
 
@@ -723,7 +714,7 @@ class FallBackDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 1
+        return 3
 
     @property
     def default_timeout(self) -> int:
@@ -877,6 +868,32 @@ def build(type_: str,
                     generator,
                     prototype_formulas=prototype_formulas,
                     negated_hypothesis_ratio=negated_hypothesis_ratio,
+                    **kwargs,
+                ),
+                SimplifiedFormulaDistractor(**kwargs,),
+                VariousFormUnkownInterprandsDistractor(
+                    prototype_formulas=prototype_formulas,
+                    sample_hard_negatives=sample_hard_negatives,
+                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
+                    **kwargs,
+                ),
+            ],
+            **kwargs,
+        )
+
+    elif type_ == 'mixture.negative_tree.negative_tree.simplified_formula.various_form':
+        return MixtureDistractor(
+            [
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negated_hypothesis_ratio=1.0,
+                    **kwargs,
+                ),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negated_hypothesis_ratio=0.0,
                     **kwargs,
                 ),
                 SimplifiedFormulaDistractor(**kwargs,),

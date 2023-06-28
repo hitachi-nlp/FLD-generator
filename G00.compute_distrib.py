@@ -10,13 +10,8 @@ from logger_setup import setup as setup_logger
 logger = logging.getLogger(__name__)
 
 
-def main():
-    setup_logger(level=logging.INFO)
-
-    input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed/')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230626.for_ICML/')
+def compute_distrib(input_dir: Path, output_dir: Path) -> None:
     engine = SubprocessEngine()
-
     for input_path in input_dir.glob('**/*.jsonl'):
         # if str(input_path).find('job-') >= 0 or not str(input_path).find('train') >= 0:
         if str(input_path).find('job-') >= 0:
@@ -29,6 +24,24 @@ def main():
             f'python ./compute_distrib.py {str(input_path)} {str(output_path)}',
             wait_until_finish=True,
         )
+
+
+def main():
+    setup_logger(level=logging.INFO)
+
+    # input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed/')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed/')
+
+    # input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed.suppress_tree_generation_failure/')
+
+    # input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
+
+    input_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
+    output_dir = Path('./outputs/G00.compute_distrib.py/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
+
+    compute_distrib(input_dir, output_dir)
 
 
 if __name__ == '__main__':

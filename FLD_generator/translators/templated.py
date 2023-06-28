@@ -79,6 +79,9 @@ class TemplatedTranslator(Translator):
 
         self._two_layered_config = self._build_two_layered_config(config_json)
 
+        self._load_words_by_pos_attrs_cache: Dict[Any, set] = {}
+        self._load_words_by_pos_attrs_cache_interm: Dict[Any, set] = defaultdict(set)
+
         self._translations: Dict[str, List[str]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
         # sort by specificity
         self._translations = OrderedDict((
@@ -157,50 +160,49 @@ class TemplatedTranslator(Translator):
                 raise ValueError()
         return flat_config
 
-    def _load_words(self,
-                    word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
+    @profile
+    def _load_words(self, word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
 
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
-        nouns = sorted({
+        nouns = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if word not in intermediate_constant_nouns
-        })
+        )
 
-        logger.info('loading event nouns ...')
-        event_nouns = sorted({
+        event_nouns = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)
-        })
+        )
 
         logger.info('loading entity nouns ...')
-        entity_nouns = sorted({
+        entity_nouns = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
-        })
+        )
 
         logger.info('loading adjs ...')
-        adjs = sorted({
+        adjs = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)
-        })
+        )
 
         logger.info('loading intransitive_verbs ...')
-        intransitive_verbs = sorted({
+        intransitive_verbs = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
-        })
+        )
 
         logger.info('loading transitive_verbs ...')
-        transitive_verbs = sorted({
+        transitive_verbs = sorted(
             word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
-        })
+        )
 
         logger.info('making transitive verb and object combinations ...')
         transitive_verb_PASs = []
@@ -224,18 +226,30 @@ class TemplatedTranslator(Translator):
 
         return zeroary_predicates, unary_predicates, constants
 
+    @profile
     def _load_words_by_pos_attrs(self,
                                  word_bank: WordBank,
                                  pos: Optional[POS] = None,
                                  attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
+        cache_key = (id(word_bank), pos, tuple(attrs) if attrs is not None else None)
+        if cache_key in self._load_words_by_pos_attrs_cache:
+            yield from self._load_words_by_pos_attrs_cache[cache_key]
+            return
+
+        intermediate_cache = self._load_words_by_pos_attrs_cache_interm[cache_key]
         attrs = attrs or []
         for word in word_bank.get_words():
-            if pos is not None and pos not in word_bank.get_pos(word):
+            if word in intermediate_cache:
+                continue
+            if pos is not None and pos not in word_bank.get_pos(word):  # SLOW
                 continue
             if any((attr not in word_bank.get_attrs(word)
                     for attr in attrs)):
                 continue
+            intermediate_cache.add(word)
             yield word
+
+        self._load_words_by_pos_attrs_cache[cache_key] = intermediate_cache
 
     @property
     def acceptable_formulas(self) -> List[str]:

@@ -64,6 +64,7 @@ class WordNetWordBank(WordBank):
     def _get_real_words(self) -> Iterable[str]:
         yield from sorted(self._cached_word_set)
 
+    @profile
     def _get_pos(self, word: str) -> List[POS]:
         word = self.get_lemma(word)
         wb_POSs = {
