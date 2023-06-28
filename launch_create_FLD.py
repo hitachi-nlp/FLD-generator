@@ -240,7 +240,9 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
+
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230628.make_harder')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -383,11 +385,12 @@ def main():
         # '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
         # '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers',
 
+        # ---------------------------------- 20230628.make_harder ------------------------------------
         '20230626.many_bugs_fixed.D3.hard',
-        # '20230626.many_bugs_fixed.D8.hard',
+        '20230626.many_bugs_fixed.D8.hard',
 
-        # '20230626.many_bugs_fixed.D3.hard.dist-trees',
-        # '20230626.many_bugs_fixed.D8.hard.dist-trees',
+        '20230626.many_bugs_fixed.D3.hard.dist-trees',
+        '20230626.many_bugs_fixed.D8.hard.dist-trees',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -395,12 +398,12 @@ def main():
     # num_jobs_per_dataset = 60
 
     num_jobs_for_datasets = 4
-    num_jobs_per_dataset = 20
+    num_jobs_per_dataset = 45
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
-    timeout_per_job = 3600  # for the case some jobs hangs
+    timeout_per_job = 4800  # for the case some jobs hangs
     delete_logs_when_done = True
     dry_run = False
 
