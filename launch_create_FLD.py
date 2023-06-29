@@ -386,19 +386,24 @@ def main():
         # '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers',
 
         # ---------------------------------- 20230628.make_harder ------------------------------------
-        '20230626.many_bugs_fixed.D3.hard',
-        '20230626.many_bugs_fixed.D8.hard',
+        # '20230626.many_bugs_fixed.D3.hard',
+        # '20230626.many_bugs_fixed.D3.hard.dist-trees',
+        # '20230626.many_bugs_fixed.D3.hard.unk-0.1',
+        # '20230626.many_bugs_fixed.D3.hard.brnch-high',
+        '20230626.many_bugs_fixed.D3.hard.dist-neg-1.0',
+        '20230626.many_bugs_fixed.D3.hard.dist-neg-0.5',
+        '20230626.many_bugs_fixed.D3.hard.dist-neg-0.0',
 
-        '20230626.many_bugs_fixed.D3.hard.dist-trees',
-        '20230626.many_bugs_fixed.D8.hard.dist-trees',
+        # '20230626.many_bugs_fixed.D8.hard',
+        # '20230626.many_bugs_fixed.D8.hard.dist-trees',
     ]
     # dataset_names = dataset_names[::-1]
 
     # num_jobs_for_datasets = 3
     # num_jobs_per_dataset = 60
 
-    num_jobs_for_datasets = 4
-    num_jobs_per_dataset = 45
+    num_jobs_for_datasets = 3
+    num_jobs_per_dataset = 60
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')

@@ -7,6 +7,7 @@ import zlib
 from pprint import pformat
 from ctypes import ArgumentError
 
+from z3.z3types import Z3Exception
 from FLD_generator.argument import Argument
 from nltk.corpus import cmudict
 import timeout_decorator
@@ -144,6 +145,9 @@ def run_with_timeout_retry(
         timeout_func = timeout_decorator.timeout(timeout_per_trial,
                                                  timeout_exception=TimeoutError,
                                                  use_signals=True)(func)
+        is_fatal = False
+        do_log_args = False
+        exception = None
         try:
             result = timeout_func(*func_args, **func_kwargs)
             logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
@@ -155,19 +159,34 @@ def run_with_timeout_retry(
             retry_msg = 'is_retry_func(result)'
 
         except ArgumentError as e:
-            # import pudb; pudb.set_trace()
-            logger.fatal('ArgumentError occurred. We will continue the trials, however, do not know the root cause of this.')
-            logger.info(pformat(func_args))
-            logger.info(pformat(func_kwargs))
-            logger.info(str(timeout_func))
-            logger.info(str(e))
+            exception = e
+            do_log_args = True
+
+            logger.fatal('[utils.py] ArgumentError occurred. We will continue the trials, however, do not know the root cause of this.')
             retry_msg = ''
 
+        except Z3Exception as e:
+            exception = e
+            do_log_args = True
+            logger.fatal('[checkers.py] Z3Exception occurred. We will continue the trials, however, do not know the root cause of this.')
+
         except TimeoutError as e:
+            exception = e
             retry_msg = f'TimeoutError(timeout={timeout_per_trial})'
 
         except should_retry_exception as e:
+            exception = e
             retry_msg = str(e)
+
+        if do_log_args:
+            logger.info(pformat(func_args))
+            logger.info(pformat(func_kwargs))
+            logger.info(str(timeout_func))
+            logger.info(str(exception))
+            logger.info(str(type(exception)))
+
+        if is_fatal:
+            raise exception
 
         logger.info(_make_pretty_msg(i_trial, 'failure',
                                      msg=f'this is caused by the folllowing:\n{str(retry_msg)}'))

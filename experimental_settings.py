@@ -5395,6 +5395,397 @@ _DATASET_SETTINGS = {
 
 
 
+    '20230626.many_bugs_fixed.D3.hard.dist-trees': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        # 'negated_hypothesis_ratio': 1.0,
+        'distractor': 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+    
+
+
+
+    '20230626.many_bugs_fixed.D3.hard.unk-0.1': {
+        'unknown_ratio': 0.1,
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+
+
+    '20230626.many_bugs_fixed.D3.hard.brnch-high': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(2, 5),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+
+    '20230626.many_bugs_fixed.D3.hard.dist-neg-1.0': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'distractor': 'negative_tree',
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+
+    '20230626.many_bugs_fixed.D3.hard.dist-neg-0.5': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 0.5,
+        'distractor': 'negative_tree',
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+    '20230626.many_bugs_fixed.D3.hard.dist-neg-0.0': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 0.0,
+        'distractor': 'negative_tree',
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 3),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+
+
     '20230626.many_bugs_fixed.D8.hard': {
 
         'argument_configs': [
@@ -5459,69 +5850,6 @@ _DATASET_SETTINGS = {
 
 
 
-
-    '20230626.many_bugs_fixed.D3.hard.dist-trees': {
-
-        'argument_configs': [
-            # './configs/arguments/AACorpus.pred_arg.json',
-
-            './configs/arguments/axiom.pred_only.json',
-            './configs/arguments/axiom.pred_arg.json',
-
-            './configs/arguments/axiom.and_or.pred_only.json',
-            './configs/arguments/axiom.and_or.pred_arg.json',
-
-            './configs/arguments/axiom.implication_intro.pred_only.json',
-            './configs/arguments/axiom.implication_intro.pred_arg.json',
-
-            './configs/arguments/axiom.negation.pred_only.json',
-            './configs/arguments/axiom.negation.pred_arg.json',
-
-            # './configs/arguments/theorem.pred_only.json',
-            # './configs/arguments/theorem.pred_arg.json',
-
-            # './configs/arguments/theorem.and_or.pred_only.json',
-            # './configs/arguments/theorem.and_or.pred_arg.json',
-        ],
-        'quantification': 0.2,
-        'quantify_all_at_once': True,
-
-
-        'quantifier_axioms': [
-            'universal_quantifier_elim',
-            'universal_quantifier_intro',
-            'existential_quantifier_intro',
-            'existential_quantifier_elim',
-        ],
-
-
-        'complication': 0.5,
-
-
-        'num_distractors': _to_range(15, 20),
-        # 'negated_hypothesis_ratio': 1.0,
-        'distractor': 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
-        'reused_object_nouns_max_factor': 1.0,
-        'add_subj_obj_swapped_distractor': True,
-
-        'num_translation_distractors': _to_range(0, 5),
-        'use_collapsed_translation_nodes_for_unknown_tree': True,
-
-
-        'use_fixed_translation': False,
-        'limit_vocab_size_per_type': None,
-
-
-        'depth_distribution': 'flat.no_reference',
-        'depths': _to_range(1, 3),
-        'branch_extension_steps': _to_range(0, 3),
-
-
-        'split_sizes': {
-            'test': 500,
-            'train': 15000,
-        }
-    },
 
 
 
@@ -5767,9 +6095,16 @@ _DATASET_NAME_TO_DEFAULT = {
     # ---------------------------------- 20230626.many_bugs_fixed ------------------------------------
     '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP': '20230626.many_bugs_fixed',
     '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers': '20230626.many_bugs_fixed',
+
     '20230626.many_bugs_fixed.D3.hard': '20230626.many_bugs_fixed',
-    '20230626.many_bugs_fixed.D8.hard': '20230626.many_bugs_fixed',
     '20230626.many_bugs_fixed.D3.hard.dist-trees': '20230626.many_bugs_fixed',
+    '20230626.many_bugs_fixed.D3.hard.unk-0.1': '20230626.many_bugs_fixed',
+    '20230626.many_bugs_fixed.D3.hard.brnch-high': '20230626.many_bugs_fixed',
+    '20230626.many_bugs_fixed.D3.hard.dist-neg-1.0': '20230626.many_bugs_fixed',
+    '20230626.many_bugs_fixed.D3.hard.dist-neg-0.5': '20230626.many_bugs_fixed',
+    '20230626.many_bugs_fixed.D3.hard.dist-neg-0.0': '20230626.many_bugs_fixed',
+
+    '20230626.many_bugs_fixed.D8.hard': '20230626.many_bugs_fixed',
     '20230626.many_bugs_fixed.D8.hard.dist-trees': '20230626.many_bugs_fixed',
 
 
