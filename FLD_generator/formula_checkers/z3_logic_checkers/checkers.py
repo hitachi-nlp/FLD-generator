@@ -129,26 +129,21 @@ def parse(rep: str):
                 arg = None
 
             if arg is not None:
-                # import ctypes
-                # try:
-                #     return _UNARY_PREDICATES(pred)(_ARGS(arg))
-                # except ctypes.ArgumentError as e:
-                #     import pudb; pudb.set_trace()
-
                 exception = None
                 try:
                     return _UNARY_PREDICATES(pred)(_ARGS(arg))
-                except ArgumentError as e:
-                    # import pudb; pudb.set_trace()
-                    exception = e
-                    logger.fatal('[checkers.py] ArgumentError occurred. We will continue the trials, however, do not know the root cause of this.')
+                # except ArgumentError as e:
+                #     exception = e
+                #     logger.fatal('[checkers.py] ArgumentError occurred. We will continue the trials, however, we do not know the root cause of this.')
                 except Z3Exception as e:
                     exception = e
-                    logger.fatal('[checkers.py] Z3Exception occurred. We will continue the trials, however, do not know the root cause of this.')
-                logger.info('pred                    : ' + str(pred))
-                logger.info('arg                     : ' + str(arg))
-                logger.info('_UNARY_PREDICATES(pred) : ' + str(_UNARY_PREDICATES(pred)))
-                logger.info('_ARGS(arg)              : ' + str(_ARGS(arg)))
+                    logger.fatal('[checkers.py] Z3Exception occurred. We will continue the trials, however, we do not know the root cause of this.')
+                logger.info('pred                          : ' + str(pred))
+                logger.info('arg                           : ' + str(arg))
+                logger.info('_UNARY_PREDICATES(pred)       : ' + str(_UNARY_PREDICATES(pred)))
+                logger.info('type(_UNARY_PREDICATES(pred)) : ' + str(type(_UNARY_PREDICATES(pred))))
+                logger.info('_ARGS(arg)                    : ' + str(_ARGS(arg)))
+                logger.info('type(_ARGS(arg))              : ' + str(type(_ARGS(arg))))
                 raise exception
 
             else:

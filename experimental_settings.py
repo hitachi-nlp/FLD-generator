@@ -5843,7 +5843,7 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 500,
+            # 'test': 500,
             'train': 15000,
         }
     },
@@ -6169,6 +6169,7 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230626.many_bugs_fixed.D3.hard.dist-neg-1.0': '20230626.many_bugs_fixed',
     '20230626.many_bugs_fixed.D3.hard.dist-neg-0.5': '20230626.many_bugs_fixed',
     '20230626.many_bugs_fixed.D3.hard.dist-neg-0.0': '20230626.many_bugs_fixed',
+    '20230626.many_bugs_fixed.D3.hard.dist-trees-only': '20230626.many_bugs_fixed',
 
     '20230626.many_bugs_fixed.D8.hard': '20230626.many_bugs_fixed',
     '20230626.many_bugs_fixed.D8.hard.dist-trees': '20230626.many_bugs_fixed',

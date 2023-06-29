@@ -142,9 +142,13 @@ def run_with_timeout_retry(
 
     trial_results = []
     for i_trial in range(0, max_retry):
-        timeout_func = timeout_decorator.timeout(timeout_per_trial,
-                                                 timeout_exception=TimeoutError,
-                                                 use_signals=True)(func)
+        timeout_func = timeout_decorator.timeout(
+            timeout_per_trial,
+            timeout_exception=TimeoutError,
+            use_signals=True,
+            # use_signals=False,  # XXX this does not work
+        )(func)
+
         is_fatal = False
         do_log_args = False
         exception = None
@@ -159,16 +163,15 @@ def run_with_timeout_retry(
             retry_msg = 'is_retry_func(result)'
 
         except ArgumentError as e:
-            exception = e
-            do_log_args = True
-
-            logger.fatal('[utils.py] ArgumentError occurred. We will continue the trials, however, do not know the root cause of this.')
-            retry_msg = ''
-
+            if str(e).find('TimeoutError') >= 0:
+                exception = e
+                retry_msg = f'ArgumentError(TimeoutError(timeout={timeout_per_trial})) (we guess this error occurs when timeout is come during the extenral z3 library is being executed)'
+            else:
+                raise e
         except Z3Exception as e:
             exception = e
             do_log_args = True
-            logger.fatal('[checkers.py] Z3Exception occurred. We will continue the trials, however, do not know the root cause of this.')
+            logger.fatal('[checkers.py] Z3Exception occurred. We will continue the trials, however, we do not know the root cause of this.')
 
         except TimeoutError as e:
             exception = e

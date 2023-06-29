@@ -65,7 +65,7 @@ class Translator(ABC):
             )
             if len(transls) == 0:
                 raise TranslationFailure()
-            return transls
+            return transls[-1]
         except RetryAndTimeoutFailure as e:
             raise TranslationFailure(str(e))
 
