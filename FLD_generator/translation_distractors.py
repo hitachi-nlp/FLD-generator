@@ -44,7 +44,13 @@ class TranslationDistractor(ABC):
                 logger=logger,
                 log_title='_generate()',
             )
-            return sorted(trial_results, key = lambda distractors: len(distractors))[-1]
+            if len(trial_results) == 0:
+                if best_effort:
+                    return []
+                else:
+                    raise TranslationDistractorGenerationFailure()
+            else:
+                return sorted(trial_results, key = lambda distractors: len(distractors))[-1]
         except RetryAndTimeoutFailure as e:
             raise TranslationDistractorGenerationFailure(str(e))
 

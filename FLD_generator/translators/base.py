@@ -53,7 +53,7 @@ class Translator(ABC):
                   timeout: Optional[int] = 10) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
                                                         Dict[str, int]]:
         try:
-            return run_with_timeout_retry(
+            transls = run_with_timeout_retry(
                 self._translate,
                 func_args=[formulas, intermediate_constant_formulas],
                 func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
@@ -62,7 +62,10 @@ class Translator(ABC):
                 timeout_per_trial=timeout,
                 logger=logger,
                 log_title='_translate()',
-            )[-1]
+            )
+            if len(transls) == 0:
+                raise TranslationFailure()
+            return transls
         except RetryAndTimeoutFailure as e:
             raise TranslationFailure(str(e))
 

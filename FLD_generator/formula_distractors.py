@@ -81,11 +81,14 @@ class FormulaDistractor(ABC):
                 log_title='_generate()',
             )
 
-            best_result = sorted(
-                trial_results,
-                key = lambda formula_distractors_stats: len(formula_distractors_stats[0])
-            )[-1]
-            formula_distractors, stats = best_result
+            if len(trial_results) == 0:
+                formula_distractors, stats = [], {}
+            else:
+                best_result = sorted(
+                    trial_results,
+                    key = lambda formula_distractors_stats: len(formula_distractors_stats[0])
+                )[-1]
+                formula_distractors, stats = best_result
 
             self._validate_results(formula_distractors, size, best_effort=best_effort, no_warning=no_warning)
 
@@ -875,6 +878,25 @@ def build(type_: str,
                     prototype_formulas=prototype_formulas,
                     sample_hard_negatives=sample_hard_negatives,
                     use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
+                    **kwargs,
+                ),
+            ],
+            **kwargs,
+        )
+
+    elif type_ == 'mixture.negative_tree.negative_tree':
+        return MixtureDistractor(
+            [
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negated_hypothesis_ratio=1.0,
+                    **kwargs,
+                ),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negated_hypothesis_ratio=0.0,
                     **kwargs,
                 ),
             ],

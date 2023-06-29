@@ -160,19 +160,19 @@ def test_generate_dataset():
     def _to_range(begin: int, end: int) -> List[int]:
         return list(range(begin, end + 1))
 
-    # word_bank = None
-    word_bank = build_wordnet_wordbank('eng')
+    word_bank = None
+    # word_bank = build_wordnet_wordbank('eng')
 
-    # translator = None
-    translator = build_translator(
-        glob.glob('./configs/translations/thing.v1/**.json'),
-        word_bank,
-        use_fixed_translation=True,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        volume_to_weight='sqrt',
-        do_translate_to_nl=True,
-    )
+    translator = None
+    # translator = build_translator(
+    #     glob.glob('./configs/translations/thing.v1/**.json'),
+    #     word_bank,
+    #     use_fixed_translation=True,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     volume_to_weight='sqrt',
+    #     do_translate_to_nl=True,
+    # )
    
     generator = build_generator(
         [
@@ -227,7 +227,7 @@ def test_generate_dataset():
     distractor = build_distractor(
         # 'unknown_interprands',
         # 'various_form',
-        # 'negative_tree',
+        'negative_tree',
 
         # 'fallback.unknown_interprands.negative_tree',
         # 'fallback.negative_tree.unknown_interprands',
@@ -235,7 +235,7 @@ def test_generate_dataset():
         # 'fallback.various_form.negative_tree',
 
         # 'mixture.negative_tree.simplified_formula.various_form',
-        'mixture.negative_tree.negative_tree.simplified_formula.various_form',
+        # 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
 
         generator=generator,
         sample_prototype_formulas_from_tree=True,
@@ -244,13 +244,13 @@ def test_generate_dataset():
         negated_hypothesis_ratio=1.0,
     )
 
-    # translation_distractor = None
-    swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
-    translation_distractor = build_translation_distractor(
-        'word_swap',
-        word_bank=word_bank,
-        swap_ng_words=swap_ng_words,
-    )
+    translation_distractor = None
+    # swap_ng_words = json.load(open('./configs/translation_distractors/swap_ng_words.json'))
+    # translation_distractor = build_translation_distractor(
+    #     'word_swap',
+    #     word_bank=word_bank,
+    #     swap_ng_words=swap_ng_words,
+    # )
 
     pipeline = ProofTreeGenerationPipeline(
         generator,

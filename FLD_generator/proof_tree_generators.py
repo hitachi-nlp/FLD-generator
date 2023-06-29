@@ -390,7 +390,10 @@ class ProofTreeGenerator:
         if get_all_trial_results:
             return trial_result_proof_trees
         else:
-            return _pick_largest_tree(trial_result_proof_trees)
+            if len(trial_result_proof_trees) == 0:
+                raise ProofTreeGenerationFailure()
+            else:
+                return _pick_largest_tree(trial_result_proof_trees)
 
     def generate_stem(self, depth: int, get_all_trial_results=False, **kwargs) -> Union[ProofTree, List[ProofTree]]:
         trial_result_proof_trees = _generate_stem_with_timeout_retry(
@@ -404,7 +407,10 @@ class ProofTreeGenerator:
         if get_all_trial_results:
             return trial_result_proof_trees
         else:
-            return _pick_largest_tree(trial_result_proof_trees)
+            if len(trial_result_proof_trees) == 0:
+                raise GenerateStemFailure()
+            else:
+                return _pick_largest_tree(trial_result_proof_trees)
 
     def extend_branches(self,
                         proof_tree: ProofTree,
@@ -422,8 +428,11 @@ class ProofTreeGenerator:
         if get_all_trial_results:
             return trial_result_proof_trees
         else:
-            return sorted(trial_result_proof_trees,
-                          key = lambda A_num_step: A_num_step[1])[-1]
+            if len(trial_result_proof_trees) == 0:
+                return proof_tree.copy(), 0
+            else:
+                return sorted(trial_result_proof_trees,
+                              key = lambda A_num_step: A_num_step[1])[-1]
 
 
 def _generate_tree_with_timeout_retry(arguments: List[Argument],
@@ -508,7 +517,8 @@ def _generate_tree(arguments: List[Argument],
             # proof_tree = sorted(trial_results,
             #                     key = lambda A_num_step: A_num_step[1])[-1][0]
 
-            proof_tree = sorted(trial_results, key=lambda tree_step: (tree_step[0].depth, tree_step[1]))[-1][0]
+            if len(trial_results) > 0:
+                proof_tree = sorted(trial_results, key=lambda tree_step: (tree_step[0].depth, tree_step[1]))[-1][0]
 
         except (ExtendBranchesFailure, ExtendBranchesImpossible) as e:
             logger.warning(make_pretty_msg(title='extend_branches()', status='failure', boundary_level=0,
@@ -1427,7 +1437,11 @@ def _fix_illegal_intermediate_constants(
                         timeout=10,
                         max_retry=5,
                     )
-                    proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]
+                    if len(trial_results) == 0:
+                        logger.info(_make_pretty_msg_for_fix(status='failure', msg=f'will try next.'))
+                        continue
+                    else:
+                        proof_tree_tmp_maybe_fixed, _, alignment = sorted(trial_results, key=lambda A_num_step_B: A_num_step_B[1])[-1]
                 except ExtendBranchesFailure as e:
                     logger.info(_make_pretty_msg_for_fix(status='failure', msg=f'will try next. failed in branch extension due to:\n{str(e)}'))
                     continue
