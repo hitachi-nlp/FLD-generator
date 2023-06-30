@@ -281,7 +281,7 @@ class TemplatedTranslator(Translator):
         translation_names: List[Optional[str]] = []
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
-        interp_mapping = self._choose_interp_mapping(formulas, intermediate_constant_formulas)
+        interpret_mapping = self._choose_interpret_mapping(formulas, intermediate_constant_formulas)
 
         for formula in formulas:
             # find translation key
@@ -291,9 +291,9 @@ class TemplatedTranslator(Translator):
                 found_keys += 1
 
                 # Choose a translation
-                chosen_nl = self._sample_interp_mapping_consistent_nl(
+                chosen_nl = self._sample_interpret_mapping_consistent_nl(
                     translation_key,
-                    interp_mapping,
+                    interpret_mapping,
                     push_mapping,
                     block_shuffle=not self.use_fixed_translation,
                     volume_to_weight=self._volume_to_weight_func,
@@ -303,8 +303,8 @@ class TemplatedTranslator(Translator):
                         f'translation not found for "{formula.rep}" in key="{translation_key}"',
                         'The possible causes includes:',
                         f'(i) the key="{translation_key}" in config indeed have no translation',
-                        '(ii) we have found translations, but the sampled interpretation mapping could not match the pos and word inflation required by the translations. The interp_mapping is the following:',
-                        '\n    ' + '\n    '.join(pformat(interp_mapping).split('\n')),
+                        '(ii) we have found translations, but the sampled interpretation mapping could not match the pos and word inflation required by the translations. The interpret_mapping is the following:',
+                        '\n    ' + '\n    '.join(pformat(interpret_mapping).split('\n')),
                     ]
                     logger.info('\n'.join(msgs))
                     continue
@@ -312,8 +312,8 @@ class TemplatedTranslator(Translator):
                 chosen_nl_pushed = interpret_formula(Formula(chosen_nl), push_mapping).rep
 
                 # Generate word inflated mapping.
-                inflated_mapping, _inflation_stats = self._make_word_inflated_interp_mapping(
-                    interp_mapping,
+                inflated_mapping, _inflation_stats = self._make_word_inflated_interpret_mapping(
+                    interpret_mapping,
                     chosen_nl_pushed,
                 )
 
@@ -321,36 +321,36 @@ class TemplatedTranslator(Translator):
                     for inflation_type, count in _inflation_stats.items():
                         count_stats['inflation_stats'][f'{inflation_type}'] = count
 
-                interp_templated_translation_pushed_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
+                interpret_templated_translation_pushed_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
 
-                # do interpretation using predicates and constants using interp_mapping
+                # do interpretation using predicates and constants using interpret_mapping
                 if self._do_translate_to_nl:
-                    interp_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pushed_wo_info)
-                    translation = interpret_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
+                    interpret_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interpret_templated_translation_pushed_wo_info)
+                    translation = interpret_formula(Formula(interpret_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
                 else:
-                    translation = interp_templated_translation_pushed_wo_info
+                    translation = interpret_templated_translation_pushed_wo_info
 
                 SO_swap_formula: Optional[Formula] = None
                 if len(formula.unary_PASs) == 1 and len(formula.predicates) == 1 and len(formula.constants) == 1:  # something like {A}{a}
                     constant = formula.constants[0].rep
                     predicate = formula.predicates[0].rep
 
-                    constant_transl = interp_mapping[constant]
-                    predicate_transl = interp_mapping[predicate]
+                    constant_transl = interpret_mapping[constant]
+                    predicate_transl = interpret_mapping[predicate]
 
                     predicate_transl_verb, predicate_transl_obj = self._parse_word_with_obj(predicate_transl)
 
                     if predicate_transl_obj is not None:
-                        SO_swap_interp_mapping = copy.deepcopy(inflated_mapping)
-                        SO_swap_interp_mapping[constant] = predicate_transl_obj
-                        SO_swap_interp_mapping[predicate] = self._pair_word_with_obj(predicate_transl_verb, constant_transl)
+                        SO_swap_interpret_mapping = copy.deepcopy(inflated_mapping)
+                        SO_swap_interpret_mapping[constant] = predicate_transl_obj
+                        SO_swap_interpret_mapping[predicate] = self._pair_word_with_obj(predicate_transl_verb, constant_transl)
 
-                        SO_swap_inflated_mapping, _ = self._make_word_inflated_interp_mapping(
-                            SO_swap_interp_mapping,
+                        SO_swap_inflated_mapping, _ = self._make_word_inflated_interpret_mapping(
+                            SO_swap_interpret_mapping,
                             chosen_nl_pushed,
                         )
-                        interp_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interp_templated_translation_pushed_wo_info)
-                        SO_swap_translation = interpret_formula(Formula(interp_templated_translation_pushed_wo_info_with_the_or_it), SO_swap_inflated_mapping).rep
+                        interpret_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interpret_templated_translation_pushed_wo_info)
+                        SO_swap_translation = interpret_formula(Formula(interpret_templated_translation_pushed_wo_info_with_the_or_it), SO_swap_inflated_mapping).rep
 
                         used_predicates = {pred.rep
                                            for formula in formulas + SO_swap_formulas
@@ -482,13 +482,13 @@ class TemplatedTranslator(Translator):
                     yield _transl_key, push_mapping
 
     @profile
-    def _sample_interp_mapping_consistent_nl(self,
+    def _sample_interpret_mapping_consistent_nl(self,
                                              sentence_key: str,
-                                             interp_mapping: Dict[str, str],
+                                             interpret_mapping: Dict[str, str],
                                              push_mapping: Dict[str, str],
                                              block_shuffle=True,
                                              volume_to_weight = lambda weight: weight) -> Optional[str]:
-        """ Find translations the pos and nflations of which are consistent with interp_mapping """
+        """ Find translations the pos and nflations of which are consistent with interpret_mapping """
 
         # # -------------------------------- XXX do not remove those code for debugging ------------------------------
         # query = None
@@ -502,14 +502,14 @@ class TemplatedTranslator(Translator):
 
         #     pull_mapping = {val: key for key, val in push_mapping.items()}
         #     pprint({
-        #         pull_mapping[key]: val for key, val in interp_mapping.items()
+        #         pull_mapping[key]: val for key, val in interpret_mapping.items()
         #         if key in pull_mapping
         #     })
 
         #     iterator_with_volumes = [
         #         self._make_resolved_translation_sampler(transl_nl,
         #                                                 set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-        #                                                 constraint_interp_mapping=interp_mapping,
+        #                                                 constraint_interpret_mapping=interpret_mapping,
         #                                                 constraint_push_mapping=push_mapping,
         #                                                 block_shuffle=block_shuffle,
         #                                                 volume_to_weight=volume_to_weight,
@@ -526,9 +526,9 @@ class TemplatedTranslator(Translator):
         #         iterators,
         #         [volume_to_weight(volume) for volume in volumes]
         #     ):
-        #         condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
+        #         condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
         #             condition,
-        #             interp_mapping,
+        #             interpret_mapping,
         #             push_mapping,
         #         )
         #         if condition_is_consistent:
@@ -548,7 +548,7 @@ class TemplatedTranslator(Translator):
         iterator_with_volumes = [
             self._make_resolved_translation_sampler(transl_nl,
                                                     set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-                                                    constraint_interp_mapping=interp_mapping,
+                                                    constraint_interpret_mapping=interpret_mapping,
                                                     constraint_push_mapping=push_mapping,
                                                     block_shuffle=block_shuffle,
                                                     volume_to_weight=volume_to_weight)
@@ -573,9 +573,9 @@ class TemplatedTranslator(Translator):
 
         for resolved_nl, condition in generate():
 
-            condition_is_consistent = self._interp_mapping_is_consistent_with_condition(
+            condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
                 condition,
-                interp_mapping,
+                interpret_mapping,
                 push_mapping,
             )
             assert condition_is_consistent  # the consistency should have been checked recursively.
@@ -584,14 +584,14 @@ class TemplatedTranslator(Translator):
         return None
 
     @profile
-    def _interp_mapping_is_consistent_with_condition(self,
+    def _interpret_mapping_is_consistent_with_condition(self,
                                                      condition: _PosFormConditionSet,
-                                                     interp_mapping: Dict[str, str],
+                                                     interpret_mapping: Dict[str, str],
                                                      push_mapping: Dict[str, str]) -> bool:
         condition_is_consistent = True
         for interprand_rep, pos, form in condition:
             interprand_rep_pushed = push_mapping[interprand_rep]
-            word = interp_mapping[interprand_rep_pushed]
+            word = interpret_mapping[interprand_rep_pushed]
 
             if pos not in self._get_pos(word):
                 condition_is_consistent = False
@@ -608,7 +608,7 @@ class TemplatedTranslator(Translator):
     def _make_resolved_translation_sampler(self,
                                            nl: str,
                                            ancestor_keys: Set[str],
-                                           constraint_interp_mapping: Optional[Dict[str, str]] = None,
+                                           constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
@@ -619,8 +619,8 @@ class TemplatedTranslator(Translator):
         condition = self._get_pos_form_consistency_condition(nl)
         if constraint_push_mapping is not None\
                 and check_condition\
-                and not self._interp_mapping_is_consistent_with_condition(condition,
-                                                                          constraint_interp_mapping,
+                and not self._interpret_mapping_is_consistent_with_condition(condition,
+                                                                          constraint_interpret_mapping,
                                                                           constraint_push_mapping):
             return iter([]), 0
 
@@ -645,7 +645,7 @@ class TemplatedTranslator(Translator):
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
                         ancestor_keys,
-                        constraint_interp_mapping=constraint_interp_mapping,
+                        constraint_interpret_mapping=constraint_interpret_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
@@ -680,7 +680,7 @@ class TemplatedTranslator(Translator):
     def _make_resolved_template_sampler(self,
                                         template: str,
                                         ancestor_keys: Set[str],
-                                        constraint_interp_mapping: Optional[Dict[str, str]] = None,
+                                        constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
@@ -690,7 +690,7 @@ class TemplatedTranslator(Translator):
             raise Exception(f'template for {template} not found.')
         iterator_with_volumes = [self._make_resolved_translation_sampler(template_nl,
                                                                          ancestor_keys.union(set([template_key])),
-                                                                         constraint_interp_mapping=constraint_interp_mapping,
+                                                                         constraint_interpret_mapping=constraint_interpret_mapping,
                                                                          constraint_push_mapping=constraint_push_mapping,
                                                                          block_shuffle=shuffle,
                                                                          volume_to_weight=volume_to_weight,
@@ -816,7 +816,7 @@ class TemplatedTranslator(Translator):
         return with_definite
 
     @profile
-    def _choose_interp_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
+    def _choose_interpret_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
                                    for predicate in formula.zeroary_predicates})
@@ -894,10 +894,10 @@ class TemplatedTranslator(Translator):
             print(traceback.format_exc())
             raise
 
-        interp_mapping = zeroary_mapping.copy()
-        interp_mapping.update(unary_mapping)
+        interpret_mapping = zeroary_mapping.copy()
+        interpret_mapping.update(unary_mapping)
 
-        return interp_mapping
+        return interpret_mapping
 
     @profile
     def _sample(self, elems: List[Any], size: int) -> List[Any]:
@@ -910,8 +910,8 @@ class TemplatedTranslator(Translator):
             return random.sample(elems, size)
 
     @profile
-    def _make_word_inflated_interp_mapping(self,
-                                           interp_mapping: Dict[str, str],
+    def _make_word_inflated_interpret_mapping(self,
+                                           interpret_mapping: Dict[str, str],
                                            interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
         inflated_mapping = {}
         stats = defaultdict(int)
@@ -920,7 +920,7 @@ class TemplatedTranslator(Translator):
                 + Formula(interprand_templated_translation_pushed).constants:
             interprand_rep = interprand_formula.rep
             if interprand_templated_translation_pushed.find(f'{interprand_rep}[') >= 0:
-                word = interp_mapping[interprand_rep]
+                word = interpret_mapping[interprand_rep]
                 pos_form = self._get_interprand_condition_from_template(interprand_rep, interprand_templated_translation_pushed)
                 if pos_form is None:
                     raise ValueError(f'Could not extract pos and form information about "{interprand_rep}" from "{interprand_templated_translation_pushed}"')
