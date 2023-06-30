@@ -10,9 +10,7 @@ class Argument:
                  conclusion: Formula,
                  assumptions: Dict[Formula, Formula],
                  intermediate_constants: Optional[List[Formula]] = None,
-                 id: Optional[str] = None,
-                 base_scheme_group: Optional[str] = None,
-                 scheme_variant: Optional[str] = None):
+                 id: Optional[str] = None):
         self.premises = premises
         self.conclusion = conclusion
         self.assumptions = assumptions
@@ -26,8 +24,6 @@ class Argument:
             self.intermediate_constants = []
 
         self.id = id
-        self.base_scheme_group = base_scheme_group
-        self.scheme_variant = scheme_variant
 
     def __str__(self) -> str:
         return f'Argument(id="{self.id}", assumptions={str(self.assumptions)}, premises={str(self.premises)}, conclusion={str(self.conclusion)}, intermediate_constants={str(self.intermediate_constants)})'
@@ -58,8 +54,6 @@ class Argument:
              if assumption is not None},
             intermediate_constants=intermediate_constants,
             id=json_dict['id'],
-            base_scheme_group=json_dict.get('base_scheme_group', None),
-            scheme_variant=json_dict.get('scheme_variant', None),
         )
 
     @classmethod
@@ -73,8 +67,6 @@ class Argument:
     def to_json(self) -> Dict:
         return {
             'id': self.id,
-            'base_scheme_group': self.base_scheme_group,
-            'scheme_variant': self.scheme_variant,
             'intermediate': [constant.rep for constant in self.intermediate_constants],
             'premises': [
                 (premise.rep if premise not in self.assumptions else f'{self.assumptions[premise].rep} {DERIVE} {premise.rep}')

@@ -444,9 +444,7 @@ def interpret_argument(arg: Argument,
                     interpreted_conclusion,
                     interpreted_assumptions,
                     intermediate_constants=interpreted_intermediate_constants,
-                    id=arg.id,
-                    base_scheme_group=arg.base_scheme_group,
-                    scheme_variant=arg.scheme_variant)
+                    id=arg.id)
 
 
 @profile
