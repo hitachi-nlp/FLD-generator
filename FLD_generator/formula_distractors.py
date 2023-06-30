@@ -51,11 +51,11 @@ class FormulaDistractor(ABC):
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
                  max_retry: Optional[int] = None,
-                 timeout: Optional[int] = None,
+                 timeout_per_trial: Optional[int] = None,
                  best_effort=False,
                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         max_retry = max_retry or self.default_max_retry
-        timeout = timeout or self.default_timeout
+        timeout_per_trial = timeout_per_trial or self.default_timeout_per_trial
         try:
             self._log(logging.INFO, f'try to generate {size} distractors', boundary_level=2)
 
@@ -75,7 +75,7 @@ class FormulaDistractor(ABC):
                 best_effort=best_effort,
 
                 max_retry=max_retry,
-                timeout_per_trial=timeout,
+                timeout_per_trial=timeout_per_trial,
 
                 logger=logger,
                 log_title='_generate()',
@@ -104,7 +104,7 @@ class FormulaDistractor(ABC):
 
     @property
     @abstractmethod
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         pass
 
     @abstractmethod
@@ -233,7 +233,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
         return 5
 
     @property
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         return 10
 
     @profile
@@ -442,7 +442,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
         return 1
 
     @property
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         return 10
 
     @profile
@@ -515,7 +515,7 @@ class NegativeTreeDistractor(FormulaDistractor):
         return 5
 
     @property
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         return 10
 
     @profile
@@ -657,7 +657,7 @@ class MixtureDistractor(FormulaDistractor):
         return 3
 
     @property
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         timeout_sum = 0
         for distractor in self._distractors:
             timeout_sum += distractor.default_max_retry * distractor.default_timeout
@@ -720,7 +720,7 @@ class FallBackDistractor(FormulaDistractor):
         return 3
 
     @property
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         timeout_sum = 0
         for distractor in self._distractors:
             timeout_sum += distractor.default_max_retry * distractor.default_timeout

@@ -439,7 +439,7 @@ def _generate_tree_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
                                       max_retry=50,
-                                      timeout=20,  # 5 + 5
+                                      timeout_per_trial=20,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
         trial_result_proof_trees = run_with_timeout_retry(
@@ -451,7 +451,7 @@ def _generate_tree_with_timeout_retry(arguments: List[Argument],
             should_retry_exception=ProofTreeGenerationFailure,
 
             max_retry=max_retry,
-            timeout_per_trial=timeout,
+            timeout_per_trial=timeout_per_trial,
             best_effort=kwargs.get('best_effort', False),
 
             logger=logger,
@@ -547,7 +547,7 @@ def _generate_stem_with_timeout_retry(arguments: List[Argument],
                                       depth: int,
                                       *args,
                                       max_retry=50,
-                                      timeout=10,
+                                      timeout_per_trial=10,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
     try:
@@ -562,7 +562,7 @@ def _generate_stem_with_timeout_retry(arguments: List[Argument],
             should_retry_exception=GenerateStemFailure,
 
             max_retry=max_retry,
-            timeout_per_trial=timeout,
+            timeout_per_trial=timeout_per_trial,
             best_effort=best_effort,
 
             logger=logger,
@@ -578,7 +578,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         arguments: List[Argument],
                                         num_steps: int,
                                         *args,
-                                        timeout=10,
+                                        timeout_per_trial=10,
                                         max_retry=50,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
@@ -594,7 +594,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
             should_retry_exception=ExtendBranchesFailure,
 
             max_retry=max_retry,
-            timeout_per_trial=timeout,
+            timeout_per_trial=timeout_per_trial,
             best_effort=best_effort,
 
             logger=logger,
@@ -1434,7 +1434,7 @@ def _fix_illegal_intermediate_constants(
                         return_alignment=True,
 
                         best_effort=True,
-                        timeout=10,
+                        timeout_per_trial=10,
                         max_retry=5,
                     )
                     if len(trial_results) == 0:

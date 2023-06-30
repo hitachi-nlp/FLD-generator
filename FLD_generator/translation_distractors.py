@@ -27,7 +27,7 @@ class TranslationDistractor(ABC):
                  timeout_per_trial: Optional[int] = None,
                  best_effort=False) -> List[str]:
         max_retry = max_retry or self.default_max_retry
-        timeout_per_trial = timeout_per_trial or self.default_timeout
+        timeout_per_trial = timeout_per_trial or self.default_timeout_per_trial
         try:
             trial_results = run_with_timeout_retry(
                 self._generate,
@@ -61,7 +61,7 @@ class TranslationDistractor(ABC):
 
     @property
     @abstractmethod
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         pass
 
     @abstractmethod
@@ -180,7 +180,7 @@ class WordSwapDistractor(TranslationDistractor):
         return 3
 
     @property
-    def default_timeout(self) -> int:
+    def default_timeout_per_trial(self) -> int:
         return 10
 
 
