@@ -4,25 +4,24 @@ import re
 from FLD_generator.formula import (
     Formula,
     IMPLICATION,
-    AND,
-    OR,
-    NOT,
+    CONJUNCTION,
+    DISJUNCTION,
     NEGATION,
     DERIVE,
     CONTRADICTION,
 )
 
 I_IMPLICATION = IMPLICATION
-I_AND = AND
-I_OR = OR
+I_AND = CONJUNCTION
+I_OR = DISJUNCTION
 I_NEGATION = NEGATION
 I_UNIVERSAL = 'ForAll'
 I_EXISTS = 'Exists'
 
 _FLD_to_interm = {
     IMPLICATION: I_IMPLICATION,
-    AND: I_AND,
-    OR: I_OR,
+    CONJUNCTION: I_AND,
+    DISJUNCTION: I_OR,
     NEGATION: I_NEGATION,
 }
 
@@ -55,7 +54,7 @@ def parse(formula_rep: str,
 
     def head_is_connective(rep: str) -> bool:
         return any(tail_rep.startswith(op_rep)
-                   for op_rep in [IMPLICATION, AND, OR, NEGATION])
+                   for op_rep in [IMPLICATION, CONJUNCTION, DISJUNCTION, NEGATION])
 
     def head_is_quantifier(rep: str) -> bool:
         return any(rep.startswith(quantifier)
@@ -80,7 +79,7 @@ def parse(formula_rep: str,
 
             if head_is_connective(tail_rep):
                 assert op is None
-                op_rep = [op_rep_ for op_rep_ in [IMPLICATION, AND, OR, NEGATION]
+                op_rep = [op_rep_ for op_rep_ in [IMPLICATION, CONJUNCTION, DISJUNCTION, NEGATION]
                           if tail_rep.startswith(op_rep_)][0]
                 op = _FLD_to_interm[op_rep]
                 i_char += len(op_rep)

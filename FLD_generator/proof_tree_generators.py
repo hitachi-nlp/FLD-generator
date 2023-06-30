@@ -11,7 +11,7 @@ from .formula import (
     PREDICATES,
     CONSTANTS,
     Formula,
-    OR,
+    DISJUNCTION,
 )
 from .formula_checkers import (
     is_predicate_arity_consistent_set as is_predicate_arity_consistent_formula_set,
@@ -49,8 +49,8 @@ from .utils import (
 
 from .formula import (
     IMPLICATION,
-    AND,
-    OR,
+    CONJUNCTION,
+    DISJUNCTION,
     NEGATION,
     PREDICATES,
     CONSTANTS,
@@ -206,7 +206,7 @@ class ProofTreeGenerator:
                 return False
             if max_implication_per_formula is not None and formula.rep.count(IMPLICATION) > max_implication_per_formula:
                 return False
-            if max_and_or_per_formula is not None and formula.rep.count(AND) + formula.rep.count(OR) > max_and_or_per_formula:
+            if max_and_or_per_formula is not None and formula.rep.count(CONJUNCTION) + formula.rep.count(DISJUNCTION) > max_and_or_per_formula:
                 return False
             return True
 
@@ -325,7 +325,7 @@ class ProofTreeGenerator:
         _argument_weights = {argument: calc_argument_weight(argument) for argument in _arguments}
 
         def is_or_formula(formula: Formula) -> bool:
-            return formula.rep.find(f' {OR} ') >= 0
+            return formula.rep.find(f' {DISJUNCTION} ') >= 0
 
         def is_or_argument(argument: Argument) -> bool:
             return any(is_or_formula(formula) for formula in argument.all_formulas)

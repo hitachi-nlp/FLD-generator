@@ -7,8 +7,8 @@ from itertools import permutations
 from .formula import (
     Formula,
     NEGATION,
-    OR,
-    AND,
+    DISJUNCTION,
+    CONJUNCTION,
     IMPLICATION,
     PREDICATES,
     CONSTANTS,
@@ -75,7 +75,7 @@ def generate_simplified_formulas(src_formula: Formula,
         else:
             yield simplified_formula
 
-    for op in [AND, OR]:
+    for op in [CONJUNCTION, DISJUNCTION]:
         op_regexp = f'\(([^\)]*) {op} ([^\)]*)\)'
         for i_match, match in enumerate(re.finditer(op_regexp, rep)):
             span_text = rep[match.start():match.end()]
@@ -137,11 +137,11 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
             yield mapping
 
     if suppress_op_expansion_if_exists\
-            and any([formula.rep.find(OR) >= 0 or formula.rep.find(AND) >= 0
+            and any([formula.rep.find(DISJUNCTION) >= 0 or formula.rep.find(CONJUNCTION) >= 0
                     for formula in formulas]):
         pass
     else:
-        for op in [OR, AND]:
+        for op in [DISJUNCTION, CONJUNCTION]:
             for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
                 unk_extended_predicates = [unk_pred0, unk_pred1]\
                     + predicates[:i_predicate_to_expand]\
@@ -617,7 +617,7 @@ def formula_can_not_be_identical_to(this_formula: Formula,
         return True
 
     if any([this_formula.rep.count(symbol) != that_formula.rep.count(symbol)
-            for symbol in [AND, OR, IMPLICATION, NEGATION]]):
+            for symbol in [CONJUNCTION, DISJUNCTION, IMPLICATION, NEGATION]]):
         return True
 
     return False

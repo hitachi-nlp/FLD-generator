@@ -6,8 +6,8 @@ from FLD_generator.formula import (
     Formula,
     eliminate_double_negation,
     IMPLICATION,
-    AND,
-    OR,
+    CONJUNCTION,
+    DISJUNCTION,
     NEGATION,
     CONSTANTS,
 )
@@ -213,7 +213,7 @@ def is_nonsense(formula: Formula,
         pass
 
     # detect fromulas like: ({A} v {A})
-    for op in [AND, OR, IMPLICATION]:
+    for op in [CONJUNCTION, DISJUNCTION, IMPLICATION]:
         match = re.search(f'[^ ]* {op} [^ ]*', rep)
         if match is not None:
             left, right = match.group().lstrip('(').rstrip(')').split(f' {op} ')
@@ -287,45 +287,45 @@ def _get_boolean_values(formula: Formula, PAS: Formula) -> Set[str]:
     values = set()
     PAS_rep = PAS.rep
     rep = formula.wo_quantifier.rep
-    if rep.find(AND) >= 0:
-        if re.match(f'^\({PAS_rep} {AND} .*\)$', rep):
+    if rep.find(CONJUNCTION) >= 0:
+        if re.match(f'^\({PAS_rep} {CONJUNCTION} .*\)$', rep):
             values.add('T')
-        elif re.match(f'^\({NEGATION}{PAS_rep} {AND} .*\)$', rep):
+        elif re.match(f'^\({NEGATION}{PAS_rep} {CONJUNCTION} .*\)$', rep):
             values.add('F')
-        if re.match(f'^\(.* {AND} {PAS_rep}\)$', rep):
+        if re.match(f'^\(.* {CONJUNCTION} {PAS_rep}\)$', rep):
             values.add('T')
-        elif re.match(f'^\(.* {AND} {NEGATION}{PAS_rep}\)$', rep):
+        elif re.match(f'^\(.* {CONJUNCTION} {NEGATION}{PAS_rep}\)$', rep):
             values.add('F')
 
         # AND with is converted to OR by DeMorgan, thus it is undecidable.
-        elif re.match(f'^{NEGATION}\({PAS_rep} {AND} .*\)$', rep):
+        elif re.match(f'^{NEGATION}\({PAS_rep} {CONJUNCTION} .*\)$', rep):
             values.add('Unknown')
-        elif re.match(f'^{NEGATION}\({NEGATION}{PAS_rep} {AND} .*\)$', rep):
+        elif re.match(f'^{NEGATION}\({NEGATION}{PAS_rep} {CONJUNCTION} .*\)$', rep):
             values.add('Unknown')
-        if re.match(f'^{NEGATION}\(.* {AND} {PAS_rep}\)$', rep):
+        if re.match(f'^{NEGATION}\(.* {CONJUNCTION} {PAS_rep}\)$', rep):
             values.add('Unknown')
-        elif re.match(f'^{NEGATION}\(.* {AND} {NEGATION}{PAS_rep}\)$', rep):
+        elif re.match(f'^{NEGATION}\(.* {CONJUNCTION} {NEGATION}{PAS_rep}\)$', rep):
             values.add('Unknown')
 
-    elif rep.find(OR) >= 0:
+    elif rep.find(DISJUNCTION) >= 0:
         is_decidable_or = False
-        if re.match(f'^\({PAS_rep} {OR} {PAS_rep}\)$', rep):
+        if re.match(f'^\({PAS_rep} {DISJUNCTION} {PAS_rep}\)$', rep):
             values.add('T')
             is_decidable_or = True
-        elif re.match(f'^\({NEGATION}{PAS_rep} {OR} {NEGATION}{PAS_rep}\)$', rep):
+        elif re.match(f'^\({NEGATION}{PAS_rep} {DISJUNCTION} {NEGATION}{PAS_rep}\)$', rep):
             values.add('F')
             is_decidable_or = True
 
-        if re.match(f'^{NEGATION}\({PAS_rep} {OR} .*\)$', rep):
+        if re.match(f'^{NEGATION}\({PAS_rep} {DISJUNCTION} .*\)$', rep):
             values.add('F')
             is_decidable_or = True
-        elif re.match(f'^{NEGATION}\({NEGATION}{PAS_rep} {OR} .*\)$', rep):
+        elif re.match(f'^{NEGATION}\({NEGATION}{PAS_rep} {DISJUNCTION} .*\)$', rep):
             values.add('T')
             is_decidable_or = True
-        if re.match(f'^{NEGATION}\(.* {OR} {PAS_rep}\)$', rep):
+        if re.match(f'^{NEGATION}\(.* {DISJUNCTION} {PAS_rep}\)$', rep):
             values.add('F')
             is_decidable_or = True
-        elif re.match(f'^{NEGATION}\(.* {OR} {NEGATION}{PAS_rep}\)$', rep):
+        elif re.match(f'^{NEGATION}\(.* {DISJUNCTION} {NEGATION}{PAS_rep}\)$', rep):
             values.add('T')
             is_decidable_or = True
 

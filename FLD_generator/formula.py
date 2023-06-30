@@ -6,9 +6,8 @@ import kern_profiler
 
 
 IMPLICATION = '->'
-AND = '&'
-OR = 'v'
-NOT = '¬'
+CONJUNCTION = '&'
+DISJUNCTION = 'v'
 NEGATION = '¬'
 DERIVE = '⊢'
 CONTRADICTION = '#F#'
