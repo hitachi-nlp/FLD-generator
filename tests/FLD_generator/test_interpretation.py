@@ -95,11 +95,11 @@ def test_formula_is_identical_to():
     this = Formula('{A}{a} -> {B}{b}')
     that = Formula('{A}{a} -> {A}{a}')
 
-    assert formula_is_identical_to(this, that, allow_many_to_oneg=True)
-    assert not formula_is_identical_to(that, this, allow_many_to_oneg=True)
+    assert formula_is_identical_to(this, that, allow_many_to_one=True)
+    assert not formula_is_identical_to(that, this, allow_many_to_one=True)
 
-    assert not formula_is_identical_to(this, that, allow_many_to_oneg=False)
-    assert not formula_is_identical_to(that, this, allow_many_to_oneg=False)
+    assert not formula_is_identical_to(this, that, allow_many_to_one=False)
+    assert not formula_is_identical_to(that, this, allow_many_to_one=False)
 
 
 def test_argument_is_identical_to():
@@ -141,7 +141,7 @@ def test_argument_is_identical_to():
             Formula('{P}'),
             {},
         ),
-        allow_many_to_oneg=False,
+        allow_many_to_one=False,
     )
 
     assert not argument_is_identical_to(
@@ -184,7 +184,7 @@ def test_argument_is_identical_to():
             {},
             intermediate_constants=[Formula('{b}')]
         ),
-        allow_many_to_oneg=False,
+        allow_many_to_one=False,
     )
 
     assert not argument_is_identical_to(
@@ -200,7 +200,7 @@ def test_argument_is_identical_to():
             {},
             intermediate_constants=[Formula('{b}')]
         ),
-        allow_many_to_oneg=False,
+        allow_many_to_one=False,
     )
 
 
@@ -225,7 +225,7 @@ def test_generate_quantifier_axiom_arguments():
         assert(len(generated_arguments) == len(expected_arguments))
         for generated_argument in generated_arguments:
             print(f'{str(generated_argument)}')
-            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_oneg=False)
+            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_one=False)
                        for expected_argument in expected_arguments))
 
     print('\n\n\n================= test_generate_quantifier_axiom_arguments() ====================')
@@ -651,7 +651,7 @@ def test_generate_quantifier_formulas():
         assert(len(quantified_formulas) == len(expected_formulas))
         for generated_formula in quantified_formulas:
             print(f'{str(generated_formula)}')
-            assert(any(formula_is_identical_to(generated_formula, expected_formula, allow_many_to_oneg=False)
+            assert(any(formula_is_identical_to(generated_formula, expected_formula, allow_many_to_one=False)
                        for expected_formula in expected_formulas))
 
     check_generation(
@@ -713,7 +713,7 @@ def test_generate_quantifier_arguments():
         for generated_argument, _ in generated_arguments:
             print(f'{str(generated_argument)}')
 
-            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_oneg=False)
+            assert(any(argument_is_identical_to(generated_argument, expected_argument, allow_many_to_one=False)
                        for expected_argument in expected_arguments))
 
     print('\n\n\n================= test_generate_quantifier_arguments() ====================')

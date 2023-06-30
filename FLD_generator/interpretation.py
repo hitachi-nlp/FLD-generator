@@ -524,21 +524,21 @@ def _interpret_rep(rep: str,
 
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
-                            allow_many_to_oneg=True,
+                            allow_many_to_one=True,
                             add_complicated_arguments=False,
                             elim_dneg=False) -> bool:
     """ Check whether this formula can be the same as that formula by any mapping.
 
-    Note that this and that is not symmetrical, unless allow_many_to_oneg=False.
+    Note that this and that is not symmetrical, unless allow_many_to_one=False.
     For example:
         this: {A}{a} -> {B}{b}
         that: {A}{a} -> {A}{a}
 
-        formula_is_identical_to(this, that, allow_many_to_oneg=True): True
-        formula_is_identical_to(that, this, allow_many_to_oneg=True): False
+        formula_is_identical_to(this, that, allow_many_to_one=True): True
+        formula_is_identical_to(that, this, allow_many_to_one=True): False
 
-        formula_is_identical_to(this, that, allow_many_to_oneg=False): False
-        formula_is_identical_to(that, this, allow_many_to_oneg=False): False
+        formula_is_identical_to(this, that, allow_many_to_one=False): False
+        formula_is_identical_to(that, this, allow_many_to_one=False): False
     """
     if elim_dneg:
         this_formula = eliminate_double_negation(this_formula)
@@ -547,7 +547,7 @@ def formula_is_identical_to(this_formula: Formula,
     if formula_can_not_be_identical_to(this_formula, that_formula, add_complicated_arguments=add_complicated_arguments, elim_dneg=elim_dneg):
         return False
 
-    for mapping in generate_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one=allow_many_to_oneg):
+    for mapping in generate_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one=allow_many_to_one):
         this_interpreted = interpret_formula(this_formula, mapping, elim_dneg=elim_dneg)
         if this_interpreted.rep == that_formula.rep:
             return True
@@ -635,7 +635,7 @@ def _get_appearance_cnt(formulas: List[Formula], tgt_formula: Formula) -> int:
 
 def argument_is_identical_to(this_argument: Argument,
                              that_argument: Argument,
-                             allow_many_to_oneg=True,
+                             allow_many_to_one=True,
                              add_complicated_arguments=False,
                              elim_dneg=False) -> bool:
 
@@ -715,7 +715,7 @@ def argument_is_identical_to(this_argument: Argument,
     for mapping in generate_mappings_from_argument(this_argument,
                                                    that_argument,
                                                    add_complicated_arguments=add_complicated_arguments,
-                                                   allow_many_to_one=allow_many_to_oneg):
+                                                   allow_many_to_one=allow_many_to_one):
         this_argument_interpreted = interpret_argument(this_argument, mapping, elim_dneg=elim_dneg)
 
         # XXX: DO NOT change the order of validation. It is now ordered as "faster former"
