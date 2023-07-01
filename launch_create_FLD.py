@@ -242,8 +242,10 @@ def main():
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
 
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230628.make_harder')
+    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230628.make_harder')
     # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230629.degug')
+
+    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230701.finalize')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -394,18 +396,23 @@ def main():
         # '20230626.many_bugs_fixed.D3.hard.dist-neg-1.0',
         # '20230626.many_bugs_fixed.D3.hard.dist-neg-0.5',
         # '20230626.many_bugs_fixed.D3.hard.dist-neg-0.0',
-        '20230626.many_bugs_fixed.D3.hard.dist-trees-only',
+        # '20230626.many_bugs_fixed.D3.hard.dist-trees-only',
 
         # '20230626.many_bugs_fixed.D8.hard',
         # '20230626.many_bugs_fixed.D8.hard.dist-trees',
+
+        # ---------------------------------- 20230701.finalize ------------------------------------
+        '20230701.D3.default',
+        '20230701.D8.default',
+
     ]
     # dataset_names = dataset_names[::-1]
 
     # num_jobs_for_datasets = 3
     # num_jobs_per_dataset = 60
 
-    num_jobs_for_datasets = 3
-    num_jobs_per_dataset = 60
+    num_jobs_for_datasets = 2
+    num_jobs_per_dataset = 80
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
