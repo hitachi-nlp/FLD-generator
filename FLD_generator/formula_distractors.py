@@ -660,7 +660,7 @@ class MixtureDistractor(FormulaDistractor):
     def default_timeout_per_trial(self) -> int:
         timeout_sum = 0
         for distractor in self._distractors:
-            timeout_sum += distractor.default_max_retry * distractor.default_timeout
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial
         return timeout_sum
 
     @profile
@@ -723,7 +723,7 @@ class FallBackDistractor(FormulaDistractor):
     def default_timeout_per_trial(self) -> int:
         timeout_sum = 0
         for distractor in self._distractors:
-            timeout_sum += distractor.default_max_retry * distractor.default_timeout
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial
         return timeout_sum
 
     @profile
