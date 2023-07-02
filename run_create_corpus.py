@@ -228,24 +228,24 @@ def main():
     setup_logger(level=logging.INFO)
     logger.info('============================== [launch_create_FLD_corpus.py] start! ============================')
 
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221203.first_exp')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20221217.back_to_the_past')
+    # output_top_dir = Path('./outputs/00.create_corpus/20221203.first_exp')
+    # output_top_dir = Path('./outputs/00.create_corpus/20221217.back_to_the_past')
 
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230529.use_fixed_translation_for_LLM')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230601.fix_translation')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230615.formula_checkers')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230616.formula_checkers')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230621.formula_checkers')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230529.use_fixed_translation_for_LLM')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230601.fix_translation')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230615.formula_checkers')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230616.formula_checkers')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230621.formula_checkers')
 
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
 
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230628.make_harder')
-    # output_top_dir = Path('./outputs/10.create_FLD_corpus/20230629.degug')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230628.make_harder')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230629.degug')
 
-    output_top_dir = Path('./outputs/10.create_FLD_corpus/20230701.finalize')
+    output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
