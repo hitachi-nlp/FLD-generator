@@ -172,28 +172,35 @@ def generate_instances(size: int, *args):
 @click.argument('output-path')
 @click.argument('size', type=int)
 @click.option('--argument-config', '--ac',
-              multiple=True, default=[])
+              multiple=True, default=[],
+              help='argument (deduction rule) configuration files')
 @click.option('--translation-config', '--tc',
               multiple=True,
-              default=['./configs/translations/thing.json'])
+              default=['./configs/translations/thing.json'],
+              help='natural language translation config files')
 @click.option('--use-fixed-translation', type=bool, is_flag=True)
-@click.option('--reused-object-nouns-max-factor', type=float, default=0.0)
+@click.option('--reused-object-nouns-max-factor', type=float, default=1.0)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
-@click.option('--translation-volume-to-weight', type=str, default='linear')
-@click.option('--depths', type=str, default=json.dumps([5]))
+@click.option('--translation-volume-to-weight', type=str, default='sqrt')
+@click.option('--depths', type=str, default=json.dumps([5]),
+              help='the depths of proof trees')
 @click.option('--depth-distribution', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
 @click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
-@click.option('--complication', type=float, default=0.0)
-@click.option('--quantification', type=float, default=0.0)
+@click.option('--complication', type=float, default=0.0,
+              help='the ratio of complex formulas included in the dataset')
+@click.option('--quantification', type=float, default=0.0,
+              help='the ratio of quantification formulas (i.e., formulas that use ∀,∃)')
 @click.option('--quantifier-axiom', multiple=True, default=None)
 @click.option('--translation-config', '--tc', multiple=True,
               default=['./configs/translations/thing.json'])
 @click.option('--quantify-implication-premise-conclusion-at_once', is_flag=True)
 @click.option('--quantify-all-at-once', is_flag=True)
 @click.option('--keep-dneg', is_flag=True, default=False)
-@click.option('--distractor', default='unknown_interprands')
-@click.option('--num-distractors', type=str, default=json.dumps([5]))
+@click.option('--distractor', default='unknown_interprands',
+              help='type of distractor')
+@click.option('--num-distractors', type=str, default=json.dumps([5]),
+              help='possible number of distractors in each example')
 @click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
 @click.option('--use-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
 @click.option('--negated-hypothesis-ratio', type=float, default=0.5)
@@ -202,8 +209,10 @@ def generate_instances(size: int, *args):
 @click.option('--translation-distractor', default='word_swap')
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 @click.option('--num-translation-distractors', type=str, default=json.dumps([5]))
-@click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
-@click.option('--world-assump', default='CWA')
+@click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']),
+              help='possible proof stance of each example')
+@click.option('--world-assump', default='CWA',
+              help='the world assumption (Open World Assumption vs Closed World Assumption)')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--swap-ng-words-config', default='./configs/translation_distractors/swap_ng_words.json')
