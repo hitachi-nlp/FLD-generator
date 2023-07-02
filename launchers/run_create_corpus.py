@@ -129,7 +129,7 @@ def make_dataset(dataset_name: str,
             save_params(job_settings, job_output_dir)
 
             command = ' '.join([
-                'python ./create_FLD_corpus.py',
+                'python ./create_corpus.py',
 
                 f'{job_output_path}',
                 str(int(size_per_job)),
@@ -226,7 +226,7 @@ def make_dataset(dataset_name: str,
 @click.command()
 def main():
     setup_logger(level=logging.INFO)
-    logger.info('============================== [launch_create_FLD_corpus.py] start! ============================')
+    logger.info('============================== [run_create_corpus.py] start! ============================')
 
     # output_top_dir = Path('./outputs/00.create_corpus/20221203.first_exp')
     # output_top_dir = Path('./outputs/00.create_corpus/20221217.back_to_the_past')
@@ -245,7 +245,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230628.make_harder')
     # output_top_dir = Path('./outputs/00.create_corpus/20230629.degug')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
+    output_top_dir = Path('./outputs/00.create_corpus/debug')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -402,8 +403,9 @@ def main():
         # '20230626.many_bugs_fixed.D8.hard.dist-trees',
 
         # ---------------------------------- 20230701.finalize ------------------------------------
-        '20230701.D3.default',
-        '20230701.D8.default',
+        # '20230701.D3.default',
+        # '20230701.D8.default',
+        '20230701.D3.debug',
 
     ]
     # dataset_names = dataset_names[::-1]
@@ -441,7 +443,7 @@ def main():
 
     Parallel(n_jobs=num_jobs_for_datasets, backend='threading')(jobs)
 
-    logger.info('============================== [launch_create_FLD_corpus.py] done! ============================')
+    logger.info('============================== [00.run_create_corpus.py] done! ============================')
 
 
 if __name__ == '__main__':
