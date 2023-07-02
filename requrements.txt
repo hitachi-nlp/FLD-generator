@@ -5,6 +5,6 @@ z3-solver
 timeout-decorator
 lemminflect
 nltk
+colorlog
 
 line_profiling@git+https://github.com/hitachi-nlp/line-profiling.git@main
-logger_setup@git+https://github.com/HonoMi/python-logger-setup.git@master
