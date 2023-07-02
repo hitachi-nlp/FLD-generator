@@ -245,8 +245,7 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230628.make_harder')
     # output_top_dir = Path('./outputs/00.create_corpus/20230629.degug')
 
-    # output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
-    output_top_dir = Path('./outputs/00.create_corpus/debug')
+    output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -405,16 +404,18 @@ def main():
         # ---------------------------------- 20230701.finalize ------------------------------------
         # '20230701.D3.default',
         # '20230701.D8.default',
-        '20230701.D3.debug',
+        '20230701.D3.wo_transl_dist',
+        '20230701.D3.brnch-small',
+        '20230701.D3.dist-small',
 
     ]
     # dataset_names = dataset_names[::-1]
 
-    # num_jobs_for_datasets = 3
-    # num_jobs_per_dataset = 60
+    num_jobs_for_datasets = 3
+    num_jobs_per_dataset = 60
 
-    num_jobs_for_datasets = 2
-    num_jobs_per_dataset = 80
+    # num_jobs_for_datasets = 2
+    # num_jobs_per_dataset = 80
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')

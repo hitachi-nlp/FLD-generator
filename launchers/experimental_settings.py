@@ -6051,6 +6051,201 @@ _DATASET_SETTINGS = {
 
 
 
+    '20230701.D3.wo_transl_dist': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'distractor': 'mixture.negative_tree.negative_tree',
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(2, 5),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+
+    '20230701.D3.brnch-small': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'distractor': 'mixture.negative_tree.negative_tree',
+        'num_distractors': _to_range(15, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(0, 5),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
+
+
+    '20230701.D3.dist-small': {
+
+        'argument_configs': [
+            # './configs/arguments/AACorpus.pred_arg.json',
+
+            './configs/arguments/axiom.pred_only.json',
+            './configs/arguments/axiom.pred_arg.json',
+
+            './configs/arguments/axiom.and_or.pred_only.json',
+            './configs/arguments/axiom.and_or.pred_arg.json',
+
+            './configs/arguments/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axiom.implication_intro.pred_arg.json',
+
+            './configs/arguments/axiom.negation.pred_only.json',
+            './configs/arguments/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/theorem.pred_only.json',
+            # './configs/arguments/theorem.pred_arg.json',
+
+            # './configs/arguments/theorem.and_or.pred_only.json',
+            # './configs/arguments/theorem.and_or.pred_arg.json',
+        ],
+        'quantification': 0.2,
+        'quantify_all_at_once': True,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complication': 0.5,
+
+
+        'distractor': 'mixture.negative_tree.negative_tree',
+        'num_distractors': _to_range(0, 20),
+        'negated_hypothesis_ratio': 1.0,
+        'reused_object_nouns_max_factor': 1.0,
+        'add_subj_obj_swapped_distractor': True,
+
+        'num_translation_distractors': _to_range(0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distribution': 'flat.no_reference',
+        'depths': _to_range(1, 3),
+        'branch_extension_steps': _to_range(2, 5),
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 15000,
+        }
+    },
+
+
     '20230701.D8.default': {
 
         'argument_configs': [
@@ -6376,6 +6571,10 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230701.D3.default': '20230626.many_bugs_fixed',
     '20230701.D8.default': '20230626.many_bugs_fixed',
     '20230701.D3.debug': '20230626.many_bugs_fixed',
+
+    '20230701.D3.wo_transl_dist': '20230626.many_bugs_fixed',
+    '20230701.D3.brnch-small': '20230626.many_bugs_fixed',
+    '20230701.D3.dist-small': '20230626.many_bugs_fixed',
 
 
 }
