@@ -6,5 +6,6 @@ timeout-decorator
 lemminflect
 nltk
 colorlog
+dill
 
 line_profiling@git+https://github.com/hitachi-nlp/line-profiling.git@main
