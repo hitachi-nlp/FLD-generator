@@ -15,7 +15,7 @@ from FLD_generator.formula_distractors import FormulaDistractorGenerationFailure
 from FLD_generator.translation_distractors import TranslationDistractor
 from FLD_generator.translators import TranslationFailure
 from FLD_generator.utils import make_pretty_msg
-import kern_profiler
+import line_profiling
 
 logger = logging.getLogger(__name__)
 

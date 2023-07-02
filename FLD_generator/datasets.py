@@ -29,7 +29,7 @@ from FLD_generator.formula_checkers import (
     is_disprovable,
     is_unknown,
 )
-import kern_profiler
+import line_profiling
 
 logger = logging.getLogger(__name__)
 

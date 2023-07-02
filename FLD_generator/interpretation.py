@@ -17,7 +17,7 @@ from .formula import (
     negate,
 )
 from .argument import Argument
-import kern_profiler
+import line_profiling
 
 
 def _fill_str(no: int) -> str:

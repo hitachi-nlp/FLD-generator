@@ -11,7 +11,7 @@ from FLD_generator.formula import (
     NEGATION,
     CONSTANTS,
 )
-import kern_profiler
+import line_profiling
 
 logger = logging.getLogger(__name__)
 

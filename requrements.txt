@@ -1,17 +1,10 @@
-jsonlines
 tqdm
-pandas
-click
-nltk
 joblib
-transformers
-py-timeout
-timeout-decorator
-# pyinflect
-lemminflect
+click
 z3-solver
+timeout-decorator
+lemminflect
+nltk
 
-script_engine@git+https://github.com/HonoMi/script-engine.git@master
-lab@git+https://github.com/HonoMi/lab.git@master
+line_profiling@git+https://github.com/hitachi-nlp/line-profiling.git@main
 logger_setup@git+https://github.com/HonoMi/python-logger-setup.git@master
-kern_profiler@git+https://github.com/HonoMi/kern-profiler.git@master

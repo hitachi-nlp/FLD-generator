@@ -4,7 +4,6 @@ import logging
 from string import ascii_uppercase
 from functools import lru_cache
 
-# from pyinflect import getInflection
 from lemminflect import getInflection, getLemma
 
 from FLD_generator.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm

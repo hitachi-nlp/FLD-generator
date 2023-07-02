@@ -8,7 +8,7 @@ from .exception import FormalLogicExceptionBase
 from FLD_generator.utils import run_with_timeout_retry, RetryAndTimeoutFailure
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.word_banks import POS, ATTR
-import kern_profiler
+import line_profiling
 
 
 logger = logging.getLogger(__name__)

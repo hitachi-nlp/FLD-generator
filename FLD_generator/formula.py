@@ -2,7 +2,7 @@ import re
 from typing import List, Optional
 
 from FLD_generator.exception import FormalLogicExceptionBase
-import kern_profiler
+import line_profiling
 
 
 IMPLICATION = '->'

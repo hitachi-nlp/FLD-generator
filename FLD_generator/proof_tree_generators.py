@@ -57,7 +57,7 @@ from .formula import (
     VARIABLES,
     has_contradiction_symbol,
 )
-import kern_profiler
+import line_profiling
 
 # _LOG_ONLY_WHEN_FAILED = True
 logger = logging.getLogger(__name__)

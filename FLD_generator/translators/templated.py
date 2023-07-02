@@ -26,7 +26,7 @@ from FLD_generator.utils import make_combination, chained_sampling_from_weighted
 from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
 from FLD_generator.utils import starts_with_vowel_sound, compress, decompress, make_pretty_msg
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
-import kern_profiler
+import line_profiling
 
 logger = logging.getLogger(__name__)
 

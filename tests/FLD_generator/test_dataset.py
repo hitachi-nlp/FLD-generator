@@ -23,7 +23,7 @@ from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results
 from logger_setup import setup as setup_logger
 
-import kern_profiler
+import line_profiling
 
 logger = logging.getLogger(__name__)
 

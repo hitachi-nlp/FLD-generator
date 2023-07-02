@@ -43,7 +43,7 @@ from .intermediates import (
     I_UNIVERSAL,
     I_EXISTS,
 )
-import kern_profiler
+import line_profiling
 
 _interm_to = {
     I_IMPLICATION: Implies,

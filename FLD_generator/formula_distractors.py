@@ -31,7 +31,7 @@ from .proof_tree_generators import ProofTreeGenerator
 from .exception import FormalLogicExceptionBase
 from .proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
 from FLD_generator.utils import run_with_timeout_retry, RetryAndTimeoutFailure, make_pretty_msg
-import kern_profiler
+import line_profiling
 
 
 logger = logging.getLogger(__name__)
