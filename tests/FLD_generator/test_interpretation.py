@@ -645,7 +645,7 @@ def test_generate_quantifier_formulas():
 
         quantified_formulas = [
             formula
-            for formula, _ in generate_quantifier_formulas(formula, type_, quantify_all_at_once=quantify_all_at_once)
+            for formula, _ in generate_quantifier_formulas(formula, type_, all_constants_at_once=quantify_all_at_once)
         ]
 
         assert(len(quantified_formulas) == len(expected_formulas))
@@ -703,7 +703,7 @@ def test_generate_quantifier_arguments():
         print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}, quantify_all_at_once_in_a_formula={quantify_all_at_once_in_a_formula}) ------')
 
         generated_arguments = list(
-            generate_partially_quantifier_arguments(src_arg, quantifier_type, quantify_all_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
+            generate_partially_quantifier_arguments(src_arg, quantifier_type, all_constants_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
         )
 
         for generated_argument, _ in generated_arguments:

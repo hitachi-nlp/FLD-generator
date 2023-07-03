@@ -26,6 +26,10 @@ class TranslationFailure(FormalLogicExceptionBase):
     pass
 
 
+class TranslationImpossible(FormalLogicExceptionBase):
+    pass
+
+
 class TranslationNotFoundError(FormalLogicExceptionBase):
     pass
 

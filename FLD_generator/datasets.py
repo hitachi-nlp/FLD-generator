@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from abc import abstractmethod, ABC
 from statistics import mean, stdev
-from typing import Dict, List, Optional, Union, Iterable, Tuple, Any, Set
+from typing import Dict, List, Optional, Union, Iterable, Tuple, Any, Set, Tuple
 import logging
 import copy
 from collections import defaultdict
@@ -186,14 +186,18 @@ def _is_identical_node(this: Node, that: Node) -> bool:
     return this.formula == that.formula
 
 
+def _to_range(lower: int, upper: int) -> List[int]:
+    return list(range(lower, upper + 1))
+
+
 class NLProofSDataset:
 
     def __init__(self,
                  pipeline: ProofTreeGenerationPipeline,
-                 proof_stances: List[str],
-                 world_assump: str,
-                 depths: List[int],
-                 branch_extension_steps: List[int],
+                 depth_range: Tuple[int, int],
+                 branch_extensions_range: Tuple[int, int],
+                 proof_stances: Optional[List[str]] = None,
+                 world_assump: str = 'OWA',
                  depth_weights: List[float] = None,
                  depth_1_reference_weight: Optional[float] = None,
                  force_fix_illegal_intermediate_constants=False,
@@ -201,28 +205,28 @@ class NLProofSDataset:
                  use_collapsed_translation_nodes_for_unknown_tree=False,
                  swap_ng_words: Optional[Set[str]] = None,
                  word_bank: Optional[WordBank] = None,
-                 num_distractors: Optional[List[int]] = None,
-                 num_translation_distractors: Optional[List[int]] = None,
+                 distractors_range: Optional[List[int]] = None,
+                 translation_distractors_range: Optional[Tuple[int, int]] = None,
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
                  version: str = '0.0',
                  log_stats=True,
                  raise_if_translation_not_found=True):
+
         self.pipeline = pipeline
 
+        proof_stances = proof_stances or ['PROVED', 'DISPROVED', 'UNKNOWN']
         self.proof_stances = [ProofStance(proof_stance) for proof_stance in proof_stances]
         self.world_assump = WorldAssumption(world_assump)
         self.unknown_ratio = unknown_ratio
 
-        if len(depths) == 0:
-            raise ValueError()
-        self.depths = depths
+        self.depths = _to_range(*depth_range)
 
         if depth_weights is not None:
-            if len(depth_weights) != len(depths):
+            if len(depth_weights) != len(self.depths):
                 raise ValueError()
         else:
-            depth_weights = [1.0] * len(depths)
+            depth_weights = [1.0] * len(self.depths)
         depth_weights = [weight / sum(depth_weights) for weight in depth_weights]
         self._depth_weights = depth_weights
         logger.info('using depth weight: %s', str(self._depth_weights))
@@ -230,9 +234,9 @@ class NLProofSDataset:
         self._depth_1_reference_weight = depth_1_reference_weight
         self._force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants
 
-        self.branch_extension_steps = branch_extension_steps
-        self.num_distractors = num_distractors or [0]
-        self.num_translation_distractors = num_translation_distractors or [0]
+        self.branch_extension_steps = _to_range(*branch_extensions_range)
+        self.num_distractors = _to_range(*distractors_range) if distractors_range is not None else [0]
+        self.num_translation_distractors = _to_range(*translation_distractors_range) if branch_extensions_range is not None else [0]
         self.allow_inconsistency = allow_inconsistency
         self.allow_smaller_proofs = allow_smaller_proofs
         self.log_stats = log_stats,

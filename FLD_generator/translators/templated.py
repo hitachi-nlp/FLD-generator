@@ -11,6 +11,7 @@ import logging
 from pprint import pformat, pprint
 from functools import lru_cache
 import math
+from pathlib import Path
 
 from tqdm import tqdm
 from FLD_generator.utils import nested_merge
@@ -1033,8 +1034,14 @@ def build(config_paths: List[str],
 
     merged_config_json = {}
     for config_path in config_paths:
-        merged_config_json = nested_merge(merged_config_json,
-                                          json.load(open(config_path)))
+        _config_path = Path(config_path)
+        if _config_path.is_dir():
+            all_paths = sorted(_config_path.glob('**/*.json'))
+        else:
+            all_paths = [_config_path]
+        for _path in all_paths:
+            merged_config_json = nested_merge(merged_config_json,
+                                              json.load(open(str(_path))))
 
     translator = TemplatedTranslator(
         merged_config_json,

@@ -30,6 +30,8 @@ def make_dataset(dataset_name: str,
                  timeout_per_job: int,
                  delete_logs_when_done: bool,
                  num_jobs: int,
+                 num_workers_per_job: int,
+                 min_dataset_size_per_job: int,
                  dry_run: bool) -> None:
     logger.info('====================== make_dataset() for "%s" =========================',
                 dataset_name)
@@ -38,7 +40,7 @@ def make_dataset(dataset_name: str,
     # ----------------- fixed ------------------
     settings = {
         'dataset_name': dataset_name,
-        'num_workers_per_job': 5,
+        'num_workers_per_job': num_workers_per_job,
     }
     settings.update(get_dataset_setting(dataset_name))
 
@@ -53,28 +55,29 @@ def make_dataset(dataset_name: str,
 
             'argument_configs',
 
-            'complication',
-            'quantification',
+            'complex_formula_arguments_weight',
+            'quantifier_axiom_arguments_weight',
             'quantify_implication_premise_conclusion_at_once',
             'quantify_all_at_once',
 
-            'depths',
-            'depth_distribution',
-            'branch_extension_steps',
+            'depth_range',
+            'depth_distrib',
+            'branch_extensions_range',
 
             'distractor',
             # 'distractor_factor',
-            'num_distractors',
-            'sample_distractor_formulas_from_tree',
-            'sample_hard_negative_distractors',
-            'negated_hypothesis_ratio',
-            'add_subj_obj_swapped_distractor',
+            'distractors_range',
+            'sample_distractor_prototype_formulas_from_all_possible_formulas',
+            'disallow_hard_negative_distractors',
+            'negative_tree_negated_hypothesis_ratio',
+            'disallow_subj_obj_swapped_distractor',
             'use_collapsed_translation_nodes_for_unknown_tree',
             'fallback_from_formula_to_translation_distractor',
             'swap_ng_words_config',
 
             'translation_distractor',
-            'num_translation_distractors',
+            'translation_distractors_range',
+            'use_fixed_translation',
 
             'split_sizes',
 
@@ -92,18 +95,14 @@ def make_dataset(dataset_name: str,
     )
     logger.addHandler(create_file_handler(output_dir / 'log.txt'))
 
-    # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
-    # min_size_per_job = 900
-    # min_size_per_job = 300
-    min_size_per_job = 150
     for split, size in settings['split_sizes'].items():
         size_with_margin = int(size * 1.1)   # for the case some jobs fail or hang
 
         split_output_dir = output_dir / split
         split_output_dir.mkdir(exist_ok=True, parents=True)
 
-        if size_with_margin / num_jobs < min_size_per_job:
-            _num_jobs = max(math.ceil(size_with_margin / min_size_per_job), 1)
+        if size_with_margin / num_jobs < min_dataset_size_per_job:
+            _num_jobs = max(math.ceil(size_with_margin / min_dataset_size_per_job), 1)
         else:
             _num_jobs = num_jobs
         size_per_job = math.ceil(size_with_margin / _num_jobs)
@@ -134,7 +133,15 @@ def make_dataset(dataset_name: str,
                 f'{job_output_path}',
                 str(int(size_per_job)),
 
+                f'--depth-range \'{json.dumps(job_settings["depth_range"])}\'',
+                maybe_option('--depth-distrib', settings.get("depth_distrib", None)),
+                f'--branch-extensions-range \'{json.dumps(job_settings["branch_extensions_range"])}\'',
+
                 _make_multiple_value_option('--ac', job_settings['argument_configs']),
+                f'--complex-formula-arguments-weight {job_settings["complex_formula_arguments_weight"]}',
+                f'--quantifier-axiom-arguments-weight {job_settings["quantifier_axiom_arguments_weight"]}',
+                _make_multiple_value_option('--quantifier-axiom', job_settings['quantifier_axioms']),
+                maybe_option('--quantification-degree', job_settings.get('quantification_degree', None)),
 
                 _make_multiple_value_option('--tc', job_settings['translation_configs']),
                 '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
@@ -142,32 +149,23 @@ def make_dataset(dataset_name: str,
                 f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                 maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
 
-                f'--depths \'{json.dumps(job_settings["depths"])}\'',
-                maybe_option('--depth-distribution', settings.get("depth_distribution", None)),
-                f'--branch-extension-steps \'{json.dumps(job_settings["branch_extension_steps"])}\'',
-                f'--complication {job_settings["complication"]}',
-                f'--quantification {job_settings["quantification"]}',
-                _make_multiple_value_option('--quantifier-axiom', job_settings['quantifier_axioms']),
-                '--quantify-implication-premise-conclusion-at-once' if settings.get("quantify_implication_premise_conclusion_at_once", False) else '',
-                '--quantify-all-at-once' if settings.get("quantify_all_at_once", False) else '',
 
                 f'--distractor {job_settings["distractor"]}',
-                f'--num-distractors \'{json.dumps(job_settings["num_distractors"])}\'',
-                '--sample-distractor-formulas-from-tree' if job_settings.get('sample_distractor_formulas_from_tree', False) else '',
-                '--use-simplified-tree-formulas-as-distractor-prototype' if job_settings.get('use_simplified_tree_formulas_as_distractor_prototype', False) else '',
-                '--sample-hard-negative-distractors' if job_settings.get('sample_hard_negative_distractors', False) else '',
-                f'--negated-hypothesis-ratio {job_settings["negated_hypothesis_ratio"]}',
-                '--add-subj-obj-swapped-distractor' if job_settings.get('add_subj_obj_swapped_distractor', False) else '',
+                f'--distractors-range \'{json.dumps(job_settings["distractors_range"])}\'',
+                maybe_option('--negative-tree-negated-hypothesis-ratio', job_settings.get('negative_tree_negated_hypothesis_ratio', None)),
+                '--sample-distractor-prototype-formulas-from-all-possible-formulas' if job_settings.get('sample_distractor_prototype_formulas_from_all_possible_formulas', False) else '',
+                '--disallow-simplified-tree-formulas-as-distractor-prototype' if job_settings.get('disallow_simplified_tree_formulas_as_distractor_prototype', False) else '',
+                '--disallow-subj-obj-swapped-distractor' if job_settings.get('disallow_subj_obj_swapped_distractor', False) else '',
+                maybe_option('--swap-ng-words-config', settings.get("swap_ng_words_config", None)),
+                maybe_option('--translation-distractor', settings.get("translation_distractor", None)),
+                f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
-                f'--swap-ng-words-config {job_settings["swap_ng_words_config"]}',
 
-                f'--translation-distractor {job_settings["translation_distractor"]}',
-                f'--num-translation-distractors \'{json.dumps(job_settings["num_translation_distractors"])}\'',
-
-                f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'',
-                f'--world-assump {job_settings["world_assump"]}',
+                f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
+                f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',
                 maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
                 '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
+
                 f'--num-workers {job_settings["num_workers_per_job"]}',
                 f'--seed {job_settings["seed"]}',
 
@@ -245,7 +243,10 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230628.make_harder')
     # output_top_dir = Path('./outputs/00.create_corpus/20230629.degug')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.2')
+    output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.3.large')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -403,22 +404,31 @@ def main():
 
         # ---------------------------------- 20230701.finalize ------------------------------------
         # '20230701.D3.default',
+        # '20230701.D3.wo_transl_dist',
+        # '20230701.D3.brnch-small',
+        # '20230701.D3.dist-small',
+        '20230701.D3.default.refactor_test',
+
         # '20230701.D8.default',
-        '20230701.D3.wo_transl_dist',
-        '20230701.D3.brnch-small',
-        '20230701.D3.dist-small',
 
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 3
-    num_jobs_per_dataset = 60
+    num_jobs_for_datasets = 1
+    num_jobs_per_dataset = 100
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
 
+    # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
+    min_dataset_size_per_job = 150
+
+    num_workers_per_job = 5
+
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
+
+    # ---------------------------- fixed settings --------------------------
 
     timeout_per_job = 4800  # for the case some jobs hangs
     delete_logs_when_done = True
@@ -438,6 +448,8 @@ def main():
                 timeout_per_job,
                 delete_logs_when_done,
                 num_jobs_per_dataset,
+                num_workers_per_job,
+                min_dataset_size_per_job,
                 dry_run,
             )
         )

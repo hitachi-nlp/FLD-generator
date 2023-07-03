@@ -11,9 +11,9 @@ from FLD_generator.translators.base import Translator
 from FLD_generator.utils import flatten_dict
 from FLD_generator.exception import FormalLogicExceptionBase
 from FLD_generator.proof_tree_generators import ProofTreeGenerationFailure, ProofTreeGenerationImpossible
-from FLD_generator.formula_distractors import FormulaDistractorGenerationFailure, NegativeTreeDistractor
-from FLD_generator.translation_distractors import TranslationDistractor
-from FLD_generator.translators import TranslationFailure
+from FLD_generator.formula_distractors import FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible, NegativeTreeDistractor
+from FLD_generator.translation_distractors import TranslationDistractor, TranslationDistractorGenerationFailure, TranslationDistractorGenerationImpossible
+from FLD_generator.translators import TranslationFailure, TranslationImpossible
 from FLD_generator.utils import make_pretty_msg
 import line_profiling
 
@@ -21,6 +21,10 @@ logger = logging.getLogger(__name__)
 
 
 class ProofTreeGenerationPipelineFailure(FormalLogicExceptionBase):
+    pass
+
+
+class ProofTreeGenerationPipelineImpossible(FormalLogicExceptionBase):
     pass
 
 
@@ -126,8 +130,10 @@ class ProofTreeGenerationPipeline:
                     allow_smaller_proofs=allow_smaller_proofs,
                     force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 )
-            except (ProofTreeGenerationFailure, ProofTreeGenerationImpossible) as e:
+            except ProofTreeGenerationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
+            except ProofTreeGenerationImpossible as e:
+                raise ProofTreeGenerationPipelineImpossible(str(e))
             logger.info(_make_pretty_log('generate proof tree', 'finish'))
 
             if proof_tree is None:
@@ -149,14 +155,11 @@ class ProofTreeGenerationPipeline:
                                 raise ValueError(f'Duplicated other key {_other_key}')
                             others[_other_key] = _other_val
 
-                    except FormulaDistractorGenerationFailure as e:
+                    except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
                         is_formula_distractor_failed = True
-                        if self.fallback_from_formula_to_translation_distractor:
-                            logger.warning('formula distractor %s failed in generating distractors. will fallback to generate distractors by translation distractors.',
-                                           str(self.distractor))
-                            formula_distractors = []
-                        else:
-                            raise ProofTreeGenerationPipelineFailure(str(e))
+                        logger.warning('formula distractor %s failed in generating distractors due to the following error. :\n%s',
+                                       str(self.distractor), str(e))
+                        formula_distractors = []
                 else:
                     raise ValueError('could not generate distractors since distractor was not specified in the constructor.')
             else:
@@ -191,6 +194,8 @@ class ProofTreeGenerationPipeline:
                     )
                 except TranslationFailure as e:
                     raise ProofTreeGenerationPipelineFailure(str(e))
+                except TranslationImpossible as e:
+                    raise ProofTreeGenerationPipelineImpossible(str(e))
 
                 for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
@@ -202,6 +207,7 @@ class ProofTreeGenerationPipeline:
                     if translation is not None:
                         formula.translation = translation_prefix + translation
 
+                    # logger.critical('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      %s      %s', str(formula in leaf_formulas), str(SO_swap_formula is not None))
                     if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                         logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
                         formula_distractors.append(SO_swap_formula)
@@ -226,8 +232,10 @@ class ProofTreeGenerationPipeline:
                     else:
                         try:
                             translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors, best_effort=True)
-                        except FormulaDistractorGenerationFailure as e:
+                        except TranslationDistractorGenerationFailure as e:
                             raise ProofTreeGenerationPipelineFailure(str(e))
+                        except TranslationDistractorGenerationImpossible as e:
+                            raise ProofTreeGenerationPipelineImpossible(str(e))
                 else:
                     raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
             else:

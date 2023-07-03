@@ -2,7 +2,7 @@
 import math
 import random
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 from pprint import pformat
 import logging
@@ -38,58 +38,56 @@ def load_dataset(argument_config: List[str],
                  reused_object_nouns_max_factor: float,
                  limit_vocab_size_per_type: Optional[int],
                  translation_volume_to_weight: str,
-                 complication: float,
-                 quantification: float,
+                 complex_formula_arguments_weight: float,
+                 quantifier_axiom_arguments_weight: float,
                  quantifier_axioms: Optional[List[str]],
-                 quantify_implication_premise_conclusion_at_once: Optional[bool],
-                 quantify_all_at_once: Optional[bool],
+                 quantification_degree: str,
                  keep_dneg: bool,
                  distractor: str,
-                 num_distractors: List[int],
-                 sample_distractor_formulas_from_tree: bool,
-                 use_simplified_tree_formulas_as_distractor_prototype: bool,
-                 sample_hard_negative_distractors: bool,
-                 negated_hypothesis_ratio: float,
-                 add_subj_obj_swapped_distractor: bool,
+                 distractors_range: Tuple[int, int],
+                 sample_distractor_prototype_formulas_from_all_possible_formulas: bool,
+                 disallow_simplified_tree_formulas_as_distractor_prototype: bool,
+                 disallow_hard_negative_distractors: bool,
+                 negative_tree_negated_hypothesis_ratio: float,
+                 disallow_subj_obj_swapped_distractor: bool,
                  translation_distractor: str,
                  fallback_from_formula_to_translation_distractor: bool,
-                 num_translation_distractors: List[int],
+                 translation_distractors_range: Tuple[int, int],
                  proof_stances: List[str],
                  world_assump: str,
                  unknown_ratio: float,
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
                  swap_ng_words: Optional[List[str]],
-                 depths: List[int],
-                 depth_distribution: str,
+                 depth_range: Tuple[int, int],
+                 depth_distrib: str,
                  force_fix_illegal_intermediate_constants: bool,
-                 branch_extension_steps: List[int]):
+                 branch_extensions_range: Tuple[int, int]):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
-        complication=complication,
-        quantification=quantification,
+        complex_formula_arguments_weight=complex_formula_arguments_weight,
+        quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
         quantifier_axioms=quantifier_axioms,
-        quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
-        quantify_all_at_once=quantify_all_at_once,
+        quantification_degree=quantification_degree,
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
     word_bank = build_wordnet_wordbank('eng')
     logger.info(_build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
 
-    if any(size > 0 for size in num_distractors):
+    if distractors_range[1] > 0:
         logger.info(_build_bounded_msg(f'{"[start] building distractor":<30}', 3))
         _distractor = build_distractor(distractor,
                                        generator=generator,
-                                       sample_prototype_formulas_from_tree=sample_distractor_formulas_from_tree,
-                                       use_simplified_formulas_as_prototype=use_simplified_tree_formulas_as_distractor_prototype,
-                                       sample_hard_negatives=sample_hard_negative_distractors,
-                                       negated_hypothesis_ratio=negated_hypothesis_ratio)
+                                       sample_prototype_formulas_from_all_possible_formulas=sample_distractor_prototype_formulas_from_all_possible_formulas,
+                                       disallow_simplified_formulas_as_prototype=disallow_simplified_tree_formulas_as_distractor_prototype,
+                                       sample_hard_negatives=not disallow_hard_negative_distractors,
+                                       negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio)
         logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
 
-    if any(size > 0 for size in num_translation_distractors) or fallback_from_formula_to_translation_distractor:
+    if translation_distractors_range[1] > 0:
         logger.info(_build_bounded_msg(f'{"[start] building translation distractor":<30}', 3))
         _translation_distractor = build_translation_distractor(
             translation_distractor,
@@ -115,34 +113,34 @@ def load_dataset(argument_config: List[str],
         translation_distractor=_translation_distractor,
         fallback_from_formula_to_translation_distractor=fallback_from_formula_to_translation_distractor,
         translator=translator,
-        add_subj_obj_swapped_distractor=add_subj_obj_swapped_distractor,
+        add_subj_obj_swapped_distractor=not disallow_subj_obj_swapped_distractor,
     )
 
-    if depth_distribution == 'flat':
+    if depth_distrib == 'flat':
         depth_weights = None
         depth_1_reference_weight = None
-    elif depth_distribution == 'flat.no_reference':
+    elif depth_distrib == 'flat.no_reference':
         depth_weights = None
         depth_1_reference_weight = 0.0
-    elif depth_distribution == 'ruletaker.ours.20221202':
-        if set(depths) != set([1, 2, 3]):
-            raise ValueError(f'depths {depths} is not consistent with ruletaker.ours.20221202.')
+    elif depth_distrib == 'ruletaker.ours.20221202':
+        if set(depth_range) != (1, 3):
+            raise ValueError(f'depths {depth_range} is not consistent with ruletaker.ours.20221202.')
         # see "depth分布" of experiments.md
         depth_weights = [0.40, 0.15, 0.12]
         depth_1_reference_weight = 0.23 / (0.23 + 0.17)
     else:
-        raise ValueError(f'Unknown depth distribution {depth_distribution}')
+        raise ValueError(f'Unknown depth distrib {depth_distrib}')
 
     return NLProofSDataset(pipeline,
-                           proof_stances,
-                           world_assump,
-                           depths,
-                           branch_extension_steps,
+                           depth_range,
+                           branch_extensions_range,
+                           proof_stances=proof_stances,
+                           world_assump=world_assump,
                            depth_weights=depth_weights,
                            depth_1_reference_weight=depth_1_reference_weight,
                            force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
-                           num_distractors=num_distractors,
-                           num_translation_distractors=num_translation_distractors,
+                           distractors_range=distractors_range,
+                           translation_distractors_range=translation_distractors_range,
                            unknown_ratio=unknown_ratio,
                            use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
                            swap_ng_words=swap_ng_words,
@@ -171,54 +169,46 @@ def generate_instances(size: int, *args):
 @click.command()
 @click.argument('output-path')
 @click.argument('size', type=int)
+@click.option('--depth-range', type=str, default=json.dumps([1, 5]))
+@click.option('--depth-distrib', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
+@click.option('--branch-extensions-range', type=str, default=json.dumps([5, 5]))
 @click.option('--argument-config', '--ac',
-              multiple=True, default=[],
+              multiple=True,
+              default=['./configs/arguments/axioms'],
               help='argument (deduction rule) configuration files')
+@click.option('--complex-formula-arguments-weight', type=float, default=0.0)
+@click.option('--quantifier-axiom-arguments-weight', type=float, default=0.0)
+@click.option('--quantifier-axiom', multiple=True, default=None)
+@click.option('--quantification-degree', type=str, default='all_constants')
+@click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
+@click.option('--keep-dneg', is_flag=True, default=False)
+#
 @click.option('--translation-config', '--tc',
               multiple=True,
-              default=['./configs/translations/thing.json'],
+              default=['./configs/translations/thing.v1'],
               help='natural language translation config files')
 @click.option('--use-fixed-translation', type=bool, is_flag=True)
 @click.option('--reused-object-nouns-max-factor', type=float, default=1.0)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='sqrt')
-@click.option('--depths', type=str, default=json.dumps([5]),
-              help='the depths of proof trees')
-@click.option('--depth-distribution', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
-@click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
-@click.option('--branch-extension-steps', type=str, default=json.dumps([5]))
-@click.option('--complication', type=float, default=0.0,
-              help='the ratio of complex formulas included in the dataset')
-@click.option('--quantification', type=float, default=0.0,
-              help='the ratio of quantification formulas (i.e., formulas that use ∀,∃)')
-@click.option('--quantifier-axiom', multiple=True, default=None)
-@click.option('--translation-config', '--tc', multiple=True,
-              default=['./configs/translations/thing.json'])
-@click.option('--quantify-implication-premise-conclusion-at_once', is_flag=True)
-@click.option('--quantify-all-at-once', is_flag=True)
-@click.option('--keep-dneg', is_flag=True, default=False)
-@click.option('--distractor', default='unknown_interprands',
-              help='type of distractor')
-@click.option('--num-distractors', type=str, default=json.dumps([5]),
-              help='possible number of distractors in each example')
-@click.option('--sample-distractor-formulas-from-tree', type=bool, is_flag=True)
-@click.option('--use-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
-@click.option('--negated-hypothesis-ratio', type=float, default=0.5)
-@click.option('--sample-hard-negative-distractors', type=bool, is_flag=True)
-@click.option('--add-subj-obj-swapped-distractor', type=bool, is_flag=True)
+#
+@click.option('--distractor', default='mixture.negative_tree.negative_tree')
+@click.option('--distractors-range', type=str, default=json.dumps([5, 5]))
+@click.option('--disallow-hard-negative-distractors', type=bool, is_flag=True)
+@click.option('--negative-tree-negated-hypothesis-ratio', type=float, default=0.5)
+@click.option('--sample-distractor-prototype-formulas-from-all-possible-formulas', type=bool, is_flag=True)
+@click.option('--disallow-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
+@click.option('--disallow-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--translation-distractor', default='word_swap')
+@click.option('--translation-distractors-range', type=str, default=json.dumps([5]))
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
-@click.option('--num-translation-distractors', type=str, default=json.dumps([5]))
-@click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']),
-              help='possible proof stance of each example')
-@click.option('--world-assump', default='CWA',
-              help='the world assumption (Open World Assumption vs Closed World Assumption)')
+@click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
+@click.option('--world-assump', default='CWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
-@click.option('--swap-ng-words-config', default='./configs/translation_distractors/swap_ng_words.json')
+@click.option('--swap-ng-words-config', default=None)
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int,
-              # default=1000,
               default=20,
               # multithread  : data load = 4min, generation = 140 instances / 14min = 10 instances / min
               )
@@ -232,26 +222,25 @@ def main(output_path,
          limit_vocab_size_per_type,
          translation_volume_to_weight,
          size,
-         depths,
-         depth_distribution,
+         depth_range,
+         depth_distrib,
          force_fix_illegal_intermediate_constants,
-         branch_extension_steps,
-         complication,
-         quantification,
+         branch_extensions_range,
+         complex_formula_arguments_weight,
+         quantifier_axiom_arguments_weight,
          quantifier_axiom,
-         quantify_implication_premise_conclusion_at_once,
-         quantify_all_at_once,
+         quantification_degree,
          keep_dneg,
          distractor,
-         num_distractors,
-         sample_distractor_formulas_from_tree,
-         use_simplified_tree_formulas_as_distractor_prototype,
-         sample_hard_negative_distractors,
-         negated_hypothesis_ratio,
-         add_subj_obj_swapped_distractor,
+         distractors_range,
+         sample_distractor_prototype_formulas_from_all_possible_formulas,
+         disallow_simplified_tree_formulas_as_distractor_prototype,
+         disallow_hard_negative_distractors,
+         negative_tree_negated_hypothesis_ratio,
+         disallow_subj_obj_swapped_distractor,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
-         num_translation_distractors,
+         translation_distractors_range,
          proof_stances,
          world_assump,
          unknown_ratio,
@@ -263,12 +252,12 @@ def main(output_path,
          seed):
     setup_logger(do_stderr=True, level=logging.INFO)
     random.seed(seed)
-    depths = json.loads(depths)
-    branch_extension_steps = json.loads(branch_extension_steps)
-    num_distractors = json.loads(num_distractors)
-    num_translation_distractors = json.loads(num_translation_distractors)
+    depth_range = tuple(json.loads(depth_range))
+    branch_extensions_range = json.loads(branch_extensions_range)
+    distractors_range = json.loads(distractors_range)
+    translation_distractors_range = json.loads(translation_distractors_range)
     proof_stances = json.loads(proof_stances)
-    swap_ng_words = json.load(open(swap_ng_words_config))
+    swap_ng_words = json.load(open(swap_ng_words_config)) if swap_ng_words_config is not None else None
 
     if len(argument_config) == 0:
         raise ValueError()
@@ -304,31 +293,30 @@ def main(output_path,
                         reused_object_nouns_max_factor,
                         limit_vocab_size_per_type,
                         translation_volume_to_weight,
-                        complication,
-                        quantification,
+                        complex_formula_arguments_weight,
+                        quantifier_axiom_arguments_weight,
                         quantifier_axiom,
-                        quantify_implication_premise_conclusion_at_once,
-                        quantify_all_at_once,
+                        quantification_degree,
                         keep_dneg,
                         distractor,
-                        num_distractors,
-                        sample_distractor_formulas_from_tree,
-                        use_simplified_tree_formulas_as_distractor_prototype,
-                        sample_hard_negative_distractors,
-                        negated_hypothesis_ratio,
-                        add_subj_obj_swapped_distractor,
+                        distractors_range,
+                        sample_distractor_prototype_formulas_from_all_possible_formulas,
+                        disallow_simplified_tree_formulas_as_distractor_prototype,
+                        disallow_hard_negative_distractors,
+                        negative_tree_negated_hypothesis_ratio,
+                        disallow_subj_obj_swapped_distractor,
                         translation_distractor,
                         fallback_from_formula_to_translation_distractor,
-                        num_translation_distractors,
+                        translation_distractors_range,
                         proof_stances,
                         world_assump,
                         unknown_ratio,
                         use_collapsed_translation_nodes_for_unknown_tree,
                         swap_ng_words,
-                        depths,
-                        depth_distribution,
+                        depth_range,
+                        depth_distrib,
                         force_fix_illegal_intermediate_constants,
-                        branch_extension_steps,
+                        branch_extensions_range,
                     )
                 )
 

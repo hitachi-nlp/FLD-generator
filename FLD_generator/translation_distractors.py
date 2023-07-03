@@ -18,6 +18,10 @@ class TranslationDistractorGenerationFailure(FormalLogicExceptionBase):
     pass
 
 
+class TranslationDistractorGenerationImpossible(FormalLogicExceptionBase):
+    pass
+
+
 class TranslationDistractor(ABC):
 
     def generate(self,
@@ -184,14 +188,55 @@ class WordSwapDistractor(TranslationDistractor):
         return 10
 
 
-def build(type_: str,
+_SWAP_NG_WORDS_2023_06_16 = [
+  "a",
+  "an",
+  "the",
+
+  "be",
+  "being",
+  "is",
+  "was",
+  "are",
+  "were",
+
+  "do",
+  "does",
+  "did",
+  "will",
+
+  "not",
+
+  "and",
+  "also",
+  "but",
+
+  "with",
+  "about",
+  "in",
+
+  "or",
+  "either",
+  "both",
+
+  "that",
+
+  "to",
+  "so",
+  "there",
+  "for"
+
+]
+
+
+def build(type_: str = 'word_swap',
           word_bank: Optional[WordBank] = None,
           swap_ng_words: Optional[Set[str]] = None):
     msg = 'we should not use translation distractor because it can not ensure that the collapsed sentence can not derive the original hypothesis. For example, "{A}=typhoon & {B}=rain" collapsed to "{A}=typhoon & {B}=cloud" still derives {A}=typhoon.'
     # raise Exception(msg)
     logger.warning(msg)
 
-    swap_ng_words = swap_ng_words or {'a', 'the', 'is'}
+    swap_ng_words = swap_ng_words or _SWAP_NG_WORDS_2023_06_16
 
     if type_ == 'word_swap':
 

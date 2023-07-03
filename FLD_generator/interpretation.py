@@ -19,6 +19,12 @@ from .formula import (
 from .argument import Argument
 import line_profiling
 
+_QUANTIFICATION_DEGREES = [
+    'one_constant',
+    'all_constants_in_implication_premise_conclusion',
+    'all_constants',
+]
+
 
 def _fill_str(no: int) -> str:
     return str(no).zfill(6)
@@ -739,8 +745,7 @@ def generate_quantifier_axiom_arguments(
     argument_type: str,
     formula: Formula,
     id_prefix: Optional[str] = None,
-    quantify_implication_premise_conclusion_at_once=False,
-    quantify_all_at_once=False,
+    quantification_degree: str = 'one_constant',
     e_elim_conclusion_formula_prototype: Optional[Formula] = None,
 ) -> Iterable[Argument]:
     """
@@ -753,9 +758,10 @@ def generate_quantifier_axiom_arguments(
         raise ValueError(f'Unsupported quantifier axiom {argument_type}')
     if len(formula.variables) > 0:
         raise NotImplementedError()
-    if quantify_implication_premise_conclusion_at_once and quantify_all_at_once:
-        raise ValueError('if quantify_implication_premise_conclusion_at_once=True, then quantify_all_at_once must be False')
-    if quantify_implication_premise_conclusion_at_once and formula.rep.count(IMPLICATION) >= 2:
+
+    if quantification_degree not in _QUANTIFICATION_DEGREES:
+        raise ValueError(f'Unknown quantification degree "{dquantification_degreeegree}"')
+    if quantification_degree == 'all_constants_in_implication_premise_conclusion' and formula.rep.count(IMPLICATION) >= 2:
         raise NotImplementedError()
 
     def is_constant_only(formula: Formula) -> bool:
@@ -768,7 +774,9 @@ def generate_quantifier_axiom_arguments(
         return is_constant_only(formula) or is_variable_only(formula)
 
     de_quantifier_constant = sorted(set(CONSTANTS) - {c.rep for c in formula.constants})[0]
-    for i, quantifier_mapping in enumerate(generate_quantifier_mappings([formula], quantify_all_at_once=quantify_all_at_once)):
+    for i, quantifier_mapping in enumerate(
+        generate_quantifier_mappings([formula],
+                                     all_constants=quantification_degree == 'all_constants')):
         quantifier_variables = {
             tgt for src, tgt in quantifier_mapping.items()
             if src != tgt
@@ -787,7 +795,7 @@ def generate_quantifier_axiom_arguments(
         xyz_formula = interpret_formula(formula, quantifier_mapping)
         abc_formula = interpret_formula(formula, de_quantifier_mapping)
 
-        if quantify_implication_premise_conclusion_at_once:
+        if quantification_degree == 'all_constants_in_implication_premise_conclusion':
             if (xyz_formula.premise is not None and not is_individual_type_single(xyz_formula.premise))\
                     or (xyz_formula.conclusion is not None and not is_individual_type_single(xyz_formula.conclusion)):
                 continue
@@ -806,7 +814,7 @@ def generate_quantifier_axiom_arguments(
                 )
             elif argument_type == 'universal_quantifier_intro':
                 quantified_constant_reps = list(
-                    set([constant.rep for constant in de_quantifier_formula.constants])\
+                    set([constant.rep for constant in de_quantifier_formula.constants])
                     - set([constant.rep for constant in quantifier_formula.constants])
                 )
                 quantified_constants = [Formula(rep) for rep in quantified_constant_reps]
@@ -871,9 +879,7 @@ def generate_quantifier_axiom_arguments(
 def generate_partially_quantifier_arguments(src_arg: Argument,
                                             quantifier_type: str,
                                             elim_dneg=False,
-                                            quantify_implication_premise_conclusion_at_once=False,
-                                            quantify_all_at_once=False,
-                                            quantify_all_at_once_in_a_formula=False,
+                                            quantification_degree: str = 'one_constant',
                                             get_name=False) -> Union[Iterable[Tuple[Argument, Dict[str, str]]], Iterable[Tuple[Argument, Dict[str, str], str]]]:
     """
 
@@ -882,11 +888,11 @@ def generate_partially_quantifier_arguments(src_arg: Argument,
     """
     # XXX: We should not quantify the conclusion since such arguments do not hold
     raise NotImplementedError()
-    if quantify_implication_premise_conclusion_at_once:
+    if quantification_degree == 'all_constants_in_implication_premise_conclusion':
         raise NotImplementedError()
 
     for mapping, name in generate_quantifier_mappings(src_arg.all_formulas,
-                                                      quantify_all_at_once=quantify_all_at_once,
+                                                      all_constants = quantification_degree == 'all_constants',
                                                       get_name=True):
         constants_appearing_only_in_one_formula = set()
         for i_formula, formula in enumerate(src_arg.all_formulas):
@@ -904,7 +910,7 @@ def generate_partially_quantifier_arguments(src_arg: Argument,
                    for src_constant in quantified_constants):
             continue
 
-        if quantify_all_at_once_in_a_formula:
+        if quantification_degree == 'all_constants':
             is_all_or_nothing = True  # In a formula, all or no constants should be converted to variable at once
             for formula in src_arg.all_formulas:
                 constant_reps = {constant.rep for constant in formula.constants}
@@ -929,11 +935,11 @@ def generate_partially_quantifier_arguments(src_arg: Argument,
 
 def generate_quantifier_formulas(src_formula: Formula,
                                  quantifier_type: str,
-                                 quantify_all_at_once=False,
+                                 all_constants=False,
                                  get_name=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
     for i, (quantifier_mapping, name) in enumerate(generate_quantifier_mappings([src_formula],
-                                                                        quantify_all_at_once=quantify_all_at_once,
-                                                                        get_name=True)):
+                                                                                all_constants=all_constants,
+                                                                                get_name=True)):
         quantifier_variables = [tgt for tgt in quantifier_mapping.values()
                                 if tgt in VARIABLES]
 
@@ -952,7 +958,7 @@ def generate_quantifier_formulas(src_formula: Formula,
 
 @profile
 def generate_quantifier_mappings(formulas: List[Formula],
-                                 quantify_all_at_once=False,
+                                 all_constants=False,
                                  get_name=False)\
         -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
 
@@ -967,7 +973,7 @@ def generate_quantifier_mappings(formulas: List[Formula],
             return
 
         src_constant = constants[0]
-        tgt_constant_reps = [tgt_variable] if quantify_all_at_once else [src_constant, tgt_variable]
+        tgt_constant_reps = [tgt_variable] if all_constants else [src_constant, tgt_variable]
         for tgt_constant_rep in tgt_constant_reps:
             for mapping in enum_all_quantifier_mappings(constants[1:]):
                 mapping[src_constant] = tgt_constant_rep
