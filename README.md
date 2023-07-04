@@ -1,5 +1,5 @@
 # FLD Generator
-This is one of the official repositories of the paper `Learning Deductive Reasoning from Synthetic Corpus based on Formal Logic`.
+This is one of the official repositories of the paper [Learning Deductive Reasoning from Synthetic Corpus based on Formal Logic](TODO).
 This repository includes the code for generating the FLD corpus.  
 
 See [the entry-point repository](https://github.com/hitachi-nlp/FLD) for the other repositories used in the paper.
@@ -19,7 +19,7 @@ $ pip install -r ./requrements.txt
 `./create_corpus.py` generates corpus with the design specified by the given options.
 
 ### Creating FLD.3
-
+TODO
 ```console
 $ python ./create_corpus.py\
     <output_dir>\
