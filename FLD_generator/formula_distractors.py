@@ -661,7 +661,7 @@ class MixtureDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 3
+        return 1
 
     @property
     def default_timeout_per_trial(self) -> int:
