@@ -11,8 +11,8 @@ See [the entry-point repository](https://github.com/hitachi-nlp/FLD) for the oth
 
 ## Installation
 The code has been tested on Python 3.7.7.
-```
-pip install -r ./requrements.txt
+```console
+$ pip install -r ./requrements.txt
 ```
 
 ## How to generate FLD corpus
@@ -20,8 +20,8 @@ pip install -r ./requrements.txt
 
 ### Creating FLD.3
 
-```sh
-python ./create_corpus.py\
+```console
+$ python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --ac ./configs/arguments/axiom.pred_only.json\

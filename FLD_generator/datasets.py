@@ -481,6 +481,7 @@ class NLProofSDataset:
                 'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
                 'negative_proof_stance': negative_stance_label,
                 'negative_answer': negative_label,
+                # 'negative_original_tree_depth': negative_tree.depth if negative_tree is not None else None,
 
                 'original_tree_depth': proof_tree.depth,
 

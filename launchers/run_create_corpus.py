@@ -246,7 +246,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
     # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test')
     # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.2')
-    output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.3.large')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.3.large')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230704.speedup.1')
+    output_top_dir = Path('./outputs/00.create_corpus/20230704.speedup.2')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -421,7 +423,8 @@ def main():
     # num_jobs_per_dataset = 80
 
     # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
-    min_dataset_size_per_job = 150
+    # min_dataset_size_per_job = 150
+    min_dataset_size_per_job = 50
 
     num_workers_per_job = 5
 

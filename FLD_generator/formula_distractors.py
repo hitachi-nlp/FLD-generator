@@ -502,10 +502,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                  prototype_formulas: Optional[List[Formula]] = None,
                  negative_tree_negated_hypothesis_ratio=0.5,
                  **kwargs):
-        try:
-            super().__init__(**kwargs)
-        except:
-            import pudb; pudb.set_trace()
+        super().__init__(**kwargs)
 
         if generator.complex_formula_arguments_weight < 0.01:
             raise ValueError('Generator with too small "complex_formula_arguments_weight" will lead to generation failure, since we try to generate a tree with negated hypothesis, which is only in the complicated arguments.')
@@ -609,7 +606,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                     negative_tree,
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
-                    max_retry=10,
+                    max_retry=10,   # HONOKA: this value determines the total speed.
                     best_effort=True,
                     force_fix_illegal_intermediate_constants=True,
                 )
@@ -630,7 +627,6 @@ class NegativeTreeDistractor(FormulaDistractor):
             if initial_sampling == 'negated_hypothesis':
                 leaf_node_at_most = len(negative_leaf_nodes) - 1  # should exclude at least one
             elif initial_sampling == 'various_form':
-                # leaf_node_at_most = random.sample([len(negative_leaf_nodes) - 1, len(negative_leaf_nodes)], 1)[0]
                 leaf_node_at_most = len(negative_leaf_nodes)
 
             for distractor_node in random.sample(negative_leaf_nodes, leaf_node_at_most):
@@ -661,6 +657,7 @@ class MixtureDistractor(FormulaDistractor):
     def __init__(self, distractors: List[FormulaDistractor], **kwargs):
         super().__init__(**kwargs)
         self._distractors = distractors
+        self.distractors_max_enum = 3
 
     @property
     def default_max_retry(self) -> int:
@@ -670,7 +667,7 @@ class MixtureDistractor(FormulaDistractor):
     def default_timeout_per_trial(self) -> int:
         timeout_sum = 0
         for distractor in self._distractors:
-            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial * self.distractors_max_enum
         return timeout_sum
 
     @profile
@@ -692,30 +689,32 @@ class MixtureDistractor(FormulaDistractor):
         distractor_formulas = []
         others = defaultdict(list)
         remaining_size = size
-        max_enum = 3
-        for distractor in random.sample(self._distractors * max_enum, len(self._distractors) * max_enum):
-            _size = random.randint(0, remaining_size)
-            if _size == 0:
-                continue
+        for enum in range(self.distractors_max_enum):
+            for i_distrator, distractor in enumerate(random.sample(self._distractors, len(self._distractors))):
+                if remaining_size <= 0:
+                    break
 
-            try:
-                _distractor_formulas, _others = distractor.generate(proof_tree,
-                                                                    _size,
-                                                                    existing_distractors = existing_distractors + distractor_formulas,
-                                                                    allow_inconsistency=allow_inconsistency,
-                                                                    allow_smaller_proofs=allow_smaller_proofs,
-                                                                    best_effort=best_effort)
+                if i_distrator == len(self._distractors) - 1:
+                    _size = remaining_size
+                else:
+                    _size = random.randint(1, remaining_size)
 
-                distractor_formulas += _distractor_formulas
-                remaining_size -= len(_distractor_formulas)
+                try:
+                    _distractor_formulas, _others = distractor.generate(proof_tree,
+                                                                        _size,
+                                                                        existing_distractors = existing_distractors + distractor_formulas,
+                                                                        allow_inconsistency=allow_inconsistency,
+                                                                        allow_smaller_proofs=allow_smaller_proofs,
+                                                                        best_effort=best_effort)
 
-                for _other_key, _other_val in _others.items():
-                    # if _other_key in others:
-                    #     raise ValueError(f'Duplicated other key {_other_key}')
-                    others[f'mixture_list.{_other_key}'].append(_other_val)
+                    distractor_formulas += _distractor_formulas
+                    remaining_size -= len(_distractor_formulas)
 
-            except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
-                self._log(logging.INFO, f'sub distractor "{str(distractor)}" failed in generating distractors with the following message:' + '\n' + f'{str(e)}')
+                    for _other_key, _other_val in _others.items():
+                        others[f'mixture_list.{_other_key}'].append(_other_val)
+
+                except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
+                    self._log(logging.INFO, f'sub distractor "{str(distractor)}" failed in generating distractors with the following message:' + '\n' + f'{str(e)}')
 
         return distractor_formulas, others
 

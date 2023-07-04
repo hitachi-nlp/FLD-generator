@@ -207,7 +207,6 @@ class ProofTreeGenerationPipeline:
                     if translation is not None:
                         formula.translation = translation_prefix + translation
 
-                    # logger.critical('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      %s      %s', str(formula in leaf_formulas), str(SO_swap_formula is not None))
                     if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                         logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
                         formula_distractors.append(SO_swap_formula)
