@@ -57,8 +57,11 @@ def main():
     # input_dir = Path('./outputs/00.create_corpus/20230704.speedup.1')
     # output_dir = Path('./outputs/G00.compute_distrib.py/20230704.speedup.1')
 
-    input_dir = Path('./outputs/00.create_corpus/20230704.speedup.2')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230704.speedup.2')
+    # input_dir = Path('./outputs/00.create_corpus/20230704.speedup.2')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230704.speedup.2')
+
+    input_dir = Path('./outputs/00.create_corpus/20230705.dist-tree')
+    output_dir = Path('./outputs/G00.compute_distrib.py/20230705.dist-tree')
 
     compute_distrib(input_dir, output_dir)
 

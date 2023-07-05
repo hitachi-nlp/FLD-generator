@@ -5081,7 +5081,7 @@ _DATASET_SETTINGS = {
 
 
         'distractors_range': (15, 20),
-        'distractor': 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
+        'distractor': 'mixture.negative_tree_double.simplified_formula.various_form',
 
         'translation_distractors_range': (0, 5),
         'use_collapsed_translation_nodes_for_unknown_tree': True,
@@ -5450,7 +5450,7 @@ _DATASET_SETTINGS = {
 
 
         'distractors_range': (15, 20),
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
 
         'translation_distractors_range': (0, 5),
         'use_collapsed_translation_nodes_for_unknown_tree': True,
@@ -5577,7 +5577,7 @@ _DATASET_SETTINGS = {
 
 
         'distractors_range': (15, 20),
-        'distractor': 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
+        'distractor': 'mixture.negative_tree_double.simplified_formula.various_form',
 
         'translation_distractors_range': (0, 5),
         'use_collapsed_translation_nodes_for_unknown_tree': True,
@@ -5620,7 +5620,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (15, 20),
 
         'translation_distractors_range': (0, 5),
@@ -5665,7 +5665,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (15, 20),
 
         'translation_distractors_range': (0, 0),
@@ -5708,7 +5708,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (15, 20),
 
         'translation_distractors_range': (0, 5),
@@ -5752,7 +5752,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (0, 20),
 
         'translation_distractors_range': (0, 5),
@@ -5795,7 +5795,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (15, 20),
 
         'translation_distractors_range': (0, 5),
@@ -5812,11 +5812,99 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
+            # 'test': 50,
             'test': 300,
             # 'test': 1000,
         }
     },
 
+
+
+    '20230701.D3.default.dist-tree-triple': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'distractor': 'mixture.negative_tree_triple',
+        'distractors_range': (15, 20),
+
+        'translation_distractors_range': (0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distrib': 'flat.no_reference',
+        'depth_range': (1, 3),
+        'branch_extensions_range': (2, 5),
+
+
+        'split_sizes': {
+            # 'test': 50,
+            'test': 300,
+            # 'test': 1000,
+        }
+    },
+
+
+
+    '20230701.D3.default.dist-tree-quadruple': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+
+
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+
+
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'distractor': 'mixture.negative_tree_quadruple',
+        'distractors_range': (15, 20),
+
+        'translation_distractors_range': (0, 5),
+        'use_collapsed_translation_nodes_for_unknown_tree': True,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'depth_distrib': 'flat.no_reference',
+        'depth_range': (1, 3),
+        'branch_extensions_range': (2, 5),
+
+
+        'split_sizes': {
+            # 'test': 50,
+            'test': 300,
+            # 'test': 1000,
+        }
+    },
 
 
 
@@ -5840,7 +5928,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (15, 20),
 
         'translation_distractors_range': (0, 5),
@@ -5885,7 +5973,7 @@ _DATASET_SETTINGS = {
         'complex_formula_arguments_weight': 0.5,
 
 
-        'distractor': 'mixture.negative_tree.negative_tree',
+        'distractor': 'mixture.negative_tree_double',
         'distractors_range': (15, 20),
 
         'translation_distractors_range': (0, 5),
@@ -6082,6 +6170,8 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230701.D3.brnch-small': '20230626.many_bugs_fixed',
     '20230701.D3.dist-small': '20230626.many_bugs_fixed',
     '20230701.D3.default.refactor_test': '20230626.many_bugs_fixed',
+    '20230701.D3.default.dist-tree-triple': '20230626.many_bugs_fixed',
+    '20230701.D3.default.dist-tree-quadruple': '20230626.many_bugs_fixed',
 
     '20230701.D8.default': '20230626.many_bugs_fixed',
 

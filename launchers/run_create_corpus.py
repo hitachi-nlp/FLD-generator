@@ -250,7 +250,12 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.3.large')
     # output_top_dir = Path('./outputs/00.create_corpus/20230704.speedup.1')
     # output_top_dir = Path('./outputs/00.create_corpus/20230704.speedup.2')
-    output_top_dir = Path('./outputs/00.create_corpus/20230704.refactor_test')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230704.refactor_test')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230705.dist-tree')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230705.dist-tree.1_parallel')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230705.log')
+    output_top_dir = Path('./outputs/00.create_corpus/20230705.min_size_per_worker=20')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -412,23 +417,28 @@ def main():
         # '20230701.D3.brnch-small',
         # '20230701.D3.dist-small',
         '20230701.D3.default.refactor_test',
+        '20230701.D3.default.dist-tree-triple',
+        '20230701.D3.default.dist-tree-quadruple',
+
 
         # '20230701.D8.default',
 
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 1
-    num_jobs_per_dataset = 100
+    num_jobs_for_datasets = 3
+    num_jobs_per_dataset = 50
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
 
     # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
     # min_dataset_size_per_job = 150
-    min_dataset_size_per_job = 50
+    min_dataset_size_per_job = 100
+    # min_dataset_size_per_job = 10
 
     num_workers_per_job = 5
+    # num_workers_per_job = 1
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')

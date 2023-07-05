@@ -785,6 +785,16 @@ def build(type_: str,
           sample_prototype_formulas_from_all_possible_formulas=False,
           negative_tree_negated_hypothesis_ratio=0.5,
           **kwargs):
+
+    # logger.fatal('--------------------- build_distractor -----------------------------')
+    # logger.info(type_)
+    # logger.info(sample_hard_negatives)
+    # logger.info(disallow_simplified_formulas_as_prototype)
+    # logger.info(sample_prototype_formulas_from_all_possible_formulas)
+    # logger.info(negative_tree_negated_hypothesis_ratio)
+    # from pprint import pformat
+    # logger.info(pformat(kwargs))
+
     use_simplified_formulas_as_prototype = not disallow_simplified_formulas_as_prototype
 
     prototype_formulas: Optional[List[Formula]] = None
@@ -882,9 +892,65 @@ def build(type_: str,
             **kwargs,
         )
 
-    elif type_ == 'mixture.negative_tree.negative_tree':
+    elif type_ == 'mixture.negative_tree_double':
         return MixtureDistractor(
             [
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=0.0,
+                    **kwargs,
+                ),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=1.0,
+                    **kwargs,
+                ),
+            ],
+            **kwargs,
+        )
+
+    elif type_ == 'mixture.negative_tree_triple':
+        return MixtureDistractor(
+            [
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=0.0,
+                    **kwargs,
+                ),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=0.0,
+                    **kwargs,
+                ),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=1.0,
+                    **kwargs,
+                ),
+            ],
+            **kwargs,
+        )
+
+    elif type_ == 'mixture.negative_tree_quadruple':
+        return MixtureDistractor(
+            [
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=0.0,
+                    **kwargs,
+                ),
+                NegativeTreeDistractor(
+                    generator,
+                    prototype_formulas=prototype_formulas,
+                    negative_tree_negated_hypothesis_ratio=0.0,
+                    **kwargs,
+                ),
                 NegativeTreeDistractor(
                     generator,
                     prototype_formulas=prototype_formulas,
@@ -894,14 +960,14 @@ def build(type_: str,
                 NegativeTreeDistractor(
                     generator,
                     prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
+                    negative_tree_negated_hypothesis_ratio=1.0,
                     **kwargs,
                 ),
             ],
             **kwargs,
         )
 
-    elif type_ == 'mixture.negative_tree.negative_tree.simplified_formula.various_form':
+    elif type_ == 'mixture.negative_tree_double.simplified_formula.various_form':
         return MixtureDistractor(
             [
                 NegativeTreeDistractor(

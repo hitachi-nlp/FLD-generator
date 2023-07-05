@@ -209,7 +209,7 @@ def generate_instances(size: int, *args):
 @click.option('--swap-ng-words-config', default=None)
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int,
-              default=10,
+              default=20,
               # multithread  : data load = 4min, generation = 140 instances / 14min = 10 instances / min
               )
 @click.option('--batch-size-per-worker', type=int, default=10000)

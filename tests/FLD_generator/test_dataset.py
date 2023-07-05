@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 @profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 3) -> None:
+                     num_dataset: int = 10) -> None:
     # agg_stats: Dict[str, int] = defaultdict(int)
     for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
         log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
@@ -103,7 +103,11 @@ def test_generate_dataset():
 
         # 'mixture.negative_tree.simplified_formula.various_form',
         # 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
-        'mixture.negative_tree.negative_tree',
+        # 'mixture.negative_tree.negative_tree',
+
+        # 'mixture.negative_tree_double',
+        # 'mixture.negative_tree_triple',
+        'mixture.negative_tree_quadruple',
 
         generator=generator,
         negative_tree_negated_hypothesis_ratio=1.0,
@@ -135,24 +139,32 @@ def test_generate_dataset():
         add_subj_obj_swapped_distractor=True,
     )
 
-    depth_range = (1, 8)
-    branch_extensions_range = (1, 5)
+    depth_range = (1, 3)
+    branch_extensions_range = (2, 5)
     distractors_range = (15, 20)
+
+    unknown_ratio = 0.33
+    depth_1_reference_weight = None
+
+    use_collapsed_translation_nodes_for_unknown_tree = False
     translation_distractors_range = (0, 5) if translation_distractor is not None else (0, 0)
 
-    dataset = NLProofSDataset(pipeline,
-                              depth_range,
-                              branch_extensions_range,
-                              depth_1_reference_weight=None,
-                              force_fix_illegal_intermediate_constants=True,
-                              unknown_ratio=0.333,
-                              use_collapsed_translation_nodes_for_unknown_tree=False,
-                              # word_bank=word_bank,
-                              distractors_range=distractors_range,
-                              translation_distractors_range=translation_distractors_range,
-                              allow_smaller_proofs=False,
-                              version='0.1',
-                              raise_if_translation_not_found=False)
+    dataset = NLProofSDataset(
+        pipeline,
+
+        depth_range,
+        branch_extensions_range,
+        depth_1_reference_weight=depth_1_reference_weight,
+        unknown_ratio=unknown_ratio,
+
+        distractors_range=distractors_range,
+
+        use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
+        word_bank=word_bank,
+        translation_distractors_range=translation_distractors_range,
+
+        raise_if_translation_not_found=False
+    )
 
     generate_dataset(dataset)
 
