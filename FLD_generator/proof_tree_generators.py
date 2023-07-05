@@ -177,6 +177,7 @@ class ProofTreeGenerator:
             allow_non_canonical_contradiction_use=False,
             elim_dneg=elim_dneg,
         )
+        self.arguments = tuple(self.arguments)  # to use cache
 
     @property
     def complex_formula_arguments_weight(self):
@@ -665,31 +666,6 @@ def _generate_stem(arguments: List[Argument],
         for arg in _shuffle_arguments(arguments, weights=argument_weights):
             yield arg
 
-    def find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
-        for descendant in node.descendants:
-            if descendant.is_leaf:
-                yield descendant
-
-    def find_linkable_arguments(node: ProofNode) -> Iterable[Argument]:
-        cur_possible_assumption_nodes = set(find_possible_assumption_nodes(node))
-
-        for arg in arguments:
-            one_premise_matched = False
-            for premise in arg.premises:
-                if not formula_is_identical_to(premise, node.formula):
-                    continue
-
-                if premise in arg.assumptions:
-                    assumption = arg.assumptions[premise]
-                    if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
-                               for cur_assumption_node in cur_possible_assumption_nodes):
-                        continue
-
-                one_premise_matched = True
-                break
-
-            if one_premise_matched:
-                yield arg
 
     if depth == 1:
         if depth_1_reference_weight is not None:
@@ -743,10 +719,10 @@ def _generate_stem(arguments: List[Argument],
             formulas_in_tree = [node.formula for node in proof_tree.nodes]
 
             cur_conclusion = cur_conclusion_node.formula
-            cur_possible_assumption_nodes = list(find_possible_assumption_nodes(cur_conclusion_node))
+            cur_possible_assumption_nodes = list(_find_possible_assumption_nodes(cur_conclusion_node))
             log_traces.append(f'   | cur_conclusion {cur_conclusion}')
 
-            linkable_args = list(find_linkable_arguments(cur_conclusion_node))
+            linkable_args = list(_generate_stem_find_linkable_arguments(arguments, cur_conclusion_node))
 
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
@@ -948,22 +924,54 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
-@profile
-def find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Iterable[Argument]:
+_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE: Dict[Tuple[int, int], List[Argument]] = {}
+_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE = 1000000
+
+
+def _generate_stem_find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Iterable[Argument]:
+    global _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE
+    global _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE
+
+    cache_key = (id(arguments), id(node))
+    if cache_key in _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE:
+        return _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE[cache_key]
+
+    cur_possible_assumption_nodes = set(_find_possible_assumption_nodes(node))
+
+    done_args: List[Argument] = []
     for arg in arguments:
+        one_premise_matched = False
+        for premise in arg.premises:
+            if not formula_is_identical_to(premise, node.formula):
+                continue
 
-        if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
-                and _is_failure_loop_univ_intro_argument(arg):
-            continue
+            if premise in arg.assumptions:
+                assumption = arg.assumptions[premise]
+                if not any(formula_is_identical_to(cur_assumption_node.formula, assumption)
+                           for cur_assumption_node in cur_possible_assumption_nodes):
+                    continue
 
-        if formula_is_identical_to(arg.conclusion, node.formula)\
-                and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
+            one_premise_matched = True
+            break
+
+        if one_premise_matched:
             yield arg
+            done_args.append(arg)
+
+    _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE[cache_key] = done_args
+    if len(_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE) > _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE:
+        _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE = {}
+
+
+def _find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
+    for descendant in node.descendants:
+        if descendant.is_leaf:
+            yield descendant
 
 
 @profile
 def _extend_branches(proof_tree: ProofTree,
-                     arguments: List[Argument],
+                     arguments: Union[Tuple[Argument, ...], List[Argument]],
                      num_steps: int,
                      start_leaf_nodes: Optional[List[ProofNode]] = None,
                      argument_weights: Optional[Dict[Argument, float]] = None,
@@ -1055,7 +1063,7 @@ def _extend_branches(proof_tree: ProofTree,
         if cur_step == 0:
             is_linkable_any = False
             for target_node in _target_leaf_nodes:
-                for linkable_arg in find_linkable_arguments(arguments, target_node):
+                for linkable_arg in _extend_branches_find_linkable_arguments(arguments, target_node):
                     is_linkable_any = True
                     break
                 if is_linkable_any:
@@ -1078,7 +1086,7 @@ def _extend_branches(proof_tree: ProofTree,
             target_leaf_node = leaf_node
 
             # Choose next argument
-            linkable_args = list(find_linkable_arguments(arguments, leaf_node))
+            linkable_args = list(_extend_branches_find_linkable_arguments(arguments, leaf_node))
             if len(linkable_args) == 0:
                 rejection_stats['len(linkable_args) == 0'] += 1
 
@@ -1239,6 +1247,38 @@ def _extend_branches(proof_tree: ProofTree,
         return proof_tree, cur_step, orig_nodes_to_copy_nodes
     else:
         return proof_tree, cur_step
+
+
+_EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE: Dict[Tuple[int, str], List[Argument]] = {}
+_EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE_SIZE = 1000000
+
+
+@profile
+def _extend_branches_find_linkable_arguments(arguments: Tuple[Argument, ...], node: ProofNode) -> Iterable[Argument]:
+    global _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE
+    global _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE_SIZE
+
+    cache_key = (id(arguments), node.formula.rep)
+    if cache_key in _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE:
+        return _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE[cache_key]
+
+    done_args: List[Argument] = []
+    for arg in arguments:
+
+        if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
+                and _is_failure_loop_univ_intro_argument(arg):
+            continue
+
+        if formula_is_identical_to(arg.conclusion, node.formula)\
+                and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
+            yield arg
+            done_args.append(arg)
+
+    _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE[cache_key] = done_args
+    if len(_EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE) > _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE_SIZE:
+        _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE = {}
+
+
 
 
 @profile
