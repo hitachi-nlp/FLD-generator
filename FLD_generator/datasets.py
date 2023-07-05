@@ -209,7 +209,7 @@ class NLProofSDataset:
                  translation_distractors_range: Optional[Tuple[int, int]] = None,
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
-                 version: str = '0.0',
+                 version: str = '0.1',
                  log_stats=True,
                  raise_if_translation_not_found=True):
 
