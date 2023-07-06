@@ -234,8 +234,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
         ]
 
     for complication_mapping in complication_mappings:
-        complicated_formulas = [interpret_formula(formula, complication_mapping)
-                                for formula in src_formulas]
+        complicated_formulas = interpret_formulas(src_formulas, complication_mapping)
 
         # Use "sorted" to eliminate randomness here.
         src_predicates = sorted(set([p.rep for src_formula in complicated_formulas for p in src_formula.predicates]))
@@ -431,9 +430,8 @@ def interpret_argument(arg: Argument,
                        mapping: Dict[str, str],
                        quantifier_types: Dict[str, str] = None,
                        elim_dneg=False) -> Argument:
-    interpreted_premises = [interpret_formula(formula, mapping,
+    interpreted_premises = interpret_formulas(arg.premises, mapping,
                                               quantifier_types=quantifier_types, elim_dneg=elim_dneg)
-                            for formula in arg.premises]
     interpreted_assumptions = {
         interpreted_premise: interpret_formula(arg.assumptions[premise], mapping,
                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
@@ -441,11 +439,8 @@ def interpret_argument(arg: Argument,
         if premise in arg.assumptions
     }
 
-    interpreted_intermediate_constants = [
-        interpret_formula(constant, mapping,
-                          quantifier_types=quantifier_types, elim_dneg=elim_dneg)
-        for constant in arg.intermediate_constants
-    ]
+    interpreted_intermediate_constants = interpret_formulas(arg.intermediate_constants, mapping,
+                                                            quantifier_types=quantifier_types, elim_dneg=elim_dneg)
 
     interpreted_conclusion = interpret_formula(arg.conclusion, mapping,
                                                quantifier_types=quantifier_types, elim_dneg=elim_dneg)
@@ -467,12 +462,12 @@ def interpret_formula(formula: Formula,
     return _interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
 
 
-
 @profile
 def interpret_formulas(formulas: List[Formula],
                        mapping: Dict[str, str],
                        quantifier_types: Dict[str, str] = None,
                        elim_dneg=False) -> List[Formula]:
+    """ faster than calling interpreted_formula() one by one """
     interpreted_reps = _interpret_reps([formula.rep for formula in formulas], mapping, elim_dneg=elim_dneg)
     interpreted_formulas = [Formula(interpreted_rep) for interpreted_rep in interpreted_reps]
     return [_interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
@@ -573,16 +568,16 @@ def _interpret_rep(rep: str,
     return interpreted_rep
 
 
-
 @profile
 def _interpret_reps(reps: List[str],
                     mapping: Dict[str, str],
-                    elim_dneg=False) -> str:
+                    elim_dneg=False) -> List[str]:
+    if len(reps) == 0:
+        return []
     splitter = '::::'
     rep = splitter.join(reps)
     interpreted_rep = _interpret_rep(rep, mapping, elim_dneg=elim_dneg)
     return interpreted_rep.split(splitter)
-
 
 
 def formula_is_identical_to(this_formula: Formula,

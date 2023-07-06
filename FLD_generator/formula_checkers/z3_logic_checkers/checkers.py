@@ -11,6 +11,8 @@ from FLD_generator.formula import (
     is_contradiction_symbol,
     has_contradiction_symbol,
 )
+from FLD_generator.interpretation import generate_mappings_from_predicates_and_constants, interpret_formula, interpret_formulas
+from FLD_generator.formula import PREDICATES, CONSTANTS
 from z3 import (
     DeclareSort,
     BoolSort,
@@ -149,10 +151,6 @@ def parse(rep: str):
     return go(interm)
 
 
-from FLD_generator.interpretation import generate_mappings_from_predicates_and_constants, interpret_formula
-from FLD_generator.formula import PREDICATES, CONSTANTS
-
-
 _CHECK_SAT_CACHE = {}
 _CHECK_SAT_CACHE_SIZE = 10000000
 _CHECK_SAT_NORMALIZED_FORMULAS_MAX_SIZE = 20
@@ -172,7 +170,8 @@ def _get_normalized_formuas(formulas: List[Formula], max_size: Optional[int] = N
         )):
         if i >= max_size:
             return
-        yield [interpret_formula(formula, mapping) for formula in formulas]
+        # yield [interpret_formula(formula, mapping) for formula in formulas]
+        yield interpret_formulas(formulas, mapping)
 
 
 @profile
