@@ -1,5 +1,6 @@
 import re
 from typing import List, Optional
+from functools import lru_cache
 
 from FLD_generator.exception import FormalLogicExceptionBase
 import line_profiling
@@ -143,8 +144,7 @@ class Formula:
 
     @property
     def wo_quantifier(self) -> 'Formula':
-        return Formula(_QUANTIFIER_INTRO_REGEXP.sub('', self.rep))
-        # return Formula(self.rep.split(': ')[-1])
+        return Formula(strip_quantifier(self.rep))
 
     @property
     def predicates(self) -> List['Formula']:
@@ -262,3 +262,8 @@ def is_contradiction_symbol(formula: Formula) -> bool:
 
 def has_contradiction_symbol(formula: Formula) -> bool:
     return formula.rep.find(CONTRADICTION) >= 0
+
+
+@lru_cache(maxsize=10000000)
+def strip_quantifier(rep: str) -> str:
+    return _QUANTIFIER_INTRO_REGEXP.sub('', rep)

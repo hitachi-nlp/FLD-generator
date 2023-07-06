@@ -47,10 +47,10 @@ from FLD_generator.argument import Argument
 
 
 def test_expand_op():
-    assert _expand_op(Formula('(x): ({P} v ¬{Q})x -> ({R} v ¬{S})x')).rep == '(x): ({P}x v ¬{Q}x) -> ({R}x v ¬{S}x)'
-    assert _expand_op(Formula('({P} v ¬{Q}){a} -> ({R} v ¬{S}){b}')).rep == '({P}{a} v ¬{Q}{a}) -> ({R}{b} v ¬{S}{b})'
+    assert _expand_op('(x): ({P} v ¬{Q})x -> ({R} v ¬{S})x') == '(x): ({P}x v ¬{Q}x) -> ({R}x v ¬{S}x)'
+    assert _expand_op('({P} v ¬{Q}){a} -> ({R} v ¬{S}){b}') == '({P}{a} v ¬{Q}{a}) -> ({R}{b} v ¬{S}{b})'
 
-    assert _expand_op(Formula('¬((x): ({P} v ¬{Q})x)')).rep == '¬((x): ({P}x v ¬{Q}x))'
+    assert _expand_op('¬((x): ({P} v ¬{Q})x)') == '¬((x): ({P}x v ¬{Q}x))'
 
 
 def test_formula_can_not_be_identical_to():

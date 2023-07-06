@@ -179,10 +179,10 @@ def _get_normalized_formuas(formulas: List[Formula], max_size: Optional[int] = N
 def check_sat(formulas: List[Formula],
               get_model=False,
               get_parse=False):
+    global _CHECK_SAT_CACHE
+
     for formula in formulas:
         _raise_with_contradiction(formula)
-
-    global _CHECK_SAT_CACHE
 
     cache_keys = [_check_sat_cache_key(formulas)]
     for normalized_formulas in _get_normalized_formuas(formulas,

@@ -3,6 +3,8 @@ import random
 from typing import Dict, List, Any, Iterable, Tuple, Optional, Union, Set
 import copy
 from itertools import permutations
+from functools import lru_cache
+from re import Match
 
 from .formula import (
     Formula,
@@ -15,6 +17,7 @@ from .formula import (
     VARIABLES,
     eliminate_double_negation,
     negate,
+    strip_quantifier,
 )
 from .argument import Argument
 import line_profiling
@@ -459,11 +462,28 @@ def interpret_formula(formula: Formula,
                       quantifier_types: Dict[str, str] = None,
                       elim_dneg=False) -> Formula:
 
-    interpreted_formula = _expand_op(
-        Formula(
-            _interpret_rep(formula.rep, mapping, elim_dneg=elim_dneg)
-        )
-    )
+    interpreted_rep = _interpret_rep(formula.rep, mapping, elim_dneg=elim_dneg)
+    interpreted_formula = Formula(interpreted_rep)
+    return _interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
+
+
+
+@profile
+def interpret_formulas(formulas: List[Formula],
+                       mapping: Dict[str, str],
+                       quantifier_types: Dict[str, str] = None,
+                       elim_dneg=False) -> List[Formula]:
+    interpreted_reps = _interpret_reps([formula.rep for formula in formulas], mapping, elim_dneg=elim_dneg)
+    interpreted_formulas = [Formula(interpreted_rep) for interpreted_rep in interpreted_reps]
+    return [_interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
+            for interpreted_formula in interpreted_formulas]
+
+
+@profile
+def _interpret_formula_postprocess(interpreted_formula: Formula,
+                                   quantifier_types: Dict[str, str] = None) -> Formula:
+    _expand_op_rep = _expand_op(interpreted_formula.rep)
+    interpreted_formula = Formula(_expand_op_rep)
 
     if quantifier_types is not None:
         for var, type_ in quantifier_types.items():
@@ -489,17 +509,16 @@ def interpret_formula(formula: Formula,
     return interpreted_formula
 
 
-_expand_op_regexp = re.compile(f'\([^\(\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
+_EXPAND_OP_REGEXP = re.compile(f'\([^\(\)]*\)({"|".join([arg for arg in CONSTANTS + VARIABLES])})')
 
 
 @profile
-def _expand_op(formula: Formula) -> Formula:
-    rep = formula.rep
-
+def _expand_op(rep: str) -> str:
     while True:
-        rep_wo_quantifier = Formula(rep).wo_quantifier.rep
+        # rep_wo_quantifier = Formula(rep).wo_quantifier.rep
+        rep_wo_quantifier = strip_quantifier(rep)  # fast
 
-        match = _expand_op_regexp.search(rep_wo_quantifier)
+        match = _get_expand_op_match(rep_wo_quantifier)
         if match is None:
             break
 
@@ -508,14 +527,28 @@ def _expand_op(formula: Formula) -> Formula:
         left_pred, op, right_pred = op_pred.split(' ')
         expanded_op_PAS = f'({left_pred}{constant} {op} {right_pred}{constant})'
         rep = rep.replace(f'{op_PAS}', f'{expanded_op_PAS}')
+    return rep
 
-    return Formula(rep)
+
+@lru_cache(maxsize=10000000)
+def _get_expand_op_match(rep: str) -> Optional[Match]:
+    return _EXPAND_OP_REGEXP.search(rep)
+
+
+# _INTERPRET_REP_CACHE = {}
+# _INTERPRET_REP_CACHE_SIZE = 1000000
 
 
 @profile
 def _interpret_rep(rep: str,
                    mapping: Dict[str, str],
                    elim_dneg=False) -> str:
+    # -- the cache does not speedup much
+    # global _INTERPRET_REP_CACHE
+    # cache_key = (rep, tuple(sorted(mapping.items())), elim_dneg)
+    # if cache_key in _INTERPRET_REP_CACHE:
+    #     return _INTERPRET_REP_CACHE[cache_key]
+
     interpreted_rep = rep
 
     if len(mapping) >= 1:
@@ -525,7 +558,20 @@ def _interpret_rep(rep: str,
     if elim_dneg:
         interpreted_rep = eliminate_double_negation(Formula(interpreted_rep)).rep
 
+    # _INTERPRET_REP_CACHE[cache_key] = interpreted_rep
     return interpreted_rep
+
+
+
+@profile
+def _interpret_reps(reps: List[str],
+                    mapping: Dict[str, str],
+                    elim_dneg=False) -> str:
+    splitter = '::::'
+    rep = splitter.join(reps)
+    interpreted_rep = _interpret_rep(rep, mapping, elim_dneg=elim_dneg)
+    return interpreted_rep.split(splitter)
+
 
 
 def formula_is_identical_to(this_formula: Formula,
