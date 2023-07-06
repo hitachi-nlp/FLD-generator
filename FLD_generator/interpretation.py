@@ -479,9 +479,17 @@ def interpret_formulas(formulas: List[Formula],
             for interpreted_formula in interpreted_formulas]
 
 
+_interpret_formula_postprocess_cache: Dict[str, str] = {}
+_interpret_formula_postprocess_cache_size = 10000000
+
+
 @profile
 def _interpret_formula_postprocess(interpreted_formula: Formula,
                                    quantifier_types: Dict[str, str] = None) -> Formula:
+    cache_key = interpreted_formula.rep
+    if quantifier_types is None and cache_key in _interpret_formula_postprocess_cache:
+        return Formula(_interpret_formula_postprocess_cache[cache_key])
+
     _expand_op_rep = _expand_op(interpreted_formula.rep)
     interpreted_formula = Formula(_expand_op_rep)
 
@@ -505,6 +513,9 @@ def _interpret_formula_postprocess(interpreted_formula: Formula,
             else:
                 raise ValueError(f'Unknown quantifier type {type_}')
             interpreted_formula = Formula(next_rep)
+
+    if quantifier_types is None:
+        _interpret_formula_postprocess_cache[cache_key] = interpreted_formula.rep
 
     return interpreted_formula
 
