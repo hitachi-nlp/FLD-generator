@@ -428,10 +428,11 @@ class ProofTreeGenerator:
                               key = lambda A_num_step: A_num_step[1])[-1]
 
 
-def _generate_tree_with_timeout_retry(arguments: List[Argument],
+def _generate_tree_with_timeout_retry(arguments: Union[List[Argument], Tuple[Argument, ...]],
                                       depth: int,
                                       *args,
                                       max_retry=50,
+                                      # timeout_per_trial=99999,  # 5 + 5
                                       timeout_per_trial=20,  # 5 + 5
                                       **kwargs) -> List[ProofTree]:
     try:
@@ -455,7 +456,7 @@ def _generate_tree_with_timeout_retry(arguments: List[Argument],
         raise GenerateTreeFailure(str(e))
 
 
-def _generate_tree(arguments: List[Argument],
+def _generate_tree(arguments: Union[List[Argument], Tuple[Argument, ...]],
                    depth: int,
                    branch_extension_steps: int,
                    argument_weights: Optional[Dict[Argument, float]] = None,
@@ -536,10 +537,11 @@ def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
     return sorted(proof_trees, key=lambda proof_tree: proof_tree.depth)[-1]
 
 
-def _generate_stem_with_timeout_retry(arguments: List[Argument],
+def _generate_stem_with_timeout_retry(arguments: Union[List[Argument], Tuple[Argument, ...]],
                                       depth: int,
                                       *args,
                                       max_retry=50,
+                                      # timeout_per_trial=99999,
                                       timeout_per_trial=10,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
@@ -566,9 +568,10 @@ def _generate_stem_with_timeout_retry(arguments: List[Argument],
 
 
 def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
-                                        arguments: List[Argument],
+                                        arguments: Union[List[Argument], Tuple[Argument, ...]],
                                         num_steps: int,
                                         *args,
+                                        # timeout_per_trial=99999,
                                         timeout_per_trial=10,
                                         max_retry=50,
                                         best_effort=False,
@@ -596,7 +599,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
 
 
 @profile
-def _generate_stem(arguments: List[Argument],
+def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
                    depth: int,
                    argument_weights: Optional[Dict[Argument, float]] = None,
                    depth_1_reference_weight: Optional[float] = None,
@@ -924,21 +927,21 @@ def _generate_stem(arguments: List[Argument],
     raise Exception('Unexpected')
 
 
-_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE: Dict[Tuple[int, int], List[Argument]] = {}
-_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE = 1000000
+# _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE: Dict[Tuple[int, int], List[Argument]] = {}
+# _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE = 1000000
 
 
-def _generate_stem_find_linkable_arguments(arguments: List[Argument], node: ProofNode) -> Iterable[Argument]:
-    global _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE
-    global _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE
+def _generate_stem_find_linkable_arguments(arguments: Union[List[Argument], Tuple[Argument, ...]], node: ProofNode) -> Iterable[Argument]:
+    # global _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE
+    # global _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE
 
-    cache_key = (id(arguments), id(node))
-    if cache_key in _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE:
-        return _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE[cache_key]
+    # cache_key = (id(arguments), id(node))   # XXX: we must not use id(node) for cache key because node can be mutated.
+    # if isinstance(arguments, tuple) and cache_key in _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE:
+    #     return _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE[cache_key]
 
     cur_possible_assumption_nodes = set(_find_possible_assumption_nodes(node))
 
-    done_args: List[Argument] = []
+    linkable_args: List[Argument] = []
     for arg in arguments:
         one_premise_matched = False
         for premise in arg.premises:
@@ -956,11 +959,12 @@ def _generate_stem_find_linkable_arguments(arguments: List[Argument], node: Proo
 
         if one_premise_matched:
             yield arg
-            done_args.append(arg)
+            linkable_args.append(arg)
 
-    _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE[cache_key] = done_args
-    if len(_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE) > _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE:
-        _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE = {}
+    # if isinstance(arguments, tuple):
+    #     _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE[cache_key] = tuple(linkable_args)
+    # if len(_GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE) > _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE_SIZE:
+    #     _GENERATE_STEM_FIND_LINKABLE_ARGS_CACHE = {}
 
 
 def _find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
@@ -971,7 +975,7 @@ def _find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
 
 @profile
 def _extend_branches(proof_tree: ProofTree,
-                     arguments: Union[Tuple[Argument, ...], List[Argument]],
+                     arguments: Union[List[Argument], Tuple[Argument, ...]],
                      num_steps: int,
                      start_leaf_nodes: Optional[List[ProofNode]] = None,
                      argument_weights: Optional[Dict[Argument, float]] = None,
@@ -1063,7 +1067,7 @@ def _extend_branches(proof_tree: ProofTree,
         if cur_step == 0:
             is_linkable_any = False
             for target_node in _target_leaf_nodes:
-                for linkable_arg in _extend_branches_find_linkable_arguments(arguments, target_node):
+                for _ in _extend_branches_find_linkable_arguments(arguments, target_node):
                     is_linkable_any = True
                     break
                 if is_linkable_any:
@@ -1254,15 +1258,17 @@ _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE_SIZE = 1000000
 
 
 @profile
-def _extend_branches_find_linkable_arguments(arguments: Tuple[Argument, ...], node: ProofNode) -> Iterable[Argument]:
+def _extend_branches_find_linkable_arguments(arguments: Union[Tuple[Argument, ...], List[Argument]],
+                                             node: ProofNode) -> Iterable[Argument]:
     global _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE
     global _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE_SIZE
 
     cache_key = (id(arguments), node.formula.rep)
-    if cache_key in _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE:
-        return _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE[cache_key]
+    if isinstance(arguments, tuple) and cache_key in _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE:
+        yield from _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE[cache_key]
+        return
 
-    done_args: List[Argument] = []
+    linkable_args: List[Argument] = []
     for arg in arguments:
 
         if _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP\
@@ -1272,13 +1278,12 @@ def _extend_branches_find_linkable_arguments(arguments: Tuple[Argument, ...], no
         if formula_is_identical_to(arg.conclusion, node.formula)\
                 and len(arg.assumptions) == 0:  # by it's logic, the argument with premise assumptions can not be applied in branch extension
             yield arg
-            done_args.append(arg)
+            linkable_args.append(arg)
 
-    _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE[cache_key] = done_args
+    if isinstance(arguments, tuple):
+        _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE[cache_key] = tuple(linkable_args)
     if len(_EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE) > _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE_SIZE:
         _EXTEND_BRANCHES_FIND_LINKABLE_ARGS_CACHE = {}
-
-
 
 
 @profile
@@ -1314,7 +1319,7 @@ def _choose_target_preds_consts(proof_tree: ProofTree,
     return tgt_preds, tgt_consts
 
 
-def _is_argument_new(argument: Argument, arguments: List[Argument]) -> bool:
+def _is_argument_new(argument: Argument, arguments: Union[Tuple[Argument, ...], List[Argument]]) -> bool:
     is_already_added = False
     for existent_argument in arguments:
         if argument_is_identical_to(argument, existent_argument):
@@ -1341,7 +1346,7 @@ def _shuffle(elems: List[Any],
             yield elems[idx]
 
 
-def _shuffle_arguments(arguments: List[Argument],
+def _shuffle_arguments(arguments: Union[Tuple[Argument, ...], List[Argument]],
                        weights: Optional[Dict[Argument, float]] = None) -> Iterable[Argument]:
     _weights = [weights[argument] for argument in arguments] if weights is not None else None
     yield from _shuffle(arguments, weights=_weights)
@@ -1365,7 +1370,7 @@ def _shuffle_arguments(arguments: List[Argument],
 @profile
 def _fix_illegal_intermediate_constants(
     proof_tree: ProofTree,
-    arguments: Optional[List[Argument]] = None,
+    arguments: Optional[Union[Tuple[Argument, ...], List[Argument]]] = None,
     argument_weights: Optional[Dict[Argument, float]] = None,
     argument_weight_bias_factor=100,
     allow_inconsistency=False,
@@ -1462,6 +1467,7 @@ def _fix_illegal_intermediate_constants(
                         return_alignment=True,
 
                         best_effort=True,
+                        # timeout_per_trial=99999,
                         timeout_per_trial=10,
                         max_retry=5,
                     )
@@ -1514,7 +1520,7 @@ def _validate_illegal_intermediate_constants(
     allow_illegal_intermediate_constants: bool,
     exception_cls,
     proof_tree: ProofTree,
-    arguments: List[Argument],
+    arguments: Union[Tuple[Argument, ...], List[Argument]],
     argument_weights: Optional[Dict[Argument, float]] = None,
     allow_inconsistency=False,
     allow_smaller_proofs=False,

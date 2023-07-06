@@ -60,8 +60,77 @@ def main():
     # input_dir = Path('./outputs/00.create_corpus/20230704.speedup.2')
     # output_dir = Path('./outputs/G00.compute_distrib.py/20230704.speedup.2')
 
-    input_dir = Path('./outputs/00.create_corpus/20230705.dist-tree')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230705.dist-tree')
+    # input_dir = Path('./outputs/00.create_corpus/20230705.dist-tree')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230705.dist-tree')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230706.finalize')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230706.finalize')
+
+    # OK!
+    # input_dir = Path('./outputs/00.create_corpus/20230707.476ad61')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.476ad61')
+
+    # NG!
+    # input_dir = Path('./outputs/00.create_corpus/20230707.33d4ddb')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.33d4ddb')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.d02e0eb')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.d02e0eb')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.ccc02a8')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.ccc02a8')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.33bf5a7')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.33bf5a7')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.f6e8db7')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.f6e8db7')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.wo_cache')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.honoka-dev.wo_cache')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.honoka-dev.w_cache')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.honoka-dev.w_cache.w_timeout')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.honoka-dev.w_cache.w_timeout.latest')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large.all')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large.all')
+
+
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.wo_timeout')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.wo_cache.wo_timeout')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.w_timeout')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.wo_cache.w_timeout')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.wo_timeout')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.wo_timeout')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.w_timeout')
+
+
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.raise_test')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.w_timeout.raise_test')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.first_use_no_cache')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.w_timeout.first_use_no_cache')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.second_use_no_cache')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.w_timeout.second_use_no_cache')
+
+    input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
+    output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.w_timeout.yield_from')
 
     compute_distrib(input_dir, output_dir)
 

@@ -169,9 +169,6 @@ def generate_instances(size: int, *args):
 @click.command()
 @click.argument('output-path')
 @click.argument('size', type=int)
-@click.option('--depth-range', type=str, default=json.dumps([1, 5]))
-@click.option('--depth-distrib', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
-@click.option('--branch-extensions-range', type=str, default=json.dumps([5, 5]))
 @click.option('--argument-config', '--ac',
               multiple=True,
               default=['./configs/arguments/axioms'],
@@ -180,6 +177,11 @@ def generate_instances(size: int, *args):
 @click.option('--quantifier-axiom-arguments-weight', type=float, default=0.0)
 @click.option('--quantifier-axiom', multiple=True, default=None)
 @click.option('--quantification-degree', type=str, default='all_constants')
+#
+@click.option('--depth-range', type=str, default=json.dumps([1, 5]))
+@click.option('--depth-distrib', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
+@click.option('--branch-extensions-range', type=str, default=json.dumps([5, 5]))
+#
 @click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--keep-dneg', is_flag=True, default=False)
 #

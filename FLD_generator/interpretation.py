@@ -621,6 +621,7 @@ def formula_is_identical_to(this_formula: Formula,
         formula_is_identical_to(this, that, allow_many_to_one=False): False
         formula_is_identical_to(that, this, allow_many_to_one=False): False
     """
+    global _FORMULA_IS_IDENTICAL_TO_CACHE
     cache_key = (this_formula.rep, that_formula.rep, allow_many_to_one, add_complicated_arguments, elim_dneg)
     if cache_key in _FORMULA_IS_IDENTICAL_TO_CACHE:
         return _FORMULA_IS_IDENTICAL_TO_CACHE[cache_key]
@@ -638,6 +639,8 @@ def formula_is_identical_to(this_formula: Formula,
                 break
 
     _FORMULA_IS_IDENTICAL_TO_CACHE[cache_key] = ans
+    if len(_FORMULA_IS_IDENTICAL_TO_CACHE) > _FORMULA_IS_IDENTICAL_TO_CACHE_SIZE:
+        _FORMULA_IS_IDENTICAL_TO_CACHE = {}
     return ans
 
 

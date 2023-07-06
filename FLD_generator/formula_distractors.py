@@ -239,6 +239,7 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
 
     @property
     def default_timeout_per_trial(self) -> int:
+        # return 99999
         return 10
 
     @profile
@@ -448,6 +449,7 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
 
     @property
     def default_timeout_per_trial(self) -> int:
+        # return 99999
         return 10
 
     @profile
@@ -521,6 +523,7 @@ class NegativeTreeDistractor(FormulaDistractor):
 
     @property
     def default_timeout_per_trial(self) -> int:
+        # return 99999
         return 10
 
     @profile

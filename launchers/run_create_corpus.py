@@ -255,7 +255,30 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230705.dist-tree')
     # output_top_dir = Path('./outputs/00.create_corpus/20230705.dist-tree.1_parallel')
     # output_top_dir = Path('./outputs/00.create_corpus/20230705.log')
-    output_top_dir = Path('./outputs/00.create_corpus/20230705.min_size_per_worker=20')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230705.min_size_per_worker=20')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230705.min_size_per_worker=20')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230706.finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230706.finalize.wo_cache')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.wo_cache')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large.all')
+
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.wo_timeout')  # OK
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.w_timeout')   # OK
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.wo_timeout')   # NG
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout')    # NG
+
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.raise_test')  # OK
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.first_use_no_cache')  # not good
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.second_use_no_cache')   # OK
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_return')
+    output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -416,13 +439,17 @@ def main():
         # '20230701.D3.wo_transl_dist',
         # '20230701.D3.brnch-small',
         # '20230701.D3.dist-small',
-        '20230701.D3.default.refactor_test',
-        '20230701.D3.default.dist-tree-triple',
-        '20230701.D3.default.dist-tree-quadruple',
-
+        # '20230701.D3.default.refactor_test',
+        # '20230701.D3.default.dist-tree-triple',
+        # '20230701.D3.default.dist-tree-quadruple',
 
         # '20230701.D8.default',
 
+        # ---------------------------------- 20230706.finalize.finalize ------------------------------------
+        # '20230706.finalize.D3.dist-double',
+        '20230706.finalize.D3.dist-quadruple',
+        # # '20230706.finalize.D8.dist-double',
+        # '20230706.finalize.D8.dist-quadruple',
     ]
     # dataset_names = dataset_names[::-1]
 
