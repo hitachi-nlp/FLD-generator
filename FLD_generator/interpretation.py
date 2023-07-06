@@ -462,16 +462,35 @@ def interpret_formula(formula: Formula,
     return _interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
 
 
+_INTERPRET_FORMULAS_CACHE = {}
+_INTERPRET_FORMULAS_CACHE_SIZE = 10000000
+
+
 @profile
 def interpret_formulas(formulas: List[Formula],
                        mapping: Dict[str, str],
                        quantifier_types: Dict[str, str] = None,
                        elim_dneg=False) -> List[Formula]:
     """ faster than calling interpreted_formula() one by one """
+
+    # honoka: the cache is slower
+    # cache_key = (
+    #     tuple(sorted(formula.rep for formula in formulas)),
+    #     tuple(sorted(mapping.items())),
+    #     sorted(quantifier_types.items()) if quantifier_types is not None else None,
+    #     elim_dneg,
+    # )
+    # if cache_key in _INTERPRET_FORMULAS_CACHE:
+    #     return _INTERPRET_FORMULAS_CACHE[cache_key]
+
     interpreted_reps = _interpret_reps([formula.rep for formula in formulas], mapping, elim_dneg=elim_dneg)
     interpreted_formulas = [Formula(interpreted_rep) for interpreted_rep in interpreted_reps]
-    return [_interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
-            for interpreted_formula in interpreted_formulas]
+    interpreted_formulas = [_interpret_formula_postprocess(interpreted_formula, quantifier_types=quantifier_types)
+                            for interpreted_formula in interpreted_formulas]
+
+    # _INTERPRET_FORMULAS_CACHE[cache_key] = interpreted_formulas
+
+    return interpreted_formulas
 
 
 _interpret_formula_postprocess_cache: Dict[str, str] = {}

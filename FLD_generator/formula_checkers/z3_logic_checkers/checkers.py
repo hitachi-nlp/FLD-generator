@@ -87,7 +87,7 @@ def _raise_with_contradiction(formula: Formula) -> None:
         raise Exception(f'The formula with the contradiction symbol ("{CONTRADICTION}") is not supported: "{formula.rep}"')
 
 
-# @lru_cache(maxsize=1000000)
+@lru_cache(maxsize=1000000)
 def parse(rep: str):
     _raise_with_contradiction(Formula(rep))
 
@@ -178,10 +178,10 @@ def _get_normalized_formuas(formulas: List[Formula], max_size: Optional[int] = N
 def check_sat(formulas: List[Formula],
               get_model=False,
               get_parse=False):
-    global _CHECK_SAT_CACHE
-
     for formula in formulas:
         _raise_with_contradiction(formula)
+
+    global _CHECK_SAT_CACHE
 
     cache_keys = [_check_sat_cache_key(formulas)]
     for normalized_formulas in _get_normalized_formuas(formulas,
