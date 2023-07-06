@@ -599,6 +599,10 @@ def _interpret_reps(reps: List[str],
     return interpreted_rep.split(splitter)
 
 
+_FORMULA_IS_IDENTICAL_TO_CACHE = {}
+_FORMULA_IS_IDENTICAL_TO_CACHE_SIZE = 10000000
+
+
 def formula_is_identical_to(this_formula: Formula,
                             that_formula: Formula,
                             allow_many_to_one=True,
@@ -617,18 +621,24 @@ def formula_is_identical_to(this_formula: Formula,
         formula_is_identical_to(this, that, allow_many_to_one=False): False
         formula_is_identical_to(that, this, allow_many_to_one=False): False
     """
+    cache_key = (this_formula.rep, that_formula.rep, allow_many_to_one, add_complicated_arguments, elim_dneg)
+    if cache_key in _FORMULA_IS_IDENTICAL_TO_CACHE:
+        return _FORMULA_IS_IDENTICAL_TO_CACHE[cache_key]
+
     if elim_dneg:
         this_formula = eliminate_double_negation(this_formula)
         that_formula = eliminate_double_negation(that_formula)
 
-    if formula_can_not_be_identical_to(this_formula, that_formula, add_complicated_arguments=add_complicated_arguments, elim_dneg=elim_dneg):
-        return False
+    ans = False
+    if not formula_can_not_be_identical_to(this_formula, that_formula, add_complicated_arguments=add_complicated_arguments, elim_dneg=elim_dneg):
+        for mapping in generate_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one=allow_many_to_one):
+            this_interpreted = interpret_formula(this_formula, mapping, elim_dneg=elim_dneg)
+            if this_interpreted.rep == that_formula.rep:
+                ans = True
+                break
 
-    for mapping in generate_mappings_from_formula([this_formula], [that_formula], add_complicated_arguments=add_complicated_arguments, allow_many_to_one=allow_many_to_one):
-        this_interpreted = interpret_formula(this_formula, mapping, elim_dneg=elim_dneg)
-        if this_interpreted.rep == that_formula.rep:
-            return True
-    return False
+    _FORMULA_IS_IDENTICAL_TO_CACHE[cache_key] = ans
+    return ans
 
 
 def formula_can_not_be_identical_to(this_formula: Formula,
