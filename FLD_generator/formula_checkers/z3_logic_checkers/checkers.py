@@ -1,10 +1,8 @@
-from typing import Optional, Tuple, Any, Union, List, Dict
-from collections import defaultdict
-from pprint import pprint
+from typing import Optional, Tuple, Any, Union, List, Dict, Iterable
 import logging
-from ctypes import ArgumentError
-from z3.z3types import Z3Exception
+from functools import lru_cache
 
+from z3.z3types import Z3Exception
 from FLD_generator.formula import (
     Formula,
     IMPLICATION,
@@ -87,6 +85,7 @@ def _raise_with_contradiction(formula: Formula) -> None:
         raise Exception(f'The formula with the contradiction symbol ("{CONTRADICTION}") is not supported: "{formula.rep}"')
 
 
+# @lru_cache(maxsize=1000000)
 def parse(rep: str):
     _raise_with_contradiction(Formula(rep))
 
@@ -132,9 +131,6 @@ def parse(rep: str):
                 exception = None
                 try:
                     return _UNARY_PREDICATES(pred)(_ARGS(arg))
-                # except ArgumentError as e:
-                #     exception = e
-                #     logger.fatal('[checkers.py] ArgumentError occurred. We will continue the trials, however, we do not know the root cause of this.')
                 except Z3Exception as e:
                     exception = e
                     logger.fatal('[checkers.py] Z3Exception occurred. We will continue the trials, however, we do not know the root cause of this.')
@@ -153,8 +149,31 @@ def parse(rep: str):
     return go(interm)
 
 
+from FLD_generator.interpretation import generate_mappings_from_predicates_and_constants, interpret_formula
+from FLD_generator.formula import PREDICATES, CONSTANTS
+
+
 _CHECK_SAT_CACHE = {}
-_CACHE_SIZE = 1000000
+_CHECK_SAT_CACHE_SIZE = 10000000
+_CHECK_SAT_NORMALIZED_FORMULAS_MAX_SIZE = 20
+
+
+@profile
+def _get_normalized_formuas(formulas: List[Formula], max_size: Optional[int] = None) -> Iterable[List[Formula]]:
+    predicates = sorted({pred.rep for formula in formulas for pred in formula.predicates})
+    constants = sorted({const.rep for formula in formulas for const in formula.constants})
+    for i, mapping in enumerate(
+            generate_mappings_from_predicates_and_constants(
+            predicates,
+            constants,
+            PREDICATES[:len(predicates)],
+            CONSTANTS[:len(constants)],
+            allow_many_to_one=False,
+        )):
+        if i >= max_size:
+            return
+        yield [interpret_formula(formula, mapping) for formula in formulas]
+
 
 @profile
 def check_sat(formulas: List[Formula],
@@ -165,10 +184,17 @@ def check_sat(formulas: List[Formula],
 
     global _CHECK_SAT_CACHE
 
-    cache_key = tuple(sorted(formula.rep for formula in formulas))
+    cache_keys = [_check_sat_cache_key(formulas)]
+    for normalized_formulas in _get_normalized_formuas(formulas,
+                                                       max_size=_CHECK_SAT_NORMALIZED_FORMULAS_MAX_SIZE):
+        cache_keys.append(_check_sat_cache_key(normalized_formulas))
+        
     # model and parse is object, thus we do not cache them.
-    if not get_model and not get_parse and cache_key in _CHECK_SAT_CACHE:
-        return _CHECK_SAT_CACHE[cache_key]
+    if not get_model and not get_parse:
+        for cache_key in cache_keys:
+            if cache_key in _CHECK_SAT_CACHE:
+                return _CHECK_SAT_CACHE[cache_key]
+
 
     solver = Solver()
     parsed = [parse(formula.rep) for formula in formulas]
@@ -181,8 +207,9 @@ def check_sat(formulas: List[Formula],
     else:
         model = None
 
-    _CHECK_SAT_CACHE[cache_key] = is_sat
-    if len(_CHECK_SAT_CACHE) >= _CACHE_SIZE:   # reset
+    for cache_key in cache_keys:
+        _CHECK_SAT_CACHE[cache_key] = is_sat
+    if len(_CHECK_SAT_CACHE) >= _CHECK_SAT_CACHE_SIZE:   # reset
         _CHECK_SAT_CACHE = {}
 
     if get_model or get_parse:
@@ -194,6 +221,10 @@ def check_sat(formulas: List[Formula],
         return ret
     else:
         return is_sat
+
+
+def _check_sat_cache_key(formulas: List[Formula]) -> Tuple:
+    return tuple(sorted(formula.rep for formula in formulas))
 
 
 @profile
