@@ -361,10 +361,6 @@ class NLProofSDataset:
             # -- make negative proofs --
             negative_tree = None
             if 'mixture_list.negative_tree' in others:
-                # negative_tree, negative_tree_dead_leaf_nodes = sorted(
-                #     zip(others['mixture_list.negative_tree'], others['mixture_list.negative_tree_missing_nodes']),
-                #     key = lambda tree_missing_nodes: tree_missing_nodes[0].depth,
-                # )[-1]
                 negative_tree, negative_tree_dead_leaf_nodes = random.choice(list(zip(others['mixture_list.negative_tree'], others['mixture_list.negative_tree_missing_nodes'])))
             elif 'negative_tree' in others:
                 negative_tree, negative_tree_dead_leaf_nodes = others['negative_tree'], others['negative_tree_missing_nodes']

@@ -619,7 +619,9 @@ class NegativeTreeDistractor(FormulaDistractor):
                 raise FormulaDistractorGenerationImpossible(str(e))
 
             n_trial += 1
-            negative_leaf_nodes = negative_tree.leaf_nodes
+
+            negative_leaf_nodes = [node for node in negative_tree.depth_first_traverse()
+                                   if node.is_leaf]
             if n_trial < max_trial and len(negative_leaf_nodes) - 1 < size:
                 self._log(logging.INFO, f'continue to the next trial with increased branch_extension_steps, since number of negatieve leaf formulas - 1 = {len(negative_leaf_nodes) - 1} < size={size}')
                 continue
@@ -632,7 +634,8 @@ class NegativeTreeDistractor(FormulaDistractor):
             elif initial_sampling == 'various_form':
                 leaf_node_at_most = len(negative_leaf_nodes)
 
-            for distractor_node in random.sample(negative_leaf_nodes, leaf_node_at_most):
+            # for distractor_node in random.sample(negative_leaf_nodes, leaf_node_at_most):
+            for distractor_node in negative_leaf_nodes[:leaf_node_at_most]:
                 distractor_formula = distractor_node.formula
 
                 if len(distractor_formulas) >= size:
