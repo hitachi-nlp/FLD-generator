@@ -56,9 +56,9 @@ def _generate_random_sentence(translator: Translator) -> Optional[str]:
     return None
 
 
-def _make_instance_label(proof_stance: ProofStance,
-                         world_assump: WorldAssumption,
-                         version: str = '0.0') -> Any:
+def _make_world_assump_label(proof_stance: ProofStance,
+                             world_assump: WorldAssumption,
+                             version: str = '0.0') -> Any:
     if version == '0.0':
         if world_assump == WorldAssumption.CWA:
             if proof_stance == ProofStance.PROVED:
@@ -80,7 +80,7 @@ def _make_instance_label(proof_stance: ProofStance,
                 raise ValueError()
         else:
             raise ValueError()
-    elif version == '0.1':
+    elif version in ['0.1', '0.2']:
         if world_assump == WorldAssumption.CWA:
             if proof_stance == ProofStance.PROVED:
                 return 'PROVED'
@@ -116,7 +116,7 @@ def _make_proof_stance_label(proof_stance: ProofStance,
             return 'UNKNOWN'
         else:
             raise ValueError()
-    elif version == '0.1':
+    elif version in ['0.1', '0.2']:
         return proof_stance.value
     else:
         raise ValueError()
@@ -209,7 +209,7 @@ class NLProofSDataset:
                  translation_distractors_range: Optional[Tuple[int, int]] = None,
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
-                 version: str = '0.1',
+                 version: str = '0.2',
                  log_stats=True,
                  raise_if_translation_not_found=True):
 
@@ -459,10 +459,12 @@ class NLProofSDataset:
                     raise Exception('Unexpected.')
 
             # -- make output json --
-            label = _make_instance_label(proof_stance, self.world_assump, version=self.version)
-            negative_label = _make_instance_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
+            world_assump_label = _make_world_assump_label(proof_stance, self.world_assump, version=self.version)
+            world_assump_negative_label = _make_world_assump_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
+
             stance_label = _make_proof_stance_label(proof_stance, version=self.version)
             negative_stance_label = _make_proof_stance_label(negative_proof_stance, version=self.version) if negative_proof_stance is not None else None
+
             dataset_json = {
                 'version': self.version,
 
@@ -471,13 +473,9 @@ class NLProofSDataset:
                 'formula_context': formula_context,
                 'proofs': [proof_text] if proof_text is not None else [],
                 'formula_proofs': [formula_proof_text] if formula_proof_text is not None else [],
-                'proof_stance': stance_label,
-                'answer': label,
 
                 'negative_hypothesis': negative_hypothesis,
                 'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
-                'negative_proof_stance': negative_stance_label,
-                'negative_answer': negative_label,
                 'negative_original_tree_depth': negative_tree.depth if negative_tree is not None else None,
 
                 'original_tree_depth': proof_tree.depth,
@@ -489,11 +487,27 @@ class NLProofSDataset:
                 'num_translation_distractors': len(translation_distractors),
                 'num_all_distractors': len(formula_distractors) + len(translation_distractors),
             }
+            if self.version in ['0.0', '0.1']:
+                dataset_json.update({
+                    'proof_stance': stance_label,
+                    'negative_proof_stance': negative_stance_label,
+
+                    'answer': world_assump_label,
+                    'negative_answer': world_assump_negative_label,
+                })
+            else:
+                dataset_json.update({
+                    'proof_label': stance_label,
+                    'negative_proof_label': negative_stance_label,
+
+                    'world_assump_label': world_assump_label,
+                    'world_assump_negative_label': world_assump_negative_label,
+                })
 
             # Update statistics
             if self.log_stats:
                 sample_stats = flatten_dict(pipeline_stats)
-                sample_stats[f'answer.{label}'] = 1
+                sample_stats[f'answer.{world_assump_label}'] = 1
                 sample_stats[f'proof_stance.{proof_stance.value}'] = 1
                 sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
                 sample_stats['word_count_context'] = len(context.split(' '))
