@@ -210,7 +210,7 @@ def make_dataset(dataset_name: str,
         ])
         with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
             for jsonl in job_output_jsonls:
-                logger.info('gathering results from %s', str(jsonl))
+                # logger.info('gathering results from %s', str(jsonl))
                 if is_done:
                     break
                 for line in open(jsonl):
@@ -278,7 +278,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.first_use_no_cache')  # not good
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.second_use_no_cache')   # OK
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_return')
-    output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230707.finalize')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -445,16 +447,26 @@ def main():
 
         # '20230701.D8.default',
 
-        # ---------------------------------- 20230706.finalize.finalize ------------------------------------
+        # ---------------------------------- 20230706..finalize ------------------------------------
         # '20230706.finalize.D3.dist-double',
-        '20230706.finalize.D3.dist-quadruple',
+        # '20230706.finalize.D3.dist-quadruple',
         # # '20230706.finalize.D8.dist-double',
         # '20230706.finalize.D8.dist-quadruple',
+
+        # ---------------------------------- 20230707.finalize ------------------------------------
+        # '20230707.finalize.D3.dist-double',
+        # '20230707.finalize.D3.dist-triple',
+        # '20230707.finalize.D3.dist-quadruple',
+
+        # '20230707.finalize.D8.dist-double',
+        # '20230707.finalize.D8.dist-triple',
+        # '20230707.finalize.D8.dist-quadruple',
+
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 3
-    num_jobs_per_dataset = 50
+    num_jobs_for_datasets = 2
+    num_jobs_per_dataset = 90
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
