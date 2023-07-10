@@ -53,37 +53,37 @@
 
       "({A} v {B})": [
           "<<clause::verb::{A}>> <<phrase::andOr>> <<clause::verb::{B}>>",
-          "either <<clause::verb::{A}>> or <<clause::verb::{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}>> or <<clause::verb::{B}>> or both",
 
           "<<phrase::{A}the_event_noun>> <<phrase::andOr>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
-          "either <<phrase::{A}the_event_noun>> or <<phrase::{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::{A}the_event_noun>> or <<phrase::{B}the_event_noun>> or both <<phrase::occur>>",
 
           "__"
       ],
       "(¬{A} v {B})": [
           "<<clause::verb::¬{A}>> <<phrase::andOr>> <<clause::verb::{B}>>",
-          "either <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both",
 
           "<<phrase::¬{A}the_event_noun>> <<phrase::andOr>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
-          "either <<phrase::¬{A}the_event_noun>> or <<phrase::{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::¬{A}the_event_noun>> or <<phrase::{B}the_event_noun>> or both <<phrase::occur>>",
 
           "__"
       ],
       "({A} v ¬{B})": [
           "<<clause::verb::{A}>> <<phrase::andOr>> <<clause::verb::¬{B}>>",
-          "either <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both",
 
           "<<phrase::{A}the_event_noun>> <<phrase::andOr>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
-          "either <<phrase::{A}the_event_noun>> or <<phrase::¬{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::{A}the_event_noun>> or <<phrase::¬{B}the_event_noun>> or both <<phrase::occur>>",
 
           "__"
       ],
       "(¬{A} v ¬{B})": [
           "<<clause::verb::¬{A}>> <<phrase::andOr>> <<clause::verb::¬{B}>>",
-          "either <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both",
 
           "<<phrase::¬{A}the_event_noun>> <<phrase::andOr>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
-          "either <<phrase::¬{A}the_event_noun>> or <<phrase::¬{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::¬{A}the_event_noun>> or <<phrase::¬{B}the_event_noun>> or both <<phrase::occur>>",
 
           "__"
       ],
@@ -129,25 +129,25 @@
           "a <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<clause::verb::{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}{a} v {B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}{a} v ¬{B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<clause::verb::{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}{a} v ¬{B}{a})generic_subj": [
           "a <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
@@ -191,25 +191,25 @@
           "the <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<clause::verb::{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}{a} v {B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}{a} v ¬{B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<clause::verb::{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}{a} v ¬{B}{a})specific_subj": [
           "the <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
@@ -255,25 +255,25 @@
           "<<phrase::something>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<clause::verb::{A}something>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}something>> or <<clause::verb::{B}it>> or both"
       ],
       "(¬{A}something v {B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}something>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<clause::verb::¬{A}something>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}something>> or <<clause::verb::{B}it>> or both"
       ],
       "({A}something v ¬{B}something)": [
           "<<phrase::something>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<clause::verb::{A}something>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}something>> or <<clause::verb::¬{B}it>> or both"
       ],
       "(¬{A}something v ¬{B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}something>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<clause::verb::¬{A}something>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}something>> or <<clause::verb::¬{B}it>> or both"
       ],
 
 
@@ -317,28 +317,28 @@
       "({A}everything v {B}everything)": [
           "<<phrase::everything>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}everything>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<clause::verb::{A}everything>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}everything>> or <<clause::verb::{B}it>> or both",
 
           "__"
       ],
       "(¬{A}everything v {B}everything)": [
           "<<phrase::everything>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}everything>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<clause::verb::¬{A}everything>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}everything>> or <<clause::verb::{B}it>> or both",
 
           "__"
       ],
       "({A}everything v ¬{B}everything)": [
           "<<phrase::everything>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}everything>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<clause::verb::{A}everything>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}everything>> or <<clause::verb::¬{B}it>> or both",
 
           "__"
       ],
       "(¬{A}everything v ¬{B}everything)": [
           "<<phrase::everything>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}everything>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<clause::verb::¬{A}everything>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}everything>> or <<clause::verb::¬{B}it>> or both",
 
           "__"
       ],
@@ -386,28 +386,28 @@
       "({A}it v {B}it)": [
           "it <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<clause::verb::{A}it>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}it>> or <<clause::verb::{B}it>> or both",
 
           "__"
       ],
       "(¬{A}it v {B}it)": [
           "it <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}it>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<clause::verb::¬{A}it>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}it>> or <<clause::verb::{B}it>> or both",
 
           "__"
       ],
       "({A}it v ¬{B}it)": [
           "it <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<clause::verb::{A}it>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}it>> or <<clause::verb::¬{B}it>> or both",
 
           "__"
       ],
       "(¬{A}it v ¬{B}it)": [
           "it <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}it>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<clause::verb::¬{A}it>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}it>> or <<clause::verb::¬{B}it>> or both",
 
           "__"
       ]
@@ -479,25 +479,25 @@
           "that <<clause::verb::({A} v {B})>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "either <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
       ],
       "(¬{A} v {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v {B})>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "either <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
       ],
       "({A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} v ¬{B})>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "either <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
       ],
       "(¬{A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v ¬{B})>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "either <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
       ],
 
 

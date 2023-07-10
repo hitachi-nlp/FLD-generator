@@ -404,6 +404,7 @@ class TemplatedTranslator(Translator):
         # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
+        translation = self._fix_blanks(translation)
 
         return translation
 
@@ -470,6 +471,8 @@ class TemplatedTranslator(Translator):
 
         return translation_fixed
 
+    def _fix_blanks(self, translation: str) -> str:
+        return re.sub(r'\s+', ' ', translation)
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:

@@ -113,22 +113,22 @@ def test_generate_dataset():
         negative_tree_negated_hypothesis_ratio=1.0,
     )
 
-    word_bank = None
-    # word_bank = build_wordnet_wordbank('eng')
+    # word_bank = None
+    word_bank = build_wordnet_wordbank('eng')
 
-    translator = None
-    # translator = build_translator(
-    #     ['./configs/translations/thing.v1/'],
-    #     word_bank,
-    #     use_fixed_translation=True,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     volume_to_weight='sqrt',
-    #     do_translate_to_nl=True,
-    # )
+    # translator = None
+    translator = build_translator(
+        ['./configs/translations/thing.v1/'],
+        word_bank,
+        use_fixed_translation=True,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        volume_to_weight='sqrt',
+        do_translate_to_nl=True,
+    )
 
-    translation_distractor = None
-    # translation_distractor = build_translation_distractor(word_bank=word_bank)
+    # translation_distractor = None
+    translation_distractor = build_translation_distractor(word_bank=word_bank)
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
@@ -163,7 +163,7 @@ def test_generate_dataset():
         word_bank=word_bank,
         translation_distractors_range=translation_distractors_range,
 
-        raise_if_translation_not_found=False
+        raise_if_translation_not_found=True,
     )
 
     generate_dataset(dataset)
