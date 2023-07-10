@@ -28,16 +28,16 @@
 
 
     "¬({A}something & {B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something & {B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::({A}something & {B}something)>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}something & {B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something & {B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::(¬{A}something & {B}something)>> <<phrase::is_not_true>>"
     ],
     "¬({A}something & ¬{B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something & ¬{B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::({A}something & ¬{B}something)>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}something & ¬{B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something & ¬{B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::(¬{A}something & ¬{B}something)>> <<phrase::is_not_true>>"
     ],
 
 
@@ -56,16 +56,16 @@
 
 
     "¬({A}something v {B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something v {B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::({A}something v {B}something)>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}something v {B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something v {B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::(¬{A}something v {B}something)>> <<phrase::is_not_true>>"
     ],
     "¬({A}something v ¬{B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::({A}something v ¬{B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::({A}something v ¬{B}something)>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}something v ¬{B}something)": [
-      "<<phrase::it_is_not_fact_that>>, <<sentence::(¬{A}something v ¬{B}something)>>"
+      "<<phrase::the_fact_that>> <<sentence::(¬{A}something v ¬{B}something)>> <<phrase::is_not_true>>"
     ]
 
   }

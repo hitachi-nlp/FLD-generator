@@ -440,9 +440,19 @@
       "it is <<phrase::incorrect_adj>> that"
     ],
 
+    "the_fact_that": [
+      "the fact that",
+      "that"
+    ],
+
+    "is_not_true": [
+      "is not <<phrase::correct_adj>>",
+      "is <<phrase::incorrect_adj>>"
+    ],
+
     "correct_adj": [
-      "the fact",
-      "true"
+      "true",
+      "the fact"
     ],
 
     "incorrect_adj": [

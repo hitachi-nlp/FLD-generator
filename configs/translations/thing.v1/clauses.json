@@ -461,17 +461,16 @@
 
 
       "¬({A} & {B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} & {B})>>",
-          "__comment: the template is too difficult to parse with multiple commas."
+          "<<phrase::the_fact_that>> <<clause::verb::({A} & {B})>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} & {B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::¬(¬{A} & {B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::¬(¬{A} & {B})>> <<phrase::is_not_true>>"
       ],
       "¬({A} & ¬{B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} & ¬{B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::({A} & ¬{B})>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} & ¬{B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::(¬{A} & ¬{B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} & ¬{B})>> <<phrase::is_not_true>>"
       ],
 
 
@@ -502,16 +501,16 @@
 
 
       "¬({A} v {B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} v {B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::({A} v {B})>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} v {B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::¬(¬{A} v {B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::¬(¬{A} v {B})>> <<phrase::is_not_true>>"
       ],
       "¬({A} v ¬{B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::({A} v ¬{B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::({A} v ¬{B})>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} v ¬{B}).event_occurrence": [
-          "__that <<phrase::it_is_not_fact_that>>, <<clause::verb::(¬{A} v ¬{B})>>"
+          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} v ¬{B})>> <<phrase::is_not_true>>"
       ],
 
 
