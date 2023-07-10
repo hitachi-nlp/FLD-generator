@@ -404,7 +404,9 @@ class TemplatedTranslator(Translator):
         # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
-        translation = self._fix_blanks(translation)
+        translation = self._reduce_degenerate_blanks(translation)
+        translation = self._uppercase_beggining(translation)
+        translation = self._add_ending_period(translation)
 
         return translation
 
@@ -471,8 +473,14 @@ class TemplatedTranslator(Translator):
 
         return translation_fixed
 
-    def _fix_blanks(self, translation: str) -> str:
+    def _reduce_degenerate_blanks(self, translation: str) -> str:
         return re.sub(r'\s+', ' ', translation)
+
+    def _uppercase_beggining(self, translation: str) -> str:
+        return translation[0].upper() + translation[1:]
+
+    def _add_ending_period(self, translation: str) -> str:
+        return translation + '.'
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
