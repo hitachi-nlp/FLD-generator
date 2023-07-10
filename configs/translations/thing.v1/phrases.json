@@ -435,11 +435,6 @@
       "__since"
     ],
 
-    "it_is_not_fact_that": [
-      "it is not <<phrase::correct_adj>> that",
-      "it is <<phrase::incorrect_adj>> that"
-    ],
-
     "the_fact_that": [
       "the fact that",
       "that"

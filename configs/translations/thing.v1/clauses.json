@@ -353,7 +353,7 @@
         "it <<phrase::{A}predicate>>"
       ],
       "¬{A}it": [
-        "<<phrase::it_is_not_fact_that>> <<clause::verb::{A}it>>",
+        "<<phrase::the_fact_that>> <<clause::verb::{A}it>> <<phrase::is_not_true>>",
         "it <<phrase::¬{A}predicate>>"
       ],
 
