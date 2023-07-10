@@ -353,7 +353,8 @@
         "it <<phrase::{A}predicate>>"
       ],
       "¬{A}it": [
-        "<<phrase::the_fact_that>> <<clause::verb::{A}it>> <<phrase::is_not_true>>",
+        "__<<phrase::the_fact_that>> <<clause::verb::{A}it>> <<phrase::is_not_true>>",
+        "__comment: the above sentencei is OK but confusing when nested with other 'the_fact_that'",
         "it <<phrase::¬{A}predicate>>"
       ],
 

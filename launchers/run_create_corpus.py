@@ -281,7 +281,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.finalize')
-    output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation')
+    output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.bf51eb2')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
