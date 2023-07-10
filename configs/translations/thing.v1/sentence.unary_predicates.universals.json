@@ -87,25 +87,25 @@
 
 
     "(x): {A}x -> {B}x": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::{B}it>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::{B}it>>",
       "<<sentence::{B}something>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
     "(x): ¬{A}x -> {B}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::{B}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::{B}it>>",
       "<<sentence::{B}something>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
     "(x): {A}x -> ¬{B}x": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬{B}it>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬{B}it>>",
       "<<sentence::¬{B}something>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>"
     ],
     "(x): ¬{A}x -> ¬{B}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬{B}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬{B}it>>",
       "<<sentence::¬{B}something>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>"
@@ -113,115 +113,115 @@
 
 
     "(x): ({A}x & {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>",
 
       "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}it>>"
     ],
     "(x): (¬{A}x & {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>",
 
       "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}it>>"
     ],
     "(x): ({A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>",
 
       "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}it>>"
     ],
     "(x): ({A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & {B}it)>>",
 
       "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>",
 
       "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}it>>"
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & {B}it)>>",
 
       "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it & ¬{B}it)>>",
 
       "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it & ¬{B}it)>>",
 
       "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::¬{C}it>>"
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>"
     ],
 
 
     "(x): {A}x -> ({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::({B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it & {C}it)>>",
       "<<sentence::({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::({B} & {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it & {C}it)>>",
       "<<sentence::({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::({B} & {C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it & {C}it)>>",
       "<<sentence::(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::(¬{B} & {C})predicate>>"
     ],
     "(x): {A}x -> ({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::({B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it & ¬{C}it)>>",
       "<<sentence::({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::({B} & ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it & {C}it)>>",
       "<<sentence::(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::(¬{B} & {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it & ¬{C}it)>>",
       "<<sentence::({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::({B} & ¬{C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it & ¬{C}it)>>",
       "<<sentence::(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::(¬{B} & ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it & ¬{C}it)>>",
       "<<sentence::(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::(¬{B} & ¬{C})predicate>>"
@@ -229,118 +229,118 @@
 
 
     "(x): ¬({A}x & {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something & {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something & ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>"
     ],
     "(x): ¬({A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something & {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & {B}it)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & {B}it)>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it & ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something & ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it & ¬{B}it)>>"
     ],
 
 
     "(x): {A}x -> ¬({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬({B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it & {C}it)>>",
       "<<sentence::¬({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it & {C}it)>>",
       "<<sentence::¬({B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it & {C}it)>>",
       "<<sentence::¬(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): {A}x -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬({B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it & ¬{C}it)>>",
       "<<sentence::¬({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it & {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it & {C}it)>>",
       "<<sentence::¬(¬{B}something & {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it & ¬{C}it)>>",
       "<<sentence::¬({B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it & ¬{C}it)>>",
       "<<sentence::¬(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it & ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it & ¬{C}it)>>",
       "<<sentence::¬(¬{B}something & ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
 
 
 
     "(x): ({A}x v {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>",
 
       "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>",
 
       "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>",
 
       "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v {B}it)>>",
 
       "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>",
 
       "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::{C}predicate>>"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v {B}it)>>",
 
       "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::({A}it v ¬{B}it)>>",
 
       "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::(¬{A}it v ¬{B}it)>>",
 
       "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::¬{C}predicate>>"
@@ -348,49 +348,49 @@
 
 
     "(x): {A}x -> ({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::({B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it v {C}it)>>",
       "<<sentence::({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::({B} v {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it v {C}it)>>",
       "<<sentence::({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::({B} v {C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it v {C}it)>>",
       "<<sentence::(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::(¬{B} v {C})predicate>>"
     ],
     "(x): {A}x -> ({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::({B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it v ¬{C}it)>>",
       "<<sentence::({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::({B} v ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it v {C}it)>>",
       "<<sentence::(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::(¬{B} v {C})predicate>>"
     ],
     "(x): ¬{A}x -> ({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::({B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::({B}it v ¬{C}it)>>",
       "<<sentence::({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::({B} v ¬{C})predicate>>"
     ],
     "(x): {A}x -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::(¬{B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it v ¬{C}it)>>",
 
       "<<sentence::(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>",
       "<<clause::noun::{A}something.generic_subj>> <<phrase::(¬{B} v ¬{C})predicate>>"
     ],
     "(x): ¬{A}x -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::(¬{B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::(¬{B}it v ¬{C}it)>>",
       "<<sentence::(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>",
 
       "<<clause::noun::¬{A}something.generic_subj>> <<phrase::(¬{B} v ¬{C})predicate>>"
@@ -398,69 +398,69 @@
 
 
     "(x): ¬({A}x v {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something v {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v {B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something v ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>"
     ],
     "(x): ¬({A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something v {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v {B}it)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v ¬{B}something)>>, <<sentence::{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::{C}it>>",
       "<<sentence::{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v {B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v {B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v {B}it)>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬({A}it v ¬{B}it)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v ¬{B}something)>>, <<sentence::¬{C}it>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}something v ¬{B}something)>>, <<phrase::maybe_then>> <<sentence::¬{C}it>>",
       "<<sentence::¬{C}something>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}it v ¬{B}it)>>"
     ],
 
 
     "(x): {A}x -> ¬({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬({B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it v {C}it)>>",
       "<<sentence::¬({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it v {C}it)>>",
       "<<sentence::¬({B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it v {C}it)>>",
       "<<sentence::¬(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): {A}x -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬({B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it v ¬{C}it)>>",
       "<<sentence::¬({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it v {C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it v {C}it)>>",
       "<<sentence::¬(¬{B}something v {C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
     "(x): ¬{A}x -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬({B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬({B}it v ¬{C}it)>>",
       "<<sentence::¬({B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
     "(x): {A}x -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<sentence::¬(¬{B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it v ¬{C}it)>>",
       "<<sentence::¬(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::{A}it>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<sentence::¬(¬{B}it v ¬{C}it)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}something>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}it v ¬{C}it)>>",
       "<<sentence::¬(¬{B}something v ¬{C}something)>>, <<phrase::if_conjunction>> <<sentence::¬{A}it>>"
     ],
 
@@ -472,292 +472,292 @@
 
 
     "(x): {A}{a} -> {B}x": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): {B}x>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): {B}x>>",
       "<<sentence::(x): {B}x>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> {B}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): {B}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): {B}x>>",
       "<<sentence::(x): {B}x>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬{B}x": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬{B}x>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬{B}x>>",
       "<<sentence::(x): ¬{B}x>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬{B}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬{B}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬{B}x>>",
       "<<sentence::(x): ¬{B}x>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
 
     
     "(x): ({A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>"
     ],
     "(x): (¬{A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>"
     ],
     "(x): ({A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>"
     ],
     "(x): ({A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} & {B}{a})>>"
     ],
     "(x): (¬{A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>"
     ],
     "(x): (¬{A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & {B}{a})>>"
     ],
     "(x): ({A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} & ¬{B}{a})>>"
     ],
     "(x): (¬{A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} & ¬{B}{a})>>"
     ],
 
 
     "(x): {A}{a} -> ({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ({B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x & {C}x)>>",
       "<<sentence::(x): ({B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ({B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x & {C}x)>>",
       "<<sentence::(x): ({B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> (¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): (¬{B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x & {C}x)>>",
       "<<sentence::(x): (¬{B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): {A}{a} -> ({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ({B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x & ¬{C}x)>>",
       "<<sentence::(x): ({B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> (¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): (¬{B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x & {C}x)>>",
       "<<sentence::(x): (¬{B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ({B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x & ¬{C}x)>>",
       "<<sentence::(x): ({B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): (¬{B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x & ¬{C}x)>>",
       "<<sentence::(x): (¬{B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> (¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): (¬{B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x & ¬{C}x)>>",
       "<<sentence::(x): (¬{B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
 
 
     "(x): ¬({A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} & {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>"
     ],
     "(x): ¬({A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>"
     ],
     "(x): ¬({A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} & {B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} & ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} & {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & {B}{a})>>"
     ],
     "(x): ¬({A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} & ¬{B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>>"
     ],
 
 
     "(x): {A}{a} -> ¬({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬({B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x & {C}x)>>",
       "<<sentence::(x): ¬({B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬({B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬({B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x & {C}x)>>",
       "<<sentence::(x): ¬({B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬(¬{B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x & {C}x)>>",
       "<<sentence::(x): ¬(¬{B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬({B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x & ¬{C}x)>>",
       "<<sentence::(x): ¬({B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬(¬{B}x & {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬(¬{B}x & {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x & {C}x)>>",
       "<<sentence::(x): ¬(¬{B}x & {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬({B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬({B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x & ¬{C}x)>>",
       "<<sentence::(x): ¬({B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬(¬{B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x & ¬{C}x)>>",
       "<<sentence::(x): ¬(¬{B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬(¬{B}x & ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬(¬{B}x & ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x & ¬{C}x)>>",
       "<<sentence::(x): ¬(¬{B}x & ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
 
 
 
     "(x): ({A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>"
     ],
     "(x): (¬{A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>"
     ],
     "(x): ({A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>"
     ],
     "(x): ({A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} v {B}{a})>>"
     ],
     "(x): (¬{A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>"
     ],
     "(x): (¬{A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v {B}{a})>>"
     ],
     "(x): ({A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::({A}{a} v ¬{B}{a})>>"
     ],
     "(x): (¬{A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::(¬{A}{a} v ¬{B}{a})>>"
     ],
 
 
     "(x): {A}{a} -> ({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ({B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x v {C}x)>>",
       "<<sentence::(x): ({B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ({B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x v {C}x)>>",
       "<<sentence::(x): ({B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> (¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): (¬{B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x v {C}x)>>",
       "<<sentence::(x): (¬{B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): {A}{a} -> ({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ({B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x v ¬{C}x)>>",
       "<<sentence::(x): ({B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> (¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): (¬{B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x v {C}x)>>",
       "<<sentence::(x): (¬{B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ({B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ({B}x v ¬{C}x)>>",
       "<<sentence::(x): ({B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): (¬{B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x v ¬{C}x)>>",
       "<<sentence::(x): (¬{B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> (¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): (¬{B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): (¬{B}x v ¬{C}x)>>",
       "<<sentence::(x): (¬{B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
 
 
     "(x): ¬({A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} v {B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>"
     ],
     "(x): ¬({A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>"
     ],
     "(x): ¬({A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} v {B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} v ¬{B}{a}) -> {C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<sentence::(x): {C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): {C}x>>",
       "<<sentence::(x): {C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} v {B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v {B}{a})>>"
     ],
     "(x): ¬({A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬({A}{a} v ¬{B}{a})>>"
     ],
     "(x): ¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}x": [
-      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<sentence::(x): ¬{C}x>>",
+      "<<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>, <<phrase::maybe_then>> <<sentence::(x): ¬{C}x>>",
       "<<sentence::(x): ¬{C}x>>, <<phrase::if_conjunction>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>>"
     ],
 
 
     "(x): {A}{a} -> ¬({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬({B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x v {C}x)>>",
       "<<sentence::(x): ¬({B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬({B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬({B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x v {C}x)>>",
       "<<sentence::(x): ¬({B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬(¬{B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x v {C}x)>>",
       "<<sentence::(x): ¬(¬{B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬({B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x v ¬{C}x)>>",
       "<<sentence::(x): ¬({B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬(¬{B}x v {C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬(¬{B}x v {C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x v {C}x)>>",
       "<<sentence::(x): ¬(¬{B}x v {C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬({B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬({B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬({B}x v ¬{C}x)>>",
       "<<sentence::(x): ¬({B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
     "(x): {A}{a} -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<sentence::(x): ¬(¬{B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x v ¬{C}x)>>",
       "<<sentence::(x): ¬(¬{B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::{A}{a}>>"
     ],
     "(x): ¬{A}{a} -> ¬(¬{B}x v ¬{C}x)": [
-      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<sentence::(x): ¬(¬{B}x v ¬{C}x)>>",
+      "<<phrase::if_conjunction>> <<sentence::¬{A}{a}>>, <<phrase::maybe_then>> <<sentence::(x): ¬(¬{B}x v ¬{C}x)>>",
       "<<sentence::(x): ¬(¬{B}x v ¬{C}x)>>, <<phrase::if_conjunction>> <<sentence::¬{A}{a}>>"
     ],
 
@@ -769,179 +769,179 @@
 
 
     "(x): {A}x -> {B}{b}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::{B}{b}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::{B}{b}>>",
       "<<sentence::{B}{b}>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> {B}{b}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::{B}{b}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::{B}{b}>>",
       "<<sentence::{B}{b}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> ¬{B}{b}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬{B}{b}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬{B}{b}>>",
       "<<sentence::¬{B}{b}>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬{B}{b}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬{B}{b}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬{B}{b}>>",
       "<<sentence::¬{B}{b}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
 
 
     "(x): ({A}x & {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & {B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
     "(x): (¬{A}x & {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & {B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
     "(x): ({A}x & ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & ¬{B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>"
     ],
     "(x): ({A}x & {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & {B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & ¬{B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>"
     ],
     "(x): (¬{A}x & {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & {B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
     "(x): ({A}x & ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x & ¬{B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::{A}something.generic_subj>> <<phrase::¬{B}predicate>>"
     ],
     "(x): (¬{A}x & ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x & ¬{B}x)>>",
 
-      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<clause::noun::¬{A}something.generic_subj>> <<phrase::¬{B}predicate>>"
     ],
 
 
     "(x): {A}x -> ({B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::({B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} & {C}{b})>>",
       "<<sentence::({B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ({B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::({B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} & {C}{b})>>",
       "<<sentence::({B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> (¬{B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::(¬{B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} & {C}{b})>>",
       "<<sentence::(¬{B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): {A}x -> ({B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::({B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} & ¬{C}{b})>>",
       "<<sentence::({B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> (¬{B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::(¬{B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} & {C}{b})>>",
       "<<sentence::(¬{B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): ¬{A}x -> ({B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::({B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} & ¬{C}{b})>>",
       "<<sentence::({B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> (¬{B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::(¬{B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} & ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> (¬{B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::(¬{B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} & ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
 
 
     "(x): ¬({A}x & {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & {B}x)>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & {B}x)>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & ¬{B}x)>>"
     ],
     "(x): ¬({A}x & {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & {B}x)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>"
     ],
     "(x): ¬(¬{A}x & {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & {B}x)>>"
     ],
     "(x): ¬({A}x & ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x & ¬{B}x)>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x & ¬{B}x)>>"
     ],
 
 
     "(x): {A}x -> ¬({B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬({B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} & {C}{b})>>",
       "<<sentence::¬({B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬({B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬({B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} & {C}{b})>>",
       "<<sentence::¬({B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> ¬(¬{B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬(¬{B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & {C}{b})>>",
       "<<sentence::¬(¬{B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): {A}x -> ¬({B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬({B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} & ¬{C}{b})>>",
       "<<sentence::¬({B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}{b} & {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬(¬{B}{b} & {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & {C}{b})>>",
       "<<sentence::¬(¬{B}{b} & {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): ¬{A}x -> ¬({B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬({B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} & ¬{C}{b})>>",
       "<<sentence::¬({B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> ¬(¬{B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬(¬{B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & ¬{C}{b})>>",
       "<<sentence::¬(¬{B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}{b} & ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬(¬{B}{b} & ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & ¬{C}{b})>>",
       "<<sentence::¬(¬{B}{b} & ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
 
@@ -953,137 +953,137 @@
 
 
     "(x): ({A}x v {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v {B}x)>>"
     ],
     "(x): (¬{A}x v {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v {B}x)>>"
     ],
     "(x): ({A}x v ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v ¬{B}x)>>"
     ],
     "(x): ({A}x v {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v {B}x)>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v ¬{B}x)>>"
     ],
     "(x): (¬{A}x v {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v {B}x)>>"
     ],
     "(x): ({A}x v ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ({A}x v ¬{B}x)>>"
     ],
     "(x): (¬{A}x v ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): (¬{A}x v ¬{B}x)>>"
     ],
 
 
     "(x): {A}x -> ({B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::({B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} v {C}{b})>>",
       "<<sentence::({B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ({B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::({B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} v {C}{b})>>",
       "<<sentence::({B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> (¬{B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::(¬{B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} v {C}{b})>>",
       "<<sentence::(¬{B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): {A}x -> ({B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::({B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} v ¬{C}{b})>>",
       "<<sentence::({B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> (¬{B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::(¬{B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} v {C}{b})>>",
       "<<sentence::(¬{B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): ¬{A}x -> ({B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::({B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::({B}{b} v ¬{C}{b})>>",
       "<<sentence::({B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> (¬{B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::(¬{B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} v ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> (¬{B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::(¬{B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::(¬{B}{b} v ¬{C}{b})>>",
       "<<sentence::(¬{B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
 
 
     "(x): ¬({A}x v {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v {B}x)>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v {B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v {B}x)>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v ¬{B}x)>>"
     ],
     "(x): ¬({A}x v {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v {B}x)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> {C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>, <<sentence::{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::{C}{c}>>",
       "<<sentence::{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>"
     ],
     "(x): ¬(¬{A}x v {B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v {B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v {B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v {B}x)>>"
     ],
     "(x): ¬({A}x v ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬({A}x v ¬{B}x)>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x) -> ¬{C}{c}": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>, <<sentence::¬{C}{c}>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>, <<phrase::maybe_then>> <<sentence::¬{C}{c}>>",
       "<<sentence::¬{C}{c}>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬(¬{A}x v ¬{B}x)>>"
     ],
 
 
     "(x): {A}x -> ¬({B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬({B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} v {C}{b})>>",
       "<<sentence::¬({B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬({B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬({B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} v {C}{b})>>",
       "<<sentence::¬({B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> ¬(¬{B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬(¬{B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v {C}{b})>>",
       "<<sentence::¬(¬{B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): {A}x -> ¬({B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬({B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} v ¬{C}{b})>>",
       "<<sentence::¬({B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}{b} v {C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬(¬{B}{b} v {C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v {C}{b})>>",
       "<<sentence::¬(¬{B}{b} v {C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): ¬{A}x -> ¬({B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬({B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬({B}{b} v ¬{C}{b})>>",
       "<<sentence::¬({B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ],
     "(x): {A}x -> ¬(¬{B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<sentence::¬(¬{B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v ¬{C}{b})>>",
       "<<sentence::¬(¬{B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
     ],
     "(x): ¬{A}x -> ¬(¬{B}{b} v ¬{C}{b})": [
-      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<sentence::¬(¬{B}{b} v ¬{C}{b})>>",
+      "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>, <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v ¬{C}{b})>>",
       "<<sentence::¬(¬{B}{b} v ¬{C}{b})>>, <<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>>"
     ]
 

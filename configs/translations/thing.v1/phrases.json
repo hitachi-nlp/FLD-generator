@@ -505,6 +505,11 @@
     "maybe_either": [
       "either",
       ""
+    ],
+
+    "maybe_then": [
+      "then",
+      ""
     ]
 
   }
