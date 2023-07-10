@@ -450,7 +450,7 @@
       "corect",
       "right",
       "true",
-      "valid",
+      "__valid",
       "the case",
 
       "__the fact",
@@ -461,7 +461,7 @@
       "incorrect",
       "wrong",
       "false",
-      "invalid",
+      "__invalid",
       "__",
 
       "__"
