@@ -280,7 +280,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_return')
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230707.finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230707.finalize')
+    output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -454,7 +455,7 @@ def main():
         # '20230706.finalize.D8.dist-quadruple',
 
         # ---------------------------------- 20230707.finalize ------------------------------------
-        # '20230707.finalize.D3.dist-double',
+        '20230707.finalize.D3.dist-double',
         # '20230707.finalize.D3.dist-triple',
         # '20230707.finalize.D3.dist-quadruple',
 

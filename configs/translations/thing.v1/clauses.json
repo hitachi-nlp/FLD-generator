@@ -15,7 +15,8 @@
 
       "({A} & {B})": [
           "<<clause::verb::{A}>> <<phrase::and>> <<clause::verb::{B}>>",
-          "both <<clause::verb::{A}>> <<phrase::and>> <<clause::verb::{B}>>",
+          "__both <<clause::verb::{A}>> <<phrase::and>> <<clause::verb::{B}>>",
+          "__comment: both {A} and {B} is OK but confusing when combined with subject, such as 'He both is red and green'",
 
           "<<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
           "both <<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
@@ -24,7 +25,7 @@
       ],
       "(¬{A} & {B})": [
           "<<clause::verb::¬{A}>> <<phrase::but_and>> <<clause::verb::{B}>>",
-          "both <<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::{B}>>",
+          "__both <<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::{B}>>",
 
           "<<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
           "both <<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
@@ -33,7 +34,7 @@
       ],
       "({A} & ¬{B})": [
           "<<clause::verb::{A}>> <<phrase::but_and>> <<clause::verb::¬{B}>>",
-          "both <<clause::verb::{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
+          "__both <<clause::verb::{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
 
           "<<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
           "both <<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
@@ -42,7 +43,7 @@
       ],
       "(¬{A} & ¬{B})": [
           "<<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
-          "both <<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
+          "__both <<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
 
           "<<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
           "both <<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",

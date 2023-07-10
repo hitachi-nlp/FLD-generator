@@ -133,7 +133,7 @@
 
     "({A} & {B})predicate": [
       "<<phrase::{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
-      "both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
+      "__both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
 
       "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
       "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>",
@@ -150,7 +150,7 @@
     ],
     "(¬{A} & {B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
-      "both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
+      "__both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
 
       "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
       "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>",
@@ -167,7 +167,7 @@
     ],
     "({A} & ¬{B})predicate": [
       "<<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
-      "both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
+      "__both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
 
       "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
       "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>",
@@ -184,7 +184,7 @@
     ],
     "(¬{A} & ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
-      "both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
+      "__both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
 
       "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
       "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>",
