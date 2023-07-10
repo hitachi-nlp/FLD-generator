@@ -436,26 +436,40 @@
     ],
 
     "the_fact_that": [
-      "the fact that",
-      "that"
+      "that",
+      "the fact that"
     ],
 
     "is_not_true": [
       "is not <<phrase::correct_adj>>",
-      "is <<phrase::incorrect_adj>>"
+      "is <<phrase::incorrect_adj>>",
+      "does not <<phrase::hold_verb>>"
     ],
 
     "correct_adj": [
-      "true",
       "corect",
+      "right",
+      "true",
+      "valid",
+      "the case",
+
       "__the fact",
       "__comment: this 'the fact' is confusing with 'the fact that'"
     ],
 
     "incorrect_adj": [
-      "wrong",
       "incorrect",
-      "false"
+      "wrong",
+      "false",
+      "invalid",
+      "__",
+
+      "__"
+    ],
+
+    "hold_verb": [
+      "hold",
+      "apply"
     ],
 
     "occur": [
