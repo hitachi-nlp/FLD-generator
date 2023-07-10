@@ -447,7 +447,9 @@
 
     "correct_adj": [
       "true",
-      "the fact"
+      "corect",
+      "__the fact",
+      "__comment: this 'the fact' is confusing with 'the fact that'"
     ],
 
     "incorrect_adj": [
