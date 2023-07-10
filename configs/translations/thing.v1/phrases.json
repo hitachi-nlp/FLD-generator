@@ -451,7 +451,8 @@
       "right",
       "true",
       "__valid",
-      "the case",
+      "__the case",
+      "__comment: 'not the case' is mostly used as 'That is not the case'",
 
       "__the fact",
       "__comment: this 'the fact' is confusing with 'the fact that'"
