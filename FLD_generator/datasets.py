@@ -374,7 +374,8 @@ class NLProofSDataset:
                 else:
                     negative_proof_stance = ProofStance.UNKNOWN
 
-                negative_hypothesis = self._get_sent_from_node(negative_tree.root_node)
+                negative_hypothesis_formula = negative_tree.root_node
+                negative_hypothesis = self._get_sent_from_node(negative_hypothesis_formula)
 
                 _, _, negateive_proof_text, _, _, _ = self._make_text(
                     negative_tree,
@@ -393,7 +394,7 @@ class NLProofSDataset:
                 )
 
             else:
-                negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None
+                negative_hypothesis_formula, negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None, None
 
             # -- compute depth --
             if proof_stance == ProofStance.UNKNOWN:
@@ -469,12 +470,14 @@ class NLProofSDataset:
                 'version': self.version,
 
                 'hypothesis': hypothesis,
+                'hypothesis_formula': hypothesis_formula.rep,
                 'context': context,
-                'formula_context': formula_context,
+                'context_formula': formula_context,
                 'proofs': [proof_text] if proof_text is not None else [],
-                'formula_proofs': [formula_proof_text] if formula_proof_text is not None else [],
+                'proofs_formula': [formula_proof_text] if formula_proof_text is not None else [],
 
                 'negative_hypothesis': negative_hypothesis,
+                'negative_hypothesis_formula': negative_hypothesis_formula.rep if negative_hypothesis_formula is not None else Noe,
                 'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
                 'negative_original_tree_depth': negative_tree.depth if negative_tree is not None else None,
 
