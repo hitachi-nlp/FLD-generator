@@ -697,8 +697,9 @@ class MixtureDistractor(FormulaDistractor):
         if size == 0:
             return [], {}
 
-        distractor_formulas = []
-        others = defaultdict(list)
+        distractor_formulas: List[Formula] = []
+        misc = {}
+        misc_key_ids: Dict[str, int] = defaultdict(int)
         remaining_size = size
         for enum in range(self.distractors_max_enum):
             for i_distrator, distractor in enumerate(random.sample(self._distractors, len(self._distractors))):
@@ -711,7 +712,7 @@ class MixtureDistractor(FormulaDistractor):
                     _size = random.randint(1, remaining_size)
 
                 try:
-                    _distractor_formulas, _others = distractor.generate(proof_tree,
+                    _distractor_formulas, _misc = distractor.generate(proof_tree,
                                                                         _size,
                                                                         existing_distractors = existing_distractors + distractor_formulas,
                                                                         allow_inconsistency=allow_inconsistency,
@@ -721,13 +722,14 @@ class MixtureDistractor(FormulaDistractor):
                     distractor_formulas += _distractor_formulas
                     remaining_size -= len(_distractor_formulas)
 
-                    for _other_key, _other_val in _others.items():
-                        others[f'mixture_list.{_other_key}'].append(_other_val)
+                    for misc_key, misc_val in _misc.items():
+                        misc[f'{misc_key}.mixture-{misc_key_ids[misc_key]}'] = misc_val
+                        misc_key_ids[misc_key] += 1
 
                 except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
                     self._log(logging.INFO, f'sub distractor "{str(distractor)}" failed in generating distractors with the following message:' + '\n' + f'{str(e)}')
 
-        return distractor_formulas[:size], others
+        return distractor_formulas[:size], misc
 
 
 class FallbackDistractor(FormulaDistractor):
@@ -764,13 +766,14 @@ class FallbackDistractor(FormulaDistractor):
             return [], {}
 
         distractor_formulas: List[Formula] = []
-        others = defaultdict(list)
+        misc_key_ids: Dict[str, int] = defaultdict(int)
+        misc = {}
         remaining_size = size
         for distractor in self._distractors:
             if len(distractor_formulas) >= size:
                 break
             try:
-                _distractor_formulas, _others = distractor.generate(proof_tree,
+                _distractor_formulas, _misc = distractor.generate(proof_tree,
                                                                     size,
                                                                     existing_distractors = existing_distractors + distractor_formulas,
                                                                     allow_inconsistency=allow_inconsistency,
@@ -780,13 +783,14 @@ class FallbackDistractor(FormulaDistractor):
                 distractor_formulas += _distractor_formulas
                 remaining_size -= len(_distractor_formulas)
 
-                for _other_key, _other_val in _others.items():
-                    others[f'fallback_list.{_other_key}'].append(_other_val)
+                for misc_key, misc_val in _misc.items():
+                    misc[f'{misc_key}.fallback-{misc_key_ids[misc_key]}'] = misc_val
+                    misc_key_ids[misc_key] += 1
 
             except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
                 self._log(logging.WARNING, 'generating distractors failed with the following message:\n' + f'{str(e)}')
 
-        return distractor_formulas[:size], others
+        return distractor_formulas[:size], misc
 
 
 def build(type_: str,

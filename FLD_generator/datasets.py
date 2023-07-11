@@ -361,11 +361,9 @@ class NLProofSDataset:
             # -- make negative proofs --
             negative_tree, negative_tree_missing_leaf_nodes = None, None
             all_negative_tree_attrs = [val for name, val in others.items()
-                                   if name.find('negative_tree') >= 0]
+                                       if name.find('negative_tree') >= 0]
             if len(all_negative_tree_attrs) > 0:
                 negative_tree_attrs = random.choice(all_negative_tree_attrs)
-                if isinstance(negative_tree_attrs, list):
-                    negative_tree_attrs = random.choice(negative_tree_attrs)
                 negative_tree, negative_tree_dead_leaf_nodes = negative_tree_attrs['tree'], negative_tree_attrs['missing_nodes']
 
             if negative_tree is not None:

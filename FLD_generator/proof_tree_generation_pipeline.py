@@ -108,7 +108,7 @@ class ProofTreeGenerationPipeline:
             depth_1_reference_weight: Optional[float] = None,
             force_fix_illegal_intermediate_constants=False,
             raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
-        others = {}
+        misc = {}
 
         if not self.generator.disallow_contradiction_as_hypothesis:
             raise ValueError('generator.disallow_contradiction_as_hypothesis must be "Ture" since we need the negated hypothesis for ')
@@ -145,15 +145,15 @@ class ProofTreeGenerationPipeline:
             if num_distractors > 0:
                 if self.distractor is not None:
                     try:
-                        formula_distractors, _others = self.distractor.generate(proof_tree,
+                        formula_distractors, _misc = self.distractor.generate(proof_tree,
                                                                                 num_distractors,
                                                                                 allow_inconsistency=allow_inconsistency,
                                                                                 allow_smaller_proofs=allow_smaller_proofs,
                                                                                 best_effort=True)
-                        for _other_key, _other_val in _others.items():
-                            if _other_key in others:
-                                raise ValueError(f'Duplicated other key {_other_key}')
-                            others[_other_key] = _other_val
+                        for _misc_key, _misc_val in _misc.items():
+                            if _misc_key in misc:
+                                raise ValueError(f'Duplicated misc key {_misc_key}')
+                            misc[_misc_key] = _misc_val
 
                     except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
                         is_formula_distractor_failed = True
@@ -178,13 +178,10 @@ class ProofTreeGenerationPipeline:
                 assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
 
                 other_formulas = []
-                all_negative_tree_attrs = [val for name, val in others.items()
+                all_negative_tree_attrs = [val for name, val in misc.items()
                                            if name.find('negative_tree') >= 0]
                 for negative_tree_attrs in all_negative_tree_attrs:
-                    if not isinstance(negative_tree_attrs, list):
-                        negative_tree_attrs = [negative_tree_attrs]
-                    for _negative_tree_attrs in negative_tree_attrs:
-                        other_formulas += [node.formula for node in _negative_tree_attrs['tree'].nodes]
+                    other_formulas += [node.formula for node in negative_tree_attrs['tree'].nodes]
                 all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
                 try:
@@ -247,7 +244,7 @@ class ProofTreeGenerationPipeline:
             else:
                 stats = {}
 
-            return proof_tree, root_negation_formula, formula_distractors, translation_distractors, others, stats
+            return proof_tree, root_negation_formula, formula_distractors, translation_distractors, misc, stats
 
     def _get_stats(self,
                    proof_tree: ProofTree,
