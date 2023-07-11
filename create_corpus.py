@@ -48,7 +48,7 @@ def load_dataset(argument_config: List[str],
                  sample_distractor_prototype_formulas_from_all_possible_formulas: bool,
                  disallow_simplified_tree_formulas_as_distractor_prototype: bool,
                  disallow_hard_negative_distractors: bool,
-                 negative_tree_negated_hypothesis_ratio: float,
+                 # negative_tree_negated_hypothesis_ratio: float,
                  disallow_subj_obj_swapped_distractor: bool,
                  translation_distractor: str,
                  fallback_from_formula_to_translation_distractor: bool,
@@ -77,12 +77,14 @@ def load_dataset(argument_config: List[str],
 
     if distractors_range[1] > 0:
         logger.info(_build_bounded_msg(f'{"[start] building distractor":<30}', 3))
-        _distractor = build_distractor(distractor,
-                                       generator=generator,
-                                       sample_prototype_formulas_from_all_possible_formulas=sample_distractor_prototype_formulas_from_all_possible_formulas,
-                                       disallow_simplified_formulas_as_prototype=disallow_simplified_tree_formulas_as_distractor_prototype,
-                                       sample_hard_negatives=not disallow_hard_negative_distractors,
-                                       negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio)
+        _distractor = build_distractor(
+            distractor,
+            generator=generator,
+            sample_prototype_formulas_from_all_possible_formulas=sample_distractor_prototype_formulas_from_all_possible_formulas,
+            disallow_simplified_formulas_as_prototype=disallow_simplified_tree_formulas_as_distractor_prototype,
+            sample_hard_negatives=not disallow_hard_negative_distractors,
+            # negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio,
+        )
         logger.info(_build_bounded_msg(f'{"[finish] building distractor":<30}', 3))
     else:
         _distractor = None
@@ -197,7 +199,7 @@ def generate_instances(size: int, *args):
 @click.option('--distractor', default='mixture.negative_tree.negative_tree')
 @click.option('--distractors-range', type=str, default=json.dumps([5, 5]))
 @click.option('--disallow-hard-negative-distractors', type=bool, is_flag=True)
-@click.option('--negative-tree-negated-hypothesis-ratio', type=float, default=0.5)
+# @click.option('--negative-tree-negated-hypothesis-ratio', type=float, default=0.5)
 @click.option('--sample-distractor-prototype-formulas-from-all-possible-formulas', type=bool, is_flag=True)
 @click.option('--disallow-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
 @click.option('--disallow-subj-obj-swapped-distractor', type=bool, is_flag=True)
@@ -211,7 +213,7 @@ def generate_instances(size: int, *args):
 @click.option('--swap-ng-words-config', default=None)
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int,
-              default=20,
+              default=5,
               # multithread  : data load = 4min, generation = 140 instances / 14min = 10 instances / min
               )
 @click.option('--batch-size-per-worker', type=int, default=10000)
@@ -238,7 +240,7 @@ def main(output_path,
          sample_distractor_prototype_formulas_from_all_possible_formulas,
          disallow_simplified_tree_formulas_as_distractor_prototype,
          disallow_hard_negative_distractors,
-         negative_tree_negated_hypothesis_ratio,
+         # negative_tree_negated_hypothesis_ratio,
          disallow_subj_obj_swapped_distractor,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
@@ -305,7 +307,7 @@ def main(output_path,
                         sample_distractor_prototype_formulas_from_all_possible_formulas,
                         disallow_simplified_tree_formulas_as_distractor_prototype,
                         disallow_hard_negative_distractors,
-                        negative_tree_negated_hypothesis_ratio,
+                        # negative_tree_negated_hypothesis_ratio,
                         disallow_subj_obj_swapped_distractor,
                         translation_distractor,
                         fallback_from_formula_to_translation_distractor,
@@ -347,7 +349,6 @@ def main(output_path,
             for name, count in gathered_stats.items():
                 if not name.startswith('cum.'):
                     gathered_stats[name] = gathered_stats[name] / num_jobs[name]
-
 
             logger.info('=========================== gathered stats (batch=%d) ============================',
                         i_batch)

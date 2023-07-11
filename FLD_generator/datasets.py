@@ -359,11 +359,14 @@ class NLProofSDataset:
             )
 
             # -- make negative proofs --
-            negative_tree = None
-            if 'mixture_list.negative_tree' in others:
-                negative_tree, negative_tree_dead_leaf_nodes = random.choice(list(zip(others['mixture_list.negative_tree'], others['mixture_list.negative_tree_missing_nodes'])))
-            elif 'negative_tree' in others:
-                negative_tree, negative_tree_dead_leaf_nodes = others['negative_tree'], others['negative_tree_missing_nodes']
+            negative_tree, negative_tree_missing_leaf_nodes = None, None
+            all_negative_tree_attrs = [val for name, val in others.items()
+                                   if name.find('negative_tree') >= 0]
+            if len(all_negative_tree_attrs) > 0:
+                negative_tree_attrs = random.choice(all_negative_tree_attrs)
+                if isinstance(negative_tree_attrs, list):
+                    negative_tree_attrs = random.choice(negative_tree_attrs)
+                negative_tree, negative_tree_dead_leaf_nodes = negative_tree_attrs['tree'], negative_tree_attrs['missing_nodes']
 
             if negative_tree is not None:
                 negative_tree_missing_leaf_nodes = negative_tree_dead_leaf_nodes
@@ -374,7 +377,7 @@ class NLProofSDataset:
                 else:
                     negative_proof_stance = ProofStance.UNKNOWN
 
-                negative_hypothesis_formula = negative_tree.root_node
+                negative_hypothesis_formula = negative_tree.root_node.formula
                 negative_hypothesis = self._get_sent_from_node(negative_hypothesis_formula)
 
                 _, _, negateive_proof_text, _, _, _ = self._make_text(

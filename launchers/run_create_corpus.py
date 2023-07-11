@@ -69,7 +69,7 @@ def make_dataset(dataset_name: str,
             'distractors_range',
             'sample_distractor_prototype_formulas_from_all_possible_formulas',
             'disallow_hard_negative_distractors',
-            'negative_tree_negated_hypothesis_ratio',
+            # 'negative_tree_negated_hypothesis_ratio',
             'disallow_subj_obj_swapped_distractor',
             'use_collapsed_translation_nodes_for_unknown_tree',
             'fallback_from_formula_to_translation_distractor',
@@ -150,9 +150,9 @@ def make_dataset(dataset_name: str,
                 maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
 
 
-                f'--distractor {job_settings["distractor"]}',
+                f'--distractor "{job_settings["distractor"]}"',
                 f'--distractors-range \'{json.dumps(job_settings["distractors_range"])}\'',
-                maybe_option('--negative-tree-negated-hypothesis-ratio', job_settings.get('negative_tree_negated_hypothesis_ratio', None)),
+                # maybe_option('--negative-tree-negated-hypothesis-ratio', job_settings.get('negative_tree_negated_hypothesis_ratio', None)),
                 '--sample-distractor-prototype-formulas-from-all-possible-formulas' if job_settings.get('sample_distractor_prototype_formulas_from_all_possible_formulas', False) else '',
                 '--disallow-simplified-tree-formulas-as-distractor-prototype' if job_settings.get('disallow_simplified_tree_formulas_as_distractor_prototype', False) else '',
                 '--disallow-subj-obj-swapped-distractor' if job_settings.get('disallow_subj_obj_swapped_distractor', False) else '',
@@ -283,7 +283,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.finalize')
     # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation')
     # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.bf51eb2')
-    output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.7485fef')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.7485fef')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -465,6 +467,9 @@ def main():
         # '20230707.finalize.D8.dist-triple',
         # '20230707.finalize.D8.dist-quadruple',
 
+        # ---------------------------------- 20230711 ------------------------------------
+        '20230711.dist-fallback',
+
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -476,18 +481,15 @@ def main():
 
     # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
     # min_dataset_size_per_job = 150
-    min_dataset_size_per_job = 100
+    min_dataset_size_per_job = 50
     # min_dataset_size_per_job = 10
-
-    num_workers_per_job = 5
-    # num_workers_per_job = 1
 
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # ---------------------------- fixed settings --------------------------
-
     timeout_per_job = 4800  # for the case some jobs hangs
+    num_workers_per_job = 5
     delete_logs_when_done = True
     dry_run = False
 

@@ -569,7 +569,7 @@ class NegativeTreeDistractor(FormulaDistractor):
 
         existing_distractors = existing_distractors or []
         if size == 0:
-            return [], {'negative_tree': None, 'negative_tree_missing_nodes': None}
+            return [], {'negative_tree': {'tree': None, 'missing_nodes': None}}
 
         n_trial = 0
         max_trial = 1  # max_trial >= 2 is too slow, thus we decided not to try multiple times
@@ -655,7 +655,12 @@ class NegativeTreeDistractor(FormulaDistractor):
                 self._log(logging.INFO, f'The negative tree is the following:\n{negative_tree.format_str}', boundary_level=2)
 
             # logger.fatal('%d %d', size, len(distractor_formulas))
-            return distractor_formulas, {'negative_tree': negative_tree, 'negative_tree_missing_nodes': [node for node in negative_tree.leaf_nodes if node not in distractor_nodes]}
+            return (
+                distractor_formulas,
+                {'negative_tree': {'tree': negative_tree,
+                                   'missing_nodes': [node for node in negative_tree.leaf_nodes
+                                                     if node not in distractor_nodes]}}
+            )
 
 
 class MixtureDistractor(FormulaDistractor):
@@ -722,10 +727,10 @@ class MixtureDistractor(FormulaDistractor):
                 except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
                     self._log(logging.INFO, f'sub distractor "{str(distractor)}" failed in generating distractors with the following message:' + '\n' + f'{str(e)}')
 
-        return distractor_formulas, others
+        return distractor_formulas[:size], others
 
 
-class FallBackDistractor(FormulaDistractor):
+class FallbackDistractor(FormulaDistractor):
 
     def __init__(self, distractors: List[FormulaDistractor], **kwargs):
         super().__init__(**kwargs)
@@ -733,7 +738,7 @@ class FallBackDistractor(FormulaDistractor):
 
     @property
     def default_max_retry(self) -> int:
-        return 3
+        return 1
 
     @property
     def default_timeout_per_trial(self) -> int:
@@ -758,8 +763,9 @@ class FallBackDistractor(FormulaDistractor):
         if size == 0:
             return [], {}
 
-        others = {}
         distractor_formulas: List[Formula] = []
+        others = {}
+        remaining_size = size
         for distractor in self._distractors:
             if len(distractor_formulas) >= size:
                 break
@@ -772,11 +778,10 @@ class FallBackDistractor(FormulaDistractor):
                                                                     best_effort=best_effort)
 
                 distractor_formulas += _distractor_formulas
+                remaining_size -= len(_distractor_formulas)
 
                 for _other_key, _other_val in _others.items():
-                    if _other_key in others:
-                        raise ValueError(f'Duplicated other key {_other_key}')
-                    others[_other_key] = _other_val
+                    others[f'fallback_list.{_other_key}'].append(_other_val)
 
             except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
                 self._log(logging.WARNING, 'generating distractors failed with the following message:\n' + f'{str(e)}')
@@ -788,18 +793,7 @@ def build(type_: str,
           generator: Optional[ProofTreeGenerator] = None,
           sample_hard_negatives=True,
           disallow_simplified_formulas_as_prototype=False,
-          sample_prototype_formulas_from_all_possible_formulas=False,
-          negative_tree_negated_hypothesis_ratio=0.5,
-          **kwargs):
-
-    # logger.fatal('--------------------- build_distractor -----------------------------')
-    # logger.info(type_)
-    # logger.info(sample_hard_negatives)
-    # logger.info(disallow_simplified_formulas_as_prototype)
-    # logger.info(sample_prototype_formulas_from_all_possible_formulas)
-    # logger.info(negative_tree_negated_hypothesis_ratio)
-    # from pprint import pformat
-    # logger.info(pformat(kwargs))
+          sample_prototype_formulas_from_all_possible_formulas=False):
 
     use_simplified_formulas_as_prototype = not disallow_simplified_formulas_as_prototype
 
@@ -823,180 +817,105 @@ def build(type_: str,
             logger.warning(make_pretty_msg(title='build distractor',
                                            msg='generator is not specified. Thus, the VariousFormUnkownInterprandsDistractor will use formulas in tree as prototype formulas.', boundary_level=0))
 
-    if type_ == 'various_form':
+    def build_various_form() -> FormulaDistractor:
         return VariousFormUnkownInterprandsDistractor(
             prototype_formulas=prototype_formulas,
             sample_hard_negatives=sample_hard_negatives,
             use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
-            **kwargs,
         )
-    elif type_ == 'negative_tree':
-        if generator is None:
-            raise ValueError()
+
+    def build_simplified_formula() -> FormulaDistractor:
+        return SimplifiedFormulaDistractor()
+
+    def build_negative_tree(negative_tree_negated_hypothesis_ratio: float) -> FormulaDistractor:
         return NegativeTreeDistractor(
             generator,
             prototype_formulas=prototype_formulas,
             negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio,
-            **kwargs,
         )
 
-    elif type_ == 'fallback.negative_tree.various_form':
-        return FallBackDistractor(
-            [
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio,
-                    **kwargs,
-                ),
-                VariousFormUnkownInterprandsDistractor(
-                    prototype_formulas=prototype_formulas,
-                    sample_hard_negatives=sample_hard_negatives,
-                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
-                    **kwargs,
-                ),
-            ],
-            **kwargs,
-        )
+    if type_ == 'various_form':
+        return build_various_form()
 
-    elif type_ == 'fallback.various_form.negative_tree':
-        return FallBackDistractor(
-            [
-                VariousFormUnkownInterprandsDistractor(
-                    prototype_formulas=prototype_formulas,
-                    sample_hard_negatives=sample_hard_negatives,
-                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio,
-                    **kwargs,
-                ),
-            ],
-            **kwargs,
-        )
+    elif type_.startswith('negative_tree'):
+        if generator is None:
+            raise ValueError()
+        negative_tree_negated_hypothesis_ratio = float(type_.split('-')[1])
+        return build_negative_tree(negative_tree_negated_hypothesis_ratio)
 
-    elif type_ == 'mixture.negative_tree.simplified_formula.various_form':
+    elif type_ == 'mixture(negative_tree.simplified_formula.various_form)':
+        # return MixtureDistractor(
+        #     [
+        #         build_negative_tree(negative_tree_negated_hypothesis_ratio),
+        #         build_simplified_formula(),
+        #         build_various_form(),
+        #     ],
+        # )
+        raise Exception('not maintained')
+
+    elif type_ == 'mixture(negative_tree_double)':
         return MixtureDistractor(
             [
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=negative_tree_negated_hypothesis_ratio,
-                    **kwargs,
-                ),
-                SimplifiedFormulaDistractor(**kwargs,),
-                VariousFormUnkownInterprandsDistractor(
-                    prototype_formulas=prototype_formulas,
-                    sample_hard_negatives=sample_hard_negatives,
-                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
-                    **kwargs,
-                ),
+                build_negative_tree(0.0),
+                build_negative_tree(1.0),
             ],
-            **kwargs,
         )
 
-    elif type_ == 'mixture.negative_tree_double':
+    elif type_ == 'mixture(negative_tree_triple)':
         return MixtureDistractor(
             [
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=1.0,
-                    **kwargs,
-                ),
+                build_negative_tree(0.0),
+                build_negative_tree(0.0),
+                build_negative_tree(1.0),
             ],
-            **kwargs,
         )
 
-    elif type_ == 'mixture.negative_tree_triple':
+    elif type_ == 'mixture(negative_tree_quadruple)':
         return MixtureDistractor(
             [
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=1.0,
-                    **kwargs,
-                ),
+                build_negative_tree(0.0),
+                build_negative_tree(0.0),
+                build_negative_tree(1.0),
+                build_negative_tree(1.0),
             ],
-            **kwargs,
         )
 
-    elif type_ == 'mixture.negative_tree_quadruple':
+    elif type_ == 'mixture(negative_tree_double.simplified_formula.various_form)':
         return MixtureDistractor(
             [
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=1.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=1.0,
-                    **kwargs,
-                ),
+                build_negative_tree(1.0),
+                build_negative_tree(0.0),
+                build_simplified_formula(),
+                build_various_form(),
             ],
-            **kwargs,
         )
 
-    elif type_ == 'mixture.negative_tree_double.simplified_formula.various_form':
+    elif type_ == 'fallback(negative_tree.various_form)':
+        # return FallBackDistractor(
+        #     [
+        #         build_negative_tree(negative_tree_negated_hypothesis_ratio),
+        #         build_various_form(),
+        #     ],
+        # )
+        raise Exception('not maintained')
+
+    elif type_ == 'fallback(various_form.negative_tree)':
+        # return FallBackDistractor(
+        #     [
+        #         build_various_form(),
+        #         build_negative_tree(negative_tree_negated_hypothesis_ratio),
+        #     ],
+        # )
+        raise Exception('not maintained')
+
+    elif type_ == 'fallback(mixture(negative_tree_double).simplified_formula.various_form)':
         return MixtureDistractor(
             [
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=1.0,
-                    **kwargs,
-                ),
-                NegativeTreeDistractor(
-                    generator,
-                    prototype_formulas=prototype_formulas,
-                    negative_tree_negated_hypothesis_ratio=0.0,
-                    **kwargs,
-                ),
-                SimplifiedFormulaDistractor(**kwargs,),
-                VariousFormUnkownInterprandsDistractor(
-                    prototype_formulas=prototype_formulas,
-                    sample_hard_negatives=sample_hard_negatives,
-                    use_simplified_formulas_as_prototype=use_simplified_formulas_as_prototype,
-                    **kwargs,
-                ),
+                build_negative_tree(0.0),
+                build_negative_tree(1.0),
+                build_simplified_formula(),
+                build_various_form(),
             ],
-            **kwargs,
         )
 
     else:

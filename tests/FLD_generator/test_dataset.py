@@ -93,24 +93,17 @@ def test_generate_dataset():
     )
 
     distractor = build_distractor(
-        # 'unknown_interprands',
         # 'various_form',
-
-        # 'fallback.unknown_interprands.negative_tree',
-        # 'fallback.negative_tree.unknown_interprands',
-        # 'fallback.negative_tree.various_form',
-        # 'fallback.various_form.negative_tree',
-
-        # 'mixture.negative_tree.simplified_formula.various_form',
-        # 'mixture.negative_tree.negative_tree.simplified_formula.various_form',
-        # 'mixture.negative_tree.negative_tree',
-
-        # 'mixture.negative_tree_double',
-        # 'mixture.negative_tree_triple',
-        'mixture.negative_tree_quadruple',
+        # 'mixture(negative_tree.simplified_formula.various_form)',
+        # 'mixture(negative_tree_double)',
+        # 'mixture(negative_tree_triple)',
+        # 'mixture(negative_tree_quadruple)',
+        # 'mixture(negative_tree_double.simplified_formula.various_form)',
+        # 'fallback(negative_tree.various_form)',
+        # 'fallback(various_form.negative_tree)',
+        'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
 
         generator=generator,
-        negative_tree_negated_hypothesis_ratio=1.0,
     )
 
     # word_bank = None
@@ -127,8 +120,8 @@ def test_generate_dataset():
         do_translate_to_nl=True,
     )
 
-    # translation_distractor = None
-    translation_distractor = build_translation_distractor(word_bank=word_bank)
+    translation_distractor = None
+    # translation_distractor = build_translation_distractor(word_bank=word_bank)
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
