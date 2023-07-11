@@ -480,7 +480,7 @@ class NLProofSDataset:
                 'proofs_formula': [formula_proof_text] if formula_proof_text is not None else [],
 
                 'negative_hypothesis': negative_hypothesis,
-                'negative_hypothesis_formula': negative_hypothesis_formula.rep if negative_hypothesis_formula is not None else Noe,
+                'negative_hypothesis_formula': negative_hypothesis_formula.rep if negative_hypothesis_formula is not None else None,
                 'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
                 'negative_original_tree_depth': negative_tree.depth if negative_tree is not None else None,
 
@@ -507,7 +507,7 @@ class NLProofSDataset:
                     'negative_proof_label': negative_stance_label,
 
                     'world_assump_label': world_assump_label,
-                    'world_assump_negative_label': world_assump_negative_label,
+                    'negative_world_assump_label': world_assump_negative_label,
                 })
 
             # Update statistics

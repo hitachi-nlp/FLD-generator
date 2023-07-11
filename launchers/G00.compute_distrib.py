@@ -132,8 +132,11 @@ def main():
     # input_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
     # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.w_cache.w_timeout.yield_from')
 
-    input_dir = Path('./outputs/00.create_corpus/20230707.finalize')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230707.finalize')
+    # input_dir = Path('./outputs/00.create_corpus/20230707.finalize')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.finalize')
+
+    input_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
+    output_dir = Path('./outputs/G00.compute_distrib.py/20230711.refactor_distractors')
 
     compute_distrib(input_dir, output_dir)
 

@@ -23,13 +23,14 @@ def main(input_path, output_path):
 
     # ./outputs/10.create_FLD_corpus/20230626.many_bugs_fixed/dataset_name=20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP/rsd_objct_nns_mx_fctr=1.0/smpl_hrd_ngtvs=True/try_ngtd_hypthss_frst=True/us_fxd_trnsltn=True/us_smplfd_tr_frmls_as_dstrctr_prttyp=True/test/test.jsonl
     attr_names = [
-        'proof_stance',
-        'answer',
+        'proof_label',
+        'world_assump_label',
         'original_tree_depth',
         'depth',
 
         'negative_original_tree_depth',
-        'negative_proof_stance',
+        # 'negative_world_assump_label',
+        'world_assump_negative_label',
 
         'num_formula_distractors',
         'num_translation_distractors',
