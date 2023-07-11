@@ -3035,6 +3035,85 @@ _DATASET_SETTINGS = {
 
 
 
+
+    '20230711.finalize.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat.no_reference',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
+        'distractors_range': (15, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 100,
+            # 'train': 30000,
+        }
+
+    },
+
+
+
+    '20230711.finalize.D8': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat.no_reference',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
+        'distractors_range': (15, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'train': 30000,
+        }
+
+    },
+
+
+
 }
 
 
@@ -3230,8 +3309,10 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230707.finalize.D8.dist-triple': '20230626.many_bugs_fixed', 
     '20230707.finalize.D8.dist-quadruple': '20230626.many_bugs_fixed', 
 
-    # ---------------------------------- 20230711 ------------------------------------
+    # ---------------------------------- 20230711.finalize ------------------------------------
     '20230711.dist-fallback': '20230626.many_bugs_fixed',
+    '20230711.finalize.D3': '20230626.many_bugs_fixed',
+    '20230711.finalize.D8': '20230626.many_bugs_fixed',
 
 }
 

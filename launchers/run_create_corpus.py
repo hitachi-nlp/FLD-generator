@@ -468,8 +468,9 @@ def main():
         # '20230707.finalize.D8.dist-quadruple',
 
         # ---------------------------------- 20230711 ------------------------------------
-        '20230711.dist-fallback',
-
+        # '20230711.dist-fallback',
+        '20230711.finalize.D3',
+        # '20230711.finalize.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -481,6 +482,7 @@ def main():
 
     # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
     # min_dataset_size_per_job = 150
+    # min_dataset_size_per_job = 100
     min_dataset_size_per_job = 50
     # min_dataset_size_per_job = 10
 

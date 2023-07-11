@@ -764,7 +764,7 @@ class FallbackDistractor(FormulaDistractor):
             return [], {}
 
         distractor_formulas: List[Formula] = []
-        others = {}
+        others = defaultdict(list)
         remaining_size = size
         for distractor in self._distractors:
             if len(distractor_formulas) >= size:
@@ -909,10 +909,14 @@ def build(type_: str,
         raise Exception('not maintained')
 
     elif type_ == 'fallback(mixture(negative_tree_double).simplified_formula.various_form)':
-        return MixtureDistractor(
+        return FallbackDistractor(
             [
-                build_negative_tree(0.0),
-                build_negative_tree(1.0),
+                MixtureDistractor(
+                    [
+                        build_negative_tree(0.0),
+                        build_negative_tree(1.0),
+                    ],
+                ),
                 build_simplified_formula(),
                 build_various_form(),
             ],
