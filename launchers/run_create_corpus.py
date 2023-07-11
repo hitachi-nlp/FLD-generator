@@ -459,7 +459,7 @@ def main():
         # '20230706.finalize.D8.dist-quadruple',
 
         # ---------------------------------- 20230707.finalize ------------------------------------
-        '20230707.finalize.D3.dist-double',
+        # '20230707.finalize.D3.dist-double',
         # '20230707.finalize.D3.dist-triple',
         # '20230707.finalize.D3.dist-quadruple',
 

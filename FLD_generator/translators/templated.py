@@ -474,7 +474,7 @@ class TemplatedTranslator(Translator):
         return translation_fixed
 
     def _reduce_degenerate_blanks(self, translation: str) -> str:
-        return re.sub(r'\s+', ' ', translation)
+        return re.sub(r'\s+', ' ', translation).strip(' ')
 
     def _uppercase_beggining(self, translation: str) -> str:
         return translation[0].upper() + translation[1:]
