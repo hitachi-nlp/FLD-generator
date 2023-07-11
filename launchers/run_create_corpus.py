@@ -285,7 +285,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.bf51eb2')
     # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.7485fef')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
+    output_top_dir = Path('./outputs/00.create_corpus/20230711.finalize')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -467,10 +468,10 @@ def main():
         # '20230707.finalize.D8.dist-triple',
         # '20230707.finalize.D8.dist-quadruple',
 
-        # ---------------------------------- 20230711 ------------------------------------
+        # ---------------------------------- 20230711.finalize ------------------------------------
         # '20230711.dist-fallback',
         '20230711.finalize.D3',
-        # '20230711.finalize.D8',
+        '20230711.finalize.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -480,10 +481,10 @@ def main():
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
 
-    # Too small value leads to a job being bottlenecked by the data loading, which is inefficient in terms of ABCI points.
+    # -- large value can save ABCI points because it avoids that the data loading becomes the bottleneck.
     # min_dataset_size_per_job = 150
-    # min_dataset_size_per_job = 100
-    min_dataset_size_per_job = 50
+    min_dataset_size_per_job = 100
+    # min_dataset_size_per_job = 50
     # min_dataset_size_per_job = 10
 
     # engine = SubprocessEngine()

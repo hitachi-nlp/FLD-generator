@@ -29,8 +29,7 @@ def main(input_path, output_path):
         'depth',
 
         'negative_original_tree_depth',
-        # 'negative_world_assump_label',
-        'world_assump_negative_label',
+        'negative_world_assump_label',
 
         'num_formula_distractors',
         'num_translation_distractors',
