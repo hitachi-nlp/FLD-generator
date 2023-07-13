@@ -1,5 +1,5 @@
 # FLD Generator
-This is one of the official repositories of the paper [Learning Deductive Reasoning from Synthetic Corpus based on Formal Logic](TODO).
+This is one of the official repositories of the paper [Learning Deductive Reasoning from Synthetic Corpus based on Formal Logic](#).
 This repository includes the code for generating the FLD corpus.  
 
 See [the entry-point repository](https://github.com/hitachi-nlp/FLD) for the other repositories used in the paper.
