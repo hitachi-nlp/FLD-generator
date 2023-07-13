@@ -31,12 +31,12 @@ $ python ./create_corpus.py\
     --quantifier-axiom universal_quantifier_elim\
     --quantifier-axiom universal_quantifier_intro\
     --quantifier-axiom existential_quantifier_intro\
-    --quantifier-axiom existential_quantifier_elim \
-    --translation-config ./configs/translations/thing.v1/    \
+    --quantifier-axiom existential_quantifier_elim\
+    --translation-config ./configs/translations/thing.v1/\
     --distractor "fallback(mixture(negative_tree_double).simplified_formula.various_form)"\
-    --distractors-range '[15, 20]'     \
-    --translation-distractors-range '[0, 0]'   \
-    --unknown-ratio 0.33 \
+    --distractors-range '[15, 20]'\
+    --translation-distractors-range '[0, 0]'\
+    --unknown-ratio 0.33\
     --num-workers 5\
     --seed 0
 ```
@@ -55,12 +55,12 @@ $ python ./create_corpus.py\
     --quantifier-axiom universal_quantifier_elim\
     --quantifier-axiom universal_quantifier_intro\
     --quantifier-axiom existential_quantifier_intro\
-    --quantifier-axiom existential_quantifier_elim \
-    --translation-config ./configs/translations/thing.v1/    \
+    --quantifier-axiom existential_quantifier_elim\
+    --translation-config ./configs/translations/thing.v1/\
     --distractor "fallback(mixture(negative_tree_double).simplified_formula.various_form)"\
-    --distractors-range '[15, 20]'     \
-    --translation-distractors-range '[0, 0]'   \
-    --unknown-ratio 0.33 \
+    --distractors-range '[15, 20]'\
+    --translation-distractors-range '[0, 0]'\
+    --unknown-ratio 0.33\
     --num-workers 5\
     --seed 0
 ```
