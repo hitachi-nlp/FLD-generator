@@ -15,7 +15,7 @@ $ pip install -r ./requrements.txt
 ```
 
 ## How to generate FLD corpus
-Use `./create_corpus.py`, which generates a corpus with the design specified by the options values.
+Use `./create_corpus.py`, which generates a corpus with the design specified by the option values.
 
 We can create FLD.3 (**FLD**) by running the follows command:
 ```console
