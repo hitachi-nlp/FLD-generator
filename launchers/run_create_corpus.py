@@ -286,7 +286,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.7485fef')
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
-    output_top_dir = Path('./outputs/00.create_corpus/20230711.finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230711.finalize')
+    output_top_dir = Path('./outputs/00.create_corpus/20230711.ICML-official-release-v2')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -475,8 +476,8 @@ def main():
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 2
-    num_jobs_per_dataset = 90
+    num_jobs_for_datasets = 4
+    num_jobs_per_dataset = 45
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
