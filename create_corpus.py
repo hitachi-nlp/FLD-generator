@@ -204,7 +204,7 @@ def generate_instances(size: int, *args):
 @click.option('--disallow-simplified-tree-formulas-as-distractor-prototype', type=bool, is_flag=True)
 @click.option('--disallow-subj-obj-swapped-distractor', type=bool, is_flag=True)
 @click.option('--translation-distractor', default='word_swap')
-@click.option('--translation-distractors-range', type=str, default=json.dumps([5]))
+@click.option('--translation-distractors-range', type=str, default=json.dumps([0, 0]))
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')

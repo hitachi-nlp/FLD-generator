@@ -17,66 +17,53 @@ $ pip install -r ./requrements.txt
 ## How to generate FLD corpus
 Use `./create_corpus.py`, which generates a corpus with the design specified by the options values.
 
-### Creating FLD.3
-TODO
+We can create FLD.3 (**FLD**) by running the follows command:
 ```console
 $ python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
-    --ac ./configs/arguments/axiom.pred_only.json\
-    --ac ./configs/arguments/axiom.pred_arg.json\
-    --ac ./configs/arguments/axiom.and_or.pred_only.json\
-    --ac ./configs/arguments/axiom.and_or.pred_arg.json\
-    --ac ./configs/arguments/axiom.implication_intro.pred_only.json\
-    --ac ./configs/arguments/axiom.implication_intro.pred_arg.json\
-    --ac ./configs/arguments/axiom.negation.pred_only.json\
-    --ac ./configs/arguments/axiom.negation.pred_arg.json\
-    --tc ./configs/translations/thing.v1/negated_sentence.zeroary_predicates.json\
-    --tc ./configs/translations/thing.v1/negated_sentence.others.json\
-    --tc ./configs/translations/thing.v1/sentence.unary_predicates.it.json\
-    --tc ./configs/translations/thing.v1/sentence.unary_predicates.existentials.json\
-    --tc ./configs/translations/thing.v1/sentence.others.json\
-    --tc ./configs/translations/thing.v1/sentence.unary_predicates.something.json\
-    --tc ./configs/translations/thing.v1/sentence.unary_predicates.constants.json\
-    --tc ./configs/translations/thing.v1/sentence.unary_predicates.universals.json\
-    --tc ./configs/translations/thing.v1/negated_sentence.unary_predicates.existentials.json\
-    --tc ./configs/translations/thing.v1/sentence.zeroary_predicates.json\
-    --tc ./configs/translations/thing.v1/negated_sentence.unary_predicates.constants.json\
-    --tc ./configs/translations/thing.v1/clauses.json\
-    --tc ./configs/translations/thing.v1/phrases.json\
-    --tc ./configs/translations/thing.v1/sentence.unary_predicates.everything.json\
-    --tc ./configs/translations/thing.v1/negated_sentence.unary_predicates.universals.json \
-    --reused-object-nouns-max-factor 1.0 \
-    --translation-volume-to-weight sqrt\
-    --depths '[1, 2, 3]'\
-    --depth-distribution flat.no_reference\
-    --branch-extension-steps '[0, 1, 2, 3, 4, 5]'\
-    --complication 0.5\
-    --quantification 0.2\
+    --depth-range '[1, 3]'\
+    --depth-distrib flat.no_reference\
+    --branch-extensions-range '[0, 5]'\
+    --argument-config ./configs/arguments/axioms/\
+    --complex-formula-arguments-weight 0.5\
+    --quantifier-axiom-arguments-weight 0.2\
     --quantifier-axiom universal_quantifier_elim\
     --quantifier-axiom universal_quantifier_intro\
     --quantifier-axiom existential_quantifier_intro\
     --quantifier-axiom existential_quantifier_elim \
-    --quantify-all-at-once\
-    --distractor mixture.negative_tree.negative_tree\
-    --num-distractors '[15, 16, 17, 18, 19, 20]'\
-    --sample-distractor-formulas-from-tree\
-    --use-simplified-tree-formulas-as-distractor-prototype \
-    --negated-hypothesis-ratio 1.0\
-    --add-subj-obj-swapped-distractor \
-    --swap-ng-words-config ./configs/translation_distractors/swap_ng_words.2023-06-16.json\
-    --translation-distractor word_swap\
-    --num-translation-distractors '[0, 1, 2, 3, 4, 5]'\
-    --proof-stances '["PROVED", "DISPROVED", "UNKNOWN"]'\
-    --world-assump OWA\
-    --unknown-ratio 0.33\
-    --use-collapsed-translation-nodes-for-unknown-tree\
+    --translation-config ./configs/translations/thing.v1/    \
+    --distractor "fallback(mixture(negative_tree_double).simplified_formula.various_form)"\
+    --distractors-range '[15, 20]'     \
+    --translation-distractors-range '[0, 0]'   \
+    --unknown-ratio 0.33 \
     --num-workers 5\
     --seed 0
 ```
 
-### Creating FLD.4
-TODO
+We can create FLD.4 (**FLD★**) by running the follows command:
+```console
+$ python ./create_corpus.py\
+    <output_dir>\
+    <dataset_size>\
+    --depth-range '[1, 8]'\
+    --depth-distrib flat.no_reference\
+    --branch-extensions-range '[0, 5]'\
+    --argument-config ./configs/arguments/axioms/\
+    --complex-formula-arguments-weight 0.5\
+    --quantifier-axiom-arguments-weight 0.2\
+    --quantifier-axiom universal_quantifier_elim\
+    --quantifier-axiom universal_quantifier_intro\
+    --quantifier-axiom existential_quantifier_intro\
+    --quantifier-axiom existential_quantifier_elim \
+    --translation-config ./configs/translations/thing.v1/    \
+    --distractor "fallback(mixture(negative_tree_double).simplified_formula.various_form)"\
+    --distractors-range '[15, 20]'     \
+    --translation-distractors-range '[0, 0]'   \
+    --unknown-ratio 0.33 \
+    --num-workers 5\
+    --seed 0
+```
 
 ## Citation
 ```bibtex
