@@ -3116,6 +3116,89 @@ _DATASET_SETTINGS = {
 
 
 
+
+
+
+
+
+
+    '20230718.case_study.D3.dist-mixture.num_dist-wide': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat.no_reference',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 15000,
+        }
+
+    },
+
+    '20230718.case_study.D8.dist-mixture.num_dist-wide': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat.no_reference',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 15000,
+        }
+
+    },
+
+
 }
 
 
@@ -3315,6 +3398,10 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230711.dist-fallback': '20230626.many_bugs_fixed',
     '20230711.finalize.D3': '20230626.many_bugs_fixed',
     '20230711.finalize.D8': '20230626.many_bugs_fixed',
+
+    # ---------------------------------- 20230718.case_study ------------------------------------
+    '20230718.case_study.D3.dist-mixture.num_dist-wide': '20230626.many_bugs_fixed',
+    '20230718.case_study.D8.dist-mixture.num_dist-wide': '20230626.many_bugs_fixed',
 
 }
 

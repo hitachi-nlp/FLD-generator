@@ -267,12 +267,10 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large')
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large.all')
 
-
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.wo_timeout')  # OK
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.w_timeout')   # OK
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.wo_timeout')   # NG
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout')    # NG
-
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.raise_test')  # OK
     # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.first_use_no_cache')  # not good
@@ -287,7 +285,9 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
     # output_top_dir = Path('./outputs/00.create_corpus/20230711.finalize')
-    output_top_dir = Path('./outputs/00.create_corpus/20230711.ICML-official-release-v2')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230711.ICML-official-release-v2')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -471,13 +471,18 @@ def main():
 
         # ---------------------------------- 20230711.finalize ------------------------------------
         # '20230711.dist-fallback',
-        '20230711.finalize.D3',
-        '20230711.finalize.D8',
+        # '20230711.finalize.D3',
+        # '20230711.finalize.D8',
+
+        # ---------------------------------- 20230718.case_study ------------------------------------
+        '20230718.case_study.D3.dist-mixture.num_dist-wide',
+        # '20230718.case_study.D8.dist-mixture.num_dist-wide',
+
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 4
-    num_jobs_per_dataset = 45
+    num_jobs_for_datasets = 2
+    num_jobs_per_dataset = 80
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
