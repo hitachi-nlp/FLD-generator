@@ -470,7 +470,7 @@
 
     "hold_verb": [
       "hold",
-      "apply"
+      "__apply"
     ],
 
     "occur": [
