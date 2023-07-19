@@ -475,7 +475,9 @@ def main():
         # '20230711.finalize.D8',
 
         # ---------------------------------- 20230718.case_study ------------------------------------
-        '20230718.case_study.D3.dist-mixture.num_dist-wide',
+        '20230718.case_study.D3.dist-mixture',
+        '20230718.case_study.D3.num_dist-wide',
+        # '20230718.case_study.D3.dist-mixture.num_dist-wide',
         # '20230718.case_study.D8.dist-mixture.num_dist-wide',
 
     ]
@@ -488,8 +490,8 @@ def main():
     # num_jobs_per_dataset = 80
 
     # -- large value can save ABCI points because it avoids that the data loading becomes the bottleneck.
-    # min_dataset_size_per_job = 150
-    min_dataset_size_per_job = 100
+    min_dataset_size_per_job = 150
+    # min_dataset_size_per_job = 100
     # min_dataset_size_per_job = 50
     # min_dataset_size_per_job = 10
 
