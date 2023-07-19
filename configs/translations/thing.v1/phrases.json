@@ -440,6 +440,12 @@
       "the fact that"
     ],
 
+    "is_true": [
+      "is <<phrase::correct_adj>>",
+      "is not <<phrase::incorrect_adj>>",
+      "<<phrase::hold_verb>>"
+    ],
+
     "is_not_true": [
       "is not <<phrase::correct_adj>>",
       "is <<phrase::incorrect_adj>>",

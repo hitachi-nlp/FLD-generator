@@ -440,25 +440,33 @@
 
           "__comment: '{A} and {B} resulted in {C}' does not mean that {A} and {B} are both needed at the same time to lead to the conclusion.",
           "__",
-          "__"
+          "__",
+
+          "<<phrase::the_fact_that>> <<clause::verb::({A} & {B})>> <<phrase::is_true>>"
       ],
       "(¬{A} & {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} & {B})>>",
 
           "__",
-          "__"
+          "__",
+
+          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} & {B})>> <<phrase::is_true>>"
       ],
       "({A} & ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} & ¬{B})>>",
 
           "__",
-          "__"
+          "__",
+
+          "<<phrase::the_fact_that>> <<clause::verb::({A} & ¬{B})>> <<phrase::is_true>>"
       ],
       "(¬{A} & ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} & ¬{B})>>",
 
           "__",
-          "__"
+          "__",
+
+          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} & ¬{B})>> <<phrase::is_true>>"
       ],
 
 
@@ -480,25 +488,33 @@
           "that <<clause::verb::({A} v {B})>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+
+          "<<phrase::the_fact_that>> <<clause::verb::({A} v {B})>> <<phrase::is_true>>"
       ],
       "(¬{A} v {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v {B})>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+
+          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} v {B})>> <<phrase::is_true>>"
       ],
       "({A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} v ¬{B})>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+
+          "<<phrase::the_fact_that>> <<clause::verb::({A} v ¬{B})>> <<phrase::is_true>>"
       ],
       "(¬{A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v ¬{B})>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+
+          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} v ¬{B})>> <<phrase::is_true>>"
       ],
 
 
