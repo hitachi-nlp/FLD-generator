@@ -32,6 +32,7 @@ import line_profiling
 logger = logging.getLogger(__name__)
 
 _SENTENCE_TRANSLATION_PREFIX = 'sentence'
+_DEBUG = False
 
 
 class _PosFormConditionSet(set):
@@ -244,8 +245,8 @@ class TemplatedTranslator(Translator):
                 continue
             if pos is not None and pos not in word_bank.get_pos(word):  # SLOW
                 continue
-            if any((attr not in word_bank.get_attrs(word)
-                    for attr in attrs)):
+            if any(attr not in word_bank.get_attrs(word)
+                   for attr in attrs):
                 continue
             intermediate_cache.add(word)
             yield word
@@ -400,7 +401,6 @@ class TemplatedTranslator(Translator):
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
-
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
         for _transl_key, _ in self._translations.items():
@@ -414,77 +414,32 @@ class TemplatedTranslator(Translator):
 
     @profile
     def _sample_interpret_mapping_consistent_nl(self,
-                                             sentence_key: str,
-                                             interpret_mapping: Dict[str, str],
-                                             push_mapping: Dict[str, str],
-                                             block_shuffle=True,
-                                             volume_to_weight = lambda weight: weight) -> Optional[str]:
+                                                sentence_key: str,
+                                                interpret_mapping: Dict[str, str],
+                                                push_mapping: Dict[str, str],
+                                                block_shuffle=True,
+                                                volume_to_weight = lambda weight: weight,
+                                                log_indent=0) -> Optional[str]:
         """ Find translations the pos and nflations of which are consistent with interpret_mapping """
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '**** _sample_interpret_mapping_consistent_nl() ****')
+            print(' ' * log_indent + '    sentence_key:', sentence_key)
 
-        # # -------------------------------- XXX do not remove those code for debugging ------------------------------
-        # query = None
-        # # query = '^\({[A-Z]}{[a-z]} & {[A-Z]}{[a-z]}\) ->.*'
-        # if query is not None and re.match(query, sentence_key):
-        #     print('\n\n\n')
-        #     print(f'================ translator resolve debugging for key = "{sentence_key}" =====================')
+        iterator_with_volumes = []
+        for transl_nl in self._translations[sentence_key]:
+            sampler = self._make_resolved_translation_sampler(
+                transl_nl,
+                # set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
+                set([transl_nl]),
+                constraint_interpret_mapping=interpret_mapping,
+                constraint_push_mapping=push_mapping,
+                block_shuffle=block_shuffle,
+                volume_to_weight=volume_to_weight,
+                log_indent = log_indent + 4,
+            )
+            iterator_with_volumes.append(sampler)
 
-        #     print('\n\n\n')
-        #     print('--------------------- interp mapping ---------------------')
-
-        #     pull_mapping = {val: key for key, val in push_mapping.items()}
-        #     pprint({
-        #         pull_mapping[key]: val for key, val in interpret_mapping.items()
-        #         if key in pull_mapping
-        #     })
-
-        #     iterator_with_volumes = [
-        #         self._make_resolved_translation_sampler(transl_nl,
-        #                                                 set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-        #                                                 constraint_interpret_mapping=interpret_mapping,
-        #                                                 constraint_push_mapping=push_mapping,
-        #                                                 block_shuffle=block_shuffle,
-        #                                                 volume_to_weight=volume_to_weight,
-        #                                                 check_condition=False)
-        #         for transl_nl in self._translations[sentence_key]
-        #     ]
-        #     iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-        #     volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-
-        #     print('\n\n\n')
-        #     print('--------------------- resolved translations ---------------------')
-        #     is_target = False
-        #     for resolved_nl, condition in chained_sampling_from_weighted_iterators(
-        #         iterators,
-        #         [volume_to_weight(volume) for volume in volumes]
-        #     ):
-        #         condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
-        #             condition,
-        #             interpret_mapping,
-        #             push_mapping,
-        #         )
-        #         if condition_is_consistent:
-        #             print('OK:  ', resolved_nl)
-        #             if resolved_nl.find('a {A}[ADJ] {a}[NOUN] {B}[ADJ]') >= 0:
-        #                 is_target = True
-        #             if resolved_nl.startswith('a {A}[ADJ] and {B}[ADJ]'):
-        #                 print('!! found')
-        #                 raise
-        #         else:
-        #             print('NG:  ', resolved_nl)
-        #         # if resolved_nl.find('a {A}[ADJ] and {B}[ADJ]') >= 0:
-        #         #     break
-        #     if is_target:
-        #         raise
-
-        iterator_with_volumes = [
-            self._make_resolved_translation_sampler(transl_nl,
-                                                    set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-                                                    constraint_interpret_mapping=interpret_mapping,
-                                                    constraint_push_mapping=push_mapping,
-                                                    block_shuffle=block_shuffle,
-                                                    volume_to_weight=volume_to_weight)
-            for transl_nl in self._translations[sentence_key]
-        ]
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
 
@@ -515,44 +470,31 @@ class TemplatedTranslator(Translator):
         return None
 
     @profile
-    def _interpret_mapping_is_consistent_with_condition(self,
-                                                     condition: _PosFormConditionSet,
-                                                     interpret_mapping: Dict[str, str],
-                                                     push_mapping: Dict[str, str]) -> bool:
-        condition_is_consistent = True
-        for interprand_rep, pos, form in condition:
-            interprand_rep_pushed = push_mapping[interprand_rep]
-            word = interpret_mapping[interprand_rep_pushed]
-
-            if pos not in self._get_pos(word):
-                condition_is_consistent = False
-                break
-
-            inflated_word = self._get_inflated_word(word, pos, form)
-            if inflated_word is None:
-                condition_is_consistent = False
-                break
-
-        return condition_is_consistent
-
-    @profile
     def _make_resolved_translation_sampler(self,
                                            nl: str,
-                                           ancestor_keys: Set[str],
+                                           # ancestor_keys: Set[str],
+                                           ancestor_nls: Set[str],
                                            constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
-                                           check_condition=True) -> Tuple[Iterable[NLAndCondition], int]:
+                                           check_condition=True,
+                                           log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '== _make_resolved_translation_sampler() ==')
+            print(' ' * log_indent + '    nl:', nl)
+            # print(' ' * log_indent + '    ancestor_keys:', ancestor_keys)
+            print(' ' * log_indent + '    ancestor_nls:', ancestor_nls)
         if nl.startswith('__'):
             return iter([]), 0
 
-        condition = self._get_pos_form_consistency_condition(nl)
+        condition = self._get_pos_form_consistency_condition(nl)  # SLOW
         if constraint_push_mapping is not None\
                 and check_condition\
                 and not self._interpret_mapping_is_consistent_with_condition(condition,
-                                                                          constraint_interpret_mapping,
-                                                                          constraint_push_mapping):
+                                                                             constraint_interpret_mapping,
+                                                                             constraint_push_mapping):
             return iter([]), 0
 
         templates = list(self._extract_templates(nl))
@@ -564,23 +506,28 @@ class TemplatedTranslator(Translator):
         else:
             class ResolveTemplateGenerator:
 
+                # @profile
                 def __init__(self, parent_translator: TemplatedTranslator, template: str):
                     self._template = template
                     self._parent_translator = parent_translator
                     self.volume = self._resolve()[1]
 
+                # @profile
                 def __call__(self) -> Iterable[NLAndCondition]:
                     return self._resolve()[0]
 
-                def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
+                # @profile
+                def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:  # SLOW
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
-                        ancestor_keys,
+                        # ancestor_keys,
+                        ancestor_nls,
                         constraint_interpret_mapping=constraint_interpret_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
                         check_condition=check_condition,
+                        log_indent = log_indent + 4
                     )
 
             template_resolve_generators = [ResolveTemplateGenerator(self, template) for template in templates]
@@ -610,23 +557,39 @@ class TemplatedTranslator(Translator):
     @profile
     def _make_resolved_template_sampler(self,
                                         template: str,
-                                        ancestor_keys: Set[str],
+                                        # ancestor_keys: Set[str],
+                                        ancestor_nls: Set[str],
                                         constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
-                                        check_condition=True) -> Tuple[Iterable[NLAndCondition], int]:
-        template_key, template_nls = self._find_template_nls(template, tuple(sorted(ancestor_keys)))
+                                        check_condition=True,
+                                        log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '-- _make_resolved_template_sampler() --')
+            print(' ' * log_indent + '    template:', template)
+            # print(' ' * log_indent + '    ancestor_keys:', ancestor_keys)
+            print(' ' * log_indent + '    ancestor_nls:', ancestor_nls)
+        template_key, template_nls = self._find_template_nls(template,
+                                                             # tuple(sorted(ancestor_keys)),
+                                                             # tuple(sorted(ancestor_nls.union(set([template])))),
+                                                             log_indent = log_indent + 4)
         if template_key is None:
             raise Exception(f'template for {template} not found.')
-        iterator_with_volumes = [self._make_resolved_translation_sampler(template_nl,
-                                                                         ancestor_keys.union(set([template_key])),
-                                                                         constraint_interpret_mapping=constraint_interpret_mapping,
-                                                                         constraint_push_mapping=constraint_push_mapping,
-                                                                         block_shuffle=shuffle,
-                                                                         volume_to_weight=volume_to_weight,
-                                                                         check_condition=check_condition)
-                                 for template_nl in template_nls]
+        iterator_with_volumes = [
+            self._make_resolved_translation_sampler(template_nl,
+                                                    # ancestor_keys.union(set([template_key])),
+                                                    ancestor_nls.union(set([template_nl])),
+                                                    constraint_interpret_mapping=constraint_interpret_mapping,
+                                                    constraint_push_mapping=constraint_push_mapping,
+                                                    block_shuffle=shuffle,
+                                                    volume_to_weight=volume_to_weight,
+                                                    check_condition=check_condition,
+                                                    log_indent = log_indent + 4)
+            for template_nl in template_nls
+            if template_nl not in ancestor_nls
+        ]
         iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
         volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
         volume_sum = sum(volumes)
@@ -647,9 +610,42 @@ class TemplatedTranslator(Translator):
 
         return generate(), volume_sum
 
+    @profile
+    def _interpret_mapping_is_consistent_with_condition(self,
+                                                        condition: _PosFormConditionSet,
+                                                        interpret_mapping: Dict[str, str],
+                                                        push_mapping: Dict[str, str]) -> bool:
+        condition_is_consistent = True
+        for interprand_rep, pos, form in condition:
+            interprand_rep_pushed = push_mapping[interprand_rep]
+            word = interpret_mapping[interprand_rep_pushed]
+
+            if pos not in self._get_pos(word):
+                condition_is_consistent = False
+                break
+
+            inflated_word = self._get_inflated_word(word, pos, form)
+            if inflated_word is None:
+                condition_is_consistent = False
+                break
+
+        return condition_is_consistent
+
+    # HONOKA: 多分，cacheが効かなくなったから遅くなっている(?)．
     @lru_cache(maxsize=1000000)
-    def _find_template_nls(self, template: str, ancestor_keys: Tuple[str]) -> Tuple[Optional[str], Optional[List[str]]]:
-        ancestor_keys_set = set(ancestor_keys)
+    def _find_template_nls(self,
+                           template: str,
+                           # ancestor_keys: Tuple[str],
+                           # ancestor_nls: Tuple[str],
+                           log_indent=0) -> Tuple[Optional[str], Optional[List[str]]]:
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '-- _find_template_nls() --')
+            print(' ' * log_indent + '    template:', template)
+            # print(' ' * log_indent + '    ancestor_keys:', ancestor_keys)
+            # print(' ' * log_indent + '    ancestor_nls:', ancestor_nls)
+        # ancestor_keys_set = set(ancestor_keys)
+        # ancestor_nls_set = set(ancestor_nls)
 
         template_prefix = '::'.join(template.split('::')[:-1])
         template_key = template.split('::')[-1]
@@ -660,8 +656,14 @@ class TemplatedTranslator(Translator):
 
         config = self._two_layered_config[template_prefix]
         for transl_key, transl_nls in config.items():
-            if transl_key in ancestor_keys_set:  # prevent circular reference
-                continue
+            # HONOKA: これは正確には誤りな気がする．mappingで変わりうるから．
+            # HONOKA: そして多分，keyによるrejectは不要．nlだけでよいはず．
+            # if transl_key in ancestor_keys_set: # prevent circular reference
+            #     logger.fatal('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            #     logger.fatal(template)
+            #     logger.fatal(str(ancestor_keys))
+            #     logger.fatal(str(transl_key))
+            #     continue
 
             key_formula = Formula(transl_key)
             if formula_can_not_be_identical_to(key_formula, template_key_formula):
@@ -674,6 +676,8 @@ class TemplatedTranslator(Translator):
                     found_template_key = transl_key
                     found_template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
                                           for transl_nl in transl_nls]
+                    # found_template_nls = [found_template_nl for found_template_nl in found_template_nls
+                    #                       if found_template_nl not in ancestor_nls_set]
                     break
 
             if found_template_nls is not None:
@@ -842,8 +846,8 @@ class TemplatedTranslator(Translator):
 
     @profile
     def _make_word_inflated_interpret_mapping(self,
-                                           interpret_mapping: Dict[str, str],
-                                           interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
+                                              interpret_mapping: Dict[str, str],
+                                              interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
         inflated_mapping = {}
         stats = defaultdict(int)
 
@@ -859,7 +863,7 @@ class TemplatedTranslator(Translator):
                 if self.log_stats:
                     stats[f'{pos.value}.{form.value}'] += 1
                 inflated_word = self._get_inflated_word(word, pos, form)
-                assert(inflated_word is not None)
+                assert (inflated_word is not None)
             else:
                 raise Exception(
                     f'Something wrong. Since we have checked in that the translation indeed exists, this program must not pass this block.  The problematic translation is "{interprand_templated_translation_pushed}" and unfound string is "{interprand_rep}["',
@@ -1034,6 +1038,7 @@ class TemplatedTranslator(Translator):
 
     def _add_ending_period(self, translation: str) -> str:
         return translation + '.'
+
 
 def build(config_paths: List[str],
           word_bank: WordBank,
