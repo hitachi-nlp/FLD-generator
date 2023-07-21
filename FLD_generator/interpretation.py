@@ -108,40 +108,41 @@ def generate_simplified_formulas(src_formula: Formula,
 def generate_complication_mappings_from_formula(formulas: List[Formula],
                                                 suppress_op_expansion_if_exists=False,
                                                 get_name=False) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
-    predicates = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
-    constants = sorted(set([p.rep for formula in formulas for p in formula.constants]))
+    preds = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
+    consts = sorted(set([p.rep for formula in formulas for p in formula.constants]))
 
-    identity_mapping = {pred: pred for pred in predicates}
-    identity_mapping.update({const: const for const in constants})
+    identity_mapping = {pred: pred for pred in preds}
+    identity_mapping.update({const: const for const in consts})
 
-    unused_predicates = list(set(PREDICATES) - set(predicates))
-    unk_pred0 = sorted(unused_predicates)[0]
-    unk_pred1 = sorted(unused_predicates)[1]
+    unused_preds = list(set(PREDICATES) - set(preds))
+    unused_pred0 = sorted(unused_preds)[0]
+    unused_pred1 = sorted(unused_preds)[1]
 
-    def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
-        if len(predicates) == 1:
-            predicate = predicates[0]
+    def generate_negated_preds_combinations(preds: List[str]) -> Iterable[List[str]]:
+        if len(preds) == 1:
+            pred = preds[0]
             for prefix in ['', f'{NEGATION}']:
-                yield [f'{prefix}{predicate}']
+                yield [f'{prefix}{pred}']
         else:
-            predicate = predicates[0]
+            pred = preds[0]
             for prefix in ['', f'{NEGATION}']:
-                for tail in not_enhance(predicates[1:]):
-                    yield [f'{prefix}{predicate}'] + tail
+                for tail in generate_negated_preds_combinations(preds[1:]):
+                    yield [f'{prefix}{pred}'] + tail
 
-    def generate_not_enhanced_mappings(predicates) -> Iterable[Dict]:
-        for i_enhance, predicates_with_not in enumerate(not_enhance(predicates)):
+    def generate_negation_mappings(preds) -> Iterable[Dict]:
+        for i_enhance, negated_preds in enumerate(generate_negated_preds_combinations(preds)):
             if i_enhance == 0:  # this is the original mapping
                 continue
             mapping = copy.deepcopy(identity_mapping)
-            for predicate_with_not in predicates_with_not:
-                original_predicate = predicate_with_not.lstrip(f'{NEGATION}')
-                mapping[original_predicate] = predicate_with_not
+            for negated_pred in negated_preds:
+                original_predicate = negated_pred.lstrip(f'{NEGATION}')
+                mapping[original_predicate] = negated_pred
             yield mapping
 
-    for i_not, mapping in enumerate(generate_not_enhanced_mappings(predicates)):
+    # negate each predicate
+    for i_negation, mapping in enumerate(generate_negation_mappings(preds)):
         if get_name:
-            yield mapping, f'complication.not-{_fill_str(i_not)}'
+            yield mapping, f'complication.not-{_fill_str(i_negation)}'
         else:
             yield mapping
 
@@ -151,17 +152,15 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
         pass
     else:
         for op in [DISJUNCTION, CONJUNCTION]:
-            for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
-                unk_extended_predicates = [unk_pred0, unk_pred1]\
-                    + predicates[:i_predicate_to_expand]\
-                    + predicates[i_predicate_to_expand + 1:]
-                for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
-                    mapping = copy.deepcopy(not_enhanced_mapping)
-                    for i_total_negation, total_negation_prefix in enumerate(['', NEGATION]):
-                        mapping[predicate_to_expand] = f'{total_negation_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
-                        not_name_id = i_not * 2 + i_total_negation
+            for i_op_expand, expand_pred in enumerate(preds):
+                src_preds = preds[:i_op_expand] + [unused_pred0, unused_pred1] + preds[i_op_expand + 1:]
+                for i_negation, negation_mapping in enumerate(generate_negation_mappings(src_preds)):
+                    mapping = copy.deepcopy(negation_mapping)
+                    for i_op_negation, op_nagation in enumerate(['', NEGATION]):
+                        mapping[expand_pred] = f'{op_nagation}({negation_mapping[unused_pred0]} {op} {negation_mapping[unused_pred1]})'
+                        not_name_id = i_negation * 2 + i_op_negation
                         if get_name:
-                            yield mapping, f'complication.{op}-{_fill_str(i_predicate_to_expand)}.not-{_fill_str(not_name_id)}'
+                            yield mapping, f'complication.{op}-{_fill_str(i_op_expand)}.not-{_fill_str(not_name_id)}'
                         else:
                             yield mapping
 
