@@ -121,13 +121,25 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
     def generate_negated_preds_combinations(preds: List[str]) -> Iterable[List[str]]:
         if len(preds) == 1:
             pred = preds[0]
-            for prefix in ['', f'{NEGATION}']:
-                yield [f'{prefix}{pred}']
+            # for prefix in ['', f'{NEGATION}']:
+            #     yield [f'{prefix}{pred}']
+            for do_negate in [False, True]:
+                if do_negate:
+                    yield [negate(Formula(pred)).rep]
+                else:
+                    yield [pred]
         else:
             pred = preds[0]
-            for prefix in ['', f'{NEGATION}']:
+            # for prefix in ['', f'{NEGATION}']:
+            #     for tail in generate_negated_preds_combinations(preds[1:]):
+            #         yield [f'{prefix}{pred}'] + tail
+            for do_negate in [False, True]:
                 for tail in generate_negated_preds_combinations(preds[1:]):
-                    yield [f'{prefix}{pred}'] + tail
+                    if do_negate:
+                        yield [negate(Formula(pred)).rep] + tail
+                    else:
+                        yield [pred] + tail
+
 
     def generate_negation_mappings(preds) -> Iterable[Dict]:
         for i_enhance, negated_preds in enumerate(generate_negated_preds_combinations(preds)):
@@ -156,13 +168,26 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                 src_preds = preds[:i_op_expand] + [unused_pred0, unused_pred1] + preds[i_op_expand + 1:]
                 for i_negation, negation_mapping in enumerate(generate_negation_mappings(src_preds)):
                     mapping = copy.deepcopy(negation_mapping)
-                    for i_op_negation, op_nagation in enumerate(['', NEGATION]):
-                        mapping[expand_pred] = f'{op_nagation}({negation_mapping[unused_pred0]} {op} {negation_mapping[unused_pred1]})'
+                    # for i_op_negation, op_nagation in enumerate(['', NEGATION]):
+                    #     mapping[expand_pred] = f'{op_nagation}({negation_mapping[unused_pred0]} {op} {negation_mapping[unused_pred1]})'
+                    #     not_name_id = i_negation * 2 + i_op_negation
+                    #     if get_name:
+                    #         yield mapping, f'complication.{op}-{_fill_str(i_op_expand)}.not-{_fill_str(not_name_id)}'
+                    #     else:
+                    #         yield mapping
+                    for i_op_negation, do_negate in enumerate([False, True]):
+                        op_expanded = f'({negation_mapping[unused_pred0]} {op} {negation_mapping[unused_pred1]})'
+                        if do_negate:
+                            op_expanded = negate(Formula(op_expanded)).rep
+
+                        mapping[expand_pred] = op_expanded
                         not_name_id = i_negation * 2 + i_op_negation
+
                         if get_name:
                             yield mapping, f'complication.{op}-{_fill_str(i_op_expand)}.not-{_fill_str(not_name_id)}'
                         else:
                             yield mapping
+
 
 
 def generate_arguments_in_target_space(src_arg: Argument,
@@ -843,7 +868,7 @@ def generate_quantifier_axiom_arguments(
         raise NotImplementedError()
 
     if quantification_degree not in _QUANTIFICATION_DEGREES:
-        raise ValueError(f'Unknown quantification degree "{dquantification_degreeegree}"')
+        raise ValueError(f'Unknown quantification degree "{quantification_degree}"')
     if quantification_degree == 'all_constants_in_implication_premise_conclusion' and formula.rep.count(IMPLICATION) >= 2:
         raise NotImplementedError()
 

@@ -287,7 +287,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230711.finalize')
     # output_top_dir = Path('./outputs/00.create_corpus/20230711.ICML-official-release-v2')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study')
+    output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study.strip_double_brace')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -475,9 +476,9 @@ def main():
         # '20230711.finalize.D8',
 
         # ---------------------------------- 20230718.case_study ------------------------------------
-        '20230718.case_study.D3.dist-mixture',
-        '20230718.case_study.D3.num_dist-wide',
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide',
+        # '20230718.case_study.D3.dist-mixture',
+        # '20230718.case_study.D3.num_dist-wide',
+        '20230718.case_study.D3.dist-mixture.num_dist-wide',
         # '20230718.case_study.D8.dist-mixture.num_dist-wide',
 
     ]

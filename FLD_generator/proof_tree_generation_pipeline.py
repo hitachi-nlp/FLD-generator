@@ -3,7 +3,7 @@ import logging
 from collections import defaultdict
 import random
 
-from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation
+from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation, negate
 from FLD_generator.proof import ProofTree, ProofNode
 from FLD_generator.proof_tree_generators import ProofTreeGenerator
 from FLD_generator.formula_distractors import FormulaDistractor
@@ -166,7 +166,8 @@ class ProofTreeGenerationPipeline:
                 formula_distractors = []
             logger.info(_make_pretty_log('generate distractors', 'finish'))
 
-            root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
+            # root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
+            root_negation_formula = negate(proof_tree.root_node.formula)
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 

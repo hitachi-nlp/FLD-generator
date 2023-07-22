@@ -222,38 +222,56 @@ def negate(formula: Formula) -> Formula:
     if is_contradiction_symbol(formula):
         raise ContradictionNegationError(f'Contradiction {CONTRADICTION} can not be negated.')
 
-    def require_outer_brace(formula: Formula) -> bool:
-        if len(formula.PASs) == 1:
-            # '{A}'
-            # '{A}{a}'
-            return False
-        elif formula.rep.startswith('(') and formula.rep.endswith(')'):
-            level = 1
-            for char in formula.rep[1:]:
-                if level == 0:
-                    # '({A} v {B}) -> ({C} v {D})'
-                    return True
-
-                if char == '(':
-                    level += 1
-                elif char == ')':
-                    level -= 1
-
-            assert(level == 0)
-            # '({A} v {B})'
-            return False
-
-        elif formula.rep.startswith(NEGATION):
-            # ^^({A} v {B}) -> {C}
-            # ^^({A} v {B})
-            return require_outer_brace(Formula(formula.rep.lstrip(NEGATION)))
-        else:
-            return True
-
     if require_outer_brace(formula):
         return Formula(NEGATION + '(' + formula.rep + ')')
     else:
         return Formula(NEGATION + formula.rep)
+
+
+def require_outer_brace(formula: Formula,
+                        require_for_single_predicate=False,
+                        require_for_negated_formula=False) -> bool:
+    if not require_for_single_predicate\
+            and len(formula.PASs) == 1 and formula.rep == formula.PASs[0].rep:
+        # "{A}"
+        # "{A}{a}'
+        return False
+
+    elif not require_for_negated_formula and formula.rep.startswith(NEGATION):
+        # "¬({A} v {B})" vs "¬{A} & {B}"
+        return require_outer_brace(Formula(formula.rep.lstrip(NEGATION)),
+                                   require_for_single_predicate=require_for_single_predicate,
+                                   require_for_negated_formula=require_for_negated_formula)
+
+    elif formula.rep.startswith('('):
+        level = 0
+        for i_char, char in enumerate(formula.rep):
+            if i_char == 0:
+                level += 1
+                continue
+
+            if char == '(':
+                level += 1
+            elif char == ')':
+                level -= 1
+
+            is_final_char = i_char == len(formula.rep) - 1
+
+            if level == 0 and not is_final_char:
+                # "({A} & {B}) & C"
+                return True
+
+            if is_final_char:
+                if level == 0:
+                    # "({A} & {B})"
+                    return False
+                else:
+                    raise ValueError(f'formula {formula.rep} has unbalanced braces ().')
+
+        raise Exception('The program must not pass here.')
+
+    else:
+        return True
 
 
 def is_contradiction_symbol(formula: Formula) -> bool:
