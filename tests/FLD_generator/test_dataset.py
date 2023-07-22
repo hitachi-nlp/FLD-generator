@@ -106,19 +106,19 @@ def test_generate_dataset():
         generator=generator,
     )
 
-    word_bank = None
-    # word_bank = build_wordnet_wordbank('eng')
+    # word_bank = None
+    word_bank = build_wordnet_wordbank('eng')
 
-    translator = None
-    # translator = build_translator(
-    #     ['./configs/translations/thing.v1/'],
-    #     word_bank,
-    #     use_fixed_translation=True,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     volume_to_weight='sqrt',
-    #     do_translate_to_nl=True,
-    # )
+    # translator = None
+    translator = build_translator(
+        ['./configs/translations/thing.v1/'],
+        word_bank,
+        use_fixed_translation=True,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        volume_to_weight='sqrt',
+        do_translate_to_nl=True,
+    )
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)

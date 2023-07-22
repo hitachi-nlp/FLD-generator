@@ -3,12 +3,12 @@
   "sentence": {
 
     "{A}{a}": [
-      "<<clause::verb::{A}{a}specific_subj>>"
+      "<<clause::verb::{A}{a}specific_subj>>",
+      "<<sentence::¬(¬{A}{a})>>"
     ],
     "¬{A}{a}": [
-      "__<<phrase::the_fact_that>> <<sentence::{A}{a}>> <<phrase::is_not_true>>",
-      "__comment: the above sentencei is OK but confusing when nested with other 'the_fact_that'",
-      "<<clause::verb::¬{A}{a}specific_subj>>"
+      "<<clause::verb::¬{A}{a}specific_subj>>",
+      "<<sentence::¬({A}{a})>>"
     ],
 
 

@@ -3,10 +3,12 @@
   "sentence": {
 
     "{A}": [
-      "<<clause::verb::{A}>>"
+      "<<clause::verb::{A}>>",
+      "<<sentence::¬(¬{A})>>"
     ],
     "¬{A}": [
-      "<<clause::verb::¬{A}>>"
+      "<<clause::verb::¬{A}>>",
+      "<<sentence::¬({A})>>"
     ],
 
 

@@ -289,7 +289,8 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study')
     # output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study.strip_double_brace')
-    output_top_dir = Path('./outputs/00.create_corpus/20230718.debug')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230718.debug')
+    output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',

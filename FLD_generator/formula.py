@@ -218,11 +218,15 @@ def eliminate_double_negation(formula: Formula) -> Formula:
     return Formula(re.sub(f'{NEGATION}{NEGATION}', '', formula.rep))
 
 
-def negate(formula: Formula) -> Formula:
+def negate(formula: Formula,
+           require_brace_for_single_predicate=False,
+           require_brace_for_negated_formula=False) -> Formula:
     if is_contradiction_symbol(formula):
         raise ContradictionNegationError(f'Contradiction {CONTRADICTION} can not be negated.')
 
-    if require_outer_brace(formula):
+    if require_outer_brace(formula,
+                           require_for_single_predicate=require_brace_for_single_predicate,
+                           require_for_negated_formula=require_brace_for_negated_formula):
         return Formula(NEGATION + '(' + formula.rep + ')')
     else:
         return Formula(NEGATION + formula.rep)

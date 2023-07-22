@@ -2,8 +2,14 @@
 
   "sentence": {
 
-    "¬({A})": ["<<phrase::the_fact_that>> <<sentence::{A}>> <<phrase::is_not_true>>"],
-    "¬(¬{A})": ["<<phrase::the_fact_that>> <<sentence::¬{A}>> <<phrase::is_not_true>>"],
+    "¬({A})": [
+      "<<phrase::the_fact_that>> <<sentence::{A}>> <<phrase::is_not_true>>",
+      "<<sentence::¬{A}>>"
+    ],
+    "¬(¬{A})": [
+      "<<phrase::the_fact_that>> <<sentence::¬{A}>> <<phrase::is_not_true>>",
+      "<<sentence::{A}>>"
+    ],
 
 
     "¬({A} & {B})": ["<<phrase::the_fact_that>> <<sentence::({A} & {B})>> <<phrase::is_not_true>>"],
