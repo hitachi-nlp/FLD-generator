@@ -223,6 +223,7 @@ class ProofTreeGenerator:
                 return False
             return True
 
+        # --- generate complicated arguments that includes &, v, and negation ---
         complicated_arguments: List[Argument] = []
         if complex_formula_arguments_weight > 0.0:
             for argument in arguments:
@@ -237,6 +238,7 @@ class ProofTreeGenerator:
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
 
+        # --- generate quantified arguments ---
         quantified_arguments: List[Argument] = []
         if quantifier_arguments_weight > 0.0:
             for argument in arguments + complicated_arguments:
@@ -253,6 +255,7 @@ class ProofTreeGenerator:
                             quantified_arguments.append(quantifier_argument)
                             quantifier_argument.id += f'.{name}'
 
+        # --- generate axioms of quantifiers, such as universal elimination ---
         quantifier_axiom_arguments: List[Argument] = []
         if quantifier_axiom_arguments_weight > 0.0:
             unique_formulas: List[Formula] = []

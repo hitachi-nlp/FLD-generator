@@ -31,8 +31,11 @@ def main():
     # input_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
     # output_dir = Path('./outputs/G01.show_labelwise_results.py/20230711.refactor_distractors')
 
-    input_dir = Path('./outputs/00.create_corpus/20230718.case_study')
-    output_dir = Path('./outputs/G01.show_labelwise_results.py/20230718.case_study')
+    # input_dir = Path('./outputs/00.create_corpus/20230718.case_study')
+    # output_dir = Path('./outputs/G01.show_labelwise_results.py/20230718.case_study')
+
+    input_dir = Path('./outputs/00.create_corpus/20230718.case_study.strip_double_brace')
+    output_dir = Path('./outputs/G01.show_labelwise_results.py/20230718.case_study.strip_double_brace')
 
     compute_distrib(input_dir, output_dir)
 

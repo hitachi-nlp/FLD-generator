@@ -20,10 +20,10 @@ def main(input_jsonl_path, output_txt_path):
     setup_logger(do_stderr=True, level=logging.INFO)
     output_txt_path = Path(output_txt_path)
 
-    labelwise_formulas = defaultdict(list)
+    labelwise_formulas = defaultdict(lambda : defaultdict(int))
     for line in open(input_jsonl_path):
         instance = json.loads(line.rstrip('\n'))
-        labelwise_formulas[instance['proof_label']].append(instance['hypothesis_formula'])
+        labelwise_formulas[instance['proof_label']][instance['hypothesis_formula']] += 1
 
     output_txt_path.parent.mkdir(exist_ok=True, parents=True)
     with open(str(output_txt_path), 'w') as f_out:
@@ -31,8 +31,9 @@ def main(input_jsonl_path, output_txt_path):
             formulas = labelwise_formulas[label]
             print('\n\n', file=f_out)
             print(f'====================== {label} ========================', file=f_out)
-            for formula in sorted(formulas):
-                print(f'    {formula}', file=f_out)
+
+            for formula, cnt in sorted(formulas.items()):
+                print(f'    {formula:<40} {cnt}', file=f_out)
 
 
 
