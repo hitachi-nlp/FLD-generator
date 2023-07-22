@@ -30,20 +30,6 @@
     ],
 
 
-    "¬({A}{a} & {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} & {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}{a} & ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} & ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"
-    ],
-
-
     "({A}{a} v {B}{a})": [
       "<<clause::verb::({A}{a} v {B}{a})specific_subj>>",
       "<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a})>> <<phrase::is_true>>"
@@ -59,20 +45,6 @@
     "(¬{A}{a} v ¬{B}{a})": [
       "<<clause::verb::(¬{A}{a} v ¬{B}{a})specific_subj>>",
       "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a})>> <<phrase::is_true>>"
-    ],
-
-
-    "¬({A}{a} v {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} v {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}{a} v ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} v ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"
     ],
 
 
