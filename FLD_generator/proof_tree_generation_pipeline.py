@@ -256,7 +256,8 @@ class ProofTreeGenerationPipeline:
             'distractor': len(formula_distractors),
             'argument_stats': self._empty_argument_stat.copy(),
             'translation_stats': {
-                'name_stats': self._empty_translation_stat.copy(),
+                # 'name_stats': self._empty_translation_stat.copy(),
+                'name_stats': {},
                 'other_stats': defaultdict(int),
             },
         }
