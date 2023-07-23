@@ -3230,8 +3230,8 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 500,
-            # 'test': 5000,
+            # 'test': 500,
+            'test': 3000,
             # 'valid': 5000,
             # 'train': 15000,
         }

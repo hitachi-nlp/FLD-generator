@@ -4,47 +4,39 @@
 
     "{A}": [
       "<<clause::verb::{A}>>",
-      "<<sentence::¬(¬{A})>>"
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬(¬{A})>>"]
     ],
     "¬{A}": [
       "<<clause::verb::¬{A}>>",
-      "<<sentence::¬({A})>>"
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬({A})>>"]
     ],
 
 
     "({A} & {B})": [
-      "<<clause::verb::({A} & {B})>>",
-      "<<phrase::the_fact_that>> <<sentence::({A} & {B})>> <<phrase::is_true>>"
+      "<<clause::verb::({A} & {B})>>"
     ],
     "(¬{A} & {B})": [
-      "<<clause::verb::(¬{A} & {B})>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A} & {B})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A} & {B})>>"
     ],
     "({A} & ¬{B})": [
-      "<<clause::verb::({A} & ¬{B})>>",
-      "<<phrase::the_fact_that>> <<sentence::({A} & ¬{B})>> <<phrase::is_true>>"
+      "<<clause::verb::({A} & ¬{B})>>"
     ],
     "(¬{A} & ¬{B})": [
-      "<<clause::verb::(¬{A} & ¬{B})>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A} & ¬{B})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A} & ¬{B})>>"
     ],
 
 
     "({A} v {B})": [
-      "<<clause::verb::({A} v {B})>>",
-      "<<phrase::the_fact_that>> <<sentence::({A} v {B})>> <<phrase::is_true>>"
+      "<<clause::verb::({A} v {B})>>"
     ],
     "(¬{A} v {B})": [
-      "<<clause::verb::(¬{A} v {B})>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A} v {B})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A} v {B})>>"
     ],
     "({A} v ¬{B})": [
-      "<<clause::verb::({A} v ¬{B})>>",
-      "<<phrase::the_fact_that>> <<sentence::({A} v ¬{B})>> <<phrase::is_true>>"
+      "<<clause::verb::({A} v ¬{B})>>"
     ],
     "(¬{A} v ¬{B})": [
-      "<<clause::verb::(¬{A} v ¬{B})>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A} v ¬{B})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A} v ¬{B})>>"
     ],
 
 

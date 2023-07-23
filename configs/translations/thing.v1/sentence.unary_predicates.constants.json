@@ -4,47 +4,39 @@
 
     "{A}{a}": [
       "<<clause::verb::{A}{a}specific_subj>>",
-      "<<sentence::¬(¬{A}{a})>>"
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬(¬{A}{a})>>"]
     ],
     "¬{A}{a}": [
       "<<clause::verb::¬{A}{a}specific_subj>>",
-      "<<sentence::¬({A}{a})>>"
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬({A}{a})>>"]
     ],
 
 
     "({A}{a} & {B}{a})": [
-      "<<clause::verb::({A}{a} & {B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::({A}{a} & {B}{a})specific_subj>>"
     ],
     "(¬{A}{a} & {B}{a})": [
-      "<<clause::verb::(¬{A}{a} & {B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}{a} & {B}{a})specific_subj>>"
     ],
     "({A}{a} & ¬{B}{a})": [
-      "<<clause::verb::({A}{a} & ¬{B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::({A}{a} & ¬{B}{a})specific_subj>>"
     ],
     "(¬{A}{a} & ¬{B}{a})": [
-      "<<clause::verb::(¬{A}{a} & ¬{B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}{a} & ¬{B}{a})specific_subj>>"
     ],
 
 
     "({A}{a} v {B}{a})": [
-      "<<clause::verb::({A}{a} v {B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::({A}{a} v {B}{a})specific_subj>>"
     ],
     "(¬{A}{a} v {B}{a})": [
-      "<<clause::verb::(¬{A}{a} v {B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}{a} v {B}{a})specific_subj>>"
     ],
     "({A}{a} v ¬{B}{a})": [
-      "<<clause::verb::({A}{a} v ¬{B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::({A}{a} v ¬{B}{a})specific_subj>>"
     ],
     "(¬{A}{a} v ¬{B}{a})": [
-      "<<clause::verb::(¬{A}{a} v ¬{B}{a})specific_subj>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a})>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}{a} v ¬{B}{a})specific_subj>>"
     ],
 
 

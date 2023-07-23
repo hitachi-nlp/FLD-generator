@@ -2,8 +2,8 @@ import json
 from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
 from collections import OrderedDict, defaultdict
 import traceback
+import statistics
 import re
-from tqdm import tqdm
 import copy
 import random
 import re
@@ -13,6 +13,7 @@ from functools import lru_cache
 import math
 from pathlib import Path
 
+from tqdm import tqdm
 from tqdm import tqdm
 from FLD_generator.utils import nested_merge
 from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
@@ -74,17 +75,19 @@ class TemplatedTranslator(Translator):
                  reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
-                 volume_to_weight: str = 'linear',
+                 # volume_to_weight: str = 'linear',
+                 default_weight_type='W__SQRT(VOLUME)__1.0',
                  do_translate_to_nl=True,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
+        self._default_weight_type = default_weight_type
         self._two_layered_config = self._build_two_layered_config(config_json)
 
         self._load_words_by_pos_attrs_cache: Dict[Any, set] = {}
         self._load_words_by_pos_attrs_cache_interm: Dict[Any, set] = defaultdict(set)
 
-        self._translations: Dict[str, List[str]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
+        self._translations: Dict[str, List[Tuple[str, str]]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
         # sort by specificity
         self._translations = OrderedDict((
             (key, val)
@@ -112,27 +115,27 @@ class TemplatedTranslator(Translator):
         self._unary_predicate_set = set(self._unary_predicates)
         self._constant_set = set(self._constants)
 
-        if volume_to_weight == 'linear':
-            self._volume_to_weight_func = lambda volume: volume
-        elif volume_to_weight == 'sqrt':
-            self._volume_to_weight_func = lambda volume: (math.sqrt(volume) if volume > 0 else 0)
-        elif volume_to_weight == 'log10':
-            self._volume_to_weight_func = lambda volume: (math.log10(volume) if volume > 0 else 0)
-        elif volume_to_weight == 'inv_linear':
-            self._volume_to_weight_func = lambda volume: (1.0 / volume if volume > 0 else 0)
-        elif volume_to_weight.startswith('pow-'):
-            ind = float(volume_to_weight.split('-')[1])
-            self._volume_to_weight_func = lambda volume: (math.pow(volume, ind) if volume > 0 else 0)
-        else:
-            raise ValueError()
+        # if volume_to_weight == 'linear':
+        #     self._volume_to_weight_func = lambda volume: volume
+        # elif volume_to_weight == 'sqrt':
+        #     self._volume_to_weight_func = lambda volume: (math.sqrt(volume) if volume > 0 else 0)
+        # elif volume_to_weight == 'log10':
+        #     self._volume_to_weight_func = lambda volume: (math.log10(volume) if volume > 0 else 0)
+        # elif volume_to_weight == 'inv_linear':
+        #     self._volume_to_weight_func = lambda volume: (1.0 / volume if volume > 0 else 0)
+        # elif volume_to_weight.startswith('pow-'):
+        #     ind = float(volume_to_weight.split('-')[1])
+        #     self._volume_to_weight_func = lambda volume: (math.pow(volume, ind) if volume > 0 else 0)
+        # else:
+        #     raise ValueError()
 
         self._do_translate_to_nl = do_translate_to_nl
 
-    def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[str]]]:
-        two_layered_config = self._completely_flatten_config(config)
+    def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[Tuple[str, str]]]]:
+        flat_config = self._completely_flatten_config(config)
 
-        one_hierarchy_config: Dict[str, Dict[str, List[str]]] = defaultdict(dict)
-        for key, val in two_layered_config.items():
+        two_layered_config: Dict[str, Dict[str, List[str]]] = defaultdict(dict)
+        for key, val in flat_config.items():
             if key.startswith('__'):
                 logger.info('skip key "%s"', key)
                 continue
@@ -145,21 +148,32 @@ class TemplatedTranslator(Translator):
             if transl_key.startswith('__'):
                 logger.info('skip key "%s"', key)
                 continue
-            one_hierarchy_config[prefix][transl_key] = val
-        return one_hierarchy_config
+            two_layered_config[prefix][transl_key] = val
+        return two_layered_config
 
-    def _completely_flatten_config(self, config: Dict) -> Dict[str, List[str]]:
+    def _completely_flatten_config(self, config: Dict) -> Dict[str, List[Tuple[float, str]]]:
         flat_config = {}
         for key, val in config.items():
-            if isinstance(val, str):
-                flat_config[key] = [val]
-            elif isinstance(val, list):
-                flat_config[key] = val
+            if isinstance(val, list):
+                children = []
+                for child in val:
+                    if isinstance(child, list):
+                        if not len(child) == 2:
+                            raise ValueError('invalid template {str(child)}')
+                        children.append(tuple(child))
+                    else:
+                        if not isinstance(child, str):
+                            raise ValueError('invalid template {str(child)}')
+                        children.append((self._default_weight_type, child))
+                flat_config[key] = children
+
             elif isinstance(val, dict):
                 for child_key, child_val in self._completely_flatten_config(val).items():
                     flat_config[f'{key}::{child_key}'] = child_val
+
             else:
                 raise ValueError()
+
         return flat_config
 
     @profile
@@ -259,9 +273,9 @@ class TemplatedTranslator(Translator):
 
     @property
     def translation_names(self) -> List[str]:
-        return [self._translation_name(sentence_key, nl)
+        return [self._translation_name(sentence_key, weighted_nl[1])
                 for sentence_key, nls in self._translations.items()
-                for nl in nls]
+                for weighted_nl in nls]
 
     def _translation_name(self, sentence_key: str, nl: str) -> str:
         return '____'.join([sentence_key, nl])
@@ -298,7 +312,7 @@ class TemplatedTranslator(Translator):
                     interpret_mapping,
                     push_mapping,
                     block_shuffle=not self.use_fixed_translation,
-                    volume_to_weight=self._volume_to_weight_func,
+                    # volume_to_weight=self._volume_to_weight_func,
                 )
                 if chosen_nl is None:
                     msgs = [
@@ -418,7 +432,7 @@ class TemplatedTranslator(Translator):
                                                 interpret_mapping: Dict[str, str],
                                                 push_mapping: Dict[str, str],
                                                 block_shuffle=True,
-                                                volume_to_weight = lambda weight: weight,
+                                                # volume_to_weight = lambda weight: weight,
                                                 log_indent=0) -> Optional[str]:
         """ Find translations the pos and nflations of which are consistent with interpret_mapping """
         if _DEBUG:
@@ -426,38 +440,48 @@ class TemplatedTranslator(Translator):
             print(' ' * log_indent + '**** _sample_interpret_mapping_consistent_nl() ****')
             print(' ' * log_indent + '    sentence_key:', sentence_key)
 
-        iterator_with_volumes = []
-        for transl_nl in self._translations[sentence_key]:
-            sampler = self._make_resolved_translation_sampler(
+        iterators = []
+        weight_types: List[str] = []
+        volumes: List[int] = []
+        for weight_type, transl_nl in self._translations[sentence_key]:
+            iterator_with_volume = self._make_resolved_translation_sampler(  # SLOW
                 transl_nl,
                 # set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
                 set([transl_nl]),
                 constraint_interpret_mapping=interpret_mapping,
                 constraint_push_mapping=push_mapping,
                 block_shuffle=block_shuffle,
-                volume_to_weight=volume_to_weight,
+                # volume_to_weight=volume_to_weight,
                 log_indent = log_indent + 4,
             )
-            iterator_with_volumes.append(sampler)
 
-        iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-        volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
+            iterators.append(iterator_with_volume[0])
+            weight_types.append(weight_type)
+            volumes.append(iterator_with_volume[1])
 
         if block_shuffle:
+
+            # volume_weights = [volume_to_weight(volume) for volume in volumes]
+            weights = [self._get_weight_func(weight_type)(volumes, i_iterator)
+                       for i_iterator, weight_type in enumerate(weight_types)]
+
+            @profile
             def generate():
                 for resolved_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
-                    [volume_to_weight(volume) for volume in volumes]
+                    weights,
                 ):
                     yield resolved_nl, condition
 
         else:
+
+            @profile
             def generate():
                 for iterator in iterators:
                     for resolved_nl, condition in iterator:
                         yield resolved_nl, condition
 
-        for resolved_nl, condition in generate():
+        for resolved_nl, condition in generate():   # SLOW
 
             condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
                 condition,
@@ -469,6 +493,65 @@ class TemplatedTranslator(Translator):
 
         return None
 
+    @lru_cache(maxsize=100000)
+    def _get_weight_func(self, type_: str) -> Callable[[List[int], int], float]:
+        """
+
+        examples of type_
+            "W__LINEAR(VOLUME)__1.0"
+            "W__SQRT(VOLUME)__0.1"
+            "W__LINEAR(VOLUME)_AVG__1.0"
+            "W__SQRT(VOLUME)_AVG__1.0"
+        """
+        _, volume_weight_func_name, factor = type_.split('__')
+
+        _factor = float(factor)
+
+        if volume_weight_func_name.endswith('AVG'):
+            # "SQRT(VOLUME)_AVG"
+            volume_weight_type, volume_weights_aggregation = volume_weight_func_name.split('_')
+        else:
+            # "SQRT(VOLUME)"
+            volume_weight_type, volume_weights_aggregation = volume_weight_func_name, None
+
+        if volume_weight_type == 'LINEAR(VOLUME)':
+
+            def volume2weight(volume: int) -> float:
+                return float(volume)
+
+        elif volume_weight_type == 'SQRT(VOLUME)':
+
+            def volume2weight(volume: int) -> float:
+                return math.sqrt(volume) if volume > 0 else 0
+
+        else:
+            raise ValueError(f'{volume_weight_type}')
+
+
+        if volume_weights_aggregation == 'AVG':
+
+            def agg_volume_weights(volume_weights: List[int], i: int) -> float:
+                if len(volume_weights) == 1:
+                    return _factor * volume_weights[i]
+                else:
+                    other_avg = statistics.mean(volume_weights[j] for j in range(len(volume_weights))
+                                                if j != i)
+                    return _factor * other_avg
+
+        elif volume_weights_aggregation is None:
+
+            def agg_volume_weights(volume_weights: List[int], i: int) -> float:
+                return _factor * volume_weights[i]
+
+        else:
+            raise ValueError(f'{volume_weights_aggregation}')
+        
+        def get_weight(volumes: List[int], i: int) -> float:
+            volume_weights = [volume2weight(volume) for volume in volumes]
+            return agg_volume_weights(volume_weights, i)
+
+        return get_weight
+
     @profile
     def _make_resolved_translation_sampler(self,
                                            nl: str,
@@ -477,9 +560,10 @@ class TemplatedTranslator(Translator):
                                            constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
-                                           volume_to_weight = lambda volume: volume,
+                                           # volume_to_weight = lambda volume: volume,
                                            check_condition=True,
                                            log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+        # SLOW due to the many calls
         if _DEBUG:
             print()
             print(' ' * log_indent + '== _make_resolved_translation_sampler() ==')
@@ -503,7 +587,9 @@ class TemplatedTranslator(Translator):
 
             def generate():
                 yield nl, condition
+
         else:
+
             class ResolveTemplateGenerator:
 
                 # @profile
@@ -517,7 +603,7 @@ class TemplatedTranslator(Translator):
                     return self._resolve()[0]
 
                 # @profile
-                def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:  # SLOW
+                def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
                         # ancestor_keys,
@@ -525,7 +611,7 @@ class TemplatedTranslator(Translator):
                         constraint_interpret_mapping=constraint_interpret_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
-                        volume_to_weight=volume_to_weight,
+                        # volume_to_weight=volume_to_weight,
                         check_condition=check_condition,
                         log_indent = log_indent + 4
                     )
@@ -562,7 +648,7 @@ class TemplatedTranslator(Translator):
                                         constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
-                                        volume_to_weight = lambda volume: volume,
+                                        # volume_to_weight = lambda volume: volume,
                                         check_condition=True,
                                         log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
         if _DEBUG:
@@ -577,38 +663,47 @@ class TemplatedTranslator(Translator):
                                                              log_indent = log_indent + 4)
         if template_key is None:
             raise Exception(f'template for {template} not found.')
-        iterator_with_volumes = [
-            self._make_resolved_translation_sampler(template_nl,
-                                                    # ancestor_keys.union(set([template_key])),
-                                                    ancestor_nls.union(set([template_nl])),
-                                                    constraint_interpret_mapping=constraint_interpret_mapping,
-                                                    constraint_push_mapping=constraint_push_mapping,
-                                                    block_shuffle=shuffle,
-                                                    volume_to_weight=volume_to_weight,
-                                                    check_condition=check_condition,
-                                                    log_indent = log_indent + 4)
-            for template_nl in template_nls
-            if template_nl not in ancestor_nls
-        ]
-        iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-        volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-        volume_sum = sum(volumes)
+
+        iterators = []
+        weight_types: List[str] = []
+        volumes: List[int] = []
+        for weight, template_nl in template_nls:
+            if template_nl in ancestor_nls:
+                continue
+
+            iterator_with_volume = self._make_resolved_translation_sampler(template_nl,
+                                                                           # ancestor_keys.union(set([template_key])),
+                                                                           ancestor_nls.union(set([template_nl])),
+                                                                           constraint_interpret_mapping=constraint_interpret_mapping,
+                                                                           constraint_push_mapping=constraint_push_mapping,
+                                                                           block_shuffle=shuffle,
+                                                                           # volume_to_weight=volume_to_weight,
+                                                                           check_condition=check_condition,
+                                                                           log_indent = log_indent + 4)
+            iterators.append(iterator_with_volume[0])
+            weight_types.append(weight)
+            volumes.append(iterator_with_volume[1])
 
         if shuffle:
+
             def generate():
+                weights = [self._get_weight_func(weight_type)(volumes, i_iterator)
+                           for i_iterator, weight_type in enumerate(weight_types)]
+
                 for resolved_template_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
-                    [volume_to_weight(volume) for volume in volumes]
+                    weights,
                 ):
                     yield resolved_template_nl, condition
 
         else:
+
             def generate():
                 for iterator in iterators:
                     for resolved_template_nl, condition in iterator:
                         yield resolved_template_nl, condition
 
-        return generate(), volume_sum
+        return generate(), sum(volumes)
 
     @profile
     def _interpret_mapping_is_consistent_with_condition(self,
@@ -631,13 +726,12 @@ class TemplatedTranslator(Translator):
 
         return condition_is_consistent
 
-    # HONOKA: 多分，cacheが効かなくなったから遅くなっている(?)．
     @lru_cache(maxsize=1000000)
     def _find_template_nls(self,
                            template: str,
                            # ancestor_keys: Tuple[str],
                            # ancestor_nls: Tuple[str],
-                           log_indent=0) -> Tuple[Optional[str], Optional[List[str]]]:
+                           log_indent=0) -> Tuple[Optional[str], Optional[List[Tuple[str, str]]]]:
         if _DEBUG:
             print()
             print(' ' * log_indent + '-- _find_template_nls() --')
@@ -656,15 +750,6 @@ class TemplatedTranslator(Translator):
 
         config = self._two_layered_config[template_prefix]
         for transl_key, transl_nls in config.items():
-            # HONOKA: これは正確には誤りな気がする．mappingで変わりうるから．
-            # HONOKA: そして多分，keyによるrejectは不要．nlだけでよいはず．
-            # if transl_key in ancestor_keys_set: # prevent circular reference
-            #     logger.fatal('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            #     logger.fatal(template)
-            #     logger.fatal(str(ancestor_keys))
-            #     logger.fatal(str(transl_key))
-            #     continue
-
             key_formula = Formula(transl_key)
             if formula_can_not_be_identical_to(key_formula, template_key_formula):
                 continue
@@ -674,10 +759,10 @@ class TemplatedTranslator(Translator):
                 key_formula_pulled = interpret_formula(key_formula, mapping)
                 if key_formula_pulled.rep == template_key_formula.rep:
                     found_template_key = transl_key
-                    found_template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
-                                          for transl_nl in transl_nls]
-                    # found_template_nls = [found_template_nl for found_template_nl in found_template_nls
-                    #                       if found_template_nl not in ancestor_nls_set]
+                    found_template_nls = []
+                    for weighted_nl in transl_nls:
+                        weight_type, nl = weighted_nl
+                        found_template_nls.append((weight_type, interpret_formula(Formula(nl), mapping).rep))
                     break
 
             if found_template_nls is not None:
@@ -1042,11 +1127,7 @@ class TemplatedTranslator(Translator):
 
 def build(config_paths: List[str],
           word_bank: WordBank,
-          use_fixed_translation=False,
-          reused_object_nouns_max_factor=0.0,
-          limit_vocab_size_per_type: Optional[int] = None,
-          volume_to_weight: str = 'linear',
-          do_translate_to_nl=True):
+          **kwargs):
 
     merged_config_json = {}
     for config_path in config_paths:
@@ -1056,16 +1137,13 @@ def build(config_paths: List[str],
         else:
             all_paths = [_config_path]
         for _path in all_paths:
+            logger.info('loading "%s"', str(_path))
             merged_config_json = nested_merge(merged_config_json,
                                               json.load(open(str(_path))))
 
     translator = TemplatedTranslator(
         merged_config_json,
         word_bank,
-        use_fixed_translation=use_fixed_translation,
-        reused_object_nouns_max_factor=reused_object_nouns_max_factor,
-        limit_vocab_size_per_type=limit_vocab_size_per_type,
-        volume_to_weight=volume_to_weight,
-        do_translate_to_nl=do_translate_to_nl,
+        **kwargs,
     )
     return translator

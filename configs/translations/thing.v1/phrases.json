@@ -96,7 +96,7 @@
 
     "{A}predicate": [
       "is <<phrase::{A}is_tgt>>",
-      "is not <<phrase::{A}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::{A}is_not_tgt>>"],
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>>",
 
       "<<phrase::does>> {A}[VERB]", "{A}[VERB.s]"
@@ -113,7 +113,7 @@
 
 
     "¬{A}predicate": [
-      "is <<phrase::¬{A}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>>"],
       "is not <<phrase::¬{A}is_not_tgt>>",
       "<<phrase::is_not_a_kind_of>> <<phrase::{A}a_noun>>",
 
@@ -136,14 +136,14 @@
       "__both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
 
       "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>",
-      "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>",
-      "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
 
       "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      "is both <<phrase::{A}is_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>",
-      "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both <<phrase::{A}is_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
 
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>>"
@@ -152,15 +152,15 @@
       "<<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
       "__both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
 
-      "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
       "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>",
-      "is <<phrase::¬{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>",
-      "is not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
 
-      "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
       "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>",
-      "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
 
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::{B}a_noun>>"
@@ -169,15 +169,15 @@
       "<<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
       "__both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
 
-      "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
-      "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
       "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::¬{B}is_not_tgt>>",
-      "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
 
-      "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
-      "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
       "is both <<phrase::{A}is_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
-      "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
 
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
@@ -186,14 +186,14 @@
       "<<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
       "__both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
 
-      "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
-      "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>",
-      "is <<phrase::¬{A}is_tgt>> <<phrase::but_and>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::but_and>> not <<phrase::¬{B}is_not_tgt>>"],
       "is not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
 
-      "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
-      "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>",
-      "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
       "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
 
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::¬{B}predicate>>",
@@ -205,55 +205,55 @@
       "<<phrase::maybe_either>> <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both",
 
       "is <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
-      "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
-      "is <<phrase::{A}is_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>",
-      "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
 
       "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or <<phrase::{B}is_tgt>> or both",
-      "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or <<phrase::{B}is_tgt>> or both",
-      "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or not <<phrase::{B}is_not_tgt>> or both",
-      "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or not <<phrase::{B}is_not_tgt>> or both"
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or <<phrase::{B}is_tgt>> or both"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or not <<phrase::{B}is_not_tgt>> or both"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or not <<phrase::{B}is_not_tgt>> or both"]
     ],
     "(¬{A} v {B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::andOr>> <<phrase::{B}predicate>>",
       "<<phrase::maybe_either>> <<phrase::¬{A}predicate>> or <<phrase::{B}predicate>> or both",
 
-      "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
       "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
-      "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>",
-      "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
 
-      "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or <<phrase::{B}is_tgt>> or both",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or <<phrase::{B}is_tgt>> or both"],
       "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or <<phrase::{B}is_tgt>> or both",
-      "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or not <<phrase::{B}is_not_tgt>> or both",
-      "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or not <<phrase::{B}is_not_tgt>> or both"
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or not <<phrase::{B}is_not_tgt>> or both"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or not <<phrase::{B}is_not_tgt>> or both"]
     ],
     "({A} v ¬{B})predicate": [
       "<<phrase::{A}predicate>> <<phrase::andOr>> <<phrase::¬{B}predicate>>",
       "<<phrase::maybe_either>> <<phrase::{A}predicate>> or <<phrase::¬{B}predicate>> or both",
 
-      "is <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>",
-      "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
       "is <<phrase::{A}is_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>",
-      "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>"],
 
-      "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or <<phrase::¬{B}is_tgt>> or both",
-      "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or <<phrase::¬{B}is_tgt>> or both",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
       "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both",
-      "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"]
     ],
     "(¬{A} v ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::andOr>> <<phrase::¬{B}predicate>>",
       "<<phrase::maybe_either>> <<phrase::¬{A}predicate>> or <<phrase::¬{B}predicate>> or both",
 
-      "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>",
-      "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>",
-      "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>"],
       "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>",
 
-      "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or <<phrase::¬{B}is_tgt>> or both",
-      "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or <<phrase::¬{B}is_tgt>> or both",
-      "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both",
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
+      ["W__SQRT(VOLUME)_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"],
       "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"
     ],
 

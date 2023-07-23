@@ -3,11 +3,11 @@
   "sentence": {
 
     "¬({A}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::{A}{a}>> <<phrase::is_not_true>>",
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A}{a}>> <<phrase::is_not_true>>"],
       "<<sentence::¬{A}{a}>>"
     ],
     "¬(¬{A}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::¬{A}{a}>> <<phrase::is_not_true>>",
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A}{a}>> <<phrase::is_not_true>>"],
       "<<sentence::{A}{a}>>"
     ],
 

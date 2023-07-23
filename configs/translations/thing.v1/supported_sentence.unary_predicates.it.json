@@ -1,0 +1,43 @@
+{
+
+  "sentence": {
+
+    "{A}it": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A}it>> <<phrase::is_true>>"]
+    ],
+    "¬{A}it": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A}it>> <<phrase::is_true>>"]
+    ],
+
+
+    "({A}it & {B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it & {B}it)>> <<phrase::is_true>>"]
+    ],
+    "(¬{A}it & {B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it & {B}it)>> <<phrase::is_true>>"]
+    ],
+    "({A}it & ¬{B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it & ¬{B}it)>> <<phrase::is_true>>"]
+    ],
+    "(¬{A}it & ¬{B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it & ¬{B}it)>> <<phrase::is_true>>"]
+    ],
+
+
+    "({A}it v {B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it v {B}it)>> <<phrase::is_true>>"]
+    ],
+    "(¬{A}it v {B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it v {B}it)>> <<phrase::is_true>>"]
+    ],
+    "({A}it v ¬{B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it v ¬{B}it)>> <<phrase::is_true>>"]
+    ],
+    "(¬{A}it v ¬{B}it)": [
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it v ¬{B}it)>> <<phrase::is_true>>"]
+    ]
+
+
+  }
+
+}

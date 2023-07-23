@@ -37,7 +37,8 @@ def load_dataset(argument_config: List[str],
                  use_fixed_translation: bool,
                  reused_object_nouns_max_factor: float,
                  limit_vocab_size_per_type: Optional[int],
-                 translation_volume_to_weight: str,
+                 # translation_volume_to_weight: str,
+                 translation_default_weight_type: str,
                  complex_formula_arguments_weight: float,
                  quantifier_axiom_arguments_weight: float,
                  quantifier_axioms: Optional[List[str]],
@@ -106,7 +107,8 @@ def load_dataset(argument_config: List[str],
                                   use_fixed_translation=use_fixed_translation,
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
-                                  volume_to_weight=translation_volume_to_weight)
+                                  # volume_to_weight=translation_volume_to_weight,
+                                  default_weight_type=translation_default_weight_type)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     pipeline = ProofTreeGenerationPipeline(
@@ -194,7 +196,8 @@ def generate_instances(size: int, *args):
 @click.option('--use-fixed-translation', type=bool, is_flag=True)
 @click.option('--reused-object-nouns-max-factor', type=float, default=1.0)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
-@click.option('--translation-volume-to-weight', type=str, default='sqrt')
+# @click.option('--translation-volume-to-weight', type=str, default='sqrt')
+@click.option('--translation-default-weight-type', type=str, default='W__SQRT(VOLUME)__1.0')
 #
 @click.option('--distractor', default='mixture.negative_tree.negative_tree')
 @click.option('--distractors-range', type=str, default=json.dumps([5, 5]))
@@ -224,7 +227,8 @@ def main(output_path,
          use_fixed_translation,
          reused_object_nouns_max_factor,
          limit_vocab_size_per_type,
-         translation_volume_to_weight,
+         # translation_volume_to_weight,
+         translation_default_weight_type,
          size,
          depth_range,
          depth_distrib,
@@ -296,7 +300,8 @@ def main(output_path,
                         use_fixed_translation,
                         reused_object_nouns_max_factor,
                         limit_vocab_size_per_type,
-                        translation_volume_to_weight,
+                        # translation_volume_to_weight,
+                        translation_default_weight_type,
                         complex_formula_arguments_weight,
                         quantifier_axiom_arguments_weight,
                         quantifier_axiom,

@@ -2,78 +2,41 @@
 
   "sentence": {
 
-
     "{A}it": [
-      "<<clause::verb::{A}it>>"
+      "<<clause::verb::{A}it>>",
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬(¬{A}it)>>"]
     ],
     "¬{A}it": [
-      "__<<phrase::the_fact_that>> <<sentence::{A}it>> <<phrase::is_not_true>>",
-      "__comment: the above sentencei is OK but confusing when nested with other 'the_fact_that'",
-      "<<clause::verb::¬{A}it>>"
+      "<<clause::verb::¬{A}it>>",
+      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬({A}it)>>"]
     ],
 
 
     "({A}it & {B}it)": [
-      "<<clause::verb::({A}it & {B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}it & {B}it)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}it & {B}it)>>"
     ],
     "(¬{A}it & {B}it)": [
-      "<<clause::verb::(¬{A}it & {B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it & {B}it)>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}it & {B}it)>>"
     ],
     "({A}it & ¬{B}it)": [
-      "<<clause::verb::({A}it & ¬{B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}it & ¬{B}it)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}it & ¬{B}it)>>"
     ],
     "(¬{A}it & ¬{B}it)": [
-      "<<clause::verb::(¬{A}it & ¬{B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it & ¬{B}it)>> <<phrase::is_true>>"
-    ],
-
-
-    "¬({A}it & {B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}it & {B}it)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}it & {B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it & {B}it)>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}it & ¬{B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}it & ¬{B}it)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}it & ¬{B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it & ¬{B}it)>> <<phrase::is_not_true>>"
+      "<<clause::verb::(¬{A}it & ¬{B}it)>>"
     ],
 
 
     "({A}it v {B}it)": [
-      "<<clause::verb::({A}it v {B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}it v {B}it)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}it v {B}it)>>"
     ],
     "(¬{A}it v {B}it)": [
-      "<<clause::verb::(¬{A}it v {B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it v {B}it)>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}it v {B}it)>>"
     ],
     "({A}it v ¬{B}it)": [
-      "<<clause::verb::({A}it v ¬{B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}it v ¬{B}it)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}it v ¬{B}it)>>"
     ],
     "(¬{A}it v ¬{B}it)": [
-      "<<clause::verb::(¬{A}it v ¬{B}it)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it v ¬{B}it)>> <<phrase::is_true>>"
-    ],
-
-
-    "¬({A}it v {B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}it v {B}it)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}it v {B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it v {B}it)>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}it v ¬{B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}it v ¬{B}it)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}it v ¬{B}it)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}it v ¬{B}it)>> <<phrase::is_not_true>>"
+      "<<clause::verb::(¬{A}it v ¬{B}it)>>"
     ]
 
   }

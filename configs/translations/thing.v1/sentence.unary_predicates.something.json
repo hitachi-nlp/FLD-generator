@@ -2,7 +2,6 @@
 
   "sentence": {
 
-
     "{A}something": [
       "<<clause::verb::{A}something>>"
     ],
@@ -12,66 +11,30 @@
 
 
     "({A}something & {B}something)": [
-      "<<clause::verb::({A}something & {B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}something & {B}something)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}something & {B}something)>>"
     ],
     "(¬{A}something & {B}something)": [
-      "<<clause::verb::(¬{A}something & {B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something & {B}something)>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}something & {B}something)>>"
     ],
     "({A}something & ¬{B}something)": [
-      "<<clause::verb::({A}something & ¬{B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}something & ¬{B}something)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}something & ¬{B}something)>>"
     ],
     "(¬{A}something & ¬{B}something)": [
-      "<<clause::verb::(¬{A}something & ¬{B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something & ¬{B}something)>> <<phrase::is_true>>"
-    ],
-
-
-    "¬({A}something & {B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}something & {B}something)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}something & {B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something & {B}something)>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}something & ¬{B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}something & ¬{B}something)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}something & ¬{B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something & ¬{B}something)>> <<phrase::is_not_true>>"
+      "<<clause::verb::(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "({A}something v {B}something)": [
-      "<<clause::verb::({A}something v {B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}something v {B}something)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}something v {B}something)>>"
     ],
     "(¬{A}something v {B}something)": [
-      "<<clause::verb::(¬{A}something v {B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something v {B}something)>> <<phrase::is_true>>"
+      "<<clause::verb::(¬{A}something v {B}something)>>"
     ],
     "({A}something v ¬{B}something)": [
-      "<<clause::verb::({A}something v ¬{B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::({A}something v ¬{B}something)>> <<phrase::is_true>>"
+      "<<clause::verb::({A}something v ¬{B}something)>>"
     ],
     "(¬{A}something v ¬{B}something)": [
-      "<<clause::verb::(¬{A}something v ¬{B}something)>>",
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something v ¬{B}something)>> <<phrase::is_true>>"
-    ],
-
-
-    "¬({A}something v {B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}something v {B}something)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}something v {B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something v {B}something)>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}something v ¬{B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}something v ¬{B}something)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}something v ¬{B}something)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}something v ¬{B}something)>> <<phrase::is_not_true>>"
+      "<<clause::verb::(¬{A}something v ¬{B}something)>>"
     ]
 
   }

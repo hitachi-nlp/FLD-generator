@@ -45,6 +45,24 @@ def generate_dataset(dataset: NLProofSDataset,
 @profile
 def test_generate_dataset():
 
+    # word_bank = None
+    word_bank = build_wordnet_wordbank('eng')
+
+    # translator = None
+    translator = build_translator(
+        ['./configs/translations/thing.v1/'],
+        word_bank,
+        use_fixed_translation=False,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        # volume_to_weight='sqrt',
+        default_weight_type='W__SQRT(VOLUME)__1.0',
+    )
+
+    translation_distractor = None
+    # translation_distractor = build_translation_distractor(word_bank=word_bank)
+
+
     generator = build_generator(
         [
             './configs/arguments/axioms/axiom.pred_only.json',
@@ -59,7 +77,7 @@ def test_generate_dataset():
             './configs/arguments/axioms/axiom.negation.pred_only.json',
             './configs/arguments/axioms/axiom.negation.pred_arg.json',
 
-            './configs/arguments/others/AACorpus.pred_arg.json',
+            # './configs/arguments/others/AACorpus.pred_arg.json',
 
             # # -- we exclude the below for speed --
             # './configs/arguments/theorems/theorem.pred_only.json',
@@ -105,23 +123,6 @@ def test_generate_dataset():
 
         generator=generator,
     )
-
-    # word_bank = None
-    word_bank = build_wordnet_wordbank('eng')
-
-    # translator = None
-    translator = build_translator(
-        ['./configs/translations/thing.v1/'],
-        word_bank,
-        use_fixed_translation=True,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        volume_to_weight='sqrt',
-        do_translate_to_nl=True,
-    )
-
-    translation_distractor = None
-    # translation_distractor = build_translation_distractor(word_bank=word_bank)
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
