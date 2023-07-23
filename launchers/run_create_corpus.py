@@ -282,6 +282,7 @@ def main():
         # '20230718.case_study.D3.dist-mixture',
         # '20230718.case_study.D3.num_dist-wide',
         '20230718.case_study.D3.dist-mixture.num_dist-wide',
+        '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_exp',
         # '20230718.case_study.D8.dist-mixture.num_dist-wide',
 
     ]

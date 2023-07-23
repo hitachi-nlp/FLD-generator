@@ -75,13 +75,13 @@ class TemplatedTranslator(Translator):
                  reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
-                 # volume_to_weight: str = 'linear',
-                 default_weight_type='W__SQRT(VOLUME)__1.0',
+                 volume_to_weight: str = 'linear',
+                 default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
-        self._default_weight_type = default_weight_type
+        self._default_weight_factor_type = default_weight_factor_type
         self._two_layered_config = self._build_two_layered_config(config_json)
 
         self._load_words_by_pos_attrs_cache: Dict[Any, set] = {}
@@ -115,19 +115,21 @@ class TemplatedTranslator(Translator):
         self._unary_predicate_set = set(self._unary_predicates)
         self._constant_set = set(self._constants)
 
-        # if volume_to_weight == 'linear':
-        #     self._volume_to_weight_func = lambda volume: volume
-        # elif volume_to_weight == 'sqrt':
-        #     self._volume_to_weight_func = lambda volume: (math.sqrt(volume) if volume > 0 else 0)
-        # elif volume_to_weight == 'log10':
-        #     self._volume_to_weight_func = lambda volume: (math.log10(volume) if volume > 0 else 0)
-        # elif volume_to_weight == 'inv_linear':
-        #     self._volume_to_weight_func = lambda volume: (1.0 / volume if volume > 0 else 0)
-        # elif volume_to_weight.startswith('pow-'):
-        #     ind = float(volume_to_weight.split('-')[1])
-        #     self._volume_to_weight_func = lambda volume: (math.pow(volume, ind) if volume > 0 else 0)
-        # else:
-        #     raise ValueError()
+        if volume_to_weight == 'linear':
+            self._volume_to_weight_func = lambda volume: volume
+        elif volume_to_weight == 'sqrt':
+            self._volume_to_weight_func = lambda volume: (math.sqrt(volume) if volume > 0 else 0)
+        elif volume_to_weight == 'logE':
+            self._volume_to_weight_func = lambda volume: (1 + math.log(volume) if volume > 0 else 0)
+        elif volume_to_weight == 'log10':
+            self._volume_to_weight_func = lambda volume: (1 + math.log10(volume) if volume > 0 else 0)
+        elif volume_to_weight == 'inv_linear':
+            self._volume_to_weight_func = lambda volume: (1.0 / volume if volume > 0 else 0)
+        elif volume_to_weight.startswith('pow-'):
+            ind = float(volume_to_weight.split('-')[1])
+            self._volume_to_weight_func = lambda volume: (math.pow(volume, ind) if volume > 0 else 0)
+        else:
+            raise ValueError()
 
         self._do_translate_to_nl = do_translate_to_nl
 
@@ -164,7 +166,7 @@ class TemplatedTranslator(Translator):
                     else:
                         if not isinstance(child, str):
                             raise ValueError('invalid template {str(child)}')
-                        children.append((self._default_weight_type, child))
+                        children.append((self._default_weight_factor_type, child))
                 flat_config[key] = children
 
             elif isinstance(val, dict):
@@ -312,7 +314,7 @@ class TemplatedTranslator(Translator):
                     interpret_mapping,
                     push_mapping,
                     block_shuffle=not self.use_fixed_translation,
-                    # volume_to_weight=self._volume_to_weight_func,
+                    volume_to_weight=self._volume_to_weight_func,
                 )
                 if chosen_nl is None:
                     msgs = [
@@ -432,7 +434,7 @@ class TemplatedTranslator(Translator):
                                                 interpret_mapping: Dict[str, str],
                                                 push_mapping: Dict[str, str],
                                                 block_shuffle=True,
-                                                # volume_to_weight = lambda weight: weight,
+                                                volume_to_weight = lambda weight: weight,
                                                 log_indent=0) -> Optional[str]:
         """ Find translations the pos and nflations of which are consistent with interpret_mapping """
         if _DEBUG:
@@ -451,7 +453,7 @@ class TemplatedTranslator(Translator):
                 constraint_interpret_mapping=interpret_mapping,
                 constraint_push_mapping=push_mapping,
                 block_shuffle=block_shuffle,
-                # volume_to_weight=volume_to_weight,
+                volume_to_weight=volume_to_weight,
                 log_indent = log_indent + 4,
             )
 
@@ -461,8 +463,8 @@ class TemplatedTranslator(Translator):
 
         if block_shuffle:
 
-            # volume_weights = [volume_to_weight(volume) for volume in volumes]
-            weights = [self._get_weight_func(weight_type)(volumes, i_iterator)
+            volume_weights = [volume_to_weight(volume) for volume in volumes]
+            weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
 
             @profile
@@ -494,61 +496,37 @@ class TemplatedTranslator(Translator):
         return None
 
     @lru_cache(maxsize=100000)
-    def _get_weight_func(self, type_: str) -> Callable[[List[int], int], float]:
+    def _get_weight_factor_func(self, type_: str) -> Callable[[List[float], int], float]:
         """
 
         examples of type_
-            "W__LINEAR(VOLUME)__1.0"
-            "W__SQRT(VOLUME)__0.1"
-            "W__LINEAR(VOLUME)_AVG__1.0"
-            "W__SQRT(VOLUME)_AVG__1.0"
+            "W_VOL__1.0"
+            "W_VOL_AVG__0.1"
         """
-        _, volume_weight_func_name, factor = type_.split('__')
+        volume_weight_agg, factor = type_.split('__')
 
         _factor = float(factor)
 
-        if volume_weight_func_name.endswith('AVG'):
-            # "SQRT(VOLUME)_AVG"
-            volume_weight_type, volume_weights_aggregation = volume_weight_func_name.split('_')
-        else:
-            # "SQRT(VOLUME)"
-            volume_weight_type, volume_weights_aggregation = volume_weight_func_name, None
+        if volume_weight_agg == 'W_VOL':
 
-        if volume_weight_type == 'LINEAR(VOLUME)':
+            def agg_volume_weights(volume_weights: List[float], i: int) -> float:
+                return volume_weights[i]
 
-            def volume2weight(volume: int) -> float:
-                return float(volume)
+        elif volume_weight_agg == 'W_VOL_AVG':
 
-        elif volume_weight_type == 'SQRT(VOLUME)':
-
-            def volume2weight(volume: int) -> float:
-                return math.sqrt(volume) if volume > 0 else 0
-
-        else:
-            raise ValueError(f'{volume_weight_type}')
-
-
-        if volume_weights_aggregation == 'AVG':
-
-            def agg_volume_weights(volume_weights: List[int], i: int) -> float:
+            def agg_volume_weights(volume_weights: List[float], i: int) -> float:
                 if len(volume_weights) == 1:
-                    return _factor * volume_weights[i]
+                    return volume_weights[i]
                 else:
                     other_avg = statistics.mean(volume_weights[j] for j in range(len(volume_weights))
                                                 if j != i)
-                    return _factor * other_avg
-
-        elif volume_weights_aggregation is None:
-
-            def agg_volume_weights(volume_weights: List[int], i: int) -> float:
-                return _factor * volume_weights[i]
+                    return other_avg
 
         else:
-            raise ValueError(f'{volume_weights_aggregation}')
+            raise ValueError(f'Unknown volume weight aggregation type "{volume_weight_agg}"')
         
-        def get_weight(volumes: List[int], i: int) -> float:
-            volume_weights = [volume2weight(volume) for volume in volumes]
-            return agg_volume_weights(volume_weights, i)
+        def get_weight(volume_weights: List[float], i: int) -> float:
+            return agg_volume_weights(volume_weights, i) * _factor
 
         return get_weight
 
@@ -560,7 +538,7 @@ class TemplatedTranslator(Translator):
                                            constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
-                                           # volume_to_weight = lambda volume: volume,
+                                           volume_to_weight = lambda volume: volume,
                                            check_condition=True,
                                            log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
         # SLOW due to the many calls
@@ -611,7 +589,7 @@ class TemplatedTranslator(Translator):
                         constraint_interpret_mapping=constraint_interpret_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
-                        # volume_to_weight=volume_to_weight,
+                        volume_to_weight=volume_to_weight,
                         check_condition=check_condition,
                         log_indent = log_indent + 4
                     )
@@ -648,7 +626,7 @@ class TemplatedTranslator(Translator):
                                         constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
-                                        # volume_to_weight = lambda volume: volume,
+                                        volume_to_weight = lambda volume: volume,
                                         check_condition=True,
                                         log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
         if _DEBUG:
@@ -677,7 +655,7 @@ class TemplatedTranslator(Translator):
                                                                            constraint_interpret_mapping=constraint_interpret_mapping,
                                                                            constraint_push_mapping=constraint_push_mapping,
                                                                            block_shuffle=shuffle,
-                                                                           # volume_to_weight=volume_to_weight,
+                                                                           volume_to_weight=volume_to_weight,
                                                                            check_condition=check_condition,
                                                                            log_indent = log_indent + 4)
             iterators.append(iterator_with_volume[0])
@@ -686,10 +664,12 @@ class TemplatedTranslator(Translator):
 
         if shuffle:
 
-            def generate():
-                weights = [self._get_weight_func(weight_type)(volumes, i_iterator)
-                           for i_iterator, weight_type in enumerate(weight_types)]
+            volume_weights = [volume_to_weight(volume) for volume in volumes]
+            weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
+                       for i_iterator, weight_type in enumerate(weight_types)]
 
+            @profile
+            def generate():
                 for resolved_template_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
                     weights,
@@ -698,6 +678,7 @@ class TemplatedTranslator(Translator):
 
         else:
 
+            @profile
             def generate():
                 for iterator in iterators:
                     for resolved_template_nl, condition in iterator:

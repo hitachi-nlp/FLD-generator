@@ -56,7 +56,8 @@ def test_generate_dataset():
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
         # volume_to_weight='sqrt',
-        default_weight_type='W__SQRT(VOLUME)__1.0',
+        volume_to_weight='logE',
+        default_weight_factor_type='W_VOL__1.0',
     )
 
     translation_distractor = None

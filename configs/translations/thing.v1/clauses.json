@@ -440,7 +440,7 @@
           "__",
           "__",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} & {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} & {B})>>",
@@ -448,7 +448,7 @@
           "__",
           "__",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "({A} & ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} & ¬{B})>>",
@@ -456,7 +456,7 @@
           "__",
           "__",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} & ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} & ¬{B})>>",
@@ -464,7 +464,7 @@
           "__",
           "__",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
 
 
@@ -488,7 +488,7 @@
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
           "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} v {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v {B})>>",
@@ -496,7 +496,7 @@
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
           "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "({A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} v ¬{B})>>",
@@ -504,7 +504,7 @@
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
           "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v ¬{B})>>",
@@ -512,7 +512,7 @@
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
           "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
 
-          ["W__SQRT(VOLUME)_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
 
 

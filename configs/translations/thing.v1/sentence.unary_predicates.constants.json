@@ -4,11 +4,11 @@
 
     "{A}{a}": [
       "<<clause::verb::{A}{a}specific_subj>>",
-      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬(¬{A}{a})>>"]
+      ["W_VOL_AVG__0.05", "<<sentence::¬(¬{A}{a})>>"]
     ],
     "¬{A}{a}": [
       "<<clause::verb::¬{A}{a}specific_subj>>",
-      ["W__SQRT(VOLUME)_AVG__0.05", "<<sentence::¬({A}{a})>>"]
+      ["W_VOL_AVG__0.05", "<<sentence::¬({A}{a})>>"]
     ],
 
 
