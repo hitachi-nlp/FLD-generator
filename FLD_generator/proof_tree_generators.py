@@ -1100,7 +1100,6 @@ def _extend_branches(proof_tree: ProofTree,
             is_arg_found = False
             for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
                 if is_arg_found:
-                    is_leaf_node_done = True
                     break
 
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
@@ -1213,6 +1212,11 @@ def _extend_branches(proof_tree: ProofTree,
 
                         is_arg_found = True
                         break
+
+            if is_arg_found:
+                is_leaf_node_done = True
+            else:
+                is_leaf_node_done = False
 
         if is_leaf_node_done:
             # Upate tree
