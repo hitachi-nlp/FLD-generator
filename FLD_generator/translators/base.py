@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Union
 import re
 from abc import abstractmethod, ABC
 import logging
@@ -54,8 +54,10 @@ class Translator(ABC):
                   intermediate_constant_formulas: List[Formula],
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
-                  timeout_per_trial: Optional[int] = 20) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
+                  timeout_per_trial: Optional[int] = None,
+                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
                                                         Dict[str, int]]:
+        timeout_per_trial = timeout_per_trial or len(formulas) * 1
         try:
             transls = run_with_timeout_retry(
                 self._translate,

@@ -45,20 +45,20 @@ def generate_dataset(dataset: NLProofSDataset,
 @profile
 def test_generate_dataset():
 
-    # word_bank = None
-    word_bank = build_wordnet_wordbank('eng')
+    word_bank = None
+    # word_bank = build_wordnet_wordbank('eng')
 
-    # translator = None
-    translator = build_translator(
-        ['./configs/translations/thing.v1/'],
-        word_bank,
-        use_fixed_translation=False,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        # volume_to_weight='sqrt',
-        volume_to_weight='logE',
-        default_weight_factor_type='W_VOL__1.0',
-    )
+    translator = None
+    # translator = build_translator(
+    #     ['./configs/translations/thing.v1/'],
+    #     word_bank,
+    #     use_fixed_translation=False,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     # volume_to_weight='sqrt',
+    #     volume_to_weight='logE',
+    #     default_weight_factor_type='W_VOL__1.0',
+    # )
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
@@ -66,17 +66,20 @@ def test_generate_dataset():
 
     generator = build_generator(
         [
-            './configs/arguments/axioms/axiom.pred_only.json',
-            './configs/arguments/axioms/axiom.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.and_or.pred_only.json',
-            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/',
 
-            './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
-            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axioms/axiom.pred_only.json',
+            # './configs/arguments/axioms/axiom.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.negation.pred_only.json',
-            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            # './configs/arguments/axioms/axiom.and_or.pred_only.json',
+            # './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+
+            # './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+
+            # './configs/arguments/axioms/axiom.negation.pred_only.json',
+            # './configs/arguments/axioms/axiom.negation.pred_arg.json',
 
             # './configs/arguments/others/AACorpus.pred_arg.json',
 
@@ -100,15 +103,14 @@ def test_generate_dataset():
             # './configs/arguments/theorems/universal_theorem.theorem.and_or.pred_arg.json',
         ],
         elim_dneg=True,
-        complex_formula_arguments_weight=0.3,
-        quantifier_axiom_arguments_weight=0.5,
+        quantifier_axiom_arguments_weight=0.2,
+        complex_formula_arguments_weight=0.5,
         quantifier_axioms=[
             'universal_quantifier_elim',
             'universal_quantifier_intro',
             'existential_quantifier_intro',
             'existential_quantifier_elim',
         ],
-        quantification_degree='all_constants',
     )
 
     distractor = build_distractor(
@@ -120,7 +122,9 @@ def test_generate_dataset():
         # 'mixture(negative_tree_double.simplified_formula.various_form)',
         # 'fallback(negative_tree.various_form)',
         # 'fallback(various_form.negative_tree)',
-        'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
+
+        # 'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
+        'mixture(negative_tree_double.simplified_formula.various_form)',
 
         generator=generator,
     )
@@ -134,9 +138,9 @@ def test_generate_dataset():
         add_subj_obj_swapped_distractor=True,
     )
 
-    depth_range = (1, 3)
-    branch_extensions_range = (2, 5)
-    distractors_range = (15, 20)
+    depth_range = (1, 8)
+    branch_extensions_range = (0, 5)
+    distractors_range = (0, 20)
 
     unknown_ratio = 0.33
     depth_1_reference_weight = None

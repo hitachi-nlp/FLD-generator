@@ -67,6 +67,10 @@ logger = logging.getLogger(__name__)
 # see  [failure_loop](./docs/axioms_theorems.md)
 _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP = True
 
+_DEPTH_PER_SEC = 0.5
+_EXTENSION_PER_SEC = 0.5
+_MAX_RETRY_DEFAULT = 50   # large to make sure the results meet the specification
+
 
 def _is_failure_loop_univ_intro_argument(argument: Argument) -> bool:
     return argument.id.find('universal_intro') >= 0\
@@ -433,15 +437,17 @@ class ProofTreeGenerator:
 
 def _generate_tree_with_timeout_retry(arguments: Union[List[Argument], Tuple[Argument, ...]],
                                       depth: int,
-                                      *args,
-                                      max_retry=50,
-                                      # timeout_per_trial=99999,  # 5 + 5
-                                      timeout_per_trial=20,  # 5 + 5
+                                      branch_extension_steps: int,
+                                      max_retry=_MAX_RETRY_DEFAULT,
+                                      # timeout_per_trial=99999,
+                                      # timeout_per_trial: Optional[int] = 10,  # 5 + 5
+                                      timeout_per_trial: Optional[Union[float, int]] = None,
                                       **kwargs) -> List[ProofTree]:
+    timeout_per_trial = timeout_per_trial or depth * _DEPTH_PER_SEC + branch_extension_steps * _EXTENSION_PER_SEC
     try:
         trial_result_proof_trees = run_with_timeout_retry(
             _generate_tree,
-            func_args = [arguments, depth] + list(args),
+            func_args = [arguments, depth, branch_extension_steps],
             func_kwargs=kwargs,
 
             should_retry_func=lambda proof_tree: proof_tree.depth < depth,
@@ -506,7 +512,8 @@ def _generate_tree(arguments: Union[List[Argument], Tuple[Argument, ...]],
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
-                max_retry=10,
+                max_retry=10,   # can be smaller than _MAX_RETRY_DEFAULT because the extend_branches() below can make depth large
+                # max_retry=1,   # HONOKA: ここを1にしても治る．
             )
 
             # picking the tree with the largest extension steps sometimes pick a smaller tree.
@@ -543,11 +550,13 @@ def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
 def _generate_stem_with_timeout_retry(arguments: Union[List[Argument], Tuple[Argument, ...]],
                                       depth: int,
                                       *args,
-                                      max_retry=50,
+                                      max_retry=_MAX_RETRY_DEFAULT,
                                       # timeout_per_trial=99999,
-                                      timeout_per_trial=10,
+                                      # timeout_per_trial=5,
+                                      timeout_per_trial: Optional[Union[float, int]] = None,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
+    timeout_per_trial = timeout_per_trial or _DEPTH_PER_SEC * depth
     try:
         _kwargs = kwargs.copy()
         _kwargs['best_effort'] = best_effort
@@ -575,10 +584,12 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         num_steps: int,
                                         *args,
                                         # timeout_per_trial=99999,
-                                        timeout_per_trial=10,
-                                        max_retry=50,
+                                        # timeout_per_trial=5,
+                                        timeout_per_trial: Optional[Union[float, int]] = None,
+                                        max_retry=_MAX_RETRY_DEFAULT,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
+    timeout_per_trial = timeout_per_trial or _EXTENSION_PER_SEC * num_steps
     try:
         _kwargs = kwargs.copy()
         _kwargs['best_effort'] = best_effort
@@ -1100,6 +1111,7 @@ def _extend_branches(proof_tree: ProofTree,
             is_arg_found = False
             for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
                 if is_arg_found:
+                    # is_leaf_node_done = True
                     break
 
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
@@ -1213,10 +1225,7 @@ def _extend_branches(proof_tree: ProofTree,
                         is_arg_found = True
                         break
 
-            if is_arg_found:
-                is_leaf_node_done = True
-            else:
-                is_leaf_node_done = False
+            is_leaf_node_done = is_arg_found
 
         if is_leaf_node_done:
             # Upate tree
@@ -1246,13 +1255,13 @@ def _extend_branches(proof_tree: ProofTree,
             logger.info(msg)
             if best_effort:
                 logger.info(msg)
+                # HONOKA: 「ここを通った後に retry x 5」が永遠に続く．
                 logger.info('_extend_branches() could not complete the proof tree with the specified steps. return smaller tree.')
                 break
             else:
                 raise ExtendBranchesFailure(msg)
 
-    # _check_leaf_consistency(proof_tree)
-    proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
+    proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)   # HONOKA: ここをコメントアウトすると，緩和される．
 
     if return_alignment:
         return proof_tree, cur_step, orig_nodes_to_copy_nodes
@@ -1475,7 +1484,6 @@ def _fix_illegal_intermediate_constants(
 
                         best_effort=True,
                         # timeout_per_trial=99999,
-                        timeout_per_trial=10,
                         max_retry=5,
                     )
                     if len(trial_results) == 0:

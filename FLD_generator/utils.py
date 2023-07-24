@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional
+from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional, Union
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -119,7 +119,7 @@ def run_with_timeout_retry(
     should_retry_exception: Optional[Exception] = None,
 
     max_retry: Optional[int] = None,
-    timeout_per_trial: Optional[int] = None,
+    timeout_per_trial: Optional[Union[int, float]] = None,
     best_effort=False,
 
     logger = None,
