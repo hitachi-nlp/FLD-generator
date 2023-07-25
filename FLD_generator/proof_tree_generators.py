@@ -1432,6 +1432,8 @@ def _fix_illegal_intermediate_constants(
         return None, None
 
     def is_fixed(constant: Formula, illegal_node: ProofNode, proof_tree_tmp: ProofTree) -> bool:
+        if illegal_node.is_leaf:
+            return False
         descendant_leaf_nodes = [
             node for node in illegal_node.descendants
             if node in proof_tree_tmp.leaf_nodes
@@ -1590,13 +1592,14 @@ def _is_intermediate_constants_illegal(
 
 
 def _find_illegal_intermediate_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
-    possible_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes
+    # possible_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes    # HONOKA: assump_nodesは含めるの？ => NO, これは誤りである．
+    possible_nodes = proof_tree.leaf_nodes
     if proof_tree.root_node is not None:
         possible_nodes += [proof_tree.root_node]
 
     for constant in proof_tree.intermediate_constants:
         for possible_node in possible_nodes:
-            if constant.rep in [constant.rep for constant in possible_node.formula.constants]:
+            if constant.rep in [other_constant.rep for other_constant in possible_node.formula.constants]:
                 yield constant, possible_node
 
 
