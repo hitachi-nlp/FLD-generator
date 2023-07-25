@@ -154,10 +154,10 @@ def run_with_timeout_retry(
         exception = None
         try:
             result = timeout_func(*func_args, **func_kwargs)
-            logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
             trial_results.append(result)
 
             if not should_retry_func(result):
+                logger.info(_make_pretty_msg(i_trial, 'success', msg=None))
                 return trial_results
 
             retry_msg = 'is_retry_func(result)'

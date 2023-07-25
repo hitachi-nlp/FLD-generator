@@ -69,6 +69,7 @@ _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP = True
 
 _DEPTH_PER_SEC = 0.5
 _EXTENSION_PER_SEC = 0.5
+
 _MAX_RETRY_DEFAULT = 50   # large to make sure the results meet the specification
 
 
@@ -513,7 +514,6 @@ def _generate_tree(arguments: Union[List[Argument], Tuple[Argument, ...]],
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
                 max_retry=10,   # can be smaller than _MAX_RETRY_DEFAULT because the extend_branches() below can make depth large
-                # max_retry=1,   # HONOKA: ここを1にしても治る．
             )
 
             # picking the tree with the largest extension steps sometimes pick a smaller tree.
@@ -593,6 +593,7 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
     try:
         _kwargs = kwargs.copy()
         _kwargs['best_effort'] = best_effort
+
         return run_with_timeout_retry(
             _extend_branches,
             func_args=[proof_tree, arguments, num_steps] + list(args),
@@ -1255,13 +1256,12 @@ def _extend_branches(proof_tree: ProofTree,
             logger.info(msg)
             if best_effort:
                 logger.info(msg)
-                # HONOKA: 「ここを通った後に retry x 5」が永遠に続く．
                 logger.info('_extend_branches() could not complete the proof tree with the specified steps. return smaller tree.')
                 break
             else:
                 raise ExtendBranchesFailure(msg)
 
-    proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)   # HONOKA: ここをコメントアウトすると，緩和される．
+    proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
 
     if return_alignment:
         return proof_tree, cur_step, orig_nodes_to_copy_nodes
@@ -1438,31 +1438,36 @@ def _fix_illegal_intermediate_constants(
         ]
         return all(node.formula.rep.find(constant.rep) < 0 for node in descendant_leaf_nodes)
 
+
     def build_exception_msg(illegal_node: ProofNode, node_type: str, constant: Formula, postfix='') -> str:
         return f'fixing a illegal leaf node {str(illegal_node)} with intermediate constant "{constant.rep}" failed' + postfix
 
     proof_tree_fixed = proof_tree.copy()
-    fix_trial_per_node = 30
+
+    max_extension_steps = 5
+    trial_per_step = 5
+
+    num_trial = max_extension_steps * trial_per_step
     all_is_fixed = False
     while True:
         node_is_fixed = False
-        for i_trial in range(0, fix_trial_per_node):
+        for i_trial in range(0, num_trial):
             proof_tree_tmp, fixed_nodes_to_tmp_nodes = proof_tree_fixed.copy(return_alignment=True)
             leaf_nodes = set(proof_tree_tmp.leaf_nodes)
 
             constant, illegal_node = find_one_illegal_constant(proof_tree_tmp)
-            if constant is None:  # fixed all
+            if constant is None:
                 all_is_fixed = True
                 break
 
             def _make_pretty_msg_for_fix(status: Optional[str] = None, msg: Optional[str] = None) -> str:
                 return _make_pretty_msg(trial=i_trial, status=status,
                                         subtitle=f'node={str(illegal_node)}, constant="{str(constant.rep)}"',
-                                        max_trial=fix_trial_per_node, boundary_level=1,
+                                        max_trial=num_trial, boundary_level=1,
                                         msg=msg)
 
             if illegal_node in leaf_nodes:
-                num_steps = i_trial / 6 + 1
+                num_steps = 1 + int(i_trial / max_extension_steps)
                 try:
                     trial_results = _extend_branches_with_timeout_retry(
                         proof_tree_tmp,

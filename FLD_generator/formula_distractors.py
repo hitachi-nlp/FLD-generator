@@ -607,7 +607,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                     negative_tree,
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
-                    max_retry=10,   # HONOKA: this value determines the total speed.
+                    max_retry=10,
                     best_effort=True,
                     force_fix_illegal_intermediate_constants=True,
                 )
