@@ -97,7 +97,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.fix_fix_intermediate')
 
     # output_top_dir = Path('./outputs/00.create_corpus/2023-07-25.compare_transl')
-    output_top_dir = Path('./outputs/00.create_corpus/2023-07-26.suppress_verb')
+    # output_top_dir = Path('./outputs/00.create_corpus/2023-07-26.suppress_verb')
+    output_top_dir = Path('./outputs/00.create_corpus/2023-07-27.compare_models')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -289,9 +290,9 @@ def main():
         # '20230718.case_study.D3.num_dist-wide',
         # '20230718.case_study.D8.dist-mixture.num_dist-wide',
         
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide',
+        '20230718.case_study.D3.dist-mixture.num_dist-wide',
         # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_logE',
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10',
+        '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10',
         '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal',
 
 

@@ -3230,9 +3230,9 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 3000,
+            'test': 500,
             # 'valid': 5000,
-            # 'train': 15000,
+            'train': 15000,
         }
 
     },
@@ -3271,9 +3271,9 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 3000,
+            'test': 500,
             # 'valid': 5000,
-            # 'train': 15000,
+            'train': 15000,
         }
 
     },
@@ -3312,9 +3312,9 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            'test': 3000,
+            'test': 500,
             # 'valid': 5000,
-            # 'train': 15000,
+            'train': 15000,
         }
 
     },
@@ -3346,18 +3346,18 @@ _DATASET_SETTINGS = {
         'distractors_range': (0, 20),
         'translation_distractors_range': (0, 0),
         'use_collapsed_translation_nodes_for_unknown_tree': False,
-        'adj_verb_noun_ratio': '1-1-1',
 
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
         'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
 
 
         'split_sizes': {
-            'test': 100,
+            'test': 500,
             # 'valid': 5000,
-            # 'train': 15000,
+            'train': 15000,
         }
 
     },
