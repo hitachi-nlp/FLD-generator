@@ -139,6 +139,7 @@
       ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>"],
       ["W_VOL_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>"],
       ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      "__comment: the above are suppressed because they are sort of double negatoin",
 
       "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
       ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
@@ -146,6 +147,7 @@
       ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
 
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::thing>> that <<phrase::{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>>"
     ],
     "(¬{A} & {B})predicate": [
@@ -163,6 +165,7 @@
       ["W_VOL_AVG__0.2", "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
 
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> that <<phrase::{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::{B}a_noun>>"
     ],
     "({A} & ¬{B})predicate": [
@@ -180,6 +183,7 @@
       ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
 
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::thing>> that <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
     ],
     "(¬{A} & ¬{B})predicate": [
@@ -197,6 +201,7 @@
       "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
 
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> that <<phrase::¬{B}predicate>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
     ],
 
