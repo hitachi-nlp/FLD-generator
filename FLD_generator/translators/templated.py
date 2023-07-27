@@ -78,6 +78,7 @@ class TemplatedTranslator(Translator):
                  volume_to_weight: str = 'linear',
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
+                 adj_verb_noun_ratio: Optional[List] = None,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
@@ -106,7 +107,7 @@ class TemplatedTranslator(Translator):
 
         self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
-        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(self._word_bank)
+        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(self._word_bank, adj_verb_noun_ratio=adj_verb_noun_ratio)
         if limit_vocab_size_per_type is not None:
             self._zeroary_predicates = self._sample(self._zeroary_predicates, limit_vocab_size_per_type)
             self._unary_predicates = self._sample(self._unary_predicates, limit_vocab_size_per_type)
@@ -179,7 +180,9 @@ class TemplatedTranslator(Translator):
         return flat_config
 
     @profile
-    def _load_words(self, word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
+    def _load_words(self,
+                    word_bank: WordBank,
+                    adj_verb_noun_ratio: Optional[List[float]] = None) -> Tuple[List[str], List[str], List[str]]:
 
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
@@ -228,16 +231,21 @@ class TemplatedTranslator(Translator):
             for obj in self._sample(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
 
-        zeroary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
-            + self._sample(transitive_verb_PASs, int(self.words_per_type * 4 / 3))\
-            + self._sample(event_nouns, int(self.words_per_type))
+        if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
+            raise ValueError()
+        adj_verb_noun_ratio = adj_verb_noun_ratio or [1, 2, 1]
+        adj_verb_noun_weight = [3 * ratio / sum(adj_verb_noun_ratio) for ratio in adj_verb_noun_ratio]
+
+        zeroary_predicates = self._sample(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+            + self._sample(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+            + self._sample(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+            + self._sample(event_nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
-        unary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
-            + self._sample(transitive_verb_PASs, int(self.words_per_type * 4 / 3))\
-            + self._sample(nouns, int(self.words_per_type))
+        unary_predicates = self._sample(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+            + self._sample(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+            + self._sample(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+            + self._sample(nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
         unary_predicates = sorted({word for word in unary_predicates})
 
         constants = self._sample(entity_nouns, self.words_per_type)
@@ -1108,6 +1116,7 @@ class TemplatedTranslator(Translator):
 
 def build(config_paths: List[str],
           word_bank: WordBank,
+          adj_verb_noun_ratio: Optional[str] = None,  # "1:2:1"
           **kwargs):
 
     merged_config_json = {}
@@ -1122,9 +1131,12 @@ def build(config_paths: List[str],
             merged_config_json = nested_merge(merged_config_json,
                                               json.load(open(str(_path))))
 
+    adj_verb_noun_ratio = adj_verb_noun_ratio or '1-2-1'
+    _adj_verb_noun_ratio = [float(ratio) for ratio in adj_verb_noun_ratio.split('-')]
     translator = TemplatedTranslator(
         merged_config_json,
         word_bank,
+        adj_verb_noun_ratio=_adj_verb_noun_ratio,
         **kwargs,
     )
     return translator

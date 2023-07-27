@@ -3230,7 +3230,6 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 500,
             'test': 3000,
             # 'valid': 5000,
             # 'train': 15000,
@@ -3240,7 +3239,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_exp': {
+    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_logE': {
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -3272,7 +3271,6 @@ _DATASET_SETTINGS = {
 
 
         'split_sizes': {
-            # 'test': 500,
             'test': 3000,
             # 'valid': 5000,
             # 'train': 15000,
@@ -3281,6 +3279,88 @@ _DATASET_SETTINGS = {
     },
 
 
+
+    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat.no_reference',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+        'translation_volume_to_weight': 'log10',
+
+
+        'split_sizes': {
+            'test': 3000,
+            # 'valid': 5000,
+            # 'train': 15000,
+        }
+
+    },
+
+
+
+
+    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat.no_reference',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+        'adj_verb_noun_ratio': '1-1-1',
+
+
+        'use_fixed_translation': False,
+        'limit_vocab_size_per_type': None,
+        'translation_volume_to_weight': 'log10',
+
+
+        'split_sizes': {
+            'test': 100,
+            # 'valid': 5000,
+            # 'train': 15000,
+        }
+
+    },
 
 
 
@@ -3386,6 +3466,7 @@ _DEFAULT_DATASET_SETTINGS = {
 
         'translation_distractors_range': (0, 0),
         'use_collapsed_translation_nodes_for_unknown_tree': False,
+        'translation_adj_verb_noun_ratio': '1-2-1',
 
 
         'translation_configs': _TRANSLATION_THING_CONFIGS_V1,
@@ -3527,7 +3608,9 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230718.case_study.D3.dist-mixture': '20230626.many_bugs_fixed',
     '20230718.case_study.D3.num_dist-wide': '20230626.many_bugs_fixed',
     '20230718.case_study.D3.dist-mixture.num_dist-wide': '20230626.many_bugs_fixed',
-    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_exp': '20230626.many_bugs_fixed',
+    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_logE': '20230626.many_bugs_fixed',
+    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10': '20230626.many_bugs_fixed',
+    '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal': '20230626.many_bugs_fixed',
     '20230718.case_study.D8.dist-mixture.num_dist-wide': '20230626.many_bugs_fixed',
 
 }

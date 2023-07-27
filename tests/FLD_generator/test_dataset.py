@@ -45,20 +45,21 @@ def generate_dataset(dataset: NLProofSDataset,
 @profile
 def test_generate_dataset():
 
-    word_bank = None
-    # word_bank = build_wordnet_wordbank('eng')
+    # word_bank = None
+    word_bank = build_wordnet_wordbank('eng')
 
-    translator = None
-    # translator = build_translator(
-    #     ['./configs/translations/thing.v1/'],
-    #     word_bank,
-    #     use_fixed_translation=False,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     # volume_to_weight='sqrt',
-    #     volume_to_weight='logE',
-    #     default_weight_factor_type='W_VOL__1.0',
-    # )
+    # translator = None
+    translator = build_translator(
+        ['./configs/translations/thing.v1/'],
+        word_bank,
+        use_fixed_translation=False,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        # volume_to_weight='sqrt',
+        volume_to_weight='logE',
+        default_weight_factor_type='W_VOL__1.0',
+        adj_verb_noun_ratio='1-1-1',
+    )
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)

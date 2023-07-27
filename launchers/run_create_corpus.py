@@ -2,9 +2,11 @@
 import json
 import math
 import logging
-from typing import List, Union
+from typing import List, Union, Dict
 from pathlib import Path
 import copy
+from collections import defaultdict
+import statistics
 
 import click
 from script_engine import QsubEngine, SubprocessEngine
@@ -91,7 +93,11 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.1')
     # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight-0.01')
     # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight_type_avg')
-    output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight_type_avg.0.05')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight_type_avg.0.05')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.fix_fix_intermediate')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/2023-07-25.compare_transl')
+    output_top_dir = Path('./outputs/00.create_corpus/2023-07-26.suppress_verb')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -281,15 +287,19 @@ def main():
         # ---------------------------------- 20230718.case_study ------------------------------------
         # '20230718.case_study.D3.dist-mixture',
         # '20230718.case_study.D3.num_dist-wide',
-        '20230718.case_study.D3.dist-mixture.num_dist-wide',
-        '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_exp',
         # '20230718.case_study.D8.dist-mixture.num_dist-wide',
+        
+        # '20230718.case_study.D3.dist-mixture.num_dist-wide',
+        # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_logE',
+        # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10',
+        '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal',
+
 
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 2
-    num_jobs_per_dataset = 80
+    num_jobs_for_datasets = 3
+    num_jobs_per_dataset = 50
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
@@ -465,6 +475,7 @@ def make_dataset(dataset_name: str,
                 maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
                 f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                 maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
+                maybe_option('--translation-adj-verb-noun-ratio', settings.get("translation_adj_verb_noun_ratio", None)),
 
 
                 f'--distractor "{job_settings["distractor"]}"',
@@ -518,6 +529,7 @@ def make_dataset(dataset_name: str,
         logger.info('waiting %d jobs to be finished...', len(jobs))
         Parallel(n_jobs=_num_jobs, backend='threading')(jobs)
 
+        # -- aggregate results --
         logger.info('gathering results under %s', split_output_dir)
         cnt = 0
         is_done = False
@@ -527,7 +539,6 @@ def make_dataset(dataset_name: str,
         ])
         with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
             for jsonl in job_output_jsonls:
-                # logger.info('gathering results from %s', str(jsonl))
                 if is_done:
                     break
                 for line in open(jsonl):
@@ -537,6 +548,34 @@ def make_dataset(dataset_name: str,
                     f_out.write(line)
                     cnt += 1
 
+        # -- aggregate statistics --
+        logger.info('gathering stats under %s', split_output_dir)
+        job_stats_jsonls = sorted([
+            path for path in split_output_dir.glob(f'**/*{split}.jsonl.stats.json')
+            if str(path).find('job-') >= 0
+        ])
+        agg_stats: Dict[str, Union[int, List[int]]] = {}
+        for stats_path in job_stats_jsonls:
+            stats = json.load(open(stats_path))
+            for name, cnt in stats.items():
+                if name.startswith('cum'):
+                    if name in agg_stats:
+                        agg_stats[name] += cnt
+                    else:
+                        agg_stats[name]  = cnt
+                elif name.startswith('avg'):
+                    if name in agg_stats:
+                        agg_stats[name].append(cnt)
+                    else:
+                        agg_stats[name]  = [cnt]
+                elif name.startswith('std'):
+                    # TODO: implement
+                    pass
+        for name, cnt in sorted(agg_stats.items()):
+            if name.startswith('avg'):
+                agg_stats[name] = statistics.mean(cnt)
+        json.dump(dict(agg_stats), open(str(split_output_dir / f'{split}.jsonl.stats.json'), 'w'),
+                  ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
 
 
 

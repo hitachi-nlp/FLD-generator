@@ -39,6 +39,7 @@ def load_dataset(argument_config: List[str],
                  limit_vocab_size_per_type: Optional[int],
                  translation_volume_to_weight: str,
                  translation_default_weight_factor_type: str,
+                 translation_adj_verb_noun_ratio: str,
                  complex_formula_arguments_weight: float,
                  quantifier_axiom_arguments_weight: float,
                  quantifier_axioms: Optional[List[str]],
@@ -104,6 +105,7 @@ def load_dataset(argument_config: List[str],
     logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
     translator = build_translator(translation_config,
                                   word_bank,
+                                  adj_verb_noun_ratio=translation_adj_verb_noun_ratio,
                                   use_fixed_translation=use_fixed_translation,
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
@@ -198,6 +200,7 @@ def generate_instances(size: int, *args):
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
 @click.option('--translation-volume-to-weight', type=str, default='sqrt')
 @click.option('--translation-default-weight-factor-type', type=str, default='W_VOL__1.0')
+@click.option('--translation-adj-verb-noun-ratio', type=str, default='1:2:1')
 #
 @click.option('--distractor', default='mixture.negative_tree.negative_tree')
 @click.option('--distractors-range', type=str, default=json.dumps([5, 5]))
@@ -229,6 +232,7 @@ def main(output_path,
          limit_vocab_size_per_type,
          translation_volume_to_weight,
          translation_default_weight_factor_type,
+         translation_adj_verb_noun_ratio,
          size,
          depth_range,
          depth_distrib,
@@ -302,6 +306,7 @@ def main(output_path,
                         limit_vocab_size_per_type,
                         translation_volume_to_weight,
                         translation_default_weight_factor_type,
+                        translation_adj_verb_noun_ratio,
                         complex_formula_arguments_weight,
                         quantifier_axiom_arguments_weight,
                         quantifier_axiom,
