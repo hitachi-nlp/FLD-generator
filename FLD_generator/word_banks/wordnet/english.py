@@ -53,19 +53,19 @@ class EnglishWordBank(WordNetWordBank):
     def get_lemma(self, word: str) -> str:
         return _getLemma(word)
 
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
-        if verb in ['am', 'are', 'is', 'was', 'were']:
-            logger.warning('Changing verb form for be-verb "{%s}" is subtle. Thus, we do not change it\'s form.', verb)
-            return verb
-        else:
-            verb = self.get_lemma(verb)
+    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
+        if form in [VerbForm.NORMAL, VerbForm.ING, VerbForm.S]:
+            if verb in ['am', 'are', 'is', 'was', 'were']:
+                logger.warning('Changing verb form for be-verb "{%s}" is subtle. Thus, we do not change it\'s form.', verb)
+                return [verb]
+            else:
+                verb = self.get_lemma(verb)
 
-        results = getInflection(verb, tag=self._verb_inflation_mapping[form])
+            results = getInflection(verb, tag=self._verb_inflation_mapping[form])
 
-        if results is not None:
-            return results[0]
-        else:
-            if force:
+            if results is not None:
+                return [results[0]]
+            else:
                 if form == VerbForm.NORMAL:
                     # watch
                     inflated_verb = verb
@@ -91,13 +91,20 @@ class EnglishWordBank(WordNetWordBank):
                         inflated_verb = verb + 's'
                 else:
                     raise NotImplementedError()
-                return inflated_verb
-            else:
-                return None
+                return [inflated_verb]
+        elif form == VerbForm.ANTI:
+            antonyms = self.get_antonyms(verb)
+            if len(antonyms) == 0 and force:
+                raise NotImplementedError()
+            return antonyms
+        else:
+            raise ValueError()
 
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+
+    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
         if form == AdjForm.NORMAL:
-            return adj
+            return [adj]
+
         elif form == AdjForm.NESS:
             if adj.endswith('y'):
                 # peaky -> peakiness
@@ -105,26 +112,33 @@ class EnglishWordBank(WordNetWordBank):
             else:
                 ness_adj = adj + 'ness'
             if force or ness_adj in self._cached_word_set:
-                return ness_adj
+                return [ness_adj]
             else:
-                return None
+                return []
+
+        elif form == AdjForm.ANTI:
+            antonyms = self.get_antonyms(adj)
+            antonyms += self._change_adj_form(adj, AdjForm.NEG)
+            if len(antonyms) == 0 and force:
+                return self._change_adj_form(adj, AdjForm.NEG, force=True)
+            return antonyms
+
         elif form == AdjForm.NEG:
             negnyms = self.get_negnyms(adj)
-            if len(negnyms) == 0:
-                if force:
-                    return f'non-{adj}'
-                else:
-                    return None
-            else:
-                return negnyms[0]
+            if len(negnyms) == 0 and force:
+                return [f'non-{adj}']
+            return negnyms
+
         else:
             raise ValueError(f'Unknown form {form}')
 
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> List[str]:
         if form == NounForm.NORMAL:
-            return noun
+            return [noun]
+
         elif form == NounForm.SINGULAR:
-            return noun
+            return [noun]
+
         elif form == NounForm.SINGULAR_WITH_PARTICLE:
             """
             We assume that all the words are countable, thus, all the words in singular form need an indefinite particle, i.e., "a" or "an".
@@ -137,7 +151,24 @@ class EnglishWordBank(WordNetWordBank):
                   using existent resources like [Category:Uncountable nouns - Simple English Wiktionary](https://simple.wiktionary.org/wiki/Category:Uncountable_nouns).
             """
 
-            return f'an {noun}' if starts_with_vowel_sound(noun) else f'a {noun}'
+            return [f'an {noun}' if starts_with_vowel_sound(noun) else f'a {noun}']
+
+        elif form == NounForm.PLURAL:
+            raise NotImplementedError()
+
+        elif form == NounForm.ANTI:
+            antonyms = self.get_antonyms(noun)
+            antonyms += self._change_noun_form(noun, NounForm.NEG)
+            if len(antonyms) == 0 and force:
+                return self._change_noun_form(noun, NounForm.NEG, force=True)
+            return antonyms
+
+        elif form == NounForm.NEG:
+            negnyms = self.get_negnyms(noun)
+            if len(negnyms) == 0 and force:
+                return [f'non-{noun}']
+            return negnyms
+
         else:
             raise ValueError(f'Unknown form {form}')
 

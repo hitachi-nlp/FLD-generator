@@ -6,7 +6,6 @@ import statistics
 import re
 import copy
 import random
-import re
 import logging
 from pprint import pformat, pprint
 from functools import lru_cache
@@ -14,9 +13,8 @@ import math
 from pathlib import Path
 
 from tqdm import tqdm
-from tqdm import tqdm
 from FLD_generator.utils import nested_merge
-from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
+from FLD_generator.formula import Formula, PREDICATES, CONSTANTS
 from FLD_generator.word_banks.base import WordBank, ATTR
 from FLD_generator.interpretation import (
     generate_mappings_from_formula,
@@ -988,18 +986,21 @@ class TemplatedTranslator(Translator):
         if pos == POS.ADJ:
             force = True
         elif pos == POS.VERB:
-            force = True
+            force = False
         elif pos == POS.NOUN:
             force = False
         else:
             raise ValueError()
 
         _word, obj = self._parse_word_with_obj(word)
-        _word_inflated = self._word_bank.change_word_form(_word, form, force=force)
-        if _word_inflated is None:
+        inflated_words = self._word_bank.change_word_form(_word, form, force=False)
+        if len(inflated_words) == 0 and force:
+            inflated_words = self._word_bank.change_word_form(_word, form, force=True)
+
+        if len(inflated_words) == 0:
             return None
         else:
-            return self._pair_word_with_obj(_word_inflated, obj)
+            return self._pair_word_with_obj(random.choice(inflated_words), obj)
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
@@ -1087,7 +1088,7 @@ class TemplatedTranslator(Translator):
         if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
             word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
             if POS.VERB in self._word_bank.get_pos(word_after_things):
-                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)
+                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)[0]
                 translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
 
         # target   : A and B causes C -> A and B cause C
