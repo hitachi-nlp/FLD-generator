@@ -73,7 +73,7 @@ class TemplatedTranslator(Translator):
                  reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
-                 volume_to_weight: str = 'linear',
+                 volume_to_weight: str = 'log10',
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
                  adj_verb_noun_ratio: Optional[List] = None,
@@ -1166,7 +1166,7 @@ class TemplatedTranslator(Translator):
 
 def build(config_paths: List[str],
           word_bank: WordBank,
-          adj_verb_noun_ratio: Optional[str] = None,  # "1:2:1"
+          adj_verb_noun_ratio: Optional[str] = None,
           **kwargs):
 
     merged_config_json = {}
@@ -1181,7 +1181,7 @@ def build(config_paths: List[str],
             merged_config_json = nested_merge(merged_config_json,
                                               json.load(open(str(_path))))
 
-    adj_verb_noun_ratio = adj_verb_noun_ratio or '1-2-1'
+    adj_verb_noun_ratio = adj_verb_noun_ratio or '1-1-1'
     _adj_verb_noun_ratio = [float(ratio) for ratio in adj_verb_noun_ratio.split('-')]
     translator = TemplatedTranslator(
         merged_config_json,

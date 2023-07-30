@@ -3466,9 +3466,9 @@ _DEFAULT_DATASET_SETTINGS = {
 
         'translation_distractors_range': (0, 0),
         'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'sqrt',
         'translation_adj_verb_noun_ratio': '1-2-1',
-
-
         'translation_configs': _TRANSLATION_THING_CONFIGS_V1,
 
     },

@@ -198,7 +198,7 @@ def generate_instances(size: int, *args):
 @click.option('--use-fixed-translation', type=bool, is_flag=True)
 @click.option('--reused-object-nouns-max-factor', type=float, default=1.0)
 @click.option('--limit-vocab-size-per-type', type=int, default=None)
-@click.option('--translation-volume-to-weight', type=str, default='sqrt')
+@click.option('--translation-volume-to-weight', type=str, default='log10')
 @click.option('--translation-default-weight-factor-type', type=str, default='W_VOL__1.0')
 @click.option('--translation-adj-verb-noun-ratio', type=str, default='1:2:1')
 #
