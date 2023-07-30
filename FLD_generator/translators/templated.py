@@ -279,8 +279,6 @@ class TemplatedTranslator(Translator):
 
         constants = self._take(entity_nouns, self.words_per_type)
 
-        import pudb; pudb.set_trace()
-
         return zeroary_predicates, unary_predicates, constants
 
     @profile

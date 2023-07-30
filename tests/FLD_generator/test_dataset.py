@@ -45,21 +45,21 @@ def generate_dataset(dataset: NLProofSDataset,
 @profile
 def test_generate_dataset():
 
-    # word_bank = None
-    word_bank = build_wordnet_wordbank('eng')
+    word_bank = None
+    # word_bank = build_wordnet_wordbank('eng')
 
-    # translator = None
-    translator = build_translator(
-        ['./configs/translations/thing.v1/'],
-        word_bank,
-        use_fixed_translation=False,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        # volume_to_weight='sqrt',
-        volume_to_weight='logE',
-        default_weight_factor_type='W_VOL__1.0',
-        adj_verb_noun_ratio='1-1-1',
-    )
+    translator = None
+    # translator = build_translator(
+    #     ['./configs/translations/thing.v1/'],
+    #     word_bank,
+    #     use_fixed_translation=False,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     # volume_to_weight='sqrt',
+    #     volume_to_weight='logE',
+    #     default_weight_factor_type='W_VOL__1.0',
+    #     adj_verb_noun_ratio='1-1-1',
+    # )
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
@@ -143,7 +143,6 @@ def test_generate_dataset():
     distractors_range = (0, 20)
 
     unknown_ratio = 0.33
-    depth_1_reference_weight = None
 
     use_collapsed_translation_nodes_for_unknown_tree = False
     translation_distractors_range = (0, 5) if translation_distractor is not None else (0, 0)
@@ -153,7 +152,6 @@ def test_generate_dataset():
 
         depth_range,
         branch_extensions_range,
-        depth_1_reference_weight=depth_1_reference_weight,
         unknown_ratio=unknown_ratio,
 
         distractors_range=distractors_range,

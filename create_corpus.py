@@ -131,7 +131,7 @@ def load_dataset(argument_config: List[str],
     elif depth_distrib == 'ruletaker.ours.20221202':
         if set(depth_range) != (1, 3):
             raise ValueError(f'depths {depth_range} is not consistent with ruletaker.ours.20221202.')
-        # see "depth分布" of experiments.md
+        # see "depth distribution" of experiments.md
         depth_weights = [0.40, 0.15, 0.12]
         depth_1_reference_weight = 0.23 / (0.23 + 0.17)
     else:
