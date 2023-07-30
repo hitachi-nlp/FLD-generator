@@ -139,7 +139,7 @@
       ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>"],
       ["W_VOL_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>"],
       ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
-      "__comment: the above are suppressed because they are sort of double negatoin",
+      "__comment: the above are suppressed because they are sort of double negation",
 
       "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
       ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],

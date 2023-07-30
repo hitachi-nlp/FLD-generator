@@ -64,7 +64,6 @@ def test_generate_dataset():
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
 
-
     generator = build_generator(
         [
 

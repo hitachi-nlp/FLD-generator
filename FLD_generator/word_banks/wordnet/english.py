@@ -118,10 +118,11 @@ class EnglishWordBank(WordNetWordBank):
 
         elif form == AdjForm.ANTI:
             antonyms = self.get_antonyms(adj)
-            antonyms += self._change_adj_form(adj, AdjForm.NEG)
+            antonyms += [word for word in self._change_adj_form(adj, AdjForm.NEG)
+                         if word not in antonyms]
             if len(antonyms) == 0 and force:
                 return self._change_adj_form(adj, AdjForm.NEG, force=True)
-            return antonyms
+            return sorted(set(antonyms))
 
         elif form == AdjForm.NEG:
             negnyms = self.get_negnyms(adj)
@@ -158,7 +159,8 @@ class EnglishWordBank(WordNetWordBank):
 
         elif form == NounForm.ANTI:
             antonyms = self.get_antonyms(noun)
-            antonyms += self._change_noun_form(noun, NounForm.NEG)
+            antonyms += [word for word in self._change_noun_form(noun, NounForm.NEG)
+                         if word not in antonyms]
             if len(antonyms) == 0 and force:
                 return self._change_noun_form(noun, NounForm.NEG, force=True)
             return antonyms

@@ -180,53 +180,84 @@ class TemplatedTranslator(Translator):
     @profile
     def _load_words(self,
                     word_bank: WordBank,
-                    adj_verb_noun_ratio: Optional[List[float]] = None) -> Tuple[List[str], List[str], List[str]]:
+                    adj_verb_noun_ratio: Optional[List[float]] = None,
+                    prioritize_form_abundant_words=False) -> Tuple[List[str], List[str], List[str]]:
+
+        def get_num_form_inv_score(word: str, pos: POS, form_klass) -> int:
+            antonyms = self._get_inflated_words(word, pos, form_klass.ANTI)
+            if hasattr(form_klass, 'NEG'):
+                negnyms = self._get_inflated_words(word, pos, form_klass.NEG)
+            else:
+                negnyms = []
+            return 10 - (len(antonyms) + len(negnyms))
+
+        def order_words(words: Iterable[str], pos: POS, form_klass) -> List[str]:
+            if prioritize_form_abundant_words:
+                return sorted(
+                    words,
+                    key = lambda word: (get_num_form_inv_score(word, pos, form_klass), str(word))
+                )
+            else:
+                _words = list(words)
+                return self._sample(_words, len(_words))
 
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
-        nouns = sorted(
-            word
+        nouns = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if word not in intermediate_constant_nouns
+            if word not in intermediate_constant_nouns),
+            POS.NOUN,
+            NounForm,
         )
 
-        event_nouns = sorted(
-            word
+        event_nouns = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_event_noun in word_bank.get_attrs(word)
+            if ATTR.can_be_event_noun in word_bank.get_attrs(word)),
+            POS.NOUN,
+            NounForm,
         )
 
         logger.info('loading entity nouns ...')
-        entity_nouns = sorted(
-            word
+        entity_nouns = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
+            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)),
+            POS.NOUN,
+            NounForm,
         )
 
         logger.info('loading adjs ...')
-        adjs = sorted(
-            word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)
+        adjs = order_words(
+            (word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)),
+            POS.ADJ,
+            AdjForm,
         )
 
         logger.info('loading intransitive_verbs ...')
-        intransitive_verbs = sorted(
-            word
+        intransitive_verbs = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
-            if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
+            if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)),
+            POS.VERB,
+            VerbForm,
         )
 
         logger.info('loading transitive_verbs ...')
-        transitive_verbs = sorted(
-            word
+        transitive_verbs = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
-            if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
+            if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)),
+            POS.VERB,
+            VerbForm,
         )
 
         logger.info('making transitive verb and object combinations ...')
         transitive_verb_PASs = []
-        for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
-            for obj in self._sample(nouns, 1000):
+        for verb in self._take(transitive_verbs, 1000):  # limit 1000 for speed
+            for obj in self._take(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
@@ -234,19 +265,21 @@ class TemplatedTranslator(Translator):
         adj_verb_noun_ratio = adj_verb_noun_ratio or [1, 2, 1]
         adj_verb_noun_weight = [3 * ratio / sum(adj_verb_noun_ratio) for ratio in adj_verb_noun_ratio]
 
-        zeroary_predicates = self._sample(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
-            + self._sample(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
-            + self._sample(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
-            + self._sample(event_nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
+        zeroary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+            + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+            + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+            + self._take(event_nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
-        unary_predicates = self._sample(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
-            + self._sample(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
-            + self._sample(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
-            + self._sample(nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
+        unary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+            + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+            + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+            + self._take(nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
         unary_predicates = sorted({word for word in unary_predicates})
 
-        constants = self._sample(entity_nouns, self.words_per_type)
+        constants = self._take(entity_nouns, self.words_per_type)
+
+        import pudb; pudb.set_trace()
 
         return zeroary_predicates, unary_predicates, constants
 
@@ -706,8 +739,8 @@ class TemplatedTranslator(Translator):
                 condition_is_consistent = False
                 break
 
-            inflated_word = self._get_inflated_word(word, pos, form)
-            if inflated_word is None:
+            inflated_words = self._get_inflated_words(word, pos, form)
+            if len(inflated_words) == 0:
                 condition_is_consistent = False
                 break
 
@@ -917,6 +950,16 @@ class TemplatedTranslator(Translator):
             return random.sample(elems, size)
 
     @profile
+    def _take(self, elems: List[Any], size: int) -> List[Any]:
+        if len(elems) < size:
+            logger.warning('Can\'t take %d elements. Will tak;e only %d elements.',
+                           size,
+                           len(elems))
+        # if size * 3 < len(elems):
+        #     logger.warning('taking only %d heading words from %d words. This might yield a skew distribution', size, len(elems))
+        return elems[:size]
+
+    @profile
     def _make_word_inflated_interpret_mapping(self,
                                               interpret_mapping: Dict[str, str],
                                               interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
@@ -934,8 +977,13 @@ class TemplatedTranslator(Translator):
                 pos, form = pos_form
                 if self.log_stats:
                     stats[f'{pos.value}.{form.value}'] += 1
-                inflated_word = self._get_inflated_word(word, pos, form)
-                assert (inflated_word is not None)
+                inflated_words = self._get_inflated_words(word, pos, form)
+
+                if form in [NounForm.ANTI, AdjForm.ANTI, VerbForm.ANTI]:
+                    logger.critical('got antonyms for word "%s": %s', word, str(inflated_words))
+
+                assert len(inflated_words) > 0
+                inflated_word = random.choice(inflated_words)
             else:
                 raise Exception(
                     f'Something wrong. Since we have checked in that the translation indeed exists, this program must not pass this block.  The problematic translation is "{interprand_templated_translation_pushed}" and unfound string is "{interprand_rep}["',
@@ -979,7 +1027,7 @@ class TemplatedTranslator(Translator):
         return pos, form
 
     @lru_cache(maxsize=1000000)
-    def _get_inflated_word(self, word: str, pos: POS, form: WordForm) -> Optional[str]:
+    def _get_inflated_words(self, word: str, pos: POS, form: WordForm) -> Tuple[str, ...]:
         if pos not in self._get_pos(word):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
@@ -998,9 +1046,10 @@ class TemplatedTranslator(Translator):
             inflated_words = self._word_bank.change_word_form(_word, form, force=True)
 
         if len(inflated_words) == 0:
-            return None
+            return ()
         else:
-            return self._pair_word_with_obj(random.choice(inflated_words), obj)
+            return tuple(self._pair_word_with_obj(word, obj)
+                         for word in inflated_words)
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
