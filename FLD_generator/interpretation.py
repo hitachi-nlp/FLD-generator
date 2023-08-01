@@ -189,39 +189,6 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
                             yield mapping
 
 
-
-def generate_arguments_in_target_space(src_arg: Argument,
-                                       tgt_arg: Argument,
-                                       add_complicated_arguments=False,
-                                       constraints: Optional[Dict[str, str]] = None,
-                                       shuffle=False,
-                                       allow_many_to_one=True,
-                                       elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula(src_arg.all_formulas,
-                                                  tgt_arg.all_formulas,
-                                                  add_complicated_arguments=add_complicated_arguments,
-                                                  constraints=constraints,
-                                                  shuffle=shuffle,
-                                                  allow_many_to_one=allow_many_to_one):
-        yield interpret_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
-
-
-def generate_formulas_in_target_space(src_formula: Formula,
-                                      tgt_formula: Formula,
-                                      add_complicated_arguments=False,
-                                      constraints: Optional[Dict[str, str]] = None,
-                                      shuffle=False,
-                                      allow_many_to_one=True,
-                                      elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula([src_formula],
-                                                  [tgt_formula],
-                                                  add_complicated_arguments=add_complicated_arguments,
-                                                  constraints=constraints,
-                                                  shuffle=shuffle,
-                                                  allow_many_to_one=allow_many_to_one):
-        yield interpret_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
-
-
 def generate_mappings_from_argument(src_argument: Argument,
                                     tgt_argument: Argument,
                                     add_complicated_arguments=False,
@@ -231,6 +198,7 @@ def generate_mappings_from_argument(src_argument: Argument,
     yield from generate_mappings_from_formula(
         src_argument.all_formulas,
         tgt_argument.all_formulas,
+        intermediate_constants=src_argument.intermediate_constants,
         add_complicated_arguments=add_complicated_arguments,
         constraints=constraints,
         shuffle=shuffle,
@@ -242,6 +210,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                    tgt_formulas: List[Formula],
                                    add_complicated_arguments=False,
                                    constraints: Optional[Dict[str, str]] = None,
+                                   intermediate_constants: Optional[List[Formula]] = None,
                                    shuffle=False,
                                    allow_many_to_one=True,
                                    suppress_op_expansion_if_exists=False) -> Iterable[Dict[str, str]]:
@@ -266,10 +235,19 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
 
         src_constants = sorted(set([c.rep for src_formula in complicated_formulas for c in src_formula.constants]))
         tgt_constants = sorted(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
+
+        if intermediate_constants is not None:
+            intermediate_constant_reps = list({c.rep
+                                               for c_formula in intermediate_constants
+                                               for c in c_formula.constants})
+        else:
+            intermediate_constant_reps = []
+
         yield from generate_mappings_from_predicates_and_constants(src_predicates,
                                                                    src_constants,
                                                                    tgt_predicates,
                                                                    tgt_constants,
+                                                                   intermediate_constants=intermediate_constant_reps,
                                                                    constraints=constraints,
                                                                    shuffle=shuffle,
                                                                    allow_many_to_one=allow_many_to_one)
@@ -280,6 +258,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
                                                     src_constants: List[str],
                                                     tgt_predicates: List[str],
                                                     tgt_constants: List[str],
+                                                    intermediate_constants: Optional[List[str]] = None,
                                                     constraints: Optional[Dict[str, str]] = None,
                                                     shuffle=False,
                                                     allow_many_to_one=True) -> Iterable[Dict[str, str]]:
@@ -305,6 +284,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
             constraints=constraints,
             shuffle=shuffle,
             allow_many_to_one=allow_many_to_one,
+            many_to_one_ng_src_objs=intermediate_constants,
         )
 
     for pred_mappings in get_pred_mappings():
@@ -319,7 +299,8 @@ def _generate_mappings(src_objs: List[Any],
                        tgt_objs: List[Any],
                        constraints: Optional[Dict[Any, Any]] = None,
                        shuffle=False,
-                       allow_many_to_one=True) -> Iterable[Optional[Dict[Any, Any]]]:
+                       allow_many_to_one=True,
+                       many_to_one_ng_src_objs: Optional[List[Any]] = None) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError('Elements in src_objs are not unique: {src_objs}')
     if len(set(tgt_objs)) != len(tgt_objs):
@@ -337,10 +318,23 @@ def _generate_mappings(src_objs: List[Any],
                                                   constraints=idx_constraints,
                                                   shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
-            yield {
+            mapping = {
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
             }
+
+            if many_to_one_ng_src_objs is not None:
+                used_by_others = False
+                for many_to_one_ng_src_obj in many_to_one_ng_src_objs:
+                    tgt_obj = mapping[many_to_one_ng_src_obj]
+                    if any(tgt_obj == other_tgt_obj for other_src_obj, other_tgt_obj in mapping.items()
+                           if other_src_obj != many_to_one_ng_src_obj):
+                        used_by_others = True
+                        break
+                if used_by_others:
+                    continue
+
+            yield mapping
     else:
         raise ValueError()
 

@@ -768,6 +768,8 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
                     for premise_mapping in generate_mappings_from_formula(
                         [formula] + ([assumption] if assumption is not None else []),
                         [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
+                        intermediate_constants=next_arg.intermediate_constants,
+                        allow_many_to_one=True,
                         shuffle=True,
                     ):
                         if is_arg_found:
@@ -775,8 +777,10 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
 
                         premise_pulled = interpret_formula(formula, premise_mapping, elim_dneg=elim_dneg)
                         assumption_pulled = interpret_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
+                        intermediate_constants_pulled = [interpret_formula(c, premise_mapping, elim_dneg=elim_dneg) for c in next_arg.intermediate_constants]
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
+                        log_traces.append(f'   |   |   | intermediate_constants_pulled {intermediate_constants_pulled}')
 
                         if premise_pulled.rep != cur_conclusion.rep:  # linkable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
@@ -790,6 +794,12 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
 
                         if not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree):
                             rejection_stats['not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree)'] += 1
+                            continue
+
+                        if any(interm_const.rep in {node_const.rep for node_const in node.formula.constants}
+                               for interm_const in intermediate_constants_pulled
+                               for node in proof_tree.assump_nodes):
+                            rejection_stats['intermediate_constants in leaf_nodes or assump_nodes'] += 1
                             continue
 
                         target_preds, target_consts = _choose_target_preds_consts(proof_tree,
@@ -1135,6 +1145,8 @@ def _extend_branches(proof_tree: ProofTree,
                 for conclusion_mapping in generate_mappings_from_formula(
                         [next_arg.conclusion],
                         [leaf_node.formula],
+                        intermediate_constants=next_arg.intermediate_constants,
+                        allow_many_to_one=True,
                         shuffle=True,
                 ):
                     if is_arg_found:

@@ -975,13 +975,94 @@ def test_generate_simplified_formulas():
     )
 
 
+def test_generate_mappings_from_formula():
+
+    def test(src_formula_reps: List[str],
+             tgt_formula_reps: List[str],
+             intermediate_constant_reps: List[str],
+             src_formula_0_gold_reps: List[str]):
+
+        src_formulas = [Formula(rep) for rep in src_formula_reps]
+        tgt_formulas = [Formula(rep) for rep in tgt_formula_reps]
+        intermediate_constants = [Formula(rep) for rep in intermediate_constant_reps]
+
+        mapped_formula_reps = set([])
+        for mapping in generate_mappings_from_formula(src_formulas, tgt_formulas, intermediate_constants=intermediate_constants):
+            mapped_formula_reps.add(interpret_formula(src_formulas[0], mapping).rep)
+        assert (mapped_formula_reps == set(src_formula_0_gold_reps))
+
+    test(
+        [
+            '{A}{a} & {B}{b}',
+            '(x): {A}x & {B}{b}',
+        ],
+        [
+            '{A}{k} & {B}{k}',
+        ],
+        [
+        ],
+        [
+            '{A}{k} & {A}{k}',
+            '{B}{k} & {A}{k}',
+            '{A}{k} & {B}{k}',
+            '{B}{k} & {B}{k}',
+        ]
+    )
+
+
+    test(
+        [
+            '{A}{a} & {B}{b}',
+            '(x): {A}x & {B}{b}',
+        ],
+        [
+            '{A}{k} & {B}{k}',
+        ],
+        [
+            '{a}',
+        ],
+        [
+        ]
+    )
+
+
+    test(
+        [
+            '{A}{a} & {B}{b}',
+            '(x): {A}x & {B}{b}',
+        ],
+        [
+            '{A}{k} & {B}{l}',
+        ],
+        [
+            '{a}',
+        ],
+        [
+            '{A}{k} & {A}{l}',
+            '{B}{k} & {A}{l}',
+            '{A}{k} & {B}{l}',
+            '{B}{k} & {B}{l}',
+
+            '{A}{l} & {A}{k}',
+            '{B}{l} & {A}{k}',
+            '{A}{l} & {B}{k}',
+            '{B}{l} & {B}{k}',
+
+        ]
+    )
+
+
+
+
 if __name__ == '__main__':
     # test_expand_op()
     # test_formula_is_identical_to()
     # test_formula_can_not_be_identical_to()
     # test_argument_is_identical_to()
 
-    test_generate_quantifier_axiom_arguments()
+    # test_generate_quantifier_axiom_arguments()
+
+    test_generate_mappings_from_formula()
 
     # test_generate_quantifier_formulas()
     # test_generate_quantifier_arguments()

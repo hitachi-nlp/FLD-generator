@@ -88,6 +88,7 @@ class ProofTreeGenerationPipeline:
         for tree in trial_proof_trees:
             tree.validate()
 
+
         trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
         to_be_cached_trees, to_be_return_tree = trial_proof_trees[:-1], trial_proof_trees[-1]
 
@@ -201,12 +202,12 @@ class ProofTreeGenerationPipeline:
                 for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
                     if i_formula in assump_formula_indices:
-                        translation_prefix = 'let\'s assume that '
+                        translation_prefix = 'Let\'s assume that '
                     else:
                         translation_prefix = ''
 
                     if translation is not None:
-                        formula.translation = translation_prefix + translation
+                        formula.translation = translation_prefix + translation[0].lower() + translation[1:]
 
                     if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                         logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)

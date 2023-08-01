@@ -116,7 +116,8 @@ class ProofNode:
         if self.is_leaf:
             pass
         elif self.is_assump:
-            raise IllegalTreeOpetaionError()
+            # exception will be raised below
+            pass
         if self.has_intermediate_constants:
             # This leads to illegality because:
             # (i) nodes with intermediate constants must not be at leaf, but
@@ -142,7 +143,7 @@ class ProofNode:
         # if not force and node.assump_parent is not None:
         #     raise MultipleParentError()
         # node._assump_parent = self
-        self.set_assump_parent(self, force=force, unchain=True)
+        node.set_assump_parent(self, force=force, unchain=True)
 
         if node not in self._assump_children:
             self._assump_children.append(node)
@@ -392,4 +393,4 @@ class ProofTree:
     def validate(self) -> None:
         for node in self.nodes:
             if node.has_intermediate_constants and (node.is_leaf or node.is_assump):
-                raise IllegalTreeError()
+                raise IllegalTreeError(self.format_str)
