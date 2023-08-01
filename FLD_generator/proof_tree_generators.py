@@ -27,7 +27,6 @@ from .argument_checkers import (
 )
 from .interpretation import (
     generate_mappings_from_formula,
-    generate_formulas_in_target_space,
     generate_complicated_arguments,
     generate_partially_quantifier_arguments,
     interpret_formula,
@@ -69,6 +68,10 @@ _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP = True
 
 _DEPTH_PER_SEC = 0.5
 _EXTENSION_PER_SEC = 0.5
+
+# _DEPTH_PER_SEC = 99999
+# _EXTENSION_PER_SEC = 99999
+
 
 _MAX_RETRY_DEFAULT = 50   # large to make sure the results meet the specification
 
@@ -901,7 +904,11 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
                     cur_conclusion_node if formula.rep == cur_conclusion.rep else ProofNode(formula)
                     for formula in next_arg_pulled.premises
                 ]
-                update(next_premise_nodes, next_assumption_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
+                update(next_premise_nodes,
+                       next_assumption_nodes,
+                       next_conclusion_node,
+                       next_arg_pulled,
+                       proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
@@ -984,7 +991,8 @@ def _generate_stem_find_linkable_arguments(arguments: Union[List[Argument], Tupl
 
 def _find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
     for descendant in node.descendants:
-        if descendant.is_leaf:
+        if descendant.is_leaf and not descendant.has_intermediate_constants:
+        # if descendant.is_leaf:
             yield descendant
 
 
@@ -1592,13 +1600,13 @@ def _is_intermediate_constants_illegal(
 
 
 def _find_illegal_intermediate_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
-    # possible_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes    # HONOKA: assump_nodesは含めるの？ => NO, これは誤りである．
-    possible_nodes = proof_tree.leaf_nodes
+    # possible_illegal_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes    # HONOKA: assump_nodesは含めるの？ => NO, これは誤りである．
+    possible_illegal_nodes = proof_tree.leaf_nodes
     if proof_tree.root_node is not None:
-        possible_nodes += [proof_tree.root_node]
+        possible_illegal_nodes += [proof_tree.root_node]
 
     for constant in proof_tree.intermediate_constants:
-        for possible_node in possible_nodes:
+        for possible_node in possible_illegal_nodes:
             if constant.rep in [other_constant.rep for other_constant in possible_node.formula.constants]:
                 yield constant, possible_node
 

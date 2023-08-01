@@ -85,6 +85,8 @@ class ProofTreeGenerationPipeline:
             force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
             get_all_trial_results=True,
         )
+        for tree in trial_proof_trees:
+            tree.validate()
 
         trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
         to_be_cached_trees, to_be_return_tree = trial_proof_trees[:-1], trial_proof_trees[-1]

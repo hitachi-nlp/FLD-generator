@@ -611,6 +611,7 @@ class NegativeTreeDistractor(FormulaDistractor):
                     best_effort=True,
                     force_fix_illegal_intermediate_constants=True,
                 )
+                negative_tree.validate()
             except ExtendBranchesFailure as e:
                 raise FormulaDistractorGenerationFailure(str(e))
             except ExtendBranchesImpossible as e:

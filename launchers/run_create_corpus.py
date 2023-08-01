@@ -100,7 +100,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/2023-07-26.suppress_verb')
     # output_top_dir = Path('./outputs/00.create_corpus/2023-07-27.compare_models')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize')
+    output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize.debug')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -298,8 +299,8 @@ def main():
         # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal',
 
         # ---------------------------------- 20230729.case_study_finalize ------------------------------------
-        '20230729.case_study_finalize.D3',
-        # '20230729.case_study_finalize.D8',
+        # '20230729.case_study_finalize.D3',
+        '20230729.case_study_finalize.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -321,7 +322,7 @@ def main():
     # ---------------------------- fixed settings --------------------------
     timeout_per_job = 4800  # for the case some jobs hangs
     num_workers_per_job = 5
-    delete_logs_when_done = True
+    delete_logs_when_done = False
     dry_run = False
 
     if num_jobs_for_datasets * num_jobs_per_dataset > 180:
