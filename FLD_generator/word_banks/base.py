@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from itertools import chain
 from functools import lru_cache
 
+import line_profiling
+
 
 class POS(Enum):
     # from nltk/corpus/reader/wordnet.py
@@ -28,10 +30,14 @@ class VerbForm(Enum):
     ING = 'ing'
     S = 's'
 
+    ANTI = 'anti'
+
 
 class AdjForm(Enum):
     NORMAL = 'normal'
     NESS = 'ness'
+
+    ANTI = 'anti'
     NEG = 'neg'
 
 
@@ -39,7 +45,10 @@ class NounForm(Enum):
     NORMAL = 'normal'
     SINGULAR = 's'
     SINGULAR_WITH_PARTICLE = 'swa'
-    PLURAL = 'p'
+    PLURAL = 'p'   # not implemented
+
+    ANTI = 'anti'
+    NEG = 'neg'
 
 
 WordForm = Union[AdjForm, VerbForm, NounForm]
@@ -52,8 +61,8 @@ def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
         return AdjForm
     elif pos == POS.NOUN:
         return NounForm
-    elif pos == POS.UNK:
-        return None
+    elif pos == POS.ADV:
+        raise NotImplementedError()
     else:
         raise ValueError(f'Unknown pos {pos}')
 
@@ -88,7 +97,7 @@ class WordBank(ABC):
     def change_word_form(self,
                          word: str,
                          form: Union[VerbForm, AdjForm, NounForm],
-                         force=False) -> Optional[str]:
+                         force=False) -> List[str]:
         if form in VerbForm:
             if POS.VERB not in self.get_pos(word):
                 raise ValueError(f'The pos of the form ({str(form)}) is Verb. The word {word} does not have this pos.')
@@ -105,15 +114,15 @@ class WordBank(ABC):
             raise ValueError()
 
     @abstractmethod
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> List[str]:
         pass
 
     @lru_cache(1000000)

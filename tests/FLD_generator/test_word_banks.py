@@ -2,8 +2,9 @@ from typing import List, Optional, Iterable, Dict
 
 from FLD_generator.word_banks import build_wordnet_wordbank, POS, ATTR, get_form_types
 import logging
-
 from logger_setup import setup as setup_logger
+
+import line_profiling
 
 setup_logger(level=logging.INFO)
 
@@ -36,10 +37,17 @@ def _test_word_bank(wb):
                 else:
                     print(f'{str(pos):<10}{str(attr.value):<30}{word:<20}')
 
-                form_types = get_form_types(pos)
+                try:
+                    form_types = get_form_types(pos)
+                except NotImplementedError as e:
+                    continue
+
                 if form_types is not None:
                     for form_type in form_types:
-                        inflated_word = wb.change_word_form(word, form_type)
+                        try:
+                            inflated_word = wb.change_word_form(word, form_type)
+                        except NotImplementedError as e:
+                            continue
                         if inflated_word is not None:
                             print(f'    {str(form_type):<40}{str(inflated_word):<40}')
 

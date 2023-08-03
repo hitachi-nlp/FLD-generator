@@ -135,8 +135,14 @@ def main():
     # input_dir = Path('./outputs/00.create_corpus/20230707.finalize')
     # output_dir = Path('./outputs/G00.compute_distrib.py/20230707.finalize')
 
-    input_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
-    output_dir = Path('./outputs/G00.compute_distrib.py/20230711.refactor_distractors')
+    # input_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230711.refactor_distractors')
+
+    # input_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
+    # output_dir = Path('./outputs/G00.compute_distrib.py/20230711.refactor_distractors')
+
+    input_dir = Path('./outputs/00.create_corpus/2023-07-27.compare_models')
+    output_dir = Path('./outputs/G00.compute_distrib.py/2023-07-27.compare_models')
 
     compute_distrib(input_dir, output_dir)
 

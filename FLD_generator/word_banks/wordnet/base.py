@@ -84,15 +84,15 @@ class WordNetWordBank(WordBank):
         pass
 
     @abstractmethod
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> Optional[str]:
+    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> Optional[str]:
+    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> Optional[str]:
+    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> List[str]:
         pass
 
     def _can_be_intransitive_verb(self, verb: str) -> bool:

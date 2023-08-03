@@ -27,7 +27,6 @@ from .argument_checkers import (
 )
 from .interpretation import (
     generate_mappings_from_formula,
-    generate_formulas_in_target_space,
     generate_complicated_arguments,
     generate_partially_quantifier_arguments,
     interpret_formula,
@@ -66,6 +65,15 @@ logger = logging.getLogger(__name__)
 
 # see  [failure_loop](./docs/axioms_theorems.md)
 _DO_HEURISTICS_TO_AVOID_UNIV_INTRO_FAILURE_LOOP = True
+
+_DEPTH_PER_SEC = 0.5
+_EXTENSION_PER_SEC = 0.5
+
+# _DEPTH_PER_SEC = 99999
+# _EXTENSION_PER_SEC = 99999
+
+
+_MAX_RETRY_DEFAULT = 50   # large to make sure the results meet the specification
 
 
 def _is_failure_loop_univ_intro_argument(argument: Argument) -> bool:
@@ -223,6 +231,7 @@ class ProofTreeGenerator:
                 return False
             return True
 
+        # --- generate complicated arguments that includes &, v, and negation ---
         complicated_arguments: List[Argument] = []
         if complex_formula_arguments_weight > 0.0:
             for argument in arguments:
@@ -237,6 +246,7 @@ class ProofTreeGenerator:
                         complicated_argument.id += f'.{name}'
                         complicated_arguments.append(complicated_argument)
 
+        # --- generate quantified arguments ---
         quantified_arguments: List[Argument] = []
         if quantifier_arguments_weight > 0.0:
             for argument in arguments + complicated_arguments:
@@ -253,6 +263,7 @@ class ProofTreeGenerator:
                             quantified_arguments.append(quantifier_argument)
                             quantifier_argument.id += f'.{name}'
 
+        # --- generate axioms of quantifiers, such as universal elimination ---
         quantifier_axiom_arguments: List[Argument] = []
         if quantifier_axiom_arguments_weight > 0.0:
             unique_formulas: List[Formula] = []
@@ -430,15 +441,17 @@ class ProofTreeGenerator:
 
 def _generate_tree_with_timeout_retry(arguments: Union[List[Argument], Tuple[Argument, ...]],
                                       depth: int,
-                                      *args,
-                                      max_retry=50,
-                                      # timeout_per_trial=99999,  # 5 + 5
-                                      timeout_per_trial=20,  # 5 + 5
+                                      branch_extension_steps: int,
+                                      max_retry=_MAX_RETRY_DEFAULT,
+                                      # timeout_per_trial=99999,
+                                      # timeout_per_trial: Optional[int] = 10,  # 5 + 5
+                                      timeout_per_trial: Optional[Union[float, int]] = None,
                                       **kwargs) -> List[ProofTree]:
+    timeout_per_trial = timeout_per_trial or depth * _DEPTH_PER_SEC + branch_extension_steps * _EXTENSION_PER_SEC
     try:
         trial_result_proof_trees = run_with_timeout_retry(
             _generate_tree,
-            func_args = [arguments, depth] + list(args),
+            func_args = [arguments, depth, branch_extension_steps],
             func_kwargs=kwargs,
 
             should_retry_func=lambda proof_tree: proof_tree.depth < depth,
@@ -503,7 +516,7 @@ def _generate_tree(arguments: Union[List[Argument], Tuple[Argument, ...]],
                 allow_reference_arguments_when_depth_1=allow_reference_arguments_when_depth_1,
                 force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
                 allow_illegal_intermediate_constants=allow_illegal_intermediate_constants,
-                max_retry=10,
+                max_retry=10,   # can be smaller than _MAX_RETRY_DEFAULT because the extend_branches() below can make depth large
             )
 
             # picking the tree with the largest extension steps sometimes pick a smaller tree.
@@ -540,11 +553,13 @@ def _pick_largest_tree(proof_trees: List[ProofTree]) -> ProofTree:
 def _generate_stem_with_timeout_retry(arguments: Union[List[Argument], Tuple[Argument, ...]],
                                       depth: int,
                                       *args,
-                                      max_retry=50,
+                                      max_retry=_MAX_RETRY_DEFAULT,
                                       # timeout_per_trial=99999,
-                                      timeout_per_trial=10,
+                                      # timeout_per_trial=5,
+                                      timeout_per_trial: Optional[Union[float, int]] = None,
                                       best_effort=False,
                                       **kwargs) -> List[ProofTree]:
+    timeout_per_trial = timeout_per_trial or _DEPTH_PER_SEC * depth
     try:
         _kwargs = kwargs.copy()
         _kwargs['best_effort'] = best_effort
@@ -572,13 +587,16 @@ def _extend_branches_with_timeout_retry(proof_tree: ProofTree,
                                         num_steps: int,
                                         *args,
                                         # timeout_per_trial=99999,
-                                        timeout_per_trial=10,
-                                        max_retry=50,
+                                        # timeout_per_trial=5,
+                                        timeout_per_trial: Optional[Union[float, int]] = None,
+                                        max_retry=_MAX_RETRY_DEFAULT,
                                         best_effort=False,
                                         **kwargs) -> List[Tuple[ProofTree, int]]:
+    timeout_per_trial = timeout_per_trial or _EXTENSION_PER_SEC * num_steps
     try:
         _kwargs = kwargs.copy()
         _kwargs['best_effort'] = best_effort
+
         return run_with_timeout_retry(
             _extend_branches,
             func_args=[proof_tree, arguments, num_steps] + list(args),
@@ -750,6 +768,8 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
                     for premise_mapping in generate_mappings_from_formula(
                         [formula] + ([assumption] if assumption is not None else []),
                         [cur_conclusion] + [node.formula for node in cur_possible_assumption_nodes],
+                        intermediate_constants=next_arg.intermediate_constants,
+                        allow_many_to_one=True,
                         shuffle=True,
                     ):
                         if is_arg_found:
@@ -757,8 +777,10 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
 
                         premise_pulled = interpret_formula(formula, premise_mapping, elim_dneg=elim_dneg)
                         assumption_pulled = interpret_formula(assumption, premise_mapping, elim_dneg=elim_dneg) if assumption is not None else None
+                        intermediate_constants_pulled = [interpret_formula(c, premise_mapping, elim_dneg=elim_dneg) for c in next_arg.intermediate_constants]
                         log_traces.append(f'   |   |   | premise_pulled {premise_pulled}')
                         log_traces.append(f'   |   |   | assumption_pulled {assumption_pulled}')
+                        log_traces.append(f'   |   |   | intermediate_constants_pulled {intermediate_constants_pulled}')
 
                         if premise_pulled.rep != cur_conclusion.rep:  # linkable or not
                             rejection_stats['premise_pulled.rep != cur_conclusion.rep'] += 1
@@ -772,6 +794,12 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
 
                         if not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree):
                             rejection_stats['not is_predicate_arity_consistent_formula_set([premise_pulled] + formulas_in_tree)'] += 1
+                            continue
+
+                        if any(interm_const.rep in {node_const.rep for node_const in node.formula.constants}
+                               for interm_const in intermediate_constants_pulled
+                               for node in proof_tree.assump_nodes):
+                            rejection_stats['intermediate_constants in leaf_nodes or assump_nodes'] += 1
                             continue
 
                         target_preds, target_consts = _choose_target_preds_consts(proof_tree,
@@ -886,7 +914,11 @@ def _generate_stem(arguments: Union[List[Argument], Tuple[Argument, ...]],
                     cur_conclusion_node if formula.rep == cur_conclusion.rep else ProofNode(formula)
                     for formula in next_arg_pulled.premises
                 ]
-                update(next_premise_nodes, next_assumption_nodes, next_conclusion_node, next_arg_pulled, proof_tree)
+                update(next_premise_nodes,
+                       next_assumption_nodes,
+                       next_conclusion_node,
+                       next_arg_pulled,
+                       proof_tree)
 
                 cur_conclusion_node = next_conclusion_node
                 cur_premise_nodes = next_premise_nodes
@@ -969,7 +1001,8 @@ def _generate_stem_find_linkable_arguments(arguments: Union[List[Argument], Tupl
 
 def _find_possible_assumption_nodes(node: ProofNode) -> Iterable[ProofNode]:
     for descendant in node.descendants:
-        if descendant.is_leaf:
+        if descendant.is_leaf and not descendant.has_intermediate_constants:
+        # if descendant.is_leaf:
             yield descendant
 
 
@@ -1097,7 +1130,7 @@ def _extend_branches(proof_tree: ProofTree,
             is_arg_found = False
             for next_arg in _shuffle_arguments(linkable_args, weights=argument_weights):
                 if is_arg_found:
-                    is_leaf_node_done = True
+                    # is_leaf_node_done = True
                     break
 
                 if next_arg.id.startswith('reference') and (depth_limit != 1 or not allow_reference_arguments_when_depth_1):
@@ -1112,6 +1145,8 @@ def _extend_branches(proof_tree: ProofTree,
                 for conclusion_mapping in generate_mappings_from_formula(
                         [next_arg.conclusion],
                         [leaf_node.formula],
+                        intermediate_constants=next_arg.intermediate_constants,
+                        allow_many_to_one=True,
                         shuffle=True,
                 ):
                     if is_arg_found:
@@ -1211,6 +1246,8 @@ def _extend_branches(proof_tree: ProofTree,
                         is_arg_found = True
                         break
 
+            is_leaf_node_done = is_arg_found
+
         if is_leaf_node_done:
             # Upate tree
             next_arg_pulled.conclusion = target_leaf_node.formula  # refer to the same object
@@ -1244,7 +1281,6 @@ def _extend_branches(proof_tree: ProofTree,
             else:
                 raise ExtendBranchesFailure(msg)
 
-    # _check_leaf_consistency(proof_tree)
     proof_tree = _my_validate_illegal_intermediate_constants(proof_tree)
 
     if return_alignment:
@@ -1416,37 +1452,44 @@ def _fix_illegal_intermediate_constants(
         return None, None
 
     def is_fixed(constant: Formula, illegal_node: ProofNode, proof_tree_tmp: ProofTree) -> bool:
+        if illegal_node.is_leaf:
+            return False
         descendant_leaf_nodes = [
             node for node in illegal_node.descendants
             if node in proof_tree_tmp.leaf_nodes
         ]
         return all(node.formula.rep.find(constant.rep) < 0 for node in descendant_leaf_nodes)
 
+
     def build_exception_msg(illegal_node: ProofNode, node_type: str, constant: Formula, postfix='') -> str:
         return f'fixing a illegal leaf node {str(illegal_node)} with intermediate constant "{constant.rep}" failed' + postfix
 
     proof_tree_fixed = proof_tree.copy()
-    fix_trial_per_node = 30
+
+    max_extension_steps = 5
+    trial_per_step = 5
+
+    num_trial = max_extension_steps * trial_per_step
     all_is_fixed = False
     while True:
         node_is_fixed = False
-        for i_trial in range(0, fix_trial_per_node):
+        for i_trial in range(0, num_trial):
             proof_tree_tmp, fixed_nodes_to_tmp_nodes = proof_tree_fixed.copy(return_alignment=True)
             leaf_nodes = set(proof_tree_tmp.leaf_nodes)
 
             constant, illegal_node = find_one_illegal_constant(proof_tree_tmp)
-            if constant is None:  # fixed all
+            if constant is None:
                 all_is_fixed = True
                 break
 
             def _make_pretty_msg_for_fix(status: Optional[str] = None, msg: Optional[str] = None) -> str:
                 return _make_pretty_msg(trial=i_trial, status=status,
                                         subtitle=f'node={str(illegal_node)}, constant="{str(constant.rep)}"',
-                                        max_trial=fix_trial_per_node, boundary_level=1,
+                                        max_trial=num_trial, boundary_level=1,
                                         msg=msg)
 
             if illegal_node in leaf_nodes:
-                num_steps = i_trial / 6 + 1
+                num_steps = 1 + int(i_trial / max_extension_steps)
                 try:
                     trial_results = _extend_branches_with_timeout_retry(
                         proof_tree_tmp,
@@ -1468,7 +1511,6 @@ def _fix_illegal_intermediate_constants(
 
                         best_effort=True,
                         # timeout_per_trial=99999,
-                        timeout_per_trial=10,
                         max_retry=5,
                     )
                     if len(trial_results) == 0:
@@ -1570,13 +1612,14 @@ def _is_intermediate_constants_illegal(
 
 
 def _find_illegal_intermediate_constants(proof_tree: ProofTree) -> Iterable[Tuple[Formula, ProofNode]]:
-    possible_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes
+    # possible_illegal_nodes = proof_tree.leaf_nodes + proof_tree.assump_nodes    # HONOKA: assump_nodesは含めるの？ => NO, これは誤りである．
+    possible_illegal_nodes = proof_tree.leaf_nodes
     if proof_tree.root_node is not None:
-        possible_nodes += [proof_tree.root_node]
+        possible_illegal_nodes += [proof_tree.root_node]
 
     for constant in proof_tree.intermediate_constants:
-        for possible_node in possible_nodes:
-            if constant.rep in [constant.rep for constant in possible_node.formula.constants]:
+        for possible_node in possible_illegal_nodes:
+            if constant.rep in [other_constant.rep for other_constant in possible_node.formula.constants]:
                 yield constant, possible_node
 
 

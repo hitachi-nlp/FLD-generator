@@ -1,4 +1,4 @@
-from typing import List, Any, Iterable, Tuple, Dict
+from typing import List, Any, Iterable, Tuple, Dict, Union
 from abc import abstractmethod, ABC
 from pprint import pprint
 import random
@@ -59,7 +59,7 @@ class FormulaDistractor(ABC):
                  best_effort=False,
                  no_warning=False) -> Tuple[List[Formula], Dict[str, Any]]:
         max_retry = max_retry or self.default_max_retry
-        timeout_per_trial = timeout_per_trial or self.default_timeout_per_trial
+        timeout_per_trial = timeout_per_trial or self.default_timeout_per_trial(size)
 
         self._log(logging.INFO, f'try to generate {size} distractors', boundary_level=2)
 
@@ -107,9 +107,8 @@ class FormulaDistractor(ABC):
     def default_max_retry(self) -> int:
         pass
 
-    @property
     @abstractmethod
-    def default_timeout_per_trial(self) -> int:
+    def default_timeout_per_trial(self, size: int) -> Union[float, int]:
         pass
 
     @abstractmethod
@@ -237,10 +236,10 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
     def default_max_retry(self) -> int:
         return 5
 
-    @property
-    def default_timeout_per_trial(self) -> int:
+    def default_timeout_per_trial(self, size: int) -> Union[float, int]:
         # return 99999
-        return 10
+        # return 10
+        return size * 0.5
 
     @profile
     def _generate(self,
@@ -447,10 +446,10 @@ class SimplifiedFormulaDistractor(FormulaDistractor):
         # this class is deterministic and thus, only 1 trial is enough.
         return 1
 
-    @property
-    def default_timeout_per_trial(self) -> int:
+    def default_timeout_per_trial(self, size: int) -> Union[float, int]:
         # return 99999
-        return 10
+        # return 10
+        return size * 0.5
 
     @profile
     def _generate(self,
@@ -521,10 +520,9 @@ class NegativeTreeDistractor(FormulaDistractor):
     def default_max_retry(self) -> int:
         return 5
 
-    @property
-    def default_timeout_per_trial(self) -> int:
-        # return 99999
-        return 10
+    def default_timeout_per_trial(self, size: int) -> Union[float, int]:
+        # return 10
+        return 2 + 0.5 * size
 
     @profile
     def generate(self, *args, **kwargs) -> Tuple[List[Formula], Dict[str, Any]]:
@@ -609,10 +607,11 @@ class NegativeTreeDistractor(FormulaDistractor):
                     negative_tree,
                     branch_extension_steps,
                     ng_formulas=[node.formula for node in proof_tree.nodes],
-                    max_retry=10,   # HONOKA: this value determines the total speed.
+                    max_retry=10,
                     best_effort=True,
                     force_fix_illegal_intermediate_constants=True,
                 )
+                negative_tree.validate()
             except ExtendBranchesFailure as e:
                 raise FormulaDistractorGenerationFailure(str(e))
             except ExtendBranchesImpossible as e:
@@ -674,11 +673,10 @@ class MixtureDistractor(FormulaDistractor):
     def default_max_retry(self) -> int:
         return 1
 
-    @property
-    def default_timeout_per_trial(self) -> int:
+    def default_timeout_per_trial(self, size: int) -> Union[float, int]:
         timeout_sum = 0
         for distractor in self._distractors:
-            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial * self.distractors_max_enum
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial(size) * self.distractors_max_enum
         return timeout_sum
 
     @profile
@@ -742,11 +740,10 @@ class FallbackDistractor(FormulaDistractor):
     def default_max_retry(self) -> int:
         return 1
 
-    @property
-    def default_timeout_per_trial(self) -> int:
+    def default_timeout_per_trial(self, size: int) -> Union[float, int]:
         timeout_sum = 0
         for distractor in self._distractors:
-            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial
+            timeout_sum += distractor.default_max_retry * distractor.default_timeout_per_trial(size)
         return timeout_sum
 
     @profile

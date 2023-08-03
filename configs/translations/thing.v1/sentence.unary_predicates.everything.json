@@ -24,20 +24,6 @@
     ],
 
 
-    "¬({A}everything & {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything & {B}everything)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}everything & {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything & {B}everything)>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}everything & ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything & ¬{B}everything)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}everything & ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything & ¬{B}everything)>> <<phrase::is_not_true>>"
-    ],
-
-
     "({A}everything v {B}everything)": [
       "<<clause::verb::({A}everything v {B}everything)>>"
     ],
@@ -49,20 +35,6 @@
     ],
     "(¬{A}everything v ¬{B}everything)": [
       "<<clause::verb::(¬{A}everything v ¬{B}everything)>>"
-    ],
-
-
-    "¬({A}everything v {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything v {B}everything)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}everything v {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything v {B}everything)>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}everything v ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything v ¬{B}everything)>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}everything v ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything v ¬{B}everything)>> <<phrase::is_not_true>>"
     ]
 
   }

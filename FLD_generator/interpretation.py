@@ -108,40 +108,53 @@ def generate_simplified_formulas(src_formula: Formula,
 def generate_complication_mappings_from_formula(formulas: List[Formula],
                                                 suppress_op_expansion_if_exists=False,
                                                 get_name=False) -> Union[Iterable[Dict[str, str]], Iterable[Tuple[Dict[str, str], str]]]:
-    predicates = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
-    constants = sorted(set([p.rep for formula in formulas for p in formula.constants]))
+    preds = sorted(set([p.rep for formula in formulas for p in formula.predicates]))
+    consts = sorted(set([p.rep for formula in formulas for p in formula.constants]))
 
-    identity_mapping = {pred: pred for pred in predicates}
-    identity_mapping.update({const: const for const in constants})
+    identity_mapping = {pred: pred for pred in preds}
+    identity_mapping.update({const: const for const in consts})
 
-    unused_predicates = list(set(PREDICATES) - set(predicates))
-    unk_pred0 = sorted(unused_predicates)[0]
-    unk_pred1 = sorted(unused_predicates)[1]
+    unused_preds = list(set(PREDICATES) - set(preds))
+    unused_pred0 = sorted(unused_preds)[0]
+    unused_pred1 = sorted(unused_preds)[1]
 
-    def not_enhance(predicates: List[str]) -> Iterable[List[str]]:
-        if len(predicates) == 1:
-            predicate = predicates[0]
-            for prefix in ['', f'{NEGATION}']:
-                yield [f'{prefix}{predicate}']
+    def generate_negated_preds_combinations(preds: List[str]) -> Iterable[List[str]]:
+        if len(preds) == 1:
+            pred = preds[0]
+            # for prefix in ['', f'{NEGATION}']:
+            #     yield [f'{prefix}{pred}']
+            for do_negate in [False, True]:
+                if do_negate:
+                    yield [negate(Formula(pred)).rep]
+                else:
+                    yield [pred]
         else:
-            predicate = predicates[0]
-            for prefix in ['', f'{NEGATION}']:
-                for tail in not_enhance(predicates[1:]):
-                    yield [f'{prefix}{predicate}'] + tail
+            pred = preds[0]
+            # for prefix in ['', f'{NEGATION}']:
+            #     for tail in generate_negated_preds_combinations(preds[1:]):
+            #         yield [f'{prefix}{pred}'] + tail
+            for do_negate in [False, True]:
+                for tail in generate_negated_preds_combinations(preds[1:]):
+                    if do_negate:
+                        yield [negate(Formula(pred)).rep] + tail
+                    else:
+                        yield [pred] + tail
 
-    def generate_not_enhanced_mappings(predicates) -> Iterable[Dict]:
-        for i_enhance, predicates_with_not in enumerate(not_enhance(predicates)):
+
+    def generate_negation_mappings(preds) -> Iterable[Dict]:
+        for i_enhance, negated_preds in enumerate(generate_negated_preds_combinations(preds)):
             if i_enhance == 0:  # this is the original mapping
                 continue
             mapping = copy.deepcopy(identity_mapping)
-            for predicate_with_not in predicates_with_not:
-                original_predicate = predicate_with_not.lstrip(f'{NEGATION}')
-                mapping[original_predicate] = predicate_with_not
+            for negated_pred in negated_preds:
+                original_predicate = negated_pred.lstrip(f'{NEGATION}')
+                mapping[original_predicate] = negated_pred
             yield mapping
 
-    for i_not, mapping in enumerate(generate_not_enhanced_mappings(predicates)):
+    # negate each predicate
+    for i_negation, mapping in enumerate(generate_negation_mappings(preds)):
         if get_name:
-            yield mapping, f'complication.not-{_fill_str(i_not)}'
+            yield mapping, f'complication.not-{_fill_str(i_negation)}'
         else:
             yield mapping
 
@@ -151,51 +164,29 @@ def generate_complication_mappings_from_formula(formulas: List[Formula],
         pass
     else:
         for op in [DISJUNCTION, CONJUNCTION]:
-            for i_predicate_to_expand, predicate_to_expand in enumerate(predicates):
-                unk_extended_predicates = [unk_pred0, unk_pred1]\
-                    + predicates[:i_predicate_to_expand]\
-                    + predicates[i_predicate_to_expand + 1:]
-                for i_not, not_enhanced_mapping in enumerate(generate_not_enhanced_mappings(unk_extended_predicates)):
-                    mapping = copy.deepcopy(not_enhanced_mapping)
-                    for i_total_negation, total_negation_prefix in enumerate(['', NEGATION]):
-                        mapping[predicate_to_expand] = f'{total_negation_prefix}({not_enhanced_mapping[unk_pred0]} {op} {not_enhanced_mapping[unk_pred1]})'
-                        not_name_id = i_not * 2 + i_total_negation
+            for i_op_expand, expand_pred in enumerate(preds):
+                src_preds = preds[:i_op_expand] + [unused_pred0, unused_pred1] + preds[i_op_expand + 1:]
+                for i_negation, negation_mapping in enumerate(generate_negation_mappings(src_preds)):
+                    mapping = copy.deepcopy(negation_mapping)
+                    # for i_op_negation, op_nagation in enumerate(['', NEGATION]):
+                    #     mapping[expand_pred] = f'{op_nagation}({negation_mapping[unused_pred0]} {op} {negation_mapping[unused_pred1]})'
+                    #     not_name_id = i_negation * 2 + i_op_negation
+                    #     if get_name:
+                    #         yield mapping, f'complication.{op}-{_fill_str(i_op_expand)}.not-{_fill_str(not_name_id)}'
+                    #     else:
+                    #         yield mapping
+                    for i_op_negation, do_negate in enumerate([False, True]):
+                        op_expanded = f'({negation_mapping[unused_pred0]} {op} {negation_mapping[unused_pred1]})'
+                        if do_negate:
+                            op_expanded = negate(Formula(op_expanded)).rep
+
+                        mapping[expand_pred] = op_expanded
+                        not_name_id = i_negation * 2 + i_op_negation
+
                         if get_name:
-                            yield mapping, f'complication.{op}-{_fill_str(i_predicate_to_expand)}.not-{_fill_str(not_name_id)}'
+                            yield mapping, f'complication.{op}-{_fill_str(i_op_expand)}.not-{_fill_str(not_name_id)}'
                         else:
                             yield mapping
-
-
-def generate_arguments_in_target_space(src_arg: Argument,
-                                       tgt_arg: Argument,
-                                       add_complicated_arguments=False,
-                                       constraints: Optional[Dict[str, str]] = None,
-                                       shuffle=False,
-                                       allow_many_to_one=True,
-                                       elim_dneg=False) -> Iterable[Tuple[Argument, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula(src_arg.all_formulas,
-                                                  tgt_arg.all_formulas,
-                                                  add_complicated_arguments=add_complicated_arguments,
-                                                  constraints=constraints,
-                                                  shuffle=shuffle,
-                                                  allow_many_to_one=allow_many_to_one):
-        yield interpret_argument(src_arg, mapping, elim_dneg=elim_dneg), mapping
-
-
-def generate_formulas_in_target_space(src_formula: Formula,
-                                      tgt_formula: Formula,
-                                      add_complicated_arguments=False,
-                                      constraints: Optional[Dict[str, str]] = None,
-                                      shuffle=False,
-                                      allow_many_to_one=True,
-                                      elim_dneg=False) -> Iterable[Tuple[Formula, Dict[str, str]]]:
-    for mapping in generate_mappings_from_formula([src_formula],
-                                                  [tgt_formula],
-                                                  add_complicated_arguments=add_complicated_arguments,
-                                                  constraints=constraints,
-                                                  shuffle=shuffle,
-                                                  allow_many_to_one=allow_many_to_one):
-        yield interpret_formula(src_formula, mapping, elim_dneg=elim_dneg), mapping
 
 
 def generate_mappings_from_argument(src_argument: Argument,
@@ -207,6 +198,7 @@ def generate_mappings_from_argument(src_argument: Argument,
     yield from generate_mappings_from_formula(
         src_argument.all_formulas,
         tgt_argument.all_formulas,
+        intermediate_constants=src_argument.intermediate_constants,
         add_complicated_arguments=add_complicated_arguments,
         constraints=constraints,
         shuffle=shuffle,
@@ -218,6 +210,7 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
                                    tgt_formulas: List[Formula],
                                    add_complicated_arguments=False,
                                    constraints: Optional[Dict[str, str]] = None,
+                                   intermediate_constants: Optional[List[Formula]] = None,
                                    shuffle=False,
                                    allow_many_to_one=True,
                                    suppress_op_expansion_if_exists=False) -> Iterable[Dict[str, str]]:
@@ -242,10 +235,19 @@ def generate_mappings_from_formula(src_formulas: List[Formula],
 
         src_constants = sorted(set([c.rep for src_formula in complicated_formulas for c in src_formula.constants]))
         tgt_constants = sorted(set([c.rep for tgt_formula in tgt_formulas for c in tgt_formula.constants]))
+
+        if intermediate_constants is not None:
+            intermediate_constant_reps = list({c.rep
+                                               for c_formula in intermediate_constants
+                                               for c in c_formula.constants})
+        else:
+            intermediate_constant_reps = []
+
         yield from generate_mappings_from_predicates_and_constants(src_predicates,
                                                                    src_constants,
                                                                    tgt_predicates,
                                                                    tgt_constants,
+                                                                   intermediate_constants=intermediate_constant_reps,
                                                                    constraints=constraints,
                                                                    shuffle=shuffle,
                                                                    allow_many_to_one=allow_many_to_one)
@@ -256,6 +258,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
                                                     src_constants: List[str],
                                                     tgt_predicates: List[str],
                                                     tgt_constants: List[str],
+                                                    intermediate_constants: Optional[List[str]] = None,
                                                     constraints: Optional[Dict[str, str]] = None,
                                                     shuffle=False,
                                                     allow_many_to_one=True) -> Iterable[Dict[str, str]]:
@@ -281,6 +284,7 @@ def generate_mappings_from_predicates_and_constants(src_predicates: List[str],
             constraints=constraints,
             shuffle=shuffle,
             allow_many_to_one=allow_many_to_one,
+            many_to_one_ng_src_objs=intermediate_constants,
         )
 
     for pred_mappings in get_pred_mappings():
@@ -295,7 +299,8 @@ def _generate_mappings(src_objs: List[Any],
                        tgt_objs: List[Any],
                        constraints: Optional[Dict[Any, Any]] = None,
                        shuffle=False,
-                       allow_many_to_one=True) -> Iterable[Optional[Dict[Any, Any]]]:
+                       allow_many_to_one=True,
+                       many_to_one_ng_src_objs: Optional[List[Any]] = None) -> Iterable[Optional[Dict[Any, Any]]]:
     if len(set(src_objs)) != len(src_objs):
         raise ValueError('Elements in src_objs are not unique: {src_objs}')
     if len(set(tgt_objs)) != len(tgt_objs):
@@ -313,10 +318,23 @@ def _generate_mappings(src_objs: List[Any],
                                                   constraints=idx_constraints,
                                                   shuffle=shuffle,
                                                   allow_many_to_one=allow_many_to_one):
-            yield {
+            mapping = {
                 src_obj: tgt_obj
                 for src_obj, tgt_obj in zip(src_objs, chosen_tgt_objs)
             }
+
+            if many_to_one_ng_src_objs is not None:
+                used_by_others = False
+                for many_to_one_ng_src_obj in many_to_one_ng_src_objs:
+                    tgt_obj = mapping[many_to_one_ng_src_obj]
+                    if any(tgt_obj == other_tgt_obj for other_src_obj, other_tgt_obj in mapping.items()
+                           if other_src_obj != many_to_one_ng_src_obj):
+                        used_by_others = True
+                        break
+                if used_by_others:
+                    continue
+
+            yield mapping
     else:
         raise ValueError()
 
@@ -844,7 +862,7 @@ def generate_quantifier_axiom_arguments(
         raise NotImplementedError()
 
     if quantification_degree not in _QUANTIFICATION_DEGREES:
-        raise ValueError(f'Unknown quantification degree "{dquantification_degreeegree}"')
+        raise ValueError(f'Unknown quantification degree "{quantification_degree}"')
     if quantification_degree == 'all_constants_in_implication_premise_conclusion' and formula.rep.count(IMPLICATION) >= 2:
         raise NotImplementedError()
 

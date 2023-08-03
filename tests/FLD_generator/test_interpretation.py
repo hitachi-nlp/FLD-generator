@@ -209,16 +209,19 @@ def test_generate_quantifier_axiom_arguments():
     def check_generation(argument_type: str,
                          formula: Formula,
                          expected_arguments: List[Argument],
-                         quantify_implication_premise_conclusion_at_once=False,
-                         quantify_all_at_once=False,
+                         # quantify_implication_premise_conclusion_at_once=False,
+                         # quantify_all_at_once=False,
+                         quantification_degree: Optional[str] = 'one_constant',
                          e_elim_conclusion_formula_prototype: Optional[Formula] = None):
         print()
-        print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}, quantify_implication_premise_conclusion_at_once={quantify_implication_premise_conclusion_at_once}) ------')
+        # print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}, quantify_implication_premise_conclusion_at_once={quantify_implication_premise_conclusion_at_once}) ------')
+        print(f'--------- quantifier_axiom_arguments {argument_type} for "{formula.rep}" (quantification_degree={quantification_degree}) ------')
 
         generated_arguments = list(
             generate_quantifier_axiom_arguments(argument_type, formula, id_prefix='test',
-                                                quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
-                                                quantify_all_at_once=quantify_all_at_once,
+                                                # quantify_implication_premise_conclusion_at_once=quantify_implication_premise_conclusion_at_once,
+                                                # quantify_all_at_once=quantify_all_at_once,
+                                                quantification_degree=quantification_degree,
                                                 e_elim_conclusion_formula_prototype=e_elim_conclusion_formula_prototype)
         )
 
@@ -309,7 +312,8 @@ def test_generate_quantifier_axiom_arguments():
                 {},
             ),
         ],
-        quantify_implication_premise_conclusion_at_once=True,
+        # quantify_implication_premise_conclusion_at_once=True,
+        quantification_degree='all_constants_in_implication_premise_conclusion',
     )
 
     check_generation(
@@ -323,7 +327,8 @@ def test_generate_quantifier_axiom_arguments():
             ),
 
         ],
-        quantify_all_at_once=True
+        # quantify_all_at_once=True
+        quantification_degree='all_constants',
     )
 
     # ----------- universal_quantifier_intro --------------
@@ -416,7 +421,8 @@ def test_generate_quantifier_axiom_arguments():
                 intermediate_constants=[Formula('{i}')]
             ),
         ],
-        quantify_implication_premise_conclusion_at_once=True,
+        # quantify_implication_premise_conclusion_at_once=True,
+        quantification_degree='all_constants_in_implication_premise_conclusion',
     )
 
     check_generation(
@@ -431,7 +437,8 @@ def test_generate_quantifier_axiom_arguments():
             ),
 
         ],
-        quantify_all_at_once=True
+        # quantify_all_at_once=True
+        quantification_degree='all_constants',
     )
 
     # ----------- existential_quantifier_intro --------------
@@ -515,7 +522,8 @@ def test_generate_quantifier_axiom_arguments():
                 {},
             ),
         ],
-        quantify_implication_premise_conclusion_at_once=True,
+        # quantify_implication_premise_conclusion_at_once=True,
+        quantification_degree='all_constants_in_implication_premise_conclusion',
     )
 
     check_generation(
@@ -528,7 +536,8 @@ def test_generate_quantifier_axiom_arguments():
                 {},
             ),
         ],
-        quantify_all_at_once=True,
+        # quantify_all_at_once=True,
+        quantification_degree='all_constants',
     )
 
     # ----------- existential_quantifier_elim --------------
@@ -614,7 +623,8 @@ def test_generate_quantifier_axiom_arguments():
                 {},
             ),
         ],
-        quantify_implication_premise_conclusion_at_once=True,
+        # quantify_implication_premise_conclusion_at_once=True,
+        quantification_degree='all_constants_in_implication_premise_conclusion',
         e_elim_conclusion_formula_prototype=Formula('{F}{a}'),
     )
 
@@ -628,7 +638,8 @@ def test_generate_quantifier_axiom_arguments():
                 {},
             ),
         ],
-        quantify_all_at_once=True,
+        # quantify_all_at_once=True,
+        quantification_degree='all_constants',
         e_elim_conclusion_formula_prototype=Formula('{F}{a}'),
     )
 
@@ -638,14 +649,16 @@ def test_generate_quantifier_formulas():
     def check_generation(type_: str,
                          formula: Formula,
                          expected_formulas: List[Formula],
-                         quantify_all_at_once=False):
+                         # quantify_all_at_once=False,
+                         all_constants=False,
+                         ):
 
         print()
-        print(f'--------- quantifier_axiom_formulas {type_} for "{formula.rep}" (quantify_all_at_once={quantify_all_at_once}) ------')
+        print(f'--------- quantifier_axiom_formulas {type_} for "{formula.rep}" (all_constants={all_constants}) ------')
 
         quantified_formulas = [
             formula
-            for formula, _ in generate_quantifier_formulas(formula, type_, all_constants_at_once=quantify_all_at_once)
+            for formula, _ in generate_quantifier_formulas(formula, type_, all_constants=all_constants)
         ]
 
         assert(len(quantified_formulas) == len(expected_formulas))
@@ -660,7 +673,8 @@ def test_generate_quantifier_formulas():
         [
             Formula('(x): {F}x'),
         ],
-        quantify_all_at_once=False,
+        # quantify_all_at_once=False,
+        all_constants=False,
     )
 
     check_generation(
@@ -671,7 +685,8 @@ def test_generate_quantifier_formulas():
             Formula('(x): ({F}{a} v {G}x)'),
             Formula('(x): ({F}x v {G}x)'),
         ],
-        quantify_all_at_once=False,
+        # quantify_all_at_once=False,
+        all_constants=False,
     )
 
     check_generation(
@@ -680,7 +695,8 @@ def test_generate_quantifier_formulas():
         [
             Formula('(x): ({F}x v {G}x)'),
         ],
-        quantify_all_at_once=True,
+        # quantify_all_at_once=True,
+        all_constants=True,
     )
 
     check_generation(
@@ -688,7 +704,8 @@ def test_generate_quantifier_formulas():
         Formula('{A}'),
         [
         ],
-        quantify_all_at_once=False,
+        # quantify_all_at_once=False,
+        all_constants=False,
     )
 
 
@@ -697,13 +714,14 @@ def test_generate_quantifier_arguments():
     def check_generation(quantifier_type: str,
                          src_arg: Argument,
                          expected_arguments: List[Argument],
-                         quantify_all_at_once=False,
-                         quantify_all_at_once_in_a_formula=False):
+                         # quantify_all_at_once=False,
+                         # quantify_all_at_once_in_a_formula=False,
+                         quantification_degree='one_constant'):
         print()
-        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantify_all_at_once={quantify_all_at_once}, quantify_all_at_once_in_a_formula={quantify_all_at_once_in_a_formula}) ------')
+        print(f'--------- quantifier_arguments {quantifier_type} for "{str(src_arg)}" (quantification_degree={quantification_degree}) ------')
 
         generated_arguments = list(
-            generate_partially_quantifier_arguments(src_arg, quantifier_type, all_constants_at_once=quantify_all_at_once, quantify_all_at_once_in_a_formula=quantify_all_at_once_in_a_formula)
+            generate_partially_quantifier_arguments(src_arg, quantifier_type, quantification_degree=quantification_degree)
         )
 
         for generated_argument, _ in generated_arguments:
@@ -777,7 +795,8 @@ def test_generate_quantifier_arguments():
                 {},
             ),
         ],
-        quantify_all_at_once=True,
+        # quantify_all_at_once=True,
+        quantification_degree='all_constants',
     )
 
     check_generation(
@@ -806,7 +825,8 @@ def test_generate_quantifier_arguments():
                 {},
             ),
         ],
-        quantify_all_at_once_in_a_formula=True,
+        # quantify_all_at_once_in_a_formula=True,
+        quantification_degree='all_constants_in_implication_premise_conclusion',
     )
 
     premise = Formula('{A}{a}')
@@ -955,15 +975,96 @@ def test_generate_simplified_formulas():
     )
 
 
+def test_generate_mappings_from_formula():
+
+    def test(src_formula_reps: List[str],
+             tgt_formula_reps: List[str],
+             intermediate_constant_reps: List[str],
+             src_formula_0_gold_reps: List[str]):
+
+        src_formulas = [Formula(rep) for rep in src_formula_reps]
+        tgt_formulas = [Formula(rep) for rep in tgt_formula_reps]
+        intermediate_constants = [Formula(rep) for rep in intermediate_constant_reps]
+
+        mapped_formula_reps = set([])
+        for mapping in generate_mappings_from_formula(src_formulas, tgt_formulas, intermediate_constants=intermediate_constants):
+            mapped_formula_reps.add(interpret_formula(src_formulas[0], mapping).rep)
+        assert (mapped_formula_reps == set(src_formula_0_gold_reps))
+
+    test(
+        [
+            '{A}{a} & {B}{b}',
+            '(x): {A}x & {B}{b}',
+        ],
+        [
+            '{A}{k} & {B}{k}',
+        ],
+        [
+        ],
+        [
+            '{A}{k} & {A}{k}',
+            '{B}{k} & {A}{k}',
+            '{A}{k} & {B}{k}',
+            '{B}{k} & {B}{k}',
+        ]
+    )
+
+
+    test(
+        [
+            '{A}{a} & {B}{b}',
+            '(x): {A}x & {B}{b}',
+        ],
+        [
+            '{A}{k} & {B}{k}',
+        ],
+        [
+            '{a}',
+        ],
+        [
+        ]
+    )
+
+
+    test(
+        [
+            '{A}{a} & {B}{b}',
+            '(x): {A}x & {B}{b}',
+        ],
+        [
+            '{A}{k} & {B}{l}',
+        ],
+        [
+            '{a}',
+        ],
+        [
+            '{A}{k} & {A}{l}',
+            '{B}{k} & {A}{l}',
+            '{A}{k} & {B}{l}',
+            '{B}{k} & {B}{l}',
+
+            '{A}{l} & {A}{k}',
+            '{B}{l} & {A}{k}',
+            '{A}{l} & {B}{k}',
+            '{B}{l} & {B}{k}',
+
+        ]
+    )
+
+
+
+
 if __name__ == '__main__':
     # test_expand_op()
     # test_formula_is_identical_to()
     # test_formula_can_not_be_identical_to()
     # test_argument_is_identical_to()
 
-    test_generate_quantifier_axiom_arguments()
+    # test_generate_quantifier_axiom_arguments()
+
+    test_generate_mappings_from_formula()
 
     # test_generate_quantifier_formulas()
-    # # test_generate_quantifier_arguments()
+    # test_generate_quantifier_arguments()
 
     # test_generate_simplified_formulas()
