@@ -3511,7 +3511,8 @@ _DEFAULT_DATASET_SETTINGS = {
 
 
 
-
+        'translation_volume_to_weight': 'sqrt',
+        'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_configs': _TRANSLATION_THING_CONFIGS,
 
     },
@@ -3534,7 +3535,8 @@ _DEFAULT_DATASET_SETTINGS = {
 
 
 
-
+        'translation_volume_to_weight': 'sqrt',
+        'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_configs': _TRANSLATION_THING_CONFIGS,
 
 
