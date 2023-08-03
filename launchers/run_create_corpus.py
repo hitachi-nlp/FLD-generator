@@ -301,8 +301,8 @@ def main():
         # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal',
 
         # ---------------------------------- 20230729.case_study_finalize ------------------------------------
-        # '20230729.case_study_finalize.D3',
-        '20230729.case_study_finalize.D8',
+        '20230729.case_study_finalize.D3',
+        # '20230729.case_study_finalize.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -419,6 +419,7 @@ def make_dataset(dataset_name: str,
             'translation_configs',
             'limit_vocab_size_per_type',
             'translation_volume_to_weight',
+            'trnsltn_adj_vrb_nn_rt',
 
             'num_workers_per_job',
 
