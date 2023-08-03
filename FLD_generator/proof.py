@@ -2,6 +2,7 @@ from typing import List, Tuple, Optional, Iterable, Union, Dict, Set, Any
 from collections import defaultdict
 from copy import copy
 import logging
+from enum import Enum
 
 from .formula import Formula
 from .argument import Argument
@@ -11,13 +12,32 @@ from FLD_generator.utils import make_combination_from_iter
 logger = logging.getLogger(__name__)
 
 
+class IllegalTreeError(FormalLogicExceptionBase):
+    pass
+
+
+class IllegalTreeOpetaionError(FormalLogicExceptionBase):
+    pass
+
+
 class MultipleParentError(FormalLogicExceptionBase):
     pass
 
 
 class ProofNode:
 
-    def __init__(self, formula: Formula, argument: Optional[Argument] = None):
+    # class _NodeState(Enum):
+    #     LEAF = 'leaf'
+    #     ASSUMP = 'assump'
+
+    # class _ConstState(Enum):
+    #     HAS_INTERMEDIATE = 'has_intermediate'
+    #     NO_INTERMEDIATE = 'no_intermediate'
+
+    def __init__(self,
+                 formula: Formula,
+                 argument: Optional[Argument] = None,
+                 tree: Optional['ProofTree'] = None):
         self.formula = formula
         self.argument: Optional[Argument] = argument
 
@@ -27,22 +47,15 @@ class ProofNode:
         self._assump_parent: Optional[ProofNode] = None
         self._assump_children: List['ProofNode'] = []
 
+        self._tree = tree
+
     @property
     def parent(self):
         return self._parent
 
-    def set_parent(self, node: 'ProofNode', force=False) -> None:
-        node.add_child(self, force=force)
-
-    def _set_parent(self, node: 'ProofNode') -> None:
-        self._parent = node
-
-    def delete_parent(self) -> None:
-        if self._parent is not None:
-            self._parent.delete_child(self)
-
-    def _delete_parent(self) -> None:
-        self._parent = None
+    @property
+    def children(self):
+        return self._children
 
     @property
     def ancestors(self) -> List['ProofNode']:
@@ -52,78 +65,105 @@ class ProofNode:
             return [self.parent] + self.parent.ancestors
 
     @property
-    def children(self):
-        return self._children
-
-    def add_child(self, node: 'ProofNode', force=False) -> None:
-        if not force and node.parent is not None:
-            raise MultipleParentError('Can\'t add child since the child already has a parent.')
-
-        if node not in self._children:
-            self._children.append(node)
-        node._set_parent(self)
-
-    def delete_child(self, node: 'ProofNode') -> None:
-        for _node in self._children:
-            if _node  == node:
-                self._children.remove(_node)
-                _node._delete_parent()
-                break
-        if len(self._children) == 0:
-            self.argument = None
-
-    @property
     def descendants(self) -> List['ProofNode']:
         descendants = copy(self.children)
         for child in self.children:
             descendants += child.descendants
         return descendants
 
+    def set_parent(self, node: 'ProofNode', force=False, unchain=False) -> None:
+        if self.is_leaf:
+            pass
+        elif self.is_assump:
+            pass
+        if self.has_intermediate_constants:
+            pass
+
+        if unchain:
+            if not force and self.parent is not None:
+                raise MultipleParentError()
+            self._parent = node
+        else:
+            node.add_child(self, force=force)
+
+    def add_child(self, node: 'ProofNode', force=False) -> None:
+        if self.is_leaf:
+            pass
+        elif self.is_assump:
+            raise IllegalTreeOpetaionError()
+        if self.has_intermediate_constants:
+            pass
+
+        # if not force and node.parent is not None:
+        #     raise MultipleParentError()
+        # node._parent = self
+        node.set_parent(self, force=force, unchain=True)
+
+        if node not in self._children:
+            self._children.append(node)
+
+        self._share_tree(node)
+
     @property
     def assump_parent(self):
         return self._assump_parent
-
-    def set_assump_parent(self, node: 'ProofNode', force=False) -> None:
-        node.add_assump_child(self, force=force)
-
-    def _set_assump_parent(self, node: 'ProofNode') -> None:
-        self._assump_parent = node
-
-    def delete_assump_parent(self) -> None:
-        if self._assump_parent is not None:
-            self._assump_parent.delete_assump_child(self)
-
-    def _delete_assump_parent(self) -> None:
-        self._assump_parent = None
 
     @property
     def assump_children(self):
         return self._assump_children
 
+    def set_assump_parent(self, node: 'ProofNode', force=False, unchain=False) -> None:
+        if self.is_leaf:
+            pass
+        elif self.is_assump:
+            # exception will be raised below
+            pass
+        if self.has_intermediate_constants:
+            # This leads to illegality because:
+            # (i) nodes with intermediate constants must not be at leaf, but
+            # (ii) assumption nodes must be at leaf.
+            raise IllegalTreeOpetaionError()
+
+        if unchain:
+            if not force and node.assump_parent is not None:
+                raise MultipleParentError()
+            self._assump_parent = node
+        else:
+            node.add_assump_child(self, force=force)
+
     def add_assump_child(self, node: 'ProofNode', force=False) -> None:
-        if not force and node.assump_parent is not None:
-            raise MultipleParentError('Can\'t add assump_child since the assump_child already has a assump_parent.')
+        if self.is_leaf:
+            pass
+        if self.is_assump:
+            raise IllegalTreeOpetaionError()
+        if self.has_intermediate_constants:
+            # this can lead to illegality because the child will becom assump and intermediate both.
+            raise IllegalTreeOpetaionError()
+
+        # if not force and node.assump_parent is not None:
+        #     raise MultipleParentError()
+        # node._assump_parent = self
+        node.set_assump_parent(self, force=force, unchain=True)
 
         if node not in self._assump_children:
             self._assump_children.append(node)
-        node._set_assump_parent(self)
 
-    def delete_assump_child(self, node: 'ProofNode') -> None:
-        for _node in self._assump_children:
-            if _node  == node:
-                self._assump_children.remove(_node)
-                _node._delete_assump_parent()
-                break
-        if len(self._assump_children) == 0:
-            self.argument = None
+        self._share_tree(node)
 
     @property
-    def is_leaf(self) -> bool:
-        return len(self.children) == 0 and not self.is_assump
+    def tree(self) -> Optional['ProofTree']:
+        return self._tree
 
-    @property
-    def is_assump(self) -> bool:
-        return self.assump_parent is not None
+    def set_tree(self, tree: 'ProofTree') -> None:
+        if self.tree is not None and tree != self.tree:
+            raise IllegalTreeOpetaionError('The node already has a tree.')
+        self._tree = tree
+
+    def _share_tree(self, node: 'ProofNode') -> None:
+        if node.tree is not None:
+            self.set_tree(node.tree)
+        elif self.tree is not None:
+            node.set_tree(self.tree)
 
     def __str__(self) -> str:
         return f'ProofNode({self.formula}, is_assump={self.is_assump})'
@@ -131,27 +171,60 @@ class ProofNode:
     def __repr__(self) -> str:
         return str(self)
 
+    # @property
+    # def _states(self) -> Tuple[_NodeState, _ConstState]:
+    #     if self.is_leaf:
+    #         node_state = self._NodeState.LEAF
+    #     elif self.is_assump:
+    #         node_state = self._NodeState.ASSUMP
+
+    #     if self.has_intermediate_constants:
+    #         const_state = self._ConstState.HAS_INTERMEDIATE
+    #     else:
+    #         const_state = self._ConstState.NO_INTERMEDIATE
+
+    #     return (node_state, const_state)
+
+    @property
+    def is_leaf(self) -> bool:
+        return not self._has_children and self.assump_parent is None
+
+    @property
+    def is_assump(self) -> bool:
+        return not self._has_children and self.assump_parent is not None
+
+    @property
+    def has_intermediate_constants(self) -> bool:
+        my_consts = {c.rep for c in self.formula.constants}
+
+        int_consts: Set[str] = set([])
+        if self.argument is not None:
+            int_consts = int_consts.union({c.rep for c in self.argument.intermediate_constants})
+        if self.tree is not None:
+            int_consts = int_consts.union({c.rep for c in self.tree.intermediate_constants})
+
+        return len(my_consts.intersection(int_consts)) > 0
+
+    @property
+    def _has_children(self) -> bool:
+        return len(self.children) > 0
+
+    @property
+    def _has_parent(self) -> bool:
+        return self._parent is None
+
 
 class ProofTree:
 
     def __init__(self, nodes: Optional[List[ProofNode]] = None):
         self._nodes: List[ProofNode] = nodes or []
+        for node in self._nodes:
+            node.set_tree(self)
 
     def add_node(self, node: ProofNode) -> None:
         if node not in self._nodes:
             self._nodes.append(node)
-            # node._tree = self
-
-    def delete_node(self, node: ProofNode) -> None:
-        self._nodes.remove(node)
-
-        for node_in_tree in self._nodes:
-            if node.parent == node_in_tree:
-                node.delete_parent()
-            if node.assump_parent == node_in_tree:
-                node.delete_assump_parent()
-            node.delete_child(node_in_tree)
-            node.delete_assump_child(node_in_tree)
+            node.set_tree(self)
 
     @property
     def nodes(self) -> List[ProofNode]:
@@ -246,11 +319,6 @@ class ProofTree:
 
     def copy(self, return_alignment=False) -> Union['ProofTree', Tuple['ProofTree', Dict['ProofNode', 'ProofNode']]]:
         nodes = self.nodes
-        # assump_nodes = []
-        # for node in nodes:
-        #     for assump_child in node.assump_children:
-        #         if assump_child not in assump_nodes:
-        #             assump_nodes.append(assump_child)
 
         orig_nodes_to_orig_parents = {orig_node: orig_node.parent for orig_node in nodes}
         orig_nodes_to_orig_children = {orig_node: orig_node.children for orig_node in nodes}
@@ -317,37 +385,12 @@ class ProofTree:
                 for copy_child in copy_assump_children:
                     copy_node.add_assump_child(copy_child, force=True)
 
-        # copy_nodes_wo_assump = []
-        # for copy_node in copy_nodes:
-        #     orig_node = copy_nodes_to_orig_nodes[copy_node]
-        #     if orig_node not in assump_nodes:
-        #         copy_nodes_wo_assump.append(copy_node)
-
-        # return ProofTree(nodes=copy_nodes_wo_assump)
-
         if return_alignment:
             return ProofTree(nodes=copy_nodes), orig_nodes_to_copy_nodes
         else:
             return ProofTree(nodes=copy_nodes)
 
-
-# def find_must_consistent_node_sets(node: ProofNode) -> List[Set[ProofNode]]:
-#     if node.is_leaf:
-#         return [set([node])]
-# 
-#     from FLD_generator.proof_tree_generators import _can_argument_induce_contradiction as can_argument_induce_contradiction
-#     if node.argument is not None and can_argument_induce_contradiction(node.argument):
-#         if len(node.children) == 1:
-#             return find_must_consistent_node_sets(node.children[0])
-#         elif len(node.children) == 2:
-#             left_child_consistent_sets: List[Set[ProofNode]] = find_must_consistent_node_sets(node.children[0])
-#             right_child_consistent_sets: List[Set[ProofNode]] = find_must_consistent_node_sets(node.children[1])
-#             return left_child_consistent_sets + right_child_consistent_sets
-#         else:
-#             raise Exception('we think negation arguments only have one or two children. something wrong?')
-#     else:
-#         child_consistent_sets_list: List[List[Set[ProofNode]]] = []
-#         for child in node.children:
-#             child_consistent_sets_list.append(find_must_consistent_node_sets(child))
-#         combinations: List[List[Set[ProofNode]]] = list(make_combination_from_iter(child_consistent_sets_list))
-#         return [set.union(*sets) for sets in combinations]
+    def validate(self) -> None:
+        for node in self.nodes:
+            if node.has_intermediate_constants and (node.is_leaf or node.is_assump):
+                raise IllegalTreeError(self.format_str)

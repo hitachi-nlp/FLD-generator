@@ -3,12 +3,12 @@
   "sentence": {
 
     "{A}{a}": [
-      "<<clause::verb::{A}{a}specific_subj>>"
+      "<<clause::verb::{A}{a}specific_subj>>",
+      ["W_VOL_AVG__0.05", "<<sentence::¬(¬{A}{a})>>"]
     ],
     "¬{A}{a}": [
-      "__<<phrase::the_fact_that>> <<sentence::{A}{a}>> <<phrase::is_not_true>>",
-      "__comment: the above sentencei is OK but confusing when nested with other 'the_fact_that'",
-      "<<clause::verb::¬{A}{a}specific_subj>>"
+      "<<clause::verb::¬{A}{a}specific_subj>>",
+      ["W_VOL_AVG__0.05", "<<sentence::¬({A}{a})>>"]
     ],
 
 
@@ -26,20 +26,6 @@
     ],
 
 
-    "¬({A}{a} & {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} & {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}{a} & ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} & ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"
-    ],
-
-
     "({A}{a} v {B}{a})": [
       "<<clause::verb::({A}{a} v {B}{a})specific_subj>>"
     ],
@@ -51,20 +37,6 @@
     ],
     "(¬{A}{a} v ¬{B}{a})": [
       "<<clause::verb::(¬{A}{a} v ¬{B}{a})specific_subj>>"
-    ],
-
-
-    "¬({A}{a} v {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} v {B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬({A}{a} v ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"
-    ],
-    "¬(¬{A}{a} v ¬{B}{a})": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"
     ],
 
 

@@ -1,0 +1,124 @@
+{
+
+  "sentence": {
+
+    "{A}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A}>> <<phrase::is_true>>"]],
+    "¬{A}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A}>> <<phrase::is_true>>"]],
+
+
+    "({A} & {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} & {B})>> <<phrase::is_true>>"]],
+    "(¬{A} & {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} & {B})>> <<phrase::is_true>>"]],
+    "({A} & ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} & ¬{B})>> <<phrase::is_true>>"]],
+    "(¬{A} & ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} & ¬{B})>> <<phrase::is_true>>"]],
+
+
+    "¬({A} & {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} & {B})>> <<phrase::is_true>>"]],
+    "¬(¬{A} & {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} & {B})>> <<phrase::is_true>>"]],
+    "¬({A} & ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} & ¬{B})>> <<phrase::is_true>>"]],
+    "¬(¬{A} & ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} & ¬{B})>> <<phrase::is_true>>"]],
+
+
+    "({A} v {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} v {B})>> <<phrase::is_true>>"]],
+    "(¬{A} v {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} v {B})>> <<phrase::is_true>>"]],
+    "({A} v ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} v ¬{B})>> <<phrase::is_true>>"]],
+    "(¬{A} v ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} v ¬{B})>> <<phrase::is_true>>"]],
+
+
+    "¬({A} v {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} v {B})>> <<phrase::is_true>>"]],
+    "¬(¬{A} v {B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} v {B})>> <<phrase::is_true>>"]],
+    "¬({A} v ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} v ¬{B})>> <<phrase::is_true>>"]],
+    "¬(¬{A} v ¬{B})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} v ¬{B})>> <<phrase::is_true>>"]],
+
+
+    "{A} -> {B}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> {B}>> <<phrase::is_true>>"]],
+    "¬{A} -> {B}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> {B}>> <<phrase::is_true>>"]],
+    "{A} -> ¬{B}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬{B}>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬{B}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬{B}>> <<phrase::is_true>>"]],
+
+
+
+    "({A} & {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} & {B}) -> {C}>> <<phrase::is_true>>"]],
+    "(¬{A} & {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} & {B}) -> {C}>> <<phrase::is_true>>"]],
+    "({A} & ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} & ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "({A} & {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} & {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "(¬{A} & ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} & ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "(¬{A} & {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} & {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "({A} & ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} & ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "(¬{A} & ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} & ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+
+
+    "{A} -> ({B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ({B} & {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ({B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ({B} & {C})>> <<phrase::is_true>>"]],
+    "{A} -> (¬{B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> (¬{B} & {C})>> <<phrase::is_true>>"]],
+    "{A} -> ({B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ({B} & ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> (¬{B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> (¬{B} & {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ({B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ({B} & ¬{C})>> <<phrase::is_true>>"]],
+    "{A} -> (¬{B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> (¬{B} & ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> (¬{B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> (¬{B} & ¬{C})>> <<phrase::is_true>>"]],
+
+
+
+    "¬({A} & {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} & {B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} & {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} & {B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬({A} & ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} & ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬({A} & {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} & {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} & ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} & ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} & {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} & {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "¬({A} & ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} & ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} & ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} & ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    
+
+    "{A} -> ¬({B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬({B} & {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬({B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬({B} & {C})>> <<phrase::is_true>>"]],
+    "{A} -> ¬(¬{B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬(¬{B} & {C})>> <<phrase::is_true>>"]],
+    "{A} -> ¬({B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬({B} & ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬(¬{B} & {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬(¬{B} & {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬({B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬({B} & ¬{C})>> <<phrase::is_true>>"]],
+    "{A} -> ¬(¬{B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬(¬{B} & ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬(¬{B} & ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬(¬{B} & ¬{C})>> <<phrase::is_true>>"]],
+
+
+    "({A} v {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} v {B}) -> {C}>> <<phrase::is_true>>"]],
+    "(¬{A} v {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} v {B}) -> {C}>> <<phrase::is_true>>"]],
+    "({A} v ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} v ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "({A} v {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} v {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "(¬{A} v ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} v ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "(¬{A} v {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} v {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "({A} v ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A} v ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "(¬{A} v ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A} v ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+
+
+
+    "{A} -> ({B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ({B} v {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ({B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ({B} v {C})>> <<phrase::is_true>>"]],
+    "{A} -> (¬{B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> (¬{B} v {C})>> <<phrase::is_true>>"]],
+    "{A} -> ({B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ({B} v ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> (¬{B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> (¬{B} v {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ({B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ({B} v ¬{C})>> <<phrase::is_true>>"]],
+    "{A} -> (¬{B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> (¬{B} v ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> (¬{B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> (¬{B} v ¬{C})>> <<phrase::is_true>>"]],
+
+
+
+    "¬({A} v {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} v {B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} v {B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} v {B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬({A} v ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} v ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬({A} v {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} v {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} v ¬{B}) -> {C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} v ¬{B}) -> {C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} v {B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} v {B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "¬({A} v ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬({A} v ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+    "¬(¬{A} v ¬{B}) -> ¬{C}": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬(¬{A} v ¬{B}) -> ¬{C}>> <<phrase::is_true>>"]],
+
+
+    "{A} -> ¬({B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬({B} v {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬({B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬({B} v {C})>> <<phrase::is_true>>"]],
+    "{A} -> ¬(¬{B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬(¬{B} v {C})>> <<phrase::is_true>>"]],
+    "{A} -> ¬({B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬({B} v ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬(¬{B} v {C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬(¬{B} v {C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬({B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬({B} v ¬{C})>> <<phrase::is_true>>"]],
+    "{A} -> ¬(¬{B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A} -> ¬(¬{B} v ¬{C})>> <<phrase::is_true>>"]],
+    "¬{A} -> ¬(¬{B} v ¬{C})": [["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A} -> ¬(¬{B} v ¬{C})>> <<phrase::is_true>>"]]
+
+  }
+
+}

@@ -770,7 +770,8 @@
 
     "(x): {A}x -> {B}{b}": [
       "<<phrase::if_conjunction>> <<sentence::(Ex): {A}x>> <<phrase::maybe_then>> <<sentence::{B}{b}>>",
-      "<<sentence::{B}{b}>> <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>"
+      "<<sentence::{B}{b}>> <<phrase::if_conjunction>> <<sentence::(Ex): {A}x>>",
+      "__use of (Ex): in these sentences is correct (consider the meaning of whole the sentence)"
     ],
     "(x): ¬{A}x -> {B}{b}": [
       "<<phrase::if_conjunction>> <<sentence::(Ex): ¬{A}x>> <<phrase::maybe_then>> <<sentence::{B}{b}>>",

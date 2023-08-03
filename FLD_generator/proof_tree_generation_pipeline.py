@@ -3,7 +3,7 @@ import logging
 from collections import defaultdict
 import random
 
-from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation
+from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation, negate
 from FLD_generator.proof import ProofTree, ProofNode
 from FLD_generator.proof_tree_generators import ProofTreeGenerator
 from FLD_generator.formula_distractors import FormulaDistractor
@@ -85,6 +85,9 @@ class ProofTreeGenerationPipeline:
             force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
             get_all_trial_results=True,
         )
+        for tree in trial_proof_trees:
+            tree.validate()
+
 
         trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
         to_be_cached_trees, to_be_return_tree = trial_proof_trees[:-1], trial_proof_trees[-1]
@@ -166,7 +169,8 @@ class ProofTreeGenerationPipeline:
                 formula_distractors = []
             logger.info(_make_pretty_log('generate distractors', 'finish'))
 
-            root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
+            # root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
+            root_negation_formula = negate(proof_tree.root_node.formula)
             if self.generator.elim_dneg:
                 root_negation_formula = eliminate_double_negation(root_negation_formula)
 
@@ -198,12 +202,12 @@ class ProofTreeGenerationPipeline:
                 for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
                     if i_formula in assump_formula_indices:
-                        translation_prefix = 'let\'s assume that '
+                        translation_prefix = 'Let\'s assume that '
                     else:
                         translation_prefix = ''
 
                     if translation is not None:
-                        formula.translation = translation_prefix + translation
+                        formula.translation = translation_prefix + translation[0].lower() + translation[1:]
 
                     if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                         logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
@@ -255,7 +259,8 @@ class ProofTreeGenerationPipeline:
             'distractor': len(formula_distractors),
             'argument_stats': self._empty_argument_stat.copy(),
             'translation_stats': {
-                'name_stats': self._empty_translation_stat.copy(),
+                # 'name_stats': self._empty_translation_stat.copy(),
+                'name_stats': {},
                 'other_stats': defaultdict(int),
             },
         }

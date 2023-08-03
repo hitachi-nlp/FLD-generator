@@ -23,7 +23,7 @@ $ python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --depth-range '[1, 3]'\
-    --depth-distrib flat.no_reference\
+    --depth-distrib flat\
     --branch-extensions-range '[0, 5]'\
     --argument-config ./configs/arguments/axioms/\
     --complex-formula-arguments-weight 0.5\
@@ -33,10 +33,8 @@ $ python ./create_corpus.py\
     --quantifier-axiom existential_quantifier_intro\
     --quantifier-axiom existential_quantifier_elim\
     --translation-config ./configs/translations/thing.v1/\
-    --distractor "fallback(mixture(negative_tree_double).simplified_formula.various_form)"\
-    --distractors-range '[15, 20]'\
-    --translation-distractors-range '[0, 0]'\
-    --unknown-ratio 0.33\
+    --distractor "mixture(negative_tree_double.simplified_formula.various_form)"\
+    --distractors-range '[0, 20]'\
     --num-workers 5\
     --seed 0
 ```
@@ -47,7 +45,7 @@ $ python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --depth-range '[1, 8]'\
-    --depth-distrib flat.no_reference\
+    --depth-distrib flat\
     --branch-extensions-range '[0, 5]'\
     --argument-config ./configs/arguments/axioms/\
     --complex-formula-arguments-weight 0.5\
@@ -57,10 +55,8 @@ $ python ./create_corpus.py\
     --quantifier-axiom existential_quantifier_intro\
     --quantifier-axiom existential_quantifier_elim\
     --translation-config ./configs/translations/thing.v1/\
-    --distractor "fallback(mixture(negative_tree_double).simplified_formula.various_form)"\
-    --distractors-range '[15, 20]'\
-    --translation-distractors-range '[0, 0]'\
-    --unknown-ratio 0.33\
+    --distractor "mixture(negative_tree_double.simplified_formula.various_form)"\
+    --distractors-range '[0, 20]'\
     --num-workers 5\
     --seed 0
 ```

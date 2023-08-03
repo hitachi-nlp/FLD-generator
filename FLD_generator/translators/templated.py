@@ -2,11 +2,10 @@ import json
 from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
 from collections import OrderedDict, defaultdict
 import traceback
+import statistics
 import re
-from tqdm import tqdm
 import copy
 import random
-import re
 import logging
 from pprint import pformat, pprint
 from functools import lru_cache
@@ -15,7 +14,7 @@ from pathlib import Path
 
 from tqdm import tqdm
 from FLD_generator.utils import nested_merge
-from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, negate, ContradictionNegationError, IMPLICATION
+from FLD_generator.formula import Formula, PREDICATES, CONSTANTS
 from FLD_generator.word_banks.base import WordBank, ATTR
 from FLD_generator.interpretation import (
     generate_mappings_from_formula,
@@ -32,6 +31,7 @@ import line_profiling
 logger = logging.getLogger(__name__)
 
 _SENTENCE_TRANSLATION_PREFIX = 'sentence'
+_DEBUG = False
 
 
 class _PosFormConditionSet(set):
@@ -73,17 +73,20 @@ class TemplatedTranslator(Translator):
                  reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
                  words_per_type=5000,
-                 volume_to_weight: str = 'linear',
+                 volume_to_weight: str = 'log10',
+                 default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
+                 adj_verb_noun_ratio: Optional[List] = None,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
+        self._default_weight_factor_type = default_weight_factor_type
         self._two_layered_config = self._build_two_layered_config(config_json)
 
         self._load_words_by_pos_attrs_cache: Dict[Any, set] = {}
         self._load_words_by_pos_attrs_cache_interm: Dict[Any, set] = defaultdict(set)
 
-        self._translations: Dict[str, List[str]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
+        self._translations: Dict[str, List[Tuple[str, str]]] = self._two_layered_config[_SENTENCE_TRANSLATION_PREFIX]
         # sort by specificity
         self._translations = OrderedDict((
             (key, val)
@@ -102,7 +105,7 @@ class TemplatedTranslator(Translator):
 
         self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
-        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(self._word_bank)
+        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(self._word_bank, adj_verb_noun_ratio=adj_verb_noun_ratio)
         if limit_vocab_size_per_type is not None:
             self._zeroary_predicates = self._sample(self._zeroary_predicates, limit_vocab_size_per_type)
             self._unary_predicates = self._sample(self._unary_predicates, limit_vocab_size_per_type)
@@ -115,8 +118,10 @@ class TemplatedTranslator(Translator):
             self._volume_to_weight_func = lambda volume: volume
         elif volume_to_weight == 'sqrt':
             self._volume_to_weight_func = lambda volume: (math.sqrt(volume) if volume > 0 else 0)
+        elif volume_to_weight == 'logE':
+            self._volume_to_weight_func = lambda volume: (1 + math.log(volume) if volume > 0 else 0)
         elif volume_to_weight == 'log10':
-            self._volume_to_weight_func = lambda volume: (math.log10(volume) if volume > 0 else 0)
+            self._volume_to_weight_func = lambda volume: (1 + math.log10(volume) if volume > 0 else 0)
         elif volume_to_weight == 'inv_linear':
             self._volume_to_weight_func = lambda volume: (1.0 / volume if volume > 0 else 0)
         elif volume_to_weight.startswith('pow-'):
@@ -127,11 +132,11 @@ class TemplatedTranslator(Translator):
 
         self._do_translate_to_nl = do_translate_to_nl
 
-    def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[str]]]:
-        two_layered_config = self._completely_flatten_config(config)
+    def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[Tuple[str, str]]]]:
+        flat_config = self._completely_flatten_config(config)
 
-        one_hierarchy_config: Dict[str, Dict[str, List[str]]] = defaultdict(dict)
-        for key, val in two_layered_config.items():
+        two_layered_config: Dict[str, Dict[str, List[str]]] = defaultdict(dict)
+        for key, val in flat_config.items():
             if key.startswith('__'):
                 logger.info('skip key "%s"', key)
                 continue
@@ -144,86 +149,135 @@ class TemplatedTranslator(Translator):
             if transl_key.startswith('__'):
                 logger.info('skip key "%s"', key)
                 continue
-            one_hierarchy_config[prefix][transl_key] = val
-        return one_hierarchy_config
+            two_layered_config[prefix][transl_key] = val
+        return two_layered_config
 
-    def _completely_flatten_config(self, config: Dict) -> Dict[str, List[str]]:
+    def _completely_flatten_config(self, config: Dict) -> Dict[str, List[Tuple[float, str]]]:
         flat_config = {}
         for key, val in config.items():
-            if isinstance(val, str):
-                flat_config[key] = [val]
-            elif isinstance(val, list):
-                flat_config[key] = val
+            if isinstance(val, list):
+                children = []
+                for child in val:
+                    if isinstance(child, list):
+                        if not len(child) == 2:
+                            raise ValueError('invalid template {str(child)}')
+                        children.append(tuple(child))
+                    else:
+                        if not isinstance(child, str):
+                            raise ValueError('invalid template {str(child)}')
+                        children.append((self._default_weight_factor_type, child))
+                flat_config[key] = children
+
             elif isinstance(val, dict):
                 for child_key, child_val in self._completely_flatten_config(val).items():
                     flat_config[f'{key}::{child_key}'] = child_val
+
             else:
                 raise ValueError()
+
         return flat_config
 
     @profile
-    def _load_words(self, word_bank: WordBank) -> Tuple[List[str], List[str], List[str]]:
+    def _load_words(self,
+                    word_bank: WordBank,
+                    adj_verb_noun_ratio: Optional[List[float]] = None,
+                    prioritize_form_abundant_words=False) -> Tuple[List[str], List[str], List[str]]:
+
+        def get_num_form_inv_score(word: str, pos: POS, form_klass) -> int:
+            antonyms = self._get_inflated_words(word, pos, form_klass.ANTI)
+            if hasattr(form_klass, 'NEG'):
+                negnyms = self._get_inflated_words(word, pos, form_klass.NEG)
+            else:
+                negnyms = []
+            return 10 - (len(antonyms) + len(negnyms))
+
+        def order_words(words: Iterable[str], pos: POS, form_klass) -> List[str]:
+            if prioritize_form_abundant_words:
+                return sorted(
+                    words,
+                    key = lambda word: (get_num_form_inv_score(word, pos, form_klass), str(word))
+                )
+            else:
+                _words = list(words)
+                return self._sample(_words, len(_words))
 
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
-        nouns = sorted(
-            word
+        nouns = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if word not in intermediate_constant_nouns
+            if word not in intermediate_constant_nouns),
+            POS.NOUN,
+            NounForm,
         )
 
-        event_nouns = sorted(
-            word
+        event_nouns = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_event_noun in word_bank.get_attrs(word)
+            if ATTR.can_be_event_noun in word_bank.get_attrs(word)),
+            POS.NOUN,
+            NounForm,
         )
 
         logger.info('loading entity nouns ...')
-        entity_nouns = sorted(
-            word
+        entity_nouns = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)
+            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)),
+            POS.NOUN,
+            NounForm,
         )
 
         logger.info('loading adjs ...')
-        adjs = sorted(
-            word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)
+        adjs = order_words(
+            (word
+            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)),
+            POS.ADJ,
+            AdjForm,
         )
 
         logger.info('loading intransitive_verbs ...')
-        intransitive_verbs = sorted(
-            word
+        intransitive_verbs = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
-            if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)
+            if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)),
+            POS.VERB,
+            VerbForm,
         )
 
         logger.info('loading transitive_verbs ...')
-        transitive_verbs = sorted(
-            word
+        transitive_verbs = order_words(
+            (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
-            if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)
+            if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)),
+            POS.VERB,
+            VerbForm,
         )
 
         logger.info('making transitive verb and object combinations ...')
         transitive_verb_PASs = []
-        for verb in self._sample(transitive_verbs, 1000):  # limit 1000 for speed
-            for obj in self._sample(nouns, 1000):
+        for verb in self._take(transitive_verbs, 1000):  # limit 1000 for speed
+            for obj in self._take(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
 
-        zeroary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
-            + self._sample(transitive_verb_PASs, int(self.words_per_type * 4 / 3))\
-            + self._sample(event_nouns, int(self.words_per_type))
+        if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
+            raise ValueError()
+        adj_verb_noun_ratio = adj_verb_noun_ratio or [1, 2, 1]
+        adj_verb_noun_weight = [3 * ratio / sum(adj_verb_noun_ratio) for ratio in adj_verb_noun_ratio]
+
+        zeroary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+            + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+            + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+            + self._take(event_nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
         zeroary_predicates = sorted({word for word in zeroary_predicates})
 
-        unary_predicates = self._sample(adjs, self.words_per_type)\
-            + self._sample(intransitive_verbs, int(self.words_per_type * 2 / 3))\
-            + self._sample(transitive_verb_PASs, int(self.words_per_type * 4 / 3))\
-            + self._sample(nouns, int(self.words_per_type))
+        unary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+            + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+            + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+            + self._take(nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
         unary_predicates = sorted({word for word in unary_predicates})
 
-        constants = self._sample(entity_nouns, self.words_per_type)
+        constants = self._take(entity_nouns, self.words_per_type)
 
         return zeroary_predicates, unary_predicates, constants
 
@@ -244,8 +298,8 @@ class TemplatedTranslator(Translator):
                 continue
             if pos is not None and pos not in word_bank.get_pos(word):  # SLOW
                 continue
-            if any((attr not in word_bank.get_attrs(word)
-                    for attr in attrs)):
+            if any(attr not in word_bank.get_attrs(word)
+                   for attr in attrs):
                 continue
             intermediate_cache.add(word)
             yield word
@@ -258,9 +312,9 @@ class TemplatedTranslator(Translator):
 
     @property
     def translation_names(self) -> List[str]:
-        return [self._translation_name(sentence_key, nl)
+        return [self._translation_name(sentence_key, weighted_nl[1])
                 for sentence_key, nls in self._translations.items()
-                for nl in nls]
+                for weighted_nl in nls]
 
     def _translation_name(self, sentence_key: str, nl: str) -> str:
         return '____'.join([sentence_key, nl])
@@ -400,88 +454,6 @@ class TemplatedTranslator(Translator):
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
-    def _fix_translation(self, translation: str) -> str:
-        # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
-        translation = self._correct_indefinite_particles(translation)
-        translation = self._fix_pred_singularity(translation)
-        translation = self._reduce_degenerate_blanks(translation)
-        translation = self._uppercase_beggining(translation)
-        translation = self._add_ending_period(translation)
-
-        return translation
-
-    @profile
-    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
-        """ choose an appropriate indefinite particls, i.e., "a" or "an", depending on the word pronounciation """
-        words = sentence_wo_templates.split(' ')
-        corrected_words = []
-        for i_word, word in enumerate(words):
-            if word.lower() in ['a', 'an']:
-                if len(words) >= i_word + 2:
-                    next_word = words[i_word + 1]
-                    if starts_with_vowel_sound(next_word):
-                        corrected_words.append('an')
-                    else:
-                        corrected_words.append('a')
-                else:
-                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
-                    corrected_words.append(word)
-            else:
-                corrected_words.append(word)
-        corrected_sentence = ' '.join(corrected_words)
-        return corrected_sentence
-
-    def _fix_pred_singularity(self, translation: str) -> str:
-        # TODO: A and B {is, runs} => currently, we do not have ({A}{a} and {B}{a}) so that we do not this fix.
-        translation_fixed = translation
-
-        def fix_all_thing_is(translation: str, src_pred: str, dst_pred: str) -> str:
-            if re.match(f'.*all .*things? {src_pred}.*', translation):
-                translation_fixed = re.sub(f'(.*)all (.*)things? {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
-                return translation_fixed
-            else:
-                return translation
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is an', 'are')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is a', 'are')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is', 'are')
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was an', 'were')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was a', 'were')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was', 'wer')
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'does', 'do')
-
-        # all kind thing squashes apple -> all kind thing squash apple
-        if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
-            word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
-            if POS.VERB in self._word_bank.get_pos(word_after_things):
-                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)
-                translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
-
-        # target   : A and B causes C -> A and B cause C
-        # negagive : A runs and it is also kind
-        # def fix_A_and_B_is(translation: str, src_pred: str, dst_pred: str) -> str:
-        #     if re.match(f'.*[^ ]* and [^ ]* {src_pred}.*', translation):
-        #         translation_fixed = re.sub('.*([^ ]*) and ([^ ]*) {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
-        #         return translation_fixed
-        #     else:
-        #         return translation
-
-        if translation_fixed != translation:
-            logger.info('translation is fixed as:\norig : "%s"\nfixed: "%s"', translation, translation_fixed)
-
-        return translation_fixed
-
-    def _reduce_degenerate_blanks(self, translation: str) -> str:
-        return re.sub(r'\s+', ' ', translation).strip(' ')
-
-    def _uppercase_beggining(self, translation: str) -> str:
-        return translation[0].upper() + translation[1:]
-
-    def _add_ending_period(self, translation: str) -> str:
-        return translation + '.'
-
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
         for _transl_key, _ in self._translations.items():
@@ -495,95 +467,60 @@ class TemplatedTranslator(Translator):
 
     @profile
     def _sample_interpret_mapping_consistent_nl(self,
-                                             sentence_key: str,
-                                             interpret_mapping: Dict[str, str],
-                                             push_mapping: Dict[str, str],
-                                             block_shuffle=True,
-                                             volume_to_weight = lambda weight: weight) -> Optional[str]:
+                                                sentence_key: str,
+                                                interpret_mapping: Dict[str, str],
+                                                push_mapping: Dict[str, str],
+                                                block_shuffle=True,
+                                                volume_to_weight = lambda weight: weight,
+                                                log_indent=0) -> Optional[str]:
         """ Find translations the pos and nflations of which are consistent with interpret_mapping """
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '**** _sample_interpret_mapping_consistent_nl() ****')
+            print(' ' * log_indent + '    sentence_key:', sentence_key)
 
-        # # -------------------------------- XXX do not remove those code for debugging ------------------------------
-        # query = None
-        # # query = '^\({[A-Z]}{[a-z]} & {[A-Z]}{[a-z]}\) ->.*'
-        # if query is not None and re.match(query, sentence_key):
-        #     print('\n\n\n')
-        #     print(f'================ translator resolve debugging for key = "{sentence_key}" =====================')
+        iterators = []
+        weight_types: List[str] = []
+        volumes: List[int] = []
+        for weight_type, transl_nl in self._translations[sentence_key]:
+            iterator_with_volume = self._make_resolved_translation_sampler(  # SLOW
+                transl_nl,
+                # set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
+                set([transl_nl]),
+                constraint_interpret_mapping=interpret_mapping,
+                constraint_push_mapping=push_mapping,
+                block_shuffle=block_shuffle,
+                volume_to_weight=volume_to_weight,
+                log_indent = log_indent + 4,
+            )
 
-        #     print('\n\n\n')
-        #     print('--------------------- interp mapping ---------------------')
-
-        #     pull_mapping = {val: key for key, val in push_mapping.items()}
-        #     pprint({
-        #         pull_mapping[key]: val for key, val in interpret_mapping.items()
-        #         if key in pull_mapping
-        #     })
-
-        #     iterator_with_volumes = [
-        #         self._make_resolved_translation_sampler(transl_nl,
-        #                                                 set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-        #                                                 constraint_interpret_mapping=interpret_mapping,
-        #                                                 constraint_push_mapping=push_mapping,
-        #                                                 block_shuffle=block_shuffle,
-        #                                                 volume_to_weight=volume_to_weight,
-        #                                                 check_condition=False)
-        #         for transl_nl in self._translations[sentence_key]
-        #     ]
-        #     iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-        #     volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-
-        #     print('\n\n\n')
-        #     print('--------------------- resolved translations ---------------------')
-        #     is_target = False
-        #     for resolved_nl, condition in chained_sampling_from_weighted_iterators(
-        #         iterators,
-        #         [volume_to_weight(volume) for volume in volumes]
-        #     ):
-        #         condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
-        #             condition,
-        #             interpret_mapping,
-        #             push_mapping,
-        #         )
-        #         if condition_is_consistent:
-        #             print('OK:  ', resolved_nl)
-        #             if resolved_nl.find('a {A}[ADJ] {a}[NOUN] {B}[ADJ]') >= 0:
-        #                 is_target = True
-        #             if resolved_nl.startswith('a {A}[ADJ] and {B}[ADJ]'):
-        #                 print('!! found')
-        #                 raise
-        #         else:
-        #             print('NG:  ', resolved_nl)
-        #         # if resolved_nl.find('a {A}[ADJ] and {B}[ADJ]') >= 0:
-        #         #     break
-        #     if is_target:
-        #         raise
-
-        iterator_with_volumes = [
-            self._make_resolved_translation_sampler(transl_nl,
-                                                    set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
-                                                    constraint_interpret_mapping=interpret_mapping,
-                                                    constraint_push_mapping=push_mapping,
-                                                    block_shuffle=block_shuffle,
-                                                    volume_to_weight=volume_to_weight)
-            for transl_nl in self._translations[sentence_key]
-        ]
-        iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-        volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
+            iterators.append(iterator_with_volume[0])
+            weight_types.append(weight_type)
+            volumes.append(iterator_with_volume[1])
 
         if block_shuffle:
+
+            volume_weights = [volume_to_weight(volume) for volume in volumes]
+            weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
+                       for i_iterator, weight_type in enumerate(weight_types)]
+
+            @profile
             def generate():
                 for resolved_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
-                    [volume_to_weight(volume) for volume in volumes]
+                    weights,
                 ):
                     yield resolved_nl, condition
 
         else:
+
+            @profile
             def generate():
                 for iterator in iterators:
                     for resolved_nl, condition in iterator:
                         yield resolved_nl, condition
 
-        for resolved_nl, condition in generate():
+        for resolved_nl, condition in generate():   # SLOW
 
             condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
                 condition,
@@ -595,45 +532,68 @@ class TemplatedTranslator(Translator):
 
         return None
 
-    @profile
-    def _interpret_mapping_is_consistent_with_condition(self,
-                                                     condition: _PosFormConditionSet,
-                                                     interpret_mapping: Dict[str, str],
-                                                     push_mapping: Dict[str, str]) -> bool:
-        condition_is_consistent = True
-        for interprand_rep, pos, form in condition:
-            interprand_rep_pushed = push_mapping[interprand_rep]
-            word = interpret_mapping[interprand_rep_pushed]
+    @lru_cache(maxsize=100000)
+    def _get_weight_factor_func(self, type_: str) -> Callable[[List[float], int], float]:
+        """
 
-            if pos not in self._get_pos(word):
-                condition_is_consistent = False
-                break
+        examples of type_
+            "W_VOL__1.0"
+            "W_VOL_AVG__0.1"
+        """
+        volume_weight_agg, factor = type_.split('__')
 
-            inflated_word = self._get_inflated_word(word, pos, form)
-            if inflated_word is None:
-                condition_is_consistent = False
-                break
+        _factor = float(factor)
 
-        return condition_is_consistent
+        if volume_weight_agg == 'W_VOL':
+
+            def agg_volume_weights(volume_weights: List[float], i: int) -> float:
+                return volume_weights[i]
+
+        elif volume_weight_agg == 'W_VOL_AVG':
+
+            def agg_volume_weights(volume_weights: List[float], i: int) -> float:
+                if len(volume_weights) == 1:
+                    return volume_weights[i]
+                else:
+                    other_avg = statistics.mean(volume_weights[j] for j in range(len(volume_weights))
+                                                if j != i)
+                    return other_avg
+
+        else:
+            raise ValueError(f'Unknown volume weight aggregation type "{volume_weight_agg}"')
+        
+        def get_weight(volume_weights: List[float], i: int) -> float:
+            return agg_volume_weights(volume_weights, i) * _factor
+
+        return get_weight
 
     @profile
     def _make_resolved_translation_sampler(self,
                                            nl: str,
-                                           ancestor_keys: Set[str],
+                                           # ancestor_keys: Set[str],
+                                           ancestor_nls: Set[str],
                                            constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
-                                           check_condition=True) -> Tuple[Iterable[NLAndCondition], int]:
+                                           check_condition=True,
+                                           log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+        # SLOW due to the many calls
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '== _make_resolved_translation_sampler() ==')
+            print(' ' * log_indent + '    nl:', nl)
+            # print(' ' * log_indent + '    ancestor_keys:', ancestor_keys)
+            print(' ' * log_indent + '    ancestor_nls:', ancestor_nls)
         if nl.startswith('__'):
             return iter([]), 0
 
-        condition = self._get_pos_form_consistency_condition(nl)
+        condition = self._get_pos_form_consistency_condition(nl)  # SLOW
         if constraint_push_mapping is not None\
                 and check_condition\
                 and not self._interpret_mapping_is_consistent_with_condition(condition,
-                                                                          constraint_interpret_mapping,
-                                                                          constraint_push_mapping):
+                                                                             constraint_interpret_mapping,
+                                                                             constraint_push_mapping):
             return iter([]), 0
 
         templates = list(self._extract_templates(nl))
@@ -642,26 +602,33 @@ class TemplatedTranslator(Translator):
 
             def generate():
                 yield nl, condition
+
         else:
+
             class ResolveTemplateGenerator:
 
+                # @profile
                 def __init__(self, parent_translator: TemplatedTranslator, template: str):
                     self._template = template
                     self._parent_translator = parent_translator
                     self.volume = self._resolve()[1]
 
+                # @profile
                 def __call__(self) -> Iterable[NLAndCondition]:
                     return self._resolve()[0]
 
+                # @profile
                 def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
-                        ancestor_keys,
+                        # ancestor_keys,
+                        ancestor_nls,
                         constraint_interpret_mapping=constraint_interpret_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
                         check_condition=check_condition,
+                        log_indent = log_indent + 4
                     )
 
             template_resolve_generators = [ResolveTemplateGenerator(self, template) for template in templates]
@@ -691,46 +658,106 @@ class TemplatedTranslator(Translator):
     @profile
     def _make_resolved_template_sampler(self,
                                         template: str,
-                                        ancestor_keys: Set[str],
+                                        # ancestor_keys: Set[str],
+                                        ancestor_nls: Set[str],
                                         constraint_interpret_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
-                                        check_condition=True) -> Tuple[Iterable[NLAndCondition], int]:
-        template_key, template_nls = self._find_template_nls(template, tuple(sorted(ancestor_keys)))
+                                        check_condition=True,
+                                        log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '-- _make_resolved_template_sampler() --')
+            print(' ' * log_indent + '    template:', template)
+            # print(' ' * log_indent + '    ancestor_keys:', ancestor_keys)
+            print(' ' * log_indent + '    ancestor_nls:', ancestor_nls)
+        template_key, template_nls = self._find_template_nls(template,
+                                                             # tuple(sorted(ancestor_keys)),
+                                                             # tuple(sorted(ancestor_nls.union(set([template])))),
+                                                             log_indent = log_indent + 4)
         if template_key is None:
             raise Exception(f'template for {template} not found.')
-        iterator_with_volumes = [self._make_resolved_translation_sampler(template_nl,
-                                                                         ancestor_keys.union(set([template_key])),
-                                                                         constraint_interpret_mapping=constraint_interpret_mapping,
-                                                                         constraint_push_mapping=constraint_push_mapping,
-                                                                         block_shuffle=shuffle,
-                                                                         volume_to_weight=volume_to_weight,
-                                                                         check_condition=check_condition)
-                                 for template_nl in template_nls]
-        iterators = [iterator_with_volume[0] for iterator_with_volume in iterator_with_volumes]
-        volumes = [iterator_with_volume[1] for iterator_with_volume in iterator_with_volumes]
-        volume_sum = sum(volumes)
+
+        iterators = []
+        weight_types: List[str] = []
+        volumes: List[int] = []
+        for weight, template_nl in template_nls:
+            if template_nl in ancestor_nls:
+                continue
+
+            iterator_with_volume = self._make_resolved_translation_sampler(template_nl,
+                                                                           # ancestor_keys.union(set([template_key])),
+                                                                           ancestor_nls.union(set([template_nl])),
+                                                                           constraint_interpret_mapping=constraint_interpret_mapping,
+                                                                           constraint_push_mapping=constraint_push_mapping,
+                                                                           block_shuffle=shuffle,
+                                                                           volume_to_weight=volume_to_weight,
+                                                                           check_condition=check_condition,
+                                                                           log_indent = log_indent + 4)
+            iterators.append(iterator_with_volume[0])
+            weight_types.append(weight)
+            volumes.append(iterator_with_volume[1])
 
         if shuffle:
+
+            volume_weights = [volume_to_weight(volume) for volume in volumes]
+            weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
+                       for i_iterator, weight_type in enumerate(weight_types)]
+
+            @profile
             def generate():
                 for resolved_template_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
-                    [volume_to_weight(volume) for volume in volumes]
+                    weights,
                 ):
                     yield resolved_template_nl, condition
 
         else:
+
+            @profile
             def generate():
                 for iterator in iterators:
                     for resolved_template_nl, condition in iterator:
                         yield resolved_template_nl, condition
 
-        return generate(), volume_sum
+        return generate(), sum(volumes)
+
+    @profile
+    def _interpret_mapping_is_consistent_with_condition(self,
+                                                        condition: _PosFormConditionSet,
+                                                        interpret_mapping: Dict[str, str],
+                                                        push_mapping: Dict[str, str]) -> bool:
+        condition_is_consistent = True
+        for interprand_rep, pos, form in condition:
+            interprand_rep_pushed = push_mapping[interprand_rep]
+            word = interpret_mapping[interprand_rep_pushed]
+
+            if pos not in self._get_pos(word):
+                condition_is_consistent = False
+                break
+
+            inflated_words = self._get_inflated_words(word, pos, form)
+            if len(inflated_words) == 0:
+                condition_is_consistent = False
+                break
+
+        return condition_is_consistent
 
     @lru_cache(maxsize=1000000)
-    def _find_template_nls(self, template: str, ancestor_keys: Tuple[str]) -> Tuple[Optional[str], Optional[List[str]]]:
-        ancestor_keys_set = set(ancestor_keys)
+    def _find_template_nls(self,
+                           template: str,
+                           # ancestor_keys: Tuple[str],
+                           # ancestor_nls: Tuple[str],
+                           log_indent=0) -> Tuple[Optional[str], Optional[List[Tuple[str, str]]]]:
+        if _DEBUG:
+            print()
+            print(' ' * log_indent + '-- _find_template_nls() --')
+            print(' ' * log_indent + '    template:', template)
+            # print(' ' * log_indent + '    ancestor_keys:', ancestor_keys)
+            # print(' ' * log_indent + '    ancestor_nls:', ancestor_nls)
+        # ancestor_keys_set = set(ancestor_keys)
+        # ancestor_nls_set = set(ancestor_nls)
 
         template_prefix = '::'.join(template.split('::')[:-1])
         template_key = template.split('::')[-1]
@@ -741,9 +768,6 @@ class TemplatedTranslator(Translator):
 
         config = self._two_layered_config[template_prefix]
         for transl_key, transl_nls in config.items():
-            if transl_key in ancestor_keys_set:  # prevent circular reference
-                continue
-
             key_formula = Formula(transl_key)
             if formula_can_not_be_identical_to(key_formula, template_key_formula):
                 continue
@@ -753,8 +777,10 @@ class TemplatedTranslator(Translator):
                 key_formula_pulled = interpret_formula(key_formula, mapping)
                 if key_formula_pulled.rep == template_key_formula.rep:
                     found_template_key = transl_key
-                    found_template_nls = [interpret_formula(Formula(transl_nl), mapping).rep
-                                          for transl_nl in transl_nls]
+                    found_template_nls = []
+                    for weighted_nl in transl_nls:
+                        weight_type, nl = weighted_nl
+                        found_template_nls.append((weight_type, interpret_formula(Formula(nl), mapping).rep))
                     break
 
             if found_template_nls is not None:
@@ -922,9 +948,19 @@ class TemplatedTranslator(Translator):
             return random.sample(elems, size)
 
     @profile
+    def _take(self, elems: List[Any], size: int) -> List[Any]:
+        if len(elems) < size:
+            logger.warning('Can\'t take %d elements. Will tak;e only %d elements.',
+                           size,
+                           len(elems))
+        # if size * 3 < len(elems):
+        #     logger.warning('taking only %d heading words from %d words. This might yield a skew distribution', size, len(elems))
+        return elems[:size]
+
+    @profile
     def _make_word_inflated_interpret_mapping(self,
-                                           interpret_mapping: Dict[str, str],
-                                           interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
+                                              interpret_mapping: Dict[str, str],
+                                              interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
         inflated_mapping = {}
         stats = defaultdict(int)
 
@@ -939,8 +975,13 @@ class TemplatedTranslator(Translator):
                 pos, form = pos_form
                 if self.log_stats:
                     stats[f'{pos.value}.{form.value}'] += 1
-                inflated_word = self._get_inflated_word(word, pos, form)
-                assert(inflated_word is not None)
+                inflated_words = self._get_inflated_words(word, pos, form)
+
+                if form in [NounForm.ANTI, AdjForm.ANTI, VerbForm.ANTI]:
+                    logger.critical('got antonyms for word "%s": %s', word, str(inflated_words))
+
+                assert len(inflated_words) > 0
+                inflated_word = random.choice(inflated_words)
             else:
                 raise Exception(
                     f'Something wrong. Since we have checked in that the translation indeed exists, this program must not pass this block.  The problematic translation is "{interprand_templated_translation_pushed}" and unfound string is "{interprand_rep}["',
@@ -984,25 +1025,29 @@ class TemplatedTranslator(Translator):
         return pos, form
 
     @lru_cache(maxsize=1000000)
-    def _get_inflated_word(self, word: str, pos: POS, form: WordForm) -> Optional[str]:
+    def _get_inflated_words(self, word: str, pos: POS, form: WordForm) -> Tuple[str, ...]:
         if pos not in self._get_pos(word):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
         if pos == POS.ADJ:
             force = True
         elif pos == POS.VERB:
-            force = True
+            force = False
         elif pos == POS.NOUN:
             force = False
         else:
             raise ValueError()
 
         _word, obj = self._parse_word_with_obj(word)
-        _word_inflated = self._word_bank.change_word_form(_word, form, force=force)
-        if _word_inflated is None:
-            return None
+        inflated_words = self._word_bank.change_word_form(_word, form, force=False)
+        if len(inflated_words) == 0 and force:
+            inflated_words = self._word_bank.change_word_form(_word, form, force=True)
+
+        if len(inflated_words) == 0:
+            return ()
         else:
-            return self._pair_word_with_obj(_word_inflated, obj)
+            return tuple(self._pair_word_with_obj(word, obj)
+                         for word in inflated_words)
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
@@ -1034,14 +1079,93 @@ class TemplatedTranslator(Translator):
         else:
             return '__O__'.join([word, obj])
 
+    def _fix_translation(self, translation: str) -> str:
+        # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
+        translation = self._correct_indefinite_particles(translation)
+        translation = self._fix_pred_singularity(translation)
+        translation = self._reduce_degenerate_blanks(translation)
+        translation = self._uppercase_beggining(translation)
+        translation = self._add_ending_period(translation)
+
+        return translation
+
+    @profile
+    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
+        """ choose an appropriate indefinite particls, i.e., "a" or "an", depending on the word pronounciation """
+        words = sentence_wo_templates.split(' ')
+        corrected_words = []
+        for i_word, word in enumerate(words):
+            if word.lower() in ['a', 'an']:
+                if len(words) >= i_word + 2:
+                    next_word = words[i_word + 1]
+                    if starts_with_vowel_sound(next_word):
+                        corrected_words.append('an')
+                    else:
+                        corrected_words.append('a')
+                else:
+                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
+                    corrected_words.append(word)
+            else:
+                corrected_words.append(word)
+        corrected_sentence = ' '.join(corrected_words)
+        return corrected_sentence
+
+    def _fix_pred_singularity(self, translation: str) -> str:
+        # TODO: A and B {is, runs} => currently, we do not have ({A}{a} and {B}{a}) so that we do not this fix.
+        translation_fixed = translation
+
+        def fix_all_thing_is(translation: str, src_pred: str, dst_pred: str) -> str:
+            if re.match(f'.*all .*things? {src_pred}.*', translation):
+                translation_fixed = re.sub(f'(.*)all (.*)things? {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
+                return translation_fixed
+            else:
+                return translation
+
+        translation_fixed = fix_all_thing_is(translation_fixed, 'is an', 'are')
+        translation_fixed = fix_all_thing_is(translation_fixed, 'is a', 'are')
+        translation_fixed = fix_all_thing_is(translation_fixed, 'is', 'are')
+
+        translation_fixed = fix_all_thing_is(translation_fixed, 'was an', 'were')
+        translation_fixed = fix_all_thing_is(translation_fixed, 'was a', 'were')
+        translation_fixed = fix_all_thing_is(translation_fixed, 'was', 'wer')
+
+        translation_fixed = fix_all_thing_is(translation_fixed, 'does', 'do')
+
+        # all kind thing squashes apple -> all kind thing squash apple
+        if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
+            word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
+            if POS.VERB in self._word_bank.get_pos(word_after_things):
+                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)[0]
+                translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
+
+        # target   : A and B causes C -> A and B cause C
+        # negagive : A runs and it is also kind
+        # def fix_A_and_B_is(translation: str, src_pred: str, dst_pred: str) -> str:
+        #     if re.match(f'.*[^ ]* and [^ ]* {src_pred}.*', translation):
+        #         translation_fixed = re.sub('.*([^ ]*) and ([^ ]*) {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
+        #         return translation_fixed
+        #     else:
+        #         return translation
+
+        if translation_fixed != translation:
+            logger.info('translation is fixed as:\norig : "%s"\nfixed: "%s"', translation, translation_fixed)
+
+        return translation_fixed
+
+    def _reduce_degenerate_blanks(self, translation: str) -> str:
+        return re.sub(r'\s+', ' ', translation).strip(' ')
+
+    def _uppercase_beggining(self, translation: str) -> str:
+        return translation[0].upper() + translation[1:]
+
+    def _add_ending_period(self, translation: str) -> str:
+        return translation + '.'
+
 
 def build(config_paths: List[str],
           word_bank: WordBank,
-          use_fixed_translation=False,
-          reused_object_nouns_max_factor=0.0,
-          limit_vocab_size_per_type: Optional[int] = None,
-          volume_to_weight: str = 'linear',
-          do_translate_to_nl=True):
+          adj_verb_noun_ratio: Optional[str] = None,
+          **kwargs):
 
     merged_config_json = {}
     for config_path in config_paths:
@@ -1051,16 +1175,16 @@ def build(config_paths: List[str],
         else:
             all_paths = [_config_path]
         for _path in all_paths:
+            logger.info('loading "%s"', str(_path))
             merged_config_json = nested_merge(merged_config_json,
                                               json.load(open(str(_path))))
 
+    adj_verb_noun_ratio = adj_verb_noun_ratio or '1-1-1'
+    _adj_verb_noun_ratio = [float(ratio) for ratio in adj_verb_noun_ratio.split('-')]
     translator = TemplatedTranslator(
         merged_config_json,
         word_bank,
-        use_fixed_translation=use_fixed_translation,
-        reused_object_nouns_max_factor=reused_object_nouns_max_factor,
-        limit_vocab_size_per_type=limit_vocab_size_per_type,
-        volume_to_weight=volume_to_weight,
-        do_translate_to_nl=do_translate_to_nl,
+        adj_verb_noun_ratio=_adj_verb_noun_ratio,
+        **kwargs,
     )
     return translator

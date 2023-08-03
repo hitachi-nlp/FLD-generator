@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 @profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 50) -> None:
+                     num_dataset: int = 10000) -> None:
     # agg_stats: Dict[str, int] = defaultdict(int)
     for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
         log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
@@ -45,21 +45,43 @@ def generate_dataset(dataset: NLProofSDataset,
 @profile
 def test_generate_dataset():
 
+    word_bank = None
+    # word_bank = build_wordnet_wordbank('eng')
+
+    translator = None
+    # translator = build_translator(
+    #     ['./configs/translations/thing.v1/'],
+    #     word_bank,
+    #     use_fixed_translation=False,
+    #     reused_object_nouns_max_factor=1.0,
+    #     limit_vocab_size_per_type=None,
+    #     # volume_to_weight='sqrt',
+    #     volume_to_weight='logE',
+    #     default_weight_factor_type='W_VOL__1.0',
+    #     adj_verb_noun_ratio='1-1-1',
+    # )
+
+    translation_distractor = None
+    # translation_distractor = build_translation_distractor(word_bank=word_bank)
+
     generator = build_generator(
         [
-            './configs/arguments/axioms/axiom.pred_only.json',
-            './configs/arguments/axioms/axiom.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.and_or.pred_only.json',
-            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/',
 
-            './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
-            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axioms/axiom.pred_only.json',
+            # './configs/arguments/axioms/axiom.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.negation.pred_only.json',
-            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            # './configs/arguments/axioms/axiom.and_or.pred_only.json',
+            # './configs/arguments/axioms/axiom.and_or.pred_arg.json',
 
-            './configs/arguments/others/AACorpus.pred_arg.json',
+            # './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+
+            # './configs/arguments/axioms/axiom.negation.pred_only.json',
+            # './configs/arguments/axioms/axiom.negation.pred_arg.json',
+
+            # './configs/arguments/others/AACorpus.pred_arg.json',
 
             # # -- we exclude the below for speed --
             # './configs/arguments/theorems/theorem.pred_only.json',
@@ -81,15 +103,14 @@ def test_generate_dataset():
             # './configs/arguments/theorems/universal_theorem.theorem.and_or.pred_arg.json',
         ],
         elim_dneg=True,
-        complex_formula_arguments_weight=0.3,
-        quantifier_axiom_arguments_weight=0.5,
+        quantifier_axiom_arguments_weight=0.2,
+        complex_formula_arguments_weight=0.5,
         quantifier_axioms=[
             'universal_quantifier_elim',
             'universal_quantifier_intro',
             'existential_quantifier_intro',
             'existential_quantifier_elim',
         ],
-        quantification_degree='all_constants',
     )
 
     distractor = build_distractor(
@@ -101,27 +122,12 @@ def test_generate_dataset():
         # 'mixture(negative_tree_double.simplified_formula.various_form)',
         # 'fallback(negative_tree.various_form)',
         # 'fallback(various_form.negative_tree)',
-        'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
+
+        # 'fallback(mixture(negative_tree_double).simplified_formula.various_form)',
+        'mixture(negative_tree_double.simplified_formula.various_form)',
 
         generator=generator,
     )
-
-    # word_bank = None
-    word_bank = build_wordnet_wordbank('eng')
-
-    # translator = None
-    translator = build_translator(
-        ['./configs/translations/thing.v1/'],
-        word_bank,
-        use_fixed_translation=True,
-        reused_object_nouns_max_factor=1.0,
-        limit_vocab_size_per_type=None,
-        volume_to_weight='sqrt',
-        do_translate_to_nl=True,
-    )
-
-    translation_distractor = None
-    # translation_distractor = build_translation_distractor(word_bank=word_bank)
 
     pipeline = ProofTreeGenerationPipeline(
         generator,
@@ -132,12 +138,11 @@ def test_generate_dataset():
         add_subj_obj_swapped_distractor=True,
     )
 
-    depth_range = (1, 3)
-    branch_extensions_range = (2, 5)
-    distractors_range = (15, 20)
+    depth_range = (1, 8)
+    branch_extensions_range = (0, 5)
+    distractors_range = (0, 20)
 
     unknown_ratio = 0.33
-    depth_1_reference_weight = None
 
     use_collapsed_translation_nodes_for_unknown_tree = False
     translation_distractors_range = (0, 5) if translation_distractor is not None else (0, 0)
@@ -147,7 +152,6 @@ def test_generate_dataset():
 
         depth_range,
         branch_extensions_range,
-        depth_1_reference_weight=depth_1_reference_weight,
         unknown_ratio=unknown_ratio,
 
         distractors_range=distractors_range,

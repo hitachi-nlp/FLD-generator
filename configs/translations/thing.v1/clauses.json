@@ -353,8 +353,6 @@
         "it <<phrase::{A}predicate>>"
       ],
       "¬{A}it": [
-        "__<<phrase::the_fact_that>> <<clause::verb::{A}it>> <<phrase::is_not_true>>",
-        "__comment: the above sentencei is OK but confusing when nested with other 'the_fact_that'",
         "it <<phrase::¬{A}predicate>>"
       ],
 
@@ -440,39 +438,47 @@
 
           "__comment: '{A} and {B} resulted in {C}' does not mean that {A} and {B} are both needed at the same time to lead to the conclusion.",
           "__",
-          "__"
+          "__",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} & {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} & {B})>>",
 
           "__",
-          "__"
+          "__",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "({A} & ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} & ¬{B})>>",
 
           "__",
-          "__"
+          "__",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} & ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} & ¬{B})>>",
 
           "__",
-          "__"
+          "__",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
 
 
       "¬({A} & {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::({A} & {B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} & {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::¬(¬{A} & {B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
       "¬({A} & ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::({A} & ¬{B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} & ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} & ¬{B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
 
 
@@ -480,39 +486,47 @@
           "that <<clause::verb::({A} v {B})>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} v {B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v {B})>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "({A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::({A} v ¬{B})>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
       "(¬{A} v ¬{B}).event_occurrence": [
           "that <<clause::verb::(¬{A} v ¬{B})>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both"
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+
+          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
       ],
 
 
       "¬({A} v {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::({A} v {B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} v {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::¬(¬{A} v {B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
       "¬({A} v ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::({A} v ¬{B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
       "¬(¬{A} v ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::verb::(¬{A} v ¬{B})>> <<phrase::is_not_true>>"
+          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
       ],
 
 

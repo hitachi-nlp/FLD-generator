@@ -11,7 +11,7 @@ from pprint import pprint, pformat
 
 from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
-from FLD_generator.formula import Formula, negate
+from FLD_generator.formula import Formula
 from FLD_generator.proof import ProofTree, ProofNode
 from FLD_generator.utils import flatten_dict, weighted_sampling, make_pretty_msg
 from FLD_generator.translators.base import Translator
@@ -414,14 +414,26 @@ class NLProofSDataset:
             if proof_stance == ProofStance.PROVED:
                 # assert is_provable(all_positive_formulas, hypothesis_formula)
                 if not is_provable(all_positive_formulas, hypothesis_formula):
+                    logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
+                    logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
+                    logger.critical('\n== tree ==\n' + proof_tree.format_str)
+                    # import pudb; pudb.set_trace()
                     stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and implies bugs.'
             elif proof_stance == ProofStance.DISPROVED:
                 # assert is_disprovable(all_positive_formulas, hypothesis_formula)
                 if not is_disprovable(all_positive_formulas, hypothesis_formula):
+                    logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
+                    logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
+                    logger.critical('\n== tree ==\n' + proof_tree.format_str)
+                    # import pudb; pudb.set_trace()
                     stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and implies bugs.'
             elif proof_stance == ProofStance.UNKNOWN:
                 # assert is_unknown(all_positive_formulas, hypothesis_formula)
                 if not is_unknown(all_positive_formulas, hypothesis_formula):
+                    logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
+                    logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
+                    logger.critical('\n== tree ==\n' + proof_tree.format_str)
+                    # import pudb; pudb.set_trace()
                     stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and implies bugs.'
             if stance_msg is not None:
                 logger.fatal('proof_tree leaf nodes:')
