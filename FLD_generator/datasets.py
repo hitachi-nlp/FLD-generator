@@ -305,8 +305,13 @@ class NLProofSDataset:
 
             # -- sample nodes --
             if proof_stance == ProofStance.UNKNOWN:
-                hypothesis_formula = proof_tree.root_node.formula
-                hypothesis = self._get_sent_from_node(proof_tree.root_node)
+                if random.random() < 0.5:
+                    hypothesis_formula = proof_tree.root_node.formula
+                    hypothesis = self._get_sent_from_node(proof_tree.root_node)
+                else:
+                    hypothesis_formula = root_negation_formula
+                    hypothesis = root_negation_formula.translation or root_negation_formula.rep
+
                 could_make_unknown = False
                 for _ in range(10):
                     # dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
