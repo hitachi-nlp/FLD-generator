@@ -14,7 +14,7 @@ from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.datasets import NLProofSDataset
-from FLD_generator.word_banks import build_wordnet_wordbank
+from FLD_generator.word_banks import build_wordbank
 from FLD_generator.translators import (
     build as build_translator,
     TemplatedTranslator,
@@ -46,7 +46,7 @@ def generate_dataset(dataset: NLProofSDataset,
 def test_generate_dataset():
 
     word_bank = None
-    # word_bank = build_wordnet_wordbank('eng')
+    # word_bank = build_wordbank('eng')
 
     translator = None
     # translator = build_translator(

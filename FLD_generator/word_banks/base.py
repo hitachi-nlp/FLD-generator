@@ -64,6 +64,8 @@ def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
         return NounForm
     elif pos == POS.ADV:
         raise NotImplementedError()
+    elif pos == POS.OTHERS:
+        return None
     else:
         raise ValueError(f'Unknown pos {pos}')
 
@@ -72,10 +74,10 @@ class WordBank(ABC):
 
     def get_words(self) -> Iterable[str]:
         # enumerate base form of words
-        yield from chain(self.get_intermediate_constant_words(), self._get_real_words())
+        yield from chain(self.get_intermediate_constant_words(), self._get_all_lemmas())
 
     @abstractmethod
-    def _get_real_words(self) -> Iterable[str]:
+    def _get_all_lemmas(self) -> Iterable[str]:
         # enumerate base form of words
         pass
 
@@ -105,14 +107,17 @@ class WordBank(ABC):
             if POS.VERB not in self.get_pos(word):
                 raise ValueError(f'The pos of the form ({str(form)}) is Verb. The word {word} does not have this pos.')
             return self._change_verb_form(word, form, force=force)
+
         elif form in AdjForm:
             if POS.ADJ not in self.get_pos(word) and POS.ADJ_SAT not in self.get_pos(word):
                 raise ValueError(f'The pos of the form ({str(form)}) is Adj. The word {word} does not have this pos.')
             return self._change_adj_form(word, form, force=force)
+
         elif form in NounForm:
             if POS.NOUN not in self.get_pos(word):
                 raise ValueError(f'The pos of the form ({str(form)}) is Noun. The word {word} does not have this pos.')
             return self._change_noun_form(word, form, force=force)
+
         else:
             raise ValueError()
 

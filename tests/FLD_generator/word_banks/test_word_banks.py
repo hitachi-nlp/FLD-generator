@@ -1,6 +1,6 @@
 from typing import List, Optional, Iterable, Dict
 
-from FLD_generator.word_banks import build_wordnet_wordbank, POS, ATTR, get_form_types
+from FLD_generator.word_banks import build_wordbank, POS, ATTR, get_form_types
 import logging
 from logger_setup import setup as setup_logger
 
@@ -11,7 +11,7 @@ setup_logger(level=logging.INFO)
 
 def test_word_bank(lang: str,
                    vocab_restrictions: Optional[Dict[POS, List[str]]] = None):
-    wb = build_wordnet_wordbank(lang, vocab_restrictions=vocab_restrictions)
+    wb = build_wordbank(lang, vocab_restrictions=vocab_restrictions)
     _test_word_bank(wb)
 
 
