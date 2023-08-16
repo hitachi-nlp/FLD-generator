@@ -1,14 +1,11 @@
-from typing import Optional, Iterable, List, Dict, Iterable
+from typing import Optional, Iterable, List, Dict
 import re
 import logging
 from string import ascii_uppercase
 from functools import lru_cache
 
 from lemminflect import getInflection, getLemma
-
 from FLD_generator.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
-from nltk.corpus.reader.wordnet import Synset, Lemma
-from nltk.corpus import wordnet as wn
 from FLD_generator.utils import starts_with_vowel_sound
 from .base import WordNetWordBank
 
@@ -35,15 +32,6 @@ class EnglishWordBank(WordNetWordBank):
         f'THING-{alphabet}'
         for alphabet in ascii_uppercase
     ]
-
-    def __init__(self,
-                 transitive_verbs: Optional[Iterable[str]] = None,
-                 intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
-        super().__init__(vocab_restrictions=vocab_restrictions)
-
-        self._transitive_verbs = set(verb.lower() for verb in transitive_verbs) if transitive_verbs is not None else None
-        self._intransitive_verbs = set(verb.lower() for verb in intransitive_verbs) if intransitive_verbs is not None else None
 
     @property
     def _intermediate_constant_words(self) -> List[str]:
@@ -99,7 +87,6 @@ class EnglishWordBank(WordNetWordBank):
             return antonyms
         else:
             raise ValueError()
-
 
     def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
         if form == AdjForm.NORMAL:
@@ -173,19 +160,6 @@ class EnglishWordBank(WordNetWordBank):
 
         else:
             raise ValueError(f'Unknown form {form}')
-
-    def _can_be_transitive_verb_synset(self, syn: Synset) -> bool:
-        if self._can_be_intransitive_verb is None:
-            raise ValueError('Set transitive verb list')
-        lemma = self._get_lemma(syn)
-        return lemma is not None and lemma.name().lower() in self._transitive_verbs
-
-    def _can_be_intransitive_verb_synset(self, syn: Synset) -> bool:
-        if self._intransitive_verbs is None:
-            raise ValueError('Set intransitive verb list')
-
-        lemma = self._get_lemma(syn)
-        return lemma is not None and lemma.name().lower() in self._intransitive_verbs
 
     def get_negnyms(self, word) -> List[str]:
         # See [here](https://langsquare.exblog.jp/28548624/) for the following detection rules.

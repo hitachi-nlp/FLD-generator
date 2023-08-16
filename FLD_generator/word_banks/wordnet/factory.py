@@ -2,7 +2,6 @@ from typing import Set, Optional, Dict, Union, List, Iterable
 
 from .base import WordNetWordBank, POS
 from .english import EnglishWordBank
-from .japanese import JapaneseWordBank
 
 
 def build(
@@ -41,10 +40,7 @@ def build(
         )
 
     elif lang == JapaneseWordBank.language:
-
-        return JapaneseWordBank(
-            vocab_restrictions=_vocab_restrictions,
-        )
+        raise NotImplementedError()
 
     else:
         raise ValueError(f'Unknown language "{lang}"')

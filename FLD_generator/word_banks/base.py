@@ -14,6 +14,7 @@ class POS(Enum):
     ADJ = 'ADJ'       # adjectives
     ADJ_SAT = 'ADJ_SAT'
     ADV = 'ADV'       # adverbs
+    OTHERS = 'OTHERS'
 
 
 class ATTR(Enum):
@@ -70,10 +71,12 @@ def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
 class WordBank(ABC):
 
     def get_words(self) -> Iterable[str]:
+        # enumerate base form of words
         yield from chain(self.get_intermediate_constant_words(), self._get_real_words())
 
     @abstractmethod
     def _get_real_words(self) -> Iterable[str]:
+        # enumerate base form of words
         pass
 
     def get_intermediate_constant_words(self) -> Iterable[str]:
