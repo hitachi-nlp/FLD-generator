@@ -33,9 +33,9 @@ def _test_word_bank(wb):
         for attr in [None] + list(ATTR):
             for word in get_words(pos=pos, attrs=[attr]):
                 if attr is None:
-                    print(f'{str(pos):<10}{"None":<30}{word:<20}')
+                    print(f'{str(pos):<20}{"None":<30}{word:<20}')
                 else:
-                    print(f'{str(pos):<10}{str(attr.value):<30}{word:<20}')
+                    print(f'{str(pos):<20}{str(attr.value):<30}{word:<20}')
 
                 try:
                     form_types = get_form_types(pos)
@@ -53,7 +53,7 @@ def _test_word_bank(wb):
 
 
 if __name__ == '__main__':
-    test_word_bank('eng')
+    # test_word_bank('eng')
 
     # # restricted vocab
     # test_word_bank(
@@ -66,4 +66,4 @@ if __name__ == '__main__':
     #     }
     # )
 
-    # test_word_bank('jpn')
+    test_word_bank('jpn')

@@ -2,31 +2,15 @@ from abc import ABC
 from collections import defaultdict
 from typing import Optional, Iterable, Dict, List, Set, Tuple
 import logging
-from functools import lru_cache
 
-from lemminflect import getLemma
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from FLD_generator.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
 
+from .parsers.english import get_lemma as get_lemma_eng
+from .parsers.japanese import get_lemma as get_lemma_jpn
 from .wordnet import WN_POS, SynsetOp, LemmaOp
-from .japanese import parse as parse_jp_sentence
 
 logger = logging.getLogger(__name__)
-
-
-@lru_cache(maxsize=1000000)
-def _getLemmaEng(word: str) -> str:
-    # TODO: pos other than VERB
-    return getLemma(word, upos='VERB')[0]
-
-
-@lru_cache(maxsize=1000000)
-def _getLemmaJpn(word: str) -> str:
-    for morpheme in parse_jp_sentence(word):
-        if morpheme.katsuyou == '基本形':
-            return morpheme.surface
-    raise NotImplementedError()
-
 
 # nltk/corpus/reader/wordnet.py
 _POS_WB_TO_WN = {
@@ -93,12 +77,15 @@ class WordUtil:
             yield lemma_str, syn.pos()
 
     def get_lemma(self, word: str) -> str:
+
         if self._language == 'eng':
             # Why not use wordnet?
             # -> maybe, we wanted to ensure that the lemmatization always succeeds
-            return _getLemmaEng(word)
+            return get_lemma_eng(word)
+
         elif self._language == 'jpn':
-            return _getLemmaJpn(word)
+            return get_lemma_jpn(word)
+
         else:
             raise NotImplementedError()
 

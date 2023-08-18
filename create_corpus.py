@@ -14,13 +14,9 @@ import dill
 
 from FLD_generator.translators import build as build_translator
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.formula_distractors import FormulaDistractor
-from FLD_generator.argument import Argument
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.proof_tree_generators import build as build_generator
 from FLD_generator.datasets import NLProofSDataset
-from FLD_generator.proof import ProofTree
-from FLD_generator.utils import nested_merge
 from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
 from FLD_generator.utils import _build_bounded_msg, log_results

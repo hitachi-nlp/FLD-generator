@@ -11,7 +11,7 @@ from FLD_generator.word_banks.base import (
 from FLD_generator.word_banks.base import WordBank
 import line_profiling
 
-from .morpheme import Morpheme, load_morphemes
+from .parsers.japanese import Morpheme
 from .word_utils import WordUtil
 
 
@@ -74,7 +74,7 @@ class JapaneseWordBank(WordBank):
         if form == VerbForm.NORMAL:
             return [verb]
 
-        elif force == VerbForm.ING:
+        elif form == VerbForm.ING:
             verbs: List[str] = []
             for morpheme in self._get_katsuyou_morphemes(verb, katsuyous=['連用タ接続']):
                 if morpheme.surface[-1] == 'ん':
@@ -83,10 +83,10 @@ class JapaneseWordBank(WordBank):
                     verbs.append(morpheme.surface + 'ている')
             return verbs
 
-        elif force == VerbForm.S:
+        elif form == VerbForm.S:
             return [verb]
 
-        elif force == VerbForm.ANTI:
+        elif form == VerbForm.ANTI:
             raise NotImplementedError()
         else:
             raise Exception()
@@ -164,10 +164,12 @@ class JapaneseWordBank(WordBank):
             raise ValueError(f'Unknown form {form}')
 
     def _can_be_intransitive_verb(self, verb: str) -> bool:
-        return self._word_util.can_be_intransitive_verb(verb)
+        # return self._word_util.can_be_intransitive_verb(verb)
+        return True
 
     def _can_be_transitive_verb(self, verb: str) -> bool:
-        return self._word_util.can_be_transitive_verb(verb)
+        # return self._word_util.can_be_transitive_verb(verb)
+        return True
 
     def _can_be_event_noun(self, noun: str) -> bool:
         return self._word_util.can_be_event_noun(noun)

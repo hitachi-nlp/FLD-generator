@@ -2,7 +2,8 @@ from typing import Set, Optional, Dict, Union, List, Iterable
 
 from FLD_generator.word_banks.base import WordBank, POS
 from .english import EnglishWordBank
-from .japanese import load_morphemes
+from .japanese import JapaneseWordBank
+from .parsers.japanese import load_morphemes
 
 
 def build(
@@ -42,6 +43,14 @@ def build(
         )
 
     elif lang == 'jpn':
+
+        if transitive_verbs_path is not None:
+            raise NotImplementedError()
+        transitive_verbs = None
+
+        if intransitive_verbs_path is not None:
+            raise NotImplementedError()
+        intransitive_verbs = None
 
         jpn_dict_csvs_dir = './res/word_banks/japanese/mecab/mecab-ipadic/'
         jpn_morphemes = load_morphemes(jpn_dict_csvs_dir)
