@@ -10,8 +10,8 @@ def _to_range(begin: int, end: int) -> List[int]:
 # _TRANSLATION_THING_CONFIGS = glob.glob('./configs/translations/thing/**.json')
 # _TRANSLATION_THING_CONFIGS_V1 = glob.glob('./configs/translations/thing.v1/**.json')
 
-_TRANSLATION_THING_CONFIGS = ['./configs/translations/thing/']
-_TRANSLATION_THING_CONFIGS_V1 = ['./configs/translations/thing.v1/']
+_TRANSLATION_THING_CONFIGS = ['./configs/translations/eng/thing/']
+_TRANSLATION_THING_CONFIGS_V1 = ['./configs/translations/eng/thing.v1/']
 
 
 

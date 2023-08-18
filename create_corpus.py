@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_dataset(argument_config: List[str],
+                 translation_lang: str,
                  translation_config: List[str],
                  use_fixed_translation: bool,
                  reused_object_nouns_max_factor: float,
@@ -99,7 +100,8 @@ def load_dataset(argument_config: List[str],
         _translation_distractor = None
 
     logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
-    translator = build_translator(translation_config,
+    translator = build_translator(translation_lang,
+                                  translation_config,
                                   word_bank,
                                   adj_verb_noun_ratio=translation_adj_verb_noun_ratio,
                                   use_fixed_translation=use_fixed_translation,
@@ -187,6 +189,7 @@ def generate_instances(size: int, *args):
 @click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--keep-dneg', is_flag=True, default=False)
 #
+@click.option('--translation-lang', type=str, default='eng')
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/translations/thing.v1'],
@@ -222,6 +225,7 @@ def generate_instances(size: int, *args):
 @click.option('--seed', type=int, default=0)
 def main(output_path,
          argument_config,
+         translation_lang,
          translation_config,
          use_fixed_translation,
          reused_object_nouns_max_factor,
@@ -296,6 +300,7 @@ def main(output_path,
                     delayed(generate_instances)(
                         _batch_size_per_worker,
                         argument_config,
+                        translation_lang,
                         translation_config,
                         use_fixed_translation,
                         reused_object_nouns_max_factor,

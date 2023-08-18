@@ -34,15 +34,19 @@ class JapaneseWordBank(WordBank):
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
                  vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
-        self._morphemes = sorted(morphemes)
+        morphemes = [morpheme for morpheme in morphemes
+                     if morpheme.pos in ['名詞', '動詞', '形容詞']]
+        self._all_morphemes = sorted(morphemes)
 
-        self._surface2morpheme: Dict[str, List[Morpheme]] = defaultdict(list)
-        # self._base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        self._base2katsuyous: Dict[str, List[Morpheme]] = defaultdict(list)
+        self._morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        self._base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        self._katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
         for morpheme in morphemes:
-            self._surface2morpheme[morpheme.surface].append(morpheme)
-            if morpheme.katsuyou != '基本形':
-                self._base2katsuyous[morpheme.base].append(morpheme)
+            self._morphemes[morpheme.surface].append(morpheme)
+            if morpheme.surface == morpheme.base:
+                self._base_morphemes[morpheme.base].append(morpheme)
+            else:
+                self._katsuyou_morphemes[morpheme.base].append(morpheme)
 
         self._word_util = WordUtil(
             'jpn',
@@ -52,8 +56,8 @@ class JapaneseWordBank(WordBank):
         )
 
     def _get_all_lemmas(self) -> Iterable[str]:
-        for morpheme in self._morphemes:
-            if morpheme.katsuyou == '基本形':
+        for morphemes in self._base_morphemes.values():
+            for morpheme in morphemes:
                 yield morpheme.surface
 
     @property
@@ -61,66 +65,87 @@ class JapaneseWordBank(WordBank):
         return self.__intermediate_constant_words
 
     def _get_pos(self, word: str) -> List[POS]:
-        if word not in self._surface2morpheme:
+        if word not in self._base_morphemes:
             return []
         else:
-            morphemes = self._surface2morpheme[word]
+            morphemes = self._base_morphemes[word]
             return list({
                 self._morphme_pos_to_POS.get(morpheme.pos, POS.OTHERS)
                 for morpheme in morphemes
             })
 
     def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
-        if form == VerbForm.NORMAL:
-            return [verb]
+        if form in [VerbForm.NORMAL, VerbForm.ING, VerbForm.S]:
 
-        elif form == VerbForm.ING:
-            verbs: List[str] = []
-            for morpheme in self._get_katsuyou_morphemes(verb, katsuyous=['連用タ接続']):
-                if morpheme.surface[-1] == 'ん':
-                    verbs.append(morpheme.surface + 'でいる')
-                else:
-                    verbs.append(morpheme.surface + 'ている')
-            return verbs
+            if form == VerbForm.NORMAL:
+                return [self._word_util.get_lemma(verb)]
 
-        elif form == VerbForm.S:
-            return [verb]
+            elif form == VerbForm.ING:
+                verbs: List[str] = []
+                for morpheme in self._get_katsuyou_morphemes(
+                    verb,
+                    katsuyous=[
+                        '連用タ接続',
+                        '連用形',
+                        '未然形',  # very rare: "寇す" ->  寇し(未然形)
+                    ]
+                ):
+                    if morpheme.surface[-1] == 'ん':
+                        verbs.append(morpheme.surface + 'でいる')
+                    else:
+                        verbs.append(morpheme.surface + 'ている')
+                    # break to use the first match katsyoukei because
+                    # for some morpheme they have both '連用タ接続'(correct) and '連用形(incorrect)'
+                    # but for some other morpheme they have only '連用形(correct)'
+                    break
+
+                if len(verbs) == 0 and force:
+                    raise NotImplementedError()
+
+                return verbs
+
+            elif form == VerbForm.S:
+                return [verb]
+
+            raise Exception()
 
         elif form == VerbForm.ANTI:
-            raise NotImplementedError()
+            antonyms = self._get_antonyms(verb)
+
+            if len(antonyms) == 0 and force:
+                raise NotImplementedError()
+
+            return antonyms
+
         else:
-            raise Exception()
+            raise ValueError()
 
     def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
         if form == AdjForm.NORMAL:
             return [adj]
 
         elif form == AdjForm.NESS:
-            return [adj + 'こと']
+            return [adj + 'ということ']
 
         elif form == AdjForm.ANTI:
-            if not force:
-                raise NotImplementedError()
+            antonyms = self._get_antonyms(adj)
+            antonyms += [
+                word
+                for word in self._change_adj_form(adj, AdjForm.NEG, force=False)
+                if word not in antonyms]
 
-            antonyms: List[str] = []
-            # TODO: antonymsを入れる．wordnetでできるか？
-            # "美しい" vs "醜い"
             if len(antonyms) == 0 and force:
-                antonyms = self._change_adj_form(adj, AdjForm.NEG, force=True)
+                antonyms += self._change_adj_form(adj, AdjForm.NEG, force=True)
+
             return antonyms
 
         elif form == AdjForm.NEG:
-            if not force:
-                raise NotImplementedError()
-
-            negnyms: List[str] = []
-            # TODO: implement by wordnet
-            # 日本語の場合，形容詞にはnegnymが無い？
-            # e.g.) "不可能" vs "可能 -> "可能だ"は形容動詞語幹 + だ -> adj形容動詞を入れる必要がある．
-            if len(negnyms) == 0 and force:
-                negnyms = [_adj.surface + 'ないということ'
-                           for _adj in  self._get_katsuyou_morphemes(adj, katsuyous=['連用テ接続'])]
-            return negnyms
+            """
+            日本語の場合，形容詞にはnegnymが無いと思われる．
+            きれい vs 醜い     -> これはantonymである．
+            きれい vs 非きれい -> これがnegnymだが，言葉として存在しない．
+            """
+            raise ValueError('Japanese do not have negnyms.')
 
         else:
             raise ValueError()
@@ -139,25 +164,27 @@ class JapaneseWordBank(WordBank):
             return [noun]
 
         elif form == NounForm.ANTI:
-            if not force:
-                raise NotImplementedError()
+            antonyms = self._get_antonyms(noun)
+            antonyms += [word for word in self._change_noun_form(noun, NounForm.NEG, force=False)
+                         if word not in antonyms]
 
-            antonyms: List[str] = []
-            # TODO
             if len(antonyms) == 0 and force:
                 return self._change_noun_form(noun, NounForm.NEG, force=True)
+
             return antonyms
 
         elif form == NounForm.NEG:
-            if not force:
-                raise NotImplementedError()
-
             negnyms: List[str] = []
-            # TODO
+
+            negnym_candidates = [f'{neg_prefix}{noun}'
+                                 for neg_prefix in ['無', '不', '未', '非']]
+            for negnym_candidate in negnym_candidates:
+                if negnym_candidate in self._base_morphemes:
+                    negnyms.append(negnym_candidate)
+
             if len(negnyms) == 0 and force:
-                raise NotImplementedError()
-                # 「不可能」 -> OK, 「不台風」 -> NO, 「不電話」 -> NO
-                # return [f'non-{noun}']
+                negnyms = negnym_candidates
+
             return negnyms
 
         else:
@@ -177,17 +204,11 @@ class JapaneseWordBank(WordBank):
     def _can_be_entity_noun(self, noun: str) -> bool:
         return self._word_util.can_be_entity_noun(noun)
 
-    def get_synonyms(self, word: str) -> List[str]:
-        return self._word_util.get_synonyms(word)
-
-    def get_antonyms(self, word: str) -> List[str]:
+    def _get_antonyms(self, word: str) -> List[str]:
         return self._word_util.get_antonyms(word)
-
-    def get_negnyms(self, word) -> List[str]:
-        raise NotImplementedError()
 
     def _get_katsuyou_morphemes(self,
                                 word: str,
                                 katsuyous: Optional[List[str]] = None) -> List[Morpheme]:
-        return [morpheme for morpheme in self._base2katsuyous[word]
+        return [morpheme for morpheme in self._katsuyou_morphemes[word]
                 if katsuyous is None or morpheme.katsuyou in katsuyous]

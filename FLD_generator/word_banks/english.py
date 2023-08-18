@@ -65,6 +65,7 @@ class EnglishWordBank(WordBank):
                 if form == VerbForm.NORMAL:
                     # watch
                     inflated_verb = verb
+
                 elif form == VerbForm.ING:
                     # [現在分詞](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo82.htm)
                     if re.match('.*[^aeiou]e$', verb):
@@ -75,6 +76,7 @@ class EnglishWordBank(WordBank):
                         inflated_verb = verb + verb[-1] + 'ing'
                     else:
                         inflated_verb = verb + 'ing'
+
                 elif form == VerbForm.S:
                     # [３単現及び名詞の複数形の -s, -es](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo52.htm)
                     if re.match('.*(s|sh|ch|x|o)$', verb):
@@ -85,16 +87,18 @@ class EnglishWordBank(WordBank):
                         inflated_verb = verb[:-1] + 'ies'
                     else:
                         inflated_verb = verb + 's'
+
                 else:
                     raise NotImplementedError()
 
                 return [inflated_verb]
 
         elif form == VerbForm.ANTI:
+            antonyms = self._get_antonyms(verb)
 
-            antonyms = self.get_antonyms(verb)
             if len(antonyms) == 0 and force:
                 raise NotImplementedError()
+
             return antonyms
 
         else:
@@ -105,29 +109,39 @@ class EnglishWordBank(WordBank):
             return [adj]
 
         elif form == AdjForm.NESS:
+            ness_adjs: List[str] = []
+
             if adj.endswith('y'):
                 # peaky -> peakiness
                 ness_adj = adj[:-1] + 'iness'
             else:
                 ness_adj = adj + 'ness'
-            if force or ness_adj in self._word_util.get_all_lemmas():
-                return [ness_adj]
-            else:
-                return []
+            if ness_adj in self._word_util.get_all_lemmas():
+                ness_adjs.append(ness_adj)
+
+            if len(ness_adjs) == 0 and force:
+                ness_adjs.append(ness_adj)
+
+            return ness_adjs
 
         elif form == AdjForm.ANTI:
-            antonyms = self.get_antonyms(adj)
-            for word in self._change_adj_form(adj, AdjForm.NEG):
-                if word not in antonyms:
-                    antonyms.append(word)
+            antonyms = self._get_antonyms(adj)
+            antonyms += [
+                word
+                for word in self._change_adj_form(adj, AdjForm.NEG, force=False)
+                if word not in antonyms]
+
             if len(antonyms) == 0 and force:
-                return self._change_adj_form(adj, AdjForm.NEG, force=True)
+                antonyms += self._change_adj_form(adj, AdjForm.NEG, force=True)
+
             return antonyms
 
         elif form == AdjForm.NEG:
-            negnyms = self.get_negnyms(adj)
+            negnyms = self._get_negnyms(adj)
+
             if len(negnyms) == 0 and force:
                 return [f'non-{adj}']
+
             return negnyms
 
         else:
@@ -158,17 +172,21 @@ class EnglishWordBank(WordBank):
             raise NotImplementedError()
 
         elif form == NounForm.ANTI:
-            antonyms = self.get_antonyms(noun)
-            antonyms += [word for word in self._change_noun_form(noun, NounForm.NEG)
+            antonyms = self._get_antonyms(noun)
+            antonyms += [word for word in self._change_noun_form(noun, NounForm.NEG, force=False)
                          if word not in antonyms]
+
             if len(antonyms) == 0 and force:
                 return self._change_noun_form(noun, NounForm.NEG, force=True)
+
             return antonyms
 
         elif form == NounForm.NEG:
-            negnyms = self.get_negnyms(noun)
+
+            negnyms = self._get_negnyms(noun)
             if len(negnyms) == 0 and force:
                 return [f'non-{noun}']
+
             return negnyms
 
         else:
@@ -186,19 +204,16 @@ class EnglishWordBank(WordBank):
     def _can_be_entity_noun(self, noun: str) -> bool:
         return self._word_util.can_be_entity_noun(noun)
 
-    def get_synonyms(self, word: str) -> List[str]:
-        return self._word_util.get_synonyms(word)
-
-    def get_antonyms(self, word: str) -> List[str]:
+    def _get_antonyms(self, word: str) -> List[str]:
         return self._word_util.get_antonyms(word)
 
-    def get_negnyms(self, word) -> List[str]:
+    def _get_negnyms(self, word) -> List[str]:
         # See [here](https://langsquare.exblog.jp/28548624/) for the following detection rules.
         negnyms = []
         negation_prefixes = ['in', 'im', 'il', 'ir', 'un', 'dis', 'non']
         negation_postfixes = ['less']
 
-        for antonym in self.get_antonyms(word):
+        for antonym in self._get_antonyms(word):
             if any([antonym == f'{prefix}{word}' for prefix in negation_prefixes])\
                     or any([antonym == f'{word}{postfix}' for postfix in negation_postfixes]):
                 negnyms.append(antonym)

@@ -15,10 +15,7 @@ from FLD_generator.translation_distractors import build as build_translation_dis
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.datasets import NLProofSDataset
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.translators import (
-    build as build_translator,
-    TemplatedTranslator,
-)
+from FLD_generator.translators import build as build_translator
 from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results
 from logger_setup import setup as setup_logger
@@ -45,21 +42,32 @@ def generate_dataset(dataset: NLProofSDataset,
 @profile
 def test_generate_dataset():
 
-    word_bank = None
-    # word_bank = build_wordbank('eng')
+    # lang = 'eng'
+    lang = 'jpn'
 
-    translator = None
-    # translator = build_translator(
-    #     ['./configs/translations/thing.v1/'],
-    #     word_bank,
-    #     use_fixed_translation=False,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     # volume_to_weight='sqrt',
-    #     volume_to_weight='logE',
-    #     default_weight_factor_type='W_VOL__1.0',
-    #     adj_verb_noun_ratio='1-1-1',
-    # )
+    # word_bank = None
+    word_bank = build_wordbank(lang)
+
+    if lang == 'eng':
+        translation_config_dir = './configs/translations/eng/thing.v1/'
+    elif lang == 'jpn':
+        translation_config_dir = './configs/translations/jpn/thing.v1/'
+    else:
+        raise ValueError()
+
+    # translator = None
+    translator = build_translator(
+        lang,
+        [translation_config_dir],
+        word_bank,
+        use_fixed_translation=False,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        # volume_to_weight='sqrt',
+        volume_to_weight='logE',
+        default_weight_factor_type='W_VOL__1.0',
+        adj_verb_noun_ratio='1-1-1',
+    )
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)

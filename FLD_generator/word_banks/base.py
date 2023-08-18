@@ -161,18 +161,3 @@ class WordBank(ABC):
     @abstractmethod
     def _can_be_entity_noun(self, noun: str) -> bool:
         pass
-
-    @abstractmethod
-    def get_synonyms(self, word: str) -> List[str]:
-        pass
-
-    @abstractmethod
-    def get_antonyms(self, word: str) -> List[str]:
-        pass
-
-    @abstractmethod
-    def get_negnyms(self, word: str) -> List[str]:
-        # might be the subset of antonyms.
-        # antonyms may include words such as alkaline being antonym to acidic.
-        # negnym exclude such ones and include only the words like inaccrate being a negnym to accurate.
-        pass

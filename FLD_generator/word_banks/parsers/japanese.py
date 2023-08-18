@@ -120,7 +120,7 @@ def parse(text: str) -> List[Morpheme]:
 
 @lru_cache(maxsize=1000000)
 def get_lemma(word: str) -> str:
-    for morpheme in parse(word):
-        if morpheme.katsuyou == '基本形':
-            return morpheme.surface
-    raise NotImplementedError()
+    return parse(word)[0].base
+    # for morpheme in parse(word):
+    #     if morpheme.katsuyou is None or morpheme.katsuyou == '基本形':
+    #         return morpheme.surface

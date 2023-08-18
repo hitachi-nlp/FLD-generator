@@ -1,2 +1,2 @@
-from .templated import TemplatedTranslator, build
+from .factory import build, TemplatedTranslator
 from .base import TranslationFailure, TranslationImpossible

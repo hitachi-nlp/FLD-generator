@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
+from typing import List, Dict, Optional, Tuple, Iterable, Any, Set, Callable
 from collections import OrderedDict, defaultdict
 import traceback
 import statistics
@@ -7,13 +7,11 @@ import re
 import copy
 import random
 import logging
-from pprint import pformat, pprint
+from pprint import pformat
 from functools import lru_cache
 import math
-from pathlib import Path
 
 from tqdm import tqdm
-from FLD_generator.utils import nested_merge
 from FLD_generator.formula import Formula, PREDICATES, CONSTANTS
 from FLD_generator.word_banks.base import WordBank, ATTR
 from FLD_generator.interpretation import (
@@ -735,11 +733,15 @@ class TemplatedTranslator(Translator):
 
             if pos not in self._get_pos(word):
                 condition_is_consistent = False
+                # logger.warning('-- pos not in self._get_pos(word) --')
+                # logger.warning('    word=%s     target_pos=%s    self._get_pos(word)=%s', str(word), str(pos), str(self._get_pos(word)))
                 break
 
             inflated_words = self._get_inflated_words(word, pos, form)
             if len(inflated_words) == 0:
                 condition_is_consistent = False
+                # logger.warning('-- len(inflated_words) --')
+                # logger.warning('    word=%s    pos%s     form=%s', str(word), str(pos), str(form))
                 break
 
         return condition_is_consistent
@@ -908,29 +910,20 @@ class TemplatedTranslator(Translator):
         )
 
         # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
-        try:
-            unary_mapping = next(
-                generate_mappings_from_predicates_and_constants(
-                    unary_predicates,
-                    constants,
-                    adj_verb_nouns,
-                    entity_nouns,
-                    shuffle=True,
-                    allow_many_to_one=False,
-                    constraints={
-                        intermediate_constant: intermediate_constant_noun
-                        for intermediate_constant, intermediate_constant_noun in zip(intermediate_constants, intermediate_constant_nouns)
-                    }
-                )
+        unary_mapping = next(
+            generate_mappings_from_predicates_and_constants(
+                unary_predicates,
+                constants,
+                adj_verb_nouns,
+                entity_nouns,
+                shuffle=True,
+                allow_many_to_one=False,
+                constraints={
+                    intermediate_constant: intermediate_constant_noun
+                    for intermediate_constant, intermediate_constant_noun in zip(intermediate_constants, intermediate_constant_nouns)
+                }
             )
-        except:
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print(unary_predicates)
-            print(constants)
-            print(adj_verb_nouns)
-            print(entity_nouns)
-            print(traceback.format_exc())
-            raise
+        )
 
         interpret_mapping = zeroary_mapping.copy()
         interpret_mapping.update(unary_mapping)
@@ -1160,31 +1153,3 @@ class TemplatedTranslator(Translator):
 
     def _add_ending_period(self, translation: str) -> str:
         return translation + '.'
-
-
-def build(config_paths: List[str],
-          word_bank: WordBank,
-          adj_verb_noun_ratio: Optional[str] = None,
-          **kwargs):
-
-    merged_config_json = {}
-    for config_path in config_paths:
-        _config_path = Path(config_path)
-        if _config_path.is_dir():
-            all_paths = sorted(_config_path.glob('**/*.json'))
-        else:
-            all_paths = [_config_path]
-        for _path in all_paths:
-            logger.info('loading "%s"', str(_path))
-            merged_config_json = nested_merge(merged_config_json,
-                                              json.load(open(str(_path))))
-
-    adj_verb_noun_ratio = adj_verb_noun_ratio or '1-1-1'
-    _adj_verb_noun_ratio = [float(ratio) for ratio in adj_verb_noun_ratio.split('-')]
-    translator = TemplatedTranslator(
-        merged_config_json,
-        word_bank,
-        adj_verb_noun_ratio=_adj_verb_noun_ratio,
-        **kwargs,
-    )
-    return translator
