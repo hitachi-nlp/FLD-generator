@@ -2,9 +2,10 @@ from typing import Optional, Iterable, List, Dict, Set
 import re
 import logging
 from string import ascii_uppercase
+from enum import Enum, EnumMeta
 
 from lemminflect import getInflection
-from FLD_generator.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLD_generator.word_banks.base import WordBank, POS
 from FLD_generator.utils import starts_with_vowel_sound
 
 from .word_utils import WordUtil
@@ -14,11 +15,29 @@ logger = logging.getLogger(__name__)
 
 class EnglishWordBank(WordBank):
 
-    _verb_inflation_mapping = {
-        VerbForm.NORMAL: 'VB',
-        VerbForm.ING: 'VBG',
-        VerbForm.S: 'VBZ',
-    }
+    class VerbForm(Enum):
+        """ https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html """
+        NORMAL = 'normal'
+        ING = 'ing'
+        S = 's'
+
+        ANTI = 'anti'
+
+    class AdjForm(Enum):
+        NORMAL = 'normal'
+        NESS = 'ness'
+
+        ANTI = 'anti'
+        NEG = 'neg'
+
+    class NounForm(Enum):
+        NORMAL = 'normal'
+        SINGULAR = 's'
+        SINGULAR_WITH_PARTICLE = 'swa'
+        PLURAL = 'p'   # not implemented
+
+        ANTI = 'anti'
+        NEG = 'neg'
 
     __intermediate_constant_words  = [
         f'THING-{alphabet}'
@@ -37,6 +56,12 @@ class EnglishWordBank(WordBank):
             vocab_restrictions=vocab_restrictions,
         )
 
+        self._verb_inflation_mapping = {
+            self.VerbForm.NORMAL: 'VB',
+            self.VerbForm.ING: 'VBG',
+            self.VerbForm.S: 'VBZ',
+        }
+
     def _get_all_lemmas(self) -> Iterable[str]:
         return sorted(self._word_util.get_all_lemmas())
 
@@ -47,8 +72,9 @@ class EnglishWordBank(WordBank):
     def _get_pos(self, word: str) -> List[POS]:
         return self._word_util.get_pos(word)
 
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
-        if form in [VerbForm.NORMAL, VerbForm.ING, VerbForm.S]:
+    def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
+
+        if form in [self.VerbForm.NORMAL, self.VerbForm.ING, self.VerbForm.S]:
             if verb in ['am', 'are', 'is', 'was', 'were']:
                 logger.warning('Changing verb form for be-verb "{%s}" is subtle. Thus, we do not change it\'s form.', verb)
                 return [verb]
@@ -62,11 +88,11 @@ class EnglishWordBank(WordBank):
 
             else:
 
-                if form == VerbForm.NORMAL:
+                if form == self.VerbForm.NORMAL:
                     # watch
                     inflated_verb = verb
 
-                elif form == VerbForm.ING:
+                elif form == self.VerbForm.ING:
                     # [現在分詞](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo82.htm)
                     if re.match('.*[^aeiou]e$', verb):
                         # date -> dating
@@ -77,7 +103,7 @@ class EnglishWordBank(WordBank):
                     else:
                         inflated_verb = verb + 'ing'
 
-                elif form == VerbForm.S:
+                elif form == self.VerbForm.S:
                     # [３単現及び名詞の複数形の -s, -es](https://www2.kaiyodai.ac.jp/~takagi/econ/kougo52.htm)
                     if re.match('.*(s|sh|ch|x|o)$', verb):
                         # wash -> washes
@@ -93,7 +119,7 @@ class EnglishWordBank(WordBank):
 
                 return [inflated_verb]
 
-        elif form == VerbForm.ANTI:
+        elif form == self.VerbForm.ANTI:
             antonyms = self._get_antonyms(verb)
 
             if len(antonyms) == 0 and force:
@@ -104,11 +130,12 @@ class EnglishWordBank(WordBank):
         else:
             raise ValueError()
 
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
-        if form == AdjForm.NORMAL:
+    def _change_adj_form(self, adj: str, form: Enum, force=False) -> List[str]:
+
+        if form == self.AdjForm.NORMAL:
             return [adj]
 
-        elif form == AdjForm.NESS:
+        elif form == self.AdjForm.NESS:
             ness_adjs: List[str] = []
 
             if adj.endswith('y'):
@@ -124,19 +151,19 @@ class EnglishWordBank(WordBank):
 
             return ness_adjs
 
-        elif form == AdjForm.ANTI:
+        elif form == self.AdjForm.ANTI:
             antonyms = self._get_antonyms(adj)
             antonyms += [
                 word
-                for word in self._change_adj_form(adj, AdjForm.NEG, force=False)
+                for word in self._change_adj_form(adj, self.AdjForm.NEG, force=False)
                 if word not in antonyms]
 
             if len(antonyms) == 0 and force:
-                antonyms += self._change_adj_form(adj, AdjForm.NEG, force=True)
+                antonyms += self._change_adj_form(adj, self.AdjForm.NEG, force=True)
 
             return antonyms
 
-        elif form == AdjForm.NEG:
+        elif form == self.AdjForm.NEG:
             negnyms = self._get_negnyms(adj)
 
             if len(negnyms) == 0 and force:
@@ -147,14 +174,15 @@ class EnglishWordBank(WordBank):
         else:
             raise ValueError(f'Unknown form {form}')
 
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> List[str]:
-        if form == NounForm.NORMAL:
+    def _change_noun_form(self, noun: str, form: Enum, force=False) -> List[str]:
+
+        if form == self.NounForm.NORMAL:
             return [noun]
 
-        elif form == NounForm.SINGULAR:
+        elif form == self.NounForm.SINGULAR:
             return [noun]
 
-        elif form == NounForm.SINGULAR_WITH_PARTICLE:
+        elif form == self.NounForm.SINGULAR_WITH_PARTICLE:
             """
             We assume that all the words are countable, thus, all the words in singular form need an indefinite particle, i.e., "a" or "an".
             This approximation is because that detecting the word countability is a challenging problem.
@@ -168,20 +196,20 @@ class EnglishWordBank(WordBank):
 
             return [f'an {noun}' if starts_with_vowel_sound(noun) else f'a {noun}']
 
-        elif form == NounForm.PLURAL:
+        elif form == self.NounForm.PLURAL:
             raise NotImplementedError()
 
-        elif form == NounForm.ANTI:
+        elif form == self.NounForm.ANTI:
             antonyms = self._get_antonyms(noun)
-            antonyms += [word for word in self._change_noun_form(noun, NounForm.NEG, force=False)
+            antonyms += [word for word in self._change_noun_form(noun, self.NounForm.NEG, force=False)
                          if word not in antonyms]
 
             if len(antonyms) == 0 and force:
-                return self._change_noun_form(noun, NounForm.NEG, force=True)
+                return self._change_noun_form(noun, self.NounForm.NEG, force=True)
 
             return antonyms
 
-        elif form == NounForm.NEG:
+        elif form == self.NounForm.NEG:
 
             negnyms = self._get_negnyms(noun)
             if len(negnyms) == 0 and force:

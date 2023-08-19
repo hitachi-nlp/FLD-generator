@@ -2,6 +2,7 @@ import json
 from typing import List, Dict, Optional, Tuple, Iterable, Any, Set, Callable
 from collections import OrderedDict, defaultdict
 import traceback
+from enum import Enum
 import statistics
 import re
 import copy
@@ -21,7 +22,7 @@ from FLD_generator.interpretation import (
     formula_can_not_be_identical_to,
 )
 from FLD_generator.utils import make_combination, chained_sampling_from_weighted_iterators
-from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
+from FLD_generator.word_banks import POS
 from FLD_generator.utils import starts_with_vowel_sound, compress, decompress, make_pretty_msg
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import line_profiling
@@ -34,19 +35,13 @@ _DEBUG = False
 
 class _PosFormConditionSet(set):
 
-    def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[WordForm]]]):
+    def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[str]]]):
         keys = [elem[0] for elem in elems]
         key_set = set(keys)
         if len(key_set) < len(keys):
             raise Exception(f'Duplicated condition for found in {elems}')
         unique_elems = set(elems)
         return super().__new__(cls, unique_elems)
-
-
-class _PosFormConditionTuple(tuple):
-
-    def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[WordForm]]]):
-        return super().__new__(cls, sorted(elems, key=lambda key_pos_form: key_pos_form[0]))
 
 
 NLAndCondition = Iterable[Tuple[str, _PosFormConditionSet]]
@@ -181,19 +176,17 @@ class TemplatedTranslator(Translator):
                     adj_verb_noun_ratio: Optional[List[float]] = None,
                     prioritize_form_abundant_words=False) -> Tuple[List[str], List[str], List[str]]:
 
-        def get_num_form_inv_score(word: str, pos: POS, form_klass) -> int:
-            antonyms = self._get_inflated_words(word, pos, form_klass.ANTI)
-            if hasattr(form_klass, 'NEG'):
-                negnyms = self._get_inflated_words(word, pos, form_klass.NEG)
-            else:
-                negnyms = []
+        def get_num_form_inv_score(word: str, pos: POS) -> int:
+            # words with larger number of forms have smaller score
+            antonyms = self._get_inflated_words(word, pos, 'anti')
+            negnyms = self._get_inflated_words(word, pos, 'neg')
             return 10 - (len(antonyms) + len(negnyms))
 
-        def order_words(words: Iterable[str], pos: POS, form_klass) -> List[str]:
+        def order_words(words: Iterable[str], pos: POS) -> List[str]:
             if prioritize_form_abundant_words:
                 return sorted(
                     words,
-                    key = lambda word: (get_num_form_inv_score(word, pos, form_klass), str(word))
+                    key = lambda word: (get_num_form_inv_score(word, pos), str(word))
                 )
             else:
                 _words = list(words)
@@ -206,7 +199,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if word not in intermediate_constant_nouns),
             POS.NOUN,
-            NounForm,
         )
 
         event_nouns = order_words(
@@ -214,7 +206,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)),
             POS.NOUN,
-            NounForm,
         )
 
         logger.info('loading entity nouns ...')
@@ -223,7 +214,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)),
             POS.NOUN,
-            NounForm,
         )
 
         logger.info('loading adjs ...')
@@ -231,7 +221,6 @@ class TemplatedTranslator(Translator):
             (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)),
             POS.ADJ,
-            AdjForm,
         )
 
         logger.info('loading intransitive_verbs ...')
@@ -240,7 +229,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)),
             POS.VERB,
-            VerbForm,
         )
 
         logger.info('loading transitive_verbs ...')
@@ -249,7 +237,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)),
             POS.VERB,
-            VerbForm,
         )
 
         logger.info('making transitive verb and object combinations ...')
@@ -806,7 +793,7 @@ class TemplatedTranslator(Translator):
         formula = Formula(nl)
         interprands = formula.predicates + formula.constants
 
-        conditions: List[Tuple[str, POS, WordForm]] = []
+        conditions: List[Tuple[str, POS, str]] = []
         for interprand in interprands:
             pos_form = self._get_interprand_condition_from_template(interprand.rep, formula.rep)
             if pos_form is None:
@@ -967,11 +954,8 @@ class TemplatedTranslator(Translator):
                     raise ValueError(f'Could not extract pos and form information about "{interprand_rep}" from "{interprand_templated_translation_pushed}"')
                 pos, form = pos_form
                 if self.log_stats:
-                    stats[f'{pos.value}.{form.value}'] += 1
+                    stats[f'{pos.value}.{form}'] += 1
                 inflated_words = self._get_inflated_words(word, pos, form)
-
-                if form in [NounForm.ANTI, AdjForm.ANTI, VerbForm.ANTI]:
-                    logger.critical('got antonyms for word "%s": %s', word, str(inflated_words))
 
                 assert len(inflated_words) > 0
                 inflated_word = random.choice(inflated_words)
@@ -983,7 +967,7 @@ class TemplatedTranslator(Translator):
         return inflated_mapping, stats
 
     @profile
-    def _get_interprand_condition_from_template(self, interprand: str, rep: str) -> Optional[Tuple[POS, WordForm]]:
+    def _get_interprand_condition_from_template(self, interprand: str, rep: str) -> Optional[Tuple[POS, Optional[str]]]:
         interprand_begin = rep.find(interprand)
         if interprand_begin < 0:
             # raise Exception(f'Information for "{interprand}" can not be extracted from "{rep}".')
@@ -1000,25 +984,14 @@ class TemplatedTranslator(Translator):
         info = rep[info_begin + 1: info_end - 1]
 
         if len(info.split('.')) >= 2:
-            pos_str, form_str = info.split('.')
+            pos_str, form = info.split('.')
         else:
-            pos_str, form_str = info, None
+            pos_str, form = info, 'normal'
 
-        pos = POS[pos_str]
-
-        if pos == POS.ADJ:
-            form = AdjForm.NORMAL if form_str is None else AdjForm(form_str)
-        elif pos == POS.VERB:
-            form = VerbForm.NORMAL if form_str is None else VerbForm(form_str)
-        elif pos == POS.NOUN:
-            form = NounForm.NORMAL if form_str is None else NounForm(form_str)
-        else:
-            raise ValueError()
-
-        return pos, form
+        return POS[pos_str], form
 
     @lru_cache(maxsize=1000000)
-    def _get_inflated_words(self, word: str, pos: POS, form: WordForm) -> Tuple[str, ...]:
+    def _get_inflated_words(self, word: str, pos: POS, form: str) -> Tuple[str, ...]:
         if pos not in self._get_pos(word):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
@@ -1032,9 +1005,9 @@ class TemplatedTranslator(Translator):
             raise ValueError()
 
         _word, obj = self._parse_word_with_obj(word)
-        inflated_words = self._word_bank.change_word_form(_word, form, force=False)
+        inflated_words = self._word_bank.change_word_form(_word, pos, form, force=False)
         if len(inflated_words) == 0 and force:
-            inflated_words = self._word_bank.change_word_form(_word, form, force=True)
+            inflated_words = self._word_bank.change_word_form(_word, pos, form, force=True)
 
         if len(inflated_words) == 0:
             return ()
@@ -1128,7 +1101,7 @@ class TemplatedTranslator(Translator):
         if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
             word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
             if POS.VERB in self._word_bank.get_pos(word_after_things):
-                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)[0]
+                verb_normal = self._word_bank.change_word_form(word_after_things, POS.VERB, 'normal')[0]
                 translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
 
         # target   : A and B causes C -> A and B cause C

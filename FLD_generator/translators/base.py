@@ -1,8 +1,6 @@
-from typing import List, Dict, Optional, Tuple, Union
-import re
+from typing import List, Dict, Optional, Tuple
 from abc import abstractmethod, ABC
 import logging
-from string import ascii_uppercase
 
 from FLD_generator.formula import Formula
 

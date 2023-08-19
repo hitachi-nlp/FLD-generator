@@ -4,7 +4,7 @@ from typing import Optional, Iterable, Dict, List, Set, Tuple
 import logging
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
-from FLD_generator.word_banks.base import WordBank, POS, VerbForm, AdjForm, NounForm
+from FLD_generator.word_banks.base import POS
 
 from .parsers.english import get_lemma as get_lemma_eng
 from .parsers.japanese import get_lemma as get_lemma_jpn

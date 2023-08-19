@@ -1,6 +1,6 @@
 from typing import List, Optional, Iterable, Dict
 
-from FLD_generator.word_banks import build_wordbank, POS, ATTR, get_form_types
+from FLD_generator.word_banks import build_wordbank, POS, ATTR
 import logging
 from logger_setup import setup as setup_logger
 
@@ -38,22 +38,23 @@ def _test_word_bank(wb):
                     print(f'{str(pos):<20}{str(attr.value):<30}{word:<20}')
 
                 try:
-                    form_types = get_form_types(pos)
+                    # forms = get_form_types(pos)
+                    forms = wb.get_forms(pos)
                 except NotImplementedError as e:
                     continue
 
-                if form_types is not None:
-                    for form_type in form_types:
+                if forms is not None:
+                    for form in forms:
                         try:
-                            inflated_word = wb.change_word_form(word, form_type)
+                            inflated_word = wb.change_word_form(word, pos, form)
                         except NotImplementedError as e:
                             continue
                         if inflated_word is not None:
-                            print(f'    {str(form_type):<40}{str(inflated_word):<40}')
+                            print(f'    {str(form):<40}{str(inflated_word):<40}')
 
 
 if __name__ == '__main__':
-    # test_word_bank('eng')
+    test_word_bank('eng')
 
     # # restricted vocab
     # test_word_bank(
@@ -66,4 +67,4 @@ if __name__ == '__main__':
     #     }
     # )
 
-    test_word_bank('jpn')
+    # test_word_bank('jpn')

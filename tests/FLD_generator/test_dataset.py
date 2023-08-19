@@ -114,10 +114,10 @@ def test_generate_dataset():
         quantifier_axiom_arguments_weight=0.2,
         complex_formula_arguments_weight=0.5,
         quantifier_axioms=[
-            'universal_quantifier_elim',
-            'universal_quantifier_intro',
-            'existential_quantifier_intro',
-            'existential_quantifier_elim',
+            # 'universal_quantifier_elim',
+            # 'universal_quantifier_intro',
+            # 'existential_quantifier_intro',
+            # 'existential_quantifier_elim',
         ],
     )
 

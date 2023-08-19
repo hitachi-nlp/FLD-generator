@@ -1,13 +1,9 @@
 from typing import Optional, Iterable, List, Dict
 from string import ascii_uppercase
 from collections import defaultdict
+from enum import Enum, EnumMeta
 
-from FLD_generator.word_banks.base import (
-    POS,
-    VerbForm,
-    AdjForm,
-    NounForm,
-)
+from FLD_generator.word_banks.base import POS
 from FLD_generator.word_banks.base import WordBank
 import line_profiling
 
@@ -16,6 +12,30 @@ from .word_utils import WordUtil
 
 
 class JapaneseWordBank(WordBank):
+
+    class VerbForm(Enum):
+        """ https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html """
+        NORMAL = 'normal'
+        ING = 'ing'
+        S = 's'
+
+        ANTI = 'anti'
+
+    class AdjForm(Enum):
+        NORMAL = 'normal'
+        NESS = 'ness'
+
+        ANTI = 'anti'
+        NEG = 'neg'
+
+    class NounForm(Enum):
+        NORMAL = 'normal'
+        SINGULAR = 's'
+        SINGULAR_WITH_PARTICLE = 'swa'
+        PLURAL = 'p'   # not implemented
+
+        ANTI = 'anti'
+        NEG = 'neg'
 
     __intermediate_constant_words  = [
         f'事物{alphabet}'
@@ -74,13 +94,14 @@ class JapaneseWordBank(WordBank):
                 for morpheme in morphemes
             })
 
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
-        if form in [VerbForm.NORMAL, VerbForm.ING, VerbForm.S]:
+    def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
-            if form == VerbForm.NORMAL:
+        if form in [self.VerbForm.NORMAL, self.VerbForm.ING, self.VerbForm.S]:
+
+            if form == self.VerbForm.NORMAL:
                 return [self._word_util.get_lemma(verb)]
 
-            elif form == VerbForm.ING:
+            elif form == self.VerbForm.ING:
                 verbs: List[str] = []
                 for morpheme in self._get_katsuyou_morphemes(
                     verb,
@@ -104,12 +125,12 @@ class JapaneseWordBank(WordBank):
 
                 return verbs
 
-            elif form == VerbForm.S:
+            elif form == self.VerbForm.S:
                 return [verb]
 
             raise Exception()
 
-        elif form == VerbForm.ANTI:
+        elif form == self.VerbForm.ANTI:
             antonyms = self._get_antonyms(verb)
 
             if len(antonyms) == 0 and force:
@@ -120,26 +141,27 @@ class JapaneseWordBank(WordBank):
         else:
             raise ValueError()
 
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
-        if form == AdjForm.NORMAL:
+    def _change_adj_form(self, adj: str, form: Enum, force=False) -> List[str]:
+
+        if form == self.AdjForm.NORMAL:
             return [adj]
 
-        elif form == AdjForm.NESS:
+        elif form == self.AdjForm.NESS:
             return [adj + 'ということ']
 
-        elif form == AdjForm.ANTI:
+        elif form == self.AdjForm.ANTI:
             antonyms = self._get_antonyms(adj)
             antonyms += [
                 word
-                for word in self._change_adj_form(adj, AdjForm.NEG, force=False)
+                for word in self._change_adj_form(adj, self.AdjForm.NEG, force=False)
                 if word not in antonyms]
 
             if len(antonyms) == 0 and force:
-                antonyms += self._change_adj_form(adj, AdjForm.NEG, force=True)
+                antonyms += self._change_adj_form(adj, self.AdjForm.NEG, force=True)
 
             return antonyms
 
-        elif form == AdjForm.NEG:
+        elif form == self.AdjForm.NEG:
             """
             日本語の場合，形容詞にはnegnymが無いと思われる．
             きれい vs 醜い     -> これはantonymである．
@@ -150,30 +172,31 @@ class JapaneseWordBank(WordBank):
         else:
             raise ValueError()
 
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> List[str]:
-        if form == NounForm.NORMAL:
+    def _change_noun_form(self, noun: str, form: Enum, force=False) -> List[str]:
+
+        if form == self.NounForm.NORMAL:
             return [noun]
 
-        elif form == NounForm.SINGULAR:
+        elif form == self.NounForm.SINGULAR:
             return [noun]
 
-        elif form == NounForm.SINGULAR_WITH_PARTICLE:
+        elif form == self.NounForm.SINGULAR_WITH_PARTICLE:
             return [noun]
 
-        elif form == NounForm.PLURAL:
+        elif form == self.NounForm.PLURAL:
             return [noun]
 
-        elif form == NounForm.ANTI:
+        elif form == self.NounForm.ANTI:
             antonyms = self._get_antonyms(noun)
-            antonyms += [word for word in self._change_noun_form(noun, NounForm.NEG, force=False)
+            antonyms += [word for word in self._change_noun_form(noun, self.NounForm.NEG, force=False)
                          if word not in antonyms]
 
             if len(antonyms) == 0 and force:
-                return self._change_noun_form(noun, NounForm.NEG, force=True)
+                return self._change_noun_form(noun, self.NounForm.NEG, force=True)
 
             return antonyms
 
-        elif form == NounForm.NEG:
+        elif form == self.NounForm.NEG:
             negnyms: List[str] = []
 
             negnym_candidates = [f'{neg_prefix}{noun}'
