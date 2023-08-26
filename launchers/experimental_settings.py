@@ -3489,6 +3489,45 @@ _DATASET_SETTINGS = {
 
 
 
+    '20230826.jpn.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 1000,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+
+    },
+
 
 
 }
@@ -3559,6 +3598,7 @@ _DEFAULT_DATASET_SETTINGS = {
 
         'translation_volume_to_weight': 'sqrt',
         'translation_adj_verb_noun_ratio': '1-2-1',
+        'translation_lang': 'eng',
         'translation_configs': _TRANSLATION_THING_CONFIGS_V1,
 
     },

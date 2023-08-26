@@ -19,6 +19,8 @@ class JapaneseWordBank(WordBank):
         ING = 'ing'
         S = 's'
 
+        KOTO = 'koto'
+
         ANTI = 'anti'
 
     class AdjForm(Enum):
@@ -96,7 +98,7 @@ class JapaneseWordBank(WordBank):
 
     def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
-        if form in [self.VerbForm.NORMAL, self.VerbForm.ING, self.VerbForm.S]:
+        if form in [self.VerbForm.NORMAL, self.VerbForm.ING, self.VerbForm.S, self.VerbForm.KOTO]:
 
             if form == self.VerbForm.NORMAL:
                 return [self._word_util.get_lemma(verb)]
@@ -128,6 +130,10 @@ class JapaneseWordBank(WordBank):
             elif form == self.VerbForm.S:
                 return [verb]
 
+            elif form == self.VerbForm.KOTO:
+                # 走ること
+                return [verb + 'こと']
+
             raise Exception()
 
         elif form == self.VerbForm.ANTI:
@@ -150,6 +156,8 @@ class JapaneseWordBank(WordBank):
             return [adj + 'ということ']
 
         elif form == self.AdjForm.ANTI:
+            raise NotImplementedError('antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
+
             antonyms = self._get_antonyms(adj)
             antonyms += [
                 word
@@ -187,6 +195,8 @@ class JapaneseWordBank(WordBank):
             return [noun]
 
         elif form == self.NounForm.ANTI:
+            raise NotImplementedError('antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
+
             antonyms = self._get_antonyms(noun)
             antonyms += [word for word in self._change_noun_form(noun, self.NounForm.NEG, force=False)
                          if word not in antonyms]

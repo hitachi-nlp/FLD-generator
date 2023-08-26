@@ -3,38 +3,38 @@
   "sentence": {
 
     "{A}it": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A}it>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::{A}it>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "¬{A}it": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A}it>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::¬{A}it>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
 
 
     "({A}it & {B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it & {B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}it & {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}it & {B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it & {B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}it & {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "({A}it & ¬{B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it & ¬{B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}it & ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}it & ¬{B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it & ¬{B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}it & ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
 
 
     "({A}it v {B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it v {B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}it v {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}it v {B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it v {B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}it v {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "({A}it v ¬{B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}it v ¬{B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}it v ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}it v ¬{B}it)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}it v ¬{B}it)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}it v ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ]
 
 

@@ -23,21 +23,21 @@
     "¬{A}noun": [
       "__{A}[NOUN]",
       "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
+      "__<<phrase::not_pred>> {A}[VERB.ing]"
     ],
 
 
     "{A}a_noun": [
       "__comment: We eliminate ADJ and VERB otherwise the semantic of translations will diverge like (i) is [ADJ] (ii) is [ADJ.ness].",
-      "a {A}[NOUN]",
+      "<<phrase::a>> {A}[NOUN]",
       "__{A}[ADJ.ness]",
       "__{A}[VERB.ing]"
     ],
 
     "¬{A}a_noun": [
-      "__a {A}[NOUN]",
+      "__<<phrase::a>> {A}[NOUN]",
       "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
+      "__<<phrase::not_pred>> {A}[VERB.ing]"
     ],
 
 
@@ -51,7 +51,7 @@
     "¬{A}nouns": [
       "__a {A}[NOUN.p]",
       "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
+      "__<<phrase::not_pred>> {A}[VERB.ing]"
     ],
 
 
@@ -72,22 +72,22 @@
     "¬{A}a_event_noun": [
       "__a {A}[NOUN]",
       "{A}[ADJ.neg]ness", "non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
+      "__<<phrase::not_pred>> {A}[VERB.ing]"
     ],
 
 
     "{A}the_event_noun": [
-      "the {A}[NOUN]",
-      "the {A}[ADJ.ness]",
-      "the {A}[VERB.ing]",
+      "<<phrase::the>> {A}[NOUN]",
+      "<<phrase::the>> {A}[ADJ.ness]",
+      "<<phrase::the>> {A}[VERB.ing]",
 
       "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
     ],
 
     "¬{A}the_event_noun": [
-      "__the {A}[NOUN]",
-      "the {A}[ADJ.neg]ness", "the non-{A}[ADJ.ness]",
-      "__not {A}[VERB.ing]"
+      "__<<phrase::the>> {A}[NOUN]",
+      "<<phrase::the>> {A}[ADJ.neg]ness", "<<phrase::the>> non-{A}[ADJ.ness]",
+      "__<<phrase::not_pred>> {A}[VERB.ing]"
     ],
 
 
@@ -95,8 +95,8 @@
 
 
     "{A}predicate": [
-      "is <<phrase::{A}is_tgt>>",
-      ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>>"],
+      "<<phrase::is>> <<phrase::{A}is_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>>"],
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>>",
 
       "<<phrase::does>> {A}[VERB]", "{A}[VERB.s]"
@@ -113,11 +113,11 @@
 
 
     "¬{A}predicate": [
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>>"],
-      "is not <<phrase::¬{A}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>>"],
+      "<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>>",
       "<<phrase::is_not_a_kind_of>> <<phrase::{A}a_noun>>",
 
-      "<<phrase::does>> not {A}[VERB]"
+      "<<phrase::does>> <<phrase::not_pred>> {A}[VERB]"
     ],
 
     "¬{A}is_tgt": [
@@ -135,131 +135,131 @@
       "<<phrase::{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
       "__both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
 
-      "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>"],
-      ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::but_and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
       "__comment: the above are suppressed because they are sort of double negation",
 
-      "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is both <<phrase::{A}is_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
-      ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      "<<phrase::is>> both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
 
-      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::{B}predicate>>",
-      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::thing>> that <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> <<phrase::{B}post_modifier>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>>"
     ],
     "(¬{A} & {B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
       "__both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::{B}predicate>>",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
-      "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>",
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::but_and>> not <<phrase::{B}is_not_tgt>>"],
-      ["W_VOL_AVG__0.2", "is not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
+      "<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::{B}is_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::but_and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
 
-      ["W_VOL_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
-      "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
-      ["W_VOL_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
-      ["W_VOL_AVG__0.2", "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
+      "<<phrase::is>> both <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
 
-      "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::{B}predicate>>",
-      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> that <<phrase::{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> <<phrase::{B}post_modifier>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::{B}a_noun>>"
     ],
     "({A} & ¬{B})predicate": [
       "<<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
       "__both <<phrase::{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
-      "is <<phrase::{A}is_tgt>> <<phrase::but_and>> not <<phrase::¬{B}is_not_tgt>>",
-      ["W_VOL_AVG__0.2", "is not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
+      "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::but_and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>"],
 
-      ["W_VOL_AVG__0.2", "is both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
-      "is both <<phrase::{A}is_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
-      ["W_VOL_AVG__0.2", "is both not <<phrase::{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      "<<phrase::is>> both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>"],
 
-      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> that <<phrase::¬{B}predicate>>",
-      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::thing>> that <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>> <<phrase::¬{B}post_modifier>>",
+      "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
       "<<phrase::is_a_kind_of>> <<phrase::{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
     ],
     "(¬{A} & ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
       "__both <<phrase::¬{A}predicate>> <<phrase::and>> <<phrase::¬{B}predicate>>",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is not <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::but_and>> not <<phrase::¬{B}is_not_tgt>>"],
-      "is not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::but_and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>"],
+      "<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>",
 
-      ["W_VOL_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is both <<phrase::¬{A}is_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>"],
-      "is both not <<phrase::¬{A}is_not_tgt>> <<phrase::and>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>"],
+      "<<phrase::is>> both <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::and>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>",
 
-      "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> that <<phrase::¬{B}predicate>>",
-      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> that <<phrase::¬{B}predicate>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}a_noun>> <<phrase::¬{B}post_modifier>>",
+      "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
       "<<phrase::is_a_kind_of>> <<phrase::¬{A}pre_modifier>> <<phrase::¬{B}a_noun>>"
     ],
 
     "({A} v {B})predicate": [
       "<<phrase::{A}predicate>> <<phrase::andOr>> <<phrase::{B}predicate>>",
-      "<<phrase::maybe_either>> <<phrase::{A}predicate>> or <<phrase::{B}predicate>> or both",
+      "<<phrase::maybe_either>> <<phrase::{A}predicate>> <<phrase::or>> <<phrase::{B}predicate>> <<phrase::or>> both",
 
-      "is <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
-      ["W_VOL_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
-      ["W_VOL_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
+      "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
+      ["W_VOL_AVG__0.2", "__<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "__<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
 
-      "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or <<phrase::{B}is_tgt>> or both",
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or <<phrase::{B}is_tgt>> or both"],
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or not <<phrase::{B}is_not_tgt>> or both"],
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or not <<phrase::{B}is_not_tgt>> or both"]
+      "<<phrase::is>> <<phrase::maybe_either>> <<phrase::{A}is_tgt>> <<phrase::or>> <<phrase::{B}is_tgt>> <<phrase::or>> both",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::or>> <<phrase::{B}is_tgt>> <<phrase::or>> both"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::{A}is_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>> <<phrase::or>> both"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>> <<phrase::or>> both"]
     ],
     "(¬{A} v {B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::andOr>> <<phrase::{B}predicate>>",
-      "<<phrase::maybe_either>> <<phrase::¬{A}predicate>> or <<phrase::{B}predicate>> or both",
+      "<<phrase::maybe_either>> <<phrase::¬{A}predicate>> <<phrase::or>> <<phrase::{B}predicate>> <<phrase::or>> both",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
-      "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
-      ["W_VOL_AVG__0.2", "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
+      "__<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "__<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>>"],
 
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or <<phrase::{B}is_tgt>> or both"],
-      "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or <<phrase::{B}is_tgt>> or both",
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or not <<phrase::{B}is_not_tgt>> or both"],
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or not <<phrase::{B}is_not_tgt>> or both"]
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> <<phrase::or>> <<phrase::{B}is_tgt>> <<phrase::or>> both"],
+      "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::or>> <<phrase::{B}is_tgt>> <<phrase::or>> both",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>> <<phrase::or>> both"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::{B}is_not_tgt>> <<phrase::or>> both"]
     ],
     "({A} v ¬{B})predicate": [
       "<<phrase::{A}predicate>> <<phrase::andOr>> <<phrase::¬{B}predicate>>",
-      "<<phrase::maybe_either>> <<phrase::{A}predicate>> or <<phrase::¬{B}predicate>> or both",
+      "<<phrase::maybe_either>> <<phrase::{A}predicate>> <<phrase::or>> <<phrase::¬{B}predicate>> <<phrase::or>> both",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
-      "is <<phrase::{A}is_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>",
-      ["W_VOL_AVG__0.2", "__is not <<phrase::{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "__<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      "<<phrase::is>> <<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "__<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>"],
 
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
-      "is <<phrase::maybe_either>> <<phrase::{A}is_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both",
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::{A}is_not_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"]
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::{A}is_tgt>> <<phrase::or>> <<phrase::¬{B}is_tgt>> <<phrase::or>> both"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::or>> <<phrase::¬{B}is_tgt>> <<phrase::or>> both"],
+      "<<phrase::is>> <<phrase::maybe_either>> <<phrase::{A}is_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>> <<phrase::or>> both",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>> <<phrase::or>> both"]
     ],
     "(¬{A} v ¬{B})predicate": [
       "<<phrase::¬{A}predicate>> <<phrase::andOr>> <<phrase::¬{B}predicate>>",
-      "<<phrase::maybe_either>> <<phrase::¬{A}predicate>> or <<phrase::¬{B}predicate>> or both",
+      "<<phrase::maybe_either>> <<phrase::¬{A}predicate>> <<phrase::or>> <<phrase::¬{B}predicate>> <<phrase::or>> both",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
-      ["W_VOL_AVG__0.2", "is <<phrase::¬{A}is_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>"],
-      "__is not <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> not <<phrase::¬{B}is_not_tgt>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "__<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>"],
+      "__<<phrase::is>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::andOr>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>>",
 
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or <<phrase::¬{B}is_tgt>> or both"],
-      ["W_VOL_AVG__0.2", "is <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"],
-      "is <<phrase::maybe_either>> not <<phrase::¬{A}is_not_tgt>> or not <<phrase::¬{B}is_not_tgt>> or both"
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> <<phrase::or>> <<phrase::¬{B}is_tgt>> <<phrase::or>> both"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::or>> <<phrase::¬{B}is_tgt>> <<phrase::or>> both"],
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>> <<phrase::or>> both"],
+      "<<phrase::is>> <<phrase::maybe_either>> <<phrase::not_pred>> <<phrase::¬{A}is_not_tgt>> <<phrase::or>> <<phrase::not_pred>> <<phrase::¬{B}is_not_tgt>> <<phrase::or>> both"
     ],
 
 
@@ -289,7 +289,7 @@
 
     "¬{A}post_modifier": [
       "__{A}[ADJ.neg]", "__non-{A}[ADJ]",
-      "__not {A}[VERB.ing]",
+      "__<<phrase::not_pred>> {A}[VERB.ing]",
       "that <<phrase::¬{A}predicate>>"
     ],
 
@@ -309,16 +309,20 @@
 
 
     "({A} v {B})pre_modifier": [
-      "__<<phrase::maybe_either>> <<phrase::{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
+      "__<<phrase::{A}pre_modifier>> <<phrase::andOr>> <<phrase::{B}pre_modifier>>",
+      "__<<phrase::maybe_either>> <<phrase::{A}pre_modifier>> <<phrase::or>> <<phrase::{B}pre_modifier>> <<phrase::or>> both"
     ],
     "(¬{A} v {B})pre_modifier": [
-      "__<<phrase::maybe_either>> <<phrase::¬{A}pre_modifier>> or <<phrase::{B}pre_modifier>> or both"
+      "__<<phrase::¬{A}pre_modifier>> <<phrase::andOr>> <<phrase::{B}pre_modifier>>",
+      "__<<phrase::maybe_either>> <<phrase::¬{A}pre_modifier>> <<phrase::or>> <<phrase::{B}pre_modifier>> <<phrase::or>> both"
     ],
     "({A} v ¬{B})pre_modifier": [
-      "__<<phrase::maybe_either>> <<phrase::{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
+      "__<<phrase::{A}pre_modifier>> <<phrase::andOr>> <<phrase::¬{B}pre_modifier>>",
+      "__<<phrase::maybe_either>> <<phrase::{A}pre_modifier>> <<phrase::or>> <<phrase::¬{B}pre_modifier>> <<phrase::or>> both"
     ],
     "(¬{A} v ¬{B})pre_modifier": [
-      "__<<phrase::maybe_either>> <<phrase::¬{A}pre_modifier>> or <<phrase::¬{B}pre_modifier>> or both"
+      "__<<phrase::¬{A}pre_modifier>> <<phrase::andOr>> <<phrase::¬{B}pre_modifier>>",
+      "__<<phrase::maybe_either>> <<phrase::¬{A}pre_modifier>> <<phrase::or>> <<phrase::¬{B}pre_modifier>> <<phrase::or>> both"
     ],
 
 
@@ -355,10 +359,20 @@
 
 
 
+    "the": [
+      "the"
+    ],
 
+    "a": [
+      "a"
+    ],
 
     "and": [
       "and"
+    ],
+
+    "or": [
+      "or"
     ],
 
     "andOr": [
@@ -372,6 +386,18 @@
     "but_and": [
       "but",
       "and"
+    ],
+
+    "not_noun": [
+      "not"
+    ],
+
+    "not_pred": [
+      "not"
+    ],
+
+    "is": [
+      "is"
     ],
 
     "does": [
@@ -394,10 +420,10 @@
     ],
 
     "caused_verb": [
-      "is caused by",
-      "is brought about by",
+      "<<phrase::is>> caused by",
+      "<<phrase::is>> brought about by",
 
-      "is triggered by",
+      "<<phrase::is>> triggered by",
 
       "__originates from",
       "__comes from",
@@ -417,19 +443,19 @@
     ],
 
     "prevented_verb": [
-      "is prevented by"
+      "<<phrase::is>> prevented by"
     ],
 
     "is_a_kind_of": [
-      "is",
-      "is a kind of",
-      "__is an example of"
+      "<<phrase::is>>",
+      "<<phrase::is>> a kind of",
+      "__<<phrase::is>> an example of"
     ],
 
     "is_not_a_kind_of": [
-      "is not",
-      "is not a kind of",
-      "__is not an example of"
+      "<<phrase::is>> not",
+      "<<phrase::is>> <<phrase::not_pred>> a kind of",
+      "__<<phrase::is>> <<phrase::not_pred>> an example of"
     ],
 
     "if_conjunction": [
@@ -446,15 +472,15 @@
     ],
 
     "is_true": [
-      "is <<phrase::correct_adj>>",
-      "is not <<phrase::incorrect_adj>>",
+      "<<phrase::is>> <<phrase::correct_adj>>",
+      "<<phrase::is>> <<phrase::not_pred>> <<phrase::incorrect_adj>>",
       "<<phrase::hold_verb>>"
     ],
 
     "is_not_true": [
-      "is not <<phrase::correct_adj>>",
-      "is <<phrase::incorrect_adj>>",
-      "does not <<phrase::hold_verb>>"
+      "<<phrase::is>> <<phrase::not_pred>> <<phrase::correct_adj>>",
+      "<<phrase::is>> <<phrase::incorrect_adj>>",
+      "<<phrase::does>> <<phrase::not_pred>> <<phrase::hold_verb>>"
     ],
 
     "correct_adj": [
@@ -490,6 +516,10 @@
       "__takes its rise"
     ],
 
+    "not_occur": [
+      "<<phrase::does>> <<phrase::not_pred>> <<phrase::occur>>"
+    ],
+
     "there_is": [
        "there is",
        "there exists"
@@ -508,6 +538,10 @@
     "there_is_nothing_such_that" : [
        "there is <<phrase::nothing>> such that",
        "there exists <<phrase::nothing>> such that"
+    ],
+
+    "it": [
+      "it"
     ],
 
     "something": [
@@ -535,12 +569,12 @@
       "__people"
     ],
 
-    "maybe_either": [
+    "__maybe_either": [
       "either",
       ""
     ],
 
-    "maybe_then": [
+    "__maybe_then": [
       "then",
       ""
     ]

@@ -3,38 +3,38 @@
   "sentence": {
 
     "{A}something": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A}something>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::{A}something>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "¬{A}something": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A}something>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::¬{A}something>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
 
 
     "({A}something & {B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}something & {B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}something & {B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}something & {B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}something & {B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}something & {B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "({A}something & ¬{B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}something & ¬{B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}something & ¬{B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}something & ¬{B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}something & ¬{B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}something & ¬{B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
 
 
     "({A}something v {B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}something v {B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}something v {B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}something v {B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}something v {B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}something v {B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "({A}something v ¬{B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::({A}something v ¬{B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::({A}something v ¬{B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ],
     "(¬{A}something v ¬{B}something)": [
-      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::(¬{A}something v ¬{B}something)>> <<phrase::is_true>>"]
+      ["W_VOL_AVG__0.05", "「 <<sentence::(¬{A}something v ¬{B}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_true>>"]
     ]
 
 

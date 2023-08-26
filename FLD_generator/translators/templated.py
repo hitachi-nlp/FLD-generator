@@ -1,8 +1,6 @@
-import json
+from abc import abstractmethod
 from typing import List, Dict, Optional, Tuple, Iterable, Any, Set, Callable
 from collections import OrderedDict, defaultdict
-import traceback
-from enum import Enum
 import statistics
 import re
 import copy
@@ -13,7 +11,7 @@ from functools import lru_cache
 import math
 
 from tqdm import tqdm
-from FLD_generator.formula import Formula, PREDICATES, CONSTANTS
+from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, remove_outer_brace
 from FLD_generator.word_banks.base import WordBank, ATTR
 from FLD_generator.interpretation import (
     generate_mappings_from_formula,
@@ -23,7 +21,7 @@ from FLD_generator.interpretation import (
 )
 from FLD_generator.utils import make_combination, chained_sampling_from_weighted_iterators
 from FLD_generator.word_banks import POS
-from FLD_generator.utils import starts_with_vowel_sound, compress, decompress, make_pretty_msg
+from FLD_generator.utils import compress, decompress, make_pretty_msg
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import line_profiling
 
@@ -361,14 +359,14 @@ class TemplatedTranslator(Translator):
                     for inflation_type, count in _inflation_stats.items():
                         count_stats['inflation_stats'][f'{inflation_type}'] = count
 
-                interpret_templated_translation_pushed_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
+                interpret_templated_translation_pushed = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
 
                 # do interpretation using predicates and constants using interpret_mapping
                 if self._do_translate_to_nl:
-                    interpret_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interpret_templated_translation_pushed_wo_info)
-                    translation = interpret_formula(Formula(interpret_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
+                    interpret_templated_translation_pushed_with_the_or_it = self._postprocess_template(interpret_templated_translation_pushed)
+                    translation = interpret_formula(Formula(interpret_templated_translation_pushed_with_the_or_it), inflated_mapping).rep
                 else:
-                    translation = interpret_templated_translation_pushed_wo_info
+                    translation = interpret_templated_translation_pushed
 
                 SO_swap_formula: Optional[Formula] = None
                 if len(formula.unary_PASs) == 1 and len(formula.predicates) == 1 and len(formula.constants) == 1:  # something like {A}{a}
@@ -389,8 +387,8 @@ class TemplatedTranslator(Translator):
                             SO_swap_interpret_mapping,
                             chosen_nl_pushed,
                         )
-                        interpret_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interpret_templated_translation_pushed_wo_info)
-                        SO_swap_translation = interpret_formula(Formula(interpret_templated_translation_pushed_wo_info_with_the_or_it), SO_swap_inflated_mapping).rep
+                        interpret_templated_translation_pushed_with_the_or_it = self._postprocess_template(interpret_templated_translation_pushed)
+                        SO_swap_translation = interpret_formula(Formula(interpret_templated_translation_pushed_with_the_or_it), SO_swap_inflated_mapping).rep
 
                         used_predicates = {pred.rep
                                            for formula in formulas + SO_swap_formulas
@@ -408,11 +406,12 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
 
-                translation = translation.replace('__O__', ' ')
+                
+                translation = self._make_pred_with_obj_transl(translation)
                 translations.append(translation)
 
                 if SO_swap_formula is not None:
-                    SO_swap_formula.translation = SO_swap_formula.translation.replace('__O__', ' ')
+                    SO_swap_formula.translation = self._make_pred_with_obj_transl(SO_swap_formula.translation)
                 SO_swap_formulas.append(SO_swap_formula)
 
                 translation_names.append(self._translation_name(translation_key, chosen_nl))
@@ -429,26 +428,31 @@ class TemplatedTranslator(Translator):
 
         # fix grammers and other stufs
         translations = [
-            (self._fix_translation(translation) if translation is not None else None)
+            (self._postprocess_translation(translation) if translation is not None else None)
             for translation in translations
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
-                SO_swap_formula.translation = self._fix_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
+                SO_swap_formula.translation = self._postprocess_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
-        for _transl_key, _ in self._translations.items():
-            if formula_can_not_be_identical_to(Formula(_transl_key), formula):  # early rejection
-                continue
+        for _remove_outer_brace in [False, True]:
+            if _remove_outer_brace:
+                _formula = remove_outer_brace(formula)
+            else:
+                _formula = formula
+            for _transl_key, _ in self._translations.items():
+                if formula_can_not_be_identical_to(Formula(_transl_key), _formula):  # early rejection
+                    continue
 
-            for push_mapping in generate_mappings_from_formula([Formula(_transl_key)], [formula]):
-                _transl_key_pushed = interpret_formula(Formula(_transl_key), push_mapping).rep
-                if _transl_key_pushed == formula.rep:
-                    yield _transl_key, push_mapping
+                for push_mapping in generate_mappings_from_formula([Formula(_transl_key)], [_formula]):
+                    _transl_key_pushed = interpret_formula(Formula(_transl_key), push_mapping).rep
+                    if _transl_key_pushed == _formula.rep:
+                        yield _transl_key, push_mapping
 
     @profile
     def _sample_interpret_mapping_consistent_nl(self,
@@ -804,45 +808,6 @@ class TemplatedTranslator(Translator):
         return _PosFormConditionSet(conditions)
 
     @profile
-    def _replace_following_constants_with_the_or_it(self, sentence_with_templates: str) -> str:
-        constants = [c.rep for c in Formula(sentence_with_templates).constants]
-
-        with_definite = sentence_with_templates
-        for constant in constants:
-            if with_definite.count(constant) < 2:
-                continue
-
-            first_pos = with_definite.find(constant)
-
-            until_first = with_definite[:first_pos + len(constant)]
-            from_second = with_definite[first_pos + len(constant):]
-
-            if re.match(f'.*a {constant} is.*', from_second):
-                replace_with_it = random.random() >= 0.5
-            else:
-                replace_with_it = False
-
-            if replace_with_it:
-                from_second_with_definite = re.sub(
-                    f'a {constant} is',
-                    'it is',
-                    from_second,
-                )
-            else:
-                from_second_with_definite = re.sub(
-                    f'(.*)a (.*){constant}',
-                    f'\g<1>the \g<2>{constant}',
-                    from_second,
-                )
-            with_definite = until_first + from_second_with_definite
-        if sentence_with_templates != with_definite:
-            logger.info('particles "a (...) %s" are modified as:    "%s"    ->    "%s"',
-                        constant,
-                        sentence_with_templates,
-                        with_definite)
-        return with_definite
-
-    @profile
     def _choose_interpret_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
@@ -930,7 +895,7 @@ class TemplatedTranslator(Translator):
     @profile
     def _take(self, elems: List[Any], size: int) -> List[Any]:
         if len(elems) < size:
-            logger.warning('Can\'t take %d elements. Will tak;e only %d elements.',
+            logger.warning('Can\'t take %d elements. Will take only %d elements.',
                            size,
                            len(elems))
         # if size * 3 < len(elems):
@@ -1045,84 +1010,14 @@ class TemplatedTranslator(Translator):
         else:
             return '__O__'.join([word, obj])
 
-    def _fix_translation(self, translation: str) -> str:
-        # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
-        translation = self._correct_indefinite_particles(translation)
-        translation = self._fix_pred_singularity(translation)
-        translation = self._reduce_degenerate_blanks(translation)
-        translation = self._uppercase_beggining(translation)
-        translation = self._add_ending_period(translation)
+    @abstractmethod
+    def _postprocess_template(self, template: str) -> str:
+        pass
 
-        return translation
+    @abstractmethod
+    def _make_pred_with_obj_transl(self, translation: str) -> str:
+        pass
 
-    @profile
-    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
-        """ choose an appropriate indefinite particls, i.e., "a" or "an", depending on the word pronounciation """
-        words = sentence_wo_templates.split(' ')
-        corrected_words = []
-        for i_word, word in enumerate(words):
-            if word.lower() in ['a', 'an']:
-                if len(words) >= i_word + 2:
-                    next_word = words[i_word + 1]
-                    if starts_with_vowel_sound(next_word):
-                        corrected_words.append('an')
-                    else:
-                        corrected_words.append('a')
-                else:
-                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
-                    corrected_words.append(word)
-            else:
-                corrected_words.append(word)
-        corrected_sentence = ' '.join(corrected_words)
-        return corrected_sentence
-
-    def _fix_pred_singularity(self, translation: str) -> str:
-        # TODO: A and B {is, runs} => currently, we do not have ({A}{a} and {B}{a}) so that we do not this fix.
-        translation_fixed = translation
-
-        def fix_all_thing_is(translation: str, src_pred: str, dst_pred: str) -> str:
-            if re.match(f'.*all .*things? {src_pred}.*', translation):
-                translation_fixed = re.sub(f'(.*)all (.*)things? {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
-                return translation_fixed
-            else:
-                return translation
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is an', 'are')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is a', 'are')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is', 'are')
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was an', 'were')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was a', 'were')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was', 'wer')
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'does', 'do')
-
-        # all kind thing squashes apple -> all kind thing squash apple
-        if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
-            word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
-            if POS.VERB in self._word_bank.get_pos(word_after_things):
-                verb_normal = self._word_bank.change_word_form(word_after_things, POS.VERB, 'normal')[0]
-                translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
-
-        # target   : A and B causes C -> A and B cause C
-        # negagive : A runs and it is also kind
-        # def fix_A_and_B_is(translation: str, src_pred: str, dst_pred: str) -> str:
-        #     if re.match(f'.*[^ ]* and [^ ]* {src_pred}.*', translation):
-        #         translation_fixed = re.sub('.*([^ ]*) and ([^ ]*) {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
-        #         return translation_fixed
-        #     else:
-        #         return translation
-
-        if translation_fixed != translation:
-            logger.info('translation is fixed as:\norig : "%s"\nfixed: "%s"', translation, translation_fixed)
-
-        return translation_fixed
-
-    def _reduce_degenerate_blanks(self, translation: str) -> str:
-        return re.sub(r'\s+', ' ', translation).strip(' ')
-
-    def _uppercase_beggining(self, translation: str) -> str:
-        return translation[0].upper() + translation[1:]
-
-    def _add_ending_period(self, translation: str) -> str:
-        return translation + '.'
+    @abstractmethod
+    def _postprocess_translation(self, translation: str) -> str:
+        pass

@@ -18,6 +18,7 @@ def build(lang: str,
           config_paths: List[str],
           word_bank: WordBank,
           adj_verb_noun_ratio: Optional[str] = None,
+          insert_word_delimiters=False,
           **kwargs) -> TemplatedTranslator:
 
     merged_config_json = {}
@@ -46,6 +47,7 @@ def build(lang: str,
             merged_config_json,
             word_bank,
             adj_verb_noun_ratio=_adj_verb_noun_ratio,
+            insert_word_delimiters=insert_word_delimiters,
             **kwargs,
         )
     else:

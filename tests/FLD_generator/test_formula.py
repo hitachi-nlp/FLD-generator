@@ -1,5 +1,5 @@
 from typing import List, Set
-from FLD_generator.formula import Formula, negate, require_outer_brace
+from FLD_generator.formula import Formula, negate, _require_outer_brace
 
 
 def test_formula():
@@ -37,7 +37,7 @@ def test_require_outer_brace():
               gold_do_require: bool,
               require_for_single_predicate=False,
               require_for_negated_formula=False) -> bool:
-        do_require = require_outer_brace(Formula(rep),
+        do_require = _require_outer_brace(Formula(rep),
                                          require_for_single_predicate=require_for_single_predicate,
                                          require_for_negated_formula=require_for_negated_formula)
         return do_require is gold_do_require

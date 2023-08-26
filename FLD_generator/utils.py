@@ -6,6 +6,7 @@ import logging
 import zlib
 from pprint import pformat
 from ctypes import ArgumentError
+import os
 
 from z3.z3types import Z3Exception
 from FLD_generator.argument import Argument
@@ -484,3 +485,8 @@ def is_consistent_formula_set_with_logs(org_formulas: List[Formula],
         return False, log_msgs
 
     return True, log_msgs
+
+
+def fix_seed(seed: int) -> None:
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)

@@ -19,7 +19,7 @@ from FLD_generator.proof_tree_generators import build as build_generator
 from FLD_generator.datasets import NLProofSDataset
 from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
-from FLD_generator.utils import _build_bounded_msg, log_results
+from FLD_generator.utils import _build_bounded_msg, log_results, fix_seed
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -263,7 +263,7 @@ def main(output_path,
          batch_size_per_worker,
          seed):
     setup_logger(do_stderr=True, level=logging.INFO)
-    random.seed(seed)
+    fix_seed(seed)
     depth_range = tuple(json.loads(depth_range))
     branch_extensions_range = json.loads(branch_extensions_range)
     distractors_range = json.loads(distractors_range)

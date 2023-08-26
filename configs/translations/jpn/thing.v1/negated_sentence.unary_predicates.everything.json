@@ -3,38 +3,38 @@
   "sentence": {
 
     "¬({A}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::({A}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::¬({A}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::¬({A}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
 
 
     "¬({A}everything & {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything & {B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::({A}everything & {B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}everything & {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything & {B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::(¬{A}everything & {B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬({A}everything & ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything & ¬{B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::({A}everything & ¬{B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}everything & ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything & ¬{B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::(¬{A}everything & ¬{B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
 
 
     "¬({A}everything v {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything v {B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::({A}everything v {B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}everything v {B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything v {B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::(¬{A}everything v {B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬({A}everything v ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}everything v ¬{B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::({A}everything v ¬{B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}everything v ¬{B}everything)": [
-      "<<phrase::the_fact_that>> <<sentence::(¬{A}everything v ¬{B}everything)>> <<phrase::is_not_true>>"
+      "「 <<sentence::(¬{A}everything v ¬{B}everything)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ]
 
   }

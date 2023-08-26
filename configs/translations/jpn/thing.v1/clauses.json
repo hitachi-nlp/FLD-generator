@@ -9,44 +9,44 @@
       ],
 
       "¬{A}": [
-        "<<phrase::{A}the_event_noun>> <<phrase::does>> not occur"
+        "<<phrase::{A}the_event_noun>> <<phrase::not_occur>>"
       ],
 
 
       "({A} & {B})": [
           "<<clause::verb::{A}>> <<phrase::and>> <<clause::verb::{B}>>",
-          "__both <<clause::verb::{A}>> <<phrase::and>> <<clause::verb::{B}>>",
+          "__<<clause::verb::{A}>> <<phrase::and>> <<clause::verb::{B}>> <<phrase::both_pred>>",
           "__comment: both {A} and {B} is OK but confusing when combined with subject, such as 'He both is red and green'",
 
-          "<<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
-          "both <<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::{A}the_event_noun>> <<phrase::noun_and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::{A}the_event_noun>> <<phrase::noun_and>> <<phrase::{B}the_event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
 
           "__"
       ],
       "(¬{A} & {B})": [
           "<<clause::verb::¬{A}>> <<phrase::but_and>> <<clause::verb::{B}>>",
-          "__both <<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::{B}>>",
+          "__<<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::{B}>> <<phrase::both_pred>>",
 
-          "<<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
-          "both <<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::¬{A}the_event_noun>> <<phrase::noun_and>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::¬{A}the_event_noun>> <<phrase::noun_and>> <<phrase::{B}the_event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
 
-          "not <<phrase::{A}the_event_noun>> <<phrase::but>> <<phrase::{B}the_event_noun>> <<phrase::occur>>"
+          "<<phrase::{A}the_event_noun>> <<phrase::noun_not>> <<phrase::{B}the_event_noun>> <<phrase::occur>>"
       ],
       "({A} & ¬{B})": [
           "<<clause::verb::{A}>> <<phrase::but_and>> <<clause::verb::¬{B}>>",
-          "__both <<clause::verb::{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
+          "__<<clause::verb::{A}>> <<phrase::and>> <<clause::verb::¬{B}>> <<phrase::both_pred>>",
 
-          "<<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
-          "both <<phrase::{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::{A}the_event_noun>> <<phrase::noun_and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::{A}the_event_noun>> <<phrase::noun_and>> <<phrase::¬{B}the_event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
 
-          "<<phrase::{A}the_event_noun>> <<phrase::but>> not <<phrase::{B}the_event_noun>> <<phrase::occur>>"
+          "__<<phrase::{A}the_event_noun>> <<phrase::but>> <<phrase::noun_not>> <<phrase::{B}the_event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & ¬{B})": [
           "<<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
-          "__both <<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>>",
+          "__<<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>> <<phrase::both_pred>>",
 
-          "<<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
-          "both <<phrase::¬{A}the_event_noun>> <<phrase::and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::¬{A}the_event_noun>> <<phrase::noun_and>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
+          "<<phrase::¬{A}the_event_noun>> <<phrase::noun_and>> <<phrase::¬{B}the_event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
 
           "__"
       ],
@@ -54,37 +54,37 @@
 
       "({A} v {B})": [
           "<<clause::verb::{A}>> <<phrase::andOr>> <<clause::verb::{B}>>",
-          "<<phrase::maybe_either>> <<clause::verb::{A}>> or <<clause::verb::{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}>> <<phrase::or>> <<clause::verb::{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::{A}the_event_noun>> <<phrase::andOr>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::{A}the_event_noun>> or <<phrase::{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::{A}the_event_noun>> <<phrase::or>> <<phrase::{B}the_event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
 
           "__"
       ],
       "(¬{A} v {B})": [
           "<<clause::verb::¬{A}>> <<phrase::andOr>> <<clause::verb::{B}>>",
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}>> or <<clause::verb::{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}>> <<phrase::or>> <<clause::verb::{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::¬{A}the_event_noun>> <<phrase::andOr>> <<phrase::{B}the_event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::¬{A}the_event_noun>> or <<phrase::{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::¬{A}the_event_noun>> <<phrase::or>> <<phrase::{B}the_event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
 
           "__"
       ],
       "({A} v ¬{B})": [
           "<<clause::verb::{A}>> <<phrase::andOr>> <<clause::verb::¬{B}>>",
-          "<<phrase::maybe_either>> <<clause::verb::{A}>> or <<clause::verb::¬{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}>> <<phrase::or>> <<clause::verb::¬{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::{A}the_event_noun>> <<phrase::andOr>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::{A}the_event_noun>> or <<phrase::¬{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::{A}the_event_noun>> <<phrase::or>> <<phrase::¬{B}the_event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
 
           "__"
       ],
       "(¬{A} v ¬{B})": [
           "<<clause::verb::¬{A}>> <<phrase::andOr>> <<clause::verb::¬{B}>>",
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}>> or <<clause::verb::¬{B}>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}>> <<phrase::or>> <<clause::verb::¬{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::¬{A}the_event_noun>> <<phrase::andOr>> <<phrase::¬{B}the_event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::¬{A}the_event_noun>> or <<phrase::¬{B}the_event_noun>> or both <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::¬{A}the_event_noun>> <<phrase::or>> <<phrase::¬{B}the_event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
 
           "__"
       ],
@@ -93,33 +93,33 @@
 
 
       "{A}{a}generic_subj": [
-        "a <<phrase::{a}noun>> <<phrase::{A}predicate>>"
+        "<<phrase::a>> <<phrase::{a}noun>> <<phrase::{A}predicate>>"
       ],
       "¬{A}{a}generic_subj": [
-        "a <<phrase::{a}noun>> <<phrase::¬{A}predicate>>"
+        "<<phrase::a>> <<phrase::{a}noun>> <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}{a} & {B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::({A} & {B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}{a}generic_subj>> <<phrase::and>> <<clause::verb::{B}it>>",
 
           "__"
       ],
       "(¬{A}{a} & {B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
           "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::but_and>> <<clause::verb::{B}it>>",
 
           "__"
       ],
       "({A}{a} & ¬{B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
           "<<clause::verb::{A}{a}generic_subj>> <<phrase::but_and>> <<clause::verb::¬{B}it>>",
 
           "__"
       ],
       "(¬{A}{a} & ¬{B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
           "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::and>> <<clause::verb::¬{B}it>>",
 
           "__"
@@ -127,61 +127,61 @@
 
 
       "({A}{a} v {B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}generic_subj>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "(¬{A}{a} v {B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}generic_subj>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "({A}{a} v ¬{B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}generic_subj>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "(¬{A}{a} v ¬{B}{a})generic_subj": [
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}{a}generic_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}generic_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}generic_subj>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
 
 
 
 
       "{A}{a}specific_subj": [
-        "the <<phrase::{a}noun>> <<phrase::{A}predicate>>"
+        "<<phrase::the>> <<phrase::{a}noun>> <<phrase::{A}predicate>>"
       ],
       "¬{A}{a}specific_subj": [
-        "the <<phrase::{a}noun>> <<phrase::¬{A}predicate>>"
+        "<<phrase::the>> <<phrase::{a}noun>> <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}{a} & {B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::({A} & {B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}{a}specific_subj>> <<phrase::and>> <<clause::verb::{B}it>>",
 
           "__"
       ],
       "(¬{A}{a} & {B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::(¬{A} & {B})predicate>>",
           "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::but>> <<clause::verb::{B}it>>",
 
           "__"
       ],
       "({A}{a} & ¬{B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::({A} & ¬{B})predicate>>",
           "<<clause::verb::{A}{a}specific_subj>> <<phrase::but>> <<clause::verb::¬{B}it>>",
 
           "__"
       ],
       "(¬{A}{a} & ¬{B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})predicate>>",
           "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::and>> <<clause::verb::¬{B}it>>",
 
           "__"
@@ -189,28 +189,28 @@
 
 
       "({A}{a} v {B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}specific_subj>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "(¬{A}{a} v {B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}specific_subj>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "({A}{a} v ¬{B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}{a}specific_subj>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "(¬{A}{a} v ¬{B}{a})specific_subj": [
-          "the <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<phrase::the>> <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}{a}specific_subj>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}specific_subj>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}{a}specific_subj>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
 
 
@@ -256,25 +256,25 @@
           "<<phrase::something>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::{A}something>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}something>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "(¬{A}something v {B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}something>> <<phrase::andOr>> <<clause::verb::{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}something>> or <<clause::verb::{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}something>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "({A}something v ¬{B}something)": [
           "<<phrase::something>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}something>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::{A}something>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::{A}something>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
       "(¬{A}something v ¬{B}something)": [
           "<<phrase::something>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}something>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
 
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}something>> or <<clause::verb::¬{B}it>> or both"
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}something>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>"
       ],
 
 
@@ -318,28 +318,28 @@
       "({A}everything v {B}everything)": [
           "<<phrase::everything>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}everything>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::{A}everything>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}everything>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}everything v {B}everything)": [
           "<<phrase::everything>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}everything>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}everything>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}everything>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "({A}everything v ¬{B}everything)": [
           "<<phrase::everything>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}everything>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::{A}everything>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}everything>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}everything v ¬{B}everything)": [
           "<<phrase::everything>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}everything>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}everything>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}everything>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
@@ -350,33 +350,33 @@
 
 
       "{A}it": [
-        "it <<phrase::{A}predicate>>"
+        "<<phrase::it>> <<phrase::{A}predicate>>"
       ],
       "¬{A}it": [
-        "it <<phrase::¬{A}predicate>>"
+        "<<phrase::it>> <<phrase::¬{A}predicate>>"
       ],
 
 
       "({A}it & {B}it)": [
-          "it <<phrase::({A} & {B})predicate>>",
+          "<<phrase::it>> <<phrase::({A} & {B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::and>> <<clause::verb::{B}it>>",
 
           "__"
       ],
       "(¬{A}it & {B}it)": [
-          "it <<phrase::(¬{A} & {B})predicate>>",
+          "<<phrase::it>> <<phrase::(¬{A} & {B})predicate>>",
           "<<clause::verb::¬{A}it>> <<phrase::and>> <<clause::verb::{B}it>>",
 
           "__"
       ],
       "({A}it & ¬{B}it)": [
-          "it <<phrase::({A} & ¬{B})predicate>>",
+          "<<phrase::it>> <<phrase::({A} & ¬{B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::and>> <<clause::verb::¬{B}it>>",
 
           "__"
       ],
       "(¬{A}it & ¬{B}it)": [
-          "it <<phrase::(¬{A} & ¬{B})predicate>>",
+          "<<phrase::it>> <<phrase::(¬{A} & ¬{B})predicate>>",
           "<<clause::verb::¬{A}it>> <<phrase::and>> <<clause::verb::¬{B}it>>",
 
           "__"
@@ -384,33 +384,102 @@
 
 
       "({A}it v {B}it)": [
-          "it <<phrase::({A} v {B})predicate>>",
+          "<<phrase::it>> <<phrase::({A} v {B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::{A}it>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}it>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}it v {B}it)": [
-          "it <<phrase::(¬{A} v {B})predicate>>",
+          "<<phrase::it>> <<phrase::(¬{A} v {B})predicate>>",
           "<<clause::verb::¬{A}it>> <<phrase::andOr>> <<clause::verb::{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}it>> or <<clause::verb::{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}it>> <<phrase::or>> <<clause::verb::{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "({A}it v ¬{B}it)": [
-          "it <<phrase::({A} v ¬{B})predicate>>",
+          "<<phrase::it>> <<phrase::({A} v ¬{B})predicate>>",
           "<<clause::verb::{A}it>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::{A}it>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::{A}it>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}it v ¬{B}it)": [
-          "it <<phrase::(¬{A} v ¬{B})predicate>>",
+          "<<phrase::it>> <<phrase::(¬{A} v ¬{B})predicate>>",
           "<<clause::verb::¬{A}it>> <<phrase::andOr>> <<clause::verb::¬{B}it>>",
-          "<<phrase::maybe_either>> <<clause::verb::¬{A}it>> or <<clause::verb::¬{B}it>> or both",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}it>> <<phrase::or>> <<clause::verb::¬{B}it>> <<phrase::or>> <<phrase::both_pred>>",
+
+          "__"
+      ],
+
+
+
+
+
+
+      "{A}none": [
+        "<<phrase::{A}predicate_wo_ha_ga>>"
+      ],
+      "¬{A}none": [
+        "<<phrase::¬{A}predicate_wo_ha_ga>>"
+      ],
+
+
+      "({A}none & {B}none)": [
+          "<<phrase::({A} & {B})predicate_wo_ha_ga>>",
+          "<<clause::verb::{A}none>> <<phrase::and>> <<clause::verb::{B}none>>",
+
+          "__"
+      ],
+      "(¬{A}none & {B}none)": [
+          "<<phrase::(¬{A} & {B})predicate_wo_ha_ga>>",
+          "<<clause::verb::¬{A}none>> <<phrase::and>> <<clause::verb::{B}none>>",
+
+          "__"
+      ],
+      "({A}none & ¬{B}none)": [
+          "<<phrase::({A} & ¬{B})predicate_wo_ha_ga>>",
+          "<<clause::verb::{A}none>> <<phrase::and>> <<clause::verb::¬{B}none>>",
+
+          "__"
+      ],
+      "(¬{A}none & ¬{B}none)": [
+          "<<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>>",
+          "<<clause::verb::¬{A}none>> <<phrase::and>> <<clause::verb::¬{B}none>>",
+
+          "__"
+      ],
+
+
+      "({A}none v {B}none)": [
+          "<<phrase::({A} v {B})predicate_wo_ha_ga>>",
+          "<<clause::verb::{A}none>> <<phrase::andOr>> <<clause::verb::{B}none>>",
+          "<<phrase::maybe_either>> <<clause::verb::{A}none>> <<phrase::or>> <<clause::verb::{B}none>> <<phrase::or>> <<phrase::both_pred>>",
+
+          "__"
+      ],
+      "(¬{A}none v {B}none)": [
+          "<<phrase::(¬{A} v {B})predicate_wo_ha_ga>>",
+          "<<clause::verb::¬{A}none>> <<phrase::andOr>> <<clause::verb::{B}none>>",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}none>> <<phrase::or>> <<clause::verb::{B}none>> <<phrase::or>> <<phrase::both_pred>>",
+
+          "__"
+      ],
+      "({A}none v ¬{B}none)": [
+          "<<phrase::({A} v ¬{B})predicate_wo_ha_ga>>",
+          "<<clause::verb::{A}none>> <<phrase::andOr>> <<clause::verb::¬{B}none>>",
+          "<<phrase::maybe_either>> <<clause::verb::{A}none>> <<phrase::or>> <<clause::verb::¬{B}none>> <<phrase::or>> <<phrase::both_pred>>",
+
+          "__"
+      ],
+      "(¬{A}none v ¬{B}none)": [
+          "<<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>>",
+          "<<clause::verb::¬{A}none>> <<phrase::andOr>> <<clause::verb::¬{B}none>>",
+          "<<phrase::maybe_either>> <<clause::verb::¬{A}none>> <<phrase::or>> <<clause::verb::¬{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ]
+
 
 
     },
@@ -425,108 +494,110 @@
 
       "{A}.event_occurrence": [
         "<<phrase::{A}the_event_noun>>",
-        "that <<clause::verb::{A}>>"
+        "<<clause::verb::{A}>> <<phrase::toiu_koto>>",
+        "「 <<clause::verb::{A}>> 」 <<phrase::toiu_koto>>"
       ],
       "¬{A}.event_occurrence": [
         "<<phrase::¬{A}the_event_noun>>",
-        "that <<clause::verb::¬{A}>>"
+        "<<clause::verb::¬{A}>> <<phrase::toiu_koto>>",
+        "「 <<clause::verb::¬{A}>> 」 <<phrase::toiu_koto>>"
       ],
 
 
       "({A} & {B}).event_occurrence": [
-          "that <<clause::verb::({A} & {B})>>",
+          "「 <<clause::verb::({A} & {B})>> 」 <<phrase::toiu_koto>>",
 
           "__comment: '{A} and {B} resulted in {C}' does not mean that {A} and {B} are both needed at the same time to lead to the conclusion.",
           "__",
           "__",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
       "(¬{A} & {B}).event_occurrence": [
-          "that <<clause::verb::(¬{A} & {B})>>",
+          "「 <<clause::verb::(¬{A} & {B})>> 」 <<phrase::toiu_koto>>",
 
           "__",
           "__",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
       "({A} & ¬{B}).event_occurrence": [
-          "that <<clause::verb::({A} & ¬{B})>>",
+          "「 <<clause::verb::({A} & ¬{B})>> 」 <<phrase::toiu_koto>>",
 
           "__",
           "__",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
       "(¬{A} & ¬{B}).event_occurrence": [
-          "that <<clause::verb::(¬{A} & ¬{B})>>",
+          "「 <<clause::verb::(¬{A} & ¬{B})>> 」 <<phrase::toiu_koto>>",
 
           "__",
           "__",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
 
 
       "¬({A} & {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
       "¬(¬{A} & {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::(¬{A} & {B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
       "¬({A} & ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::({A} & ¬{B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
       "¬(¬{A} & ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::(¬{A} & ¬{B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
 
 
       "({A} v {B}).event_occurrence": [
-          "that <<clause::verb::({A} v {B})>>",
+          "「 <<clause::verb::({A} v {B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> <<phrase::or>> <<clause::noun::{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
       "(¬{A} v {B}).event_occurrence": [
-          "that <<clause::verb::(¬{A} v {B})>>",
+          "「 <<clause::verb::(¬{A} v {B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::{B}.event_occurrence>> or both",
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> <<phrase::or>> <<clause::noun::{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
       "({A} v ¬{B}).event_occurrence": [
-          "that <<clause::verb::({A} v ¬{B})>>",
+          "「 <<clause::verb::({A} v ¬{B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> <<phrase::or>> <<clause::noun::¬{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
       "(¬{A} v ¬{B}).event_occurrence": [
-          "that <<clause::verb::(¬{A} v ¬{B})>>",
+          "「 <<clause::verb::(¬{A} v ¬{B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> or <<clause::noun::¬{B}.event_occurrence>> or both",
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> <<phrase::or>> <<clause::noun::¬{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
 
-          ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_true>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
 
 
       "¬({A} v {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
       "¬(¬{A} v {B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
       "¬({A} v ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
       "¬(¬{A} v ¬{B}).event_occurrence": [
-          "<<phrase::the_fact_that>> <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_not_true>>"
+          "「 <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_not_true>> 」 <<phrase::toiu_koto>>"
       ],
 
 
@@ -537,63 +608,63 @@
 
 
       "{A}{a}generic_subj": [
-        "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>>",
-        "a <<phrase::{a}noun>> <<phrase::{A}post_modifier>>"
+        "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>>",
+        "<<phrase::a>> <<phrase::{a}noun>> <<phrase::{A}post_modifier>>"
       ],
 
       "¬{A}{a}generic_subj": [
-        "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>>",
-        "a <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>>"
+        "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>>",
+        "<<phrase::a>> <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>>"
       ],
 
       
       "({A}{a} & {B}{a})generic_subj": [
-          "a <<phrase::({A} & {B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::({A} & {B})post_modifier>>",
+          "<<phrase::a>> <<phrase::({A} & {B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & {B})post_modifier>>",
 
-          "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
+          "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
       ],
 
       "(¬{A}{a} & {B}{a})generic_subj": [
-          "a <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} & {B})post_modifier>>",
+          "<<phrase::a>> <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & {B})post_modifier>>",
 
-          "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
+          "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
       ],
 
       "({A}{a} & ¬{B}{a})generic_subj": [
-          "a <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::({A} & ¬{B})post_modifier>>",
+          "<<phrase::a>> <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & ¬{B})post_modifier>>",
 
-          "a <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
+          "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
       "(¬{A}{a} & ¬{B}{a})generic_subj": [
-          "a <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+          "<<phrase::a>> <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
-          "a <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
+          "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
 
       "({A}{a} v {B}{a})generic_subj": [
-          "a <<phrase::({A} v {B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::({A} v {B})post_modifier>>"
+          "<<phrase::a>> <<phrase::({A} v {B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
       "(¬{A}{a} v {B}{a})generic_subj": [
-          "a <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} v {B})post_modifier>>"
+          "<<phrase::a>> <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
       "({A}{a} v ¬{B}{a})generic_subj": [
-          "a <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::({A} v ¬{B})post_modifier>>"
+          "<<phrase::a>> <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
       "(¬{A}{a} v ¬{B}{a})generic_subj": [
-          "a <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "a <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+          "<<phrase::a>> <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
+          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ],
 
 
@@ -645,23 +716,23 @@
 
 
       "({A}{a} v {B}{a})generic_obj": [
-          "__<<phrase::({A} v {B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::({A} v {B})post_modifier>>"
+          "<<phrase::({A} v {B})pre_modifier>> <<phrase::{a}nouns>>",
+          "<<phrase::{a}nouns>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
       "(¬{A}{a} v {B}{a})generic_obj": [
-          "__<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::(¬{A} v {B})post_modifier>>"
+          "<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}nouns>>",
+          "<<phrase::{a}nouns>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
       "({A}{a} v ¬{B}{a})generic_obj": [
-          "__<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::({A} v ¬{B})post_modifier>>"
+          "<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
+          "<<phrase::{a}nouns>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
       "(¬{A}{a} v ¬{B}{a})generic_obj": [
-          "__<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+          "<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
+          "<<phrase::{a}nouns>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ],
 
 
@@ -673,81 +744,98 @@
 
 
       "{A}something.generic_subj": [
-        "a <<phrase::{A}pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::{A}post_modifier>>",
+        "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::{A}post_modifier>>",
 
         "<<phrase::{A}a_noun>>"
       ],
 
       "¬{A}something.generic_subj": [
-        "a <<phrase::¬{A}pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::¬{A}post_modifier>>",
+        "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::¬{A}post_modifier>>",
 
         "<<phrase::¬{A}a_noun>>"
       ],
 
       
       "({A}something & {B}something)generic_subj": [
-        "a <<phrase::({A} & {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} & {B})post_modifier>>",
+        "<<phrase::a>> <<phrase::({A} & {B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::({A} & {B})post_modifier>>",
 
-        "a <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
+        "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
 
-        "a <<phrase::{B}pre_modifier>> <<phrase::{A}noun>>",
+        "<<phrase::a>> <<phrase::{B}pre_modifier>> <<phrase::{A}noun>>",
         "<<phrase::{A}a_noun>> <<phrase::{B}post_modifier>>"
       ],
 
       "(¬{A}something & {B}something)generic_subj": [
-        "a <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} & {B})post_modifier>>",
+        "<<phrase::a>> <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::(¬{A} & {B})post_modifier>>",
 
-        "a <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
+        "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
 
-        "a <<phrase::{B}pre_modifier>> <<phrase::¬{A}noun>>",
+        "<<phrase::a>> <<phrase::{B}pre_modifier>> <<phrase::¬{A}noun>>",
         "<<phrase::¬{A}a_noun>> <<phrase::{B}post_modifier>>"
       ],
 
       "({A}something & ¬{B}something)generic_subj": [
-        "a <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} & ¬{B})post_modifier>>",
+        "<<phrase::a>> <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::({A} & ¬{B})post_modifier>>",
 
-        "a <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
+        "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
 
-        "a <<phrase::¬{B}pre_modifier>> <<phrase::{A}noun>>",
+        "<<phrase::a>> <<phrase::¬{B}pre_modifier>> <<phrase::{A}noun>>",
         "<<phrase::{A}a_noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
       "(¬{A}something & ¬{B}something)generic_subj": [
-        "a <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+        "<<phrase::a>> <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
-        "a <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
+        "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
 
-        "a <<phrase::¬{B}pre_modifier>> <<phrase::¬{A}noun>>",
+        "<<phrase::a>> <<phrase::¬{B}pre_modifier>> <<phrase::¬{A}noun>>",
         "<<phrase::¬{A}a_noun>> <<phrase::¬{B}post_modifier>>"
       ],
 
 
       "({A}something v {B}something)generic_subj": [
-        "a <<phrase::({A} v {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} v {B})post_modifier>>"
+        "<<phrase::a>> <<phrase::({A} v {B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
       "(¬{A}something v {B}something)generic_subj": [
-        "a <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} v {B})post_modifier>>"
+        "<<phrase::a>> <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
       "({A}something v ¬{B}something)generic_subj": [
-        "a <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} v ¬{B})post_modifier>>"
+        "<<phrase::a>> <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
       "(¬{A}something v ¬{B}something)generic_subj": [
-        "a <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+        "<<phrase::a>> <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::thing>>",
+        "__<<phrase::something>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ],
 
+
+      "¬({A}something & {B}something)generic_subj": [],
+
+      "¬(¬{A}something & {B}something)generic_subj": [],
+
+      "¬({A}something & ¬{B}something)generic_subj": [],
+
+      "¬(¬{A}something & ¬{B}something)generic_subj": [],
+
+
+      "¬({A}something v {B}something)generic_subj": [],
+
+      "¬(¬{A}something v {B}something)generic_subj": [],
+
+      "¬({A}something v ¬{B}something)generic_subj": [],
+
+      "¬(¬{A}something v ¬{B}something)generic_subj": [],
 
 
 
@@ -772,7 +860,7 @@
       
       "({A}things & {B}things)generic_obj": [
         "<<phrase::({A} & {B})pre_modifier>> <<phrase::things>>",
-        "__comment: post_modifier with plural vrebs is not implemented yet",
+        "__comment: post_modifier with plural verb is not implemented yet",
         "__<<phrase::things>> <<phrase::({A} & {B})post_modifier>>",
 
         "__<<phrase::{A}pre_modifier>> <<phrase::things>> <<phrase::{B}post_modifier>>",
@@ -814,128 +902,106 @@
 
       "({A}things v {B}things)generic_obj": [
         "<<phrase::({A} v {B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::({A} v {B})post_modifier>>"
+        "<<phrase::things>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
       "(¬{A}things v {B}things)generic_obj": [
         "<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::(¬{A} v {B})post_modifier>>"
+        "<<phrase::things>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
       "({A}things v ¬{B}things)generic_obj": [
         "<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::({A} v ¬{B})post_modifier>>"
+        "<<phrase::things>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
       "(¬{A}things v ¬{B}things)generic_obj": [
         "<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+        "<<phrase::things>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ],
 
 
 
 
-      "¬({A}things & {B}things)generic_obj": [],
+      "__{A}nothing.generic_obj": [
+        "____<<phrase::{A}pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::{A}post_modifier>>",
 
-      "¬(¬{A}things & {B}things)generic_obj": [],
-
-      "¬({A}things & ¬{B}things)generic_obj": [],
-
-      "¬(¬{A}things & ¬{B}things)generic_obj": [],
-
-
-      "¬({A}things v {B}things)generic_obj": [],
-
-      "¬(¬{A}things v {B}things)generic_obj": [],
-
-      "¬({A}things v ¬{B}things)generic_obj": [],
-
-      "¬(¬{A}things v ¬{B}things)generic_obj": [],
-
-
-
-
-
-
-      "{A}nothing.generic_obj": [
-        "__<<phrase::{A}pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::{A}post_modifier>>",
-
-        "__<<phrase::{A}nouns>>"
+        "____<<phrase::{A}nouns>>"
       ],
 
-      "¬{A}nothing.generic_obj": [
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::¬{A}post_modifier>>",
+      "__¬{A}nothing.generic_obj": [
+        "____<<phrase::¬{A}pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::¬{A}post_modifier>>",
 
-        "__<<phrase::¬{A}nouns>>"
+        "____<<phrase::¬{A}nouns>>"
       ],
 
       
-      "({A}nothing & {B}nothing)generic_obj": [
-        "__<<phrase::({A} & {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} & {B})post_modifier>>",
+      "__({A}nothing & {B}nothing)generic_obj": [
+        "____<<phrase::({A} & {B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::({A} & {B})post_modifier>>",
 
-        "__<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>",
+        "____<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>",
 
-        "__<<phrase::{B}pre_modifier>> <<phrase::{A}nouns>>",
-        "__<<phrase::{A}nouns>> <<phrase::{B}post_modifier>>"
+        "____<<phrase::{B}pre_modifier>> <<phrase::{A}nouns>>",
+        "____<<phrase::{A}nouns>> <<phrase::{B}post_modifier>>"
       ],
 
-      "(¬{A}nothing & {B}nothing)generic_obj": [
-        "__<<phrase::(¬{A} & {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} & {B})post_modifier>>",
+      "__(¬{A}nothing & {B}nothing)generic_obj": [
+        "____<<phrase::(¬{A} & {B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::(¬{A} & {B})post_modifier>>",
 
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>",
+        "____<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>",
 
-        "__<<phrase::{B}pre_modifier>> <<phrase::¬{A}nouns>>",
-        "__<<phrase::¬{A}nouns>> <<phrase::{B}post_modifier>>"
+        "____<<phrase::{B}pre_modifier>> <<phrase::¬{A}nouns>>",
+        "____<<phrase::¬{A}nouns>> <<phrase::{B}post_modifier>>"
       ],
 
-      "({A}nothing & ¬{B}nothing)generic_obj": [
-        "__<<phrase::({A} & ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} & ¬{B})post_modifier>>",
+      "__({A}nothing & ¬{B}nothing)generic_obj": [
+        "____<<phrase::({A} & ¬{B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::({A} & ¬{B})post_modifier>>",
 
-        "__<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>",
+        "____<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>",
 
-        "__<<phrase::¬{B}pre_modifier>> <<phrase::{A}nouns>>",
-        "__<<phrase::{A}nouns>> <<phrase::¬{B}post_modifier>>"
+        "____<<phrase::¬{B}pre_modifier>> <<phrase::{A}nouns>>",
+        "____<<phrase::{A}nouns>> <<phrase::¬{B}post_modifier>>"
       ],
 
-      "(¬{A}nothing & ¬{B}nothing)generic_obj": [
-        "__<<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+      "__(¬{A}nothing & ¬{B}nothing)generic_obj": [
+        "____<<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
 
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>",
+        "____<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>",
 
-        "__<<phrase::¬{B}pre_modifier>> <<phrase::¬{A}nouns>>",
-        "__<<phrase::¬{A}nouns>> <<phrase::¬{B}post_modifier>>"
+        "____<<phrase::¬{B}pre_modifier>> <<phrase::¬{A}nouns>>",
+        "____<<phrase::¬{A}nouns>> <<phrase::¬{B}post_modifier>>"
       ],
 
 
-      "({A}nothing v {B}nothing)generic_obj": [
-        "__<<phrase::({A} v {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} v {B})post_modifier>>"
+      "__({A}nothing v {B}nothing)generic_obj": [
+        "____<<phrase::({A} v {B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::({A} v {B})post_modifier>>"
       ],
 
-      "(¬{A}nothing v {B}nothing)generic_obj": [
-        "__<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} v {B})post_modifier>>"
+      "__(¬{A}nothing v {B}nothing)generic_obj": [
+        "____<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::(¬{A} v {B})post_modifier>>"
       ],
 
-      "({A}nothing v ¬{B}nothing)generic_obj": [
-        "__<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} v ¬{B})post_modifier>>"
+      "__({A}nothing v ¬{B}nothing)generic_obj": [
+        "____<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::({A} v ¬{B})post_modifier>>"
       ],
 
-      "(¬{A}nothing v ¬{B}nothing)generic_obj": [
-        "__<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+      "__(¬{A}nothing v ¬{B}nothing)generic_obj": [
+        "____<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::nothing>>",
+        "__<<phrase::nothing>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
       ]
 
 
 
     }
-  }
+ }
 
 }
