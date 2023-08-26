@@ -51,5 +51,5 @@ def build(lang: str,
             **kwargs,
         )
     else:
-        raise ValueError()
+        raise ValueError(f'Unsupported language {lang}')
     return translator
