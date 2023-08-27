@@ -36,6 +36,7 @@ class ProofTreeGenerationPipeline:
                  translation_distractor: Optional[TranslationDistractor] = None,
                  fallback_from_formula_to_translation_distractor=False,
                  translator: Optional[Translator] = None,
+                 assumption_prefix='Let\'s assume that ',
                  add_subj_obj_swapped_distractor=False,
                  log_stats=False):
         self.generator = generator
@@ -44,6 +45,7 @@ class ProofTreeGenerationPipeline:
         self.fallback_from_formula_to_translation_distractor = fallback_from_formula_to_translation_distractor
         self.translator = translator
         self.add_subj_obj_swapped_distractor = add_subj_obj_swapped_distractor
+        self.assumption_prefix = assumption_prefix
 
         self.log_stats = log_stats
         self._empty_argument_stat = {arg.id: 0 for arg in self.generator.arguments}
@@ -202,7 +204,7 @@ class ProofTreeGenerationPipeline:
                 for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
                     formula.translation_name = translation_name
                     if i_formula in assump_formula_indices:
-                        translation_prefix = 'Let\'s assume that '
+                        translation_prefix = self.assumption_prefix
                     else:
                         translation_prefix = ''
 

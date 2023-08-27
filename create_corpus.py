@@ -111,12 +111,19 @@ def load_dataset(argument_config: List[str],
                                   default_weight_factor_type=translation_default_weight_factor_type)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
+    if translation_lang == 'eng':
+        assumption_prefix = 'Let\'s assume that '
+    elif translation_lang == 'jpn':
+        assumption_prefix = '以下のように仮定する: '
+    else:
+        raise NotImplementedError()
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=_distractor,
         translation_distractor=_translation_distractor,
         fallback_from_formula_to_translation_distractor=fallback_from_formula_to_translation_distractor,
         translator=translator,
+        assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=not disallow_subj_obj_swapped_distractor,
     )
 

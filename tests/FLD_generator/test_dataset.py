@@ -135,12 +135,20 @@ def test_generate_dataset_lang(lang: str):
         generator=generator,
     )
 
+    if lang == 'eng':
+        assumption_prefix = 'Let\'s assume that '
+    elif lang == 'jpn':
+        assumption_prefix = '以下のように仮定する: '
+    else:
+        raise NotImplementedError()
+
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
         translation_distractor=translation_distractor,
         fallback_from_formula_to_translation_distractor=True,
         translator=translator,
+        assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
     )
 
