@@ -242,6 +242,7 @@ class TemplatedTranslator(Translator):
         for verb in self._take(transitive_verbs, 1000):  # limit 1000 for speed
             for obj in self._take(nouns, 1000):
                 transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
+        random.shuffle(transitive_verb_PASs)
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
