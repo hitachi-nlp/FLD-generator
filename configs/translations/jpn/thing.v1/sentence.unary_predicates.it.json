@@ -1,0 +1,44 @@
+{
+
+  "sentence": {
+
+    "{A}it": [
+      "<<clause::verb::{A}it>>",
+      ["W_VOL_AVG__0.05", "<<sentence::¬(¬{A}it)>>"]
+    ],
+    "¬{A}it": [
+      "<<clause::verb::¬{A}it>>",
+      ["W_VOL_AVG__0.05", "<<sentence::¬({A}it)>>"]
+    ],
+
+
+    "({A}it & {B}it)": [
+      "<<clause::verb::({A}it & {B}it)>>"
+    ],
+    "(¬{A}it & {B}it)": [
+      "<<clause::verb::(¬{A}it & {B}it)>>"
+    ],
+    "({A}it & ¬{B}it)": [
+      "<<clause::verb::({A}it & ¬{B}it)>>"
+    ],
+    "(¬{A}it & ¬{B}it)": [
+      "<<clause::verb::(¬{A}it & ¬{B}it)>>"
+    ],
+
+
+    "({A}it v {B}it)": [
+      "<<clause::verb::({A}it v {B}it)>>"
+    ],
+    "(¬{A}it v {B}it)": [
+      "<<clause::verb::(¬{A}it v {B}it)>>"
+    ],
+    "({A}it v ¬{B}it)": [
+      "<<clause::verb::({A}it v ¬{B}it)>>"
+    ],
+    "(¬{A}it v ¬{B}it)": [
+      "<<clause::verb::(¬{A}it v ¬{B}it)>>"
+    ]
+
+  }
+
+}

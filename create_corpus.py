@@ -13,17 +13,13 @@ from tqdm import tqdm
 import dill
 
 from FLD_generator.translators import build as build_translator
-from FLD_generator.word_banks import build_wordnet_wordbank
-from FLD_generator.formula_distractors import FormulaDistractor
-from FLD_generator.argument import Argument
+from FLD_generator.word_banks import build_wordbank
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.proof_tree_generators import build as build_generator
 from FLD_generator.datasets import NLProofSDataset
-from FLD_generator.proof import ProofTree
-from FLD_generator.utils import nested_merge
 from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
-from FLD_generator.utils import _build_bounded_msg, log_results
+from FLD_generator.utils import _build_bounded_msg, log_results, fix_seed
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -33,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_dataset(argument_config: List[str],
+                 translation_lang: str,
                  translation_config: List[str],
                  use_fixed_translation: bool,
                  reused_object_nouns_max_factor: float,
@@ -74,7 +71,7 @@ def load_dataset(argument_config: List[str],
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
-    word_bank = build_wordnet_wordbank('eng')
+    word_bank = build_wordbank(translation_lang)
     logger.info(_build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
 
     if distractors_range[1] > 0:
@@ -103,7 +100,8 @@ def load_dataset(argument_config: List[str],
         _translation_distractor = None
 
     logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
-    translator = build_translator(translation_config,
+    translator = build_translator(translation_lang,
+                                  translation_config,
                                   word_bank,
                                   adj_verb_noun_ratio=translation_adj_verb_noun_ratio,
                                   use_fixed_translation=use_fixed_translation,
@@ -113,12 +111,19 @@ def load_dataset(argument_config: List[str],
                                   default_weight_factor_type=translation_default_weight_factor_type)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
+    if translation_lang == 'eng':
+        assumption_prefix = 'Let\'s assume that '
+    elif translation_lang == 'jpn':
+        assumption_prefix = '以下のように仮定する: '
+    else:
+        raise NotImplementedError()
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=_distractor,
         translation_distractor=_translation_distractor,
         fallback_from_formula_to_translation_distractor=fallback_from_formula_to_translation_distractor,
         translator=translator,
+        assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=not disallow_subj_obj_swapped_distractor,
     )
 
@@ -191,6 +196,7 @@ def generate_instances(size: int, *args):
 @click.option('--force-fix-illegal-intermediate-constants', is_flag=True)
 @click.option('--keep-dneg', is_flag=True, default=False)
 #
+@click.option('--translation-lang', type=str, default='eng')
 @click.option('--translation-config', '--tc',
               multiple=True,
               default=['./configs/translations/thing.v1'],
@@ -226,6 +232,7 @@ def generate_instances(size: int, *args):
 @click.option('--seed', type=int, default=0)
 def main(output_path,
          argument_config,
+         translation_lang,
          translation_config,
          use_fixed_translation,
          reused_object_nouns_max_factor,
@@ -263,7 +270,7 @@ def main(output_path,
          batch_size_per_worker,
          seed):
     setup_logger(do_stderr=True, level=logging.INFO)
-    random.seed(seed)
+    fix_seed(seed)
     depth_range = tuple(json.loads(depth_range))
     branch_extensions_range = json.loads(branch_extensions_range)
     distractors_range = json.loads(distractors_range)
@@ -300,6 +307,7 @@ def main(output_path,
                     delayed(generate_instances)(
                         _batch_size_per_worker,
                         argument_config,
+                        translation_lang,
                         translation_config,
                         use_fixed_translation,
                         reused_object_nouns_max_factor,

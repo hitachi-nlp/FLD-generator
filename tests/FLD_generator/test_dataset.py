@@ -14,18 +14,16 @@ from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.datasets import NLProofSDataset
-from FLD_generator.word_banks import build_wordnet_wordbank
-from FLD_generator.translators import (
-    build as build_translator,
-    TemplatedTranslator,
-)
+from FLD_generator.word_banks import build_wordbank
+from FLD_generator.translators import build as build_translator
 from FLD_generator.interpretation import formula_is_identical_to
-from FLD_generator.utils import nested_merge, log_results
+from FLD_generator.utils import nested_merge, log_results, fix_seed
 from logger_setup import setup as setup_logger
 
 import line_profiling
 
 logger = logging.getLogger(__name__)
+fix_seed(0)
 
 
 @profile
@@ -43,23 +41,31 @@ def generate_dataset(dataset: NLProofSDataset,
 
 
 @profile
-def test_generate_dataset():
+def test_generate_dataset_lang(lang: str):
 
-    word_bank = None
-    # word_bank = build_wordnet_wordbank('eng')
+    # word_bank = None
+    word_bank = build_wordbank(lang)
 
-    translator = None
-    # translator = build_translator(
-    #     ['./configs/translations/thing.v1/'],
-    #     word_bank,
-    #     use_fixed_translation=False,
-    #     reused_object_nouns_max_factor=1.0,
-    #     limit_vocab_size_per_type=None,
-    #     # volume_to_weight='sqrt',
-    #     volume_to_weight='logE',
-    #     default_weight_factor_type='W_VOL__1.0',
-    #     adj_verb_noun_ratio='1-1-1',
-    # )
+    if lang == 'eng':
+        translation_config_dir = './configs/translations/eng/thing.v1/'
+    elif lang == 'jpn':
+        translation_config_dir = './configs/translations/jpn/thing.v1/'
+    else:
+        raise ValueError()
+
+    # translator = None
+    translator = build_translator(
+        lang,
+        [translation_config_dir],
+        word_bank,
+        use_fixed_translation=False,
+        reused_object_nouns_max_factor=1.0,
+        limit_vocab_size_per_type=None,
+        # volume_to_weight='sqrt',
+        volume_to_weight='logE',
+        default_weight_factor_type='W_VOL__1.0',
+        adj_verb_noun_ratio='1-1-1',
+    )
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
@@ -69,17 +75,17 @@ def test_generate_dataset():
 
             './configs/arguments/axioms/',
 
-            # './configs/arguments/axioms/axiom.pred_only.json',
-            # './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_only.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
 
-            # './configs/arguments/axioms/axiom.and_or.pred_only.json',
-            # './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.and_or.pred_only.json',
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
 
-            # './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
-            # './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
 
-            # './configs/arguments/axioms/axiom.negation.pred_only.json',
-            # './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_only.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
 
             # './configs/arguments/others/AACorpus.pred_arg.json',
 
@@ -129,12 +135,20 @@ def test_generate_dataset():
         generator=generator,
     )
 
+    if lang == 'eng':
+        assumption_prefix = 'Let\'s assume that '
+    elif lang == 'jpn':
+        assumption_prefix = '以下のように仮定する: '
+    else:
+        raise NotImplementedError()
+
     pipeline = ProofTreeGenerationPipeline(
         generator,
         distractor=distractor,
         translation_distractor=translation_distractor,
         fallback_from_formula_to_translation_distractor=True,
         translator=translator,
+        assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
     )
 
@@ -171,4 +185,5 @@ if __name__ == '__main__':
     setup_logger(level=logging.INFO)
 
     # test_generate_dataset_AACorpus()
-    test_generate_dataset()
+    # test_generate_dataset_lang('eng')
+    test_generate_dataset_lang('jpn')

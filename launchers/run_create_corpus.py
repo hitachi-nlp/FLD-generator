@@ -103,7 +103,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize')
     # output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize.debug')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230801.case_study_finalize.fix')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230801.case_study_finalize.fix')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230826.jpn')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -300,9 +302,13 @@ def main():
         # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10',
         # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal',
 
-        # ---------------------------------- 20230729.case_study_finalize ------------------------------------
-        '20230729.case_study_finalize.D3',
+        # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
+        # '20230729.case_study_finalize.D3',
         # '20230729.case_study_finalize.D8',
+
+        # ---------------------------------- 20230826.jpn ------------------------------------
+        # '20230826.jpn.D3',
+        '20230826.jpn.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -416,6 +422,7 @@ def make_dataset(dataset_name: str,
 
             'split_sizes',
 
+            'translation_lang',
             'translation_configs',
             'limit_vocab_size_per_type',
             'translation_volume_to_weight',
@@ -479,6 +486,7 @@ def make_dataset(dataset_name: str,
                 _make_multiple_value_option('--quantifier-axiom', job_settings['quantifier_axioms']),
                 maybe_option('--quantification-degree', job_settings.get('quantification_degree', None)),
 
+                maybe_option('--translation-lang', job_settings.get('translation_lang', None)),
                 _make_multiple_value_option('--translation-config', job_settings['translation_configs']),
                 '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
                 maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),

@@ -9,7 +9,6 @@ import copy
 from collections import defaultdict
 from pprint import pprint, pformat
 
-from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm, ATTR
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.formula import Formula
 from FLD_generator.proof import ProofTree, ProofNode

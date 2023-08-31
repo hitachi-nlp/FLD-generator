@@ -1,20 +1,17 @@
-import json
-from typing import List, Dict, Optional, Tuple, Union, Iterable, Any, Set, Container, Callable
+from abc import abstractmethod
+from typing import List, Dict, Optional, Tuple, Iterable, Any, Set, Callable
 from collections import OrderedDict, defaultdict
-import traceback
 import statistics
 import re
 import copy
 import random
 import logging
-from pprint import pformat, pprint
+from pprint import pformat
 from functools import lru_cache
 import math
-from pathlib import Path
 
 from tqdm import tqdm
-from FLD_generator.utils import nested_merge
-from FLD_generator.formula import Formula, PREDICATES, CONSTANTS
+from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, remove_outer_brace
 from FLD_generator.word_banks.base import WordBank, ATTR
 from FLD_generator.interpretation import (
     generate_mappings_from_formula,
@@ -23,8 +20,8 @@ from FLD_generator.interpretation import (
     formula_can_not_be_identical_to,
 )
 from FLD_generator.utils import make_combination, chained_sampling_from_weighted_iterators
-from FLD_generator.word_banks import POS, VerbForm, AdjForm, NounForm, WordForm
-from FLD_generator.utils import starts_with_vowel_sound, compress, decompress, make_pretty_msg
+from FLD_generator.word_banks import POS
+from FLD_generator.utils import compress, decompress, make_pretty_msg
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import line_profiling
 
@@ -36,19 +33,13 @@ _DEBUG = False
 
 class _PosFormConditionSet(set):
 
-    def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[WordForm]]]):
+    def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[str]]]):
         keys = [elem[0] for elem in elems]
         key_set = set(keys)
         if len(key_set) < len(keys):
             raise Exception(f'Duplicated condition for found in {elems}')
         unique_elems = set(elems)
         return super().__new__(cls, unique_elems)
-
-
-class _PosFormConditionTuple(tuple):
-
-    def __new__(cls, elems: Iterable[Tuple[str, Optional[POS], Optional[WordForm]]]):
-        return super().__new__(cls, sorted(elems, key=lambda key_pos_form: key_pos_form[0]))
 
 
 NLAndCondition = Iterable[Tuple[str, _PosFormConditionSet]]
@@ -183,19 +174,17 @@ class TemplatedTranslator(Translator):
                     adj_verb_noun_ratio: Optional[List[float]] = None,
                     prioritize_form_abundant_words=False) -> Tuple[List[str], List[str], List[str]]:
 
-        def get_num_form_inv_score(word: str, pos: POS, form_klass) -> int:
-            antonyms = self._get_inflated_words(word, pos, form_klass.ANTI)
-            if hasattr(form_klass, 'NEG'):
-                negnyms = self._get_inflated_words(word, pos, form_klass.NEG)
-            else:
-                negnyms = []
+        def get_num_form_inv_score(word: str, pos: POS) -> int:
+            # words with larger number of forms have smaller score
+            antonyms = self._get_inflated_words(word, pos, 'anti')
+            negnyms = self._get_inflated_words(word, pos, 'neg')
             return 10 - (len(antonyms) + len(negnyms))
 
-        def order_words(words: Iterable[str], pos: POS, form_klass) -> List[str]:
+        def order_words(words: Iterable[str], pos: POS) -> List[str]:
             if prioritize_form_abundant_words:
                 return sorted(
                     words,
-                    key = lambda word: (get_num_form_inv_score(word, pos, form_klass), str(word))
+                    key = lambda word: (get_num_form_inv_score(word, pos), str(word))
                 )
             else:
                 _words = list(words)
@@ -208,7 +197,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if word not in intermediate_constant_nouns),
             POS.NOUN,
-            NounForm,
         )
 
         event_nouns = order_words(
@@ -216,7 +204,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_event_noun in word_bank.get_attrs(word)),
             POS.NOUN,
-            NounForm,
         )
 
         logger.info('loading entity nouns ...')
@@ -225,7 +212,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)),
             POS.NOUN,
-            NounForm,
         )
 
         logger.info('loading adjs ...')
@@ -233,7 +219,6 @@ class TemplatedTranslator(Translator):
             (word
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)),
             POS.ADJ,
-            AdjForm,
         )
 
         logger.info('loading intransitive_verbs ...')
@@ -242,7 +227,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)),
             POS.VERB,
-            VerbForm,
         )
 
         logger.info('loading transitive_verbs ...')
@@ -251,7 +235,6 @@ class TemplatedTranslator(Translator):
             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)),
             POS.VERB,
-            VerbForm,
         )
 
         logger.info('making transitive verb and object combinations ...')
@@ -376,14 +359,14 @@ class TemplatedTranslator(Translator):
                     for inflation_type, count in _inflation_stats.items():
                         count_stats['inflation_stats'][f'{inflation_type}'] = count
 
-                interpret_templated_translation_pushed_wo_info = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
+                interpret_templated_translation_pushed = re.sub('\[[^\]]*\]', '', chosen_nl_pushed)
 
                 # do interpretation using predicates and constants using interpret_mapping
                 if self._do_translate_to_nl:
-                    interpret_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interpret_templated_translation_pushed_wo_info)
-                    translation = interpret_formula(Formula(interpret_templated_translation_pushed_wo_info_with_the_or_it), inflated_mapping).rep
+                    interpret_templated_translation_pushed_with_the_or_it = self._postprocess_template(interpret_templated_translation_pushed)
+                    translation = interpret_formula(Formula(interpret_templated_translation_pushed_with_the_or_it), inflated_mapping).rep
                 else:
-                    translation = interpret_templated_translation_pushed_wo_info
+                    translation = interpret_templated_translation_pushed
 
                 SO_swap_formula: Optional[Formula] = None
                 if len(formula.unary_PASs) == 1 and len(formula.predicates) == 1 and len(formula.constants) == 1:  # something like {A}{a}
@@ -404,8 +387,8 @@ class TemplatedTranslator(Translator):
                             SO_swap_interpret_mapping,
                             chosen_nl_pushed,
                         )
-                        interpret_templated_translation_pushed_wo_info_with_the_or_it = self._replace_following_constants_with_the_or_it(interpret_templated_translation_pushed_wo_info)
-                        SO_swap_translation = interpret_formula(Formula(interpret_templated_translation_pushed_wo_info_with_the_or_it), SO_swap_inflated_mapping).rep
+                        interpret_templated_translation_pushed_with_the_or_it = self._postprocess_template(interpret_templated_translation_pushed)
+                        SO_swap_translation = interpret_formula(Formula(interpret_templated_translation_pushed_with_the_or_it), SO_swap_inflated_mapping).rep
 
                         used_predicates = {pred.rep
                                            for formula in formulas + SO_swap_formulas
@@ -423,11 +406,12 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
 
-                translation = translation.replace('__O__', ' ')
+                
+                translation = self._make_pred_with_obj_transl(translation)
                 translations.append(translation)
 
                 if SO_swap_formula is not None:
-                    SO_swap_formula.translation = SO_swap_formula.translation.replace('__O__', ' ')
+                    SO_swap_formula.translation = self._make_pred_with_obj_transl(SO_swap_formula.translation)
                 SO_swap_formulas.append(SO_swap_formula)
 
                 translation_names.append(self._translation_name(translation_key, chosen_nl))
@@ -444,26 +428,31 @@ class TemplatedTranslator(Translator):
 
         # fix grammers and other stufs
         translations = [
-            (self._fix_translation(translation) if translation is not None else None)
+            (self._postprocess_translation(translation) if translation is not None else None)
             for translation in translations
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
-                SO_swap_formula.translation = self._fix_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
+                SO_swap_formula.translation = self._postprocess_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
-        for _transl_key, _ in self._translations.items():
-            if formula_can_not_be_identical_to(Formula(_transl_key), formula):  # early rejection
-                continue
+        for _remove_outer_brace in [False, True]:
+            if _remove_outer_brace:
+                _formula = remove_outer_brace(formula)
+            else:
+                _formula = formula
+            for _transl_key, _ in self._translations.items():
+                if formula_can_not_be_identical_to(Formula(_transl_key), _formula):  # early rejection
+                    continue
 
-            for push_mapping in generate_mappings_from_formula([Formula(_transl_key)], [formula]):
-                _transl_key_pushed = interpret_formula(Formula(_transl_key), push_mapping).rep
-                if _transl_key_pushed == formula.rep:
-                    yield _transl_key, push_mapping
+                for push_mapping in generate_mappings_from_formula([Formula(_transl_key)], [_formula]):
+                    _transl_key_pushed = interpret_formula(Formula(_transl_key), push_mapping).rep
+                    if _transl_key_pushed == _formula.rep:
+                        yield _transl_key, push_mapping
 
     @profile
     def _sample_interpret_mapping_consistent_nl(self,
@@ -735,11 +724,15 @@ class TemplatedTranslator(Translator):
 
             if pos not in self._get_pos(word):
                 condition_is_consistent = False
+                # logger.warning('-- pos not in self._get_pos(word) --')
+                # logger.warning('    word=%s     target_pos=%s    self._get_pos(word)=%s', str(word), str(pos), str(self._get_pos(word)))
                 break
 
             inflated_words = self._get_inflated_words(word, pos, form)
             if len(inflated_words) == 0:
                 condition_is_consistent = False
+                # logger.warning('-- len(inflated_words) --')
+                # logger.warning('    word=%s    pos%s     form=%s', str(word), str(pos), str(form))
                 break
 
         return condition_is_consistent
@@ -804,7 +797,7 @@ class TemplatedTranslator(Translator):
         formula = Formula(nl)
         interprands = formula.predicates + formula.constants
 
-        conditions: List[Tuple[str, POS, WordForm]] = []
+        conditions: List[Tuple[str, POS, str]] = []
         for interprand in interprands:
             pos_form = self._get_interprand_condition_from_template(interprand.rep, formula.rep)
             if pos_form is None:
@@ -813,45 +806,6 @@ class TemplatedTranslator(Translator):
             conditions.append((interprand.rep, pos, form))
 
         return _PosFormConditionSet(conditions)
-
-    @profile
-    def _replace_following_constants_with_the_or_it(self, sentence_with_templates: str) -> str:
-        constants = [c.rep for c in Formula(sentence_with_templates).constants]
-
-        with_definite = sentence_with_templates
-        for constant in constants:
-            if with_definite.count(constant) < 2:
-                continue
-
-            first_pos = with_definite.find(constant)
-
-            until_first = with_definite[:first_pos + len(constant)]
-            from_second = with_definite[first_pos + len(constant):]
-
-            if re.match(f'.*a {constant} is.*', from_second):
-                replace_with_it = random.random() >= 0.5
-            else:
-                replace_with_it = False
-
-            if replace_with_it:
-                from_second_with_definite = re.sub(
-                    f'a {constant} is',
-                    'it is',
-                    from_second,
-                )
-            else:
-                from_second_with_definite = re.sub(
-                    f'(.*)a (.*){constant}',
-                    f'\g<1>the \g<2>{constant}',
-                    from_second,
-                )
-            with_definite = until_first + from_second_with_definite
-        if sentence_with_templates != with_definite:
-            logger.info('particles "a (...) %s" are modified as:    "%s"    ->    "%s"',
-                        constant,
-                        sentence_with_templates,
-                        with_definite)
-        return with_definite
 
     @profile
     def _choose_interpret_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
@@ -908,29 +862,20 @@ class TemplatedTranslator(Translator):
         )
 
         # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
-        try:
-            unary_mapping = next(
-                generate_mappings_from_predicates_and_constants(
-                    unary_predicates,
-                    constants,
-                    adj_verb_nouns,
-                    entity_nouns,
-                    shuffle=True,
-                    allow_many_to_one=False,
-                    constraints={
-                        intermediate_constant: intermediate_constant_noun
-                        for intermediate_constant, intermediate_constant_noun in zip(intermediate_constants, intermediate_constant_nouns)
-                    }
-                )
+        unary_mapping = next(
+            generate_mappings_from_predicates_and_constants(
+                unary_predicates,
+                constants,
+                adj_verb_nouns,
+                entity_nouns,
+                shuffle=True,
+                allow_many_to_one=False,
+                constraints={
+                    intermediate_constant: intermediate_constant_noun
+                    for intermediate_constant, intermediate_constant_noun in zip(intermediate_constants, intermediate_constant_nouns)
+                }
             )
-        except:
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print(unary_predicates)
-            print(constants)
-            print(adj_verb_nouns)
-            print(entity_nouns)
-            print(traceback.format_exc())
-            raise
+        )
 
         interpret_mapping = zeroary_mapping.copy()
         interpret_mapping.update(unary_mapping)
@@ -950,7 +895,7 @@ class TemplatedTranslator(Translator):
     @profile
     def _take(self, elems: List[Any], size: int) -> List[Any]:
         if len(elems) < size:
-            logger.warning('Can\'t take %d elements. Will tak;e only %d elements.',
+            logger.warning('Can\'t take %d elements. Will take only %d elements.',
                            size,
                            len(elems))
         # if size * 3 < len(elems):
@@ -974,11 +919,8 @@ class TemplatedTranslator(Translator):
                     raise ValueError(f'Could not extract pos and form information about "{interprand_rep}" from "{interprand_templated_translation_pushed}"')
                 pos, form = pos_form
                 if self.log_stats:
-                    stats[f'{pos.value}.{form.value}'] += 1
+                    stats[f'{pos.value}.{form}'] += 1
                 inflated_words = self._get_inflated_words(word, pos, form)
-
-                if form in [NounForm.ANTI, AdjForm.ANTI, VerbForm.ANTI]:
-                    logger.critical('got antonyms for word "%s": %s', word, str(inflated_words))
 
                 assert len(inflated_words) > 0
                 inflated_word = random.choice(inflated_words)
@@ -990,7 +932,7 @@ class TemplatedTranslator(Translator):
         return inflated_mapping, stats
 
     @profile
-    def _get_interprand_condition_from_template(self, interprand: str, rep: str) -> Optional[Tuple[POS, WordForm]]:
+    def _get_interprand_condition_from_template(self, interprand: str, rep: str) -> Optional[Tuple[POS, Optional[str]]]:
         interprand_begin = rep.find(interprand)
         if interprand_begin < 0:
             # raise Exception(f'Information for "{interprand}" can not be extracted from "{rep}".')
@@ -1007,25 +949,14 @@ class TemplatedTranslator(Translator):
         info = rep[info_begin + 1: info_end - 1]
 
         if len(info.split('.')) >= 2:
-            pos_str, form_str = info.split('.')
+            pos_str, form = info.split('.')
         else:
-            pos_str, form_str = info, None
+            pos_str, form = info, 'normal'
 
-        pos = POS[pos_str]
-
-        if pos == POS.ADJ:
-            form = AdjForm.NORMAL if form_str is None else AdjForm(form_str)
-        elif pos == POS.VERB:
-            form = VerbForm.NORMAL if form_str is None else VerbForm(form_str)
-        elif pos == POS.NOUN:
-            form = NounForm.NORMAL if form_str is None else NounForm(form_str)
-        else:
-            raise ValueError()
-
-        return pos, form
+        return POS[pos_str], form
 
     @lru_cache(maxsize=1000000)
-    def _get_inflated_words(self, word: str, pos: POS, form: WordForm) -> Tuple[str, ...]:
+    def _get_inflated_words(self, word: str, pos: POS, form: str) -> Tuple[str, ...]:
         if pos not in self._get_pos(word):
             raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
@@ -1039,9 +970,9 @@ class TemplatedTranslator(Translator):
             raise ValueError()
 
         _word, obj = self._parse_word_with_obj(word)
-        inflated_words = self._word_bank.change_word_form(_word, form, force=False)
+        inflated_words = self._word_bank.change_word_form(_word, pos, form, force=False)
         if len(inflated_words) == 0 and force:
-            inflated_words = self._word_bank.change_word_form(_word, form, force=True)
+            inflated_words = self._word_bank.change_word_form(_word, pos, form, force=True)
 
         if len(inflated_words) == 0:
             return ()
@@ -1079,112 +1010,14 @@ class TemplatedTranslator(Translator):
         else:
             return '__O__'.join([word, obj])
 
-    def _fix_translation(self, translation: str) -> str:
-        # TODO: should transfer to sub-classes since this method depends on, e.g., lanugage (en, ja)
-        translation = self._correct_indefinite_particles(translation)
-        translation = self._fix_pred_singularity(translation)
-        translation = self._reduce_degenerate_blanks(translation)
-        translation = self._uppercase_beggining(translation)
-        translation = self._add_ending_period(translation)
+    @abstractmethod
+    def _postprocess_template(self, template: str) -> str:
+        pass
 
-        return translation
+    @abstractmethod
+    def _make_pred_with_obj_transl(self, translation: str) -> str:
+        pass
 
-    @profile
-    def _correct_indefinite_particles(self, sentence_wo_templates: str) -> str:
-        """ choose an appropriate indefinite particls, i.e., "a" or "an", depending on the word pronounciation """
-        words = sentence_wo_templates.split(' ')
-        corrected_words = []
-        for i_word, word in enumerate(words):
-            if word.lower() in ['a', 'an']:
-                if len(words) >= i_word + 2:
-                    next_word = words[i_word + 1]
-                    if starts_with_vowel_sound(next_word):
-                        corrected_words.append('an')
-                    else:
-                        corrected_words.append('a')
-                else:
-                    logger.warning('Sentence might end with particle: "%s"', sentence_wo_templates)
-                    corrected_words.append(word)
-            else:
-                corrected_words.append(word)
-        corrected_sentence = ' '.join(corrected_words)
-        return corrected_sentence
-
-    def _fix_pred_singularity(self, translation: str) -> str:
-        # TODO: A and B {is, runs} => currently, we do not have ({A}{a} and {B}{a}) so that we do not this fix.
-        translation_fixed = translation
-
-        def fix_all_thing_is(translation: str, src_pred: str, dst_pred: str) -> str:
-            if re.match(f'.*all .*things? {src_pred}.*', translation):
-                translation_fixed = re.sub(f'(.*)all (.*)things? {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
-                return translation_fixed
-            else:
-                return translation
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is an', 'are')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is a', 'are')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'is', 'are')
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was an', 'were')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was a', 'were')
-        translation_fixed = fix_all_thing_is(translation_fixed, 'was', 'wer')
-
-        translation_fixed = fix_all_thing_is(translation_fixed, 'does', 'do')
-
-        # all kind thing squashes apple -> all kind thing squash apple
-        if re.match('(.*)all (.*)things? ([^ ]*)(.*)', translation_fixed):
-            word_after_things = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<3>', translation_fixed)
-            if POS.VERB in self._word_bank.get_pos(word_after_things):
-                verb_normal = self._word_bank.change_word_form(word_after_things, VerbForm.NORMAL)[0]
-                translation_fixed = re.sub('(.*)all (.*)things? ([^ ]*)(.*)', '\g<1>all \g<2>things ' + verb_normal + '\g<4>', translation_fixed)
-
-        # target   : A and B causes C -> A and B cause C
-        # negagive : A runs and it is also kind
-        # def fix_A_and_B_is(translation: str, src_pred: str, dst_pred: str) -> str:
-        #     if re.match(f'.*[^ ]* and [^ ]* {src_pred}.*', translation):
-        #         translation_fixed = re.sub('.*([^ ]*) and ([^ ]*) {src_pred}(.*)', '\g<1>all \g<2>things ' + dst_pred + '\g<3>', translation)
-        #         return translation_fixed
-        #     else:
-        #         return translation
-
-        if translation_fixed != translation:
-            logger.info('translation is fixed as:\norig : "%s"\nfixed: "%s"', translation, translation_fixed)
-
-        return translation_fixed
-
-    def _reduce_degenerate_blanks(self, translation: str) -> str:
-        return re.sub(r'\s+', ' ', translation).strip(' ')
-
-    def _uppercase_beggining(self, translation: str) -> str:
-        return translation[0].upper() + translation[1:]
-
-    def _add_ending_period(self, translation: str) -> str:
-        return translation + '.'
-
-
-def build(config_paths: List[str],
-          word_bank: WordBank,
-          adj_verb_noun_ratio: Optional[str] = None,
-          **kwargs):
-
-    merged_config_json = {}
-    for config_path in config_paths:
-        _config_path = Path(config_path)
-        if _config_path.is_dir():
-            all_paths = sorted(_config_path.glob('**/*.json'))
-        else:
-            all_paths = [_config_path]
-        for _path in all_paths:
-            logger.info('loading "%s"', str(_path))
-            merged_config_json = nested_merge(merged_config_json,
-                                              json.load(open(str(_path))))
-
-    adj_verb_noun_ratio = adj_verb_noun_ratio or '1-1-1'
-    _adj_verb_noun_ratio = [float(ratio) for ratio in adj_verb_noun_ratio.split('-')]
-    translator = TemplatedTranslator(
-        merged_config_json,
-        word_bank,
-        adj_verb_noun_ratio=_adj_verb_noun_ratio,
-        **kwargs,
-    )
-    return translator
+    @abstractmethod
+    def _postprocess_translation(self, translation: str) -> str:
+        pass

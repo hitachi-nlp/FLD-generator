@@ -1,5 +1,5 @@
 from typing import Optional, Iterable, List, Union
-from enum import Enum
+from enum import Enum, EnumMeta
 from abc import ABC, abstractmethod
 from itertools import chain
 from functools import lru_cache
@@ -14,6 +14,7 @@ class POS(Enum):
     ADJ = 'ADJ'       # adjectives
     ADJ_SAT = 'ADJ_SAT'
     ADV = 'ADV'       # adverbs
+    OTHERS = 'OTHERS'
 
 
 class ATTR(Enum):
@@ -24,56 +25,20 @@ class ATTR(Enum):
     can_be_entity_noun = 'can_be_entity_noun'
 
 
-class VerbForm(Enum):
-    """ https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html """
-    NORMAL = 'normal'
-    ING = 'ing'
-    S = 's'
-
-    ANTI = 'anti'
-
-
-class AdjForm(Enum):
-    NORMAL = 'normal'
-    NESS = 'ness'
-
-    ANTI = 'anti'
-    NEG = 'neg'
-
-
-class NounForm(Enum):
-    NORMAL = 'normal'
-    SINGULAR = 's'
-    SINGULAR_WITH_PARTICLE = 'swa'
-    PLURAL = 'p'   # not implemented
-
-    ANTI = 'anti'
-    NEG = 'neg'
-
-
-WordForm = Union[AdjForm, VerbForm, NounForm]
-
-
-def get_form_types(pos: POS) -> Union[VerbForm, AdjForm, NounForm]:
-    if pos == POS.VERB:
-        return VerbForm
-    elif pos in [POS.ADJ, POS.ADJ_SAT]:
-        return AdjForm
-    elif pos == POS.NOUN:
-        return NounForm
-    elif pos == POS.ADV:
-        raise NotImplementedError()
-    else:
-        raise ValueError(f'Unknown pos {pos}')
-
-
 class WordBank(ABC):
 
+    # implemente in the sub classes
+    VerbForm: EnumMeta
+    AdjForm: EnumMeta
+    NounForm: EnumMeta
+
     def get_words(self) -> Iterable[str]:
-        yield from chain(self.get_intermediate_constant_words(), self._get_real_words())
+        # enumerate base form of words
+        yield from chain(self.get_intermediate_constant_words(), self._get_all_lemmas())
 
     @abstractmethod
-    def _get_real_words(self) -> Iterable[str]:
+    def _get_all_lemmas(self) -> Iterable[str]:
+        # enumerate base form of words
         pass
 
     def get_intermediate_constant_words(self) -> Iterable[str]:
@@ -94,35 +59,43 @@ class WordBank(ABC):
     def _get_pos(self, word: str) -> List[POS]:
         pass
 
+    def get_forms(self, pos: POS) -> List[str]:
+        if pos == POS.VERB:
+            return [e.value for e in self.VerbForm]
+        elif pos in [POS.ADJ, POS.ADJ_SAT]:
+            return [e.value for e in self.AdjForm]
+        elif pos == POS.NOUN:
+            return [e.value for e in self.NounForm]
+        else:
+            raise NotImplementedError()
+
     def change_word_form(self,
                          word: str,
-                         form: Union[VerbForm, AdjForm, NounForm],
+                         pos: POS,
+                         form: str,
                          force=False) -> List[str]:
-        if form in VerbForm:
-            if POS.VERB not in self.get_pos(word):
-                raise ValueError(f'The pos of the form ({str(form)}) is Verb. The word {word} does not have this pos.')
-            return self._change_verb_form(word, form, force=force)
-        elif form in AdjForm:
-            if POS.ADJ not in self.get_pos(word) and POS.ADJ_SAT not in self.get_pos(word):
-                raise ValueError(f'The pos of the form ({str(form)}) is Adj. The word {word} does not have this pos.')
-            return self._change_adj_form(word, form, force=force)
-        elif form in NounForm:
-            if POS.NOUN not in self.get_pos(word):
-                raise ValueError(f'The pos of the form ({str(form)}) is Noun. The word {word} does not have this pos.')
-            return self._change_noun_form(word, form, force=force)
+        if pos not in self.get_pos(word):
+            raise ValueError(f'The worf {word} do not have pos={pos.value}')
+
+        if pos == POS.VERB:
+            return self._change_verb_form(word, self.VerbForm(form), force=force)
+        elif pos in [POS.ADJ, POS.ADJ_SAT]:
+            return self._change_adj_form(word, self.AdjForm(form), force=force)
+        elif pos == POS.NOUN:
+            return self._change_noun_form(word, self.NounForm(form), force=force)
         else:
-            raise ValueError()
+            raise Exception()
 
     @abstractmethod
-    def _change_verb_form(self, verb: str, form: VerbForm, force=False) -> List[str]:
+    def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_adj_form(self, adj: str, form: AdjForm, force=False) -> List[str]:
+    def _change_adj_form(self, adj: str, form: Enum, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_noun_form(self, noun: str, form: NounForm, force=False) -> List[str]:
+    def _change_noun_form(self, noun: str, form: Enum, force=False) -> List[str]:
         pass
 
     @lru_cache(1000000)
@@ -152,19 +125,4 @@ class WordBank(ABC):
 
     @abstractmethod
     def _can_be_entity_noun(self, noun: str) -> bool:
-        pass
-
-    @abstractmethod
-    def get_synonyms(self, word: str) -> List[str]:
-        pass
-
-    @abstractmethod
-    def get_antonyms(self, word: str) -> List[str]:
-        pass
-
-    @abstractmethod
-    def get_negnyms(self, word: str) -> List[str]:
-        # might be the subset of antonyms.
-        # antonyms may include words such as alkaline being antonym to acidic.
-        # negnym exclude such ones and include only the words like inaccrate being a negnym to accurate.
         pass
