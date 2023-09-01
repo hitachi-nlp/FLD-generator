@@ -473,13 +473,13 @@
 
     "is_true": [
       "<<phrase::is>> <<phrase::correct_adj>>",
-      "<<phrase::is>> <<phrase::not_pred>> <<phrase::incorrect_adj>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::incorrect_adj>>"],
       "<<phrase::hold_verb>>"
     ],
 
     "is_not_true": [
-      "<<phrase::is>> <<phrase::not_pred>> <<phrase::correct_adj>>",
       "<<phrase::is>> <<phrase::incorrect_adj>>",
+      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::correct_adj>>"],
       "<<phrase::does>> <<phrase::not_pred>> <<phrase::hold_verb>>"
     ],
 
