@@ -105,7 +105,9 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230801.case_study_finalize.fix')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230826.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230826.jpn')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230901.random_transitive_verbs')
 
     dataset_names = [
         # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
@@ -308,7 +310,11 @@ def main():
 
         # ---------------------------------- 20230826.jpn ------------------------------------
         # '20230826.jpn.D3',
-        '20230826.jpn.D8',
+        # '20230826.jpn.D8',
+
+        # ---------------------------------- 202320230901.random_transitive_verbs.D3 ------------------------------------
+        '20230901.random_transitive_verbs.D3',
+        # '20230901.random_transitive_verbs.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
