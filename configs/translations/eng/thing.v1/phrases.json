@@ -569,12 +569,12 @@
       "__people"
     ],
 
-    "__maybe_either": [
+    "maybe_either": [
       "either",
       ""
     ],
 
-    "__maybe_then": [
+    "maybe_then": [
       "then",
       ""
     ]
