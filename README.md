@@ -9,7 +9,7 @@ See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about t
 ## Installation
 The code has been tested on Python 3.7.7.
 ```console
-$ pip install -r ./requrements.txt
+$ pip install -r ./requirements/requrements.txt
 ```
 
 ## How to generate FLD corpus
