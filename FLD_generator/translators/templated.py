@@ -308,6 +308,7 @@ class TemplatedTranslator(Translator):
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+        self._reset_pred_with_obj_transl()
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
@@ -1013,6 +1014,10 @@ class TemplatedTranslator(Translator):
 
     @abstractmethod
     def _postprocess_template(self, template: str) -> str:
+        pass
+
+    @abstractmethod
+    def _reset_pred_with_obj_transl(self) -> None:
         pass
 
     @abstractmethod

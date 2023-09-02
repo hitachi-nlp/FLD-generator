@@ -18,6 +18,9 @@ class EnglishTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return self._replace_following_constants_with_the_or_it(template)
 
+    def _reset_pred_with_obj_transl(self) -> None:
+        pass
+
     def _make_pred_with_obj_transl(self, translation: str) -> str:
         return translation.replace('__O__', ' ')
 
