@@ -25,6 +25,7 @@ _POS_WN_TO_WB = {val: key
                  for key, val in _POS_WB_TO_WN.items()}
 
 
+
 class WordUtil:
 
     def __init__(self,
@@ -32,6 +33,9 @@ class WordUtil:
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
                  vocab_restrictions: Optional[Dict[POS, Set[str]]] = None):
+        if language == 'jpn':
+            logger.warning('Wordnet operations such as getting synonyms/antonyms may not produce good results for language=%s, due to not-yet-refined logic', language)
+
         self._language = language
         self._syn_op = SynsetOp()
         self._lemma_op = LemmaOp()
