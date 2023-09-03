@@ -201,7 +201,7 @@ class LemmaOp:
     def synonyms(self, lemma: Lemma) -> List[Lemma]:
         synonyms: List[Lemma] = []
         for syn in self.to_syns(lemma):
-            for synonym in self.from_syn(syn, lemma_lang=lemma.lan()):
+            for synonym in self.from_syn(syn, lemma_lang=lemma.lang()):
                 if self._is_ok_lemma(synonym) and synonym not in synonyms:
                     synonyms.append(synonym)
         return synonyms

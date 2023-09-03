@@ -3564,7 +3564,89 @@ _DATASET_SETTINGS = {
             # 'valid': 5000,
             'train': 15000,
         }
-    }
+    },
+
+
+
+    '20230901.random_transitive_verbs.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 15000,
+        }
+
+    },
+
+
+
+    '20230901.random_transitive_verbs.D8': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            # 'train': 30000,
+        }
+
+    },
+
+
 
 
 }
@@ -3787,6 +3869,11 @@ _DATASET_NAME_TO_DEFAULT = {
     # ---------------------------------- 20230826.jpn ------------------------------------
     '20230826.jpn.D3': '20230626.many_bugs_fixed',
     '20230826.jpn.D8': '20230626.many_bugs_fixed',
+
+    # ---------------------------------- 20230901.random_transitive_verbs ------------------------------------
+    '20230901.random_transitive_verbs.D3': '20230626.many_bugs_fixed',
+    '20230901.random_transitive_verbs.D8': '20230626.many_bugs_fixed',
+
 
 }
 
