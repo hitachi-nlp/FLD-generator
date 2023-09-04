@@ -24,82 +24,6 @@ def main():
     setup_logger(level=logging.INFO)
     logger.info('============================== [run_create_corpus.py] start! ============================')
 
-    # output_top_dir = Path('./outputs/00.create_corpus/20221203.first_exp')
-    # output_top_dir = Path('./outputs/00.create_corpus/20221217.back_to_the_past')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230529.use_fixed_translation_for_LLM')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230601.fix_translation')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230615.formula_checkers')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230616.formula_checkers')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230621.formula_checkers')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v1')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230626.many_bugs_fixed.suppress_tree_generation_failure.v2')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230628.make_harder')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230629.degug')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230701.finalize')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.2')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230703.refactor_test.3.large')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230704.speedup.1')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230704.speedup.2')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230704.refactor_test')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230705.dist-tree')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230705.dist-tree.1_parallel')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230705.log')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230705.min_size_per_worker=20')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230705.min_size_per_worker=20')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230706.finalize')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230706.finalize.wo_cache')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.wo_cache')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.honoka-dev.w_cache.w_timeout.latest.extend_branches_timeout_large.all')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.wo_timeout')  # OK
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.wo_cache.w_timeout')   # OK
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.wo_timeout')   # NG
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout')    # NG
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.raise_test')  # OK
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.first_use_no_cache')  # not good
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.second_use_no_cache')   # OK
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_return')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.w_cache.w_timeout.yield_from')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230707.finalize')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.bf51eb2')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230710.update_translation.7485fef')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230711.refactor_distractors')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230711.finalize')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230711.ICML-official-release-v2')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.case_study.strip_double_brace')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.debug')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.1')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight-0.01')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight_type_avg')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.weight_type_avg.0.05')
-    # output_top_dir = Path('./outputs/00.create_corpus/20230718.symmetric_translation.debug.fix_fix_intermediate')
-
-    # output_top_dir = Path('./outputs/00.create_corpus/2023-07-25.compare_transl')
-    # output_top_dir = Path('./outputs/00.create_corpus/2023-07-26.suppress_verb')
-    # output_top_dir = Path('./outputs/00.create_corpus/2023-07-27.compare_models')
-
     # output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize')
     # output_top_dir = Path('./outputs/00.create_corpus/20230729.case_study_finalize.debug')
 
@@ -107,203 +31,11 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230826.jpn')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230901.random_transitive_verbs')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230901.random_transitive_verbs')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230904.jpn')
 
     dataset_names = [
-        # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems',
-        # '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems',
-        # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems',
-        # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems',
-
-
-        # '20221007.atmf-PA.arg-compl.dpth-3.add-axioms-theorems.limit_vocab',
-        # '20221007.atmf-PA.arg-compl.dpth-5.add-axioms-theorems.limit_vocab',
-        # # '20221007.atmf-PA.arg-compl.dpth-10.add-axioms-theorems.limit_vocab',
-        # '20221007.atmf-PA.arg-compl.dpth-1-3.add-axioms-theorems.limit_vocab',
-
-
-        # '20221011__dpth-S__bx-S__dist-neg__dist_size-S__size-S',
-        # '20221011__dpth-M__bx-M__dist-neg__dist_size-S__size-S',
-        # '20221011__dpth-S__bx-S__dist-neg__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-neg__dist_size-M__size-M',
-
-        # '20221011__dpth-S__bx-S__dist-unk__dist_size-S__size-S',
-        # '20221011__dpth-M__bx-M__dist-unk__dist_size-S__size-S',
-        # '20221011__dpth-S__bx-S__dist-unk__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-unk__dist_size-M__size-M',
-
-        # '20221011__dpth-S__bx-S__dist-mix__dist_size-S__size-S',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-S__size-S',
-        # '20221011__dpth-S__bx-S__dist-mix__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-M',
-
-
-        # '20221015__dpth-S__bx-S__dist-mix__dist_size-M__size-S.reuse_object_nouns',
-        # '20221011__dpth-M__bx-M__dist-mix__dist_size-M__size-S.reuse_object_nouns',
-
-
-        # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
-        # '20221026__dpth-M__bx-M__dist-unk__dist_size-M__reuse-0.0__transl_weight-sqrt__size-S',
-
-
-        # '20221028__dpth-M__bx-M__dist-var__dist_size-S__reuse-0.0__transl_weight-linear__size-S',
-        # '20221028__dpth-M__bx-M__dist-var__dist_size-M__reuse-0.0__transl_weight-linear__size-S',
-
-
-        # '20221101__arg-basic__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-True__voc_limit-100__dataset_size-100000',
-        # '20221101__arg-cmpl__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-True__voc_limit-100__dataset_size-100000',
-        # '20221101__arg-cmpl__dpth-3__bx-3__dist-var__dist_size-0__reuse-0.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
-        # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-0__reuse-0.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
-        # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-100000',
-        # '20221101__arg-cmpl__dpth-10__bx-5__dist-var__dist_size-10__reuse-1.0__fixed_transl-False__voc_limit-None__dataset_size-300000',
-
-
-        # '20221107__arg-base__dpth-03__dist-00__transl-nrrw__size-100000',
-        # '20221107__arg-cmpl__dpth-03__dist-00__transl-nrrw__size-100000',
-        # '20221107__arg-cmpl__dpth-03__dist-00__transl-wide__size-100000',
-        # '20221107__arg-cmpl__dpth-03__dist-10__transl-wide__size-100000',
-        # '20221107__arg-cmpl__dpth-10__dist-10__transl-wide__size-100000',
-
-
-        # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
-        # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--10__transl-wide__unk-0.33__size-100000',
-        # '20221112__arg-cmpl__dpth-10__dist-5__transl_dist--0__transl-wide__unk-0.65__size-100000',
-        # '20221112__arg-cmpl__dpth-3__dist-5__transl_dist--0__transl-wide__unk-0.33__size-100000',
-
-
-        # '20221115__arg-RT__frml-smpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
-        # '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--0__transl-nrrw__size-100000',
-        # '20221115__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--10__transl-nrrw__size-100000',
-        # '20221115__arg-RT__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',  # ~ RuleTaker
-        # '20221115__arg-all__frml-cmpl__tree-smll__dist-10__transl_dist--0__transl-nrrw__size-100000',
-        # '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-nrrw__size-100000',
-        # '20221115__arg-all__frml-cmpl__tree-lrg__dist-10__transl_dist--0__transl-wide__size-100000',
-
-
-        # '20221117__arg-RT__frml-cmpl__tree-smll__dist-0__transl_dist--20__transl-wide__size-100000',
-        # '20221117__arg-RT__frml-cmpl__tree-tiny__dist-0__transl_dist--20__transl-wide__size-100000',
-
-        # '20221120.negative_tree__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-100000',
-
-        # '20221123.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
-
-        # '20221124.and__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
-
-        # '20221125.full__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-10000',
-        # '20221126.transl__arg-RT__frml-cmpl__tree-small__dist-5__transl_dist--5__transl-wide__size-30000',
-
-        # '20221130.transl__arg-AA__frml-smpl__tree-1__dist-5__transl_dist--5__transl-wide__size-30000',
-
-
-
-        # '20221203.first_exp__arg-RT__frml-smpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-AA__frml-cmpl__dist-20__transl-nrrw__tree-1__dataset_size-30000',
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000',
-
-        # ---------------------------------- 20221215 additional experiments ------------------------------------
-        # '20221203.first_exp__arg-RT__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-
-        # ---------------------------------- 20221216 additional experiments ------------------------------------
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-0__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLD__frml-smpl__dist-20__transl-nrrw__tree-3__dataset_size-30000',
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000',
-
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-8__dataset_size-30000.G_MP',
-
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
-        # '20221203.first_exp__arg-FLD__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT',
-
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.G_MP',
-
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-5__dataset_size-30000.G_MP',
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-100000.G_MP',
-
-        # ---------------------------------- 20221217.back_to_the_past ------------------------------------
-        # '20221217.back_to_the_past__arg-FLD__frml-cmpl__dist-10__transl-wide__tree-10__dataset_size-100000',
-
-        # ---------------------------------- 20230529.use_fixed_translation_for_LLM ------------------------------------
-        # '20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000__dpth-RT.G_MP',
-        # '20230529.use_fixed_translation_for_LLM.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
-        # '20230529.use_fixed_translation_for_LLM.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-8__dataset_size-30000',
-
-        # ---------------------------------- 20230615.formula_checkers ------------------------------------
-        # '20230615.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000',
-        # '20230615.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
-
-        # ---------------------------------- 20230616.formula_checkers ------------------------------------
-        # '20230616.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
-
-        # ---------------------------------- 20230621.formula_checkers ------------------------------------
-        # '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems',
-        # '20230621.formula_checkers.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.wo_theorems.wo_translation_dist',
-
-        # ---------------------------------- 20230626.many_bugs_fixed ------------------------------------
-        # '20230626.many_bugs_fixed.20221203.first_exp__arg-RT__frml-cmpl__dist-20__transl-nrrw__tree-3__dataset_size-30000.G_MP',
-        # '20230626.many_bugs_fixed.20221203.first_exp__arg-FLNL__frml-cmpl__dist-20__transl-wide__tree-3__dataset_size-30000.plus_quantifiers',
-
-        # ---------------------------------- 20230628.make_harder ------------------------------------
-        # '20230626.many_bugs_fixed.D3.hard',
-        # '20230626.many_bugs_fixed.D3.hard.dist-trees',
-        # '20230626.many_bugs_fixed.D3.hard.unk-0.1',
-        # '20230626.many_bugs_fixed.D3.hard.brnch-high',
-        # '20230626.many_bugs_fixed.D3.hard.dist-neg-1.0',
-        # '20230626.many_bugs_fixed.D3.hard.dist-neg-0.5',
-        # '20230626.many_bugs_fixed.D3.hard.dist-neg-0.0',
-        # '20230626.many_bugs_fixed.D3.hard.dist-trees-only',
-
-        # '20230626.many_bugs_fixed.D8.hard',
-        # '20230626.many_bugs_fixed.D8.hard.dist-trees',
-
-        # ---------------------------------- 20230701.finalize ------------------------------------
-        # '20230701.D3.default',
-        # '20230701.D3.wo_transl_dist',
-        # '20230701.D3.brnch-small',
-        # '20230701.D3.dist-small',
-        # '20230701.D3.default.refactor_test',
-        # '20230701.D3.default.dist-tree-triple',
-        # '20230701.D3.default.dist-tree-quadruple',
-
-        # '20230701.D8.default',
-
-        # ---------------------------------- 20230706..finalize ------------------------------------
-        # '20230706.finalize.D3.dist-double',
-        # '20230706.finalize.D3.dist-quadruple',
-        # # '20230706.finalize.D8.dist-double',
-        # '20230706.finalize.D8.dist-quadruple',
-
-        # ---------------------------------- 20230707.finalize ------------------------------------
-        # '20230707.finalize.D3.dist-double',
-        # '20230707.finalize.D3.dist-triple',
-        # '20230707.finalize.D3.dist-quadruple',
-
-        # '20230707.finalize.D8.dist-double',
-        # '20230707.finalize.D8.dist-triple',
-        # '20230707.finalize.D8.dist-quadruple',
-
-        # ---------------------------------- 20230711.finalize ------------------------------------
-        # '20230711.dist-fallback',
-        # '20230711.finalize.D3',
-        # '20230711.finalize.D8',
-
-        # ---------------------------------- 20230718.case_study ------------------------------------
-        # '20230718.case_study.D3.dist-mixture',
-        # '20230718.case_study.D3.num_dist-wide',
-        # '20230718.case_study.D8.dist-mixture.num_dist-wide',
-        
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide',
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_logE',
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10',
-        # '20230718.case_study.D3.dist-mixture.num_dist-wide.transl_vol_log10.adj_verb_noun_equal',
-
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
         # '20230729.case_study_finalize.D3',
         # '20230729.case_study_finalize.D8',
@@ -313,13 +45,20 @@ def main():
         # '20230826.jpn.D8',
 
         # ---------------------------------- 202320230901.random_transitive_verbs.D3 ------------------------------------
-        '20230901.random_transitive_verbs.D3',
+        # '20230901.random_transitive_verbs.D3',
         # '20230901.random_transitive_verbs.D8',
+
+        # ---------------------------------- 20230904.jpn ------------------------------------
+        # '20230904.jpn.D1.wo_brnch.wo_dstrct',
+        # '20230904.jpn.D1.wo_brnch',
+        # '20230904.jpn.D1',
+        '20230904.jpn.D3'
+
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 2
-    num_jobs_per_dataset = 90
+    num_jobs_for_datasets = 4
+    num_jobs_per_dataset = 40
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
