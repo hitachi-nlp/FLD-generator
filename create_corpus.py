@@ -114,7 +114,7 @@ def load_dataset(argument_config: List[str],
     if translation_lang == 'eng':
         assumption_prefix = 'Let\'s assume that '
     elif translation_lang == 'jpn':
-        assumption_prefix = '以下のように仮定する: '
+        assumption_prefix = '以下のように仮定する： '
     else:
         raise NotImplementedError()
     pipeline = ProofTreeGenerationPipeline(
