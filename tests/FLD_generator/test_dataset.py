@@ -138,7 +138,7 @@ def test_generate_dataset_lang(lang: str):
     if lang == 'eng':
         assumption_prefix = 'Let\'s assume that '
     elif lang == 'jpn':
-        assumption_prefix = '以下のように仮定する： '
+        assumption_prefix = '以下のように仮定する。'
     else:
         raise NotImplementedError()
 

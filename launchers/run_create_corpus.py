@@ -33,7 +33,9 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230901.random_transitive_verbs')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230904.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230904.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230912.jpn')
+    output_top_dir = Path('./outputs/00.create_corpus/20230914.jpn')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -52,13 +54,19 @@ def main():
         # '20230904.jpn.D1.wo_brnch.wo_dstrct',
         # '20230904.jpn.D1.wo_brnch',
         # '20230904.jpn.D1',
-        '20230904.jpn.D3'
+        # '20230904.jpn.D3',
+
+        # ---------------------------------- 20230912.jpn ------------------------------------
+#         '20230912.jpn.D3',
+
+        # ---------------------------------- 20230914.jpn ------------------------------------
+        '20230914.jpn.D3',
 
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 4
-    num_jobs_per_dataset = 40
+    num_jobs_for_datasets = 2
+    num_jobs_per_dataset = 90
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
