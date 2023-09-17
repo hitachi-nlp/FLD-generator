@@ -3,7 +3,7 @@
   "sentence": {
 
     "¬({A}something)": [
-      "「 <<sentence::({A}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+      "「 <<sentence::{A}something>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}something)": [
       "「 <<sentence::¬({A}something)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"

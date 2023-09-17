@@ -3,7 +3,7 @@
   "sentence": {
 
     "¬({A}something)": [
-      "<<phrase::the_fact_that>> <<sentence::({A}something)>> <<phrase::is_not_true>>"
+      "<<phrase::the_fact_that>> <<sentence::{A}something>> <<phrase::is_not_true>>"
     ],
     "¬(¬{A}something)": [
       "<<phrase::the_fact_that>> <<sentence::¬({A}something)>> <<phrase::is_not_true>>"
