@@ -35,7 +35,8 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230904.jpn')
     # output_top_dir = Path('./outputs/00.create_corpus/20230912.jpn')
-    output_top_dir = Path('./outputs/00.create_corpus/20230914.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230914.jpn')
+    output_top_dir = Path('./outputs/00.create_corpus/20230916.jpn')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -60,7 +61,14 @@ def main():
 #         '20230912.jpn.D3',
 
         # ---------------------------------- 20230914.jpn ------------------------------------
-        '20230914.jpn.D3',
+        # '20230914.jpn.D3',
+
+
+        # ---------------------------------- 20230916.jpn ------------------------------------
+        '20230916.jpn.D1_wo_dist',
+        '20230916.jpn.D1',
+        '20230916.jpn.D3',
+        '20230916.jpn.D5',
 
     ]
     # dataset_names = dataset_names[::-1]
