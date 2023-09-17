@@ -10,7 +10,6 @@ from pprint import pformat
 from functools import lru_cache
 import math
 
-from tqdm import tqdm
 from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, remove_outer_brace
 from FLD_generator.word_banks.base import WordBank, ATTR
 from FLD_generator.interpretation import (

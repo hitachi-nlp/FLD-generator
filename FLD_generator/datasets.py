@@ -258,7 +258,7 @@ class NLProofSDataset:
                  size: int,
                  conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=False,
                  conclude_hypothesis_from_random_sent_if_proof_is_unknown=False,
-                 add_randome_sentence_if_context_is_null=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], List[str], Dict[str, Any]]]:
+                 add_random_sentence_if_context_is_null=True) -> Iterable[Tuple[Dict, ProofTree, Optional[List[Formula]], List[str], Dict[str, Any]]]:
         """ Generate dataset
 
         See discussions.md for the options.
@@ -357,7 +357,7 @@ class NLProofSDataset:
                 formula_distractors=formula_distractors,
                 translation_distractors=translation_distractors,
 
-                add_randome_sentence_if_context_is_null=add_randome_sentence_if_context_is_null,
+                add_random_sentence_if_context_is_null=add_random_sentence_if_context_is_null,
                 conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
                 conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
             )
@@ -393,7 +393,7 @@ class NLProofSDataset:
                     node2id=node2id,
                     id2node=id2node,
 
-                    add_randome_sentence_if_context_is_null=add_randome_sentence_if_context_is_null,
+                    add_random_sentence_if_context_is_null=add_random_sentence_if_context_is_null,
                     conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
                     conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
                 )
@@ -482,9 +482,6 @@ class NLProofSDataset:
 
             stance_label = _make_proof_stance_label(proof_stance, version=self.version)
             negative_stance_label = _make_proof_stance_label(negative_proof_stance, version=self.version) if negative_proof_stance is not None else None
-
-            if not context:
-                import pudb; pudb.set_trace()
 
             dataset_json = {
                 'version': self.version,
@@ -596,7 +593,7 @@ class NLProofSDataset:
                    formula_distractors: Optional[List[Formula]] = None,
                    translation_distractors: Optional[List[str]] = None,
 
-                   add_randome_sentence_if_context_is_null=False,
+                   add_random_sentence_if_context_is_null=False,
                    conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=True,
                    conclude_hypothesis_from_random_sent_if_proof_is_unknown=False) -> Tuple[str, Optional[str], Dict[Node, str], Dict[str, Node]]:
 
@@ -621,13 +618,13 @@ class NLProofSDataset:
             + [_TranslationDistractorNode(distractor_translation) for distractor_translation in translation_distractors]
 
         if len(transformed_proof_and_distractor_nodes) == 0:
-            if add_randome_sentence_if_context_is_null:
+            if add_random_sentence_if_context_is_null:
                 random_sentence = None
                 if self.pipeline.translator is not None:
                     random_sentence = _generate_random_sentence(self.pipeline.translator)
                 random_sentence = random_sentence or _DUMMY_SENTENCE
                 transformed_proof_and_distractor_nodes = [_FormulaDistractorNode(Formula(random_sentence))]
-                logger.info('Adding a random sentence into context because context have no sentence. The randome sentence is: "%s"', random_sentence)
+                logger.info('Adding a random sentence into context because context have no sentence. The random sentence is: "%s"', random_sentence)
             else:
                 raise NotImplementedError('We must add something to context because null context will lead to error in NLProofS learning.')
 
