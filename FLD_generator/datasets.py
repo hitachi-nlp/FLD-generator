@@ -79,7 +79,7 @@ def _make_world_assump_label(proof_stance: ProofStance,
                 raise ValueError()
         else:
             raise ValueError()
-    elif version in ['0.1', '0.2']:
+    elif version in ['0.1', '0.2', '0.3']:
         if world_assump == WorldAssumption.CWA:
             if proof_stance == ProofStance.PROVED:
                 return 'PROVED'
@@ -115,7 +115,7 @@ def _make_proof_stance_label(proof_stance: ProofStance,
             return 'UNKNOWN'
         else:
             raise ValueError()
-    elif version in ['0.1', '0.2']:
+    elif version in ['0.1', '0.2', '0.3']:
         return proof_stance.value
     else:
         raise ValueError()
@@ -208,7 +208,7 @@ class NLProofSDataset:
                  translation_distractors_range: Optional[Tuple[int, int]] = None,
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
-                 version: str = '0.2',
+                 version: str = '0.3',
                  log_stats=True,
                  raise_if_translation_not_found=True):
 
@@ -242,6 +242,13 @@ class NLProofSDataset:
         self.pipeline.log_stats = log_stats
         self.version = version
         self.raise_if_translation_not_found = raise_if_translation_not_found
+
+        if self.version in ['0.0', '0.1', '0.2']:
+            self._sent_ident = 'sent'
+            self._facts_ident = 'context'
+        else:
+            self._sent_ident = 'fact'
+            self._facts_ident = 'facts'
 
         self.use_collapsed_translation_nodes_for_unknown_tree = use_collapsed_translation_nodes_for_unknown_tree
         if self.use_collapsed_translation_nodes_for_unknown_tree:
@@ -488,8 +495,8 @@ class NLProofSDataset:
 
                 'hypothesis': hypothesis,
                 'hypothesis_formula': hypothesis_formula.rep,
-                'context': context,
-                'context_formula': formula_context,
+                f'{self._facts_ident}': context,
+                f'{self._facts_ident}_formula': formula_context,
                 'proofs': [proof_text] if proof_text is not None else [],
                 'proofs_formula': [formula_proof_text] if formula_proof_text is not None else [],
 
@@ -507,7 +514,7 @@ class NLProofSDataset:
                 'num_translation_distractors': len(translation_distractors),
                 'num_all_distractors': len(formula_distractors) + len(translation_distractors),
             }
-            if self.version in ['0.0', '0.1']:
+            if self.version in ['0.0', '0.1', '0.3']:
                 dataset_json.update({
                     'proof_stance': stance_label,
                     'negative_proof_stance': negative_stance_label,
@@ -766,11 +773,11 @@ class NLProofSDataset:
                     i_assump += 1
 
                 elif self._is_leaf(node, proof_tree):
-                    id_ = f'sent{i_sent}'
+                    id_ = f'{self._sent_ident}{i_sent}'
                     i_sent += 1
 
                 elif self._is_distractor(node):
-                    id_ = f'sent{i_sent}'
+                    id_ = f'{self._sent_ident}{i_sent}'
                     i_sent += 1
 
                 else:
@@ -808,7 +815,7 @@ class NLProofSDataset:
                            missing_leaf_nodes: List[ProofNode],
                            formula_rep=False) -> str:
         context_id2nodes = {id_: node for id_, node in id2node.items()
-                            if id_.startswith('sent') and node not in missing_leaf_nodes}
+                            if id_.startswith(self._sent_ident) and node not in missing_leaf_nodes}
 
         def node2sent(node) -> str:
             if formula_rep:
@@ -822,7 +829,7 @@ class NLProofSDataset:
         return ' '.join([
             f'{id_}: {node2sent(node)}'
             for id_, node in sorted(context_id2nodes.items(),
-                                    key=lambda id_node: int(re.sub('sent([0-9]*)', r'\g<1>', id_node[0])))
+                                    key=lambda id_node: int(re.sub(f'{self._sent_ident}([0-9]*)', r'\g<1>', id_node[0])))
 
         ])
 
@@ -906,7 +913,7 @@ class NLProofSDataset:
                                               if not self._is_leaf(node, proof_tree)]
 
                 if len(subtree_root_nodes_wo_leaf) == 0:
-                    sent_ids = [id_ for id_ in id2node.keys() if id_.startswith('sent')]
+                    sent_ids = [id_ for id_ in id2node.keys() if id_.startswith(self._sent_ident)]
                     hypothesis_premises = random.sample(sent_ids, 1)
                 else:
                     hypothesis_premises = [node2id[node] for node in subtree_root_nodes_wo_leaf]
@@ -915,7 +922,7 @@ class NLProofSDataset:
 
             elif conclude_hypothesis_from_random_sent_if_proof_is_unknown:
 
-                sent_ids = [id_ for id_ in id2node.keys() if id_.startswith('sent')]
+                sent_ids = [id_ for id_ in id2node.keys() if id_.startswith(self._sent_ident)]
                 hypothesis_premises = random.sample(sent_ids, 1)
                 proof_elems.append(' & '.join(hypothesis_premises) + ' -> hypothesis')
 
