@@ -60,7 +60,8 @@ def load_dataset(argument_config: List[str],
                  depth_range: Tuple[int, int],
                  depth_distrib: str,
                  force_fix_illegal_intermediate_constants: bool,
-                 branch_extensions_range: Tuple[int, int]):
+                 branch_extensions_range: Tuple[int, int],
+                 translation_variants_per_logic: int):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
@@ -155,7 +156,8 @@ def load_dataset(argument_config: List[str],
                            unknown_ratio=unknown_ratio,
                            use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
                            swap_ng_words=swap_ng_words,
-                           word_bank = word_bank if use_collapsed_translation_nodes_for_unknown_tree else None)
+                           word_bank = word_bank if use_collapsed_translation_nodes_for_unknown_tree else None,
+                           translation_variants_per_logic=translation_variants_per_logic)
 
 
 def generate_instances(size: int, *args):
@@ -218,11 +220,15 @@ def generate_instances(size: int, *args):
 @click.option('--translation-distractor', default='word_swap')
 @click.option('--translation-distractors-range', type=str, default=json.dumps([0, 0]))
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
+#
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--swap-ng-words-config', default=None)
+#
+@click.option('--translation-variants-per-logic', type=int, default=1)
+#
 @click.option('--num-workers', type=int, default=1)
 @click.option('--min-size-per-worker', type=int,
               default=10,
@@ -265,6 +271,7 @@ def main(output_path,
          unknown_ratio,
          use_collapsed_translation_nodes_for_unknown_tree,
          swap_ng_words_config,
+         translation_variants_per_logic,
          num_workers,
          min_size_per_worker,
          batch_size_per_worker,
@@ -339,6 +346,7 @@ def main(output_path,
                         depth_distrib,
                         force_fix_illegal_intermediate_constants,
                         branch_extensions_range,
+                        translation_variants_per_logic,
                     )
                 )
 

@@ -208,6 +208,7 @@ class NLProofSDataset:
                  translation_distractors_range: Optional[Tuple[int, int]] = None,
                  allow_inconsistency=False,
                  allow_smaller_proofs=False,
+                 translation_variants_per_logic=1,
                  version: str = '0.3',
                  log_stats=True,
                  raise_if_translation_not_found=True):
@@ -234,6 +235,7 @@ class NLProofSDataset:
         self._force_fix_illegal_intermediate_constants = force_fix_illegal_intermediate_constants
 
         self.branch_extension_steps = _to_range(*branch_extensions_range)
+        self._translation_variants_per_logic = translation_variants_per_logic
         self.num_distractors = _to_range(*distractors_range) if distractors_range is not None else [0]
         self.num_translation_distractors = _to_range(*translation_distractors_range) if branch_extensions_range is not None else [0]
         self.allow_inconsistency = allow_inconsistency
@@ -291,7 +293,7 @@ class NLProofSDataset:
             _branch_extension_steps = random.sample(self.branch_extension_steps, 1)[0]
 
             # -- make proof tree and distractors  --
-            proof_tree, root_negation_formula, formula_distractors, translation_distractors, others, pipeline_stats = self.pipeline.run(
+            pipeline_results = self.pipeline.run(
                 depth,
                 _branch_extension_steps,
                 _num_distractors,
@@ -300,281 +302,284 @@ class NLProofSDataset:
                 allow_inconsistency=self.allow_inconsistency,
                 allow_smaller_proofs=self.allow_smaller_proofs,
                 force_fix_illegal_intermediate_constants=self._force_fix_illegal_intermediate_constants,
+                translation_variants_per_logic=self._translation_variants_per_logic,
                 raise_if_translation_not_found=self.raise_if_translation_not_found,
             )
 
-            # -- sample stance --
-            if len(proof_tree.leaf_nodes) == 0:
-                # For some very rare case, this occurs.
-                # Since we do not expect this behaviour, we raise error for future debug
-                raise Exception(proof_tree.format_str)
+            for proof_tree, root_negation_formula, formula_distractors, translation_distractors, others, pipeline_stats in pipeline_results:
 
-            # -- sample nodes --
-            if proof_stance == ProofStance.UNKNOWN:
-                if random.random() < 0.5:
+                # -- sample stance --
+                if len(proof_tree.leaf_nodes) == 0:
+                    # For some very rare case, this occurs.
+                    # Since we do not expect this behaviour, we raise error for future debug
+                    raise Exception(proof_tree.format_str)
+
+                # -- sample nodes --
+                if proof_stance == ProofStance.UNKNOWN:
+                    if random.random() < 0.5:
+                        hypothesis_formula = proof_tree.root_node.formula
+                        hypothesis = self._get_sent_from_node(proof_tree.root_node)
+                    else:
+                        hypothesis_formula = root_negation_formula
+                        hypothesis = root_negation_formula.translation or root_negation_formula.rep
+
+                    could_make_unknown = False
+                    for _ in range(10):
+                        # dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
+                        dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, 1)
+                        if is_unknown(
+                            [node.formula for node in proof_tree.leaf_nodes
+                             if node not in dead_leaf_nodes],
+                            hypothesis_formula,
+                        ):
+                            could_make_unknown = True
+                            break
+                    if not could_make_unknown:
+                        logger.warning('skip the sample because we could not make UNKNOWN proof by sub-sampling nodes.')
+                        continue
+
+                elif proof_stance == ProofStance.PROVED:
                     hypothesis_formula = proof_tree.root_node.formula
                     hypothesis = self._get_sent_from_node(proof_tree.root_node)
-                else:
+                    dead_leaf_nodes = []
+
+                elif proof_stance == ProofStance.DISPROVED:
                     hypothesis_formula = root_negation_formula
                     hypothesis = root_negation_formula.translation or root_negation_formula.rep
+                    dead_leaf_nodes = []
 
-                could_make_unknown = False
-                for _ in range(10):
-                    # dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
-                    dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, 1)
-                    if is_unknown(
-                        [node.formula for node in proof_tree.leaf_nodes
-                         if node not in dead_leaf_nodes],
-                        hypothesis_formula,
-                    ):
-                        could_make_unknown = True
-                        break
-                if not could_make_unknown:
-                    logger.warning('skip the sample because we could not make UNKNOWN proof by sub-sampling nodes.')
-                    continue
+                alive_leaf_nodes = [node for node in proof_tree.leaf_nodes
+                                    if node not in dead_leaf_nodes]
 
-            elif proof_stance == ProofStance.PROVED:
-                hypothesis_formula = proof_tree.root_node.formula
-                hypothesis = self._get_sent_from_node(proof_tree.root_node)
-                dead_leaf_nodes = []
+                # dead nodes = missing nodes + collapsed nodes
+                missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
 
-            elif proof_stance == ProofStance.DISPROVED:
-                hypothesis_formula = root_negation_formula
-                hypothesis = root_negation_formula.translation or root_negation_formula.rep
-                dead_leaf_nodes = []
+                # -- make texts --
+                context, formula_context, proof_text, formula_proof_text, node2id, id2node = self._make_text(
+                    proof_tree,
+                    proof_stance,
 
-            alive_leaf_nodes = [node for node in proof_tree.leaf_nodes
-                                if node not in dead_leaf_nodes]
+                    dead_leaf_nodes=dead_leaf_nodes,
+                    missing_leaf_nodes=missing_leaf_nodes,
+                    collapsed_leaf_nodes=collapsed_leaf_nodes,
 
-            # dead nodes = missing nodes + collapsed nodes
-            missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
+                    node2id=None,
+                    id2node=None,
 
-            # -- make texts --
-            context, formula_context, proof_text, formula_proof_text, node2id, id2node = self._make_text(
-                proof_tree,
-                proof_stance,
-
-                dead_leaf_nodes=dead_leaf_nodes,
-                missing_leaf_nodes=missing_leaf_nodes,
-                collapsed_leaf_nodes=collapsed_leaf_nodes,
-
-                node2id=None,
-                id2node=None,
-
-                formula_distractors=formula_distractors,
-                translation_distractors=translation_distractors,
-
-                add_random_sentence_if_context_is_null=add_random_sentence_if_context_is_null,
-                conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
-                conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
-            )
-
-            # -- make negative proofs --
-            negative_tree, negative_tree_missing_leaf_nodes = None, None
-            all_negative_tree_attrs = [val for name, val in others.items()
-                                       if name.find('negative_tree') >= 0]
-            if len(all_negative_tree_attrs) > 0:
-                negative_tree_attrs = random.choice(all_negative_tree_attrs)
-                negative_tree, negative_tree_dead_leaf_nodes = negative_tree_attrs['tree'], negative_tree_attrs['missing_nodes']
-
-            if negative_tree is not None:
-                negative_tree_missing_leaf_nodes = negative_tree_dead_leaf_nodes
-                negative_tree_collapsed_leaf_nodes = []
-
-                if len(negative_tree_missing_leaf_nodes) == 0:
-                    negative_proof_stance = ProofStance.PROVED
-                else:
-                    negative_proof_stance = ProofStance.UNKNOWN
-
-                negative_hypothesis_formula = negative_tree.root_node.formula
-                negative_hypothesis = self._get_sent_from_node(negative_hypothesis_formula)
-
-                _, _, negateive_proof_text, _, _, _ = self._make_text(
-                    negative_tree,
-                    ProofStance.UNKNOWN,
-
-                    dead_leaf_nodes=negative_tree_dead_leaf_nodes,
-                    missing_leaf_nodes=negative_tree_missing_leaf_nodes,
-                    collapsed_leaf_nodes=negative_tree_collapsed_leaf_nodes,
-
-                    node2id=node2id,
-                    id2node=id2node,
+                    formula_distractors=formula_distractors,
+                    translation_distractors=translation_distractors,
 
                     add_random_sentence_if_context_is_null=add_random_sentence_if_context_is_null,
                     conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
                     conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
                 )
 
-            else:
-                negative_hypothesis_formula, negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None, None
+                # -- make negative proofs --
+                negative_tree, negative_tree_missing_leaf_nodes = None, None
+                all_negative_tree_attrs = [val for name, val in others.items()
+                                           if name.find('negative_tree') >= 0]
+                if len(all_negative_tree_attrs) > 0:
+                    negative_tree_attrs = random.choice(all_negative_tree_attrs)
+                    negative_tree, negative_tree_dead_leaf_nodes = negative_tree_attrs['tree'], negative_tree_attrs['missing_nodes']
 
-            # -- compute depth --
-            if proof_stance == ProofStance.UNKNOWN:
-                proof_depth = None
-            else:
-                if proof_tree.root_node.argument.id.startswith('reference'):
-                    proof_depth = 0
+                if negative_tree is not None:
+                    negative_tree_missing_leaf_nodes = negative_tree_dead_leaf_nodes
+                    negative_tree_collapsed_leaf_nodes = []
+
+                    if len(negative_tree_missing_leaf_nodes) == 0:
+                        negative_proof_stance = ProofStance.PROVED
+                    else:
+                        negative_proof_stance = ProofStance.UNKNOWN
+
+                    negative_hypothesis_formula = negative_tree.root_node.formula
+                    negative_hypothesis = self._get_sent_from_node(negative_hypothesis_formula)
+
+                    _, _, negateive_proof_text, _, _, _ = self._make_text(
+                        negative_tree,
+                        ProofStance.UNKNOWN,
+
+                        dead_leaf_nodes=negative_tree_dead_leaf_nodes,
+                        missing_leaf_nodes=negative_tree_missing_leaf_nodes,
+                        collapsed_leaf_nodes=negative_tree_collapsed_leaf_nodes,
+
+                        node2id=node2id,
+                        id2node=id2node,
+
+                        add_random_sentence_if_context_is_null=add_random_sentence_if_context_is_null,
+                        conclude_hypothesis_from_subtree_roots_if_proof_is_unknown=conclude_hypothesis_from_subtree_roots_if_proof_is_unknown,
+                        conclude_hypothesis_from_random_sent_if_proof_is_unknown=conclude_hypothesis_from_random_sent_if_proof_is_unknown,
+                    )
+
                 else:
-                    proof_depth = proof_tree.depth
+                    negative_hypothesis_formula, negative_hypothesis, negateive_proof_text, negative_proof_stance = None, None, None, None
 
-            all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
-            all_negative_formulas = formula_distractors
-            all_formulas = all_positive_formulas + all_negative_formulas
+                # -- compute depth --
+                if proof_stance == ProofStance.UNKNOWN:
+                    proof_depth = None
+                else:
+                    if proof_tree.root_node.argument.id.startswith('reference'):
+                        proof_depth = 0
+                    else:
+                        proof_depth = proof_tree.depth
 
-            stance_msg = None
-            if proof_stance == ProofStance.PROVED:
-                # assert is_provable(all_positive_formulas, hypothesis_formula)
-                if not is_provable(all_positive_formulas, hypothesis_formula):
-                    logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
-                    logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
-                    logger.critical('\n== tree ==\n' + proof_tree.format_str)
-                    # import pudb; pudb.set_trace()
-                    stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and implies bugs.'
-            elif proof_stance == ProofStance.DISPROVED:
-                # assert is_disprovable(all_positive_formulas, hypothesis_formula)
-                if not is_disprovable(all_positive_formulas, hypothesis_formula):
-                    logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
-                    logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
-                    logger.critical('\n== tree ==\n' + proof_tree.format_str)
-                    # import pudb; pudb.set_trace()
-                    stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and implies bugs.'
-            elif proof_stance == ProofStance.UNKNOWN:
-                # assert is_unknown(all_positive_formulas, hypothesis_formula)
-                if not is_unknown(all_positive_formulas, hypothesis_formula):
-                    logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
-                    logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
-                    logger.critical('\n== tree ==\n' + proof_tree.format_str)
-                    # import pudb; pudb.set_trace()
-                    stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and implies bugs.'
-            if stance_msg is not None:
-                logger.fatal('proof_tree leaf nodes:')
-                logger.fatal(pformat(proof_tree.leaf_nodes))
+                all_positive_formulas = [leaf_node.formula for leaf_node in alive_leaf_nodes]
+                all_negative_formulas = formula_distractors
+                all_formulas = all_positive_formulas + all_negative_formulas
 
-                logger.fatal('all_positive_formulas:')
-                for formula in all_negative_formulas:
-                    logger.fatal('    %s', formula.rep)
+                stance_msg = None
+                if proof_stance == ProofStance.PROVED:
+                    # assert is_provable(all_positive_formulas, hypothesis_formula)
+                    if not is_provable(all_positive_formulas, hypothesis_formula):
+                        logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
+                        logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
+                        logger.critical('\n== tree ==\n' + proof_tree.format_str)
+                        # import pudb; pudb.set_trace()
+                        stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and implies bugs.'
+                elif proof_stance == ProofStance.DISPROVED:
+                    # assert is_disprovable(all_positive_formulas, hypothesis_formula)
+                    if not is_disprovable(all_positive_formulas, hypothesis_formula):
+                        logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
+                        logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
+                        logger.critical('\n== tree ==\n' + proof_tree.format_str)
+                        # import pudb; pudb.set_trace()
+                        stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and implies bugs.'
+                elif proof_stance == ProofStance.UNKNOWN:
+                    # assert is_unknown(all_positive_formulas, hypothesis_formula)
+                    if not is_unknown(all_positive_formulas, hypothesis_formula):
+                        logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
+                        logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
+                        logger.critical('\n== tree ==\n' + proof_tree.format_str)
+                        # import pudb; pudb.set_trace()
+                        stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and implies bugs.'
+                if stance_msg is not None:
+                    logger.fatal('proof_tree leaf nodes:')
+                    logger.fatal(pformat(proof_tree.leaf_nodes))
 
-                logger.fatal('hypothesis:')
-                logger.fatal('    %s', hypothesis_formula.rep)
+                    logger.fatal('all_positive_formulas:')
+                    for formula in all_negative_formulas:
+                        logger.fatal('    %s', formula.rep)
 
-                logger.fatal('proof_tree:')
-                logger.fatal(proof_tree.format_str)
+                    logger.fatal('hypothesis:')
+                    logger.fatal('    %s', hypothesis_formula.rep)
 
-                raise Exception(stance_msg)
+                    logger.fatal('proof_tree:')
+                    logger.fatal(proof_tree.format_str)
 
-            if not self.allow_inconsistency:
-                _is_consistent, logs = is_consistent_formula_set_with_logs(
-                    all_formulas, [], [],
-                )
-                if not _is_consistent:
-                    for msg in logs:
-                        logger.info(msg)
-                    raise Exception('Unexpected.')
+                    raise Exception(stance_msg)
 
-            if not self.allow_smaller_proofs:
-                _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
-                    all_positive_formulas, [], [],
-                    hypothesis_formula,
-                    hypothesis_formula,
-                    distractor_formulas=all_negative_formulas,
-                )
-                if _have_smaller_proofs:
-                    for log in logs:
-                        logger.info(log)
-                    raise Exception('Unexpected.')
+                if not self.allow_inconsistency:
+                    _is_consistent, logs = is_consistent_formula_set_with_logs(
+                        all_formulas, [], [],
+                    )
+                    if not _is_consistent:
+                        for msg in logs:
+                            logger.info(msg)
+                        raise Exception('Unexpected.')
 
-            # -- make output json --
-            world_assump_label = _make_world_assump_label(proof_stance, self.world_assump, version=self.version)
-            world_assump_negative_label = _make_world_assump_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
+                if not self.allow_smaller_proofs:
+                    _have_smaller_proofs, logs = have_smaller_proofs_with_logs(
+                        all_positive_formulas, [], [],
+                        hypothesis_formula,
+                        hypothesis_formula,
+                        distractor_formulas=all_negative_formulas,
+                    )
+                    if _have_smaller_proofs:
+                        for log in logs:
+                            logger.info(log)
+                        raise Exception('Unexpected.')
 
-            stance_label = _make_proof_stance_label(proof_stance, version=self.version)
-            negative_stance_label = _make_proof_stance_label(negative_proof_stance, version=self.version) if negative_proof_stance is not None else None
+                # -- make output json --
+                world_assump_label = _make_world_assump_label(proof_stance, self.world_assump, version=self.version)
+                world_assump_negative_label = _make_world_assump_label(negative_proof_stance, self.world_assump, version=self.version) if negative_proof_stance is not None else None
 
-            dataset_json = {
-                'version': self.version,
+                stance_label = _make_proof_stance_label(proof_stance, version=self.version)
+                negative_stance_label = _make_proof_stance_label(negative_proof_stance, version=self.version) if negative_proof_stance is not None else None
 
-                'hypothesis': hypothesis,
-                'hypothesis_formula': hypothesis_formula.rep,
-                f'{self._facts_ident}': context,
-                f'{self._facts_ident}_formula': formula_context,
-                'proofs': [proof_text] if proof_text is not None else [],
-                'proofs_formula': [formula_proof_text] if formula_proof_text is not None else [],
+                dataset_json = {
+                    'version': self.version,
 
-                'negative_hypothesis': negative_hypothesis,
-                'negative_hypothesis_formula': negative_hypothesis_formula.rep if negative_hypothesis_formula is not None else None,
-                'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
-                'negative_original_tree_depth': negative_tree.depth if negative_tree is not None else None,
+                    'hypothesis': hypothesis,
+                    'hypothesis_formula': hypothesis_formula.rep,
+                    f'{self._facts_ident}': context,
+                    f'{self._facts_ident}_formula': formula_context,
+                    'proofs': [proof_text] if proof_text is not None else [],
+                    'proofs_formula': [formula_proof_text] if formula_proof_text is not None else [],
 
-                'original_tree_depth': proof_tree.depth,
+                    'negative_hypothesis': negative_hypothesis,
+                    'negative_hypothesis_formula': negative_hypothesis_formula.rep if negative_hypothesis_formula is not None else None,
+                    'negative_proofs': [negateive_proof_text] if negateive_proof_text is not None else [],
+                    'negative_original_tree_depth': negative_tree.depth if negative_tree is not None else None,
 
-                # We follow ProofWriter to define proof depth as tree depth - 1
-                'depth': proof_depth,
+                    'original_tree_depth': proof_tree.depth,
 
-                'num_formula_distractors': len(formula_distractors),
-                'num_translation_distractors': len(translation_distractors),
-                'num_all_distractors': len(formula_distractors) + len(translation_distractors),
-            }
-            if self.version in ['0.0', '0.1', '0.3']:
-                dataset_json.update({
-                    'proof_stance': stance_label,
-                    'negative_proof_stance': negative_stance_label,
+                    # We follow ProofWriter to define proof depth as tree depth - 1
+                    'depth': proof_depth,
 
-                    'answer': world_assump_label,
-                    'negative_answer': world_assump_negative_label,
-                })
-            else:
-                dataset_json.update({
-                    'proof_label': stance_label,
-                    'negative_proof_label': negative_stance_label,
-
-                    'world_assump_label': world_assump_label,
-                    'negative_world_assump_label': world_assump_negative_label,
-                })
-
-            # Update statistics
-            if self.log_stats:
-                sample_stats = flatten_dict(pipeline_stats)
-                sample_stats[f'answer.{world_assump_label}'] = 1
-                sample_stats[f'proof_stance.{proof_stance.value}'] = 1
-                sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
-                sample_stats['word_count_context'] = len(context.split(' '))
-                sample_stats['word_count_proof'] = len(proof_text.split(' ')) if proof_text is not None else None
-                sample_stats['word_count_all'] = (sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']) if sample_stats['word_count_proof'] is not None else None
-                sample_stats['tree'] = 1
-
-                for name, count in sample_stats.items():
-                    if count is None:
-                        continue
-                    sample_cum_stats[name] += count
-
-                for name, count in sample_stats.items():
-                    if name.find('argument') >= 0 or name.find('translation') >= 0:
-                        continue
-                    if count is None:
-                        continue
-                    all_sample_stats[name].append(count)
-
-                sample_avg_stats = {
-                    name: count / sample_cum_stats['tree']
-                    for name, count in sample_cum_stats.items()
-                    if name != 'tree'
+                    'num_formula_distractors': len(formula_distractors),
+                    'num_translation_distractors': len(translation_distractors),
+                    'num_all_distractors': len(formula_distractors) + len(translation_distractors),
                 }
+                if self.version in ['0.0', '0.1', '0.3']:
+                    dataset_json.update({
+                        'proof_stance': stance_label,
+                        'negative_proof_stance': negative_stance_label,
 
-                sample_std_stats = {
-                    name: stdev(count_list) if len(count_list) >= 2 else None
-                    for name, count_list in all_sample_stats.items()
-                }
+                        'answer': world_assump_label,
+                        'negative_answer': world_assump_negative_label,
+                    })
+                else:
+                    dataset_json.update({
+                        'proof_label': stance_label,
+                        'negative_proof_label': negative_stance_label,
 
-                gathered_stats = flatten_dict({'cum': sample_cum_stats, 'avg': sample_avg_stats, 'std': sample_std_stats})
-            else:
-                gathered_stats = {}
+                        'world_assump_label': world_assump_label,
+                        'negative_world_assump_label': world_assump_negative_label,
+                    })
 
-            i_sample += 1
-            yield dataset_json,\
-                proof_tree,\
-                formula_distractors,\
-                translation_distractors,\
-                gathered_stats
+                # Update statistics
+                if self.log_stats:
+                    sample_stats = flatten_dict(pipeline_stats)
+                    sample_stats[f'answer.{world_assump_label}'] = 1
+                    sample_stats[f'proof_stance.{proof_stance.value}'] = 1
+                    sample_stats['word_count_hypothesis'] = len(hypothesis.split(' '))
+                    sample_stats['word_count_context'] = len(context.split(' '))
+                    sample_stats['word_count_proof'] = len(proof_text.split(' ')) if proof_text is not None else None
+                    sample_stats['word_count_all'] = (sample_stats['word_count_hypothesis'] + sample_stats['word_count_context'] + sample_stats['word_count_proof']) if sample_stats['word_count_proof'] is not None else None
+                    sample_stats['tree'] = 1
+
+                    for name, count in sample_stats.items():
+                        if count is None:
+                            continue
+                        sample_cum_stats[name] += count
+
+                    for name, count in sample_stats.items():
+                        if name.find('argument') >= 0 or name.find('translation') >= 0:
+                            continue
+                        if count is None:
+                            continue
+                        all_sample_stats[name].append(count)
+
+                    sample_avg_stats = {
+                        name: count / sample_cum_stats['tree']
+                        for name, count in sample_cum_stats.items()
+                        if name != 'tree'
+                    }
+
+                    sample_std_stats = {
+                        name: stdev(count_list) if len(count_list) >= 2 else None
+                        for name, count_list in all_sample_stats.items()
+                    }
+
+                    gathered_stats = flatten_dict({'cum': sample_cum_stats, 'avg': sample_avg_stats, 'std': sample_std_stats})
+                else:
+                    gathered_stats = {}
+
+                i_sample += 1
+                yield dataset_json,\
+                    proof_tree,\
+                    formula_distractors,\
+                    translation_distractors,\
+                    gathered_stats
 
     def _sample_proof_stance(self) -> ProofStance:
         if random.random() < self.unknown_ratio:

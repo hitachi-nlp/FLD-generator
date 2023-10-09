@@ -164,6 +164,7 @@ def make_dataset(dataset_name: str,
 
             'depth_range',
             'depth_distrib',
+            'translation_variants_per_logic',
             'branch_extensions_range',
 
             'distractor',
@@ -271,6 +272,8 @@ def make_dataset(dataset_name: str,
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',
                 maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
                 '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
+
+                maybe_option('--translation-variants-per-logic', settings.get("translation_variants_per_logic", None)),
 
                 f'--num-workers {job_settings["num_workers_per_job"]}',
                 f'--seed {job_settings["seed"]}',

@@ -2,6 +2,7 @@ from typing import List, Optional, Tuple, Dict, Any, Set
 import logging
 from collections import defaultdict
 import random
+import copy
 
 from FLD_generator.formula import Formula, NEGATION, eliminate_double_negation, negate
 from FLD_generator.proof import ProofTree, ProofNode
@@ -90,7 +91,6 @@ class ProofTreeGenerationPipeline:
         for tree in trial_proof_trees:
             tree.validate()
 
-
         trial_proof_trees = sorted(trial_proof_trees, key= lambda proof_tree: proof_tree.depth)
         to_be_cached_trees, to_be_return_tree = trial_proof_trees[:-1], trial_proof_trees[-1]
 
@@ -100,7 +100,6 @@ class ProofTreeGenerationPipeline:
                 self._reusable_proof_trees[_get_cache_key(to_be_cached_tree.depth)] = []
 
         return to_be_return_tree
-
 
     @profile
     def run(self,
@@ -112,8 +111,8 @@ class ProofTreeGenerationPipeline:
             allow_smaller_proofs=False,
             depth_1_reference_weight: Optional[float] = None,
             force_fix_illegal_intermediate_constants=False,
-            raise_if_translation_not_found=True) -> Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]:
-        misc = {}
+            translation_variants_per_logic=1,
+            raise_if_translation_not_found=True) -> List[Tuple[ProofTree, Formula, Optional[List[Formula]], List[str], Dict[str, Any], Dict[str, int]]]:
 
         if not self.generator.disallow_contradiction_as_hypothesis:
             raise ValueError('generator.disallow_contradiction_as_hypothesis must be "Ture" since we need the negated hypothesis for ')
@@ -121,136 +120,212 @@ class ProofTreeGenerationPipeline:
         if depth < 1:
             raise ValueError('depth must be >= 1')
 
-        def _make_pretty_log(title: str, status: str) -> str:
-            return make_pretty_msg(title=title, status=status, boundary_level=4)
-
         while True:
-            logger.info(_make_pretty_log('generate proof tree', 'start'))
-            try:
-                proof_tree = self._reusable_generate(
+            logic =\
+                self._build_logic(
                     depth,
                     branch_extension_steps,
-                    depth_1_reference_weight=depth_1_reference_weight,
+                    num_distractors,
                     allow_inconsistency=allow_inconsistency,
                     allow_smaller_proofs=allow_smaller_proofs,
-                    force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
+                    depth_1_reference_weight=depth_1_reference_weight,
+                    force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants
                 )
-            except ProofTreeGenerationFailure as e:
-                raise ProofTreeGenerationPipelineFailure(str(e))
-            except ProofTreeGenerationImpossible as e:
-                raise ProofTreeGenerationPipelineImpossible(str(e))
-            logger.info(_make_pretty_log('generate proof tree', 'finish'))
-
-            if proof_tree is None:
+            if logic is None:
                 logger.info('tree not generated. Will retry.')
                 continue
+            proof_tree, root_negation_formula, formula_distractors, is_formula_distractor_failed, misc = logic
 
-            logger.info(_make_pretty_log('generate distractors', 'start'))
-            is_formula_distractor_failed = False
-            if num_distractors > 0:
-                if self.distractor is not None:
-                    try:
-                        formula_distractors, _misc = self.distractor.generate(proof_tree,
-                                                                                num_distractors,
-                                                                                allow_inconsistency=allow_inconsistency,
-                                                                                allow_smaller_proofs=allow_smaller_proofs,
-                                                                                best_effort=True)
-                        for _misc_key, _misc_val in _misc.items():
-                            if _misc_key in misc:
-                                raise ValueError(f'Duplicated misc key {_misc_key}')
-                            misc[_misc_key] = _misc_val
+            variants = []
+            for i_variant in range(translation_variants_per_logic):
+                logger.info('================== creating variant=%d from the logic =================', i_variant)
+                proof_tree_var = proof_tree.copy()
+                root_negation_formula_var = copy.deepcopy(root_negation_formula)
+                formula_distractors_var = copy.deepcopy(formula_distractors)
+                is_formula_distractor_failed_var = copy.copy(is_formula_distractor_failed)
+                misc_var = copy.deepcopy(misc)
 
-                    except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
-                        is_formula_distractor_failed = True
-                        logger.warning('formula distractor %s failed in generating distractors due to the following error. :\n%s',
-                                       str(self.distractor), str(e))
-                        formula_distractors = []
+                translator_stats_var = self._add_translations(
+                    proof_tree_var,
+                    root_negation_formula_var,
+                    formula_distractors_var,
+                    misc_var,
+                    raise_if_translation_not_found=raise_if_translation_not_found,
+                )
+
+                translation_distractors_var = self._build_translation_distractors(
+                    proof_tree_var,
+                    num_translation_distractors,
+                    is_formula_distractor_failed_var,
+                    num_distractors,
+                )
+
+                if self.log_stats:
+                    stats_var = self._get_stats(proof_tree_var, formula_distractors_var, translator_stats_var)
                 else:
-                    raise ValueError('could not generate distractors since distractor was not specified in the constructor.')
-            else:
-                formula_distractors = []
-            logger.info(_make_pretty_log('generate distractors', 'finish'))
+                    stats_var = {}
 
-            # root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
-            root_negation_formula = negate(proof_tree.root_node.formula)
-            if self.generator.elim_dneg:
-                root_negation_formula = eliminate_double_negation(root_negation_formula)
+                variants.append((
+                    proof_tree_var,
+                    root_negation_formula_var,
+                    formula_distractors_var,
+                    translation_distractors_var,
+                    misc_var,
+                    stats_var,
+                ))
 
-            translator_stats = {}
-            if self.translator is not None:
-                logger.info(_make_pretty_log('generate translations', 'start'))
-                all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
-                leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-                assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
+            return variants
 
-                other_formulas = []
-                all_negative_tree_attrs = [val for name, val in misc.items()
-                                           if name.find('negative_tree') >= 0]
-                for negative_tree_attrs in all_negative_tree_attrs:
-                    other_formulas += [node.formula for node in negative_tree_attrs['tree'].nodes]
-                all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
+    @profile
+    def _build_logic(self,
+                     depth: int,
+                     branch_extension_steps: int,
+                     num_distractors: int,
+                     allow_inconsistency=False,
+                     allow_smaller_proofs=False,
+                     depth_1_reference_weight: Optional[float] = None,
+                     force_fix_illegal_intermediate_constants=False)\
+            -> Optional[Tuple[ProofTree, Formula, List[Formula], bool, Dict[str, Any]]]:
+        misc = {}
 
+        logger.info(self._make_pretty_log('generate proof tree', 'start'))
+        try:
+            proof_tree = self._reusable_generate(
+                depth,
+                branch_extension_steps,
+                depth_1_reference_weight=depth_1_reference_weight,
+                allow_inconsistency=allow_inconsistency,
+                allow_smaller_proofs=allow_smaller_proofs,
+                force_fix_illegal_intermediate_constants=force_fix_illegal_intermediate_constants,
+            )
+        except ProofTreeGenerationFailure as e:
+            raise ProofTreeGenerationPipelineFailure(str(e))
+        except ProofTreeGenerationImpossible as e:
+            raise ProofTreeGenerationPipelineImpossible(str(e))
+        logger.info(self._make_pretty_log('generate proof tree', 'finish'))
+
+        if proof_tree is None:
+            return None
+
+        # root_negation_formula = Formula(f'{NEGATION}({proof_tree.root_node.formula.rep})')
+        root_negation_formula = negate(proof_tree.root_node.formula)
+        if self.generator.elim_dneg:
+            root_negation_formula = eliminate_double_negation(root_negation_formula)
+
+        logger.info(self._make_pretty_log('generate distractors', 'start'))
+        is_formula_distractor_failed = False
+        if num_distractors > 0:
+            if self.distractor is not None:
                 try:
-                    named_translations, translator_stats = self.translator.translate(
-                        all_formulas,
-                        list(proof_tree.intermediate_constants),
-                        raise_if_translation_not_found=raise_if_translation_not_found,
-                    )
-                except TranslationFailure as e:
-                    raise ProofTreeGenerationPipelineFailure(str(e))
-                except TranslationImpossible as e:
-                    raise ProofTreeGenerationPipelineImpossible(str(e))
+                    formula_distractors, _misc = self.distractor.generate(proof_tree,
+                                                                          num_distractors,
+                                                                          allow_inconsistency=allow_inconsistency,
+                                                                          allow_smaller_proofs=allow_smaller_proofs,
+                                                                          best_effort=True)
+                    for _misc_key, _misc_val in _misc.items():
+                        if _misc_key in misc:
+                            raise ValueError(f'Duplicated misc key {_misc_key}')
+                        misc[_misc_key] = _misc_val
 
-                for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
-                    formula.translation_name = translation_name
-                    if i_formula in assump_formula_indices:
-                        translation_prefix = self.assumption_prefix
-                    else:
-                        translation_prefix = ''
-
-                    if translation is not None:
-                        formula.translation = translation_prefix + translation[0].lower() + translation[1:]
-
-                    if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
-                        logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
-                        formula_distractors.append(SO_swap_formula)
-                logger.info(_make_pretty_log('generate translations', 'finish'))
-
-            logger.info(_make_pretty_log('generate translation distractors', 'start'))
-            if num_translation_distractors > 0 or (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
-                if (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
-                    _num_translation_distractors = num_translation_distractors + num_distractors
-                    logger.info('try to generate %d + %d distractors by translation distractor. The latter is due to that the formula distractor failed.',
-                                num_translation_distractors, num_distractors)
-
-                else:
-                    _num_translation_distractors = num_translation_distractors
-
-                if self.translation_distractor is not None:
-                    leaf_translations = [leaf_node.formula.translation for leaf_node in proof_tree.leaf_nodes
-                                         if leaf_node.formula.translation is not None]
-                    if len(leaf_translations) == 0:
-                        logger.info('can not generate translation distractors because no leaf translations found')
-                        translation_distractors = []
-                    else:
-                        try:
-                            translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors, best_effort=True)
-                        except TranslationDistractorGenerationFailure as e:
-                            raise ProofTreeGenerationPipelineFailure(str(e))
-                        except TranslationDistractorGenerationImpossible as e:
-                            raise ProofTreeGenerationPipelineImpossible(str(e))
-                else:
-                    raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
+                except (FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible) as e:
+                    is_formula_distractor_failed = True
+                    logger.warning('formula distractor %s failed in generating distractors due to the following error. :\n%s',
+                                   str(self.distractor), str(e))
+                    formula_distractors = []
             else:
-                translation_distractors = []
-            logger.info(_make_pretty_log('generate translation distractors', 'finish'))
+                raise ValueError('could not generate distractors since distractor was not specified in the constructor.')
+        else:
+            formula_distractors = []
+        logger.info(self._make_pretty_log('generate distractors', 'finish'))
 
-            if self.log_stats:
-                stats = self._get_stats(proof_tree, formula_distractors, translator_stats)
+        return proof_tree, root_negation_formula, formula_distractors, is_formula_distractor_failed, misc
+
+    @profile
+    def _add_translations(self,
+                          proof_tree: ProofTree,
+                          root_negation_formula: Formula,
+                          formula_distractors: List[Formula],
+                          misc: Dict[str, Any],
+                          raise_if_translation_not_found=True) -> Dict[str, Any]:
+        translator_stats = {}
+        if self.translator is not None:
+            logger.info(self._make_pretty_log('generate translations', 'start'))
+            all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
+            leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
+            assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
+
+            other_formulas = []
+            all_negative_tree_attrs = [val for name, val in misc.items()
+                                       if name.find('negative_tree') >= 0]
+            for negative_tree_attrs in all_negative_tree_attrs:
+                other_formulas += [node.formula for node in negative_tree_attrs['tree'].nodes]
+            all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
+
+            try:
+                named_translations, translator_stats = self.translator.translate(
+                    all_formulas,
+                    list(proof_tree.intermediate_constants),
+                    raise_if_translation_not_found=raise_if_translation_not_found,
+                )
+            except TranslationFailure as e:
+                raise ProofTreeGenerationPipelineFailure(str(e))
+            except TranslationImpossible as e:
+                raise ProofTreeGenerationPipelineImpossible(str(e))
+
+            for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
+                formula.translation_name = translation_name
+                if i_formula in assump_formula_indices:
+                    translation_prefix = self.assumption_prefix
+                else:
+                    translation_prefix = ''
+
+                if translation is not None:
+                    formula.translation = translation_prefix + translation[0].lower() + translation[1:]
+
+                if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
+                    logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
+
+                    formula_distractors.append(SO_swap_formula)
+            logger.info(self._make_pretty_log('generate translations', 'finish'))
+
+        return translator_stats
+
+    @profile
+    def _build_translation_distractors(self,
+                                       proof_tree: ProofTree,
+                                       num_translation_distractors: int,
+                                       is_formula_distractor_failed: bool,
+                                       num_distractors: int,) -> List[Formula]:
+        logger.info(self._make_pretty_log('generate translation distractors', 'start'))
+        if num_translation_distractors > 0\
+                or (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
+            if (self.fallback_from_formula_to_translation_distractor and is_formula_distractor_failed):
+                _num_translation_distractors = num_translation_distractors + num_distractors
+                logger.info('try to generate %d + %d distractors by translation distractor. The latter is due to that the formula distractor failed.',
+                            num_translation_distractors, num_distractors)
+
             else:
-                stats = {}
+                _num_translation_distractors = num_translation_distractors
 
-            return proof_tree, root_negation_formula, formula_distractors, translation_distractors, misc, stats
+            if self.translation_distractor is not None:
+                leaf_translations = [leaf_node.formula.translation for leaf_node in proof_tree.leaf_nodes
+                                     if leaf_node.formula.translation is not None]
+                if len(leaf_translations) == 0:
+                    logger.info('can not generate translation distractors because no leaf translations found')
+                    translation_distractors = []
+                else:
+                    try:
+                        translation_distractors: List[str] = self.translation_distractor.generate(leaf_translations, _num_translation_distractors, best_effort=True)
+                    except TranslationDistractorGenerationFailure as e:
+                        raise ProofTreeGenerationPipelineFailure(str(e))
+                    except TranslationDistractorGenerationImpossible as e:
+                        raise ProofTreeGenerationPipelineImpossible(str(e))
+            else:
+                raise ValueError('could not generate translation distractors since translation distractor was not specified in the constructor.')
+        else:
+            translation_distractors = []
+        logger.info(self._make_pretty_log('generate translation distractors', 'finish'))
+        return translation_distractors
 
     def _get_stats(self,
                    proof_tree: ProofTree,
@@ -320,3 +395,6 @@ class ProofTreeGenerationPipeline:
             stats['translation_stats']['other_stats'][key] = val
 
         return stats
+
+    def _make_pretty_log(self, title: str, status: str) -> str:
+        return make_pretty_msg(title=title, status=status, boundary_level=4)

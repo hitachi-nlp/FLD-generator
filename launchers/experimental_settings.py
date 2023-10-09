@@ -2219,7 +2219,7 @@ _DATASET_SETTINGS = {
         'depth_range': (1, 3),
         'branch_extensions_range': (2, 5),
 
-
+        'translation_variants_per_logic': 1,
         'split_sizes': {
             'test': 500,
             'train': 15000,

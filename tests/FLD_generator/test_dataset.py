@@ -73,21 +73,24 @@ def test_generate_dataset_lang(lang: str):
     generator = build_generator(
         [
 
-            './configs/arguments/axioms/',
+            # './configs/arguments/axioms/',
 
             './configs/arguments/axioms/axiom.pred_only.json',
             './configs/arguments/axioms/axiom.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.and_or.pred_only.json',
-            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            # './configs/arguments/axioms/axiom.and_or.pred_only.json',
+            # './configs/arguments/axioms/axiom.and_or.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
-            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            # './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
+            # './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
 
-            './configs/arguments/axioms/axiom.negation.pred_only.json',
-            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            # './configs/arguments/axioms/axiom.negation.pred_only.json',
+            # './configs/arguments/axioms/axiom.negation.pred_arg.json',
 
+
+            # # -- AACorpus --
             # './configs/arguments/others/AACorpus.pred_arg.json',
+
 
             # # -- we exclude the below for speed --
             # './configs/arguments/theorems/theorem.pred_only.json',
@@ -97,6 +100,7 @@ def test_generate_dataset_lang(lang: str):
             # './configs/arguments/theorems/theorem.and_or.pred_arg.json',
 
             # './configs/arguments/theorems/theorem.G_MP.pred_arg.json',
+
 
             # -- not tested. may not work --
             # './configs/arguments/theorems/universal_theorem.axiom.pred_arg.json',
@@ -154,12 +158,14 @@ def test_generate_dataset_lang(lang: str):
 
     depth_range = (1, 8)
     branch_extensions_range = (0, 5)
-    distractors_range = (0, 20)
 
     unknown_ratio = 0.33
+    distractors_range = (0, 20)
 
     use_collapsed_translation_nodes_for_unknown_tree = False
     translation_distractors_range = (0, 5) if translation_distractor is not None else (0, 0)
+
+    translation_variants_per_logic = 1
 
     dataset = NLProofSDataset(
         pipeline,
@@ -174,10 +180,12 @@ def test_generate_dataset_lang(lang: str):
         word_bank=word_bank,
         translation_distractors_range=translation_distractors_range,
 
+        translation_variants_per_logic=translation_variants_per_logic,
         raise_if_translation_not_found=True,
     )
 
-    generate_dataset(dataset)
+    num_dataset = 10
+    generate_dataset(dataset, num_dataset=num_dataset)
 
 
 if __name__ == '__main__':
