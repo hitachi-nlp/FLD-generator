@@ -439,7 +439,7 @@ class TemplatedTranslator(Translator):
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
-    @profile
+    # @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
         for _remove_outer_brace in [False, True]:
             if _remove_outer_brace:
@@ -455,7 +455,7 @@ class TemplatedTranslator(Translator):
                     if _transl_key_pushed == _formula.rep:
                         yield _transl_key, push_mapping
 
-    @profile
+    # @profile
     def _sample_interpret_mapping_consistent_nl(self,
                                                 sentence_key: str,
                                                 interpret_mapping: Dict[str, str],
@@ -494,7 +494,7 @@ class TemplatedTranslator(Translator):
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
 
-            @profile
+            # @profile
             def generate():
                 for resolved_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
@@ -504,7 +504,7 @@ class TemplatedTranslator(Translator):
 
         else:
 
-            @profile
+            # @profile
             def generate():
                 for iterator in iterators:
                     for resolved_nl, condition in iterator:
@@ -557,7 +557,7 @@ class TemplatedTranslator(Translator):
 
         return get_weight
 
-    @profile
+    # @profile
     def _make_resolved_translation_sampler(self,
                                            nl: str,
                                            # ancestor_keys: Set[str],
@@ -597,17 +597,17 @@ class TemplatedTranslator(Translator):
 
             class ResolveTemplateGenerator:
 
-                # @profile
+                # # @profile
                 def __init__(self, parent_translator: TemplatedTranslator, template: str):
                     self._template = template
                     self._parent_translator = parent_translator
                     self.volume = self._resolve()[1]
 
-                # @profile
+                # # @profile
                 def __call__(self) -> Iterable[NLAndCondition]:
                     return self._resolve()[0]
 
-                # @profile
+                # # @profile
                 def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
@@ -645,7 +645,7 @@ class TemplatedTranslator(Translator):
 
         return generate(), volume
 
-    @profile
+    # @profile
     def _make_resolved_template_sampler(self,
                                         template: str,
                                         # ancestor_keys: Set[str],
@@ -695,7 +695,7 @@ class TemplatedTranslator(Translator):
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
 
-            @profile
+            # @profile
             def generate():
                 for resolved_template_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
@@ -705,7 +705,7 @@ class TemplatedTranslator(Translator):
 
         else:
 
-            @profile
+            # @profile
             def generate():
                 for iterator in iterators:
                     for resolved_template_nl, condition in iterator:
@@ -713,7 +713,7 @@ class TemplatedTranslator(Translator):
 
         return generate(), sum(volumes)
 
-    @profile
+    # @profile
     def _interpret_mapping_is_consistent_with_condition(self,
                                                         condition: _PosFormConditionSet,
                                                         interpret_mapping: Dict[str, str],
@@ -793,7 +793,7 @@ class TemplatedTranslator(Translator):
             template = nl[match.span()[0] + len(self._TEMPLATE_BRACES[0]) : match.span()[1] - len(self._TEMPLATE_BRACES[1])]
             yield template
 
-    @profile
+    # @profile
     def _get_pos_form_consistency_condition(self, nl: str) -> _PosFormConditionSet:
         formula = Formula(nl)
         interprands = formula.predicates + formula.constants
@@ -808,7 +808,7 @@ class TemplatedTranslator(Translator):
 
         return _PosFormConditionSet(conditions)
 
-    @profile
+    # @profile
     def _choose_interpret_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
@@ -883,7 +883,7 @@ class TemplatedTranslator(Translator):
 
         return interpret_mapping
 
-    @profile
+    # @profile
     def _sample(self, elems: List[Any], size: int) -> List[Any]:
         if len(elems) < size:
             logger.warning('Can\'t sample %d elements. Will sample only %d elements.',
@@ -893,7 +893,7 @@ class TemplatedTranslator(Translator):
         else:
             return random.sample(elems, size)
 
-    @profile
+    # @profile
     def _take(self, elems: List[Any], size: int) -> List[Any]:
         if len(elems) < size:
             logger.warning('Can\'t take %d elements. Will take only %d elements.',
@@ -903,7 +903,7 @@ class TemplatedTranslator(Translator):
         #     logger.warning('taking only %d heading words from %d words. This might yield a skew distribution', size, len(elems))
         return elems[:size]
 
-    @profile
+    # @profile
     def _make_word_inflated_interpret_mapping(self,
                                               interpret_mapping: Dict[str, str],
                                               interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
@@ -932,7 +932,7 @@ class TemplatedTranslator(Translator):
             inflated_mapping[interprand_rep] = inflated_word
         return inflated_mapping, stats
 
-    @profile
+    # @profile
     def _get_interprand_condition_from_template(self, interprand: str, rep: str) -> Optional[Tuple[POS, Optional[str]]]:
         interprand_begin = rep.find(interprand)
         if interprand_begin < 0:

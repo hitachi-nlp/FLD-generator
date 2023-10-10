@@ -4114,6 +4114,7 @@ _DEFAULT_DATASET_SETTINGS = {
 
     '20230626.many_bugs_fixed': {
         'unknown_ratio': 0.33,
+        'sample_all_stances_per_logic': False,
 
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,

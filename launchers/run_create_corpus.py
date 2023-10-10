@@ -271,6 +271,7 @@ def make_dataset(dataset_name: str,
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',
                 maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
+                '--sample-all-stances-per-logic' if job_settings.get('sample_all_stances_per_logic', False) else '',
                 '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
 
                 maybe_option('--translation-variants-per-logic', settings.get("translation_variants_per_logic", None)),
