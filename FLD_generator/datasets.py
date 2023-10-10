@@ -285,8 +285,8 @@ class NLProofSDataset:
             proof_stance = self._sample_proof_stance()
             depth_idx = weighted_sampling(self._depth_weights)
             depth = self.depths[depth_idx]
-            if proof_stance == ProofStance.UNKNOWN:
-                depth += 1
+            # if proof_stance == ProofStance.UNKNOWN:
+            #     depth += 1
 
             _num_distractors = random.sample(self.num_distractors, 1)[0]
             _num_translation_distractors = random.sample(self.num_translation_distractors, 1)[0]
