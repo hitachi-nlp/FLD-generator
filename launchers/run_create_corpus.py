@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import json
+import random
 import math
 import logging
 from typing import List, Union, Dict
@@ -38,7 +39,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230914.jpn')
     # output_top_dir = Path('./outputs/00.create_corpus/20230916.jpn')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab.small')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab.small')
+    output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -74,8 +76,9 @@ def main():
 
         # ---------------------------------- 20231010.D3.large_vocab ------------------------------------
         '20231010.D3.large_vocab',
-        '20231010.D3.large_vocab.smpl_stncs',
-        '20231010.D3.large_vocab.smpl_stncs.transl_vrnts',
+        # '20231010.D3.large_vocab.smpl_stncs',
+        # '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3',
+        # '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -280,6 +283,7 @@ def make_dataset(dataset_name: str,
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',
                 maybe_option('--unknown-ratio', job_settings.get("unknown_ratio", None)),
                 '--sample-all-stances-per-logic' if job_settings.get('sample_all_stances_per_logic', False) else '',
+                maybe_option('--context-shuffles-per-instance', job_settings.get("context_shuffles_per_instance", None)),
                 '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
 
                 maybe_option('--translation-variants-per-logic', job_settings.get("translation_variants_per_logic", None)),
@@ -328,16 +332,20 @@ def make_dataset(dataset_name: str,
             path for path in split_output_dir.glob(f'**/*{split}.jsonl')
             if str(path).find('job-') >= 0
         ])
-        with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
-            for jsonl in job_output_jsonls:
-                if is_done:
+        lines: List[str] = []
+        for jsonl in job_output_jsonls:
+            if is_done:
+                break
+            for line in open(jsonl):
+                if cnt >= size:
+                    is_done = True
                     break
-                for line in open(jsonl):
-                    if cnt >= size:
-                        is_done = True
-                        break
-                    f_out.write(line)
-                    cnt += 1
+                lines.append(line)
+                cnt += 1
+        random.shuffle(lines)
+        with open(split_output_dir / f'{split}.jsonl', 'w') as f_out:
+            for line in lines:
+                f_out.write(line)
 
         # -- aggregate statistics --
         logger.info('gathering stats under %s', split_output_dir)

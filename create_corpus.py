@@ -56,6 +56,7 @@ def load_dataset(argument_config: List[str],
                  world_assump: str,
                  unknown_ratio: float,
                  sample_all_stances_per_logic: bool,
+                 context_shuffles_per_instance: int,
                  use_collapsed_translation_nodes_for_unknown_tree: bool,
                  swap_ng_words: Optional[List[str]],
                  depth_range: Tuple[int, int],
@@ -156,6 +157,7 @@ def load_dataset(argument_config: List[str],
                            translation_distractors_range=translation_distractors_range,
                            unknown_ratio=unknown_ratio,
                            sample_all_stances_per_logic=sample_all_stances_per_logic,
+                           context_shuffles_per_instance=context_shuffles_per_instance,
                            use_collapsed_translation_nodes_for_unknown_tree=use_collapsed_translation_nodes_for_unknown_tree,
                            swap_ng_words=swap_ng_words,
                            word_bank = word_bank if use_collapsed_translation_nodes_for_unknown_tree else None,
@@ -226,7 +228,8 @@ def generate_instances(size: int, *args):
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
-@click.option('--sample-all-stances-per-logic', is_flag=True, default = False)
+@click.option('--sample-all-stances-per-logic', is_flag=True, default=False)
+@click.option('--context-shuffles-per-instance', type=int, default=1)
 @click.option('--use-collapsed-translation-nodes-for-unknown-tree', is_flag=True, default=False)
 @click.option('--swap-ng-words-config', default=None)
 #
@@ -273,6 +276,7 @@ def main(output_path,
          world_assump,
          unknown_ratio,
          sample_all_stances_per_logic,
+         context_shuffles_per_instance,
          use_collapsed_translation_nodes_for_unknown_tree,
          swap_ng_words_config,
          translation_variants_per_logic,
@@ -345,6 +349,7 @@ def main(output_path,
                         world_assump,
                         unknown_ratio,
                         sample_all_stances_per_logic,
+                        context_shuffles_per_instance,
                         use_collapsed_translation_nodes_for_unknown_tree,
                         swap_ng_words,
                         depth_range,

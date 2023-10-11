@@ -4091,6 +4091,9 @@ _DATASET_SETTINGS = {
 
         'split_wise_settings': {
             'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
             },
             'valid': {
             },
@@ -4098,9 +4101,9 @@ _DATASET_SETTINGS = {
             },
         },
         'split_sizes': {
-            'test': 100,
+            'test': 500,
             # 'valid': 500,
-            'train': 3000,
+            'train': 30000,
         },
 
     },
@@ -4139,6 +4142,8 @@ _DATASET_SETTINGS = {
         'split_wise_settings': {
             'train': {
                 'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
             },
             'valid': {
             },
@@ -4146,15 +4151,15 @@ _DATASET_SETTINGS = {
             },
         },
         'split_sizes': {
-            'test': 100,
+            'test': 500,
             # 'valid': 500,
-            'train': 3000,
+            'train': 100000,
         },
 
     },
 
 
-    '20231010.D3.large_vocab.smpl_stncs.transl_vrnts': {
+    '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3': {
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4187,6 +4192,57 @@ _DATASET_SETTINGS = {
         'split_wise_settings': {
             'train': {
                 'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 3,
+                'translation_variants_per_logic': 1,
+            },
+            'valid': {
+            },
+            'test': {
+            },
+        },
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 500,
+            'train': 300000,
+        },
+
+    },
+
+
+    '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 3,
                 'translation_variants_per_logic': 3,
             },
             'valid': {
@@ -4195,12 +4251,13 @@ _DATASET_SETTINGS = {
             },
         },
         'split_sizes': {
-            'test': 100,
+            'test': 500,
             # 'valid': 500,
-            'train': 3000,
+            'train': 1000000,
         },
 
     },
+
 
 }
 
@@ -4210,6 +4267,7 @@ _DEFAULT_DATASET_SETTINGS = {
     '20221115': {
         'unknown_ratio': 0.33,
         'sample_all_stances_per_logic': False,
+        'context_shuffles_per_instance': 1,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4234,6 +4292,7 @@ _DEFAULT_DATASET_SETTINGS = {
     '20221203': {
         'unknown_ratio': 0.33,
         'sample_all_stances_per_logic': False,
+        'context_shuffles_per_instance': 1,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4264,6 +4323,7 @@ _DEFAULT_DATASET_SETTINGS = {
     '20230626.many_bugs_fixed': {
         'unknown_ratio': 0.33,
         'sample_all_stances_per_logic': False,
+        'context_shuffles_per_instance': 1,
 
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,
@@ -4456,7 +4516,8 @@ _DATASET_NAME_TO_DEFAULT = {
     # ---------------------------------- 20231010.D3.large_vocab ------------------------------------
     '20231010.D3.large_vocab': '20230626.many_bugs_fixed',
     '20231010.D3.large_vocab.smpl_stncs': '20230626.many_bugs_fixed',
-    '20231010.D3.large_vocab.smpl_stncs.transl_vrnts': '20230626.many_bugs_fixed',
+    '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3': '20230626.many_bugs_fixed',
+    '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3': '20230626.many_bugs_fixed',
 }
 
 
