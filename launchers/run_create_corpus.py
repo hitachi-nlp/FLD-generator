@@ -38,7 +38,7 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230914.jpn')
     # output_top_dir = Path('./outputs/00.create_corpus/20230916.jpn')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20231010.jpn')
+    output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab.small')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -302,13 +302,14 @@ def make_dataset(dataset_name: str,
                 # remove large log files.
                 command += f'; rm {str(job_log_path)}; rm {str(job_output_dir)}/*.stats.json'
 
+            job_hours = math.floor(timeout_per_job / 3600)
             jobs.append(
                 delayed(engine.run)(
                     command,
                     stdout=stdout,
                     stderr=stderr,
                     options={
-                        'l_opts': ['h_rt=5:00:00'],
+                        'l_opts': [f'h_rt={job_hours}:00:00'],
                         'timeout_from_run': timeout_per_job,
                     },
                     dry_run=dry_run,

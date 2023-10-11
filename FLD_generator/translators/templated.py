@@ -211,6 +211,7 @@ class TemplatedTranslator(Translator):
                     self._generate_iterable = lambda : list_elems
 
                 self._elems_iter = None
+                self._reset_iter_elems()
 
             def __iter__(self):
                 return self
@@ -222,7 +223,6 @@ class TemplatedTranslator(Translator):
                     self._elems_iter = iter(self._generate_iterable())
 
             def __next__(self):
-                self._reset_iter_elems()
                 while True:
                     try:
                         return next(self._elems_iter)
@@ -946,43 +946,51 @@ class TemplatedTranslator(Translator):
         return interpret_mapping
 
     @profile
-    def _sample(self, elems: Union[List[Any], Iterable[Any]], size: int) -> List[Any]:
+    def _sample(self,
+                elems: Union[List[Any], Iterable[Any]],
+                size: int,
+                allow_duplicates=False) -> List[Any]:
         if isinstance(elems, list):
             if len(elems) < size:
                 logger.warning('Can\'t sample %d elements. Will sample only %d elements.',
                                size,
                                len(elems))
-                return shuffle(elems, len(elems))
+                samples = random.sample(elems, len(elems))
             else:
-                return random.sample(elems, size)
+                samples = random.sample(elems, size)
+            if not allow_duplicates and len(samples) != len(set(samples)):
+                raise ValueError('The given "elems" seems to have duplicates')
         else:
-            sampled: List[Any] = []
+            samples: Set[Any] = set([])
             for elem in elems:
-                sampled.append(elem)
-                if len(sampled) >= size:
-                    return sampled
-            try:
+                samples.add(elem)
+                if len(samples) >= size:
+                    break
+            if len(samples) < size:
                 raise Exception('Could not sample %d elements from the iterator', size)
-            except:
-                import pudb; pudb.set_trace()
+            samples = list(samples)
+        return samples
 
     @profile
-    def _take(self, elems: Union[Iterable[Any], List[Any]], size: int) -> List[Any]:
+    def _take(self, elems: Union[Iterable[Any], List[Any]], size: int, allow_duplicates=False) -> List[Any]:
         if isinstance(elems, list):
             if len(elems) < size:
                 logger.warning('Can\'t take %d elements. Will take only %d elements.',
                                size,
                                len(elems))
-            # if size * 3 < len(elems):
-            #     logger.warning('taking only %d heading words from %d words. This might yield a skew distribution', size, len(elems))
-            return elems[:size]
+            samples = elems[:size]
+            if not allow_duplicates and len(samples) != len(set(samples)):
+                raise ValueError('The given "elems" seems to have duplicates')
         else:
-            sampled: List[Any] = []
+            samples: Set[Any] = set([])
             for elem in elems:
-                sampled.append(elem)
-                if len(sampled) >= size:
-                    return sampled
-            raise Exception('Could not sample %d elements from the iterator', size)
+                samples.add(elem)
+                if len(samples) >= size:
+                    break
+            if len(samples) < size:
+                raise Exception('Could not sample %d elements from the iterator', size)
+            samples = list(samples)
+        return samples
 
     @profile
     def _make_word_inflated_interpret_mapping(self,

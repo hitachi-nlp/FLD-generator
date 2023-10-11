@@ -79,7 +79,7 @@ def _make_world_assump_label(proof_stance: ProofStance,
                 raise ValueError()
         else:
             raise ValueError()
-    elif version in ['0.1', '0.2', '0.3']:
+    else:
         if world_assump == WorldAssumption.CWA:
             if proof_stance == ProofStance.PROVED:
                 return 'PROVED'
@@ -100,8 +100,6 @@ def _make_world_assump_label(proof_stance: ProofStance,
                 raise ValueError()
         else:
             raise ValueError()
-    else:
-        raise ValueError()
 
 
 def _make_proof_stance_label(proof_stance: ProofStance,
@@ -115,10 +113,8 @@ def _make_proof_stance_label(proof_stance: ProofStance,
             return 'UNKNOWN'
         else:
             raise ValueError()
-    elif version in ['0.1', '0.2', '0.3']:
-        return proof_stance.value
     else:
-        raise ValueError()
+        return proof_stance.value
 
 
 class _DistractorFakeNode(ABC):
@@ -524,7 +520,7 @@ class NLProofSDataset:
                         'num_translation_distractors': len(translation_distractors),
                         'num_all_distractors': len(formula_distractors) + len(translation_distractors),
                     }
-                    if self.version in ['0.0', '0.1', '0.3']:
+                    if self.version in ['0.0', '0.1']:
                         dataset_json.update({
                             'proof_stance': stance_label,
                             'negative_proof_stance': negative_stance_label,

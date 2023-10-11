@@ -73,10 +73,10 @@ def test_generate_dataset_lang(lang: str):
     generator = build_generator(
         [
 
-            # './configs/arguments/axioms/',
+            './configs/arguments/axioms/',
 
-            './configs/arguments/axioms/axiom.pred_only.json',
-            './configs/arguments/axioms/axiom.pred_arg.json',
+            # './configs/arguments/axioms/axiom.pred_only.json',
+            # './configs/arguments/axioms/axiom.pred_arg.json',
 
             # './configs/arguments/axioms/axiom.and_or.pred_only.json',
             # './configs/arguments/axioms/axiom.and_or.pred_arg.json',
