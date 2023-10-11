@@ -7,6 +7,7 @@ import zlib
 from pprint import pformat
 from ctypes import ArgumentError
 import os
+import logging
 
 from z3.z3types import Z3Exception
 from FLD_generator.argument import Argument

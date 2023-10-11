@@ -160,7 +160,7 @@ def test_generate_dataset_lang(lang: str):
     branch_extensions_range = (0, 5)
 
     unknown_ratio = 0.33
-    sample_all_stances_per_logic = True
+    sample_all_stances_per_logic = False
     distractors_range = (0, 20)
 
     use_collapsed_translation_nodes_for_unknown_tree = False
@@ -186,7 +186,7 @@ def test_generate_dataset_lang(lang: str):
         raise_if_translation_not_found=True,
     )
 
-    num_dataset = 10
+    num_dataset = 30
     generate_dataset(dataset, num_dataset=num_dataset)
 
 

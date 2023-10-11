@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, Dict, Optional, Tuple, Iterable, Any, Set, Callable
+from typing import List, Dict, Optional, Tuple, Iterable, Any, Set, Callable, Union, Generator, Iterator
 from collections import OrderedDict, defaultdict
 import statistics
 import re
@@ -18,9 +18,15 @@ from FLD_generator.interpretation import (
     interpret_formula,
     formula_can_not_be_identical_to,
 )
-from FLD_generator.utils import make_combination, chained_sampling_from_weighted_iterators
 from FLD_generator.word_banks import POS
-from FLD_generator.utils import compress, decompress, make_pretty_msg
+from FLD_generator.utils import (
+    compress,
+    decompress,
+    make_pretty_msg,
+    chained_sampling_from_weighted_iterators,
+    make_combination,
+    shuffle,
+)
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import line_profiling
 
@@ -62,7 +68,7 @@ class TemplatedTranslator(Translator):
                  use_fixed_translation: bool,
                  reused_object_nouns_max_factor=0.0,
                  limit_vocab_size_per_type: Optional[int] = None,
-                 words_per_type=5000,
+                 # words_per_type=5000,
                  volume_to_weight: str = 'log10',
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
@@ -89,19 +95,18 @@ class TemplatedTranslator(Translator):
             for nl in nls:
                 logger.debug('    "%s"', nl)
 
-        self.words_per_type = words_per_type
+        # self.words_per_type = words_per_type
 
         self._word_bank = word_bank
 
         self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
-        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(self._word_bank, adj_verb_noun_ratio=adj_verb_noun_ratio)
+        self._zeroary_predicates, self._unary_predicates, self._constants = self._load_words(
+            self._word_bank, adj_verb_noun_ratio=adj_verb_noun_ratio)
         if limit_vocab_size_per_type is not None:
             self._zeroary_predicates = self._sample(self._zeroary_predicates, limit_vocab_size_per_type)
             self._unary_predicates = self._sample(self._unary_predicates, limit_vocab_size_per_type)
             self._constants = self._sample(self._constants, limit_vocab_size_per_type)
-        self._zeroary_predicate_set = set(self._zeroary_predicates)
-        self._unary_predicate_set = set(self._unary_predicates)
         self._constant_set = set(self._constants)
 
         if volume_to_weight == 'linear':
@@ -171,23 +176,58 @@ class TemplatedTranslator(Translator):
     def _load_words(self,
                     word_bank: WordBank,
                     adj_verb_noun_ratio: Optional[List[float]] = None,
-                    prioritize_form_abundant_words=False) -> Tuple[List[str], List[str], List[str]]:
+                    # prioritize_form_abundant_words=False,
+                    ) -> Tuple[Iterable[str], Iterable[str], List[str]]:
 
-        def get_num_form_inv_score(word: str, pos: POS) -> int:
-            # words with larger number of forms have smaller score
-            antonyms = self._get_inflated_words(word, pos, 'anti')
-            negnyms = self._get_inflated_words(word, pos, 'neg')
-            return 10 - (len(antonyms) + len(negnyms))
+        # def get_num_form_inv_score(word: str, pos: POS) -> int:
+        #     # words with larger number of forms have smaller score
+        #     antonyms = self._get_inflated_words(word, pos, 'anti')
+        #     negnyms = self._get_inflated_words(word, pos, 'neg')
+        #     return 10 - (len(antonyms) + len(negnyms))
 
+        # def order_words(words: Iterable[str], pos: POS) -> List[str]:
+        #     if prioritize_form_abundant_words:
+        #         return sorted(
+        #             words,
+        #             key = lambda word: (get_num_form_inv_score(word, pos), str(word))
+        #         )
+        #     else:
+        #         _words = list(words)
+        #         return self._sample(_words, len(_words))
+
+        # TEMPORARY
         def order_words(words: Iterable[str], pos: POS) -> List[str]:
-            if prioritize_form_abundant_words:
-                return sorted(
-                    words,
-                    key = lambda word: (get_num_form_inv_score(word, pos), str(word))
-                )
-            else:
-                _words = list(words)
-                return self._sample(_words, len(_words))
+            return list(words)
+
+        class RandomCycle:
+
+            def __init__(self, elems: Union[Iterable[Any], Callable[[], Iterator[Any]]], shuffle=True):
+                self._shuffle = shuffle
+
+                if isinstance(elems, Callable):
+                    self._generate_iterable = elems
+                else:
+                    list_elems = list(elems)
+                    self._generate_iterable = lambda : list_elems
+
+                self._elems_iter = None
+
+            def __iter__(self):
+                return self
+
+            def _reset_iter_elems(self):
+                if self._shuffle:
+                    self._elems_iter = iter(shuffle(list(self._generate_iterable())))
+                else:
+                    self._elems_iter = iter(self._generate_iterable())
+
+            def __next__(self):
+                self._reset_iter_elems()
+                while True:
+                    try:
+                        return next(self._elems_iter)
+                    except StopIteration:
+                        self._reset_iter_elems()
 
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
@@ -237,30 +277,52 @@ class TemplatedTranslator(Translator):
         )
 
         logger.info('making transitive verb and object combinations ...')
-        transitive_verb_PASs = []
-        for verb in self._take(transitive_verbs, 1000):  # limit 1000 for speed
-            for obj in self._take(nouns, 1000):
-                transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
-        random.shuffle(transitive_verb_PASs)
+        # transitive_verb_PASs = []
+        # for verb in self._take(transitive_verbs, 1000):  # limit 1000 for speed
+        #     for obj in self._take(nouns, 1000):
+        #         transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
+        # random.shuffle(transitive_verb_PASs)
+
+        @profile
+        def build_transitive_verb_PASs():
+            _transitive_verbs = shuffle(transitive_verbs)
+            _nouns = shuffle(nouns)
+            for i in range(min(len(_transitive_verbs), len(_nouns))):
+                verb = _transitive_verbs[i]
+                obj = _nouns[i]
+                yield self._pair_word_with_obj(verb, obj)
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
         adj_verb_noun_ratio = adj_verb_noun_ratio or [1, 2, 1]
         adj_verb_noun_weight = [3 * ratio / sum(adj_verb_noun_ratio) for ratio in adj_verb_noun_ratio]
 
-        zeroary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
-            + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
-            + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
-            + self._take(event_nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
-        zeroary_predicates = sorted({word for word in zeroary_predicates})
+        # zeroary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+        #     + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+        #     + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+        #     + self._take(event_nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
+        # zeroary_predicates = sorted({word for word in zeroary_predicates})
 
-        unary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
-            + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
-            + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
-            + self._take(nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
-        unary_predicates = sorted({word for word in unary_predicates})
+        zeorary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+        zeroary_predicates = chained_sampling_from_weighted_iterators(
+            (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(event_nouns)),
+            zeorary_word_weights,
+        )
 
-        constants = self._take(entity_nouns, self.words_per_type)
+        # unary_predicates = self._take(adjs, int(adj_verb_noun_weight[0] * self.words_per_type))\
+        #     + self._take(intransitive_verbs, int(adj_verb_noun_weight[1] * self.words_per_type * 1 / 3))\
+        #     + self._take(transitive_verb_PASs, int(adj_verb_noun_weight[1] * self.words_per_type * 2 / 3))\
+        #     + self._take(nouns, int(adj_verb_noun_weight[2] * self.words_per_type))
+        # unary_predicates = sorted({word for word in unary_predicates})
+
+        unary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+        unary_predicates = chained_sampling_from_weighted_iterators(
+            (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(nouns)),
+            unary_word_weights,
+        )
+
+        # constants = self._take(entity_nouns, self.words_per_type
+        constants = entity_nouns
 
         return zeroary_predicates, unary_predicates, constants
 
@@ -439,7 +501,7 @@ class TemplatedTranslator(Translator):
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
 
-    # @profile
+    @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
         for _remove_outer_brace in [False, True]:
             if _remove_outer_brace:
@@ -455,7 +517,7 @@ class TemplatedTranslator(Translator):
                     if _transl_key_pushed == _formula.rep:
                         yield _transl_key, push_mapping
 
-    # @profile
+    @profile
     def _sample_interpret_mapping_consistent_nl(self,
                                                 sentence_key: str,
                                                 interpret_mapping: Dict[str, str],
@@ -494,7 +556,7 @@ class TemplatedTranslator(Translator):
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
 
-            # @profile
+            @profile
             def generate():
                 for resolved_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
@@ -504,7 +566,7 @@ class TemplatedTranslator(Translator):
 
         else:
 
-            # @profile
+            @profile
             def generate():
                 for iterator in iterators:
                     for resolved_nl, condition in iterator:
@@ -557,7 +619,7 @@ class TemplatedTranslator(Translator):
 
         return get_weight
 
-    # @profile
+    @profile
     def _make_resolved_translation_sampler(self,
                                            nl: str,
                                            # ancestor_keys: Set[str],
@@ -597,17 +659,17 @@ class TemplatedTranslator(Translator):
 
             class ResolveTemplateGenerator:
 
-                # # @profile
+                # @profile
                 def __init__(self, parent_translator: TemplatedTranslator, template: str):
                     self._template = template
                     self._parent_translator = parent_translator
                     self.volume = self._resolve()[1]
 
-                # # @profile
+                # @profile
                 def __call__(self) -> Iterable[NLAndCondition]:
                     return self._resolve()[0]
 
-                # # @profile
+                # @profile
                 def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
@@ -645,7 +707,7 @@ class TemplatedTranslator(Translator):
 
         return generate(), volume
 
-    # @profile
+    @profile
     def _make_resolved_template_sampler(self,
                                         template: str,
                                         # ancestor_keys: Set[str],
@@ -695,7 +757,7 @@ class TemplatedTranslator(Translator):
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
 
-            # @profile
+            @profile
             def generate():
                 for resolved_template_nl, condition in chained_sampling_from_weighted_iterators(
                     iterators,
@@ -705,7 +767,7 @@ class TemplatedTranslator(Translator):
 
         else:
 
-            # @profile
+            @profile
             def generate():
                 for iterator in iterators:
                     for resolved_template_nl, condition in iterator:
@@ -713,7 +775,7 @@ class TemplatedTranslator(Translator):
 
         return generate(), sum(volumes)
 
-    # @profile
+    @profile
     def _interpret_mapping_is_consistent_with_condition(self,
                                                         condition: _PosFormConditionSet,
                                                         interpret_mapping: Dict[str, str],
@@ -793,7 +855,7 @@ class TemplatedTranslator(Translator):
             template = nl[match.span()[0] + len(self._TEMPLATE_BRACES[0]) : match.span()[1] - len(self._TEMPLATE_BRACES[1])]
             yield template
 
-    # @profile
+    @profile
     def _get_pos_form_consistency_condition(self, nl: str) -> _PosFormConditionSet:
         formula = Formula(nl)
         interprands = formula.predicates + formula.constants
@@ -808,7 +870,7 @@ class TemplatedTranslator(Translator):
 
         return _PosFormConditionSet(conditions)
 
-    # @profile
+    @profile
     def _choose_interpret_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
         zeroary_predicates = list({predicate.rep
                                    for formula in formulas
@@ -883,27 +945,46 @@ class TemplatedTranslator(Translator):
 
         return interpret_mapping
 
-    # @profile
-    def _sample(self, elems: List[Any], size: int) -> List[Any]:
-        if len(elems) < size:
-            logger.warning('Can\'t sample %d elements. Will sample only %d elements.',
-                           size,
-                           len(elems))
-            return random.sample(elems, len(elems))
+    @profile
+    def _sample(self, elems: Union[List[Any], Iterable[Any]], size: int) -> List[Any]:
+        if isinstance(elems, list):
+            if len(elems) < size:
+                logger.warning('Can\'t sample %d elements. Will sample only %d elements.',
+                               size,
+                               len(elems))
+                return shuffle(elems, len(elems))
+            else:
+                return random.sample(elems, size)
         else:
-            return random.sample(elems, size)
+            sampled: List[Any] = []
+            for elem in elems:
+                sampled.append(elem)
+                if len(sampled) >= size:
+                    return sampled
+            try:
+                raise Exception('Could not sample %d elements from the iterator', size)
+            except:
+                import pudb; pudb.set_trace()
 
-    # @profile
-    def _take(self, elems: List[Any], size: int) -> List[Any]:
-        if len(elems) < size:
-            logger.warning('Can\'t take %d elements. Will take only %d elements.',
-                           size,
-                           len(elems))
-        # if size * 3 < len(elems):
-        #     logger.warning('taking only %d heading words from %d words. This might yield a skew distribution', size, len(elems))
-        return elems[:size]
+    @profile
+    def _take(self, elems: Union[Iterable[Any], List[Any]], size: int) -> List[Any]:
+        if isinstance(elems, list):
+            if len(elems) < size:
+                logger.warning('Can\'t take %d elements. Will take only %d elements.',
+                               size,
+                               len(elems))
+            # if size * 3 < len(elems):
+            #     logger.warning('taking only %d heading words from %d words. This might yield a skew distribution', size, len(elems))
+            return elems[:size]
+        else:
+            sampled: List[Any] = []
+            for elem in elems:
+                sampled.append(elem)
+                if len(sampled) >= size:
+                    return sampled
+            raise Exception('Could not sample %d elements from the iterator', size)
 
-    # @profile
+    @profile
     def _make_word_inflated_interpret_mapping(self,
                                               interpret_mapping: Dict[str, str],
                                               interprand_templated_translation_pushed: str) -> Tuple[Dict[str, str], Dict[str, int]]:
@@ -932,7 +1013,7 @@ class TemplatedTranslator(Translator):
             inflated_mapping[interprand_rep] = inflated_word
         return inflated_mapping, stats
 
-    # @profile
+    @profile
     def _get_interprand_condition_from_template(self, interprand: str, rep: str) -> Optional[Tuple[POS, Optional[str]]]:
         interprand_begin = rep.find(interprand)
         if interprand_begin < 0:

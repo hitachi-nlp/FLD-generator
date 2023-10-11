@@ -36,7 +36,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230904.jpn')
     # output_top_dir = Path('./outputs/00.create_corpus/20230912.jpn')
     # output_top_dir = Path('./outputs/00.create_corpus/20230914.jpn')
-    output_top_dir = Path('./outputs/00.create_corpus/20230916.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230916.jpn')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20231010.jpn')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -58,23 +60,27 @@ def main():
         # '20230904.jpn.D3',
 
         # ---------------------------------- 20230912.jpn ------------------------------------
-#         '20230912.jpn.D3',
+        # '20230912.jpn.D3',
 
         # ---------------------------------- 20230914.jpn ------------------------------------
         # '20230914.jpn.D3',
 
 
         # ---------------------------------- 20230916.jpn ------------------------------------
-        '20230916.jpn.D1_wo_dist',
-        '20230916.jpn.D1',
-        '20230916.jpn.D3',
-        '20230916.jpn.D5',
+        # '20230916.jpn.D1_wo_dist',
+        # '20230916.jpn.D1',
+        # '20230916.jpn.D3',
+        # '20230916.jpn.D5',
 
+        # ---------------------------------- 20231010.D3.large_vocab ------------------------------------
+        '20231010.D3.large_vocab',
+        '20231010.D3.large_vocab.smpl_stncs',
+        '20231010.D3.large_vocab.smpl_stncs.transl_vrnts',
     ]
     # dataset_names = dataset_names[::-1]
 
-    num_jobs_for_datasets = 2
-    num_jobs_per_dataset = 90
+    num_jobs_for_datasets = 3
+    num_jobs_per_dataset = 40
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
@@ -89,7 +95,7 @@ def main():
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # ---------------------------- fixed settings --------------------------
-    timeout_per_job = 4800  # for the case some jobs hangs
+    timeout_per_job = 7200  # for the case some jobs hangs
     num_workers_per_job = 5
     delete_logs_when_done = False
     dry_run = False
@@ -183,6 +189,7 @@ def make_dataset(dataset_name: str,
             'use_fixed_translation',
 
             'split_sizes',
+            'split_wise_settings',
 
             'translation_lang',
             'translation_configs',
@@ -227,6 +234,7 @@ def make_dataset(dataset_name: str,
             job_log_path = job_output_dir / 'log.txt'
 
             job_settings = copy.deepcopy(settings)
+            job_settings.update(settings.get('split_wise_settings', {}).get(split, {}))
             job_settings['split'] = split
             job_settings['seed'] = i_job
 
@@ -239,7 +247,7 @@ def make_dataset(dataset_name: str,
                 str(int(size_per_job)),
 
                 f'--depth-range \'{json.dumps(job_settings["depth_range"])}\'',
-                maybe_option('--depth-distrib', settings.get("depth_distrib", None)),
+                maybe_option('--depth-distrib', job_settings.get("depth_distrib", None)),
                 f'--branch-extensions-range \'{json.dumps(job_settings["branch_extensions_range"])}\'',
 
                 _make_multiple_value_option('--argument-config', job_settings['argument_configs']),
@@ -250,11 +258,11 @@ def make_dataset(dataset_name: str,
 
                 maybe_option('--translation-lang', job_settings.get('translation_lang', None)),
                 _make_multiple_value_option('--translation-config', job_settings['translation_configs']),
-                '--use-fixed-translation' if settings.get("use_fixed_translation", False) else '',
-                maybe_option('--reused-object-nouns-max-factor', settings.get("reused_object_nouns_max_factor", None)),
+                '--use-fixed-translation' if job_settings.get("use_fixed_translation", False) else '',
+                maybe_option('--reused-object-nouns-max-factor', job_settings.get("reused_object_nouns_max_factor", None)),
                 f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
-                maybe_option('--translation-volume-to-weight', settings.get("translation_volume_to_weight", None)),
-                maybe_option('--translation-adj-verb-noun-ratio', settings.get("translation_adj_verb_noun_ratio", None)),
+                maybe_option('--translation-volume-to-weight', job_settings.get("translation_volume_to_weight", None)),
+                maybe_option('--translation-adj-verb-noun-ratio', job_settings.get("translation_adj_verb_noun_ratio", None)),
 
 
                 f'--distractor "{job_settings["distractor"]}"',
@@ -263,18 +271,18 @@ def make_dataset(dataset_name: str,
                 '--sample-distractor-prototype-formulas-from-all-possible-formulas' if job_settings.get('sample_distractor_prototype_formulas_from_all_possible_formulas', False) else '',
                 '--disallow-simplified-tree-formulas-as-distractor-prototype' if job_settings.get('disallow_simplified_tree_formulas_as_distractor_prototype', False) else '',
                 '--disallow-subj-obj-swapped-distractor' if job_settings.get('disallow_subj_obj_swapped_distractor', False) else '',
-                maybe_option('--swap-ng-words-config', settings.get("swap_ng_words_config", None)),
-                maybe_option('--translation-distractor', settings.get("translation_distractor", None)),
+                maybe_option('--swap-ng-words-config', job_settings.get("swap_ng_words_config", None)),
+                maybe_option('--translation-distractor', job_settings.get("translation_distractor", None)),
                 f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',
-                maybe_option('--unknown-ratio', settings.get("unknown_ratio", None)),
+                maybe_option('--unknown-ratio', job_settings.get("unknown_ratio", None)),
                 '--sample-all-stances-per-logic' if job_settings.get('sample_all_stances_per_logic', False) else '',
                 '--use-collapsed-translation-nodes-for-unknown-tree' if job_settings.get('use_collapsed_translation_nodes_for_unknown_tree', False) else '',
 
-                maybe_option('--translation-variants-per-logic', settings.get("translation_variants_per_logic", None)),
+                maybe_option('--translation-variants-per-logic', job_settings.get("translation_variants_per_logic", None)),
 
                 f'--num-workers {job_settings["num_workers_per_job"]}',
                 f'--seed {job_settings["seed"]}',
