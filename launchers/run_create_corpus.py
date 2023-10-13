@@ -40,7 +40,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230916.jpn')
 
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab.small')
-    output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
+    output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -75,15 +76,18 @@ def main():
         # '20230916.jpn.D5',
 
         # ---------------------------------- 20231010.D3.large_vocab ------------------------------------
-        '20231010.D3.large_vocab',
-        # '20231010.D3.large_vocab.smpl_stncs',
-        # '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3',
-        # '20231010.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
+        # '20231010.D3.large_vocab',
+
+        # ---------------------------------- 20231012.D3.large_vocab ------------------------------------
+        '20231012.D3.large_vocab',
+        '20231012.D3.large_vocab.smpl_stncs',
+        '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
+        '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
     ]
     # dataset_names = dataset_names[::-1]
 
     num_jobs_for_datasets = 3
-    num_jobs_per_dataset = 40
+    num_jobs_per_dataset = 60
 
     # num_jobs_for_datasets = 2
     # num_jobs_per_dataset = 80
