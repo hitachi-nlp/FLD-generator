@@ -26,18 +26,11 @@ class MultipleParentError(FormalLogicExceptionBase):
 
 class ProofNode:
 
-    # class _NodeState(Enum):
-    #     LEAF = 'leaf'
-    #     ASSUMP = 'assump'
-
-    # class _ConstState(Enum):
-    #     HAS_INTERMEDIATE = 'has_intermediate'
-    #     NO_INTERMEDIATE = 'no_intermediate'
-
     def __init__(self,
                  formula: Formula,
                  argument: Optional[Argument] = None,
-                 tree: Optional['ProofTree'] = None):
+                 tree: Optional['ProofTree'] = None,
+                 is_commonsense=False):
         self.formula = formula
         self.argument: Optional[Argument] = argument
 
@@ -49,7 +42,14 @@ class ProofNode:
 
         self._tree = tree
 
-        self.is_commonsense = False
+        self.is_commonsense = is_commonsense
+
+    def copy(self) -> 'ProofNode':
+        return ProofNode(
+            deepcopy(self.formula),
+            argument=deepcopy(self.argument),
+            is_commonsense=self.is_commonsense,
+        )
 
     @property
     def parent(self):
@@ -338,7 +338,7 @@ class ProofTree:
         copy_nodes = []
         # for orig_node in nodes + assump_nodes:
         for orig_node in nodes:
-            copy_node = ProofNode(deepcopy(orig_node.formula), argument=orig_node.argument)
+            copy_node = orig_node.copy()
 
             orig_nodes_to_copy_nodes[orig_node] = copy_node
             copy_nodes_to_orig_nodes[copy_node] = orig_node
