@@ -49,6 +49,8 @@ class ProofNode:
 
         self._tree = tree
 
+        self.is_commonsense = False
+
     @property
     def parent(self):
         return self._parent

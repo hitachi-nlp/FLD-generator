@@ -31,7 +31,8 @@ def _test_word_bank(wb):
 
     for pos in POS:
         for attr in [None] + list(ATTR):
-            for word in get_words(pos=pos, attrs=[attr]):
+            for i_word, word in enumerate(get_words(pos=pos, attrs=[attr])):
+                # print(i_word)
                 if attr is None:
                     print(f'{str(pos):<20}{"None":<30}{word:<20}')
                 else:

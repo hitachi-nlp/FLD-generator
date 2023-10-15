@@ -18,6 +18,7 @@ from FLD_generator.word_banks import build_wordbank
 from FLD_generator.translators import build as build_translator
 from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results, fix_seed
+from FLD_generator.commonsense_banks import MockIfThenCommonsenseBank
 from logger_setup import setup as setup_logger
 
 import line_profiling
@@ -53,6 +54,9 @@ def test_generate_dataset_lang(lang: str):
     else:
         raise ValueError()
 
+    # commonsense_bank = None
+    commonsense_bank = MockIfThenCommonsenseBank()
+
     # translator = None
     translator = build_translator(
         lang,
@@ -65,7 +69,10 @@ def test_generate_dataset_lang(lang: str):
         volume_to_weight='logE',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
+        commonsense_bank=commonsense_bank,
     )
+
+    # commonsense_translator = build_commonsense_translator()
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
@@ -114,7 +121,8 @@ def test_generate_dataset_lang(lang: str):
         ],
         elim_dneg=True,
         quantifier_axiom_arguments_weight=0.2,
-        complex_formula_arguments_weight=0.5,
+        # complex_formula_arguments_weight=0.5,
+        complex_formula_arguments_weight=0.1,
         quantifier_axioms=[
             'universal_quantifier_elim',
             'universal_quantifier_intro',
@@ -154,6 +162,8 @@ def test_generate_dataset_lang(lang: str):
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
+        commonsense_injection_ratio=1.0,
+        # commonsense_translator=commonsense_translator,
     )
 
     depth_range = (1, 8)
@@ -188,7 +198,7 @@ def test_generate_dataset_lang(lang: str):
         raise_if_translation_not_found=True,
     )
 
-    num_dataset = 30
+    num_dataset = 1000
     generate_dataset(dataset, num_dataset=num_dataset)
 
 

@@ -42,6 +42,10 @@ class Translator(ABC):
     def acceptable_formulas(self) -> List[str]:
         pass
 
+    # @abstractmethod
+    # def is_acceptable(self, formulas: List[Formula]) -> bool:
+    #     pass
+
     @property
     @abstractmethod
     def translation_names(self) -> List[str]:
@@ -50,6 +54,7 @@ class Translator(ABC):
     def translate(self,
                   formulas: List[Formula],
                   intermediate_constant_formulas: List[Formula],
+                  commonsense_injection_idxs: Optional[List[int]] = None,
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
                   timeout_per_trial: Optional[int] = None,
@@ -61,7 +66,10 @@ class Translator(ABC):
             transls = run_with_timeout_retry(
                 self._translate,
                 func_args=[formulas, intermediate_constant_formulas],
-                func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
+                func_kwargs={
+                    'commonsense_injection_idxs': commonsense_injection_idxs,
+                    'raise_if_translation_not_found': raise_if_translation_not_found,
+                },
                 should_retry_exception=TranslationFailure,
                 max_retry=max_retry,
                 timeout_per_trial=timeout_per_trial,
@@ -79,4 +87,8 @@ class Translator(ABC):
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+        pass
+
+    @abstractmethod
+    def is_commonsense_translatable(self, formulas: List[Formula]) -> bool:
         pass

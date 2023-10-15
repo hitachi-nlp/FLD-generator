@@ -7,9 +7,11 @@ from tqdm import tqdm
 from FLD_generator.utils import nested_merge
 from FLD_generator.word_banks.base import WordBank
 
+from .base import Translator
 from .templated import TemplatedTranslator
 from .english import EnglishTranslator
 from .japanese import JapaneseTranslator
+# from .commonsense import MockIfThenCommonsenseTranslator
 
 logger = logging.getLogger(__name__)
 
@@ -53,3 +55,7 @@ def build(lang: str,
     else:
         raise ValueError(f'Unsupported language {lang}')
     return translator
+
+
+# def build_commonsense(*args, **kwargs) -> Translator:
+#     return MockIfThenCommonsenseTranslator()

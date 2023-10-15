@@ -27,6 +27,7 @@ from FLD_generator.utils import (
     make_combination,
     shuffle,
 )
+from FLD_generator.commonsense_banks.base import CommonsenseBankBase
 from .base import Translator, TranslationNotFoundError, calc_formula_specificity
 import line_profiling
 
@@ -73,6 +74,7 @@ class TemplatedTranslator(Translator):
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
                  adj_verb_noun_ratio: Optional[List] = None,
+                 commonsense_bank: Optional[CommonsenseBankBase] = None,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
@@ -126,6 +128,8 @@ class TemplatedTranslator(Translator):
             raise ValueError()
 
         self._do_translate_to_nl = do_translate_to_nl
+
+        self._commonsense_bank = commonsense_bank
 
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[Tuple[str, str]]]]:
         flat_config = self._completely_flatten_config(config)
@@ -233,46 +237,46 @@ class TemplatedTranslator(Translator):
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
         nouns = order_words(
             (word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if word not in intermediate_constant_nouns),
+             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+             if word not in intermediate_constant_nouns),
             POS.NOUN,
         )
 
         event_nouns = order_words(
             (word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_event_noun in word_bank.get_attrs(word)),
+             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+             if ATTR.can_be_event_noun in word_bank.get_attrs(word)),
             POS.NOUN,
         )
 
         logger.info('loading entity nouns ...')
         entity_nouns = order_words(
             (word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-            if ATTR.can_be_entity_noun in word_bank.get_attrs(word)),
+             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+             if ATTR.can_be_entity_noun in word_bank.get_attrs(word)),
             POS.NOUN,
         )
 
         logger.info('loading adjs ...')
         adjs = order_words(
             (word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)),
+             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)),
             POS.ADJ,
         )
 
         logger.info('loading intransitive_verbs ...')
         intransitive_verbs = order_words(
             (word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
-            if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)),
+             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
+             if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)),
             POS.VERB,
         )
 
         logger.info('loading transitive_verbs ...')
         transitive_verbs = order_words(
             (word
-            for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
-            if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)),
+             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
+             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)),
             POS.VERB,
         )
 
@@ -341,7 +345,7 @@ class TemplatedTranslator(Translator):
         for word in word_bank.get_words():
             if word in intermediate_cache:
                 continue
-            if pos is not None and pos not in word_bank.get_pos(word):  # SLOW
+            if pos is not None and pos not in word_bank.get_pos(word, not_found_warning=False):
                 continue
             if any(attr not in word_bank.get_attrs(word)
                    for attr in attrs):
@@ -354,6 +358,10 @@ class TemplatedTranslator(Translator):
     @property
     def acceptable_formulas(self) -> List[str]:
         return list(self._translations.keys())
+
+    # def is_acceptable(self, formulas: List[Formula]) -> List[str]:
+    #     return all(formula.rep in self.acceptable_formulas
+    #                for formula in formulas)
 
     @property
     def translation_names(self) -> List[str]:
@@ -368,7 +376,9 @@ class TemplatedTranslator(Translator):
     def _translate(self,
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
+                   commonsense_injection_idxs: Optional[List[int]] = None,
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+        commonsense_injection_idxs = commonsense_injection_idxs or []
         self._reset_pred_with_obj_transl()
 
         def raise_or_warn(msg: str) -> None:
@@ -382,7 +392,21 @@ class TemplatedTranslator(Translator):
         translation_names: List[Optional[str]] = []
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
-        interpret_mapping = self._choose_interpret_mapping(formulas, intermediate_constant_formulas)
+        if len(commonsense_injection_idxs) > 0:
+            if self._commonsense_bank is None:
+                raise ValueError()
+            should_commonsense_formulas = [formulas[idx] for idx in commonsense_injection_idxs]
+            if not self._commonsense_bank.is_acceptable(should_commonsense_formulas):
+                raise ValueError()
+            commonsense_injection_mapping = self._choose_interpret_mapping(should_commonsense_formulas,
+                                                                           [],
+                                                                           from_commonsense=True)
+        else:
+            commonsense_injection_mapping = {}
+
+        interpret_mapping = self._choose_interpret_mapping(formulas,
+                                                           intermediate_constant_formulas,
+                                                           constraints=commonsense_injection_mapping)
 
         for formula in formulas:
             # find translation key
@@ -469,7 +493,6 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
 
-                
                 translation = self._make_pred_with_obj_transl(translation)
                 translations.append(translation)
 
@@ -500,6 +523,9 @@ class TemplatedTranslator(Translator):
                 SO_swap_formula.translation = self._postprocess_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
 
         return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
+
+    def is_commonsense_translatable(self, formulas: List[Formula]) -> bool:
+        return self._commonsense_bank.is_acceptable(formulas)
 
     @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
@@ -613,7 +639,7 @@ class TemplatedTranslator(Translator):
 
         else:
             raise ValueError(f'Unknown volume weight aggregation type "{volume_weight_agg}"')
-        
+
         def get_weight(volume_weights: List[float], i: int) -> float:
             return agg_volume_weights(volume_weights, i) * _factor
 
@@ -787,15 +813,11 @@ class TemplatedTranslator(Translator):
 
             if pos not in self._get_pos(word):
                 condition_is_consistent = False
-                # logger.warning('-- pos not in self._get_pos(word) --')
-                # logger.warning('    word=%s     target_pos=%s    self._get_pos(word)=%s', str(word), str(pos), str(self._get_pos(word)))
                 break
 
             inflated_words = self._get_inflated_words(word, pos, form)
             if len(inflated_words) == 0:
                 condition_is_consistent = False
-                # logger.warning('-- len(inflated_words) --')
-                # logger.warning('    word=%s    pos%s     form=%s', str(word), str(pos), str(form))
                 break
 
         return condition_is_consistent
@@ -871,79 +893,94 @@ class TemplatedTranslator(Translator):
         return _PosFormConditionSet(conditions)
 
     @profile
-    def _choose_interpret_mapping(self, formulas: List[Formula], intermediate_constant_formulas: List[Formula]) -> Dict[str, str]:
-        zeroary_predicates = list({predicate.rep
-                                   for formula in formulas
-                                   for predicate in formula.zeroary_predicates})
-        unary_predicates = list({predicate.rep
-                                 for formula in formulas
-                                 for predicate in formula.unary_predicates})
-        constants = list({constant.rep for formula in formulas for constant in formula.constants})
-        intermediate_constants = sorted({constant.rep for constant in intermediate_constant_formulas})
+    def _choose_interpret_mapping(self,
+                                  formulas: List[Formula],
+                                  intermediate_constant_formulas: List[Formula],
+                                  constraints: Optional[Dict[str, str]] = None,
+                                  from_commonsense=False,
+                                  ) -> Dict[str, str]:
 
-        adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
-        if self.reused_object_nouns_max_factor > 0.0:
-            obj_nouns = list({
-                self._parse_word_with_obj(word)[1]
-                for word in adj_verb_nouns
-                if self._parse_word_with_obj(word)[1] is not None
-            })
+        if from_commonsense and self._commonsense_bank.is_acceptable(formulas):
+            return self._commonsense_bank.sample_mapping(formulas)
+
         else:
-            obj_nouns = []
+            constraints = constraints or {}
 
-        event_noun_size = int(len(zeroary_predicates) * 2.0)
-        event_nouns = self._sample(self._zeroary_predicates, max(event_noun_size, 0))
+            zeroary_predicates = list({predicate.rep
+                                       for formula in formulas
+                                       for predicate in formula.zeroary_predicates})
+            unary_predicates = list({predicate.rep
+                                     for formula in formulas
+                                     for predicate in formula.unary_predicates})
+            constants = list({constant.rep for formula in formulas for constant in formula.constants})
+            intermediate_constants = sorted({constant.rep for constant in intermediate_constant_formulas})
 
-        entity_noun_size = int(math.ceil(len(constants) * 1.0))   # since all the constants have pos=NOUN, x 1.0 is enough
-        while True:
-            entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
-            if len(entity_nouns) > 0:
-                logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
+            adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
+            if self.reused_object_nouns_max_factor > 0.0:
+                obj_nouns = list({
+                    self._parse_word_with_obj(word)[1]
+                    for word in adj_verb_nouns
+                    if self._parse_word_with_obj(word)[1] is not None
+                })
+            else:
+                obj_nouns = []
 
-            sampled_constants = self._sample(self._constants, max((entity_noun_size - len(entity_nouns)) * 5, 0))
-            for constant in sampled_constants:
+            event_noun_size = int(len(zeroary_predicates) * 2.0)
+            event_nouns = self._sample(self._zeroary_predicates, max(event_noun_size, 0))
+
+            entity_noun_size = int(math.ceil(len(constants) * 1.0))   # since all the constants have pos=NOUN, x 1.0 is enough
+            while True:
+                entity_nouns = [noun for noun in obj_nouns if noun in self._constant_set][: int(entity_noun_size * self.reused_object_nouns_max_factor)]
+                if len(entity_nouns) > 0:
+                    logger.info('the following object nouns may be reused as as entity nouns: %s', str(entity_nouns))
+
+                sampled_constants = self._sample(self._constants, max((entity_noun_size - len(entity_nouns)) * 5, 0))
+                for constant in sampled_constants:
+                    if len(entity_nouns) >= entity_noun_size:
+                        break
+                    if constant not in entity_nouns:
+                        entity_nouns.append(constant)
+
                 if len(entity_nouns) >= entity_noun_size:
                     break
-                if constant not in entity_nouns:
-                    entity_nouns.append(constant)
 
-            if len(entity_nouns) >= entity_noun_size:
-                break
+            intermediate_constant_nouns = sorted(self._word_bank.get_intermediate_constant_words())[:len(intermediate_constants)]
 
-        intermediate_constant_nouns = sorted(self._word_bank.get_intermediate_constant_words())[:len(intermediate_constants)]
-
-        # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
-        zeroary_mapping = next(
-            generate_mappings_from_predicates_and_constants(
-                zeroary_predicates,
-                [],
-                event_nouns,
-                [],
-                shuffle=True,
-                allow_many_to_one=False,
+            zeroary_constraints = {k: v for k, v in constraints.items() if k in zeroary_predicates}
+            # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
+            zeroary_mapping = next(
+                generate_mappings_from_predicates_and_constants(
+                    zeroary_predicates,
+                    [],
+                    event_nouns,
+                    [],
+                    shuffle=True,
+                    allow_many_to_one=False,
+                    constraints=zeroary_constraints,
+                )
             )
-        )
 
-        # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
-        unary_mapping = next(
-            generate_mappings_from_predicates_and_constants(
-                unary_predicates,
-                constants,
-                adj_verb_nouns,
-                entity_nouns,
-                shuffle=True,
-                allow_many_to_one=False,
-                constraints={
-                    intermediate_constant: intermediate_constant_noun
-                    for intermediate_constant, intermediate_constant_noun in zip(intermediate_constants, intermediate_constant_nouns)
-                }
+            # Unary predicate {A}, which appears as "{A}{a}", shoud be adjective or verb.
+            unary_constraints = {
+                **dict(zip(intermediate_constants, intermediate_constant_nouns)),
+                **{k: v for k, v in constraints.items() if k in unary_predicates + constants}
+            }
+            unary_mapping = next(
+                generate_mappings_from_predicates_and_constants(
+                    unary_predicates,
+                    constants,
+                    adj_verb_nouns,
+                    entity_nouns,
+                    shuffle=True,
+                    allow_many_to_one=False,
+                    constraints=unary_constraints,
+                )
             )
-        )
 
-        interpret_mapping = zeroary_mapping.copy()
-        interpret_mapping.update(unary_mapping)
+            interpret_mapping = zeroary_mapping.copy()
+            interpret_mapping.update(unary_mapping)
 
-        return interpret_mapping
+            return interpret_mapping
 
     @profile
     def _sample(self,
