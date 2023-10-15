@@ -58,8 +58,7 @@ class Translator(ABC):
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
                   timeout_per_trial: Optional[int] = None,
-                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
-                                                        Dict[str, int]]:
+                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
         timeout_per_trial = timeout_per_trial or len(formulas) * 1
         # timeout_per_trial = 9999
         try:
@@ -86,7 +85,7 @@ class Translator(ABC):
     def _translate(self,
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
-                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
         pass
 
     @abstractmethod

@@ -770,6 +770,7 @@ class NLProofSDataset:
         # build node ids
         i_sent = 1
         i_assump = 1
+        i_commonsense = 1
 
         _node2id: Dict[Node, str] = {}
         _id2node: Dict[str, Node] = {}
@@ -793,6 +794,10 @@ class NLProofSDataset:
                 elif self._is_assump(node):
                     id_ = f'assump{i_assump}'
                     i_assump += 1
+
+                elif self._is_commonsense(node):
+                    id_ = f'commonsense{i_commonsense}'
+                    i_commonsense += 1
 
                 elif self._is_leaf(node, proof_tree):
                     id_ = f'{self._sent_ident}{i_sent}'
@@ -885,6 +890,14 @@ class NLProofSDataset:
                 else:
                     conclusion_str = f'{assump_id}: {self._get_sent_from_node(node)}'
 
+            elif self._is_commonsense(node):
+                premise_str = 'void'
+                commonsense_id = node2id[node]
+                if formula_rep:
+                    conclusion_str = f'{commonsense_id}: {node.formula.rep}'
+                else:
+                    conclusion_str = f'{commonsense_id}: {self._get_sent_from_node(node)}'
+
             elif self._is_leaf(node, proof_tree):
                 continue
 
@@ -968,9 +981,14 @@ class NLProofSDataset:
     def _is_assump(self, node: Node) -> bool:
         return isinstance(node, ProofNode) and node.is_assump
 
+    def _is_commonsense(self, node: Node) -> bool:
+        return isinstance(node, ProofNode) and node.is_commonsense
+
     def _is_int(self, node: Node, proof_tree: ProofTree) -> bool:
         return isinstance(node, ProofNode)\
-            and (not self._is_root(node, proof_tree) and not self._is_leaf(node, proof_tree) and not self._is_assump(node))
+            and (not self._is_root(node, proof_tree)\
+                 and not self._is_leaf(node, proof_tree)\
+                 and not self._is_assump(node))
 
     def _is_distractor(self, node: Node) -> bool:
         return isinstance(node, _DistractorFakeNode)

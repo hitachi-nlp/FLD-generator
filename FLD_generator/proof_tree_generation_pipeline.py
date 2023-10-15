@@ -274,8 +274,6 @@ class ProofTreeGenerationPipeline:
                                                           int(len(commonsense_translatable_leaf_formulas) * self._commonsense_injection_ratio))
                 commonsense_nodes = [node for node in tree_nodes
                                      if node.formula in commonsense_leaf_formulas]
-                for node in commonsense_nodes:
-                    node.is_commonsense = True
                 commonsense_node_idxs = [idx for idx, node in enumerate(tree_nodes)
                                          if node.formula in commonsense_leaf_formulas]
             else:
@@ -294,7 +292,12 @@ class ProofTreeGenerationPipeline:
             except TranslationImpossible as e:
                 raise ProofTreeGenerationPipelineImpossible(str(e))
 
-            for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
+            for i_formula, (formula, (translation_name, translation, SO_swap_formula, is_commonsense_injected)) in enumerate(zip(all_formulas, named_translations)):
+                if is_commonsense_injected:
+                    commonsense_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]
+                    commonsense_injected_node.is_commonsense = True
+                    logger.info('commonsense is injected to a node:%s', str(commonsense_injected_node))
+
                 formula.translation_name = translation_name
                 if i_formula in assump_formula_indices:
                     translation_prefix = self.assumption_prefix
@@ -308,12 +311,6 @@ class ProofTreeGenerationPipeline:
                     logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
 
                     formula_distractors.append(SO_swap_formula)
-
-            if len(commonsense_nodes) > 0:
-                logger.info('commonsense is # injected to nodes, as follows.')
-                for node in commonsense_nodes:
-                    logger.info(str(node))
-                    # logger.info('    -> translation: %s', node.formula.translation)
 
             logger.info(self._make_pretty_log('generate translations', 'finish'))
 

@@ -377,7 +377,7 @@ class TemplatedTranslator(Translator):
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
                    commonsense_injection_idxs: Optional[List[int]] = None,
-                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
         commonsense_injection_idxs = commonsense_injection_idxs or []
         self._reset_pred_with_obj_transl()
 
@@ -398,11 +398,18 @@ class TemplatedTranslator(Translator):
             should_commonsense_formulas = [formulas[idx] for idx in commonsense_injection_idxs]
             if not self._commonsense_bank.is_acceptable(should_commonsense_formulas):
                 raise ValueError()
-            commonsense_injection_mapping = self._choose_interpret_mapping(should_commonsense_formulas,
-                                                                           [],
-                                                                           from_commonsense=True)
+            commonsense_injection_mapping, _is_commonsense_injected = self._choose_interpret_mapping(should_commonsense_formulas,
+                                                                                                     [],
+                                                                                                     from_commonsense=True)
+            commonsense_formulas = [formula
+                                    for i, (formula, is_injected) in enumerate(zip(should_commonsense_formulas, _is_commonsense_injected))
+                                    if is_injected]
+            is_commonsense_injected = [True if formula in commonsense_formulas else False
+                                       for formula in formulas]
+
         else:
             commonsense_injection_mapping = {}
+            is_commonsense_injected = [False] * len(formulas)
 
         interpret_mapping = self._choose_interpret_mapping(formulas,
                                                            intermediate_constant_formulas,
@@ -522,7 +529,7 @@ class TemplatedTranslator(Translator):
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
                 SO_swap_formula.translation = self._postprocess_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
 
-        return list(zip(translation_names, translations, SO_swap_formulas)), count_stats
+        return list(zip(translation_names, translations, SO_swap_formulas, is_commonsense_injected)), count_stats
 
     def is_commonsense_translatable(self, formulas: List[Formula]) -> bool:
         return self._commonsense_bank.is_acceptable(formulas)
@@ -898,7 +905,7 @@ class TemplatedTranslator(Translator):
                                   intermediate_constant_formulas: List[Formula],
                                   constraints: Optional[Dict[str, str]] = None,
                                   from_commonsense=False,
-                                  ) -> Dict[str, str]:
+                                  ) -> Union[Dict[str, str], Tuple[Dict[str, str], List[bool]]]:
 
         if from_commonsense and self._commonsense_bank.is_acceptable(formulas):
             return self._commonsense_bank.sample_mapping(formulas)
