@@ -4,9 +4,11 @@ import logging
 from string import ascii_uppercase
 from enum import Enum, EnumMeta
 
+from ordered_set import OrderedSet
 from lemminflect import getInflection
 from FLD_generator.word_banks.base import WordBank, POS
 from FLD_generator.utils import starts_with_vowel_sound
+from FLD_generator.person_names import get as get_person_names
 
 from .word_utils import WordUtil
 
@@ -62,14 +64,19 @@ class EnglishWordBank(WordBank):
             self.VerbForm.S: 'VBZ',
         }
 
+        self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
+
     def _get_all_lemmas(self) -> Iterable[str]:
-        return sorted(self._word_util.get_all_lemmas())
+        return sorted(self._word_util.get_all_lemmas()) + list(self._person_names)
 
     @property
     def _intermediate_constant_words(self) -> List[str]:
         return self.__intermediate_constant_words
 
     def _get_pos(self, word: str) -> List[POS]:
+        if word in self._person_names:
+            return [POS.NOUN]
+
         return self._word_util.get_pos(word)
 
     def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
@@ -177,9 +184,15 @@ class EnglishWordBank(WordBank):
     def _change_noun_form(self, noun: str, form: Enum, force=False) -> List[str]:
 
         if form == self.NounForm.NORMAL:
+            if noun in self._person_names:
+                return [noun]
+
             return [noun]
 
         elif form == self.NounForm.SINGULAR:
+            if noun in self._person_names:
+                return [noun]
+
             return [noun]
 
         elif form == self.NounForm.SINGULAR_WITH_PARTICLE:
@@ -193,6 +206,8 @@ class EnglishWordBank(WordBank):
             TODO: We might be able to detect the countability
                   using existent resources like [Category:Uncountable nouns - Simple English Wiktionary](https://simple.wiktionary.org/wiki/Category:Uncountable_nouns).
             """
+            if noun in self._person_names:
+                return [noun]
 
             return [f'an {noun}' if starts_with_vowel_sound(noun) else f'a {noun}']
 
@@ -200,6 +215,9 @@ class EnglishWordBank(WordBank):
             raise NotImplementedError()
 
         elif form == self.NounForm.ANTI:
+            if noun in self._person_names:
+                return []
+
             antonyms = self._get_antonyms(noun)
             antonyms += [word for word in self._change_noun_form(noun, self.NounForm.NEG, force=False)
                          if word not in antonyms]
@@ -210,6 +228,8 @@ class EnglishWordBank(WordBank):
             return antonyms
 
         elif form == self.NounForm.NEG:
+            if noun in self._person_names:
+                return []
 
             negnyms = self._get_negnyms(noun)
             if len(negnyms) == 0 and force:
@@ -227,9 +247,13 @@ class EnglishWordBank(WordBank):
         return self._word_util.can_be_transitive_verb(verb)
 
     def _can_be_event_noun(self, noun: str) -> bool:
+        if noun in self._person_names:
+            return False
         return self._word_util.can_be_event_noun(noun)
 
     def _can_be_entity_noun(self, noun: str) -> bool:
+        if noun in self._person_names:
+            return True
         return self._word_util.can_be_entity_noun(noun)
 
     def _get_antonyms(self, word: str) -> List[str]:

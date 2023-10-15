@@ -3,8 +3,11 @@ from enum import Enum, EnumMeta
 from abc import ABC, abstractmethod
 from itertools import chain
 from functools import lru_cache
+import logging
 
 import line_profiling
+
+logger = logging.getLogger(__name__)
 
 
 class POS(Enum):
@@ -50,10 +53,13 @@ class WordBank(ABC):
         pass
 
     @profile
-    def get_pos(self, word: str) -> List[POS]:
+    def get_pos(self, word: str, not_found_warning=True) -> List[POS]:
         if word in self._intermediate_constant_words:
             return [POS.NOUN]
-        return self._get_pos(word)
+        pos = self._get_pos(word)
+        if not_found_warning and len(pos) == 0:
+            logger.warning('pos not found for word "%s"', word)
+        return pos
 
     @abstractmethod
     def _get_pos(self, word: str) -> List[POS]:

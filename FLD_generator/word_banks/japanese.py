@@ -3,8 +3,10 @@ from string import ascii_uppercase
 from collections import defaultdict
 from enum import Enum, EnumMeta
 
+from ordered_set import OrderedSet
 from FLD_generator.word_banks.base import POS
 from FLD_generator.word_banks.base import WordBank
+from FLD_generator.person_names import get as get_person_names
 import line_profiling
 
 from .parsers.japanese import Morpheme
@@ -77,16 +79,23 @@ class JapaneseWordBank(WordBank):
             vocab_restrictions=vocab_restrictions,
         )
 
+        self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
+
     def _get_all_lemmas(self) -> Iterable[str]:
         for morphemes in self._base_morphemes.values():
             for morpheme in morphemes:
                 yield morpheme.surface
+        for name in self._person_names:
+            yield name
 
     @property
     def _intermediate_constant_words(self) -> List[str]:
         return self.__intermediate_constant_words
 
     def _get_pos(self, word: str) -> List[POS]:
+        if word in self._person_names:
+            return [POS.NOUN]
+
         if word not in self._base_morphemes:
             return []
         else:
@@ -183,18 +192,33 @@ class JapaneseWordBank(WordBank):
     def _change_noun_form(self, noun: str, form: Enum, force=False) -> List[str]:
 
         if form == self.NounForm.NORMAL:
+            if noun in self._person_names:
+                return [noun]
+
             return [noun]
 
         elif form == self.NounForm.SINGULAR:
+            if noun in self._person_names:
+                return [noun]
+
             return [noun]
 
         elif form == self.NounForm.SINGULAR_WITH_PARTICLE:
+            if noun in self._person_names:
+                return [noun]
+
             return [noun]
 
         elif form == self.NounForm.PLURAL:
+            if noun in self._person_names:
+                return []
+
             return [noun]
 
         elif form == self.NounForm.ANTI:
+            if noun in self._person_names:
+                return []
+
             raise NotImplementedError('antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
 
             antonyms = self._get_antonyms(noun)
@@ -207,6 +231,9 @@ class JapaneseWordBank(WordBank):
             return antonyms
 
         elif form == self.NounForm.NEG:
+            if noun in self._person_names:
+                return []
+
             negnyms: List[str] = []
 
             negnym_candidates = [f'{neg_prefix}{noun}'
@@ -232,9 +259,13 @@ class JapaneseWordBank(WordBank):
         return True
 
     def _can_be_event_noun(self, noun: str) -> bool:
+        if noun in self._person_names:
+            return False
         return self._word_util.can_be_event_noun(noun)
 
     def _can_be_entity_noun(self, noun: str) -> bool:
+        if noun in self._person_names:
+            return True
         return self._word_util.can_be_entity_noun(noun)
 
     def _get_antonyms(self, word: str) -> List[str]:
