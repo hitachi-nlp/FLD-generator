@@ -1,6 +1,6 @@
 from typing import List, Tuple, Optional, Iterable, Union, Dict, Set, Any
 from collections import defaultdict
-from copy import copy
+from copy import copy, deepcopy
 import logging
 from enum import Enum
 
@@ -338,7 +338,7 @@ class ProofTree:
         copy_nodes = []
         # for orig_node in nodes + assump_nodes:
         for orig_node in nodes:
-            copy_node = ProofNode(orig_node.formula, argument=orig_node.argument)
+            copy_node = ProofNode(deepcopy(orig_node.formula), argument=orig_node.argument)
 
             orig_nodes_to_copy_nodes[orig_node] = copy_node
             copy_nodes_to_orig_nodes[copy_node] = orig_node
