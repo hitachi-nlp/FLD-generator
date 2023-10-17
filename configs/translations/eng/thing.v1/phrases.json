@@ -99,7 +99,8 @@
       ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::not_pred>> <<phrase::{A}is_not_tgt>>"],
       "<<phrase::is_a_kind_of>> <<phrase::{A}a_noun>>",
 
-      "<<phrase::does>> {A}[VERB]", "{A}[VERB.s]"
+      ["W_VOL_AVG__0.2", "<<phrase::does>> {A}[VERB]"],
+      "{A}[VERB.s]"
     ],
 
     "{A}is_tgt": [
