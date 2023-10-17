@@ -398,9 +398,13 @@ class TemplatedTranslator(Translator):
             should_commonsense_formulas = [formulas[idx] for idx in commonsense_injection_idxs]
             if not self._commonsense_bank.is_acceptable(should_commonsense_formulas):
                 raise ValueError()
-            commonsense_injection_mapping, _is_commonsense_injected = self._choose_interpret_mapping(should_commonsense_formulas,
-                                                                                                     [],
-                                                                                                     from_commonsense=True)
+            (
+                commonsense_injection_mapping,
+                commonsense_pos_mapping,
+                _is_commonsense_injected,
+            ) = self._choose_interpret_mapping(should_commonsense_formulas,
+                                               [],
+                                               from_commonsense=True)
             commonsense_formulas = [formula
                                     for i, (formula, is_injected) in enumerate(zip(should_commonsense_formulas, _is_commonsense_injected))
                                     if is_injected]
@@ -409,11 +413,13 @@ class TemplatedTranslator(Translator):
 
         else:
             commonsense_injection_mapping = {}
+            commonsense_pos_mapping = {}
             is_commonsense_injected = [False] * len(formulas)
 
         interpret_mapping = self._choose_interpret_mapping(formulas,
                                                            intermediate_constant_formulas,
                                                            constraints=commonsense_injection_mapping)
+        pos_mapping = commonsense_pos_mapping
 
         for formula in formulas:
             # find translation key
@@ -427,6 +433,7 @@ class TemplatedTranslator(Translator):
                     translation_key,
                     interpret_mapping,
                     push_mapping,
+                    pos_mapping=pos_mapping,
                     block_shuffle=not self.use_fixed_translation,
                     volume_to_weight=self._volume_to_weight_func,
                 )
@@ -555,6 +562,7 @@ class TemplatedTranslator(Translator):
                                                 sentence_key: str,
                                                 interpret_mapping: Dict[str, str],
                                                 push_mapping: Dict[str, str],
+                                                pos_mapping: Optional[Dict[str, str]] = None,
                                                 block_shuffle=True,
                                                 volume_to_weight = lambda weight: weight,
                                                 log_indent=0) -> Optional[str]:
@@ -573,6 +581,7 @@ class TemplatedTranslator(Translator):
                 # set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
                 set([transl_nl]),
                 constraint_interpret_mapping=interpret_mapping,
+                constraint_pos_mapping=pos_mapping,
                 constraint_push_mapping=push_mapping,
                 block_shuffle=block_shuffle,
                 volume_to_weight=volume_to_weight,
@@ -611,6 +620,7 @@ class TemplatedTranslator(Translator):
                 condition,
                 interpret_mapping,
                 push_mapping,
+                pos_mapping=pos_mapping,
             )
             assert condition_is_consistent  # the consistency should have been checked recursively.
             return resolved_nl
@@ -658,6 +668,7 @@ class TemplatedTranslator(Translator):
                                            # ancestor_keys: Set[str],
                                            ancestor_nls: Set[str],
                                            constraint_interpret_mapping: Optional[Dict[str, str]] = None,
+                                           constraint_pos_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
@@ -678,7 +689,8 @@ class TemplatedTranslator(Translator):
                 and check_condition\
                 and not self._interpret_mapping_is_consistent_with_condition(condition,
                                                                              constraint_interpret_mapping,
-                                                                             constraint_push_mapping):
+                                                                             constraint_push_mapping,
+                                                                             pos_mapping=constraint_pos_mapping):
             return iter([]), 0
 
         templates = list(self._extract_templates(nl))
@@ -709,6 +721,7 @@ class TemplatedTranslator(Translator):
                         # ancestor_keys,
                         ancestor_nls,
                         constraint_interpret_mapping=constraint_interpret_mapping,
+                        constraint_pos_mapping=constraint_pos_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
@@ -746,6 +759,7 @@ class TemplatedTranslator(Translator):
                                         # ancestor_keys: Set[str],
                                         ancestor_nls: Set[str],
                                         constraint_interpret_mapping: Optional[Dict[str, str]] = None,
+                                        constraint_pos_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
@@ -775,6 +789,7 @@ class TemplatedTranslator(Translator):
                                                                            # ancestor_keys.union(set([template_key])),
                                                                            ancestor_nls.union(set([template_nl])),
                                                                            constraint_interpret_mapping=constraint_interpret_mapping,
+                                                                           constraint_pos_mapping=constraint_pos_mapping,
                                                                            constraint_push_mapping=constraint_push_mapping,
                                                                            block_shuffle=shuffle,
                                                                            volume_to_weight=volume_to_weight,
@@ -812,13 +827,16 @@ class TemplatedTranslator(Translator):
     def _interpret_mapping_is_consistent_with_condition(self,
                                                         condition: _PosFormConditionSet,
                                                         interpret_mapping: Dict[str, str],
-                                                        push_mapping: Dict[str, str]) -> bool:
+                                                        push_mapping: Dict[str, str],
+                                                        pos_mapping: Optional[Dict[str, str]] = None) -> bool:
         condition_is_consistent = True
         for interprand_rep, pos, form in condition:
             interprand_rep_pushed = push_mapping[interprand_rep]
             word = interpret_mapping[interprand_rep_pushed]
+            forced_pos = pos_mapping.get(interprand_rep_pushed, None)
 
-            if pos not in self._get_pos(word):
+            allowed_pos = [forced_pos] if forced_pos is not None else self._get_pos(word)
+            if pos not in allowed_pos:  # HONOKA
                 condition_is_consistent = False
                 break
 
@@ -905,7 +923,7 @@ class TemplatedTranslator(Translator):
                                   intermediate_constant_formulas: List[Formula],
                                   constraints: Optional[Dict[str, str]] = None,
                                   from_commonsense=False,
-                                  ) -> Union[Dict[str, str], Tuple[Dict[str, str], List[bool]]]:
+                                  ) -> Union[Dict[str, str], Tuple[Dict[str, str], Dict[str, str], List[bool]]]:
 
         if from_commonsense and self._commonsense_bank.is_acceptable(formulas):
             return self._commonsense_bank.sample_mapping(formulas)

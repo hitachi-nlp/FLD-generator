@@ -168,7 +168,7 @@ class ProofNode:
             node.set_tree(self.tree)
 
     def __str__(self) -> str:
-        return f'ProofNode({self.formula}, is_assump={self.is_assump})'
+        return f'ProofNode({self.formula}, is_assump={self.is_assump}, is_commonsense={self.is_commonsense})'
 
     def __repr__(self) -> str:
         return str(self)

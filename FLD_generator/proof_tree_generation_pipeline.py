@@ -293,10 +293,6 @@ class ProofTreeGenerationPipeline:
                 raise ProofTreeGenerationPipelineImpossible(str(e))
 
             for i_formula, (formula, (translation_name, translation, SO_swap_formula, is_commonsense_injected)) in enumerate(zip(all_formulas, named_translations)):
-                if is_commonsense_injected:
-                    commonsense_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]
-                    commonsense_injected_node.is_commonsense = True
-                    logger.info('commonsense is injected to a node:%s', str(commonsense_injected_node))
 
                 formula.translation_name = translation_name
                 if i_formula in assump_formula_indices:
@@ -306,6 +302,11 @@ class ProofTreeGenerationPipeline:
 
                 if translation is not None:
                     formula.translation = translation_prefix + translation[0].lower() + translation[1:]
+
+                    if is_commonsense_injected:
+                        commonsense_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]
+                        commonsense_injected_node.is_commonsense = True
+                        logger.info('commonsense is injected to a node:%s', str(commonsense_injected_node))
 
                 if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                     logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
