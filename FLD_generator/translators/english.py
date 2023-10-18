@@ -1,11 +1,14 @@
 import re
 import random
 import logging
+from typing import Set
 
 from FLD_generator.formula import Formula
 from FLD_generator.utils import starts_with_vowel_sound
 from FLD_generator.word_banks import POS
+from FLD_generator.person_names import get_person_names
 from .templated import TemplatedTranslator
+from .base import OBJ_DELIMITER, MODIFIER_DELIMITER
 
 import line_profiling
 
@@ -15,30 +18,78 @@ logger = logging.getLogger(__name__)
 
 class EnglishTranslator(TemplatedTranslator):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._male_names: Set[str] = set()
+        self._female_names: Set[str] = set()
+        for person in get_person_names(country='US', details=True):
+            if person['gender'] == 'M':
+                self._male_names.add(person['name'])
+            else:
+                self._female_names.add(person['name'])
+
     def _postprocess_template(self, template: str) -> str:
-        return self._replace_following_constants_with_the_or_it(template)
+        return self._add_the_or_it_to_successive_appearance(template)
 
     def _reset_pred_with_obj_mdf_transl(self) -> None:
         pass
 
     def _make_pred_with_obj_mdf_transl(self, translation: str) -> str:
-        return translation.replace(self.OBJ_DELIMITER, ' ').replace(self.MODIFIER_DELIMITER, ' ')
+        return translation.replace(OBJ_DELIMITER, ' ').replace(MODIFIER_DELIMITER, ' ')
 
-    def _postprocess_translation(self, translation: str) -> str:
+    def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)
-        translation = self._uppercase_beggining(translation)
+
+        male_names = [word for word in translation.split(' ')
+                     if word in self._male_names]
+        female_names = [word for word in translation.split(' ')
+                        if word in self._female_names]
+        person_names  = male_names + female_names
+
+        if len(person_names) > 0 or is_commonsense_injected:
+            # fix "the Emma"
+            for person_name in male_names + female_names:
+                translation = translation\
+                    .replace(f'the {person_name}', person_name)\
+                    .replace(f'a {person_name}', person_name)\
+                    .replace(f'an {person_name}', person_name)\
+
+            # something -> someone, thing -> one
+            translation = translation.replace('nothing', 'no one')  # need space bofore "one"
+            translation = translation.replace('thing', 'one')
+            for interm_constant_prefix in self._word_bank.INTERMEDIATE_CONSTANT_PREFIXES:
+                translation = translation.replace(interm_constant_prefix, 'PERSON')
+
+            # it -> he/she/the one
+            if len(male_names) > 0 and len(female_names) > 0:
+                pronoun = random.choice(['he', 'she'])
+            elif len(male_names) > 0:
+                pronoun = random.choice(['he'])
+            elif len(female_names) > 0:
+                pronoun = random.choice(['she'])
+            else:
+                pronoun = random.choice(['the one'])
+            for _pronoun in ['it', 'the thing', 'the one']:
+                translation = translation.replace(f' {_pronoun}', f' {pronoun}')
+
+        # translation = self._uppercase_beggining(translation)  # this module should not know whether this is the beginning if a sentence
         translation = self._add_ending_period(translation)
         return translation
 
     @profile
-    def _replace_following_constants_with_the_or_it(self, sentence_with_templates: str) -> str:
+    def _add_the_or_it_to_successive_appearance(self, sentence_with_templates: str) -> str:
         constants = [c.rep for c in Formula(sentence_with_templates).constants]
+
+        if len(constants) >= 2:
+            # If we have many constants, replacing one with pronoun may induce ambiguity
+            return sentence_with_templates
 
         with_definite = sentence_with_templates
         for constant in constants:
-            if with_definite.count(constant) < 2:
+            if with_definite.count(constant) < 2:  # have two appearance
                 continue
 
             first_pos = with_definite.find(constant)
@@ -141,4 +192,5 @@ class EnglishTranslator(TemplatedTranslator):
         return translation[0].upper() + translation[1:]
 
     def _add_ending_period(self, translation: str) -> str:
-        return translation + '.'
+        if not translation.endswith('.'):
+            return translation + '.'

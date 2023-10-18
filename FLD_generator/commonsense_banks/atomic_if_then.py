@@ -10,6 +10,8 @@ from tqdm import tqdm
 from FLD_generator.formula import Formula
 from FLD_generator.word_banks.word_utils import WordUtil, POS
 from FLD_generator.person_names import get_person_names
+from FLD_generator.utils import RandomCycle
+from FLD_generator.translators.base import pair_pred_with_obj_mdf
 from .base import CommonsenseBankBase
 from .utils import (
     is_simple_unary_implication_shared_const,
@@ -172,7 +174,7 @@ def load_atomic_if_then_statements(path: str, max_statements: Optional[int] = No
                     if if_verb_right_modif is not None and if_verb_right_modif.find(_PersonY) >= 0:
                         then_subj = _PersonY
                     else:
-                        then_subj = 'Others'
+                        then_subj = 'others'
             else:
                 raise Exception()
 
@@ -274,8 +276,8 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
     def __init__(self,
                  path: str,
                  max_statements: Optional[int] = None):
-        self._shared_subj_statements: List[AtomicIfThenStatement] = []
-        self._unshared_subj_statements: List[AtomicIfThenStatement] = []
+        self._shared_subj_statements: Iterable[AtomicIfThenStatement] = []
+        self._unshared_subj_statements: Iterable[AtomicIfThenStatement] = []
 
         for statement in load_atomic_if_then_statements(path, max_statements=max_statements):
             if self._extract_PAS(statement.if_statement)[1] is None\
@@ -286,8 +288,10 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
                 self._shared_subj_statements.append(statement)
             else:
                 self._unshared_subj_statements.append(statement)
+        self._shared_subj_statements = RandomCycle(self._shared_subj_statements)
+        self._unshared_subj_statements = RandomCycle(self._unshared_subj_statements)
 
-        self._person_names: List[str] = get_person_names(country='US')
+        self._person_names: Iterable[str] = RandomCycle(get_person_names(country='US'))
 
     def is_acceptable(self, formulas: List[Formula]) -> bool:
         return all(
@@ -311,17 +315,17 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
             """
 
             if is_simple_unary_implication_shared_const(formula):
-                if_then_statement = random.sample(self._shared_subj_statements, 1)[0]
+                if_then_statement = next(self._shared_subj_statements)
             elif is_simple_unary_implication_unshared_const(formula):
-                if_then_statement = random.sample(self._unshared_subj_statements, 1)[0]
+                if_then_statement = next(self._unshared_subj_statements)
             elif is_simple_universal_implication(formula):
-                if_then_statement = random.sample(self._shared_subj_statements, 1)[0]
+                if_then_statement = next(self._shared_subj_statements)
             else:
                 is_mapped.append(False)
                 continue
 
-            person_x_sample = random.sample(self._person_names, 1)[0]
-            person_y_sample = random.sample(self._person_names, 1)[0]
+            person_x_sample = next(self._person_names, 1)
+            person_y_sample = next(self._person_names, 1)
 
             def replace_names(rep: Optional[str]) -> Optional[str]:
                 if rep is None:
@@ -339,10 +343,7 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
             if_pred, then_pred = get_if_then_predicates(formula)
 
             def maybe_modif(pred: str, right_modif: Optional[str]) -> str:
-                if right_modif is None:
-                    return pred
-                else:
-                    return ' '.join([pred, right_modif])
+                return pair_pred_with_obj_mdf(pred, None, right_modif)
 
             if is_simple_unary_implication_shared_const(formula):  # {A}{a} -> {B}{b}
                 if_const, then_const = get_if_then_constants(formula)

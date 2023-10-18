@@ -276,7 +276,6 @@ class NLProofSDataset:
         all_sample_stats = defaultdict(list)
         i_sample = 0
         while i_sample < size:
-            # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! i_sample', i_sample)
 
             logger.info('\n\n')
             logger.info(make_pretty_msg(title='generate a dataset instance', status='start', boundary_level=5))

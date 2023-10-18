@@ -26,9 +26,16 @@ from FLD_generator.utils import (
     chained_sampling_from_weighted_iterators,
     make_combination,
     shuffle,
+    RandomCycle,
 )
 from FLD_generator.commonsense_banks.base import CommonsenseBankBase
-from .base import Translator, TranslationNotFoundError, calc_formula_specificity
+from .base import (
+    Translator,
+    TranslationNotFoundError,
+    calc_formula_specificity,
+    pair_pred_with_obj_mdf,
+    parse_pred_with_obj_mdf,
+)
 import line_profiling
 
 logger = logging.getLogger(__name__)
@@ -62,8 +69,6 @@ def _decompress_nls(binary: bytes) -> List[str]:
 class TemplatedTranslator(Translator):
 
     _TEMPLATE_BRACES = ['<<', '>>']
-    OBJ_DELIMITER = '__OBJ__'
-    MODIFIER_DELIMITER = '__MDF__'
 
     def __init__(self,
                  config_json: Dict[str, Dict],
@@ -205,36 +210,6 @@ class TemplatedTranslator(Translator):
         def order_words(words: Iterable[str], pos: POS) -> List[str]:
             return list(words)
 
-        class RandomCycle:
-
-            def __init__(self, elems: Union[Iterable[Any], Callable[[], Iterator[Any]]], shuffle=True):
-                self._shuffle = shuffle
-
-                if isinstance(elems, Callable):
-                    self._generate_iterable = elems
-                else:
-                    list_elems = list(elems)
-                    self._generate_iterable = lambda : list_elems
-
-                self._elems_iter = None
-                self._reset_iter_elems()
-
-            def __iter__(self):
-                return self
-
-            def _reset_iter_elems(self):
-                if self._shuffle:
-                    self._elems_iter = iter(shuffle(list(self._generate_iterable())))
-                else:
-                    self._elems_iter = iter(self._generate_iterable())
-
-            def __next__(self):
-                while True:
-                    try:
-                        return next(self._elems_iter)
-                    except StopIteration:
-                        self._reset_iter_elems()
-
         logger.info('loading nouns ...')
         intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
         nouns = order_words(
@@ -296,7 +271,7 @@ class TemplatedTranslator(Translator):
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
-                yield self._pair_pred_with_obj_mdf(verb, obj, None)
+                yield pair_pred_with_obj_mdf(verb, obj, None)
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
@@ -423,7 +398,7 @@ class TemplatedTranslator(Translator):
                                                            constraints=commonsense_injection_mapping)
         force_pos_mapping = commonsense_pos_mapping
 
-        for formula in formulas:
+        for formula, _is_commonsense_injected in zip(formulas, is_commonsense_injected):
             # find translation key
             found_keys = 0
             is_found = False
@@ -479,14 +454,16 @@ class TemplatedTranslator(Translator):
                     constant_transl = interpret_mapping[constant]
                     predicate_transl = interpret_mapping[predicate]
 
-                    predicate_transl_verb, predicate_transl_obj, predicate_transl_modif = self._parse_pred_with_obj_mdf(predicate_transl)
+                    predicate_transl_verb, predicate_transl_obj, predicate_transl_modif = parse_pred_with_obj_mdf(predicate_transl)
 
                     if predicate_transl_obj is not None:
                         if predicate_transl_modif is not None:
-                            raise Exception('might be a bug')
+                            raise Exception(f'might be a bug, predicate_transl={predicate_transl}')
                         SO_swap_interpret_mapping = copy.deepcopy(inflated_mapping)
                         SO_swap_interpret_mapping[constant] = predicate_transl_obj
-                        SO_swap_interpret_mapping[predicate] = self._pair_pred_with_obj_mdf(predicate_transl_verb, constant_transl, predicate_transl_modif)
+                        SO_swap_interpret_mapping[predicate] = pair_pred_with_obj_mdf(predicate_transl_verb,
+                                                                                            constant_transl,
+                                                                                            predicate_transl_modif)
 
                         SO_swap_inflated_mapping, _ = self._make_word_inflated_interpret_mapping(
                             SO_swap_interpret_mapping,
@@ -532,13 +509,16 @@ class TemplatedTranslator(Translator):
 
         # fix grammers and other stufs
         translations = [
-            (self._postprocess_translation(translation) if translation is not None else None)
-            for translation in translations
+            (self._postprocess_translation(translation,
+                                           is_commonsense_injected=_is_commonsense_injected) if translation is not None else None)
+            for translation, _is_commonsense_injected in zip(translations, is_commonsense_injected)
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
-                SO_swap_formula.translation = self._postprocess_translation(SO_swap_formula.translation) if SO_swap_formula.translation is not None else None
+                SO_swap_formula.translation = (
+                    self._postprocess_translation(SO_swap_formula.translation, is_commonsense_injected=False) if SO_swap_formula.translation is not None
+                    else None)
 
         return list(zip(translation_names, translations, SO_swap_formulas, is_commonsense_injected)), count_stats
 
@@ -931,14 +911,16 @@ class TemplatedTranslator(Translator):
 
         if from_commonsense and self._commonsense_bank.is_acceptable(formulas):
             mapping, pos_mapping, is_injected = self._commonsense_bank.sample_mapping(formulas)
-            mapping_with_delimiters: Dict[str, str] = {}
-            for key, val in mapping.items():
-                val_words = val.split(' ', 1)
-                if len(val_words) >= 2:
-                    val_words_rep = self._pair_pred_with_obj_mdf(val_words[0], None, val_words[1])
-                else:
-                    val_words_rep = val
-                mapping_with_delimiters[key] = val_words_rep
+            # -- this work should be done by commonsense bank --
+            # mapping_with_delimiters: Dict[str, str] = {}
+            # for key, val in mapping.items():
+            #     val_words = val.split(' ', 1)
+            #     if len(val_words) >= 2:
+            #         val_words_rep = pair_pred_with_obj_mdf(val_words[0], None, val_words[1])
+            #     else:
+            #         val_words_rep = val
+            #     mapping_with_delimiters[key] = val_words_rep
+            mapping_with_delimiters: Dict[str, str] = mapping
             return mapping_with_delimiters, pos_mapping, is_injected
 
         else:
@@ -956,9 +938,9 @@ class TemplatedTranslator(Translator):
             adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
             if self.reused_object_nouns_max_factor > 0.0:
                 obj_nouns = list({
-                    self._parse_pred_with_obj_mdf(word)[1]
+                    parse_pred_with_obj_mdf(word)[1]
                     for word in adj_verb_nouns
-                    if self._parse_pred_with_obj_mdf(word)[1] is not None
+                    if parse_pred_with_obj_mdf(word)[1] is not None
                 })
             else:
                 obj_nouns = []
@@ -982,7 +964,8 @@ class TemplatedTranslator(Translator):
                 if len(entity_nouns) >= entity_noun_size:
                     break
 
-            intermediate_constant_nouns = sorted(self._word_bank.get_intermediate_constant_words())[:len(intermediate_constants)]
+            # intermediate_constant_nouns = sorted(self._word_bank.get_intermediate_constant_words())[:len(intermediate_constants)]
+            intermediate_constant_nouns = self._sample(self._word_bank.get_intermediate_constant_words(), len(intermediate_constants))
 
             zeroary_constraints = {k: v for k, v in constraints.items() if k in zeroary_predicates}
             # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
@@ -1135,7 +1118,7 @@ class TemplatedTranslator(Translator):
         else:
             raise ValueError()
 
-        _word, obj, modifier = self._parse_pred_with_obj_mdf(word)
+        _word, obj, modifier = parse_pred_with_obj_mdf(word)
         inflated_words = self._word_bank.change_word_form(_word, pos, form, force=False)
         if len(inflated_words) == 0 and force:
             inflated_words = self._word_bank.change_word_form(_word, pos, form, force=True)
@@ -1143,42 +1126,18 @@ class TemplatedTranslator(Translator):
         if len(inflated_words) == 0:
             return ()
         else:
-            return tuple(self._pair_pred_with_obj_mdf(word, obj, modifier)
+            return tuple(pair_pred_with_obj_mdf(word, obj, modifier)
                          for word in inflated_words)
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
-        word, obj, modifier = self._parse_pred_with_obj_mdf(word)
+        word, obj, modifier = parse_pred_with_obj_mdf(word)
         if obj is not None:
             POSs = self._word_bank.get_pos(word)
             assert POS.VERB in POSs
             return [POS.VERB]
         else:
             return self._word_bank.get_pos(word)
-
-    @lru_cache(maxsize=1000000)
-    def _parse_pred_with_obj_mdf(self, word: str) -> Tuple[str, Optional[str], Optional[str]]:
-        if word.find(self.OBJ_DELIMITER) > 0:
-            if word.find(self.MODIFIER_DELIMITER) >= 0:
-                raise ValueError()
-            pred, obj = word.split(self.OBJ_DELIMITER)
-            return pred, obj, None
-        elif word.find(self.MODIFIER_DELIMITER) > 0:
-            pred, modifier = word.split(self.MODIFIER_DELIMITER)
-            return pred, None, modifier
-        else:
-            return word, None, None
-
-    @lru_cache(maxsize=1000000)
-    def _pair_pred_with_obj_mdf(self, word: str, obj: Optional[str], modifier: Optional[str]) -> str:
-        if obj is not None:
-            if modifier is not None:
-                raise ValueError()
-            return self.OBJ_DELIMITER.join([word, obj])
-        elif modifier is not None:
-            return self.MODIFIER_DELIMITER.join([word, modifier])
-        else:
-            return word
 
     @abstractmethod
     def _postprocess_template(self, template: str) -> str:
@@ -1193,5 +1152,5 @@ class TemplatedTranslator(Translator):
         pass
 
     @abstractmethod
-    def _postprocess_translation(self, translation: str) -> str:
+    def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
         pass

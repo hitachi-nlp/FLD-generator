@@ -1,8 +1,7 @@
 from typing import Optional, Iterable, List, Dict, Set
 import re
 import logging
-from string import ascii_uppercase
-from enum import Enum, EnumMeta
+from enum import Enum
 
 from ordered_set import OrderedSet
 from lemminflect import getInflection
@@ -41,15 +40,16 @@ class EnglishWordBank(WordBank):
         ANTI = 'anti'
         NEG = 'neg'
 
-    __intermediate_constant_words  = [
-        f'THING-{alphabet}'
-        for alphabet in ascii_uppercase
+    INTERMEDIATE_CONSTANT_PREFIXES = [
+        'THING',
+        'PERSON',
     ]
 
     def __init__(self,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
                  vocab_restrictions: Optional[Dict[POS, Set[str]]] = None):
+        super().__init__()
 
         self._word_util = WordUtil(
             'eng',
@@ -68,10 +68,6 @@ class EnglishWordBank(WordBank):
 
     def _get_all_lemmas(self) -> Iterable[str]:
         return sorted(self._word_util.get_all_lemmas()) + list(self._person_names)
-
-    @property
-    def _intermediate_constant_words(self) -> List[str]:
-        return self.__intermediate_constant_words
 
     def _get_pos(self, word: str) -> List[POS]:
         if word in self._person_names:

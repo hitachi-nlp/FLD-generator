@@ -301,7 +301,10 @@ class ProofTreeGenerationPipeline:
                     translation_prefix = ''
 
                 if translation is not None:
-                    formula.translation = translation_prefix + translation[0].lower() + translation[1:]
+                    if translation_prefix:
+                        formula.translation = translation_prefix + translation[0] + translation[1:]
+                    else:
+                        formula.translation = translation[0].upper() + translation[1:]
 
                     if is_commonsense_injected:
                         commonsense_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]

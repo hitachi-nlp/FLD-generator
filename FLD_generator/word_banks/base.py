@@ -1,9 +1,11 @@
 from typing import Optional, Iterable, List, Union
 from enum import Enum, EnumMeta
+from string import ascii_uppercase
 from abc import ABC, abstractmethod
 from itertools import chain
 from functools import lru_cache
 import logging
+from ordered_set import OrderedSet
 
 import line_profiling
 
@@ -34,6 +36,14 @@ class WordBank(ABC):
     VerbForm: EnumMeta
     AdjForm: EnumMeta
     NounForm: EnumMeta
+    INTERMEDIATE_CONSTANT_PREFIXES: List[str]
+
+    def __init__(self):
+        self._intermediate_constant_words = OrderedSet([
+            f'{prefix}-{alphabet}' 
+            for alphabet in ascii_uppercase
+            for prefix in self.INTERMEDIATE_CONSTANT_PREFIXES
+        ])
 
     def get_words(self) -> Iterable[str]:
         # enumerate base form of words
@@ -46,11 +56,6 @@ class WordBank(ABC):
 
     def get_intermediate_constant_words(self) -> Iterable[str]:
         return self._intermediate_constant_words
-
-    @property
-    @abstractmethod
-    def _intermediate_constant_words(self) -> List[str]:
-        pass
 
     @profile
     def get_pos(self, word: str, not_found_warning=True) -> List[POS]:

@@ -3,6 +3,7 @@ import re
 from typing import Dict
 
 from .templated import TemplatedTranslator
+from .base import OBJ_DELIMITER, MODIFIER_DELIMITER
 
 
 class JapaneseTranslator(TemplatedTranslator):
@@ -23,7 +24,7 @@ class JapaneseTranslator(TemplatedTranslator):
 
     def _make_pred_with_obj_mdf_transl(self, translation: str) -> str:
         translation_updated = translation
-        pred_O_obj_regexp = f'([^ ]*){self.OBJ_DELIMITER}([^ ]*)'
+        pred_O_obj_regexp = f'([^ ]*){OBJ_DELIMITER}([^ ]*)'
         for match in re.finditer(pred_O_obj_regexp, translation):
             pred_with_obj_mdf = translation[match.span()[0]:match.span()[1]]
 
@@ -35,7 +36,7 @@ class JapaneseTranslator(TemplatedTranslator):
 
         return translation_updated
 
-    def _postprocess_translation(self, translation: str) -> str:
+    def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
         # translation = re.sub('だ ならば', ' ならば', translation)
         # translation = re.sub('だ し', ' ならば', translation)
         if self.insert_word_delimiters:

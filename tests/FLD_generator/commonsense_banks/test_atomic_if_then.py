@@ -23,9 +23,7 @@ def test_load_atomic_if_then_statements():
 
 def test_bank():
     path = './res/commonsense/commonsense-kg-completion/data/atomic/test.txt'
-    bank = AtomicIfThenCommonsenseBank(path,
-                                       modifier_delimiter=TemplatedTranslator.MODIFIER_DELIMITER,
-                                       max_statements=1000)
+    bank = AtomicIfThenCommonsenseBank(path, max_statements=1000)
 
     def sample_mapping(formula_rep: str) -> Tuple[Dict[str, str], Dict[str, str], List[bool]]:
         return bank.sample_mapping([Formula(formula_rep)])

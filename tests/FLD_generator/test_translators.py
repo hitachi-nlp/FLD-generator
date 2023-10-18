@@ -3,7 +3,7 @@ import logging
 import sys
 
 from FLD_generator.formula import Formula, negate, eliminate_double_negation
-from FLD_generator.translators import build as build_translator
+from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.word_banks import build_wordbank
 from FLD_generator.utils import fix_seed
 from FLD_generator.commonsense_banks import build_commonsense_bank
@@ -27,7 +27,7 @@ def test_templated_translator_lang(lang: str):
 
     commonsense_bank = build_commonsense_bank(
         'atomic_if_then',
-        atomic_filepath='./res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+        './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
         max_statements=100,
     )
 

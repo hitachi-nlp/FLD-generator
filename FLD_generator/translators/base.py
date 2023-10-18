@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional, Tuple
 from abc import abstractmethod, ABC
 import logging
+from functools import lru_cache
 
 from FLD_generator.formula import Formula
 
@@ -91,3 +92,41 @@ class Translator(ABC):
     @abstractmethod
     def is_commonsense_translatable(self, formulas: List[Formula]) -> bool:
         pass
+
+
+OBJ_DELIMITER = '__OBJ__'
+MODIFIER_DELIMITER = '__MDF__'
+
+
+@lru_cache(maxsize=1000000)
+def parse_pred_with_obj_mdf(word: str) -> Tuple[str, Optional[str], Optional[str]]:
+    if word.find(OBJ_DELIMITER) >= 0:
+        if word.find(MODIFIER_DELIMITER) >= 0:
+            import pudb; pudb.set_trace()
+            raise Exception(word)
+        pred, obj = word.split(OBJ_DELIMITER)
+        return pred, obj, None
+    elif word.find(MODIFIER_DELIMITER) >= 0:
+        try:
+            pred, modifier = word.split(MODIFIER_DELIMITER)
+        except:
+            import pudb; pudb.set_trace()
+        return pred, None, modifier
+    else:
+        return word, None, None
+
+
+@lru_cache(maxsize=1000000)
+def pair_pred_with_obj_mdf(word: str, obj: Optional[str], modifier: Optional[str]) -> str:
+    if obj is not None:
+        if modifier is not None:
+            raise ValueError()
+        paired = OBJ_DELIMITER.join([word, obj])
+    elif modifier is not None:
+        paired = MODIFIER_DELIMITER.join([word, modifier])
+    else:
+        paired = word
+    if paired.find(OBJ_DELIMITER) >= 0 and paired.find(MODIFIER_DELIMITER) >= 0:
+        import pudb; pudb.set_trace()
+    return paired
+

@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional, Union
+from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional, Union, Iterator
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -491,3 +491,34 @@ def is_consistent_formula_set_with_logs(org_formulas: List[Formula],
 def fix_seed(seed: int) -> None:
     random.seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
+
+
+class RandomCycle:
+
+    def __init__(self, elems: Union[Iterable[Any], Callable[[], Iterator[Any]]], shuffle=True):
+        self._shuffle = shuffle
+
+        if isinstance(elems, Callable):
+            self._generate_iterable = elems
+        else:
+            list_elems = list(elems)
+            self._generate_iterable = lambda : list_elems
+
+        self._elems_iter = None
+        self._reset_iter_elems()
+
+    def __iter__(self):
+        return self
+
+    def _reset_iter_elems(self):
+        if self._shuffle:
+            self._elems_iter = iter(shuffle(list(self._generate_iterable())))
+        else:
+            self._elems_iter = iter(self._generate_iterable())
+
+    def __next__(self):
+        while True:
+            try:
+                return next(self._elems_iter)
+            except StopIteration:
+                self._reset_iter_elems()

@@ -15,7 +15,7 @@ from FLD_generator.translation_distractors import build as build_translation_dis
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.datasets import NLProofSDataset
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.translators import build as build_translator
+from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results, fix_seed
 from FLD_generator.commonsense_banks import build_commonsense_bank
@@ -48,7 +48,8 @@ def test_generate_dataset_lang(lang: str):
     word_bank = build_wordbank(lang)
 
     if lang == 'eng':
-        translation_config_dir = './configs/translations/eng/thing.v1/'
+        # translation_config_dir = './configs/translations/eng/thing.v1/'
+        translation_config_dir = './configs/translations/eng/thing_person.v0/'
     elif lang == 'jpn':
         translation_config_dir = './configs/translations/jpn/thing.v1/'
     else:
