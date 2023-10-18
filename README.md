@@ -12,7 +12,14 @@ The code has been tested on Python 3.7.7.
 $ pip install -r ./requirements/requrements.txt
 ```
 
-### Additional Resources
+## Additional Resources Required
+
+### Japanese FLD
+```console
+git clone https://github.com/taku910/mecab ./res/word_banks/japanese/mecab
+```
+
+### Commonsense FLD
 In order to create the corpora with "commonsense injection", you need to download ATOMIC dataset preprocessed in [allenai/commonsense-kg-completion](https://github.com/allenai/commonsense-kg-completion), as follows:
 ```console
 mkdir -p ./res/commonsense/
