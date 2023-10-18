@@ -12,6 +12,14 @@ The code has been tested on Python 3.7.7.
 $ pip install -r ./requirements/requrements.txt
 ```
 
+## Additional Resources Required
+
+### Japanese FLD
+```console
+git clone https://github.com/taku910/mecab ./res/word_banks/japanese/mecab
+```
+
+
 ## How to generate FLD corpus
 Use `./create_corpus.py`, which generates a corpus with the design specified by the option values.
 
