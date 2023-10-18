@@ -79,10 +79,16 @@ def main():
         # '20231010.D3.large_vocab',
 
         # ---------------------------------- 20231012.D3.large_vocab ------------------------------------
-        '20231012.D3.large_vocab',
-        '20231012.D3.large_vocab.smpl_stncs',
-        '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
-        '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
+        # '20231012.D3.large_vocab',
+        # '20231012.D3.large_vocab.smpl_stncs',
+        # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
+        # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
+
+        # ---------------------------------- 20231018.commonsense.D3 ------------------------------------
+        # '20231018.commonsense.D3',
+        '20231018.commonsense.D3.w_commonsense',
+        '20231018.commonsense.D3.w_commonsense.complex-0.3',
+
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -163,7 +169,7 @@ def make_dataset(dataset_name: str,
         settings,
         top_dir=str(output_top_dir / f'dataset_name={dataset_name}'),
         short=True,
-        dirname_exclude_params=[
+        dirname_ignore_params=[
             'dataset_name',
             'proof_stances',
             'unknown_ratio',
@@ -203,6 +209,8 @@ def make_dataset(dataset_name: str,
             'limit_vocab_size_per_type',
             'translation_volume_to_weight',
             'trnsltn_adj_vrb_nn_rt',
+
+            'atomic_commonsense_filepath',
 
             'num_workers_per_job',
 
@@ -282,6 +290,9 @@ def make_dataset(dataset_name: str,
                 maybe_option('--translation-distractor', job_settings.get("translation_distractor", None)),
                 f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
+
+                maybe_option('--commonsense-injection-ratio', job_settings.get("commonsense_injection_ratio", None)),
+                maybe_option('--atomic-commonsense-filepath', job_settings.get("atomic_commonsense_filepath", None)),
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',

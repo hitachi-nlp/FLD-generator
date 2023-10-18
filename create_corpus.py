@@ -12,7 +12,7 @@ import click
 from tqdm import tqdm
 import dill
 
-from FLD_generator.translators import build as build_translator
+from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.word_banks import build_wordbank
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.proof_tree_generators import build as build_generator
@@ -20,6 +20,7 @@ from FLD_generator.datasets import NLProofSDataset
 from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
 from FLD_generator.utils import _build_bounded_msg, log_results, fix_seed
+from FLD_generator.commonsense_banks import build_commonsense_bank
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -63,7 +64,9 @@ def load_dataset(argument_config: List[str],
                  depth_distrib: str,
                  force_fix_illegal_intermediate_constants: bool,
                  branch_extensions_range: Tuple[int, int],
-                 translation_variants_per_logic: int):
+                 translation_variants_per_logic: int,
+                 commonsense_injection_ratio: float,
+                 atomic_commonsense_filepath: str):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
@@ -102,6 +105,12 @@ def load_dataset(argument_config: List[str],
     else:
         _translation_distractor = None
 
+    commonsense_bank = build_commonsense_bank(
+        'atomic_if_then',
+        atomic_commonsense_filepath,
+        # max_statements=1000,
+    )
+
     logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
     translator = build_translator(translation_lang,
                                   translation_config,
@@ -128,6 +137,7 @@ def load_dataset(argument_config: List[str],
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=not disallow_subj_obj_swapped_distractor,
+        commonsense_injection_ratio=commonsense_injection_ratio,
     )
 
     if depth_distrib == 'flat':
@@ -225,6 +235,9 @@ def generate_instances(size: int, *args):
 @click.option('--translation-distractors-range', type=str, default=json.dumps([0, 0]))
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 #
+@click.option('--commonsense-injection-ratio', type=float, default=0.0)
+@click.option('--atomic-commonsense-filepath', type=str, default=None)
+#
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')
 @click.option('--unknown-ratio', type=float, default = 1 / 3.)
@@ -272,6 +285,8 @@ def main(output_path,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
          translation_distractors_range,
+         commonsense_injection_ratio,
+         atomic_commonsense_filepath,
          proof_stances,
          world_assump,
          unknown_ratio,
@@ -357,6 +372,8 @@ def main(output_path,
                         force_fix_illegal_intermediate_constants,
                         branch_extensions_range,
                         translation_variants_per_logic,
+                        commonsense_injection_ratio,
+                        atomic_commonsense_filepath,
                     )
                 )
 
