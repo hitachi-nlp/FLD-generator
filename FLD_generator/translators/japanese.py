@@ -18,19 +18,19 @@ class JapaneseTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return template
 
-    def _reset_pred_with_obj_transl(self) -> None:
+    def _reset_pred_with_obj_mdf_transl(self) -> None:
         self._transl_to_kaku_cache = {}
 
-    def _make_pred_with_obj_transl(self, translation: str) -> str:
+    def _make_pred_with_obj_mdf_transl(self, translation: str) -> str:
         translation_updated = translation
         pred_O_obj_regexp = f'([^ ]*){self.OBJ_DELIMITER}([^ ]*)'
         for match in re.finditer(pred_O_obj_regexp, translation):
-            pred_with_obj = translation[match.span()[0]:match.span()[1]]
+            pred_with_obj_mdf = translation[match.span()[0]:match.span()[1]]
 
-            kaku = self._transl_to_kaku_cache.get(pred_with_obj, random.choice(['を', 'に']))
-            self._transl_to_kaku_cache[pred_with_obj] = kaku
+            kaku = self._transl_to_kaku_cache.get(pred_with_obj_mdf, random.choice(['を', 'に']))
+            self._transl_to_kaku_cache[pred_with_obj_mdf] = kaku
 
-            pred_with_kaku = re.sub(pred_O_obj_regexp, f'\g<2>{kaku}\g<1>', pred_with_obj)
+            pred_with_kaku = re.sub(pred_O_obj_regexp, f'\g<2>{kaku}\g<1>', pred_with_obj_mdf)
             translation_updated = re.sub(pred_O_obj_regexp, pred_with_kaku, translation_updated, 1)
 
         return translation_updated

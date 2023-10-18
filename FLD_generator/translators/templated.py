@@ -296,7 +296,7 @@ class TemplatedTranslator(Translator):
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
-                yield self._pair_pred(verb, obj, None)
+                yield self._pair_pred_with_obj_mdf(verb, obj, None)
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
@@ -381,7 +381,7 @@ class TemplatedTranslator(Translator):
                    commonsense_injection_idxs: Optional[List[int]] = None,
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
         commonsense_injection_idxs = commonsense_injection_idxs or []
-        self._reset_pred_with_obj_transl()
+        self._reset_pred_with_obj_mdf_transl()
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
@@ -479,14 +479,14 @@ class TemplatedTranslator(Translator):
                     constant_transl = interpret_mapping[constant]
                     predicate_transl = interpret_mapping[predicate]
 
-                    predicate_transl_verb, predicate_transl_obj, predicate_transl_modif = self._parse_pred(predicate_transl)
+                    predicate_transl_verb, predicate_transl_obj, predicate_transl_modif = self._parse_pred_with_obj_mdf(predicate_transl)
 
                     if predicate_transl_obj is not None:
                         if predicate_transl_modif is not None:
                             raise Exception('might be a bug')
                         SO_swap_interpret_mapping = copy.deepcopy(inflated_mapping)
                         SO_swap_interpret_mapping[constant] = predicate_transl_obj
-                        SO_swap_interpret_mapping[predicate] = self._pair_pred(predicate_transl_verb, constant_transl, predicate_transl_modif)
+                        SO_swap_interpret_mapping[predicate] = self._pair_pred_with_obj_mdf(predicate_transl_verb, constant_transl, predicate_transl_modif)
 
                         SO_swap_inflated_mapping, _ = self._make_word_inflated_interpret_mapping(
                             SO_swap_interpret_mapping,
@@ -511,11 +511,11 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
 
-                translation = self._make_pred_with_obj_transl(translation)
+                translation = self._make_pred_with_obj_mdf_transl(translation)
                 translations.append(translation)
 
                 if SO_swap_formula is not None:
-                    SO_swap_formula.translation = self._make_pred_with_obj_transl(SO_swap_formula.translation)
+                    SO_swap_formula.translation = self._make_pred_with_obj_mdf_transl(SO_swap_formula.translation)
                 SO_swap_formulas.append(SO_swap_formula)
 
                 translation_names.append(self._translation_name(translation_key, chosen_nl))
@@ -935,7 +935,7 @@ class TemplatedTranslator(Translator):
             for key, val in mapping.items():
                 val_words = val.split(' ', 1)
                 if len(val_words) >= 2:
-                    val_words_rep = self._pair_pred(val_words[0], None, val_words[1])
+                    val_words_rep = self._pair_pred_with_obj_mdf(val_words[0], None, val_words[1])
                 else:
                     val_words_rep = val
                 mapping_with_delimiters[key] = val_words_rep
@@ -956,9 +956,9 @@ class TemplatedTranslator(Translator):
             adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
             if self.reused_object_nouns_max_factor > 0.0:
                 obj_nouns = list({
-                    self._parse_pred(word)[1]
+                    self._parse_pred_with_obj_mdf(word)[1]
                     for word in adj_verb_nouns
-                    if self._parse_pred(word)[1] is not None
+                    if self._parse_pred_with_obj_mdf(word)[1] is not None
                 })
             else:
                 obj_nouns = []
@@ -1135,7 +1135,7 @@ class TemplatedTranslator(Translator):
         else:
             raise ValueError()
 
-        _word, obj, modifier = self._parse_pred(word)
+        _word, obj, modifier = self._parse_pred_with_obj_mdf(word)
         inflated_words = self._word_bank.change_word_form(_word, pos, form, force=False)
         if len(inflated_words) == 0 and force:
             inflated_words = self._word_bank.change_word_form(_word, pos, form, force=True)
@@ -1143,12 +1143,12 @@ class TemplatedTranslator(Translator):
         if len(inflated_words) == 0:
             return ()
         else:
-            return tuple(self._pair_pred(word, obj, modifier)
+            return tuple(self._pair_pred_with_obj_mdf(word, obj, modifier)
                          for word in inflated_words)
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
-        word, obj, modifier = self._parse_pred(word)
+        word, obj, modifier = self._parse_pred_with_obj_mdf(word)
         if obj is not None:
             POSs = self._word_bank.get_pos(word)
             assert POS.VERB in POSs
@@ -1157,7 +1157,7 @@ class TemplatedTranslator(Translator):
             return self._word_bank.get_pos(word)
 
     @lru_cache(maxsize=1000000)
-    def _parse_pred(self, word: str) -> Tuple[str, Optional[str], Optional[str]]:
+    def _parse_pred_with_obj_mdf(self, word: str) -> Tuple[str, Optional[str], Optional[str]]:
         if word.find(self.OBJ_DELIMITER) > 0:
             if word.find(self.MODIFIER_DELIMITER) >= 0:
                 raise ValueError()
@@ -1170,7 +1170,7 @@ class TemplatedTranslator(Translator):
             return word, None, None
 
     @lru_cache(maxsize=1000000)
-    def _pair_pred(self, word: str, obj: Optional[str], modifier: Optional[str]) -> str:
+    def _pair_pred_with_obj_mdf(self, word: str, obj: Optional[str], modifier: Optional[str]) -> str:
         if obj is not None:
             if modifier is not None:
                 raise ValueError()
@@ -1185,11 +1185,11 @@ class TemplatedTranslator(Translator):
         pass
 
     @abstractmethod
-    def _reset_pred_with_obj_transl(self) -> None:
+    def _reset_pred_with_obj_mdf_transl(self) -> None:
         pass
 
     @abstractmethod
-    def _make_pred_with_obj_transl(self, translation: str) -> str:
+    def _make_pred_with_obj_mdf_transl(self, translation: str) -> str:
         pass
 
     @abstractmethod
