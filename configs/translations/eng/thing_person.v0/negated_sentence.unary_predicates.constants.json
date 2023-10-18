@@ -1,0 +1,212 @@
+{
+
+  "sentence": {
+
+    "¬({A}{a})": [
+      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::{A}{a}>> <<phrase::is_not_true>>"],
+      "<<sentence::¬{A}{a}>>"
+    ],
+    "¬(¬{A}{a})": [
+      ["W_VOL_AVG__0.05", "<<phrase::the_fact_that>> <<sentence::¬{A}{a}>> <<phrase::is_not_true>>"],
+      "<<sentence::{A}{a}>>"
+    ],
+
+
+    "¬({A}{a} & {B}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} & {B}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} & ¬{B}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} & ¬{B}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"],
+
+    "__¬(¬({A}{a} & {B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & {B}{a})>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} & {B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & {B}{a})>> <<phrase::is_not_true>>"],
+    "__¬(¬({A}{a} & ¬{B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} & ¬{B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & ¬{B}{a})>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} v {B}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} v {B}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} v ¬{B}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} v ¬{B}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"],
+
+
+    "__¬(¬({A}{a} v {B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v {B}{a})>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} v {B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v {B}{a})>> <<phrase::is_not_true>>"],
+    "__¬(¬({A}{a} v ¬{B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} v ¬{B}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v ¬{B}{a})>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> {B}{b})": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> {B}{b}>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> {B}{b})": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> {B}{b}>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬{B}{b})": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬{B}{b}>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬{B}{b})": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬{B}{b}>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} & {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} & {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} & {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{b} & {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} & ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{b} & ¬{C}{b})>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} v {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} v {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v {B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> {C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> {C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v {B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} v {C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{b} v {C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} v ¬{C}{b}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{b} v ¬{C}{b})>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> {B}{a})": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> {B}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> {B}{a})": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> {B}{a}>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬{B}{a})": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬{B}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬{B}{a})": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬{B}{a}>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} & {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} & ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} & {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} & ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} & {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{a} & {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} v {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::({A}{a} v ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ({B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ({B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> (¬{B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> (¬{B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} v {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v {B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> {C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> {C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v {B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬({A}{a} v ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["<<phrase::the_fact_that>> <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬({B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} v {C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{a} v {C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬({B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a}))": ["<<phrase::the_fact_that>> <<sentence::¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})>> <<phrase::is_not_true>>"]
+
+
+  }
+
+}
