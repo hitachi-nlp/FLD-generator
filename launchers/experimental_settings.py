@@ -4311,6 +4311,12 @@ _DATASET_SETTINGS = {
 
 
 
+
+
+
+
+
+
     '20231018.commonsense.D3': {
 
         'argument_configs': [
@@ -4410,7 +4416,7 @@ _DATASET_SETTINGS = {
         'split_sizes': {
             # 'test': 500,
             # 'valid': 500,
-            'train': 1000,
+            'train': 3000,
         },
 
     },
@@ -4465,7 +4471,7 @@ _DATASET_SETTINGS = {
         'split_sizes': {
             # 'test': 500,
             # 'valid': 500,
-            'train': 1000,
+            'train': 3000,
         },
 
     },

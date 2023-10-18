@@ -132,7 +132,7 @@ def load_atomic_if_then_statements(path: str, max_statements: Optional[int] = No
     logger.info('loading ATOMIC statements from file "%s"', path)
 
     for i_line, line in tqdm(enumerate(open(path)), total=max_statements):
-        if i_line >= max_statements:
+        if max_statements is not None and i_line >= max_statements:
             break
         e0_str, rel_str, e1_str = line.rstrip('\n').split('\t')
         e0_str = _normalize_person(e0_str.lower())

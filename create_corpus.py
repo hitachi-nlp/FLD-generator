@@ -120,7 +120,8 @@ def load_dataset(argument_config: List[str],
                                   reused_object_nouns_max_factor=reused_object_nouns_max_factor,
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight,
-                                  default_weight_factor_type=translation_default_weight_factor_type)
+                                  default_weight_factor_type=translation_default_weight_factor_type,
+                                  commonsense_bank=commonsense_bank)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     if translation_lang == 'eng':

@@ -41,7 +41,9 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab.small')
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
-    output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20231018.commonsense')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -84,7 +86,7 @@ def main():
         # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
         # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
 
-        # ---------------------------------- 20231018.commonsense.D3 ------------------------------------
+        # ---------------------------------- 20231018.commonsense ------------------------------------
         # '20231018.commonsense.D3',
         '20231018.commonsense.D3.w_commonsense',
         '20231018.commonsense.D3.w_commonsense.complex-0.3',
