@@ -62,6 +62,8 @@ def _decompress_nls(binary: bytes) -> List[str]:
 class TemplatedTranslator(Translator):
 
     _TEMPLATE_BRACES = ['<<', '>>']
+    OBJ_DELIMITER = '__OBJ__'
+    MODIFIER_DELIMITER = '__MDF__'
 
     def __init__(self,
                  config_json: Dict[str, Dict],
@@ -284,7 +286,7 @@ class TemplatedTranslator(Translator):
         # transitive_verb_PASs = []
         # for verb in self._take(transitive_verbs, 1000):  # limit 1000 for speed
         #     for obj in self._take(nouns, 1000):
-        #         transitive_verb_PASs.append(self._pair_word_with_obj(verb, obj))
+        #         transitive_verb_PASs.append(self._pair_pred(verb, obj, None))
         # random.shuffle(transitive_verb_PASs)
 
         @profile
@@ -294,7 +296,7 @@ class TemplatedTranslator(Translator):
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
-                yield self._pair_word_with_obj(verb, obj)
+                yield self._pair_pred(verb, obj, None)
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
@@ -397,7 +399,7 @@ class TemplatedTranslator(Translator):
                 raise ValueError()
             should_commonsense_formulas = [formulas[idx] for idx in commonsense_injection_idxs]
             if not self._commonsense_bank.is_acceptable(should_commonsense_formulas):
-                raise ValueError()
+                raise ValueError('The following formulas can not be translated with commonsense: %s', str(should_commonsense_formulas))
             (
                 commonsense_injection_mapping,
                 commonsense_pos_mapping,
@@ -419,7 +421,7 @@ class TemplatedTranslator(Translator):
         interpret_mapping = self._choose_interpret_mapping(formulas,
                                                            intermediate_constant_formulas,
                                                            constraints=commonsense_injection_mapping)
-        pos_mapping = commonsense_pos_mapping
+        force_pos_mapping = commonsense_pos_mapping
 
         for formula in formulas:
             # find translation key
@@ -433,7 +435,7 @@ class TemplatedTranslator(Translator):
                     translation_key,
                     interpret_mapping,
                     push_mapping,
-                    pos_mapping=pos_mapping,
+                    force_pos_mapping=force_pos_mapping,
                     block_shuffle=not self.use_fixed_translation,
                     volume_to_weight=self._volume_to_weight_func,
                 )
@@ -477,12 +479,14 @@ class TemplatedTranslator(Translator):
                     constant_transl = interpret_mapping[constant]
                     predicate_transl = interpret_mapping[predicate]
 
-                    predicate_transl_verb, predicate_transl_obj = self._parse_word_with_obj(predicate_transl)
+                    predicate_transl_verb, predicate_transl_obj, predicate_transl_modif = self._parse_pred(predicate_transl)
 
                     if predicate_transl_obj is not None:
+                        if predicate_transl_modif is not None:
+                            raise Exception('might be a bug')
                         SO_swap_interpret_mapping = copy.deepcopy(inflated_mapping)
                         SO_swap_interpret_mapping[constant] = predicate_transl_obj
-                        SO_swap_interpret_mapping[predicate] = self._pair_word_with_obj(predicate_transl_verb, constant_transl)
+                        SO_swap_interpret_mapping[predicate] = self._pair_pred(predicate_transl_verb, constant_transl, predicate_transl_modif)
 
                         SO_swap_inflated_mapping, _ = self._make_word_inflated_interpret_mapping(
                             SO_swap_interpret_mapping,
@@ -562,7 +566,7 @@ class TemplatedTranslator(Translator):
                                                 sentence_key: str,
                                                 interpret_mapping: Dict[str, str],
                                                 push_mapping: Dict[str, str],
-                                                pos_mapping: Optional[Dict[str, str]] = None,
+                                                force_pos_mapping: Optional[Dict[str, str]] = None,
                                                 block_shuffle=True,
                                                 volume_to_weight = lambda weight: weight,
                                                 log_indent=0) -> Optional[str]:
@@ -581,7 +585,7 @@ class TemplatedTranslator(Translator):
                 # set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
                 set([transl_nl]),
                 constraint_interpret_mapping=interpret_mapping,
-                constraint_pos_mapping=pos_mapping,
+                constraint_force_pos_mapping=force_pos_mapping,
                 constraint_push_mapping=push_mapping,
                 block_shuffle=block_shuffle,
                 volume_to_weight=volume_to_weight,
@@ -607,7 +611,6 @@ class TemplatedTranslator(Translator):
                     yield resolved_nl, condition
 
         else:
-
             @profile
             def generate():
                 for iterator in iterators:
@@ -620,7 +623,7 @@ class TemplatedTranslator(Translator):
                 condition,
                 interpret_mapping,
                 push_mapping,
-                pos_mapping=pos_mapping,
+                force_pos_mapping=force_pos_mapping,
             )
             assert condition_is_consistent  # the consistency should have been checked recursively.
             return resolved_nl
@@ -668,7 +671,7 @@ class TemplatedTranslator(Translator):
                                            # ancestor_keys: Set[str],
                                            ancestor_nls: Set[str],
                                            constraint_interpret_mapping: Optional[Dict[str, str]] = None,
-                                           constraint_pos_mapping: Optional[Dict[str, str]] = None,
+                                           constraint_force_pos_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
@@ -690,7 +693,7 @@ class TemplatedTranslator(Translator):
                 and not self._interpret_mapping_is_consistent_with_condition(condition,
                                                                              constraint_interpret_mapping,
                                                                              constraint_push_mapping,
-                                                                             pos_mapping=constraint_pos_mapping):
+                                                                             force_pos_mapping=constraint_force_pos_mapping):
             return iter([]), 0
 
         templates = list(self._extract_templates(nl))
@@ -721,7 +724,7 @@ class TemplatedTranslator(Translator):
                         # ancestor_keys,
                         ancestor_nls,
                         constraint_interpret_mapping=constraint_interpret_mapping,
-                        constraint_pos_mapping=constraint_pos_mapping,
+                        constraint_force_pos_mapping=constraint_force_pos_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
@@ -759,7 +762,7 @@ class TemplatedTranslator(Translator):
                                         # ancestor_keys: Set[str],
                                         ancestor_nls: Set[str],
                                         constraint_interpret_mapping: Optional[Dict[str, str]] = None,
-                                        constraint_pos_mapping: Optional[Dict[str, str]] = None,
+                                        constraint_force_pos_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
@@ -789,7 +792,7 @@ class TemplatedTranslator(Translator):
                                                                            # ancestor_keys.union(set([template_key])),
                                                                            ancestor_nls.union(set([template_nl])),
                                                                            constraint_interpret_mapping=constraint_interpret_mapping,
-                                                                           constraint_pos_mapping=constraint_pos_mapping,
+                                                                           constraint_force_pos_mapping=constraint_force_pos_mapping,
                                                                            constraint_push_mapping=constraint_push_mapping,
                                                                            block_shuffle=shuffle,
                                                                            volume_to_weight=volume_to_weight,
@@ -828,15 +831,16 @@ class TemplatedTranslator(Translator):
                                                         condition: _PosFormConditionSet,
                                                         interpret_mapping: Dict[str, str],
                                                         push_mapping: Dict[str, str],
-                                                        pos_mapping: Optional[Dict[str, str]] = None) -> bool:
+                                                        force_pos_mapping: Optional[Dict[str, str]] = None) -> bool:
         condition_is_consistent = True
         for interprand_rep, pos, form in condition:
             interprand_rep_pushed = push_mapping[interprand_rep]
             word = interpret_mapping[interprand_rep_pushed]
-            forced_pos = pos_mapping.get(interprand_rep_pushed, None)
+            forced_pos = force_pos_mapping.get(interprand_rep_pushed, None)
 
             allowed_pos = [forced_pos] if forced_pos is not None else self._get_pos(word)
-            if pos not in allowed_pos:  # HONOKA
+
+            if pos not in allowed_pos:
                 condition_is_consistent = False
                 break
 
@@ -926,7 +930,16 @@ class TemplatedTranslator(Translator):
                                   ) -> Union[Dict[str, str], Tuple[Dict[str, str], Dict[str, str], List[bool]]]:
 
         if from_commonsense and self._commonsense_bank.is_acceptable(formulas):
-            return self._commonsense_bank.sample_mapping(formulas)
+            mapping, pos_mapping, is_injected = self._commonsense_bank.sample_mapping(formulas)
+            mapping_with_delimiters: Dict[str, str] = {}
+            for key, val in mapping.items():
+                val_words = val.split(' ', 1)
+                if len(val_words) >= 2:
+                    val_words_rep = self._pair_pred(val_words[0], None, val_words[1])
+                else:
+                    val_words_rep = val
+                mapping_with_delimiters[key] = val_words_rep
+            return mapping_with_delimiters, pos_mapping, is_injected
 
         else:
             constraints = constraints or {}
@@ -943,9 +956,9 @@ class TemplatedTranslator(Translator):
             adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)  # we sample more words so that we have more chance of POS/FORM condition matching.
             if self.reused_object_nouns_max_factor > 0.0:
                 obj_nouns = list({
-                    self._parse_word_with_obj(word)[1]
+                    self._parse_pred(word)[1]
                     for word in adj_verb_nouns
-                    if self._parse_word_with_obj(word)[1] is not None
+                    if self._parse_pred(word)[1] is not None
                 })
             else:
                 obj_nouns = []
@@ -1109,8 +1122,9 @@ class TemplatedTranslator(Translator):
 
     @lru_cache(maxsize=1000000)
     def _get_inflated_words(self, word: str, pos: POS, form: str) -> Tuple[str, ...]:
-        if pos not in self._get_pos(word):
-            raise ValueError(f'the word={word} does not have pos={str(pos)}')
+        # This raise is not the role of this function
+        # if pos not in self._get_pos(word):
+        #     raise ValueError(f'the word={word} does not have pos={str(pos)}')
 
         if pos == POS.ADJ:
             force = True
@@ -1121,7 +1135,7 @@ class TemplatedTranslator(Translator):
         else:
             raise ValueError()
 
-        _word, obj = self._parse_word_with_obj(word)
+        _word, obj, modifier = self._parse_pred(word)
         inflated_words = self._word_bank.change_word_form(_word, pos, form, force=False)
         if len(inflated_words) == 0 and force:
             inflated_words = self._word_bank.change_word_form(_word, pos, form, force=True)
@@ -1129,12 +1143,12 @@ class TemplatedTranslator(Translator):
         if len(inflated_words) == 0:
             return ()
         else:
-            return tuple(self._pair_word_with_obj(word, obj)
+            return tuple(self._pair_pred(word, obj, modifier)
                          for word in inflated_words)
 
     @lru_cache(maxsize=1000000)
     def _get_pos(self, word: str) -> List[POS]:
-        word, obj = self._parse_word_with_obj(word)
+        word, obj, modifier = self._parse_pred(word)
         if obj is not None:
             POSs = self._word_bank.get_pos(word)
             assert POS.VERB in POSs
@@ -1143,24 +1157,28 @@ class TemplatedTranslator(Translator):
             return self._word_bank.get_pos(word)
 
     @lru_cache(maxsize=1000000)
-    def _parse_word_with_obj(self, word: str) -> Tuple[str, Optional[str]]:
-        if word.find('__O__') > 0:
-            if word.count('__O__') != 1:
-                maybe_verb = word.split('__O__')[0]
-                logger.warning('Could not parse word %s since multiple "_O_" found. return verb %s only.', word, maybe_verb)
-                return maybe_verb, None
-            else:
-                verb, obj = word.split('__O__')
-                return verb, obj
+    def _parse_pred(self, word: str) -> Tuple[str, Optional[str], Optional[str]]:
+        if word.find(self.OBJ_DELIMITER) > 0:
+            if word.find(self.MODIFIER_DELIMITER) >= 0:
+                raise ValueError()
+            pred, obj = word.split(self.OBJ_DELIMITER)
+            return pred, obj, None
+        elif word.find(self.MODIFIER_DELIMITER) > 0:
+            pred, modifier = word.split(self.MODIFIER_DELIMITER)
+            return pred, None, modifier
         else:
-            return word, None
+            return word, None, None
 
     @lru_cache(maxsize=1000000)
-    def _pair_word_with_obj(self, word: str, obj: Optional[str]) -> str:
-        if obj is None:
-            return word
+    def _pair_pred(self, word: str, obj: Optional[str], modifier: Optional[str]) -> str:
+        if obj is not None:
+            if modifier is not None:
+                raise ValueError()
+            return self.OBJ_DELIMITER.join([word, obj])
+        elif modifier is not None:
+            return self.MODIFIER_DELIMITER.join([word, modifier])
         else:
-            return '__O__'.join([word, obj])
+            return word
 
     @abstractmethod
     def _postprocess_template(self, template: str) -> str:

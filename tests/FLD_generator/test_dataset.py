@@ -18,7 +18,7 @@ from FLD_generator.word_banks import build_wordbank
 from FLD_generator.translators import build as build_translator
 from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results, fix_seed
-from FLD_generator.commonsense_banks import MockIfThenCommonsenseBank
+from FLD_generator.commonsense_banks import build_commonsense_bank
 from logger_setup import setup as setup_logger
 
 import line_profiling
@@ -55,7 +55,11 @@ def test_generate_dataset_lang(lang: str):
         raise ValueError()
 
     # commonsense_bank = None
-    commonsense_bank = MockIfThenCommonsenseBank()
+    commonsense_bank = build_commonsense_bank(
+        'atomic_if_then',
+        atomic_filepath='./res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+        max_statements=1000,
+    )
 
     # translator = None
     translator = build_translator(

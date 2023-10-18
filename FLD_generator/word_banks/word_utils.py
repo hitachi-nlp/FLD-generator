@@ -72,6 +72,7 @@ class WordUtil:
         logger.info('loading words from WordNet done!')
 
     def _load_all_lemmas(self) -> Iterable[Tuple[str, WN_POS]]:
+        logger.info('loading lemmas...')
         done_lemmas: Set[Lemma] = set([])
         for syn in self._syn_op.all():
             lemmas = self._lemmas_from_syn(syn)

@@ -80,8 +80,9 @@ class WordBank(ABC):
                          pos: POS,
                          form: str,
                          force=False) -> List[str]:
-        if pos not in self.get_pos(word):
-            raise ValueError(f'The worf {word} do not have pos={pos.value}')
+        # This guard should not be the role of this function, as users may want to force some POS
+        # if pos not in self.get_pos(word):
+        #     raise ValueError(f'The worf {word} do not have pos={pos.value}')
 
         if pos == POS.VERB:
             return self._change_verb_form(word, self.VerbForm(form), force=force)

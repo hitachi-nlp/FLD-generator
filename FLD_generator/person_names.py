@@ -6,7 +6,7 @@ _ND: Optional[NameDataset] = None
 
 
 @lru_cache(maxsize=100)
-def get(country='US', top_n=1000) -> List[str]:
+def get_person_names(country='US', top_n=1000) -> List[str]:
     global _ND
     if _ND is None:
         _ND = NameDataset(load_first_names=True, load_last_names=False)

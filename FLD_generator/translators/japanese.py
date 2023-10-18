@@ -22,11 +22,8 @@ class JapaneseTranslator(TemplatedTranslator):
         self._transl_to_kaku_cache = {}
 
     def _make_pred_with_obj_transl(self, translation: str) -> str:
-        # kaku = self._transl_to_kaku_cache.get(translation)
-        # return re.sub(r'([^ ]*)__O__([^ ]*)', f'\g<2>{kaku}\g<1>', translation)
-
         translation_updated = translation
-        pred_O_obj_regexp = r'([^ ]*)__O__([^ ]*)'
+        pred_O_obj_regexp = f'([^ ]*){self.OBJ_DELIMITER}([^ ]*)'
         for match in re.finditer(pred_O_obj_regexp, translation):
             pred_with_obj = translation[match.span()[0]:match.span()[1]]
 

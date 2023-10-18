@@ -22,7 +22,7 @@ class EnglishTranslator(TemplatedTranslator):
         pass
 
     def _make_pred_with_obj_transl(self, translation: str) -> str:
-        return translation.replace('__O__', ' ')
+        return translation.replace(self.OBJ_DELIMITER, ' ').replace(self.MODIFIER_DELIMITER, ' ')
 
     def _postprocess_translation(self, translation: str) -> str:
         translation = self._correct_indefinite_particles(translation)

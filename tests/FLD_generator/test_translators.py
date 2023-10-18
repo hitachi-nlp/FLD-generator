@@ -6,6 +6,7 @@ from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator
 from FLD_generator.word_banks import build_wordbank
 from FLD_generator.utils import fix_seed
+from FLD_generator.commonsense_banks import build_commonsense_bank
 from logger_setup import setup as setup_logger
 
 fix_seed(0)
@@ -24,6 +25,12 @@ def test_templated_translator_lang(lang: str):
     else:
         raise ValueError()
 
+    commonsense_bank = build_commonsense_bank(
+        'atomic_if_then',
+        atomic_filepath='./res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+        max_statements=100,
+    )
+
     # translator = None
     translator = build_translator(
         lang,
@@ -36,12 +43,22 @@ def test_templated_translator_lang(lang: str):
         volume_to_weight='logE',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
+        commonsense_bank=commonsense_bank,
     )
 
-    def show_translations(formulas: List[Formula],
+    def show_translations(formula_reps: List[str],
                           trial=5,
-                          intermediate_constant_formulas: Optional[List[Formula]] = None) -> None:
-        for type_ in ['posi', 'neg']:
+                          intermediate_constant_formula_reps: Optional[List[str]] = None,
+                          do_negation=True,
+                          **kwargs) -> None:
+        formulas = [Formula(rep) for rep in formula_reps]
+        intermediate_constant_formulas = [Formula(rep)
+                                          for rep in intermediate_constant_formula_reps or []]
+        if do_negation:
+            types = ['posi', 'neg']
+        else:
+            types = ['posi']
+        for type_ in types:
             if type_ == 'posi':
                 _formulas = formulas
             elif type_ == 'neg':
@@ -50,101 +67,107 @@ def test_templated_translator_lang(lang: str):
             for i_trial in range(0, trial):
                 if len(formulas) >= 2:
                     print('')
-                translations, _ = translator.translate(_formulas, intermediate_constant_formulas or [])
-                for formula, (_, translation, _) in zip(_formulas, translations):
-                    print(formula.rep, f'(int={intermediate_constant_formulas})', '  ->  ', translation)
+                translations, _ = translator.translate(_formulas, intermediate_constant_formulas or [], **kwargs)
+                for formula, (_, translation, _, is_commonsense_injected) in zip(_formulas, translations):
+                    print(formula.rep, f'(int={intermediate_constant_formulas})', '  ->  ', translation, f'is_commonsense_injected={is_commonsense_injected}')
             sys.stdout.flush()
 
-    show_translations([Formula('{A}')], trial=30)
-    show_translations([Formula('¬{A}')], trial=30)
-    show_translations([Formula('¬({A})')], trial=30)
+    show_translations(['{A}'], trial=30)
+    show_translations(['¬{A}'], trial=30)
+    show_translations(['¬({A})'], trial=30)
 
-    show_translations([Formula('(¬{A} & {B})')], trial=30)
-    show_translations([Formula('(¬{A} v {B})')], trial=30)
+    show_translations(['(¬{A} & {B})'], trial=30)
+    show_translations(['(¬{A} v {B})'], trial=30)
 
-    show_translations([Formula('{A} -> {B}')], trial=30)
-    show_translations([Formula('¬{A} -> {B}')], trial=30)
-    show_translations([Formula('{A} -> ¬{B}')], trial=30)
-    show_translations([Formula('({A} & {B}) -> {C}')], trial=30)
-    show_translations([Formula('({A} v {B}) -> {C}')], trial=30)
-    show_translations([Formula('{A} -> ({B} & {C})')], trial=30)
-    show_translations([Formula('{A} -> ({B} v {C})')], trial=30)
-
-
-    show_translations([Formula('{A}{a}')], trial=30)
-    show_translations([Formula('¬{A}{a}')], trial=30)
-
-    show_translations([Formula('(¬{A}{a} & {B}{a})')], trial=30)
-    show_translations([Formula('(¬{A}{a} v {B}{a})')], trial=30)
-
-    show_translations([Formula('({A}{a} -> {B}{a})')], trial=30)
-    show_translations([Formula('(¬{A}{a} -> {B}{a})')], trial=30)
-    show_translations([Formula('({A}{a} -> ¬{B}{a})')], trial=30)
-    show_translations([Formula('({A}{a} & {B}{a}) -> {C}{c}')], trial=30)
-    show_translations([Formula('({A}{a} v {B}{a}) -> {C}{c}')], trial=30)
-    show_translations([Formula('{A}{a} -> ({B}{b} & {C}{b})')], trial=30)
-    show_translations([Formula('{A}{a} -> ({B}{b} v {C}{b})')], trial=30)
+    show_translations(['{A} -> {B}'], trial=30)
+    show_translations(['¬{A} -> {B}'], trial=30)
+    show_translations(['{A} -> ¬{B}'], trial=30)
+    show_translations(['({A} & {B}) -> {C}'], trial=30)
+    show_translations(['({A} v {B}) -> {C}'], trial=30)
+    show_translations(['{A} -> ({B} & {C})'], trial=30)
+    show_translations(['{A} -> ({B} v {C})'], trial=30)
 
 
-    show_translations([Formula('(Ex): {A}x')], trial=30)
-    show_translations([Formula('(Ex): (¬{A}x & {B}x)')], trial=30)
-    show_translations([Formula('(Ex): (¬{A}x v {B}x)')], trial=30)
-    show_translations([Formula('(Ex): {A}x -> {B}x')], trial=30)
-    show_translations([Formula('(Ex): (¬{A}x & {B}x) -> {C}x')], trial=30)
-    show_translations([Formula('(Ex): (¬{A}x v {B}x) -> {C}x')], trial=30)
+    show_translations(['{A}{a}'], trial=30)
+    show_translations(['¬{A}{a}'], trial=30)
 
-    show_translations([Formula('(x): {A}x')], trial=30)
-    show_translations([Formula('(x): (¬{A}x & {B}x)')], trial=30)
-    show_translations([Formula('(x): (¬{A}x v {B}x)')], trial=30)
-    show_translations([Formula('(x): {A}x -> {B}x')], trial=30)
-    show_translations([Formula('(x): (¬{A}x & {B}x) -> {C}x')], trial=30)
-    show_translations([Formula('(x): (¬{A}x v {B}x) -> {C}x')], trial=30)
+    show_translations(['(¬{A}{a} & {B}{a})'], trial=30)
+    show_translations(['(¬{A}{a} v {B}{a})'], trial=30)
 
-
+    show_translations(['({A}{a} -> {B}{a})'], trial=30)
+    show_translations(['(¬{A}{a} -> {B}{a})'], trial=30)
+    show_translations(['({A}{a} -> ¬{B}{a})'], trial=30)
+    show_translations(['({A}{a} & {B}{a}) -> {C}{c}'], trial=30)
+    show_translations(['({A}{a} v {B}{a}) -> {C}{c}'], trial=30)
+    show_translations(['{A}{a} -> ({B}{b} & {C}{b})'], trial=30)
+    show_translations(['{A}{a} -> ({B}{b} v {C}{b})'], trial=30)
 
 
-    # multiple formulas
+    show_translations(['(Ex): {A}x'], trial=30)
+    show_translations(['(Ex): (¬{A}x & {B}x)'], trial=30)
+    show_translations(['(Ex): (¬{A}x v {B}x)'], trial=30)
+    show_translations(['(Ex): {A}x -> {B}x'], trial=30)
+    show_translations(['(Ex): (¬{A}x & {B}x) -> {C}x'], trial=30)
+    show_translations(['(Ex): (¬{A}x v {B}x) -> {C}x'], trial=30)
+
+    show_translations(['(x): {A}x'], trial=30)
+    show_translations(['(x): (¬{A}x & {B}x)'], trial=30)
+    show_translations(['(x): (¬{A}x v {B}x)'], trial=30)
+    show_translations(['(x): {A}x -> {B}x'], trial=30)
+    show_translations(['(x): (¬{A}x & {B}x) -> {C}x'], trial=30)
+    show_translations(['(x): (¬{A}x v {B}x) -> {C}x'], trial=30)
+
+
+
+
+    # # multiple formulas
     show_translations(
         [
-            Formula('{A}{a} -> {B}{b}'),
-            Formula('{B}{b} -> {C}{c}'),
-            Formula('{C}{c} -> {D}{d}'),
+            '{A}{a} -> {B}{b}',
+            '{B}{b} -> {C}{c}',
+            '{C}{c} -> {D}{d}',
         ],
         5
     )
 
     show_translations(
         [
-            Formula('{A}'),
-            Formula('{B}'),
-            Formula('{C}'),
-            Formula('{D}{d}'),
-            Formula('{E}{e}'),
-            Formula('{F}{f}'),
+            '{A}',
+            '{B}',
+            '{C}',
+            '{D}{d}',
+            '{E}{e}',
+            '{F}{f}',
         ],
         5,
     )
 
     show_translations(
         [
-            Formula('(x): {A}x -> {B}x'),
-            Formula('(x): {B}x -> {C}x'),
-            Formula('(x): {C}x -> {D}x'),
+            '(x): {A}x -> {B}x',
+            '(x): {B}x -> {C}x',
+            '(x): {C}x -> {D}x',
         ],
         5,
     )
 
     show_translations(
         [
-            Formula('{A}{a} -> {B}{b}'),
-            Formula('{C}{c} -> {D}{d}'),
-            Formula('{F}{f} -> {G}{g}'),
+            '{A}{a} -> {B}{b}',
+            '{C}{c} -> {D}{d}',
+            '{F}{f} -> {G}{g}',
         ],
         5,
-        intermediate_constant_formulas=[Formula('{a}'), Formula('{d}')],
+        intermediate_constant_formulas=['{a}', '{d}'],
     )
+
+    show_translations(['{A}'], trial=30, commonsense_injection_idxs=[0])
+
+    show_translations(['{A}{a} -> {B}{a}'], trial=30, commonsense_injection_idxs=[0], do_negation=False)
+    show_translations(['{A}{a} -> {B}{b}'], trial=30, commonsense_injection_idxs=[0], do_negation=False)
+    show_translations(['(x): {A}x -> {B}x'], trial=30, commonsense_injection_idxs=[0], do_negation=False)
 
 
 if __name__ == '__main__':
-    # test_templated_translator_lang('eng')
+    test_templated_translator_lang('eng')
     test_templated_translator_lang('jpn')

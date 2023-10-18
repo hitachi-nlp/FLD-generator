@@ -6,7 +6,7 @@ from enum import Enum, EnumMeta
 from ordered_set import OrderedSet
 from FLD_generator.word_banks.base import POS
 from FLD_generator.word_banks.base import WordBank
-from FLD_generator.person_names import get as get_person_names
+from FLD_generator.person_names import get_person_names
 import line_profiling
 
 from .parsers.japanese import Morpheme
