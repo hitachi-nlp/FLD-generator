@@ -1,7 +1,9 @@
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Union
 from abc import abstractmethod, ABC
 import logging
 from functools import lru_cache
+from pydantic import BaseModel
+from dataclasses import dataclass
 
 from FLD_generator.formula import Formula
 
@@ -94,39 +96,19 @@ class Translator(ABC):
         pass
 
 
-OBJ_DELIMITER = '__OBJ__'
-MODIFIER_DELIMITER = '__MDF__'
+# XXX: MUST BE FROZEN to be hashable.
+# Unless, lru_cache does not work.
+
+@dataclass(frozen=True)
+class PredicatePhrase:
+    predicate: str
+    object: Optional[str] = None
+    modifier: Optional[str] = None
 
 
-@lru_cache(maxsize=1000000)
-def parse_pred_with_obj_mdf(word: str) -> Tuple[str, Optional[str], Optional[str]]:
-    if word.find(OBJ_DELIMITER) >= 0:
-        if word.find(MODIFIER_DELIMITER) >= 0:
-            import pudb; pudb.set_trace()
-            raise Exception(word)
-        pred, obj = word.split(OBJ_DELIMITER)
-        return pred, obj, None
-    elif word.find(MODIFIER_DELIMITER) >= 0:
-        try:
-            pred, modifier = word.split(MODIFIER_DELIMITER)
-        except:
-            import pudb; pudb.set_trace()
-        return pred, None, modifier
-    else:
-        return word, None, None
+@dataclass(frozen=True)
+class ConstantPhrase:
+    constant: str
 
 
-@lru_cache(maxsize=1000000)
-def pair_pred_with_obj_mdf(word: str, obj: Optional[str], modifier: Optional[str]) -> str:
-    if obj is not None:
-        if modifier is not None:
-            raise ValueError()
-        paired = OBJ_DELIMITER.join([word, obj])
-    elif modifier is not None:
-        paired = MODIFIER_DELIMITER.join([word, modifier])
-    else:
-        paired = word
-    if paired.find(OBJ_DELIMITER) >= 0 and paired.find(MODIFIER_DELIMITER) >= 0:
-        import pudb; pudb.set_trace()
-    return paired
-
+Phrase = Union[PredicatePhrase, ConstantPhrase]

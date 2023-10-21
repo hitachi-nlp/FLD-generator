@@ -8,7 +8,7 @@ from FLD_generator.utils import starts_with_vowel_sound
 from FLD_generator.word_banks import POS
 from FLD_generator.person_names import get_person_names
 from .templated import TemplatedTranslator
-from .base import OBJ_DELIMITER, MODIFIER_DELIMITER
+from .base import PredicatePhrase, ConstantPhrase
 
 import line_profiling
 
@@ -32,11 +32,19 @@ class EnglishTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return self._add_the_or_it_to_successive_appearance(template)
 
-    def _reset_pred_with_obj_mdf_transl(self) -> None:
+    def _reset_predicate_phrase_assets(self) -> None:
         pass
 
-    def _make_pred_with_obj_mdf_transl(self, translation: str) -> str:
-        return translation.replace(OBJ_DELIMITER, ' ').replace(MODIFIER_DELIMITER, ' ')
+    def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
+        return const.constant
+
+    def _make_predicate_phrase_str(self, pred: PredicatePhrase) -> str:
+        rep = pred.predicate 
+        if pred.object is not None:
+            rep += ' {pred.object}'
+        if pred.modifier is not None:
+            rep += ' {pred.modifier}'
+        return rep
 
     def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
         translation = self._correct_indefinite_particles(translation)

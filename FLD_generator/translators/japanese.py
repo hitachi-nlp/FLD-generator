@@ -3,7 +3,7 @@ import re
 from typing import Dict
 
 from .templated import TemplatedTranslator
-from .base import OBJ_DELIMITER, MODIFIER_DELIMITER
+from .base import PredicatePhrase, ConstantPhrase
 
 
 class JapaneseTranslator(TemplatedTranslator):
@@ -19,22 +19,24 @@ class JapaneseTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return template
 
-    def _reset_pred_with_obj_mdf_transl(self) -> None:
+    def _reset_predicate_phrase_assets(self) -> None:
         self._transl_to_kaku_cache = {}
 
-    def _make_pred_with_obj_mdf_transl(self, translation: str) -> str:
-        translation_updated = translation
-        pred_O_obj_regexp = f'([^ ]*){OBJ_DELIMITER}([^ ]*)'
-        for match in re.finditer(pred_O_obj_regexp, translation):
-            pred_with_obj_mdf = translation[match.span()[0]:match.span()[1]]
+    def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
+        return const.constant
 
-            kaku = self._transl_to_kaku_cache.get(pred_with_obj_mdf, random.choice(['を', 'に']))
-            self._transl_to_kaku_cache[pred_with_obj_mdf] = kaku
+    def _make_predicate_phrase_str(self, pred: PredicatePhrase) -> str:
+        rep = pred.predicate
 
-            pred_with_kaku = re.sub(pred_O_obj_regexp, f'\g<2>{kaku}\g<1>', pred_with_obj_mdf)
-            translation_updated = re.sub(pred_O_obj_regexp, pred_with_kaku, translation_updated, 1)
+        if pred.object is not None:
+            kaku = self._transl_to_kaku_cache.get(pred, random.choice(['を', 'に']))
+            self._transl_to_kaku_cache[pred] = kaku
+            rep = pred.object + kaku + rep
 
-        return translation_updated
+        if pred.modifier is not None:
+            raise NotImplementedError()
+
+        return rep
 
     def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
         # translation = re.sub('だ ならば', ' ならば', translation)

@@ -3,7 +3,11 @@ import re
 
 from FLD_generator.formula import Formula
 from FLD_generator.word_banks import POS
-
+from FLD_generator.translators.base import (
+    Phrase,
+    PredicatePhrase,
+    ConstantPhrase,
+)
 from .base import CommonsenseBankBase
 from .utils import (
     is_simple_unary_implication_unshared_const,
@@ -19,7 +23,7 @@ class MockIfThenCommonsenseBank(CommonsenseBankBase):
         return all(is_simple_unary_implication_unshared_const(formula)
                    for formula in formulas)
 
-    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, str], Dict[str, POS], List[bool]]:
+    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Phrase], Dict[str, POS], List[bool]]:
         mapping: Dict[str, str] = {}
         pos_mapping: Dict[str, str] = {}
         is_mapped: List[bool] =[]
@@ -33,11 +37,11 @@ class MockIfThenCommonsenseBank(CommonsenseBankBase):
             if_pred, then_pred = get_if_then_predicates(formula)
 
             _new_mapping = {
-                if_const.rep: 'John',
-                if_pred.rep: 'human',
+                if_const.rep: ConstantPhrase(constant='John'),
+                if_pred.rep: PredicatePhrase(predicate='human'),
 
-                then_const.rep: 'John',
-                then_pred.rep: 'die',
+                then_const.rep: ConstantPhrase(constant='John'),
+                then_pred.rep: PredicatePhrase(predicate='die'),
             }
             _new_pos_mapping = {
                 if_const.rep: POS.NOUN,

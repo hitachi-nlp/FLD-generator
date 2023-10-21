@@ -11,7 +11,11 @@ from FLD_generator.formula import Formula
 from FLD_generator.word_banks.word_utils import WordUtil, POS
 from FLD_generator.person_names import get_person_names
 from FLD_generator.utils import RandomCycle
-from FLD_generator.translators.base import pair_pred_with_obj_mdf
+from FLD_generator.translators.base import (
+    Phrase,
+    PredicatePhrase,
+    ConstantPhrase,
+)
 from .base import CommonsenseBankBase
 from .utils import (
     is_simple_unary_implication_shared_const,
@@ -301,7 +305,7 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
             for formula in formulas
         )
 
-    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, str], Dict[str, POS], List[bool]]:
+    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Phrase], Dict[str, POS], List[bool]]:
         mapping: Dict[str, str] = {}
         pos_mapping: Dict[str, str] = {}
         is_mapped: List[bool] = []
@@ -343,15 +347,16 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
             if_pred, then_pred = get_if_then_predicates(formula)
 
             def maybe_modif(pred: str, right_modif: Optional[str]) -> str:
-                return pair_pred_with_obj_mdf(pred, None, right_modif)
+                # return pair_pred_with_obj_mdf(pred, None, right_modif)
+                return PredicatePhrase(predicate=pred, object=None, modifier=right_modif)
 
             if is_simple_unary_implication_shared_const(formula):  # {A}{a} -> {B}{b}
                 if_const, then_const = get_if_then_constants(formula)
 
                 _new_mapping = {
-                    if_const.rep: if_subj_sample,
-                    if_pred.rep: maybe_modif(if_pred_sample, if_pred_right_modif_sample),
-                    then_pred.rep: maybe_modif(then_pred_sample, then_pred_right_modif_sample),
+                    if_const.rep: ConstantPhrase(constant=if_subj_sample),
+                    if_pred.rep: PredicatePhrase(predicate=if_pred_sample, modifier=if_pred_right_modif_sample),
+                    then_pred.rep: PredicatePhrase(predicate=then_pred_sample, modifier=then_pred_right_modif_sample),
                 }
                 _new_pos_mapping = {
                     if_const.rep: POS.NOUN,
@@ -363,10 +368,10 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
                 if_const, then_const = get_if_then_constants(formula)
 
                 _new_mapping = {
-                    if_const.rep: if_subj_sample,
-                    if_pred.rep: maybe_modif(if_pred_sample, if_pred_right_modif_sample),
-                    then_const.rep: then_subj_sample,
-                    then_pred.rep: maybe_modif(then_pred_sample, then_pred_right_modif_sample),
+                    if_const.rep: ConstantPhrase(constant=if_subj_sample),
+                    if_pred.rep: PredicatePhrase(predicate=if_pred_sample, modifier=if_pred_right_modif_sample),
+                    then_const.rep: ConstantPhrase(constant=then_subj_sample),
+                    then_pred.rep: PredicatePhrase(predicate=then_pred_sample, modifier=then_pred_right_modif_sample),
                 }
                 _new_pos_mapping = {
                     if_const.rep: POS.NOUN,
@@ -377,8 +382,8 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
 
             elif is_simple_universal_implication(formula):
                 _new_mapping = {
-                    if_pred.rep: maybe_modif(if_pred_sample, if_pred_right_modif_sample),
-                    then_pred.rep: maybe_modif(then_pred_sample, then_pred_right_modif_sample),
+                    if_pred.rep: PredicatePhrase(predicate=if_pred_sample, modifier=if_pred_right_modif_sample),
+                    then_pred.rep: PredicatePhrase(predicate=then_pred_sample, modifier=then_pred_right_modif_sample),
                 }
                 _new_pos_mapping = {
                     if_pred.rep: if_pred_pos,
