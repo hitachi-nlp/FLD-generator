@@ -93,9 +93,9 @@ def main():
         # '20231018.knowledge.D3.w_knowledge.complex-0.3',
 
         # ---------------------------------- 20231021.knowledge ------------------------------------
-        # '20231021.knowledge.D3',
-        # '20231021.knowledge.D3.w_knowledge',
-        '20231021.knowledge.D3.w_knowledge.complex-0.3',
+        '20231021.knowledge.D3',
+        '20231021.knowledge.D3.complex-0.3',
+        '20231021.knowledge.D3.complex-0.3.w_knowledge',
 
     ]
     # dataset_names = dataset_names[::-1]
@@ -218,7 +218,9 @@ def make_dataset(dataset_name: str,
             'translation_volume_to_weight',
             'trnsltn_adj_vrb_nn_rt',
 
-            'atomic_knowledge_filepath',
+            'knowledge_injection_ratio',
+            'knowledge_no_shuffle',
+            'atomic_filepath',
 
             'num_workers_per_job',
 
@@ -300,7 +302,8 @@ def make_dataset(dataset_name: str,
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
 
                 maybe_option('--knowledge-injection-ratio', job_settings.get("knowledge_injection_ratio", None)),
-                maybe_option('--atomic-knowledge-filepath', job_settings.get("atomic_knowledge_filepath", None)),
+                '--knowledge-no-shuffle' if job_settings.get('knowledge_no_shuffle', False) else '',
+                maybe_option('--atomic-filepath', job_settings.get("atomic_filepath", None)),
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',

@@ -66,7 +66,8 @@ def load_dataset(argument_config: List[str],
                  branch_extensions_range: Tuple[int, int],
                  translation_variants_per_logic: int,
                  knowledge_injection_ratio: float,
-                 atomic_knowledge_filepath: str):
+                 knowledge_no_shuffle: bool,
+                 atomic_filepath: str):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
@@ -107,7 +108,8 @@ def load_dataset(argument_config: List[str],
 
     knowledge_bank = build_knowledge_bank(
         'atomic_if_then',
-        atomic_knowledge_filepath,
+        atomic_filepath,
+        no_shuffle=knowledge_no_shuffle,
         # max_statements=1000,
     )
 
@@ -237,7 +239,8 @@ def generate_instances(size: int, *args):
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 #
 @click.option('--knowledge-injection-ratio', type=float, default=0.0)
-@click.option('--atomic-knowledge-filepath', type=str, default=None)
+@click.option('--knowledge-no-shuffle', is_flag=True, type=bool, default=False)
+@click.option('--atomic-filepath', type=str, default=None)
 #
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')
@@ -287,7 +290,8 @@ def main(output_path,
          fallback_from_formula_to_translation_distractor,
          translation_distractors_range,
          knowledge_injection_ratio,
-         atomic_knowledge_filepath,
+         knowledge_no_shuffle,
+         atomic_filepath,
          proof_stances,
          world_assump,
          unknown_ratio,
@@ -374,7 +378,8 @@ def main(output_path,
                         branch_extensions_range,
                         translation_variants_per_logic,
                         knowledge_injection_ratio,
-                        atomic_knowledge_filepath,
+                        knowledge_no_shuffle,
+                        atomic_filepath,
                     )
                 )
 
