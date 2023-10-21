@@ -62,7 +62,7 @@ class Translator(ABC):
                   max_retry: Optional[int] = 3,
                   timeout_per_trial: Optional[int] = None,
                   ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
-        timeout_per_trial = timeout_per_trial or len(formulas) * 1
+        timeout_per_trial = int(timeout_per_trial or len(formulas) * 1.5)
         # timeout_per_trial = 9999
         try:
             transls = run_with_timeout_retry(
