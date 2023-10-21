@@ -11,7 +11,7 @@ from .base import Translator
 from .templated import TemplatedTranslator
 from .english import EnglishTranslator
 from .japanese import JapaneseTranslator
-# from .commonsense import MockIfThenCommonsenseTranslator
+# from .knowledge import MockIfThenKnowledgeTranslator
 
 logger = logging.getLogger(__name__)
 
@@ -57,5 +57,5 @@ def build(lang: str,
     return translator
 
 
-# def build_commonsense(*args, **kwargs) -> Translator:
-#     return MockIfThenCommonsenseTranslator()
+# def build_knowledge(*args, **kwargs) -> Translator:
+#     return MockIfThenKnowledgeTranslator()

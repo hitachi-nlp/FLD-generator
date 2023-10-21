@@ -155,7 +155,7 @@ def is_nonsense(formula: Formula,
                 allow_detect_tautology_contradiction=False) -> bool:
     """ Detect fomula which is nonsense.
 
-    "Nonsense" means that, in the sense of human commonsense of natural language, the formula is not that useful.
+    "Nonsense" means that, in the sense of human knowledge of natural language, the formula is not that useful.
     The formulas includes ...:
         nonsense formulas such as:
             ({A} & {A})

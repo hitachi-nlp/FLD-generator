@@ -28,7 +28,7 @@ from FLD_generator.utils import (
     shuffle,
     RandomCycle,
 )
-from FLD_generator.commonsense_banks.base import CommonsenseBankBase
+from FLD_generator.knowledge_banks.base import KnowledgeBankBase
 from .base import (
     Translator,
     TranslationNotFoundError,
@@ -82,7 +82,7 @@ class TemplatedTranslator(Translator):
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
                  adj_verb_noun_ratio: Optional[List] = None,
-                 commonsense_bank: Optional[CommonsenseBankBase] = None,
+                 knowledge_bank: Optional[KnowledgeBankBase] = None,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
@@ -137,7 +137,7 @@ class TemplatedTranslator(Translator):
 
         self._do_translate_to_nl = do_translate_to_nl
 
-        self._commonsense_bank = commonsense_bank
+        self._knowledge_bank = knowledge_bank
 
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[Tuple[str, str]]]]:
         flat_config = self._completely_flatten_config(config)
@@ -303,9 +303,9 @@ class TemplatedTranslator(Translator):
     def _translate(self,
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
-                   commonsense_injection_idxs: Optional[List[int]] = None,
+                   knowledge_injection_idxs: Optional[List[int]] = None,
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
-        commonsense_injection_idxs = commonsense_injection_idxs or []
+        knowledge_injection_idxs = knowledge_injection_idxs or []
         self._reset_predicate_phrase_assets()
 
         def raise_or_warn(msg: str) -> None:
@@ -319,36 +319,36 @@ class TemplatedTranslator(Translator):
         translation_names: List[Optional[str]] = []
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
-        if len(commonsense_injection_idxs) > 0:
-            if self._commonsense_bank is None:
+        if len(knowledge_injection_idxs) > 0:
+            if self._knowledge_bank is None:
                 raise ValueError()
-            should_commonsense_formulas = [formulas[idx] for idx in commonsense_injection_idxs]
-            if not self._commonsense_bank.is_acceptable(should_commonsense_formulas):
-                raise ValueError('The following formulas can not be translated with commonsense: %s', str(should_commonsense_formulas))
+            should_knowledge_formulas = [formulas[idx] for idx in knowledge_injection_idxs]
+            if not self._knowledge_bank.is_acceptable(should_knowledge_formulas):
+                raise ValueError('The following formulas can not be translated with knowledge: %s', str(should_knowledge_formulas))
             (
-                commonsense_injection_mapping,
-                commonsense_pos_mapping,
-                _is_commonsense_injected,
-            ) = self._choose_interpret_mapping(should_commonsense_formulas,
+                knowledge_injection_mapping,
+                knowledge_pos_mapping,
+                _is_knowledge_injected,
+            ) = self._choose_interpret_mapping(should_knowledge_formulas,
                                                [],
-                                               from_commonsense=True)
-            commonsense_formulas = [formula
-                                    for i, (formula, is_injected) in enumerate(zip(should_commonsense_formulas, _is_commonsense_injected))
+                                               from_knowledge=True)
+            knowledge_formulas = [formula
+                                    for i, (formula, is_injected) in enumerate(zip(should_knowledge_formulas, _is_knowledge_injected))
                                     if is_injected]
-            is_commonsense_injected = [True if formula in commonsense_formulas else False
+            is_knowledge_injected = [True if formula in knowledge_formulas else False
                                        for formula in formulas]
 
         else:
-            commonsense_injection_mapping = {}
-            commonsense_pos_mapping = {}
-            is_commonsense_injected = [False] * len(formulas)
+            knowledge_injection_mapping = {}
+            knowledge_pos_mapping = {}
+            is_knowledge_injected = [False] * len(formulas)
 
         interpret_mapping = self._choose_interpret_mapping(formulas,
                                                            intermediate_constant_formulas,
-                                                           constraints=commonsense_injection_mapping)
-        force_pos_mapping = commonsense_pos_mapping
+                                                           constraints=knowledge_injection_mapping)
+        force_pos_mapping = knowledge_pos_mapping
 
-        for formula, _is_commonsense_injected in zip(formulas, is_commonsense_injected):
+        for formula, _is_knowledge_injected in zip(formulas, is_knowledge_injected):
             # find translation key
             found_keys = 0
             is_found = False
@@ -458,20 +458,20 @@ class TemplatedTranslator(Translator):
         # fix grammers and other stufs
         translations = [
             (self._postprocess_translation(translation,
-                                           is_commonsense_injected=_is_commonsense_injected) if translation is not None else None)
-            for translation, _is_commonsense_injected in zip(translations, is_commonsense_injected)
+                                           is_knowledge_injected=_is_knowledge_injected) if translation is not None else None)
+            for translation, _is_knowledge_injected in zip(translations, is_knowledge_injected)
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
                 SO_swap_formula.translation = (
-                    self._postprocess_translation(SO_swap_formula.translation, is_commonsense_injected=False) if SO_swap_formula.translation is not None
+                    self._postprocess_translation(SO_swap_formula.translation, is_knowledge_injected=False) if SO_swap_formula.translation is not None
                     else None)
 
-        return list(zip(translation_names, translations, SO_swap_formulas, is_commonsense_injected)), count_stats
+        return list(zip(translation_names, translations, SO_swap_formulas, is_knowledge_injected)), count_stats
 
-    def is_commonsense_translatable(self, formulas: List[Formula]) -> bool:
-        return self._commonsense_bank.is_acceptable(formulas)
+    def is_knowledge_translatable(self, formulas: List[Formula]) -> bool:
+        return self._knowledge_bank.is_acceptable(formulas)
 
     # @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
@@ -876,11 +876,11 @@ class TemplatedTranslator(Translator):
                                   formulas: List[Formula],
                                   intermediate_constant_formulas: List[Formula],
                                   constraints: Optional[Dict[str, Phrase]] = None,
-                                  from_commonsense=False,
+                                  from_knowledge=False,
                                   ) -> Union[Dict[str, str], Tuple[Dict[str, Phrase], Dict[str, str], List[bool]]]:
 
-        if from_commonsense and self._commonsense_bank.is_acceptable(formulas):
-            mapping, pos_mapping, is_injected = self._commonsense_bank.sample_mapping(formulas)
+        if from_knowledge and self._knowledge_bank.is_acceptable(formulas):
+            mapping, pos_mapping, is_injected = self._knowledge_bank.sample_mapping(formulas)
             mapping_with_delimiters: Dict[str, str] = mapping
             return mapping_with_delimiters, pos_mapping, is_injected
 
@@ -1114,5 +1114,5 @@ class TemplatedTranslator(Translator):
         pass
 
     @abstractmethod
-    def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
+    def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
         pass

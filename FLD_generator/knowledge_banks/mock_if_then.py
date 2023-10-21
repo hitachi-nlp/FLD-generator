@@ -8,7 +8,7 @@ from FLD_generator.translators.base import (
     PredicatePhrase,
     ConstantPhrase,
 )
-from .base import CommonsenseBankBase
+from .base import KnowledgeBankBase
 from .utils import (
     is_simple_unary_implication_unshared_const,
     get_if_then_constants,
@@ -17,7 +17,7 @@ from .utils import (
 
 
 
-class MockIfThenCommonsenseBank(CommonsenseBankBase):
+class MockIfThenKnowledgeBank(KnowledgeBankBase):
 
     def is_acceptable(self, formulas: List[Formula]) -> bool:
         return all(is_simple_unary_implication_unshared_const(formula)
@@ -52,7 +52,7 @@ class MockIfThenCommonsenseBank(CommonsenseBankBase):
             }
 
             if all(new_key not in mapping for new_key in _new_mapping):
-                # updating the already-mapped logical elements will break the commonsense statements
+                # updating the already-mapped logical elements will break the knowledge statements
                 mapping.update(_new_mapping)
                 pos_mapping.update(_new_pos_mapping)
                 is_mapped.append(True)

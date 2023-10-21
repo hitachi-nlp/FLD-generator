@@ -3,16 +3,16 @@ import logging
 from typing import Dict, Tuple, List
 
 from FLD_generator.formula import Formula
-from FLD_generator.commonsense_banks.atomic_if_then import (
+from FLD_generator.knowledge_banks.atomic_if_then import (
     load_atomic_if_then_statements,
-    AtomicIfThenCommonsenseBank,
+    AtomicIfThenKnowledgeBank,
 )
 from FLD_generator.translators import TemplatedTranslator
 from logger_setup import setup as setup_logger
 
 
 def test_load_atomic_if_then_statements():
-    path = './res/commonsense/commonsense-kg-completion/data/atomic/test.txt'
+    path = './res/knowledge/commonsense-kg-completion/data/atomic/test.txt'
     for statement in load_atomic_if_then_statements(path, max_statements=1000):
         print('\n')
         pprint(statement.if_statement)
@@ -22,8 +22,8 @@ def test_load_atomic_if_then_statements():
 
 
 def test_bank():
-    path = './res/commonsense/commonsense-kg-completion/data/atomic/test.txt'
-    bank = AtomicIfThenCommonsenseBank(path, max_statements=1000)
+    path = './res/knowledge/commonsense-kg-completion/data/atomic/test.txt'
+    bank = AtomicIfThenKnowledgeBank(path, max_statements=1000)
 
     def sample_mapping(formula_rep: str) -> Tuple[Dict[str, str], Dict[str, str], List[bool]]:
         return bank.sample_mapping([Formula(formula_rep)])

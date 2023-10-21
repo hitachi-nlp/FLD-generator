@@ -16,7 +16,7 @@ from FLD_generator.translators.base import (
     PredicatePhrase,
     ConstantPhrase,
 )
-from .base import CommonsenseBankBase
+from .base import KnowledgeBankBase
 from .utils import (
     is_simple_unary_implication_shared_const,
     is_simple_unary_implication_unshared_const,
@@ -284,7 +284,7 @@ def _is_verb(word) -> bool:
     return POS.VERB in _WORD_UTILS.get_pos(word)
 
 
-class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
+class AtomicIfThenKnowledgeBank(KnowledgeBankBase):
 
     def __init__(self,
                  path: str,
@@ -415,7 +415,7 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
                 }
 
             if all(new_key not in mapping for new_key in _new_mapping):
-                # updating the already-mapped logical elements will break the commonsense statements
+                # updating the already-mapped logical elements will break the knowledge statements
                 mapping.update(_new_mapping)
                 pos_mapping.update(_new_pos_mapping)
                 is_mapped.append(True)

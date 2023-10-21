@@ -18,7 +18,7 @@ from FLD_generator.word_banks import build_wordbank
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results, fix_seed
-from FLD_generator.commonsense_banks import build_commonsense_bank
+from FLD_generator.knowledge_banks import build_knowledge_bank
 from logger_setup import setup as setup_logger
 
 import line_profiling
@@ -55,10 +55,10 @@ def test_generate_dataset_lang(lang: str):
     else:
         raise ValueError()
 
-    # commonsense_bank = None
-    commonsense_bank = build_commonsense_bank(
+    # knowledge_bank = None
+    knowledge_bank = build_knowledge_bank(
         'atomic_if_then',
-        atomic_filepath='./res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+        atomic_filepath='./res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
         max_statements=1000,
     )
 
@@ -74,10 +74,10 @@ def test_generate_dataset_lang(lang: str):
         volume_to_weight='logE',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
-        commonsense_bank=commonsense_bank,
+        knowledge_bank=knowledge_bank,
     )
 
-    # commonsense_translator = build_commonsense_translator()
+    # knowledge_translator = build_knowledge_translator()
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
@@ -167,8 +167,8 @@ def test_generate_dataset_lang(lang: str):
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
-        commonsense_injection_ratio=1.0,
-        # commonsense_translator=commonsense_translator,
+        knowledge_injection_ratio=1.0,
+        # knowledge_translator=knowledge_translator,
     )
 
     depth_range = (1, 8)

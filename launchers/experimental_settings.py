@@ -4317,7 +4317,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20231018.commonsense.D3': {
+    '20231018.knowledge.D3': {
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4368,9 +4368,9 @@ _DATASET_SETTINGS = {
 
 
 
-    '20231018.commonsense.D3.w_commonsense': {
+    '20231018.knowledge.D3.w_knowledge': {
 
-        'commonsense_injection_ratio': 0.5,
+        'knowledge_injection_ratio': 0.5,
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4404,13 +4404,13 @@ _DATASET_SETTINGS = {
                 'sample_all_stances_per_logic': False,
                 'context_shuffles_per_instance': 1,
                 'translation_variants_per_logic': 1,
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/train.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
             },
             'valid': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/valid.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
             },
             'test': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
             },
         },
         'split_sizes': {
@@ -4423,9 +4423,9 @@ _DATASET_SETTINGS = {
 
 
 
-    '20231018.commonsense.D3.w_commonsense.complex-0.3': {
+    '20231018.knowledge.D3.w_knowledge.complex-0.3': {
 
-        'commonsense_injection_ratio': 0.5,
+        'knowledge_injection_ratio': 0.5,
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4459,13 +4459,13 @@ _DATASET_SETTINGS = {
                 'sample_all_stances_per_logic': False,
                 'context_shuffles_per_instance': 1,
                 'translation_variants_per_logic': 1,
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/train.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
             },
             'valid': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/valid.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
             },
             'test': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
             },
         },
         'split_sizes': {
@@ -4479,7 +4479,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20231021.commonsense.D3': {
+    '20231021.knowledge.D3': {
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4530,9 +4530,9 @@ _DATASET_SETTINGS = {
 
 
 
-    '20231021.commonsense.D3.w_commonsense': {
+    '20231021.knowledge.D3.w_knowledge': {
 
-        'commonsense_injection_ratio': 0.5,
+        'knowledge_injection_ratio': 0.5,
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4566,13 +4566,13 @@ _DATASET_SETTINGS = {
                 'sample_all_stances_per_logic': False,
                 'context_shuffles_per_instance': 1,
                 'translation_variants_per_logic': 1,
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/train.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
             },
             'valid': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/valid.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
             },
             'test': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
             },
         },
         'split_sizes': {
@@ -4585,9 +4585,9 @@ _DATASET_SETTINGS = {
 
 
 
-    '20231021.commonsense.D3.w_commonsense.complex-0.3': {
+    '20231021.knowledge.D3.w_knowledge.complex-0.3': {
 
-        'commonsense_injection_ratio': 0.5,
+        'knowledge_injection_ratio': 0.5,
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -4621,13 +4621,13 @@ _DATASET_SETTINGS = {
                 'sample_all_stances_per_logic': False,
                 'context_shuffles_per_instance': 1,
                 'translation_variants_per_logic': 1,
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/train.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
             },
             'valid': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/valid.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
             },
             'test': {
-                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+                'atomic_knowledge_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
             },
         },
         'split_sizes': {
@@ -4649,8 +4649,8 @@ _DEFAULT_DATASET_SETTINGS = {
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
 
-        'commonsense_injection_ratio': 0.0,
-        'atomic_commonsense_filepath': None,
+        'knowledge_injection_ratio': 0.0,
+        'atomic_knowledge_filepath': None,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4677,8 +4677,8 @@ _DEFAULT_DATASET_SETTINGS = {
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
 
-        'commonsense_injection_ratio': 0.0,
-        'atomic_commonsense_filepath': None,
+        'knowledge_injection_ratio': 0.0,
+        'atomic_knowledge_filepath': None,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4711,8 +4711,8 @@ _DEFAULT_DATASET_SETTINGS = {
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
 
-        'commonsense_injection_ratio': 0.0,
-        'atomic_commonsense_filepath': None,
+        'knowledge_injection_ratio': 0.0,
+        'atomic_knowledge_filepath': None,
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,
         'distractor': 'mixture(negative_tree-0.5.simplified_formula.various_form)',
@@ -4737,8 +4737,8 @@ _DEFAULT_DATASET_SETTINGS = {
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
 
-        'commonsense_injection_ratio': 0.0,
-        'atomic_commonsense_filepath': None,
+        'knowledge_injection_ratio': 0.0,
+        'atomic_knowledge_filepath': None,
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,
         'distractor': 'mixture(negative_tree-0.5.simplified_formula.various_form)',
@@ -4932,15 +4932,15 @@ _DATASET_NAME_TO_DEFAULT = {
     '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3': '20230626.many_bugs_fixed',
     '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3': '20230626.many_bugs_fixed',
 
-    # ---------------------------------- 20231018.commonsense.D3 ------------------------------------
-    '20231018.commonsense.D3': '20231018.thing_person_config_translation',
-    '20231018.commonsense.D3.w_commonsense': '20231018.thing_person_config_translation',
-    '20231018.commonsense.D3.w_commonsense.complex-0.3': '20231018.thing_person_config_translation',
+    # ---------------------------------- 20231018.knowledge.D3 ------------------------------------
+    '20231018.knowledge.D3': '20231018.thing_person_config_translation',
+    '20231018.knowledge.D3.w_knowledge': '20231018.thing_person_config_translation',
+    '20231018.knowledge.D3.w_knowledge.complex-0.3': '20231018.thing_person_config_translation',
 
-    # ---------------------------------- 20231021.commonsense.D3 ------------------------------------
-    '20231021.commonsense.D3': '20231018.thing_person_config_translation',
-    '20231021.commonsense.D3.w_commonsense': '20231018.thing_person_config_translation',
-    '20231021.commonsense.D3.w_commonsense.complex-0.3': '20231018.thing_person_config_translation',
+    # ---------------------------------- 20231021.knowledge.D3 ------------------------------------
+    '20231021.knowledge.D3': '20231018.thing_person_config_translation',
+    '20231021.knowledge.D3.w_knowledge': '20231018.thing_person_config_translation',
+    '20231021.knowledge.D3.w_knowledge.complex-0.3': '20231018.thing_person_config_translation',
 
 }
 

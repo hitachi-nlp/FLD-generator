@@ -30,7 +30,7 @@ class ProofNode:
                  formula: Formula,
                  argument: Optional[Argument] = None,
                  tree: Optional['ProofTree'] = None,
-                 is_commonsense=False):
+                 is_knowledge=False):
         self.formula = formula
         self.argument: Optional[Argument] = argument
 
@@ -42,13 +42,13 @@ class ProofNode:
 
         self._tree = tree
 
-        self.is_commonsense = is_commonsense
+        self.is_knowledge = is_knowledge
 
     def copy(self) -> 'ProofNode':
         return ProofNode(
             deepcopy(self.formula),
             argument=deepcopy(self.argument),
-            is_commonsense=self.is_commonsense,
+            is_knowledge=self.is_knowledge,
         )
 
     @property
@@ -168,7 +168,7 @@ class ProofNode:
             node.set_tree(self.tree)
 
     def __str__(self) -> str:
-        return f'ProofNode({self.formula}, is_assump={self.is_assump}, is_commonsense={self.is_commonsense})'
+        return f'ProofNode({self.formula}, is_assump={self.is_assump}, is_knowledge={self.is_knowledge})'
 
     def __repr__(self) -> str:
         return str(self)

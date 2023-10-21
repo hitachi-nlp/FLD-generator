@@ -1,6 +1,6 @@
 from .factory import (
     build,
-    # build_commonsense,
+    # build_knowledge,
     TemplatedTranslator,
 )
 from .base import TranslationFailure, TranslationImpossible

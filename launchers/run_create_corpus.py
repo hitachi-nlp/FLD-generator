@@ -43,8 +43,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
     # output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
 
-    # output_top_dir = Path('./outputs/00.create_corpus/20231018.commonsense')
-    output_top_dir = Path('./outputs/00.create_corpus/20231021.commonsense')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231018.knowledge')
+    output_top_dir = Path('./outputs/00.create_corpus/20231021.knowledge')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -87,15 +87,15 @@ def main():
         # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
         # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
 
-        # ---------------------------------- 20231018.commonsense ------------------------------------
-        # '20231018.commonsense.D3',
-        # '20231018.commonsense.D3.w_commonsense',
-        # '20231018.commonsense.D3.w_commonsense.complex-0.3',
+        # ---------------------------------- 20231018.knowledge ------------------------------------
+        # '20231018.knowledge.D3',
+        # '20231018.knowledge.D3.w_knowledge',
+        # '20231018.knowledge.D3.w_knowledge.complex-0.3',
 
-        # ---------------------------------- 20231021.commonsense ------------------------------------
-        # '20231021.commonsense.D3',
-        # '20231021.commonsense.D3.w_commonsense',
-        '20231021.commonsense.D3.w_commonsense.complex-0.3',
+        # ---------------------------------- 20231021.knowledge ------------------------------------
+        # '20231021.knowledge.D3',
+        # '20231021.knowledge.D3.w_knowledge',
+        '20231021.knowledge.D3.w_knowledge.complex-0.3',
 
     ]
     # dataset_names = dataset_names[::-1]
@@ -218,7 +218,7 @@ def make_dataset(dataset_name: str,
             'translation_volume_to_weight',
             'trnsltn_adj_vrb_nn_rt',
 
-            'atomic_commonsense_filepath',
+            'atomic_knowledge_filepath',
 
             'num_workers_per_job',
 
@@ -299,8 +299,8 @@ def make_dataset(dataset_name: str,
                 f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
 
-                maybe_option('--commonsense-injection-ratio', job_settings.get("commonsense_injection_ratio", None)),
-                maybe_option('--atomic-commonsense-filepath', job_settings.get("atomic_commonsense_filepath", None)),
+                maybe_option('--knowledge-injection-ratio', job_settings.get("knowledge_injection_ratio", None)),
+                maybe_option('--atomic-knowledge-filepath', job_settings.get("atomic_knowledge_filepath", None)),
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',

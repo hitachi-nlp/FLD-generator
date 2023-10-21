@@ -46,7 +46,7 @@ class EnglishTranslator(TemplatedTranslator):
             rep += f' {pred.modifier}'
         return rep
 
-    def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
+    def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)
@@ -57,7 +57,7 @@ class EnglishTranslator(TemplatedTranslator):
                         if word in self._female_names]
         person_names  = male_names + female_names
 
-        if len(person_names) > 0 or is_commonsense_injected:
+        if len(person_names) > 0 or is_knowledge_injected:
             # fix "the Emma"
             for person_name in male_names + female_names:
                 translation = translation\

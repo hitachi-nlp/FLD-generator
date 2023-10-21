@@ -14,15 +14,15 @@ from FLD_generator.translators.base import (
 logger = logging.getLogger(__name__)
 
 
-class CommonsenseMappingFailure(FormalLogicExceptionBase):
+class KnowledgeMappingFailure(FormalLogicExceptionBase):
     pass
 
 
-class CommonsenseMappingImpossible(FormalLogicExceptionBase):
+class KnowledgeMappingImpossible(FormalLogicExceptionBase):
     pass
 
 
-class CommonsenseBankBase(ABC):
+class KnowledgeBankBase(ABC):
 
     @abstractmethod
     def is_acceptable(self, formulas: List[Formula]) -> bool:
@@ -30,7 +30,7 @@ class CommonsenseBankBase(ABC):
 
     def sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Phrase], Dict[str, POS], List[bool]]:
         if not self.is_acceptable(formulas):
-            raise CommonsenseMappingImpossible()
+            raise KnowledgeMappingImpossible()
         return self._sample_mapping(formulas)
 
     @abstractmethod

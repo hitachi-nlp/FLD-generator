@@ -6,7 +6,7 @@ from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.word_banks import build_wordbank
 from FLD_generator.utils import fix_seed
-from FLD_generator.commonsense_banks import build_commonsense_bank
+from FLD_generator.knowledge_banks import build_knowledge_bank
 from logger_setup import setup as setup_logger
 
 fix_seed(0)
@@ -25,9 +25,9 @@ def test_templated_translator_lang(lang: str):
     else:
         raise ValueError()
 
-    commonsense_bank = build_commonsense_bank(
+    knowledge_bank = build_knowledge_bank(
         'atomic_if_then',
-        './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+        './res/knowledge/knowledge-kg-completion/data/atomic/test.txt',
         max_statements=100,
     )
 
@@ -43,7 +43,7 @@ def test_templated_translator_lang(lang: str):
         volume_to_weight='logE',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
-        commonsense_bank=commonsense_bank,
+        knowledge_bank=knowledge_bank,
     )
 
     def show_translations(formula_reps: List[str],
@@ -68,8 +68,8 @@ def test_templated_translator_lang(lang: str):
                 if len(formulas) >= 2:
                     print('')
                 translations, _ = translator.translate(_formulas, intermediate_constant_formulas or [], **kwargs)
-                for formula, (_, translation, _, is_commonsense_injected) in zip(_formulas, translations):
-                    print(formula.rep, f'(int={intermediate_constant_formulas})', '  ->  ', translation, f'is_commonsense_injected={is_commonsense_injected}')
+                for formula, (_, translation, _, is_knowledge_injected) in zip(_formulas, translations):
+                    print(formula.rep, f'(int={intermediate_constant_formulas})', '  ->  ', translation, f'is_knowledge_injected={is_knowledge_injected}')
             sys.stdout.flush()
 
     show_translations(['{A}'], trial=30)
@@ -161,11 +161,11 @@ def test_templated_translator_lang(lang: str):
         intermediate_constant_formulas=['{a}', '{d}'],
     )
 
-    show_translations(['{A}'], trial=30, commonsense_injection_idxs=[0])
+    show_translations(['{A}'], trial=30, knowledge_injection_idxs=[0])
 
-    show_translations(['{A}{a} -> {B}{a}'], trial=30, commonsense_injection_idxs=[0], do_negation=False)
-    show_translations(['{A}{a} -> {B}{b}'], trial=30, commonsense_injection_idxs=[0], do_negation=False)
-    show_translations(['(x): {A}x -> {B}x'], trial=30, commonsense_injection_idxs=[0], do_negation=False)
+    show_translations(['{A}{a} -> {B}{a}'], trial=30, knowledge_injection_idxs=[0], do_negation=False)
+    show_translations(['{A}{a} -> {B}{b}'], trial=30, knowledge_injection_idxs=[0], do_negation=False)
+    show_translations(['(x): {A}x -> {B}x'], trial=30, knowledge_injection_idxs=[0], do_negation=False)
 
 
 if __name__ == '__main__':

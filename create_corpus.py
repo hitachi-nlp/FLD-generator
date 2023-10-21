@@ -20,7 +20,7 @@ from FLD_generator.datasets import NLProofSDataset
 from FLD_generator.formula_distractors import build as build_distractor
 from FLD_generator.translation_distractors import build as build_translation_distractor
 from FLD_generator.utils import _build_bounded_msg, log_results, fix_seed
-from FLD_generator.commonsense_banks import build_commonsense_bank
+from FLD_generator.knowledge_banks import build_knowledge_bank
 from joblib import Parallel, delayed
 
 from logger_setup import setup as setup_logger
@@ -65,8 +65,8 @@ def load_dataset(argument_config: List[str],
                  force_fix_illegal_intermediate_constants: bool,
                  branch_extensions_range: Tuple[int, int],
                  translation_variants_per_logic: int,
-                 commonsense_injection_ratio: float,
-                 atomic_commonsense_filepath: str):
+                 knowledge_injection_ratio: float,
+                 atomic_knowledge_filepath: str):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
@@ -105,9 +105,9 @@ def load_dataset(argument_config: List[str],
     else:
         _translation_distractor = None
 
-    commonsense_bank = build_commonsense_bank(
+    knowledge_bank = build_knowledge_bank(
         'atomic_if_then',
-        atomic_commonsense_filepath,
+        atomic_knowledge_filepath,
         # max_statements=1000,
     )
 
@@ -121,7 +121,7 @@ def load_dataset(argument_config: List[str],
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight,
                                   default_weight_factor_type=translation_default_weight_factor_type,
-                                  commonsense_bank=commonsense_bank)
+                                  knowledge_bank=knowledge_bank)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     if translation_lang == 'eng':
@@ -138,7 +138,7 @@ def load_dataset(argument_config: List[str],
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=not disallow_subj_obj_swapped_distractor,
-        commonsense_injection_ratio=commonsense_injection_ratio,
+        knowledge_injection_ratio=knowledge_injection_ratio,
     )
 
     if depth_distrib == 'flat':
@@ -236,8 +236,8 @@ def generate_instances(size: int, *args):
 @click.option('--translation-distractors-range', type=str, default=json.dumps([0, 0]))
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 #
-@click.option('--commonsense-injection-ratio', type=float, default=0.0)
-@click.option('--atomic-commonsense-filepath', type=str, default=None)
+@click.option('--knowledge-injection-ratio', type=float, default=0.0)
+@click.option('--atomic-knowledge-filepath', type=str, default=None)
 #
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')
@@ -286,8 +286,8 @@ def main(output_path,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
          translation_distractors_range,
-         commonsense_injection_ratio,
-         atomic_commonsense_filepath,
+         knowledge_injection_ratio,
+         atomic_knowledge_filepath,
          proof_stances,
          world_assump,
          unknown_ratio,
@@ -373,8 +373,8 @@ def main(output_path,
                         force_fix_illegal_intermediate_constants,
                         branch_extensions_range,
                         translation_variants_per_logic,
-                        commonsense_injection_ratio,
-                        atomic_commonsense_filepath,
+                        knowledge_injection_ratio,
+                        atomic_knowledge_filepath,
                     )
                 )
 

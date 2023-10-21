@@ -38,7 +38,7 @@ class JapaneseTranslator(TemplatedTranslator):
 
         return rep
 
-    def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:
+    def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
         # translation = re.sub('だ ならば', ' ならば', translation)
         # translation = re.sub('だ し', ' ならば', translation)
         if self.insert_word_delimiters:
