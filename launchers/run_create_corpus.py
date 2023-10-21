@@ -94,8 +94,8 @@ def main():
 
         # ---------------------------------- 20231021.commonsense ------------------------------------
         # '20231021.commonsense.D3',
-        '20231021.commonsense.D3.w_commonsense',
-        # '20231021.commonsense.D3.w_commonsense.complex-0.3',
+        # '20231021.commonsense.D3.w_commonsense',
+        '20231021.commonsense.D3.w_commonsense.complex-0.3',
 
     ]
     # dataset_names = dataset_names[::-1]

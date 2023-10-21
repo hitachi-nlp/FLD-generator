@@ -838,7 +838,7 @@ class TemplatedTranslator(Translator):
         elif isinstance(phrase, PredicatePhrase):
             return self._make_predicate_phrase_str(phrase)
         else:
-            raise ValueError()
+            raise ValueError(f'{str(phrase)}')
 
     @abstractmethod
     def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
