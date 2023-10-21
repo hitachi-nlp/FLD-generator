@@ -41,9 +41,9 @@ class EnglishTranslator(TemplatedTranslator):
     def _make_predicate_phrase_str(self, pred: PredicatePhrase) -> str:
         rep = pred.predicate 
         if pred.object is not None:
-            rep += ' {pred.object}'
+            rep += f' {pred.object}'
         if pred.modifier is not None:
-            rep += ' {pred.modifier}'
+            rep += f' {pred.modifier}'
         return rep
 
     def _postprocess_translation(self, translation: str, is_commonsense_injected=False) -> str:

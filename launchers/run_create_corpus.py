@@ -43,7 +43,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
     # output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20231018.commonsense')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231018.commonsense')
+    output_top_dir = Path('./outputs/00.create_corpus/20231021.commonsense')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -88,8 +89,13 @@ def main():
 
         # ---------------------------------- 20231018.commonsense ------------------------------------
         # '20231018.commonsense.D3',
-        '20231018.commonsense.D3.w_commonsense',
-        '20231018.commonsense.D3.w_commonsense.complex-0.3',
+        # '20231018.commonsense.D3.w_commonsense',
+        # '20231018.commonsense.D3.w_commonsense.complex-0.3',
+
+        # ---------------------------------- 20231021.commonsense ------------------------------------
+        # '20231021.commonsense.D3',
+        '20231021.commonsense.D3.w_commonsense',
+        # '20231021.commonsense.D3.w_commonsense.complex-0.3',
 
     ]
     # dataset_names = dataset_names[::-1]

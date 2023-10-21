@@ -495,14 +495,25 @@ def fix_seed(seed: int) -> None:
 
 class RandomCycle:
 
-    def __init__(self, elems: Union[Iterable[Any], Callable[[], Iterator[Any]]], shuffle=True):
+    def __init__(self,
+                 elems: Union[Callable[[], Iterator[Any]], Iterable[Any]],
+                 shuffle=True):
         self._shuffle = shuffle
 
-        if isinstance(elems, Callable):
+        self._is_before_1st_cycle = True
+        self._list_cache = []
+        if isinstance(elems, Callable):  # elems is generate
             self._generate_iterable = elems
         else:
-            list_elems = list(elems)
-            self._generate_iterable = lambda : list_elems
+            if isinstance(elems, list):
+                self._generate_iterable = lambda : iter(elems)
+            else:
+                def _generate_iterable():
+                    if self._is_before_1st_cycle:
+                        return elems
+                    else:
+                        return iter(self._list_cache)
+                self._generate_iterable = _generate_iterable
 
         self._elems_iter = None
         self._reset_iter_elems()
@@ -515,10 +526,13 @@ class RandomCycle:
             self._elems_iter = iter(shuffle(list(self._generate_iterable())))
         else:
             self._elems_iter = iter(self._generate_iterable())
+        self._is_before_1st_cycle = False
 
     def __next__(self):
         while True:
             try:
-                return next(self._elems_iter)
+                item = next(self._elems_iter)
             except StopIteration:
                 self._reset_iter_elems()
+            self._list_cache.append(item)
+            return item

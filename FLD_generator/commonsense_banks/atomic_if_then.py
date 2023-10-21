@@ -113,12 +113,15 @@ _E1_IS_IF_RELATIONS = [
 ]
 
 
-def load_atomic_if_then_statements(path: str, max_statements: Optional[int] = None) -> Iterable[AtomicIfThenStatement]:
+def load_atomic_if_then_statements(path: str,
+                                   max_statements: Optional[int] = None,
+                                   shuffle=False) -> Iterable[AtomicIfThenStatement]:
 
     def _find_verb(words: List[str]) -> Optional[int]:
         for i_word, word in enumerate(words):
             if _is_verb(word):
                 return i_word
+        _is_verb(word)
         return None
 
     def _split_by_verb(pred_words: List[str]) -> Tuple[Optional[str], Optional[str], Optional[str]]:
@@ -135,7 +138,13 @@ def load_atomic_if_then_statements(path: str, max_statements: Optional[int] = No
 
     logger.info('loading ATOMIC statements from file "%s"', path)
 
-    for i_line, line in tqdm(enumerate(open(path)), total=max_statements):
+    if shuffle:
+        lines = open(path).readlines()
+        random.shuffle(lines)
+    else:
+        lines = open(path)
+
+    for i_line, line in enumerate(lines):
         if max_statements is not None and i_line >= max_statements:
             break
         e0_str, rel_str, e1_str = line.rstrip('\n').split('\t')
@@ -279,23 +288,38 @@ class AtomicIfThenCommonsenseBank(CommonsenseBankBase):
 
     def __init__(self,
                  path: str,
+                 shuffle=False,  # note that shuffl=True loads huge dataset once at first, which is slow.
                  max_statements: Optional[int] = None):
-        self._shared_subj_statements: Iterable[AtomicIfThenStatement] = []
-        self._unshared_subj_statements: Iterable[AtomicIfThenStatement] = []
 
-        for statement in load_atomic_if_then_statements(path, max_statements=max_statements):
+        self._path = path
+        self._shuffle = shuffle
+        self._max_statements = max_statements
+
+        self._shared_subj_statements = RandomCycle(self._load_shared_subj_statements, shuffle=False)
+        self._unshared_subj_statements = RandomCycle(self._load_unshared_subj_statements, shuffle=False)
+
+        self._person_names: Iterable[str] = RandomCycle(get_person_names(country='US'))
+
+    def _load_shared_subj_statements(self) -> Iterable[AtomicIfThenStatement]:
+        for statement in load_atomic_if_then_statements(self._path,
+                                                        max_statements=self._max_statements,
+                                                        shuffle=self._shuffle):
             if self._extract_PAS(statement.if_statement)[1] is None\
                     or self._extract_PAS(statement.then_statement)[1] is None:
                 continue
             if re.match('^x._x.', statement.type):
                 # type is something like "xy_xy"
-                self._shared_subj_statements.append(statement)
-            else:
-                self._unshared_subj_statements.append(statement)
-        self._shared_subj_statements = RandomCycle(self._shared_subj_statements)
-        self._unshared_subj_statements = RandomCycle(self._unshared_subj_statements)
+                yield statement
 
-        self._person_names: Iterable[str] = RandomCycle(get_person_names(country='US'))
+    def _load_unshared_subj_statements(self) -> Iterable[AtomicIfThenStatement]:
+        for statement in load_atomic_if_then_statements(self._path,
+                                                        max_statements=self._max_statements,
+                                                        shuffle=self._shuffle):
+            if self._extract_PAS(statement.if_statement)[1] is None\
+                    or self._extract_PAS(statement.then_statement)[1] is None:
+                continue
+            if not re.match('^x._x.', statement.type):
+                yield statement
 
     def is_acceptable(self, formulas: List[Formula]) -> bool:
         return all(

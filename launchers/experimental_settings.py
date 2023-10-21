@@ -4479,6 +4479,165 @@ _DATASET_SETTINGS = {
 
 
 
+    '20231021.commonsense.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
+            },
+            'valid': {
+            },
+            'test': {
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 15000,
+        },
+
+    },
+
+
+
+    '20231021.commonsense.D3.w_commonsense': {
+
+        'commonsense_injection_ratio': 0.5,
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
+                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/train.txt',
+            },
+            'valid': {
+                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/valid.txt',
+            },
+            'test': {
+                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 3000,
+        },
+
+    },
+
+
+
+    '20231021.commonsense.D3.w_commonsense.complex-0.3': {
+
+        'commonsense_injection_ratio': 0.5,
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.3,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
+                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/train.txt',
+            },
+            'valid': {
+                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/valid.txt',
+            },
+            'test': {
+                'atomic_commonsense_filepath': './res/commonsense/commonsense-kg-completion/data/atomic/test.txt',
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 3000,
+        },
+
+    },
+
 
 }
 
@@ -4777,7 +4936,11 @@ _DATASET_NAME_TO_DEFAULT = {
     '20231018.commonsense.D3': '20231018.thing_person_config_translation',
     '20231018.commonsense.D3.w_commonsense': '20231018.thing_person_config_translation',
     '20231018.commonsense.D3.w_commonsense.complex-0.3': '20231018.thing_person_config_translation',
- 
+
+    # ---------------------------------- 20231021.commonsense.D3 ------------------------------------
+    '20231021.commonsense.D3': '20231018.thing_person_config_translation',
+    '20231021.commonsense.D3.w_commonsense': '20231018.thing_person_config_translation',
+    '20231021.commonsense.D3.w_commonsense.complex-0.3': '20231018.thing_person_config_translation',
 
 }
 
