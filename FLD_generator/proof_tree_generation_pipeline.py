@@ -39,6 +39,8 @@ class ProofTreeGenerationPipeline:
                  translator: Optional[Translator] = None,
                  assumption_prefix='Let\'s assume that ',
                  add_subj_obj_swapped_distractor=False,
+                 # knowledge_translator: Optional[Translator] = None,
+                 knowledge_injection_ratio=0.0,
                  log_stats=False):
         self.generator = generator
         self.distractor = distractor
@@ -56,6 +58,9 @@ class ProofTreeGenerationPipeline:
             self._empty_translation_stat = {name: 0 for name in self.translator.translation_names}
         else:
             self._empty_translation_stat = {}
+
+        self._knowledge_injection_ratio = knowledge_injection_ratio
+        # self._knowledge_translator = knowledge_translator
 
         self._reusable_proof_trees: Dict[Tuple[Any], List[ProofTree]] = defaultdict(list)
 
@@ -250,10 +255,11 @@ class ProofTreeGenerationPipeline:
         translator_stats = {}
         if self.translator is not None:
             logger.info(self._make_pretty_log('generate translations', 'start'))
-            all_formulas = [node.formula for node in proof_tree.nodes] + [root_negation_formula]  + formula_distractors
-            leaf_formulas = [node.formula for node in proof_tree.leaf_nodes]
-            assump_formula_indices = [i for i, node in enumerate(proof_tree.nodes) if node.is_assump]
+            tree_nodes, tree_formulas = proof_tree.nodes, [node.formula for node in proof_tree.nodes]
+            leaf_nodes, leaf_formulas = proof_tree.leaf_nodes, [node.formula for node in proof_tree.leaf_nodes]
+            assump_formula_indices = [i for i, node in enumerate(tree_nodes) if node.is_assump]
 
+            all_formulas = tree_formulas + [root_negation_formula]  + formula_distractors
             other_formulas = []
             all_negative_tree_attrs = [val for name, val in misc.items()
                                        if name.find('negative_tree') >= 0]
@@ -261,10 +267,24 @@ class ProofTreeGenerationPipeline:
                 other_formulas += [node.formula for node in negative_tree_attrs['tree'].nodes]
             all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
+            if self._knowledge_injection_ratio > 0.0:
+                knowledge_translatable_leaf_formulas = [formula for formula in leaf_formulas
+                                                          if self.translator.is_knowledge_translatable([formula])]
+                knowledge_leaf_formulas = random.sample(knowledge_translatable_leaf_formulas,
+                                                          int(len(knowledge_translatable_leaf_formulas) * self._knowledge_injection_ratio))
+                knowledge_nodes = [node for node in tree_nodes
+                                     if node.formula in knowledge_leaf_formulas]
+                knowledge_node_idxs = [idx for idx, node in enumerate(tree_nodes)
+                                         if node.formula in knowledge_leaf_formulas]
+            else:
+                knowledge_nodes = []
+                knowledge_node_idxs = []
+
             try:
                 named_translations, translator_stats = self.translator.translate(
                     all_formulas,
                     list(proof_tree.intermediate_constants),
+                    knowledge_injection_idxs=knowledge_node_idxs,
                     raise_if_translation_not_found=raise_if_translation_not_found,
                 )
             except TranslationFailure as e:
@@ -272,7 +292,8 @@ class ProofTreeGenerationPipeline:
             except TranslationImpossible as e:
                 raise ProofTreeGenerationPipelineImpossible(str(e))
 
-            for i_formula, (formula, (translation_name, translation, SO_swap_formula)) in enumerate(zip(all_formulas, named_translations)):
+            for i_formula, (formula, (translation_name, translation, SO_swap_formula, is_knowledge_injected)) in enumerate(zip(all_formulas, named_translations)):
+
                 formula.translation_name = translation_name
                 if i_formula in assump_formula_indices:
                     translation_prefix = self.assumption_prefix
@@ -280,12 +301,21 @@ class ProofTreeGenerationPipeline:
                     translation_prefix = ''
 
                 if translation is not None:
-                    formula.translation = translation_prefix + translation[0].lower() + translation[1:]
+                    if translation_prefix:
+                        formula.translation = translation_prefix + translation[0] + translation[1:]
+                    else:
+                        formula.translation = translation[0].upper() + translation[1:]
+
+                    if is_knowledge_injected:
+                        knowledge_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]
+                        knowledge_injected_node.is_knowledge = True
+                        logger.info('knowledge is injected to a node:%s', str(knowledge_injected_node))
 
                 if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                     logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)
 
                     formula_distractors.append(SO_swap_formula)
+
             logger.info(self._make_pretty_log('generate translations', 'finish'))
 
         return translator_stats

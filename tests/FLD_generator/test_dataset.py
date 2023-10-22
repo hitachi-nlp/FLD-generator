@@ -15,9 +15,10 @@ from FLD_generator.translation_distractors import build as build_translation_dis
 from FLD_generator.proof_tree_generation_pipeline import ProofTreeGenerationPipeline
 from FLD_generator.datasets import NLProofSDataset
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.translators import build as build_translator
+from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.interpretation import formula_is_identical_to
 from FLD_generator.utils import nested_merge, log_results, fix_seed
+from FLD_generator.knowledge_banks import build_knowledge_bank
 from logger_setup import setup as setup_logger
 
 import line_profiling
@@ -47,11 +48,19 @@ def test_generate_dataset_lang(lang: str):
     word_bank = build_wordbank(lang)
 
     if lang == 'eng':
-        translation_config_dir = './configs/translations/eng/thing.v1/'
+        # translation_config_dir = './configs/translations/eng/thing.v1/'
+        translation_config_dir = './configs/translations/eng/thing_person.v0/'
     elif lang == 'jpn':
         translation_config_dir = './configs/translations/jpn/thing.v1/'
     else:
         raise ValueError()
+
+    # knowledge_bank = None
+    knowledge_bank = build_knowledge_bank(
+        'atomic_if_then',
+        atomic_filepath='./res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
+        max_statements=1000,
+    )
 
     # translator = None
     translator = build_translator(
@@ -65,7 +74,10 @@ def test_generate_dataset_lang(lang: str):
         volume_to_weight='logE',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
+        knowledge_bank=knowledge_bank,
     )
+
+    # knowledge_translator = build_knowledge_translator()
 
     translation_distractor = None
     # translation_distractor = build_translation_distractor(word_bank=word_bank)
@@ -114,7 +126,8 @@ def test_generate_dataset_lang(lang: str):
         ],
         elim_dneg=True,
         quantifier_axiom_arguments_weight=0.2,
-        complex_formula_arguments_weight=0.5,
+        # complex_formula_arguments_weight=0.5,
+        complex_formula_arguments_weight=0.1,
         quantifier_axioms=[
             'universal_quantifier_elim',
             'universal_quantifier_intro',
@@ -154,6 +167,8 @@ def test_generate_dataset_lang(lang: str):
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
+        knowledge_injection_ratio=1.0,
+        # knowledge_translator=knowledge_translator,
     )
 
     depth_range = (1, 8)
@@ -188,7 +203,7 @@ def test_generate_dataset_lang(lang: str):
         raise_if_translation_not_found=True,
     )
 
-    num_dataset = 30
+    num_dataset = 1000
     generate_dataset(dataset, num_dataset=num_dataset)
 
 

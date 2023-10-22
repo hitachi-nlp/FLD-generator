@@ -1,6 +1,9 @@
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Union
 from abc import abstractmethod, ABC
 import logging
+from functools import lru_cache
+from pydantic import BaseModel
+from dataclasses import dataclass
 
 from FLD_generator.formula import Formula
 
@@ -42,6 +45,10 @@ class Translator(ABC):
     def acceptable_formulas(self) -> List[str]:
         pass
 
+    # @abstractmethod
+    # def is_acceptable(self, formulas: List[Formula]) -> bool:
+    #     pass
+
     @property
     @abstractmethod
     def translation_names(self) -> List[str]:
@@ -50,18 +57,21 @@ class Translator(ABC):
     def translate(self,
                   formulas: List[Formula],
                   intermediate_constant_formulas: List[Formula],
+                  knowledge_injection_idxs: Optional[List[int]] = None,
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
                   timeout_per_trial: Optional[int] = None,
-                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]],
-                                                        Dict[str, int]]:
-        timeout_per_trial = timeout_per_trial or len(formulas) * 1
+                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
+        timeout_per_trial = int(timeout_per_trial or len(formulas) * 2.0)
         # timeout_per_trial = 9999
         try:
             transls = run_with_timeout_retry(
                 self._translate,
                 func_args=[formulas, intermediate_constant_formulas],
-                func_kwargs={'raise_if_translation_not_found': raise_if_translation_not_found},
+                func_kwargs={
+                    'knowledge_injection_idxs': knowledge_injection_idxs,
+                    'raise_if_translation_not_found': raise_if_translation_not_found,
+                },
                 should_retry_exception=TranslationFailure,
                 max_retry=max_retry,
                 timeout_per_trial=timeout_per_trial,
@@ -78,5 +88,27 @@ class Translator(ABC):
     def _translate(self,
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
-                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula]]], Dict[str, int]]:
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
         pass
+
+    @abstractmethod
+    def is_knowledge_translatable(self, formulas: List[Formula]) -> bool:
+        pass
+
+
+# XXX: MUST BE FROZEN to be hashable.
+# Unless, lru_cache does not work.
+
+@dataclass(frozen=True)
+class PredicatePhrase:
+    predicate: str
+    object: Optional[str] = None
+    modifier: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class ConstantPhrase:
+    constant: str
+
+
+Phrase = Union[PredicatePhrase, ConstantPhrase]

@@ -9,6 +9,7 @@ def _to_range(begin: int, end: int) -> List[int]:
 
 _TRANSLATION_THING_CONFIGS_ENG = ['./configs/translations/eng/thing/']
 _TRANSLATION_THING_CONFIGS_ENG_V1 = ['./configs/translations/eng/thing.v1/']
+_TRANSLATION_THING_PERSON_CONFIGS_ENG_V0 = ['./configs/translations/eng/thing_person.v0/']
 _TRANSLATION_THING_CONFIGS_JPN_V1 = ['./configs/translations/jpn/thing.v1/']
 
 
@@ -4308,6 +4309,333 @@ _DATASET_SETTINGS = {
 
     },
 
+
+
+
+
+
+
+
+
+    '20231018.knowledge.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
+            },
+            'valid': {
+            },
+            'test': {
+            },
+        },
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 500,
+            'train': 15000,
+        },
+
+    },
+
+
+
+    '20231018.knowledge.D3.w_knowledge': {
+
+        'knowledge_injection_ratio': 0.5,
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
+            },
+            'valid': {
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
+            },
+            'test': {
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 3000,
+        },
+
+    },
+
+
+
+    '20231018.knowledge.D3.w_knowledge.complex-0.3': {
+
+        'knowledge_injection_ratio': 0.5,
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.3,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': False,
+                'context_shuffles_per_instance': 1,
+                'translation_variants_per_logic': 1,
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
+            },
+            'valid': {
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
+            },
+            'test': {
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
+            },
+        },
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 500,
+            'train': 3000,
+        },
+
+    },
+
+
+
+
+    '20231021.knowledge.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 3,
+                'translation_variants_per_logic': 3,
+            },
+            'valid': {
+            },
+            'test': {
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 300000,
+        },
+
+    },
+
+
+
+    '20231021.knowledge.D3.complex-0.3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.3,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 3,
+                'translation_variants_per_logic': 3,
+            },
+            'valid': {
+            },
+            'test': {
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 300000,
+        },
+
+    },
+
+
+
+    '20231021.knowledge.D3.complex-0.3.w_knowledge': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.3,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+        'knowledge_injection_ratio': 0.5,
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 3,
+                'translation_variants_per_logic': 3,
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/train.txt',
+                'knowledge_no_shuffle': False,
+            },
+            'valid': {
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/valid.txt',
+                'knowledge_no_shuffle': True,
+            },
+            'test': {
+                'atomic_filepath': './res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
+                'knowledge_no_shuffle': True,
+            },
+        },
+        'split_sizes': {
+            # 'test': 500,
+            # 'valid': 500,
+            'train': 300000,
+        },
+
+    },
+
+
 }
 
 
@@ -4317,6 +4645,9 @@ _DEFAULT_DATASET_SETTINGS = {
         'unknown_ratio': 0.33,
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
+
+        'knowledge_injection_ratio': 0.0,
+        'atomic_filepath': None,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4342,6 +4673,9 @@ _DEFAULT_DATASET_SETTINGS = {
         'unknown_ratio': 0.33,
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
+
+        'knowledge_injection_ratio': 0.0,
+        'atomic_filepath': None,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4374,6 +4708,8 @@ _DEFAULT_DATASET_SETTINGS = {
         'sample_all_stances_per_logic': False,
         'context_shuffles_per_instance': 1,
 
+        'knowledge_injection_ratio': 0.0,
+        'atomic_filepath': None,
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,
         'distractor': 'mixture(negative_tree-0.5.simplified_formula.various_form)',
@@ -4393,8 +4729,30 @@ _DEFAULT_DATASET_SETTINGS = {
     },
 
 
+    '20231018.thing_person_config_translation': {
+        'unknown_ratio': 0.33,
+        'sample_all_stances_per_logic': False,
+        'context_shuffles_per_instance': 1,
+
+        'knowledge_injection_ratio': 0.0,
+        'atomic_filepath': None,
+
+        # 'negative_tree_negated_hypothesis_ratio': 0.5,
+        'distractor': 'mixture(negative_tree-0.5.simplified_formula.various_form)',
+        'fallback_from_formula_to_translation_distractor': False,
 
 
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'sqrt',
+        'translation_adj_verb_noun_ratio': '1-2-1',
+        'translation_lang': 'eng',
+        'translation_configs': _TRANSLATION_THING_PERSON_CONFIGS_ENG_V0,
+
+        'translation_variants_per_logic': 1,
+
+    },
 
 
 
@@ -4570,6 +4928,16 @@ _DATASET_NAME_TO_DEFAULT = {
     '20231012.D3.large_vocab.smpl_stncs': '20230626.many_bugs_fixed',
     '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3': '20230626.many_bugs_fixed',
     '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3': '20230626.many_bugs_fixed',
+
+    # ---------------------------------- 20231018.knowledge.D3 ------------------------------------
+    '20231018.knowledge.D3': '20231018.thing_person_config_translation',
+    '20231018.knowledge.D3.w_knowledge': '20231018.thing_person_config_translation',
+    '20231018.knowledge.D3.w_knowledge.complex-0.3': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20231021.knowledge.D3 ------------------------------------
+    '20231021.knowledge.D3': '20231018.thing_person_config_translation',
+    '20231021.knowledge.D3.complex-0.3': '20231018.thing_person_config_translation',
+    '20231021.knowledge.D3.complex-0.3.w_knowledge': '20231018.thing_person_config_translation',
 
 }
 

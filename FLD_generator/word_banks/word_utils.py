@@ -72,13 +72,25 @@ class WordUtil:
         logger.info('loading words from WordNet done!')
 
     def _load_all_lemmas(self) -> Iterable[Tuple[str, WN_POS]]:
+        logger.info('loading lemmas...')
+        done_lemmas: Set[Lemma] = set([])
         for syn in self._syn_op.all():
             lemmas = self._lemmas_from_syn(syn)
             if len(lemmas) == 0:
                 continue
-            # use the first (might be the best) match lemma
-            lemma_str = lemmas[0].name()
-            yield lemma_str, syn.pos()
+
+            # the first (might be the best) match lemma
+            # lemma_str = lemmas[0].name()
+            # yield lemma_str, syn.pos()
+
+            for lemma in lemmas:
+                if lemma in done_lemmas:
+                    continue
+                done_lemmas.add(lemma)
+                lemma_str = lemma.name()
+                for _syn in self._syn_op.from_word(lemma_str):
+                    yield lemma_str, _syn.pos()
+
 
     def get_lemma(self, word: str) -> str:
 

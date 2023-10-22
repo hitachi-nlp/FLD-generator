@@ -10,5 +10,7 @@ dill
 fugashi
 pydantic
 ipadic
+names-dataset
+ordered-set
 
 line_profiling@git+https://github.com/hitachi-nlp/line-profiling.git@main

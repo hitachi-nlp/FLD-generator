@@ -43,7 +43,7 @@ def test_proof_tree():
     for orig_node, copy_node in zip(tree_traversed_nodes, copy_tree_traversed_nodes):
         print(orig_node)
         assert orig_node != copy_node\
-            and orig_node.formula == copy_node.formula
+            and orig_node.formula.rep == copy_node.formula.rep
 
         if orig_node == n3:
             assert len(orig_node.assump_children) == 1
@@ -51,7 +51,7 @@ def test_proof_tree():
         for orig_assump, copy_assump in zip(orig_node.assump_children, copy_node.assump_children):
             print('    assump:', orig_assump)
             assert orig_assump != copy_assump\
-                and orig_assump.formula == copy_assump.formula
+                and orig_assump.formula.rep == copy_assump.formula.rep
 
     """
     n0 -> n2 ->

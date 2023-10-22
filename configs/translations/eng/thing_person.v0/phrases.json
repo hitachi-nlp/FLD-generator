@@ -542,31 +542,38 @@
     ],
 
     "it": [
-      "it"
+      "it",
+      "the thing",
+      "the one"
     ],
 
     "something": [
       "something",
-      "__someone"
+      ["W_VOL_AVG__0.5", "someone"],
+      ["W_VOL_AVG__0.5", "somebody"]
     ],
 
     "everything": [
       "everything",
-      "__everyone"
+      ["W_VOL_AVG__0.5", "everyone"],
+      ["W_VOL_AVG__0.5", "everybody"]
     ],
 
     "nothing": [
       "nothing",
-      "__no one"
+      ["W_VOL_AVG__0.5", "no one"],
+      ["W_VOL_AVG__0.5", "nobody"]
     ],
 
     "thing": [
       "thing",
+      "one",
       "__people"
     ],
 
     "things": [
       "things",
+      "ones",
       "__people"
     ],
 

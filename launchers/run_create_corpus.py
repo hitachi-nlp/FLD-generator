@@ -41,7 +41,10 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab.small')
     # output_top_dir = Path('./outputs/00.create_corpus/20231010.large_vocab')
-    output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20231018.knowledge')
+    output_top_dir = Path('./outputs/00.create_corpus/20231021.knowledge')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -79,10 +82,21 @@ def main():
         # '20231010.D3.large_vocab',
 
         # ---------------------------------- 20231012.D3.large_vocab ------------------------------------
-        '20231012.D3.large_vocab',
-        '20231012.D3.large_vocab.smpl_stncs',
-        '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
-        '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
+        # '20231012.D3.large_vocab',
+        # '20231012.D3.large_vocab.smpl_stncs',
+        # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3',
+        # '20231012.D3.large_vocab.smpl_stncs.cntx_shffls-3.trnsl_vrnts-3',
+
+        # ---------------------------------- 20231018.knowledge ------------------------------------
+        # '20231018.knowledge.D3',
+        # '20231018.knowledge.D3.w_knowledge',
+        # '20231018.knowledge.D3.w_knowledge.complex-0.3',
+
+        # ---------------------------------- 20231021.knowledge ------------------------------------
+        '20231021.knowledge.D3',
+        '20231021.knowledge.D3.complex-0.3',
+        '20231021.knowledge.D3.complex-0.3.w_knowledge',
+
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -163,7 +177,7 @@ def make_dataset(dataset_name: str,
         settings,
         top_dir=str(output_top_dir / f'dataset_name={dataset_name}'),
         short=True,
-        dirname_exclude_params=[
+        dirname_ignore_params=[
             'dataset_name',
             'proof_stances',
             'unknown_ratio',
@@ -203,6 +217,10 @@ def make_dataset(dataset_name: str,
             'limit_vocab_size_per_type',
             'translation_volume_to_weight',
             'trnsltn_adj_vrb_nn_rt',
+
+            'knowledge_injection_ratio',
+            'knowledge_no_shuffle',
+            'atomic_filepath',
 
             'num_workers_per_job',
 
@@ -282,6 +300,10 @@ def make_dataset(dataset_name: str,
                 maybe_option('--translation-distractor', job_settings.get("translation_distractor", None)),
                 f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
+
+                maybe_option('--knowledge-injection-ratio', job_settings.get("knowledge_injection_ratio", None)),
+                '--knowledge-no-shuffle' if job_settings.get('knowledge_no_shuffle', False) else '',
+                maybe_option('--atomic-filepath', job_settings.get("atomic_filepath", None)),
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',

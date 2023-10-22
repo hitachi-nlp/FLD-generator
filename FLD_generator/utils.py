@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional, Union
+from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional, Union, Iterator
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -491,3 +491,48 @@ def is_consistent_formula_set_with_logs(org_formulas: List[Formula],
 def fix_seed(seed: int) -> None:
     random.seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
+
+
+class RandomCycle:
+
+    def __init__(self,
+                 elems: Union[Callable[[], Iterator[Any]], Iterable[Any]],
+                 shuffle=True):
+        self._shuffle = shuffle
+
+        self._is_before_1st_cycle = True
+        self._list_cache = []
+        if isinstance(elems, Callable):  # elems is generate
+            self._generate_iterable = elems
+        else:
+            if isinstance(elems, list):
+                self._generate_iterable = lambda : iter(elems)
+            else:
+                def _generate_iterable():
+                    if self._is_before_1st_cycle:
+                        return elems
+                    else:
+                        return iter(self._list_cache)
+                self._generate_iterable = _generate_iterable
+
+        self._elems_iter = None
+        self._reset_iter_elems()
+
+    def __iter__(self):
+        return self
+
+    def _reset_iter_elems(self):
+        if self._shuffle:
+            self._elems_iter = iter(shuffle(list(self._generate_iterable())))
+        else:
+            self._elems_iter = iter(self._generate_iterable())
+        self._is_before_1st_cycle = False
+
+    def __next__(self):
+        while True:
+            try:
+                item = next(self._elems_iter)
+            except StopIteration:
+                self._reset_iter_elems()
+            self._list_cache.append(item)
+            return item
