@@ -1,6 +1,6 @@
 from typing import Optional
-from .mock_if_then import MockIfThenKnowledgeBank
-from .atomic_if_then import AtomicIfThenKnowledgeBank
+from .mock import MockIfThenKnowledgeBank
+from .atomic import AtomicIfThenKnowledgeBank
 
 
 def build(type_: str,

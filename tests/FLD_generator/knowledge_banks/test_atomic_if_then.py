@@ -3,7 +3,7 @@ import logging
 from typing import Dict, Tuple, List
 
 from FLD_generator.formula import Formula
-from FLD_generator.knowledge_banks.atomic_if_then import (
+from FLD_generator.knowledge_banks.atomic import (
     load_atomic_if_then_statements,
     AtomicIfThenKnowledgeBank,
 )
