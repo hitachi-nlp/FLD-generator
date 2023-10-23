@@ -23,17 +23,28 @@ class JapaneseTranslator(TemplatedTranslator):
         self._transl_to_kaku_cache = {}
 
     def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
-        return const.constant
+        rep = const.constant
+        if const.left_modifier is not None:
+            raise NotImplementedError()
+        if const.right_modifier is not None:
+            raise NotImplementedError()
+        return rep
 
     def _make_predicate_phrase_str(self, pred: PredicatePhrase) -> str:
         rep = pred.predicate
+
+        if pred.left_modifier is not None:
+            raise NotImplementedError()
+
+        if pred.object is not None and pred.right_modifier is not None:
+            raise Exception('Can not determine the order of these phrases. We do not expect to pass this code, therefore, might be a bug.')
 
         if pred.object is not None:
             kaku = self._transl_to_kaku_cache.get(pred, random.choice(['を', 'に']))
             self._transl_to_kaku_cache[pred] = kaku
             rep = pred.object + kaku + rep
 
-        if pred.modifier is not None:
+        if pred.right_modifier is not None:
             raise NotImplementedError()
 
         return rep

@@ -4,11 +4,8 @@ from enum import Enum
 import logging
 import random
 
-from pydantic import BaseModel
-from tqdm import tqdm
-
 from FLD_generator.formula import Formula
-from FLD_generator.word_banks.word_utils import WordUtil, POS
+from FLD_generator.word_banks.word_utils import POS
 from FLD_generator.person_names import get_person_names
 from FLD_generator.utils import RandomCycle
 from FLD_generator.translators.base import (
@@ -16,28 +13,22 @@ from FLD_generator.translators.base import (
     PredicatePhrase,
     ConstantPhrase,
 )
-from .base import KnowledgeBankBase
+from .base import KnowledgeBankBase, Statement, IfThenStatement
 from .utils import (
     is_simple_unary_implication_shared_const,
     is_simple_unary_implication_unshared_const,
     is_simple_universal_implication,
     get_if_then_constants,
     get_if_then_predicates,
+    parse_verb,
+    parse_subj,
 )
 
 
 logger = logging.getLogger(__name__)
 
-_WORD_UTILS = WordUtil('eng')
 _PersonX = 'PersonX'
 _PersonY = 'PersonY'
-
-
-class AtomicStatement(BaseModel):
-    subj: str
-    verb: str
-    verb_left_modif: Optional[str] = None
-    verb_right_modif: Optional[str] = None
 
 
 class AtomicRelation(Enum):
@@ -54,48 +45,6 @@ class AtomicRelation(Enum):
     oReact = 'oReact'
     oWant = 'oWant'
 
-
-class AtomicIfThenStatement(BaseModel):
-
-    if_statement: AtomicStatement
-    then_statement: AtomicStatement
-    relation: AtomicRelation
-
-    @property
-    def type(self) -> str:
-
-        def have(rep: Optional[str], key: str) -> str:
-            if rep is None:
-                return False
-            return rep.find(key) >= 0
-
-        char0 = 'o'
-        if have(self.if_statement.subj, _PersonX):
-            char0 = 'x'
-        elif have(self.if_statement.subj, _PersonY):
-            char0 = 'y'
-
-        char1 = 'o'
-        if have(self.if_statement.verb_right_modif, _PersonX):
-            char1 = 'x'
-        elif have(self.if_statement.verb_right_modif, _PersonY):
-            char1 = 'y'
-
-        char2 = 'o'
-        if have(self.then_statement.subj, _PersonX):
-            char2 = 'x'
-        elif have(self.then_statement.subj, _PersonY):
-            char2 = 'y'
-
-        char3 = 'o'
-        if have(self.then_statement.verb_right_modif, _PersonX):
-            char3 = 'x'
-        elif have(self.then_statement.verb_right_modif, _PersonY):
-            char3 = 'y'
-
-        return f'{char0}{char1}_{char2}{char3}'
-
-
 _E0_IS_IF_RELATIONS = [
     AtomicRelation.xAttr,
     AtomicRelation.xNeed,
@@ -109,33 +58,12 @@ _E0_IS_IF_RELATIONS = [
     AtomicRelation.oReact,
     AtomicRelation.oWant,
 ]
-_E1_IS_IF_RELATIONS = [
-]
+_E1_IS_IF_RELATIONS = []
 
 
 def load_atomic_if_then_statements(path: str,
                                    max_statements: Optional[int] = None,
-                                   shuffle=False) -> Iterable[AtomicIfThenStatement]:
-
-    def _find_verb(words: List[str]) -> Optional[int]:
-        for i_word, word in enumerate(words):
-            if _is_verb(word):
-                return i_word
-        _is_verb(word)
-        return None
-
-    def _split_by_verb(pred_words: List[str]) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-        verb_idx = _find_verb(pred_words)
-        if verb_idx is None:
-            logger.info('Could\'nt find verb from words: %s. This can be due to the incomplete detection function. The statement will be skipped.', str(pred_words))
-            return None, None, None
-        else:
-            return (
-                ' '.join(pred_words[:verb_idx]) or None,
-                pred_words[verb_idx],
-                ' '.join(pred_words[verb_idx + 1:]) or None,
-            )
-
+                                   shuffle=False) -> Iterable[IfThenStatement]:
     logger.info('loading ATOMIC statements from file "%s"', path)
 
     if shuffle:
@@ -147,7 +75,7 @@ def load_atomic_if_then_statements(path: str,
     for i_line, line in enumerate(lines):
         if max_statements is not None and i_line >= max_statements:
             break
-        e0_str, rel_str, e1_str = line.rstrip('\n').split('\t')
+        e0_str, rel_str, e1_str = line.rstrip('\n').replace('-', ' ').split('\t')
         e0_str = _normalize_person(e0_str.lower())
         e1_str = _normalize_person(e1_str.lower())
         if e1_str == 'none':
@@ -157,117 +85,109 @@ def load_atomic_if_then_statements(path: str,
 
         relation = AtomicRelation(rel_str)
 
-        e0_subj, *e0_pred_words = e0_str.split('-')
+        e0_subj_str, e0_pred_str = e0_str.split(' ', 1)
+
+        e0_subj, e0_subj_left_modif, e0_subj_right_modif = parse_subj(e0_subj_str)
+        e0_verb, e0_verb_left_modif, e0_verb_right_modif = parse_verb(e0_pred_str)
         if e0_subj != _PersonX:
             raise NotImplementedError()
-
-        e0_verb_left_modif, e0_verb, e0_verb_right_modif = _split_by_verb(e0_pred_words)
         if e0_verb is None:
             continue
 
-        e1_words = e1_str.split('-')
-        e1_subj = e1_words[0] if e1_words[0] in [_PersonX, _PersonY] else None
-        e1_pred_words = e1_words[1:] if e1_words[0] in [_PersonX, _PersonY] else e1_words
+        e1_words = e1_str.split(' ')
+
+        e1_subj_str = e1_words[0] if e1_words[0] in [_PersonX, _PersonY] else None
+        if e1_subj_str is None:
+            if relation in [AtomicRelation.xEffect, AtomicRelation.xReact, AtomicRelation.xWant,
+                            AtomicRelation.xAttr, AtomicRelation.xNeed, AtomicRelation.xIntent]:
+                e1_subj_str = _PersonX
+            elif relation in [AtomicRelation.oEffect, AtomicRelation.oReact, AtomicRelation.oWant]:
+                if if_verb_right_modif is not None and if_verb_right_modif.find(_PersonY) >= 0:
+                    e1_subj_str = _PersonY
+                else:
+                    e1_subj_str = 'others'
+            else:
+                raise Exception('Not expected')
+
+        e1_pred_str = ' '.join(e1_words[1:]) if e1_words[0] in [_PersonX, _PersonY] else ' '.join(e1_words)
+        if relation in [AtomicRelation.xWant, AtomicRelation.oWant,
+                        AtomicRelation.xNeed, AtomicRelation.xIntent]:
+            if relation in [AtomicRelation.xWant, AtomicRelation.oWant]:
+                e1_verb = 'want'
+            elif relation in [AtomicRelation.xNeed]:
+                e1_verb = 'need'
+            elif relation in [AtomicRelation.xIntent]:
+                e1_verb = 'intend'
+            else:
+                raise ValueError()
+            e1_pred_str = (f'{e1_verb} to {e1_pred_str}' if not e1_pred_str.startswith('to')\
+                           else f'{e1_verb} {e1_pred_str}')
+        elif relation in [AtomicRelation.xReact, AtomicRelation.oReact]:
+            e1_pred_str = f'feel {e1_pred_str}'
+        elif relation in [AtomicRelation.xAttr]:
+            e1_pred_str = f'is {e1_pred_str}'
+
+        e1_subj, e1_subj_left_modif, e1_subj_right_modif = parse_subj(e1_subj_str)
+        e1_verb, e1_verb_left_modif, e1_verb_right_modif = parse_verb(e1_pred_str)
 
         if relation in _E0_IS_IF_RELATIONS:
             if_subj = e0_subj
+            if_subj_left_modif = e0_subj_left_modif
+            if_subj_right_modif = e0_subj_right_modif
+
             if_verb = e0_verb
             if_verb_left_modif = e0_verb_left_modif
             if_verb_right_modif = e0_verb_right_modif
 
-            # decide subject by "x" or "o"
-            if relation in [AtomicRelation.xEffect, AtomicRelation.xReact, AtomicRelation.xWant,
-                            AtomicRelation.xAttr, AtomicRelation.xNeed, AtomicRelation.xIntent]:
-                then_subj = _PersonX
+            then_subj = e1_subj
+            then_subj_left_modif = e1_subj_left_modif
+            then_subj_right_modif = e1_subj_right_modif
 
-            elif relation in [AtomicRelation.oEffect, AtomicRelation.oReact, AtomicRelation.oWant]:
-                if e1_subj is not None:
-                    then_subj = e1_subj
-                else:
-                    if if_verb_right_modif is not None and if_verb_right_modif.find(_PersonY) >= 0:
-                        then_subj = _PersonY
-                    else:
-                        then_subj = 'others'
-            else:
-                raise Exception()
-
-            # decide pred
-            if relation in [AtomicRelation.xEffect, AtomicRelation.oEffect]:
-                then_verb_left_modif, then_verb, then_verb_right_modif = _split_by_verb(e1_pred_words)
-
-            elif relation in [AtomicRelation.xReact, AtomicRelation.oReact]:
-                then_verb = 'feel'
-                then_verb_left_modif = None
-                then_verb_right_modif = ' '.join(e1_pred_words) or None
-
-            elif relation in [AtomicRelation.xWant, AtomicRelation.oWant,
-                              AtomicRelation.xNeed, AtomicRelation.xIntent]:
-                if relation in [AtomicRelation.xWant, AtomicRelation.oWant]:
-                    then_verb = 'want'
-                elif relation in [AtomicRelation.xNeed]:
-                    then_verb = 'need'
-                elif relation in [AtomicRelation.xIntent]:
-                    then_verb = 'intend'
-                else:
-                    raise Exception()
-
-                then_verb_left_modif = None
-                e1_to_pred_words = (['to'] + e1_pred_words if len(e1_pred_words) > 0 and e1_pred_words[0] != 'to'\
-                                    else e1_pred_words)
-                then_verb_right_modif = ' '.join(e1_to_pred_words) or None
-
-            elif relation in [AtomicRelation.xAttr]:
-                then_verb = 'is'
-                then_verb_left_modif = None
-                then_verb_right_modif = ' '.join(e1_pred_words) or None
-
-
-            else:
-                raise Exception()
+            then_verb = e1_verb
+            then_verb_left_modif = e1_verb_left_modif
+            then_verb_right_modif = e1_verb_right_modif
 
         elif relation in _E1_IS_IF_RELATIONS:
-
             then_subj = e0_subj
+            then_subj_left_modif = e0_subj_left_modif
+            then_subj_right_modif = e0_subj_right_modif
+
             then_verb = e0_verb
             then_verb_left_modif = e0_verb_left_modif
             then_verb_right_modif = e0_verb_right_modif
 
-            if_subj = _PersonX
+            if_subj = e1_subj
+            if_subj_left_modif = e1_subj_left_modif
+            if_subj_right_modif = e1_subj_right_modif
 
-            if relation in []:
-                # if relation == AtomicRelation.xIntent:
-                #     if_verb = 'intend'
-                # else:
-                #     raise Exception()
-                if_verb_left_modif = None
-                e1_to_pred_words = (['to'] + e1_pred_words if len(e1_pred_words) > 0 and e1_pred_words[0] != 'to'\
-                                    else e1_pred_words)
-                if_verb_right_modif = ' '.join(e1_to_pred_words) or None
-
-            else:
-                raise Exception()
-
+            if_verb = e1_verb
+            if_verb_left_modif = e1_verb_left_modif
+            if_verb_right_modif = e1_verb_right_modif
         else:
             raise Exception()
 
         if then_verb is None:
             continue
 
-        if_statement = AtomicStatement(
+        if_statement = Statement(
             subj=if_subj,
+            subj_right_modif=if_subj_right_modif,
+            subj_left_modif=if_subj_left_modif,
             verb=if_verb,
             verb_left_modif=if_verb_left_modif,
             verb_right_modif=if_verb_right_modif,
         )
 
-        then_statement = AtomicStatement(
+        then_statement = Statement(
             subj=then_subj,
+            subj_right_modif=then_subj_right_modif,
+            subj_left_modif=then_subj_left_modif,
             verb=then_verb,
             verb_left_modif=then_verb_left_modif,
             verb_right_modif=then_verb_right_modif,
         )
 
-        yield AtomicIfThenStatement(
+        yield IfThenStatement(
             if_statement=if_statement,
             then_statement=then_statement,
             relation=relation,
@@ -278,10 +198,6 @@ def _normalize_person(rep: str) -> str:
     rep = re.sub('[Pp]erson[-]*[Xx]', _PersonX, rep)
     rep = re.sub('[Pp]erson[-]*[Yy]', _PersonY, rep)
     return rep
-
-
-def _is_verb(word) -> bool:
-    return POS.VERB in _WORD_UTILS.get_pos(word)
 
 
 class AtomicIfThenKnowledgeBank(KnowledgeBankBase):
@@ -300,26 +216,61 @@ class AtomicIfThenKnowledgeBank(KnowledgeBankBase):
 
         self._person_names: Iterable[str] = RandomCycle(get_person_names(country='US'))
 
-    def _load_shared_subj_statements(self) -> Iterable[AtomicIfThenStatement]:
+    def _load_shared_subj_statements(self) -> Iterable[IfThenStatement]:
         for statement in load_atomic_if_then_statements(self._path,
                                                         max_statements=self._max_statements,
                                                         shuffle=self._shuffle):
-            if self._extract_PAS(statement.if_statement)[1] is None\
-                    or self._extract_PAS(statement.then_statement)[1] is None:
+            if self._is_meaningful(statement):
                 continue
-            if re.match('^x._x.', statement.type):
+            if re.match('^x._x.', self._get_if_then_statement_type(statement)):
                 # type is something like "xy_xy"
                 yield statement
 
-    def _load_unshared_subj_statements(self) -> Iterable[AtomicIfThenStatement]:
+    def _load_unshared_subj_statements(self) -> Iterable[IfThenStatement]:
         for statement in load_atomic_if_then_statements(self._path,
                                                         max_statements=self._max_statements,
                                                         shuffle=self._shuffle):
-            if self._extract_PAS(statement.if_statement)[1] is None\
-                    or self._extract_PAS(statement.then_statement)[1] is None:
+            if self._is_meaningful(statement):
                 continue
-            if not re.match('^x._x.', statement.type):
+            if not re.match('^x._x.', self._get_if_then_statement_type(statement)):
                 yield statement
+
+    def _is_meaningful(self, if_then_statement: IfThenStatement) -> bool:
+        return self._extract_PAS(if_then_statement.if_statement)[1][0] is not None\
+            and self._extract_PAS(if_then_statement.then_statement)[1][0] is not None
+
+    def _get_if_then_statement_type(self, statement: IfThenStatement) -> str:
+
+        def have(rep: Optional[str], key: str) -> str:
+            if rep is None:
+                return False
+            return rep.find(key) >= 0
+
+        char0 = 'o'
+        if have(statement.if_statement.subj, _PersonX):
+            char0 = 'x'
+        elif have(statement.if_statement.subj, _PersonY):
+            char0 = 'y'
+
+        char1 = 'o'
+        if have(statement.if_statement.verb_right_modif, _PersonX):
+            char1 = 'x'
+        elif have(statement.if_statement.verb_right_modif, _PersonY):
+            char1 = 'y'
+
+        char2 = 'o'
+        if have(statement.then_statement.subj, _PersonX):
+            char2 = 'x'
+        elif have(statement.then_statement.subj, _PersonY):
+            char2 = 'y'
+
+        char3 = 'o'
+        if have(statement.then_statement.verb_right_modif, _PersonX):
+            char3 = 'x'
+        elif have(statement.then_statement.verb_right_modif, _PersonY):
+            char3 = 'y'
+
+        return f'{char0}{char1}_{char2}{char3}'
 
     def is_acceptable(self, formulas: List[Formula]) -> bool:
         return all(
@@ -329,9 +280,8 @@ class AtomicIfThenKnowledgeBank(KnowledgeBankBase):
             for formula in formulas
         )
 
-    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Phrase], Dict[str, POS], List[bool]]:
+    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
         mapping: Dict[str, str] = {}
-        pos_mapping: Dict[str, str] = {}
         is_mapped: List[bool] = []
 
         for formula in formulas:
@@ -352,96 +302,111 @@ class AtomicIfThenKnowledgeBank(KnowledgeBankBase):
                 is_mapped.append(False)
                 continue
 
-            person_x_sample = next(self._person_names, 1)
-            person_y_sample = next(self._person_names, 1)
+            person_x = next(self._person_names, 1)
+            person_y = next(self._person_names, 1)
+            
+            (if_const_phrase, if_const_pos), (if_pred_phrase, if_pred_pos) = self._sample_phrases(
+                if_then_statement.if_statement,
+                person_x,
+                person_y,
+            )
 
-            def replace_names(rep: Optional[str]) -> Optional[str]:
-                if rep is None:
-                    return None
-                return rep.replace(_PersonX, person_x_sample).replace(_PersonY, person_y_sample)
+            (then_const_phrase, then_const_pos), (then_pred_phrase, then_pred_pos) = self._sample_phrases(
+                if_then_statement.then_statement,
+                person_x,
+                person_y,
+            )
 
-            if_subj_sample, if_pred_sample, if_pred_right_modif_sample, if_pred_pos = self._extract_PAS(if_then_statement.if_statement)
-            if_subj_sample = replace_names(if_subj_sample)
-            if_pred_right_modif_sample = replace_names(if_pred_right_modif_sample)
-
-            then_subj_sample, then_pred_sample, then_pred_right_modif_sample, then_pred_pos = self._extract_PAS(if_then_statement.then_statement)
-            then_subj_sample = replace_names(then_subj_sample)
-            then_pred_right_modif_sample = replace_names(then_pred_right_modif_sample)
-
-            if_pred, then_pred = get_if_then_predicates(formula)
-
-            def maybe_modif(pred: str, right_modif: Optional[str]) -> str:
-                # return pair_pred_with_obj_mdf(pred, None, right_modif)
-                return PredicatePhrase(predicate=pred, object=None, modifier=right_modif)
+            if_pred_formula, then_pred_formula = get_if_then_predicates(formula)
+            if_const_formula, then_const_formula = get_if_then_constants(formula)
 
             if is_simple_unary_implication_shared_const(formula):  # {A}{a} -> {B}{b}
-                if_const, then_const = get_if_then_constants(formula)
-
                 _new_mapping = {
-                    if_const.rep: ConstantPhrase(constant=if_subj_sample),
-                    if_pred.rep: PredicatePhrase(predicate=if_pred_sample, modifier=if_pred_right_modif_sample),
-                    then_pred.rep: PredicatePhrase(predicate=then_pred_sample, modifier=then_pred_right_modif_sample),
-                }
-                _new_pos_mapping = {
-                    if_const.rep: POS.NOUN,
-                    if_pred.rep: if_pred_pos,
-                    then_pred.rep: then_pred_pos,
+                    if_const_formula.rep: (if_const_phrase, if_const_pos),
+                    if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                    then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
                 }
 
             elif is_simple_unary_implication_unshared_const(formula):
-                if_const, then_const = get_if_then_constants(formula)
-
                 _new_mapping = {
-                    if_const.rep: ConstantPhrase(constant=if_subj_sample),
-                    if_pred.rep: PredicatePhrase(predicate=if_pred_sample, modifier=if_pred_right_modif_sample),
-                    then_const.rep: ConstantPhrase(constant=then_subj_sample),
-                    then_pred.rep: PredicatePhrase(predicate=then_pred_sample, modifier=then_pred_right_modif_sample),
-                }
-                _new_pos_mapping = {
-                    if_const.rep: POS.NOUN,
-                    if_pred.rep: if_pred_pos,
-                    then_const.rep: POS.NOUN,
-                    then_pred.rep: then_pred_pos,
+                    if_const_formula.rep: (if_const_phrase, if_const_pos),
+                    if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                    then_const_formula.rep: (then_const_phrase, then_const_pos),
+                    then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
                 }
 
             elif is_simple_universal_implication(formula):
                 _new_mapping = {
-                    if_pred.rep: PredicatePhrase(predicate=if_pred_sample, modifier=if_pred_right_modif_sample),
-                    then_pred.rep: PredicatePhrase(predicate=then_pred_sample, modifier=then_pred_right_modif_sample),
-                }
-                _new_pos_mapping = {
-                    if_pred.rep: if_pred_pos,
-                    then_pred.rep: then_pred_pos,
+                    if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                    then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
                 }
 
             if all(new_key not in mapping for new_key in _new_mapping):
                 # updating the already-mapped logical elements will break the knowledge statements
                 mapping.update(_new_mapping)
-                pos_mapping.update(_new_pos_mapping)
                 is_mapped.append(True)
 
-        return mapping, pos_mapping, is_mapped
+        return mapping, is_mapped
 
-    def _extract_PAS(self, statement: AtomicStatement) -> Tuple[Optional[str], Optional[str], Optional[str], POS]:
+    def _sample_phrases(self,
+                        statement: Statement,
+                        person_x: str,
+                        person_y: str) -> Tuple[Tuple[ConstantPhrase, POS],
+                                                Tuple[PredicatePhrase, POS]]:
+        def replace_names(rep: Optional[str]) -> Optional[str]:
+            if rep is None:
+                return None
+            return rep.replace(_PersonX, person_x).replace(_PersonY, person_y)
+
+        (
+            (subj, subj_left_modif, subj_right_modif, subj_pos),
+            (pred, pred_left_modif, pred_right_modif, pred_pos),
+        ) = self._extract_PAS(statement)
+
+        subj = replace_names(subj)
+        subj_left_modif = replace_names(subj_left_modif)
+        subj_right_modif = replace_names(subj_right_modif)
+
+        pred = replace_names(pred)
+        pred_left_modif = replace_names(pred_left_modif)
+        pred_right_modif = replace_names(pred_right_modif)
+
+        const_phrase = ConstantPhrase(constant=subj,
+                                      left_modifier=subj_left_modif,
+                                      right_modifier=subj_right_modif)
+        pred_phrase = PredicatePhrase(predicate=pred,
+                                      right_modifier=pred_right_modif,
+                                      left_modifier=pred_left_modif)
+        return (const_phrase, subj_pos), (pred_phrase, pred_pos)
+
+    def _extract_PAS(self, statement: Statement) -> Tuple[Tuple[Optional[str], Optional[str], Optional[str], POS]]:
         subj = statement.subj
+        subj_left_modif = statement.subj_left_modif
+        subj_right_modif = statement.subj_right_modif
+        subj_pos = POS.NOUN
+
         verb = statement.verb
-        verb_modif = statement.verb_right_modif
+        pred_left_modif = statement.verb_left_modif
+        verb_right_modif = statement.verb_right_modif
 
         if verb == 'is':
-            if verb_modif is not None and len(verb_modif.split(' ')) == 1:
-                # verb_modif is like "excited"
-                pred = verb_modif.split(' ')[0]
-                pred_modif = None
+            if verb_right_modif is not None and len(verb_right_modif.split(' ')) == 1:
+                # verb_right_modif is like "excited"
+                pred = verb_right_modif.split(' ')[0]
+                pred_right_modif = None
                 pred_pos = POS.ADJ
             else:
-                # verb_modif is like "extemely excited with the game"
+                # verb_right_modif is like "extemely excited with the game"
                 # we discard such item because is is a little bit difficult to extract the main predicate phrase
                 pred = None
-                pred_modif = None
+                pred_right_modif = None
                 pred_pos = None
         else:
             pred = verb
-            pred_modif = verb_modif
+            pred_right_modif = verb_right_modif
             pred_pos = POS.VERB
 
-        return subj, pred, pred_modif, pred_pos
+        return (
+            (subj, subj_left_modif, subj_right_modif, subj_pos),
+            (pred, pred_left_modif, pred_right_modif, pred_pos),
+        )

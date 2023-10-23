@@ -103,12 +103,15 @@ class Translator(ABC):
 class PredicatePhrase:
     predicate: str
     object: Optional[str] = None
-    modifier: Optional[str] = None
+    right_modifier: Optional[str] = None  # modifier 'can include' object too.
+    left_modifier: Optional[str] = None  # modifier 'can include' object too.
 
 
 @dataclass(frozen=True)
 class ConstantPhrase:
     constant: str
+    right_modifier: Optional[str] = None  # modifier 'can include' object too.
+    left_modifier: Optional[str] = None  # modifier 'can include' object too.
 
 
 Phrase = Union[PredicatePhrase, ConstantPhrase]

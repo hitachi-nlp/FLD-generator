@@ -410,7 +410,8 @@ class TemplatedTranslator(Translator):
                         SO_swap_interpret_mapping[constant] = ConstantPhrase(constant=predicate_transl.object)
                         SO_swap_interpret_mapping[predicate] = PredicatePhrase(predicate=predicate_transl.predicate,
                                                                                object=constant_transl,
-                                                                               modifier=predicate_transl.modifier)
+                                                                               right_modifier=predicate_transl.right_modifier,
+                                                                               left_modifier=predicate_transl.left_modifier)
 
                         SO_swap_inflated_mapping, _ = self._make_phrase_inflated_interpret_mapping(
                             SO_swap_interpret_mapping,
@@ -880,9 +881,10 @@ class TemplatedTranslator(Translator):
                                   ) -> Union[Dict[str, str], Tuple[Dict[str, Phrase], Dict[str, str], List[bool]]]:
 
         if from_knowledge and self._knowledge_bank.is_acceptable(formulas):
-            mapping, pos_mapping, is_injected = self._knowledge_bank.sample_mapping(formulas)
-            mapping_with_delimiters: Dict[str, str] = mapping
-            return mapping_with_delimiters, pos_mapping, is_injected
+            _mapping, is_injected = self._knowledge_bank.sample_mapping(formulas)
+            mapping = {key: val[0] for key, val in _mapping}
+            pos_mapping = {key: val[1] for key, val in _mapping if val[1] is not None}
+            return mapping, pos_mapping, is_injected
 
         else:
             constraints = constraints or {}
@@ -1074,7 +1076,7 @@ class TemplatedTranslator(Translator):
             raise ValueError()
 
         if isinstance(phrase, PredicatePhrase):
-            _word, obj, modifier = phrase.predicate, phrase.object, phrase.modifier
+            _word, obj, right_modifier, left_modifier = phrase.predicate, phrase.object, phrase.right_modifier, phrase.left_modifier
         elif isinstance(phrase, ConstantPhrase):
             _word = phrase.constant
         else:
@@ -1085,7 +1087,7 @@ class TemplatedTranslator(Translator):
             inflated_words = self._word_bank.change_word_form(_word, pos, form, force=True)
 
         if isinstance(phrase, PredicatePhrase):
-            return tuple(PredicatePhrase(predicate=_inflated_word, object=obj, modifier=modifier)
+            return tuple(PredicatePhrase(predicate=_inflated_word, object=obj, right_modifier=right_modifier, left_modifier=left_modifier)
                          for _inflated_word in inflated_words)
 
         elif isinstance(phrase, ConstantPhrase):

@@ -17,8 +17,8 @@ def test_load_atomic_if_then_statements():
         print('\n')
         pprint(statement.if_statement)
         pprint(statement.then_statement)
-        pprint(statement.relation)
-        pprint(statement.type)
+        # pprint(statement.relation)
+        # pprint(statement.type)
 
 
 def test_bank():
@@ -46,4 +46,4 @@ if __name__ == '__main__':
     setup_logger(level=logging.INFO)
 
     test_load_atomic_if_then_statements()
-    test_bank()
+    # test_bank()

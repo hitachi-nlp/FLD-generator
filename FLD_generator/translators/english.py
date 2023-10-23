@@ -36,14 +36,24 @@ class EnglishTranslator(TemplatedTranslator):
         pass
 
     def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
-        return const.constant
+        rep = const.constant
+        if const.left_modifier is not None:
+            rep = f'{const.left_modifier} ' + rep
+        if const.right_modifier is not None:
+            rep = rep + f' {const.right_modifier} '
+        return rep
 
     def _make_predicate_phrase_str(self, pred: PredicatePhrase) -> str:
         rep = pred.predicate 
+        if pred.left_modifier is not None:
+            rep = f'{pred.left_modifier} ' + rep
+
+        if pred.object is not None and pred.right_modifier is not None:
+            raise Exception('Can not determine the order of these phrases. We do not expect to pass this code, therefore, might be a bug.')
         if pred.object is not None:
             rep += f' {pred.object}'
-        if pred.modifier is not None:
-            rep += f' {pred.modifier}'
+        if pred.right_modifier is not None:
+            rep += f' {pred.right_modifier}'
         return rep
 
     def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
