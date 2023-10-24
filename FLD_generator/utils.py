@@ -46,6 +46,9 @@ def shuffle(elems: List[Any]) -> List[Any]:
     return random.sample(elems, len(elems))
 
 
+_shuffle_func = shuffle
+
+
 def weighted_shuffle(weights: List[float]) -> Iterable[int]:
     """ Weighted shuffle = sampling elements in accordance with the their weights. The sampling sequence is made without replacement.   """
     done_indexes = set()
@@ -496,43 +499,47 @@ def fix_seed(seed: int) -> None:
 class RandomCycle:
 
     def __init__(self,
-                 elems: Union[Callable[[], Iterator[Any]], Iterable[Any]],
+                 base_elems: Union[Callable[[], Iterator[Any]], Iterable[Any]],
                  shuffle=True):
-        self._shuffle = shuffle
+        self._cached_list: Optional[List[Any]] = None
 
-        self._is_before_1st_cycle = True
-        self._list_cache = []
-        if isinstance(elems, Callable):  # elems is generate
-            self._generate_iterable = elems
-        else:
-            if isinstance(elems, list):
-                self._generate_iterable = lambda : iter(elems)
+        if shuffle:
+            if isinstance(base_elems, Callable):  # elems is generate
+                self._cached_list = _shuffle_func(elem for elem in base_elems())
+                self._is_elems_cached = True
             else:
-                def _generate_iterable():
-                    if self._is_before_1st_cycle:
-                        return elems
-                    else:
-                        return iter(self._list_cache)
-                self._generate_iterable = _generate_iterable
+                if isinstance(base_elems, list):
+                    self._cached_list = base_elems
+                    self._is_elems_cached = True
+                else:
+                    self._cached_list = []
+                    self._is_elems_cached = False
 
-        self._elems_iter = None
-        self._reset_iter_elems()
+        def make_current_iterable():
+            if self._is_elems_cached:
+                return iter(self._cached_list)
+            else:
+                if isinstance(base_elems, Callable):  # elems is generate
+                    return base_elems()
+                else:
+                    if isinstance(base_elems, list):
+                        return iter(base_elems)
+                    else:
+                        return base_elems
+
+        self._make_current_iterable = make_current_iterable
 
     def __iter__(self):
         return self
 
-    def _reset_iter_elems(self):
-        if self._shuffle:
-            self._elems_iter = iter(shuffle(list(self._generate_iterable())))
-        else:
-            self._elems_iter = iter(self._generate_iterable())
-        self._is_before_1st_cycle = False
-
     def __next__(self):
+        cur_iter = self._make_current_iterable()
         while True:
             try:
-                item = next(self._elems_iter)
+                item = next(cur_iter)
+                if not self._is_elems_cached:
+                    self._cached_list.append(item)
+                return item
             except StopIteration:
-                self._reset_iter_elems()
-            self._list_cache.append(item)
-            return item
+                self._is_elems_cached = True
+                cur_iter = self._make_current_iterable()

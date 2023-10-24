@@ -1,12 +1,27 @@
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Union, Iterable
 from abc import abstractmethod, ABC
 import logging
-from pydantic import BaseModel
 
 from FLD_generator.exception import FormalLogicExceptionBase
 from FLD_generator.formula import Formula
 from FLD_generator.word_banks import POS
-from FLD_generator.translators.base import Phrase
+from FLD_generator.translators.base import Phrase, PredicatePhrase, ConstantPhrase
+from .formula import (
+    FormulaType,
+    get_type_fml,
+    get_if_then_constants_fml,
+    get_if_then_predicates_fml,
+)
+from .statement import (
+    get_phrases_stmt,
+    Statement,
+    DeclareStatement,
+    IfThenStatement,
+    StatementType,
+    SomeoneX,
+    SomeoneY,
+)
+from .utils import type_formula_to_statement, type_statement_to_formula
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +36,35 @@ class KnowledgeMappingImpossible(FormalLogicExceptionBase):
 
 class KnowledgeBankBase(ABC):
 
+    def __init__(self):
+        self._statements: Dict[str, Iterable[Statement]] = {
+            type_: (
+                stmt for stmt in self._load_statements()
+                if stmt.type == type_
+            )
+            for type_ in self._statement_types
+        }
+        # self._person_names: Iterable[str] = RandomCycle(get_person_names(country='US'))
+
     @abstractmethod
+    def _load_statements(self) -> Iterable[Statement]:
+        pass
+
     def is_acceptable(self, formulas: List[Formula]) -> bool:
+        return all(
+            get_type_fml(formula) in self._formula_types
+            for formula in formulas
+        )
+
+    @property
+    def _formula_types(self) -> List[FormulaType]:
+        return list({
+            type_statement_to_formula(stmt_type)
+            for stmt_type in self._statement_types
+        })
+            
+    @abstractmethod
+    def _statement_types(self) -> List[StatementType]:
         pass
 
     def sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
@@ -30,21 +72,117 @@ class KnowledgeBankBase(ABC):
             raise KnowledgeMappingImpossible()
         return self._sample_mapping(formulas)
 
-    @abstractmethod
     def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
-        pass
+        mapping: Dict[str, str] = {}
+        is_mapped: List[bool] = []
 
+        for formula in formulas:
+            fml_type = get_type_fml(formula)
+            stmt_type = type_formula_to_statement(fml_type)
+            if stmt_type not in self._statement_types:
+                is_mapped.append(False)
+                continue
 
-class Statement(BaseModel):
-    subj: str
-    subj_left_modif: Optional[str] = None
-    subj_right_modif: Optional[str] = None
+            statement = next(self._statements[stmt_type])
 
-    verb: str
-    verb_left_modif: Optional[str] = None
-    verb_right_modif: Optional[str] = None
+            if isinstance(statement, DeclareStatement):
+                (const_phrase, const_pos), (pred_phrase, pred_pos) = get_phrases_stmt(
+                    statement,
+                )
 
+                if fml_type == FormulaType.Fa:
+                    const_formula = formula.constants[0]
+                    pred_formula = formula.predicates[0]
 
-class IfThenStatement(BaseModel):
-    if_statement: Statement
-    then_statement: Statement
+                    _new_mapping = {
+                        const_formula.rep: (const_phrase, const_pos),
+                        pred_formula.rep: (pred_phrase, pred_pos),
+                    }
+                else:
+                    raise NotImplementedError()
+
+            elif isinstance(statement, IfThenStatement):
+                (if_const_phrase, if_const_pos), (if_pred_phrase, if_pred_pos) = get_phrases_stmt(
+                    statement.if_statement,
+                )
+                (then_const_phrase, then_const_pos), (then_pred_phrase, then_pred_pos) = get_phrases_stmt(
+                    statement.then_statement,
+                )
+
+                # person_x = next(self._person_names, 1)
+                # person_y = next(self._person_names, 1)
+
+                # def replace_with_person_names(rep: Optional[str]) -> Optional[str]:
+                #     if rep is None:
+                #         return None
+                #     return rep.replace(SomeoneX, person_x).replace(SomeoneY, person_y)
+
+                # def assign_person_names(phrase: Union[ConstantPhrase, PredicatePhrase]) -> None:
+                #     phrase.left_modifier = replace_with_person_names(phrase.left_modifier)
+                #     phrase.right_modifier = replace_with_person_names(phrase.right_modifier)
+                #     if isinstance(phrase, ConstantPhrase):
+                #         phrase.constant = replace_with_person_names(phrase.constant)
+                #     elif isinstance(phrase, PredicatePhrase):
+                #         phrase.predicate = replace_with_person_names(phrase.predicate)
+                #     else:
+                #         raise ValueError()
+
+                # assign_person_names(if_const_phrase)
+                # assign_person_names(if_pred_phrase)
+
+                # assign_person_names(then_const_phrase)
+                # assign_person_names(then_pred_phrase)
+
+                if_pred_formula, then_pred_formula = get_if_then_predicates_fml(formula)
+                if_const_formula, then_const_formula = get_if_then_constants_fml(formula)
+
+                if fml_type == FormulaType.Fa_Ga:
+                    _new_mapping = {
+                        if_const_formula.rep: (if_const_phrase, if_const_pos),
+                        if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                        then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
+                    }
+
+                elif fml_type == FormulaType.Fa_Gb:
+                    _new_mapping = {
+                        if_const_formula.rep: (if_const_phrase, if_const_pos),
+                        if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                        then_const_formula.rep: (then_const_phrase, then_const_pos),
+                        then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
+                    }
+
+                elif fml_type == FormulaType.Fx_Gx:
+
+                    def maybe_replace(rep: Optional[str], src: str, dst: str) -> Optional[str]:
+                        if rep is None:
+                            return None
+                        return rep.replace(src, dst)
+
+                    def maybe_replace_pronoun(rep: Optional[str]) -> Optional[str]:
+                        return maybe_replace(maybe_replace(rep, SomeoneX, 'the one'), SomeoneY, 'the other')
+
+                    def rename_someone_pronoun(phrase: PredicatePhrase):
+                        return PredicatePhrase(
+                            predicate = phrase.predicate,
+                            left_modifier = maybe_replace_pronoun(phrase.left_modifier),
+                            right_modifier = maybe_replace_pronoun(phrase.right_modifier),
+                            object = maybe_replace_pronoun(phrase.object),
+                        )
+
+                    if_pred_phrase = rename_someone_pronoun(if_pred_phrase)
+                    then_pred_phrase = rename_someone_pronoun(then_pred_phrase)
+
+                    _new_mapping = {
+                        if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                        then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
+                    }
+
+            else:
+                raise ValueError()
+
+            if all(new_key not in mapping for new_key in _new_mapping):
+                # updating the already-mapped logical elements will break the knowledge statements
+                mapping.update(_new_mapping)
+                is_mapped.append(True)
+
+        return mapping, is_mapped

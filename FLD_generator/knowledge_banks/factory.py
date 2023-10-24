@@ -1,6 +1,6 @@
 from typing import Optional
 from .mock import MockIfThenKnowledgeBank
-from .atomic import AtomicIfThenKnowledgeBank
+from .atomic import AtomicKnowledgeBank
 
 
 def build(type_: str,
@@ -8,9 +8,10 @@ def build(type_: str,
           max_statements: Optional[int] = None,
           no_shuffle=False):
     if type_ == 'mock_if_then':
-        return MockIfThenKnowledgeBank()
+        raise NotImplementedError('Not maintained')
+        # return MockIfThenKnowledgeBank()
     elif type_ == 'atomic_if_then':
-        return AtomicIfThenKnowledgeBank(atomic_filepath,
+        return AtomicKnowledgeBank(atomic_filepath,
                                          max_statements=max_statements,
                                          shuffle=not no_shuffle)
     else:
