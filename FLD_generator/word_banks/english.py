@@ -1,7 +1,8 @@
-from typing import Optional, Iterable, List, Dict, Set
 import re
+from typing import Optional, Iterable, List, Dict, Set
 import logging
 from enum import Enum
+from typing import Optional
 
 from ordered_set import OrderedSet
 from lemminflect import getInflection
@@ -12,6 +13,22 @@ from FLD_generator.person_names import get_person_names
 from .word_utils import WordUtil
 
 logger = logging.getLogger(__name__)
+
+
+BE_VERBS = [
+    'am', 'was',
+    'are', 'were',
+    'is', 'was',
+]
+
+MODAL_VERBS = [
+    'do', 'does', 'did',
+    'can', 'could',
+    'may', 'might',
+    'must',
+    'shall', 'should',
+    'will', 'would',
+]
 
 
 class EnglishWordBank(WordBank):
@@ -30,6 +47,12 @@ class EnglishWordBank(WordBank):
 
         ANTI = 'anti'
         NEG = 'neg'
+
+    class PresentForm(Enum):
+        NORMAL = 'normal'
+
+    class PastForm(Enum):
+        NORMAL = 'normal'
 
     class NounForm(Enum):
         NORMAL = 'normal'
@@ -78,7 +101,7 @@ class EnglishWordBank(WordBank):
     def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
         if form in [self.VerbForm.NORMAL, self.VerbForm.ING, self.VerbForm.S]:
-            if verb in ['am', 'are', 'is', 'was', 'were']:
+            if verb in BE_VERBS:
                 logger.warning('Changing verb form for be-verb "{%s}" is subtle. Thus, we do not change it\'s form.', verb)
                 return [verb]
             else:
@@ -176,6 +199,20 @@ class EnglishWordBank(WordBank):
 
         else:
             raise ValueError(f'Unknown form {form}')
+
+    def _change_present_form(self, verb: str, form: Enum, force=False) -> List[str]:
+
+        if form in [self.PresentForm.NORMAL]:
+            return verb
+        else:
+            raise ValueError()
+
+    def _change_past_form(self, verb: str, form: Enum, force=False) -> List[str]:
+
+        if form in [self.PastForm.NORMAL]:
+            return verb
+        else:
+            raise ValueError()
 
     def _change_noun_form(self, noun: str, form: Enum, force=False) -> List[str]:
 

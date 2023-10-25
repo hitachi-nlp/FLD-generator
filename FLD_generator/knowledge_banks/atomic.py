@@ -11,6 +11,8 @@ from enum import Enum
 import logging
 import random
 
+from FLD_generator.word_banks import POS
+from FLD_generator.word_banks.english import BE_VERBS
 from .base import KnowledgeBankBase
 from .statement import (
     DeclareStatement,
@@ -21,7 +23,7 @@ from .statement import (
     SomeoneY,
 )
 from .utils import (
-    parse_verb,
+    parse_pred,
     parse_subj,
 )
 
@@ -84,14 +86,14 @@ def _load_statements(path: str,
             continue
 
         (
-            (e0_subj, e0_subj_left_modif, e0_subj_right_modif),
-            (e0_verb, e0_verb_left_modif, e0_verb_right_modif),
+            (e0_subj, e0_subj_left_modif, e0_subj_right_modif, e0_subj_pos),
+            (e0_pred, e0_pred_left_modif, e0_pred_right_modif, e0_pred_pos),
         ) = _parse_e0(e0_str, relation)
 
-        is_personY_related = e0_verb_right_modif is not None and e0_verb_right_modif.find(SomeoneY) >= 0
+        is_personY_related = e0_pred_right_modif is not None and e0_pred_right_modif.find(SomeoneY) >= 0
         (
-            (e1_subj, e1_subj_left_modif, e1_subj_right_modif),
-            (e1_verb, e1_verb_left_modif, e1_verb_right_modif),
+            (e1_subj, e1_subj_left_modif, e1_subj_right_modif, e1_subj_pos),
+            (e1_pred, e1_pred_left_modif, e1_pred_right_modif, e1_pred_pos),
         ) = _parse_e1(e1_str, relation, is_personY_related=is_personY_related)
 
         if e0_subj != SomeoneX:
@@ -101,58 +103,73 @@ def _load_statements(path: str,
             if_subj = e0_subj
             if_subj_left_modif = e0_subj_left_modif
             if_subj_right_modif = e0_subj_right_modif
+            if_subj_pos = e0_subj_pos
 
-            if_verb = e0_verb
-            if_verb_left_modif = e0_verb_left_modif
-            if_verb_right_modif = e0_verb_right_modif
+            if_pred = e0_pred
+            if_pred_left_modif = e0_pred_left_modif
+            if_pred_right_modif = e0_pred_right_modif
+            if_pred_pos = e0_pred_pos
 
             then_subj = e1_subj
             then_subj_left_modif = e1_subj_left_modif
             then_subj_right_modif = e1_subj_right_modif
+            then_subj_pos = e1_subj_pos
 
-            then_verb = e1_verb
-            then_verb_left_modif = e1_verb_left_modif
-            then_verb_right_modif = e1_verb_right_modif
+            then_pred = e1_pred
+            then_pred_left_modif = e1_pred_left_modif
+            then_pred_right_modif = e1_pred_right_modif
+            then_pred_pos = e1_pred_pos
 
         elif relation in _E1_IS_IF_RELATIONS:
             then_subj = e0_subj
             then_subj_left_modif = e0_subj_left_modif
             then_subj_right_modif = e0_subj_right_modif
+            then_subj_pos = e0_subj_pos
 
-            then_verb = e0_verb
-            then_verb_left_modif = e0_verb_left_modif
-            then_verb_right_modif = e0_verb_right_modif
+            then_pred = e0_pred
+            then_pred_left_modif = e0_pred_left_modif
+            then_pred_right_modif = e0_pred_right_modif
+            then_pred_pos = e0_pred_pos
 
             if_subj = e1_subj
             if_subj_left_modif = e1_subj_left_modif
             if_subj_right_modif = e1_subj_right_modif
+            if_subj_pos = e1_subj_pos
 
-            if_verb = e1_verb
-            if_verb_left_modif = e1_verb_left_modif
-            if_verb_right_modif = e1_verb_right_modif
+            if_pred = e1_pred
+            if_pred_left_modif = e1_pred_left_modif
+            if_pred_right_modif = e1_pred_right_modif
+            if_pred_pos = e1_pred_pos
         else:
             raise Exception()
 
-        if if_verb is None or then_verb is None:
+        if if_pred is None or then_pred is None:
             continue
 
         if_statement = DeclareStatement(
             subj=if_subj,
             subj_right_modif=if_subj_right_modif,
             subj_left_modif=if_subj_left_modif,
-            verb=if_verb,
-            verb_left_modif=if_verb_left_modif,
-            verb_right_modif=if_verb_right_modif,
+            subj_pos=if_subj_pos,
+
+            pred=if_pred,
+            pred_left_modif=if_pred_left_modif,
+            pred_right_modif=if_pred_right_modif,
+            pred_pos=if_pred_pos,
         )
 
         then_statement = DeclareStatement(
             subj=then_subj,
             subj_right_modif=then_subj_right_modif,
             subj_left_modif=then_subj_left_modif,
-            verb=then_verb,
-            verb_left_modif=then_verb_left_modif,
-            verb_right_modif=then_verb_right_modif,
+            subj_pos=then_subj_pos,
+
+            pred=then_pred,
+            pred_left_modif=then_pred_left_modif,
+            pred_right_modif=then_pred_right_modif,
+            pred_pos=then_pred_pos,
         )
+
 
         if_then_statement = IfThenStatement(
             if_statement=if_statement,
@@ -170,11 +187,11 @@ def _normalize_person_xy(rep: str) -> str:
 
 
 def _parse_e0(e0_str: str, relation: AtomicRelation) -> Tuple[
-    Tuple[Optional[str], Optional[str], Optional[str]],
-    Tuple[Optional[str], Optional[str], Optional[str]],
+    Tuple[Optional[str], Optional[str], Optional[str], Optional[POS]],
+    Tuple[Optional[str], Optional[str], Optional[str], Optional[POS]],
 ]:
     e0_subj_str, e0_pred_str = e0_str.split(' ', 1)
-    return parse_subj(e0_subj_str), parse_verb(e0_pred_str)
+    return parse_subj(e0_subj_str), parse_pred(e0_pred_str)
 
 
 def _parse_e1(e1_str: str,
@@ -214,9 +231,12 @@ def _parse_e1(e1_str: str,
     elif relation in [AtomicRelation.xReact, AtomicRelation.oReact]:
         e1_pred_str = f'feel {e1_pred_str}'
     elif relation in [AtomicRelation.xAttr]:
-        e1_pred_str = f'is {e1_pred_str}'
+        if e1_pred_str.split(' ')[0] in BE_VERBS:
+            e1_pred_str = e1_pred_str
+        else:
+            e1_pred_str = f'is {e1_pred_str}'
 
-    return parse_subj(e1_subj_str), parse_verb(e1_pred_str)
+    return parse_subj(e1_subj_str), parse_pred(e1_pred_str)
 
 
 class AtomicKnowledgeBank(KnowledgeBankBase):

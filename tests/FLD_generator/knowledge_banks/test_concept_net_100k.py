@@ -22,6 +22,7 @@ def test_load_statements():
         elif isinstance(statement, IfThenStatement):
             pprint(statement.if_statement)
             pprint(statement.then_statement)
+            pprint(statement.relation)
 
         else:
             raise Exception()
@@ -30,7 +31,7 @@ def test_load_statements():
 def test_bank():
     bank = ConceptNet100kKnowledgeBank(_PATH, max_statements=None)
 
-    # sample_mappings(bank, '{F}{a}')
+    sample_mappings(bank, '{F}{a}')
     sample_mappings(bank, '{F} -> {G}')
     sample_mappings(bank, '(x): {F}x -> {G}x')
 

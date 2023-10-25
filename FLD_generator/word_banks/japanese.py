@@ -14,9 +14,6 @@ from .word_utils import WordUtil
 
 class JapaneseWordBank(WordBank):
 
-    def __init__():
-        super().__init__()
-
     class VerbForm(Enum):
         """ https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html """
         NORMAL = 'normal'
@@ -33,6 +30,12 @@ class JapaneseWordBank(WordBank):
 
         ANTI = 'anti'
         NEG = 'neg'
+
+    class PresentForm(Enum):
+        NORMAL = 'normal'
+
+    class PastForm(Enum):
+        NORMAL = 'normal'
 
     class NounForm(Enum):
         NORMAL = 'normal'
@@ -184,6 +187,20 @@ class JapaneseWordBank(WordBank):
             """
             raise ValueError('Japanese do not have negnyms.')
 
+        else:
+            raise ValueError()
+
+    def _change_present_form(self, verb: str, form: Enum, force=False) -> List[str]:
+
+        if form in [self.PresentForm.NORMAL]:
+            return verb
+        else:
+            raise ValueError()
+
+    def _change_past_form(self, verb: str, form: Enum, force=False) -> List[str]:
+
+        if form in [self.PastForm.NORMAL]:
+            return verb
         else:
             raise ValueError()
 

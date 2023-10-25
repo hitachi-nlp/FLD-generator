@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from FLD_generator.utils import RandomCycle
 from FLD_generator.word_banks.word_utils import WordUtil, POS
+from FLD_generator.word_banks.english import BE_VERBS
 from FLD_generator.translators.base import ConstantPhrase, PredicatePhrase
 
 logger = logging.getLogger(__name__)
@@ -16,6 +17,7 @@ _WORD_UTILS = WordUtil('eng')
 
 SomeoneX = 'SomeoneX'
 SomeoneY = 'SomeoneY'
+
 
 
 class StatementType(Enum):
@@ -46,12 +48,19 @@ class DeclareStatement(BaseModel):
     subj_left_modif: Optional[str] = None
     subj: str
     subj_right_modif: Optional[str] = None
+    subj_pos: POS
 
-    verb_left_modif: Optional[str] = None
-    verb: Optional[str] = None
-    verb_right_modif: Optional[str] = None
+    pred_left_modif: Optional[str] = None
+    pred: Optional[str] = None
+    pred_right_modif: Optional[str] = None
+    pred_pos: Optional[POS] = None
 
     relation: Optional[str] = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.pred in BE_VERBS:
+            raise ValueError(f'A predicate must not be a be-verb, but be a modifier of that be-verb: {str(self)}')
 
     @property
     def type(self) -> StatementType:
@@ -88,7 +97,7 @@ def _get_statement_type(statement: Statement) -> str:
         if statement.subj is None:
             rep = 'INCOMPLETE'
 
-        if statement.verb is None:
+        if statement.pred is None:
             rep = 'F'
         else:
             if have(statement.subj, SomeoneX):
@@ -104,7 +113,7 @@ def _get_statement_type(statement: Statement) -> str:
         if statement.if_statement.subj is None or statement.then_statement.subj is None:
             rep = 'INCOMPLETE'
 
-        if statement.if_statement.verb is None and statement.then_statement.verb is None:
+        if statement.if_statement.pred is None and statement.then_statement.pred is None:
             rep = 'F_G'
         else:
             if have(statement.if_statement.subj, SomeoneX):
@@ -134,7 +143,7 @@ def get_phrases_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[Consta
     (
         (subj, subj_left_modif, subj_right_modif, subj_pos),
         (pred, pred_left_modif, pred_right_modif, pred_pos),
-    ) = get_PAS_stmt(statement)
+    ) = _get_PAS_stmt(statement)
 
     if pred is not None:
         const_phrase = ConstantPhrase(constant=subj,
@@ -156,50 +165,38 @@ def get_phrases_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[Consta
     return (const_phrase, const_pos), (pred_phrase, pred_pos)
 
 
-def get_PAS_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[str], Optional[str], Optional[str], POS]]:
+def _get_PAS_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[str], Optional[str], Optional[str], POS]]:
     subj = statement.subj
     subj_left_modif = statement.subj_left_modif
     subj_right_modif = statement.subj_right_modif
+    subj_pos = statement.subj_pos
 
-    if POS.VERB in _WORD_UTILS.get_pos(subj) and subj_right_modif is not None:
-        # "running at the park"
-        subj_pos = POS.VERB
-    else:
-        subj_pos = POS.NOUN
+    # if POS.VERB in _WORD_UTILS.get_pos(subj) and subj_right_modif is not None:
+    #     # "running at the park"
+    #     subj_pos = POS.VERB
+    # else:
+    #     subj_pos = POS.NOUN
 
-    verb = statement.verb
-    pred_left_modif = statement.verb_left_modif
-    verb_right_modif = statement.verb_right_modif
+    if statement.pred in BE_VERBS:
+        raise Exception('We do not expect to pass here, might be a bug.')
+        # if statement.pred_right_modif is None:
+        #     raise Exception('Something might by wrong')
 
-    if verb == 'is':
-        # if verb_right_modif is not None and len(verb_right_modif.split(' ')) == 1:
-        #     # verb_right_modif is like "excited"
-        #     pred = verb_right_modif.split(' ')[0]
-        #     pred_right_modif = None
-        #     pred_pos = POS.ADJ
+        # if statement.pred_right_modif.find(' ') >= 0:
+        #     pred, pred_right_modif = statement.pred_right_modif.split(' ', 1)
         # else:
-        #     # verb_right_modif is like "extemely excited with the game"
-        #     # we discard such item because is is a little bit difficult to extract the main predicate phrase
-        #     pred = None
-        #     pred_right_modif = None
-        #     pred_pos = None
+        #     pred, pred_right_modif = pred_right_modif, None
 
-        if verb_right_modif is None:
-            raise Exception('Something might by wrong')
+        # pred_left_modif = None
 
-        if verb_right_modif.find(' ') >= 9:
-            pred, pred_right_modif = verb_right_modif.split(' ', 1)
-        else:
-            pred, pred_right_modif = verb_right_modif, None
-
-        pred_left_modif = None
-
-        # pos have many candidates: "cat is a mamal",  "iron is used for clearning",  "someone is kind"
-        pred_pos = POS.OTHERS
+        # # pos have many candidates: "cat is a mamal",  "iron is used for clearning",  "someone is kind"
+        # pred_pos = POS.OTHERS
     else:
-        pred = verb
-        pred_right_modif = verb_right_modif
-        pred_pos = POS.VERB
+        pred = statement.pred
+        pred_left_modif = statement.pred_left_modif
+        pred_right_modif = statement.pred_right_modif
+        # pred_pos = POS.VERB
+        pred_pos = statement.pred_pos
 
     return (
         (subj, subj_left_modif, subj_right_modif, subj_pos),

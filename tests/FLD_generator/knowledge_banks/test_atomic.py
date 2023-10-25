@@ -13,7 +13,7 @@ _PATH = './res/knowledge/commonsense-kg-completion/data/atomic/test.txt'
 
 
 def test_load_statements():
-    for statement in _load_statements(_PATH, max_statements=1000):
+    for statement in _load_statements(_PATH, max_statements=10000):
         print('')
         pprint(statement.if_statement)
         pprint(statement.then_statement)

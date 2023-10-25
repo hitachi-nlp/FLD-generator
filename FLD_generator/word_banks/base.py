@@ -14,11 +14,24 @@ logger = logging.getLogger(__name__)
 
 class POS(Enum):
     # from nltk/corpus/reader/wordnet.py
-    VERB = 'VERB'     # verbs (all tenses and modes)
-    NOUN = 'NOUN'     # nouns (common and proper)
+    VERB = 'VERB'            # verbs (all tenses and modes)
+
     ADJ = 'ADJ'       # adjectives
+
+    # He is running at the park
+    # Note that we differenciate this from "VERB.ing"
+    # as PRESENT imply that the verb form "must be" present form
+    PRESENT = 'PRESENT'
+
+    # an iron is "used" for cleaning
+    PAST = 'PAST'
+
     ADJ_SAT = 'ADJ_SAT'
+
     ADV = 'ADV'       # adverbs
+
+    NOUN = 'NOUN'     # nouns (common and proper)
+
     OTHERS = 'OTHERS'
 
 
@@ -35,6 +48,8 @@ class WordBank(ABC):
     # implemente in the sub classes
     VerbForm: EnumMeta
     AdjForm: EnumMeta
+    PresentForm: EnumMeta
+    PastForm: EnumMeta
     NounForm: EnumMeta
     INTERMEDIATE_CONSTANT_PREFIXES: List[str]
 
@@ -104,6 +119,14 @@ class WordBank(ABC):
 
     @abstractmethod
     def _change_adj_form(self, adj: str, form: Enum, force=False) -> List[str]:
+        pass
+
+    @abstractmethod
+    def _change_present_form(self, adj: str, form: Enum, force=False) -> List[str]:
+        pass
+
+    @abstractmethod
+    def _change_past_form(self, adj: str, form: Enum, force=False) -> List[str]:
         pass
 
     @abstractmethod
