@@ -20,6 +20,8 @@ import line_profiling
 
 utils_logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
+
 
 class RetryAndTimeoutFailure(FormalLogicExceptionBase):
     pass
@@ -509,14 +511,25 @@ class RandomCycle:
                 self._is_elems_cached = True
             else:
                 if isinstance(base_elems, list):
-                    self._cached_list = base_elems
+                    self._cached_list = _shuffle_func(base_elems)
                     self._is_elems_cached = True
                 else:
                     self._cached_list = []
                     self._is_elems_cached = False
+        else:
+            if isinstance(base_elems, list):
+                self._cached_list = base_elems
+                self._is_elems_cached = True
+            else:
+                self._cached_list = []
+                self._is_elems_cached = False
+
 
         def make_current_iterable():
             if self._is_elems_cached:
+                logger.info('making iterable from %d elements, the original one is %s',
+                            len(self._cached_list),
+                            str(base_elems))
                 return iter(self._cached_list)
             else:
                 if isinstance(base_elems, Callable):  # elems is generate

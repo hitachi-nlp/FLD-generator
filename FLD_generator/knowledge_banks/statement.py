@@ -19,7 +19,11 @@ SomeoneY = 'SomeoneY'
 
 
 class StatementType(Enum):
+    F = 'F'
+    F_G = 'F_G'
+
     Fa = 'Fa'
+    Fx = 'Fx'
 
     Fa_Ga = 'Fa_Ga'
     Fa_Gb = 'Fa_Gb'
@@ -27,6 +31,8 @@ class StatementType(Enum):
     Fx_Gb = 'Fx_Gb'
     Fx_Gx = 'Fx_Gx'
     Fx_Gy = 'Fx_Gy'
+
+    INCOMPLETE = 'INCOMPLETE'
 
 
 class Statement:
@@ -42,7 +48,7 @@ class DeclareStatement(BaseModel):
     subj_right_modif: Optional[str] = None
 
     verb_left_modif: Optional[str] = None
-    verb: str
+    verb: Optional[str] = None
     verb_right_modif: Optional[str] = None
 
     relation: Optional[str] = None
@@ -63,84 +69,6 @@ class IfThenStatement(BaseModel):
         return _get_statement_type(self)
 
 
-def _get_statement_type(statement: Statement) -> str:
-
-    def have(rep: Optional[str], key: str) -> str:
-        if rep is None:
-            return False
-        return rep.find(key) >= 0
-
-    if isinstance(statement, DeclareStatement):
-        if have(statement.subj, SomeoneX):
-            subj0 = 'x'
-        elif have(statement.subj, SomeoneY):
-            subj0 = 'y'
-        else:
-            subj0 = 'a'
-
-        # if have(statement.verb_right_modif, SomeoneX):
-        #     modif0 = 'x'
-        # elif have(statement.verb_right_modif, SomeoneY):
-        #     modif0 = 'y'
-        # else:
-        #     modif0 = 'm1'
-
-        # return f'{subj0}_v_{modif0}'
-
-        rep = f'F{subj0}'
-
-    elif isinstance(statement, IfThenStatement):
-        if have(statement.if_statement.subj, SomeoneX):
-            subj0 = 'x'
-        elif have(statement.if_statement.subj, SomeoneY):
-            subj0 = 'y'
-        else:
-            subj0 = 'a'
-
-        # if have(statement.if_statement.verb_right_modif, SomeoneX):
-        #     modif0 = 'x'
-        # elif have(statement.if_statement.verb_right_modif, SomeoneY):
-        #     modif0 = 'y'
-        # else:
-        #     modif0 = 'm1'
-
-        if have(statement.then_statement.subj, SomeoneX):
-            subj1 = 'x'
-        elif have(statement.then_statement.subj, SomeoneY):
-            subj1 = 'y'
-        else:
-            if statement.then_statement.subj == statement.if_statement.subj:
-                subj1 = 'a'
-            else:
-                subj1 = 'b'
-
-        # if have(statement.then_statement.verb_right_modif, SomeoneX):
-        #     modif1 = 'x'
-        # elif have(statement.then_statement.verb_right_modif, SomeoneY):
-        #     modif1 = 'y'
-        # else:
-        #     if statement.then_statement.verb_right_modif == statement.if_statement.verb_right_modif:
-        #         subj1 = 'm1'
-        #     else:
-        #         subj1 = 'm2'
-
-        # return f'if__{subj0}_v_{modif0}__then__{subj1}_v_{modif1}'
-
-        rep = f'F{subj0}_G{subj1}'
-
-    return StatementType(rep)
-
-
-def is_meaningful_stmt(statement: Statement) -> bool:
-    if isinstance(statement, DeclareStatement):
-        (_, _), (pred_phrase, _) = get_phrases_stmt(statement)
-        return pred_phrase.predicate is not None
-    else:
-        (_, _), (if_pred_phrase, _) = get_phrases_stmt(statement.if_statement)
-        (_, _), (then_pred_phrase, _) = get_phrases_stmt(statement.then_statement)
-        return if_pred_phrase.predicate is not None and then_pred_phrase.predicate is not None
-
-
 def make_random_cycle_statement_loader(base_iter: Iterable[Statement],
                                        is_ok_filter_fn = lambda _: True) -> Iterable[Statement]:
     return RandomCycle(
@@ -149,11 +77,95 @@ def make_random_cycle_statement_loader(base_iter: Iterable[Statement],
     )
 
 
+def _get_statement_type(statement: Statement) -> str:
+
+    def have(rep: Optional[str], key: str) -> str:
+        if rep is None:
+            return False
+        return rep.find(key) >= 0
+
+    if isinstance(statement, DeclareStatement):
+        if statement.subj is None:
+            rep = 'INCOMPLETE'
+
+        if statement.verb is None:
+            rep = 'F'
+        else:
+            if have(statement.subj, SomeoneX):
+                subj0 = 'x'
+            elif have(statement.subj, SomeoneY):
+                subj0 = 'y'
+            else:
+                subj0 = 'a'
+
+            rep = f'F{subj0}'
+
+    elif isinstance(statement, IfThenStatement):
+        if statement.if_statement.subj is None or statement.then_statement.subj is None:
+            rep = 'INCOMPLETE'
+
+        if statement.if_statement.verb is None and statement.then_statement.verb is None:
+            rep = 'F_G'
+        else:
+            if have(statement.if_statement.subj, SomeoneX):
+                subj0 = 'x'
+            elif have(statement.if_statement.subj, SomeoneY):
+                subj0 = 'y'
+            else:
+                subj0 = 'a'
+
+            if have(statement.then_statement.subj, SomeoneX):
+                subj1 = 'x'
+            elif have(statement.then_statement.subj, SomeoneY):
+                subj1 = 'y'
+            else:
+                if statement.then_statement.subj == statement.if_statement.subj:
+                    subj1 = 'a'
+                else:
+                    subj1 = 'b'
+
+            rep = f'F{subj0}_G{subj1}'
+
+    return StatementType(rep)
+
+
+def get_phrases_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[ConstantPhrase], Optional[POS]],
+                                                           Tuple[PredicatePhrase, POS]]:
+    (
+        (subj, subj_left_modif, subj_right_modif, subj_pos),
+        (pred, pred_left_modif, pred_right_modif, pred_pos),
+    ) = get_PAS_stmt(statement)
+
+    if pred is not None:
+        const_phrase = ConstantPhrase(constant=subj,
+                                      left_modifier=subj_left_modif,
+                                      right_modifier=subj_right_modif)
+        const_pos = subj_pos
+        pred_phrase = PredicatePhrase(predicate=pred,
+                                      right_modifier=pred_right_modif,
+                                      left_modifier=pred_left_modif)
+        pred_pos = pred_pos
+    else:
+        const_phrase = None
+        const_pos = None
+        pred_phrase = PredicatePhrase(predicate=subj,
+                                      right_modifier=subj_right_modif,
+                                      left_modifier=subj_left_modif)
+        pred_pos = subj_pos
+
+    return (const_phrase, const_pos), (pred_phrase, pred_pos)
+
+
 def get_PAS_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[str], Optional[str], Optional[str], POS]]:
     subj = statement.subj
     subj_left_modif = statement.subj_left_modif
     subj_right_modif = statement.subj_right_modif
-    subj_pos = POS.NOUN
+
+    if POS.VERB in _WORD_UTILS.get_pos(subj) and subj_right_modif is not None:
+        # "running at the park"
+        subj_pos = POS.VERB
+    else:
+        subj_pos = POS.NOUN
 
     verb = statement.verb
     pred_left_modif = statement.verb_left_modif
@@ -172,8 +184,14 @@ def get_PAS_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[str], Opti
         #     pred_right_modif = None
         #     pred_pos = None
 
-        pred = 'is'
-        pred_right_modif = verb_right_modif
+        if verb_right_modif is None:
+            raise Exception('Something might by wrong')
+
+        if verb_right_modif.find(' ') >= 9:
+            pred, pred_right_modif = verb_right_modif.split(' ', 1)
+        else:
+            pred, pred_right_modif = verb_right_modif, None
+
         pred_left_modif = None
 
         # pos have many candidates: "cat is a mamal",  "iron is used for clearning",  "someone is kind"
@@ -187,19 +205,3 @@ def get_PAS_stmt(statement: DeclareStatement) -> Tuple[Tuple[Optional[str], Opti
         (subj, subj_left_modif, subj_right_modif, subj_pos),
         (pred, pred_left_modif, pred_right_modif, pred_pos),
     )
-
-
-def get_phrases_stmt(statement: DeclareStatement) -> Tuple[Tuple[ConstantPhrase, POS],
-                                                           Tuple[PredicatePhrase, POS]]:
-    (
-        (subj, subj_left_modif, subj_right_modif, subj_pos),
-        (pred, pred_left_modif, pred_right_modif, pred_pos),
-    ) = get_PAS_stmt(statement)
-
-    const_phrase = ConstantPhrase(constant=subj,
-                                  left_modifier=subj_left_modif,
-                                  right_modifier=subj_right_modif)
-    pred_phrase = PredicatePhrase(predicate=pred,
-                                  right_modifier=pred_right_modif,
-                                  left_modifier=pred_left_modif)
-    return (const_phrase, subj_pos), (pred_phrase, pred_pos)

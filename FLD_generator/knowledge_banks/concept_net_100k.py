@@ -12,7 +12,6 @@ from .statement import (
     IfThenStatement,
     SomeoneX,
     SomeoneY,
-    is_meaningful_stmt,
 )
 from .utils import (
     parse_verb,
@@ -100,9 +99,17 @@ def _load_statements(path: str,
             if_verb_left_modif = 'can'
 
         elif relation == ConceptNet100kRelation.Causes:
-            continue
+            # TODO: 多分，ここらへんでPOSを確定させるべきなのだと思う．
+            # "find lose item" などは，ここのparseととPOSの確定が結びついている．
+            if_subj, if_subj_left_modif, if_subj_right_modif = parse_subj(e0_str)
+            if_verb, if_verb_left_modif, if_verb_right_modif = None, None, None
+
+            then_subj, then_subj_left_modif, then_subj_right_modif = parse_subj(e1_str)
+            then_verb, then_subj_left_modif, then_verb_right_modif = None, None, None
 
         elif relation == ConceptNet100kRelation.CausesDesire:
+            # rare case
+            # difficult to parse
             continue
 
         elif relation == ConceptNet100kRelation.CreatedBy:
@@ -144,17 +151,31 @@ def _load_statements(path: str,
                     # trade with china    effect of enrich their government
                     if_verb, if_verb_left_modif, if_verb_right_modif = parse_verb(effect_str)
                 else:
-                    if_verb = 'cause'
+                    if_verb = None
                     if_verb_left_modif = None
-                    if_verb_right_modif = effect_str
+                    if_verb_right_modif = None
+
+                    then_subj, then_subj_right_modif= effect_str.split(' ', 1)
+                    then_subj_left_modif = None
+
+                    then_verb = None
+                    then_verb_left_modif = None
+                    then_verb_right_modif = None
             else:
                 if_verb, if_verb_left_modif, if_verb_right_modif = 'have', None, e1_str
 
-        elif relation == ConceptNet100kRelation.HasFirstSubevent:
-            continue
+        elif relation in [ConceptNet100kRelation.HasFirstSubevent,
+                          ConceptNet100kRelation.HasLastSubevent,
+                          ConceptNet100kRelation.HasSubevent]:
+            if_subj = SomeoneX
+            if_subj_left_modif = None
+            if_subj_right_modif = None
+            if_verb, if_verb_left_modif, if_verb_right_modif = parse_verb(f'{e0_str}')
 
-        elif relation == ConceptNet100kRelation.HasLastSubevent:
-            continue
+            then_subj = SomeoneX
+            then_subj_left_modif = None
+            then_subj_right_modif = None
+            then_verb, then_verb_left_modif, then_verb_right_modif = parse_verb(f'{e1_str}')
 
         elif relation == ConceptNet100kRelation.HasPainCharacter:
             # is rare
@@ -178,9 +199,6 @@ def _load_statements(path: str,
         elif relation == ConceptNet100kRelation.HasProperty:
             if_subj, if_subj_left_modif, if_subj_right_modif = parse_subj(e0_str)
             if_verb, if_verb_left_modif, if_verb_right_modif = 'is', None, e1_str
-
-        elif relation == ConceptNet100kRelation.HasSubevent:
-            continue
 
         elif relation == ConceptNet100kRelation.InheritsFrom:
             # examples seems to be low-quality
@@ -214,7 +232,7 @@ def _load_statements(path: str,
             continue
 
         elif relation == ConceptNet100kRelation.NotDesires:
-            pass
+            continue
 
         elif relation == ConceptNet100kRelation.NotHasA:
             continue
@@ -259,9 +277,6 @@ def _load_statements(path: str,
         else:
             raise ValueError()
 
-        if if_verb is None:
-            continue
-
         if_statement = DeclareStatement(
             subj=if_subj,
             subj_right_modif=if_subj_right_modif,
@@ -271,7 +286,7 @@ def _load_statements(path: str,
             verb_right_modif=if_verb_right_modif,
         )
 
-        if then_verb is None:
+        if then_subj is None:
             statement = if_statement
             statement.relation = relation.value
         else:
@@ -290,9 +305,6 @@ def _load_statements(path: str,
                 relation=relation.value,
             )
 
-        if not is_meaningful_stmt(statement):
-            continue
-
         yield statement
 
 
@@ -308,11 +320,16 @@ class ConceptNet100kKnowledgeBank(KnowledgeBankBase):
 
         super().__init__()
 
-    def _load_statements(self) -> Iterable[Statement]:
-        return _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle)
+    def _load_statements(self, type_: StatementType) -> Iterable[Statement]:
+        for stmt in _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle):
+            if stmt.type != type_:
+                continue
+            yield stmt
 
     @property
     def _statement_types(self) -> List[StatementType]:
         return [
             StatementType.Fa,
+            StatementType.F_G,
+            StatementType.Fx_Gx,
         ]

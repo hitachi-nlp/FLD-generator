@@ -13,7 +13,7 @@ from shared import sample_mappings
 _PATH = 'res/knowledge/commonsense-kg-completion/data/ConceptNet/train.txt'
 
 def test_load_statements():
-    for statement in _load_statements(_PATH, max_statements=10000):
+    for statement in _load_statements(_PATH, max_statements=1000):
         print('')
 
         if isinstance(statement, DeclareStatement):
@@ -28,8 +28,11 @@ def test_load_statements():
 
 
 def test_bank():
-    bank = ConceptNet100kKnowledgeBank(_PATH, max_statements=1000)
-    sample_mappings(bank, '{F}{a}')
+    bank = ConceptNet100kKnowledgeBank(_PATH, max_statements=None)
+
+    # sample_mappings(bank, '{F}{a}')
+    sample_mappings(bank, '{F} -> {G}')
+    sample_mappings(bank, '(x): {F}x -> {G}x')
 
 
 

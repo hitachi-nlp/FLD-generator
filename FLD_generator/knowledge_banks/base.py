@@ -6,6 +6,7 @@ from FLD_generator.exception import FormalLogicExceptionBase
 from FLD_generator.formula import Formula
 from FLD_generator.word_banks import POS
 from FLD_generator.translators.base import Phrase, PredicatePhrase, ConstantPhrase
+from FLD_generator.utils import RandomCycle
 from .formula import (
     FormulaType,
     get_type_fml,
@@ -38,16 +39,15 @@ class KnowledgeBankBase(ABC):
 
     def __init__(self):
         self._statements: Dict[str, Iterable[Statement]] = {
-            type_: (
-                stmt for stmt in self._load_statements()
-                if stmt.type == type_
+            type_: RandomCycle(
+                self._load_statements(type_),
+                shuffle=False,  # shuffle should be managed by "self._load_statements()"
             )
             for type_ in self._statement_types
         }
-        # self._person_names: Iterable[str] = RandomCycle(get_person_names(country='US'))
 
     @abstractmethod
-    def _load_statements(self) -> Iterable[Statement]:
+    def _load_statements(self, type_: StatementType) -> Iterable[Statement]:
         pass
 
     def is_acceptable(self, formulas: List[Formula]) -> bool:
@@ -90,7 +90,10 @@ class KnowledgeBankBase(ABC):
                     statement,
                 )
 
-                if fml_type == FormulaType.Fa:
+                if fml_type == FormulaType.F:
+                    raise NotImplementedError()
+
+                elif fml_type == FormulaType.Fa:
                     const_formula = formula.constants[0]
                     pred_formula = formula.predicates[0]
 
@@ -109,34 +112,16 @@ class KnowledgeBankBase(ABC):
                     statement.then_statement,
                 )
 
-                # person_x = next(self._person_names, 1)
-                # person_y = next(self._person_names, 1)
-
-                # def replace_with_person_names(rep: Optional[str]) -> Optional[str]:
-                #     if rep is None:
-                #         return None
-                #     return rep.replace(SomeoneX, person_x).replace(SomeoneY, person_y)
-
-                # def assign_person_names(phrase: Union[ConstantPhrase, PredicatePhrase]) -> None:
-                #     phrase.left_modifier = replace_with_person_names(phrase.left_modifier)
-                #     phrase.right_modifier = replace_with_person_names(phrase.right_modifier)
-                #     if isinstance(phrase, ConstantPhrase):
-                #         phrase.constant = replace_with_person_names(phrase.constant)
-                #     elif isinstance(phrase, PredicatePhrase):
-                #         phrase.predicate = replace_with_person_names(phrase.predicate)
-                #     else:
-                #         raise ValueError()
-
-                # assign_person_names(if_const_phrase)
-                # assign_person_names(if_pred_phrase)
-
-                # assign_person_names(then_const_phrase)
-                # assign_person_names(then_pred_phrase)
-
                 if_pred_formula, then_pred_formula = get_if_then_predicates_fml(formula)
                 if_const_formula, then_const_formula = get_if_then_constants_fml(formula)
 
-                if fml_type == FormulaType.Fa_Ga:
+                if fml_type == FormulaType.F_G:
+                    _new_mapping = {
+                        if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
+                        then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
+                    }
+
+                elif fml_type == FormulaType.Fa_Ga:
                     _new_mapping = {
                         if_const_formula.rep: (if_const_phrase, if_const_pos),
                         if_pred_formula.rep: (if_pred_phrase, if_pred_pos),

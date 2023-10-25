@@ -17,7 +17,6 @@ from .statement import (
     IfThenStatement,
     Statement,
     StatementType,
-    is_meaningful_stmt,
     SomeoneX,
     SomeoneY,
 )
@@ -161,9 +160,6 @@ def _load_statements(path: str,
             relation=relation.value,
         )
 
-        if not is_meaningful_stmt(if_then_statement):
-            continue
-
         yield if_then_statement
 
 
@@ -235,8 +231,11 @@ class AtomicKnowledgeBank(KnowledgeBankBase):
 
         super().__init__()
 
-    def _load_statements(self) -> Iterable[Statement]:
-        return _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle)
+    def _load_statements(self, type_: StatementType) -> Iterable[Statement]:
+        for stmt in _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle):
+            if stmt.type != type_:
+                continue
+            yield stmt
 
     @property
     def _statement_types(self) -> List[StatementType]:
