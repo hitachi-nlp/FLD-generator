@@ -84,19 +84,19 @@
     ],
 
 
-    "{A}the_event_noun": [
-      "<<phrase::the>> {A}[NOUN]",
-      "<<phrase::the>> {A}[ADJ.ness]",
-      "<<phrase::the>> {A}[ADJ_SAT.ness]",
-      "<<phrase::the>> {A}[VERB.ing]",
+    "{A}event_noun": [
+      "{A}[NOUN]",
+      "{A}[ADJ.ness]",
+      "{A}[ADJ_SAT.ness]",
+      "{A}[VERB.ing]",
 
       "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
     ],
 
-    "¬{A}the_event_noun": [
-      "__<<phrase::the>> {A}[NOUN]",
-      "<<phrase::the>> {A}[ADJ.neg]ness", "<<phrase::the>> non-{A}[ADJ.ness]",
-      "<<phrase::the>> {A}[ADJ_SAT.neg]ness", "<<phrase::the>> non-{A}[ADJ_SAT.ness]",
+    "¬{A}event_noun": [
+      "__{A}[NOUN]",
+      "{A}[ADJ.neg]ness", "non-{A}[ADJ.ness]",
+      "{A}[ADJ_SAT.neg]ness", "non-{A}[ADJ_SAT.ness]",
       "__<<phrase::not_pred>> {A}[VERB.ing]"
     ],
 

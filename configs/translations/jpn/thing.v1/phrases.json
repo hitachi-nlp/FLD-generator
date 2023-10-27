@@ -76,17 +76,17 @@
     ],
 
 
-    "{A}the_event_noun": [
-      "<<phrase::the>> {A}[NOUN]",
-      "<<phrase::the>> {A}[ADJ.ness]",
-      "<<phrase::the>> {A}[VERB.koto]",
+    "{A}event_noun": [
+      "{A}[NOUN]",
+      "{A}[ADJ.ness]",
+      "{A}[VERB.koto]",
 
       "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
     ],
 
-    "¬{A}the_event_noun": [
-      "__<<phrase::the>> {A}[NOUN]",
-      "__<<phrase::the>> {A}[ADJ.neg]ness", "__<<phrase::the>> non-{A}[ADJ.ness]",
+    "¬{A}event_noun": [
+      "__{A}[NOUN]",
+      "__{A}[ADJ.neg]ness", "__non-{A}[ADJ.ness]",
       "__<<phrase::pred_not>> {A}[VERB.ing]"
     ],
 
