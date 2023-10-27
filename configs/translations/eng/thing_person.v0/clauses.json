@@ -424,11 +424,11 @@
 
       "{A}.event_occurrence": [
         "<<phrase::{A}the_event_noun>>",
-        "that <<clause::verb::{A}>>"
+        ["W_VOL_AVG__0.2", "that <<clause::verb::{A}>>"]
       ],
       "¬{A}.event_occurrence": [
         "<<phrase::¬{A}the_event_noun>>",
-        "that <<clause::verb::¬{A}>>"
+        ["W_VOL_AVG__0.2", "that <<clause::verb::¬{A}>>"]
       ],
 
 
