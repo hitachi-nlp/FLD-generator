@@ -560,7 +560,7 @@ class TemplatedTranslator(Translator):
         return None
 
     @lru_cache(maxsize=100000)
-    def _get_weight_factor_func(self, type_: str) -> Callable[[List[float], int], float]:
+    def _get_weight_factor_func(self, type_: str) -> Callable[[List[float], float], float]:
         """
 
         examples of type_
@@ -605,7 +605,7 @@ class TemplatedTranslator(Translator):
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
                                            check_condition=True,
-                                           log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+                                           log_indent=0) -> Tuple[Iterable[NLAndCondition], float]:
         # SLOW due to the many calls
         if _DEBUG:
             print()
@@ -647,7 +647,7 @@ class TemplatedTranslator(Translator):
                     return self._resolve()[0]
 
                 # # @profile
-                def _resolve(self) -> Tuple[Iterable[NLAndCondition], int]:
+                def _resolve(self) -> Tuple[Iterable[NLAndCondition], float]:
                     return self._parent_translator._make_resolved_template_sampler(
                         self._template,
                         # ancestor_keys,
@@ -696,7 +696,7 @@ class TemplatedTranslator(Translator):
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
                                         check_condition=True,
-                                        log_indent=0) -> Tuple[Iterable[NLAndCondition], int]:
+                                        log_indent=0) -> Tuple[Iterable[NLAndCondition], float]:
         if _DEBUG:
             print()
             print(' ' * log_indent + '-- _make_resolved_template_sampler() --')
@@ -746,6 +746,7 @@ class TemplatedTranslator(Translator):
                     yield resolved_template_nl, condition
 
         else:
+            weights = [1.0] * len(volumes)
 
             # @profile
             def generate():
@@ -753,7 +754,9 @@ class TemplatedTranslator(Translator):
                     for resolved_template_nl, condition in iterator:
                         yield resolved_template_nl, condition
 
-        return generate(), sum(volumes)
+        volume_sum = sum(volumes)
+        # volume_sum = sum([v * w for v, w in zip(volumes, weights)])
+        return generate(), volume_sum
 
     # @profile
     def _interpret_mapping_is_consistent_with_condition(self,
