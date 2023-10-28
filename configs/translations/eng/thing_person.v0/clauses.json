@@ -537,62 +537,62 @@
 
       "{A}{a}generic_subj": [
         "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>>",
-        "<<phrase::a>> <<phrase::{a}noun>> <<phrase::{A}post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::{A}post_modifier>>"]
       ],
 
       "¬{A}{a}generic_subj": [
         "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>>",
-        "<<phrase::a>> <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::¬{A}post_modifier>>"]
       ],
 
       
       "({A}{a} & {B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::({A} & {B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & {B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & {B})post_modifier>>"],
 
-          "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"]
       ],
 
       "(¬{A}{a} & {B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & {B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & {B})post_modifier>>"],
 
-          "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::{B}post_modifier>>"]
       ],
 
       "({A}{a} & ¬{B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & ¬{B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} & ¬{B})post_modifier>>"],
 
-          "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"]
       ],
 
       "(¬{A}{a} & ¬{B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} & ¬{B})post_modifier>>"],
 
-          "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::{a}noun>> <<phrase::¬{B}post_modifier>>"]
       ],
 
 
       "({A}{a} v {B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::({A} v {B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v {B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v {B})post_modifier>>"]
       ],
 
       "(¬{A}{a} v {B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v {B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v {B})post_modifier>>"]
       ],
 
       "({A}{a} v ¬{B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v ¬{B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::({A} v ¬{B})post_modifier>>"]
       ],
 
       "(¬{A}{a} v ¬{B}{a})generic_subj": [
           "<<phrase::a>> <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}noun>>",
-          "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{a}noun>> <<phrase::(¬{A} v ¬{B})post_modifier>>"]
       ],
 
 
@@ -603,64 +603,64 @@
 
 
       "{A}{a}generic_obj": [
-        "__comment: 'nouns' is not implemented yet. also, post_modifier with plural subject is not implemented",
+        ["W_VOL_AVG__0.3", "__comment: 'nouns' is not implemented yet. also, post_modifier with plural subject is not implemented"],
         "__<<phrase::{A}pre_modifier>> <<phrase::{a}nouns>>",
-        "__<<phrase::{a}nouns>> <<phrase::{A}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::{A}post_modifier>>"]
       ],
 
       "¬{A}{a}generic_obj": [
         "__<<phrase::¬{A}pre_modifier>> <<phrase::{a}nouns>>",
-        "__<<phrase::{a}nouns>> <<phrase::¬{A}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::¬{A}post_modifier>>"]
       ],
 
       
       "({A}{a} & {B}{a})generic_obj": [
           "__<<phrase::({A} & {B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::({A} & {B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::({A} & {B})post_modifier>>"],
 
-          "__<<phrase::{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::{B}post_modifier>>"]
       ],
 
       "(¬{A}{a} & {B}{a})generic_obj": [
           "__<<phrase::(¬{A} & {B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::(¬{A} & {B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::(¬{A} & {B})post_modifier>>"],
 
-          "__<<phrase::¬{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::¬{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::{B}post_modifier>>"]
       ],
 
       "({A}{a} & ¬{B}{a})generic_obj": [
           "__<<phrase::({A} & ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::({A} & ¬{B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::({A} & ¬{B})post_modifier>>"],
 
-          "__<<phrase::{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::¬{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::¬{B}post_modifier>>"]
       ],
 
       "(¬{A}{a} & ¬{B}{a})generic_obj": [
           "__<<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::(¬{A} & ¬{B})post_modifier>>"],
 
-          "__<<phrase::¬{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::¬{B}post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::¬{A}pre_modifier>> <<phrase::{a}nouns>> <<phrase::¬{B}post_modifier>>"]
       ],
 
 
       "({A}{a} v {B}{a})generic_obj": [
           "__<<phrase::({A} v {B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::({A} v {B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::({A} v {B})post_modifier>>"]
       ],
 
       "(¬{A}{a} v {B}{a})generic_obj": [
           "__<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::(¬{A} v {B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::(¬{A} v {B})post_modifier>>"]
       ],
 
       "({A}{a} v ¬{B}{a})generic_obj": [
           "__<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::({A} v ¬{B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::({A} v ¬{B})post_modifier>>"]
       ],
 
       "(¬{A}{a} v ¬{B}{a})generic_obj": [
           "__<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::{a}nouns>>",
-          "__<<phrase::{a}nouns>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+          ["W_VOL_AVG__0.3", "__<<phrase::{a}nouns>> <<phrase::(¬{A} v ¬{B})post_modifier>>"]
       ],
 
 
@@ -673,14 +673,14 @@
 
       "{A}something.generic_subj": [
         "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::{A}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::{A}post_modifier>>"],
 
         "<<phrase::{A}a_noun>>"
       ],
 
       "¬{A}something.generic_subj": [
         "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::¬{A}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::¬{A}post_modifier>>"],
 
         "<<phrase::¬{A}a_noun>>"
       ],
@@ -688,63 +688,63 @@
       
       "({A}something & {B}something)generic_subj": [
         "<<phrase::a>> <<phrase::({A} & {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} & {B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::({A} & {B})post_modifier>>"],
 
-        "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>"],
 
         "<<phrase::a>> <<phrase::{B}pre_modifier>> <<phrase::{A}noun>>",
-        "<<phrase::{A}a_noun>> <<phrase::{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::{A}a_noun>> <<phrase::{B}post_modifier>>"]
       ],
 
       "(¬{A}something & {B}something)generic_subj": [
         "<<phrase::a>> <<phrase::(¬{A} & {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} & {B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::(¬{A} & {B})post_modifier>>"],
 
-        "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::{B}post_modifier>>"],
 
         "<<phrase::a>> <<phrase::{B}pre_modifier>> <<phrase::¬{A}noun>>",
-        "<<phrase::¬{A}a_noun>> <<phrase::{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::¬{A}a_noun>> <<phrase::{B}post_modifier>>"]
       ],
 
       "({A}something & ¬{B}something)generic_subj": [
         "<<phrase::a>> <<phrase::({A} & ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} & ¬{B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::({A} & ¬{B})post_modifier>>"],
 
-        "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>"],
 
         "<<phrase::a>> <<phrase::¬{B}pre_modifier>> <<phrase::{A}noun>>",
-        "<<phrase::{A}a_noun>> <<phrase::¬{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::{A}a_noun>> <<phrase::¬{B}post_modifier>>"]
       ],
 
       "(¬{A}something & ¬{B}something)generic_subj": [
         "<<phrase::a>> <<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::(¬{A} & ¬{B})post_modifier>>"],
 
-        "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::a>> <<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::¬{B}post_modifier>>"],
 
         "<<phrase::a>> <<phrase::¬{B}pre_modifier>> <<phrase::¬{A}noun>>",
-        "<<phrase::¬{A}a_noun>> <<phrase::¬{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::¬{A}a_noun>> <<phrase::¬{B}post_modifier>>"]
       ],
 
 
       "({A}something v {B}something)generic_subj": [
         "<<phrase::a>> <<phrase::({A} v {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} v {B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::({A} v {B})post_modifier>>"]
       ],
 
       "(¬{A}something v {B}something)generic_subj": [
         "<<phrase::a>> <<phrase::(¬{A} v {B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} v {B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::(¬{A} v {B})post_modifier>>"]
       ],
 
       "({A}something v ¬{B}something)generic_subj": [
         "<<phrase::a>> <<phrase::({A} v ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::({A} v ¬{B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::({A} v ¬{B})post_modifier>>"]
       ],
 
       "(¬{A}something v ¬{B}something)generic_subj": [
         "<<phrase::a>> <<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::thing>>",
-        "<<phrase::something>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::something>> <<phrase::(¬{A} v ¬{B})post_modifier>>"]
       ],
 
 
@@ -756,14 +756,14 @@
 
       "{A}things.generic_obj": [
         "<<phrase::{A}pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::{A}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::{A}post_modifier>>"],
 
         "<<phrase::{A}nouns>>"
       ],
 
       "¬{A}things.generic_obj": [
         "<<phrase::¬{A}pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::¬{A}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::¬{A}post_modifier>>"],
 
         "<<phrase::¬{A}nouns>>"
       ],
@@ -772,63 +772,63 @@
       "({A}things & {B}things)generic_obj": [
         "<<phrase::({A} & {B})pre_modifier>> <<phrase::things>>",
         "__comment: post_modifier with plural vrebs is not implemented yet",
-        "__<<phrase::things>> <<phrase::({A} & {B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::({A} & {B})post_modifier>>"],
 
-        "__<<phrase::{A}pre_modifier>> <<phrase::things>> <<phrase::{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}pre_modifier>> <<phrase::things>> <<phrase::{B}post_modifier>>"],
 
         "<<phrase::{B}pre_modifier>> <<phrase::{A}nouns>>",
-        "__<<phrase::{A}nouns>> <<phrase::{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}nouns>> <<phrase::{B}post_modifier>>"]
       ],
 
       "(¬{A}things & {B}things)generic_obj": [
         "<<phrase::(¬{A} & {B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::(¬{A} & {B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::(¬{A} & {B})post_modifier>>"],
 
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::things>> <<phrase::{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}pre_modifier>> <<phrase::things>> <<phrase::{B}post_modifier>>"],
 
         "<<phrase::{B}pre_modifier>> <<phrase::¬{A}nouns>>",
-        "__<<phrase::¬{A}nouns>> <<phrase::{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}nouns>> <<phrase::{B}post_modifier>>"]
       ],
 
       "({A}things & ¬{B}things)generic_obj": [
         "<<phrase::({A} & ¬{B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::({A} & ¬{B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::({A} & ¬{B})post_modifier>>"],
 
-        "__<<phrase::{A}pre_modifier>> <<phrase::things>> <<phrase::¬{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}pre_modifier>> <<phrase::things>> <<phrase::¬{B}post_modifier>>"],
 
         "<<phrase::¬{B}pre_modifier>> <<phrase::{A}nouns>>",
-        "__<<phrase::{A}nouns>> <<phrase::¬{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}nouns>> <<phrase::¬{B}post_modifier>>"]
       ],
 
       "(¬{A}things & ¬{B}things)generic_obj": [
         "<<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::(¬{A} & ¬{B})post_modifier>>"],
 
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::things>> <<phrase::¬{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}pre_modifier>> <<phrase::things>> <<phrase::¬{B}post_modifier>>"],
 
         "<<phrase::¬{B}pre_modifier>> <<phrase::¬{A}nouns>>",
-        "__<<phrase::¬{A}nouns>> <<phrase::¬{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}nouns>> <<phrase::¬{B}post_modifier>>"]
       ],
 
 
       "({A}things v {B}things)generic_obj": [
         "<<phrase::({A} v {B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::({A} v {B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::({A} v {B})post_modifier>>"]
       ],
 
       "(¬{A}things v {B}things)generic_obj": [
         "<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::(¬{A} v {B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::(¬{A} v {B})post_modifier>>"]
       ],
 
       "({A}things v ¬{B}things)generic_obj": [
         "<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::({A} v ¬{B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::({A} v ¬{B})post_modifier>>"]
       ],
 
       "(¬{A}things v ¬{B}things)generic_obj": [
         "<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::things>>",
-        "__<<phrase::things>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::things>> <<phrase::(¬{A} v ¬{B})post_modifier>>"]
       ],
 
 
@@ -858,14 +858,14 @@
 
       "{A}nothing.generic_obj": [
         "__<<phrase::{A}pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::{A}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::{A}post_modifier>>"],
 
         "__<<phrase::{A}nouns>>"
       ],
 
       "¬{A}nothing.generic_obj": [
         "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::¬{A}post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::¬{A}post_modifier>>"],
 
         "__<<phrase::¬{A}nouns>>"
       ],
@@ -873,63 +873,63 @@
       
       "({A}nothing & {B}nothing)generic_obj": [
         "__<<phrase::({A} & {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} & {B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::({A} & {B})post_modifier>>"],
 
-        "__<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>"],
 
         "__<<phrase::{B}pre_modifier>> <<phrase::{A}nouns>>",
-        "__<<phrase::{A}nouns>> <<phrase::{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}nouns>> <<phrase::{B}post_modifier>>"]
       ],
 
       "(¬{A}nothing & {B}nothing)generic_obj": [
         "__<<phrase::(¬{A} & {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} & {B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::(¬{A} & {B})post_modifier>>"],
 
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::{B}post_modifier>>"],
 
         "__<<phrase::{B}pre_modifier>> <<phrase::¬{A}nouns>>",
-        "__<<phrase::¬{A}nouns>> <<phrase::{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}nouns>> <<phrase::{B}post_modifier>>"]
       ],
 
       "({A}nothing & ¬{B}nothing)generic_obj": [
         "__<<phrase::({A} & ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} & ¬{B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::({A} & ¬{B})post_modifier>>"],
 
-        "__<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>"],
 
         "__<<phrase::¬{B}pre_modifier>> <<phrase::{A}nouns>>",
-        "__<<phrase::{A}nouns>> <<phrase::¬{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::{A}nouns>> <<phrase::¬{B}post_modifier>>"]
       ],
 
       "(¬{A}nothing & ¬{B}nothing)generic_obj": [
         "__<<phrase::(¬{A} & ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} & ¬{B})post_modifier>>",
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::(¬{A} & ¬{B})post_modifier>>"],
 
-        "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>",
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}pre_modifier>> <<phrase::nothing>> <<phrase::¬{B}post_modifier>>"],
 
         "__<<phrase::¬{B}pre_modifier>> <<phrase::¬{A}nouns>>",
-        "__<<phrase::¬{A}nouns>> <<phrase::¬{B}post_modifier>>"
+        ["W_VOL_AVG__0.3", "__<<phrase::¬{A}nouns>> <<phrase::¬{B}post_modifier>>"]
       ],
 
 
       "({A}nothing v {B}nothing)generic_obj": [
         "__<<phrase::({A} v {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} v {B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::({A} v {B})post_modifier>>"]
       ],
 
       "(¬{A}nothing v {B}nothing)generic_obj": [
         "__<<phrase::(¬{A} v {B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} v {B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::(¬{A} v {B})post_modifier>>"]
       ],
 
       "({A}nothing v ¬{B}nothing)generic_obj": [
         "__<<phrase::({A} v ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::({A} v ¬{B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::({A} v ¬{B})post_modifier>>"]
       ],
 
       "(¬{A}nothing v ¬{B}nothing)generic_obj": [
         "__<<phrase::(¬{A} v ¬{B})pre_modifier>> <<phrase::nothing>>",
-        "<<phrase::nothing>> <<phrase::(¬{A} v ¬{B})post_modifier>>"
+        ["W_VOL_AVG__0.3", "<<phrase::nothing>> <<phrase::(¬{A} v ¬{B})post_modifier>>"]
       ]
 
 

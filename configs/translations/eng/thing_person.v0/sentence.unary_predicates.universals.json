@@ -88,8 +88,8 @@
 
     "(x): {A}x -> {B}x": [
       "__we want to prioritize the generic subject translation '{A} is {B}' whenever possible",
-      ["W_VOL_AVG_0.3", "<<phrase::if_conjunction>> <<sentence::{A}something>> <<phrase::maybe_then>> <<sentence::{B}it>>"],
-      ["W_VOL_AVG_0.3", "<<sentence::{B}something>> <<phrase::if_conjunction>> <<sentence::{A}it>>"],
+      ["W_VOL_AVG__0.3", "<<phrase::if_conjunction>> <<sentence::{A}something>> <<phrase::maybe_then>> <<sentence::{B}it>>"],
+      ["W_VOL_AVG__0.3", "<<sentence::{B}something>> <<phrase::if_conjunction>> <<sentence::{A}it>>"],
 
       "<<clause::noun::{A}something.generic_subj>> <<phrase::{B}predicate>>"
     ],
