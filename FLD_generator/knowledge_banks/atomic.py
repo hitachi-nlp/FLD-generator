@@ -188,8 +188,7 @@ def _load_statements(path: str,
             negated=False,
         )
 
-        logger.info('atomic loading a statement...')
-
+        logger.info('load a statement from Atomic')
         yield if_then_statement
 
 
@@ -288,3 +287,6 @@ class AtomicKnowledgeBank(KnowledgeBankBase):
             # StatementType.Fx_nGx,
             # StatementType.nFx_nGx,
         ]
+
+    def postprocess_translation(self, translation: str) -> str:
+        return translation

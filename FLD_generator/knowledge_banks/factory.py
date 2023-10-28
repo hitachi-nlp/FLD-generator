@@ -2,6 +2,8 @@ from typing import Optional
 from .mock import MockIfThenKnowledgeBank
 from .atomic import AtomicKnowledgeBank
 from .concept_net_100k import ConceptNet100kKnowledgeBank
+from .dbpedia import DBpedia
+
 
 
 def build(type_: str,
@@ -19,6 +21,10 @@ def build(type_: str,
         return ConceptNet100kKnowledgeBank(filepath,
                                            max_statements=max_statements,
                                            shuffle=not no_shuffle)
+    elif type_ == 'dbpedia':
+        return DBpedia(filepath,
+                       max_statements=max_statements,
+                       shuffle=not no_shuffle)
 
     else:
         raise ValueError()

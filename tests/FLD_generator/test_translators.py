@@ -172,9 +172,10 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
             intermediate_constant_formulas=['{a}', '{d}'],
         )
     else:
-        show_translations(['{A} -> {B}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
-        show_translations(['(x): {A}x -> {B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
-        show_translations(['(x): {A}x -> ¬{B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        show_translations(['{A}{a}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        # show_translations(['{A} -> {B}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        # show_translations(['(x): {A}x -> {B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        # show_translations(['(x): {A}x -> ¬{B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
 
 
 def test_eng():
@@ -183,13 +184,17 @@ def test_eng():
 
 def test_eng_with_knowledge():
     knowledge_banks = [
+        # build_knowledge_bank(
+        #     'atomic',
+        #     './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
+        # ),
+        # build_knowledge_bank(
+        #     'concept_net_100k',
+        #     './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
+        # ),
         build_knowledge_bank(
-            'atomic',
-            './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
-        ),
-        build_knowledge_bank(
-            'concept_net_100k',
-            './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
+            'dbpedia',
+            './res/knowledge_banks/DBpedia500/train1.txt',
         ),
     ]
 

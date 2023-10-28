@@ -72,7 +72,9 @@ class KnowledgeBankBase(ABC):
     def _statement_types(self) -> List[StatementType]:
         pass
 
-    def sample_mapping(self, formulas: List[Formula], mapping: Optional[Dict[str, Tuple[str, POS]]] = None) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
+    def sample_mapping(self, formulas: List[Formula], mapping: Optional[Dict[str, Tuple[str, POS]]] = None)\
+            -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
+
         mapping = deepcopy(mapping) if mapping is not None else {}
         is_mapped: List[bool] = []
 
@@ -193,3 +195,7 @@ class KnowledgeBankBase(ABC):
                 is_mapped.append(True)
 
         return mapping, is_mapped
+
+    @abstractmethod
+    def postprocess_translation(self, translation: str) -> str:
+        pass

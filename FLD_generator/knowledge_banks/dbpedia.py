@@ -1,5 +1,6 @@
 from typing import Optional, Iterable, List, Dict, Tuple
 from enum import Enum
+import re
 import logging
 import random
 
@@ -28,9 +29,10 @@ _WORD_UTILS = WordUtil('eng')
 
 
 _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
-    """
-    gawk '{print $3}' ./res/knowledge_banks/DBpedia500/train1.txt | sort | uniq -c | sort -n -r > ./res/knowledge_banks/DBpedia500/relations.train1.txt"
-    """
+    # you can list possible relations by: 
+    # gawk '{print $3}' ./res/knowledge_banks/DBpedia500/train1.txt | sort | uniq -c | sort -n -r > ./res/knowledge_banks/DBpedia500/relations.train1.txt"
+
+    # XXX: WHEN ADDING A TRANSLATION, ALSO ADD POSTPROCESSING in "postprocess_translation"
 
     'team': [
         ('belongs to', POS.VERB, False),
@@ -147,7 +149,7 @@ _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
     ],
     'distributor': [
         ('is distributed by', POS.PAST_PARTICLE, False),
-        ('distributted', POS.VERB, False),
+        ('distributed', POS.VERB, False),
     ],
     'sisterStation': [
         ('is sister station of', POS.NOUN, False),
@@ -250,7 +252,7 @@ _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
         ('specializes in', POS.VERB, False),
     ],
     'militaryBranch': [
-        ('workied in', POS.VERB, False),
+        ('worked in', POS.VERB, False),
     ],
     'restingPlace': [
         ('died in', POS.VERB, False),
@@ -363,7 +365,7 @@ _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[Statement]:
-    logger.info('loading DBPedia statements from file "%s"', path)
+    logger.info('loading DBpedia statements from file "%s"', path)
 
     if shuffle:
         lines = open(path).readlines()
@@ -419,11 +421,14 @@ def _load_statements(path: str,
             logger.warning('failed to parse line "%s"', line)
             continue
 
+        logger.info('load a statement from DBpedia')
         yield statement
 
 
 def _normalize(line: str) -> str:
     line = line.replace('_', ' ')
+    line = line.replace('The', 'the')
+    line = re.sub(r'\([^\)]*\)', '', line)
     return line
 
 
@@ -453,3 +458,29 @@ class DBpedia(KnowledgeBankBase):
             # StatementType.Fx_Gx,
             # StatementType.Fx_nGx,
         ]
+
+    def postprocess_translation(self, translation: str) -> str:
+        org = translation
+        translation = translation\
+            .replace('is born in', 'was born in')\
+            .replace('dies in', 'died in')\
+            .replace('starrs in', 'starred in')\
+            .replace('is created by', 'was created by')\
+            .replace('writes', 'wrote')\
+            .replace('fights in', 'fought in')\
+            .replace('graduates from', 'graduated from')\
+            .replace('previously works in', 'previously worked in')\
+            .replace('is awarded', 'was awarded')\
+            .replace('is recorded in', 'was recorded in')\
+            .replace('is directed by', 'was directed by')\
+            .replace('distributes', 'distributed')\
+            .replace('lives in', 'lived in')\
+            .replace('plays in', 'played in')\
+            .replace('is influenced by', 'was influenced by')\
+            .replace('races in', 'raced in')\
+            .replace('takes guest role in', 'took guest role in')\
+            .replace('gets married', 'got married')\
+            .replace('works in', 'worked in')
+        # if org != translation:
+        #     logger.critical('"%s" -> "%s"', org, translation)
+        return translation

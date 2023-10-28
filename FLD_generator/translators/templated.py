@@ -457,15 +457,15 @@ class TemplatedTranslator(Translator):
 
         # fix grammers and other stufs
         translations = [
-            (self._postprocess_translation(translation,
-                                           is_knowledge_injected=_is_knowledge_injected) if translation is not None else None)
+            (self._postprocess_translation_all(translation,
+                                               is_knowledge_injected=_is_knowledge_injected) if translation is not None else None)
             for translation, _is_knowledge_injected in zip(translations, is_knowledge_injected)
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
                 SO_swap_formula.translation = (
-                    self._postprocess_translation(SO_swap_formula.translation, is_knowledge_injected=False) if SO_swap_formula.translation is not None
+                    self._postprocess_translation_all(SO_swap_formula.translation, is_knowledge_injected=False) if SO_swap_formula.translation is not None
                     else None)
 
         return list(zip(translation_names, translations, SO_swap_formulas, is_knowledge_injected)), count_stats
@@ -1118,6 +1118,19 @@ class TemplatedTranslator(Translator):
     @abstractmethod
     def _reset_predicate_phrase_assets(self) -> None:
         pass
+
+    def _postprocess_translation_all(self, translation: str, is_knowledge_injected=False) -> str:
+        # if is_knowledge_injected:
+        #     for knowledge_bank in self._knowledge_banks:
+        #         translation = knowledge_bank.postprocess_translation(translation)
+
+        # We need to postprocess not only "is_knowledge_injected" formulas but others,
+        # because the translations can "spills" to other formulas.
+        for knowledge_bank in self._knowledge_banks:
+            translation = knowledge_bank.postprocess_translation(translation)
+
+        translation = self._postprocess_translation(translation, is_knowledge_injected=is_knowledge_injected)
+        return translation
 
     @abstractmethod
     def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:

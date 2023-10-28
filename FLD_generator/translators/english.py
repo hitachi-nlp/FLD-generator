@@ -61,37 +61,6 @@ class EnglishTranslator(TemplatedTranslator):
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)
-
-        # male_names = [word for word in translation.split(' ')
-        #              if word in self._male_names]
-        # female_names = [word for word in translation.split(' ')
-        #                 if word in self._female_names]
-        # person_names  = male_names + female_names
-        # if len(person_names) > 0 or is_knowledge_injected:
-        #     # fix "the Emma"
-        #     for person_name in male_names + female_names:
-        #         translation = translation\
-        #             .replace(f'the {person_name}', person_name)\
-        #             .replace(f'a {person_name}', person_name)\
-        #             .replace(f'an {person_name}', person_name)
-
-        #     # something -> someone, thing -> one
-        #     translation = translation.replace('nothing', 'no one')  # need space bofore "one"
-        #     translation = translation.replace('thing', 'one')
-        #     for interm_constant_prefix in self._word_bank.INTERMEDIATE_CONSTANT_PREFIXES:
-        #         translation = translation.replace(interm_constant_prefix, 'PERSON')
-
-        #     # it -> he/she/the one
-        #     if len(male_names) > 0 and len(female_names) > 0:
-        #         pronoun = random.choice(['he', 'she'])
-        #     elif len(male_names) > 0:
-        #         pronoun = random.choice(['he'])
-        #     elif len(female_names) > 0:
-        #         pronoun = random.choice(['she'])
-        #     else:
-        #         pronoun = random.choice(['the one'])
-        #     for _pronoun in ['it', 'the thing', 'the one']:
-        #         translation = translation.replace(f' {_pronoun}', f' {pronoun}')
         if translation.find('someone') >= 0 or translation.find('somebody') >= 0:
             pronoun = random.choice(['the one'])
             for pronoun in ['it', 'the thing']:

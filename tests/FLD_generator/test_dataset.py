@@ -65,6 +65,10 @@ def test_generate_dataset_lang(lang: str):
             'concept_net_100k',
             './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
         ),
+        build_knowledge_bank(
+            'dbpedia',
+            './res/knowledge_banks/DBpedia500/train1.txt',
+        ),
     ]
 
     # translator = None

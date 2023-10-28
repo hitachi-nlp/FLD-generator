@@ -372,7 +372,7 @@ def _load_statements(path: str,
                 negated=False,
             )
 
-        logger.info('conceptnet 100k loading a statement...')
+        logger.info('load a statement from ConceptNet100k')
         yield statement
 
 
@@ -411,3 +411,6 @@ class ConceptNet100kKnowledgeBank(KnowledgeBankBase):
             StatementType.Fx_Gx,
             StatementType.Fx_nGx,
         ]
+
+    def postprocess_translation(self, translation: str) -> str:
+        return translation

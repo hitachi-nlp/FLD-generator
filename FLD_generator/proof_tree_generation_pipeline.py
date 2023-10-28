@@ -270,7 +270,6 @@ class ProofTreeGenerationPipeline:
             all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
             if self._knowledge_injection_range is not None:
-                logger.critical(self._knowledge_injection_range)
                 ratio_lower, ratio_upper = self._knowledge_injection_range
                 ratio = ratio_lower + random.random() * (ratio_upper - ratio_lower)
                 knowledge_translatable_leaf_formulas = [formula for formula in leaf_formulas
