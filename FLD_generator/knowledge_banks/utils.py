@@ -23,7 +23,7 @@ def _find_verb(words: List[str]) -> Optional[int]:
     return None
 
 
-def parse_subj(rep: Optional[str], might_be_gerund=False)\
+def parse_as_subj(rep: Optional[str], might_be_gerund=False)\
         -> Tuple[Optional[str], Optional[str], Optional[str], Optional[POS]]:
     if rep is None:
         return None, None, None, None
@@ -62,7 +62,10 @@ def parse_subj(rep: Optional[str], might_be_gerund=False)\
     return subj, subj_left_modif, subj_right_modif, subj_pos
 
 
-def parse_pred(rep: Optional[str], be_verb_shift=True, default_pos=POS.ADJ)\
+def parse_as_pred(rep: Optional[str],
+                  prioritize_pos: Optional[POS] = None,
+                  be_verb_shift=True,
+                  default_pos=POS.ADJ)\
         -> Tuple[Optional[str], Optional[str], Optional[str], Optional[POS]]:
     if rep is None:
         return None, None, None, None
@@ -76,46 +79,71 @@ def parse_pred(rep: Optional[str], be_verb_shift=True, default_pos=POS.ADJ)\
         verb_idx = _find_verb(words)
 
     if verb_idx is None:
-        logger.info('Could\'nt find verb from words: %s. This can be due to the incomplete detection function. The statement will be skipped.', str(words))
+        logger.info('Couldn\'t find verb from words: %s. The statement will be skipped.', str(words))
         return None, None, None, None
 
     else:
         verb = words[verb_idx]
 
         if be_verb_shift and verb in BE_VERBS:
+
             next_to_be = words[verb_idx + 1]
-            if POS.VERB in _WORD_UTILS.get_pos(next_to_be) and next_to_be.endswith('ing'):
+
+            if is_present_particle(next_to_be):
                 # "Someone is running at the park"
                 pred = words[verb_idx + 1]
                 pred_left_modif = None
                 pred_right_modif = ' '.join(words[verb_idx + 1 + 1:]) or None
-                pred_pos = POS.PRESENT
+                pred_pos = POS.PRESENT_PARTICLE
 
-            elif POS.VERB in _WORD_UTILS.get_pos(next_to_be) and next_to_be.endswith('ed'):
+            elif is_past_particle_form(next_to_be):
                 # "iron is used for cleaning"
                 pred = words[verb_idx + 1]
                 pred_left_modif = None
                 pred_right_modif = ' '.join(words[verb_idx + 1 + 1:]) or None
-                pred_pos = POS.PAST
+                pred_pos = POS.PAST_PARTICLE
 
             else:
-                pred = words[-1]
-                pred_left_modif = ' '.join(words[verb_idx + 1:-1]) or None
-                pred_right_modif = None
 
-                pred_poss = _WORD_UTILS.get_pos(pred)
-                if POS.VERB in pred_poss and pred.endswith('ing'):
-                    pred_pos = POS.PRESENT
-                elif POS.VERB in pred_poss and pred.endswith('ed'):
-                    pred_pos = POS.PAST
-                elif POS.ADJ in pred_poss:     # "iron is sharp"
-                    pred_pos = POS.ADJ
-                elif POS.NOUN in pred_poss:  # "iron is a tool"
-                    pred_pos = POS.NOUN
-                else:
-                    # raise ValueError(f'Could not determine the POS of a predicate "{pred}"')
-                    logger.warning('Could not determine the POS of a predicate %s. Used the default POS=%s', pred, default_pos)
+                rep_wo_be = ' '.join(words[verb_idx + 1:])
+                found_pred = False
+                for pred_position in ['leftmost', 'rightmost']:
+                    _pred, _pred_left_modif, _pred_right_modif = parse(rep_wo_be, pred_position)
+
+                    _pred_poss = _WORD_UTILS.get_pos(_pred)
+                    if prioritize_pos is not None and prioritize_pos in _pred_poss:
+                        hit = True
+                        _pred_pos = prioritize_pos
+                    elif POS.VERB in _pred_poss and _pred.endswith('ing'):
+                        hit = True
+                        _pred_pos = POS.PRESENT_PARTICLE
+                    elif POS.VERB in _pred_poss and _pred.endswith('ed'):
+                        hit = True
+                        _pred_pos = POS.PAST_PARTICLE
+                    elif POS.ADJ in _pred_poss:     # "iron is sharp"
+                        hit = True
+                        _pred_pos = POS.ADJ
+                    elif POS.ADJ_SAT in _pred_poss:     # "iron is ignorant"
+                        hit = True
+                        _pred_pos = POS.ADJ_SAT
+                    elif POS.NOUN in _pred_poss:  # "iron is a tool"
+                        hit = True
+                        _pred_pos = POS.NOUN
+                    else:
+                        hit = False
+
+                    if hit:
+                        pred, pred_left_modif, pred_right_modif, pred_pos = _pred, _pred_left_modif, _pred_right_modif, _pred_pos
+                        found_pred = True
+                        break
+
+                if not found_pred:
+                    pred, pred_left_modif, pred_right_modif = parse(rep_wo_be, 'leftmost')
                     pred_pos = default_pos
+                    logger.info('Could not find predicate from "%s" as no word matched a pre-defined POS. Will use default "%s"(POS=%s) as the predicate.',
+                                rep,
+                                pred,
+                                str(pred_pos))
 
         else:
             pred = words[verb_idx]
@@ -129,6 +157,32 @@ def parse_pred(rep: Optional[str], be_verb_shift=True, default_pos=POS.ADJ)\
             pred_right_modif,
             pred_pos,
         )
+
+
+def is_present_particle(word: str) -> bool:
+    return POS.VERB in _WORD_UTILS.get_pos(word) and word.endswith('ing')
+
+
+def is_past_particle_form(next_to_be: str) -> bool:
+    return POS.VERB in _WORD_UTILS.get_pos(next_to_be)\
+        and (next_to_be.endswith('ed') or next_to_be in ['born', 'spoken', 'wrote'])
+
+
+def parse(rep: str, main_word_position: str) -> Tuple[str, Optional[str], Optional[str]]:
+    words = rep.split(' ')
+    if main_word_position == 'leftmost':
+        main_word = words[0]
+        left_modifier = None
+        right_modifier = ' '.join(words[1:]) or None
+    elif main_word_position == 'rightmost':
+        main_word = words[-1]
+        left_modifier = ' '.join(words[:-1]) or None
+        right_modifier = None
+    else:
+        raise ValueError(f'Unknown position = {main_word_position}')
+    return main_word, left_modifier, right_modifier
+
+
 
 
 def type_formula_to_statement(formula_type: FormulaType) -> StatementType:

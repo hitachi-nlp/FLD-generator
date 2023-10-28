@@ -10,30 +10,37 @@ from logger_setup import setup as setup_logger
 
 from shared import sample_mappings
 
-_PATH = 'res/knowledge/commonsense-kg-completion/data/ConceptNet/train.txt'
+_PATH = 'res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt'
 
 def test_load_statements():
-    for statement in _load_statements(_PATH, max_statements=1000):
+    for statement in _load_statements(_PATH, max_statements=100000):
         print('')
 
         if isinstance(statement, DeclareStatement):
             pprint(statement)
+            print(f'type={str(statement.type)}')
 
         elif isinstance(statement, IfThenStatement):
             pprint(statement.if_statement)
             pprint(statement.then_statement)
             pprint(statement.relation)
+            print(f'type={str(statement.type)}')
 
         else:
             raise Exception()
 
 
 def test_bank():
-    bank = ConceptNet100kKnowledgeBank(_PATH, max_statements=None)
+    bank = ConceptNet100kKnowledgeBank(_PATH)
 
-    sample_mappings(bank, '{F}{a}')
+    # sample_mappings(bank, '(x): {F}x')
     sample_mappings(bank, '{F} -> {G}')
     sample_mappings(bank, '(x): {F}x -> {G}x')
+
+    # sample_mappings(bank, '(x): ¬{F}x')
+    # sample_mappings(bank, '{F} -> ¬{G}')
+    sample_mappings(bank, '(x): {F}x -> ¬{G}x')
+
 
 
 

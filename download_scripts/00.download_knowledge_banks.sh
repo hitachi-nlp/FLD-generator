@@ -17,4 +17,7 @@ google_drive_id="1wKSjDQjB5E2g8De22NzdQOzIX2IZARW0"
 output_filename="DBpedia500"
 ./download_scripts/wget_google_drive.sh ${google_drive_id} ${output_filename}.zip
 mv ${output_filename}.zip ${output_dir}
-unzip ${output_dir}/${output_filename}.zip -d ${output_dir}/${output_filename}
+unzip ${output_dir}/${output_filename}.zip -d ${output_dir}/
+for split in "train1" "train2" "valid" "test"; do
+  unzip ${output_dir}/${output_filename}/${split}.zip -d ${output_dir}/${output_filename}
+done

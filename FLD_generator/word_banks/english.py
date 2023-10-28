@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Iterable, List, Dict, Set
+from typing import Optional, Iterable, List, Dict, Set, Tuple
 import logging
 from enum import Enum
 from typing import Optional
@@ -29,6 +29,29 @@ MODAL_VERBS = [
     'shall', 'should',
     'will', 'would',
 ]
+
+PARTICLES = [
+    'a', 'an',
+    'the',
+]
+
+
+def strip_negation(rep: str) -> Tuple[str, bool]:
+    rep_org = rep
+    for verb in BE_VERBS + MODAL_VERBS:
+        if verb in ['do', 'does', 'did']:
+            tgt = ''
+        else:
+            tgt = verb
+        rep = rep.replace(f'{verb} not', tgt)
+        rep = rep.replace(f'{verb} n\'t', tgt)
+        rep = rep.replace(f'{verb}n\'t', tgt)
+
+    # special cases
+    rep = rep.replace('can\'t', 'can')
+    rep = rep.replace('shan\'t', 'can')
+
+    return rep, rep != rep_org
 
 
 class EnglishWordBank(WordBank):
@@ -200,17 +223,17 @@ class EnglishWordBank(WordBank):
         else:
             raise ValueError(f'Unknown form {form}')
 
-    def _change_present_form(self, verb: str, form: Enum, force=False) -> List[str]:
+    def _change_present_particle_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
         if form in [self.PresentForm.NORMAL]:
-            return verb
+            return [verb]
         else:
             raise ValueError()
 
-    def _change_past_form(self, verb: str, form: Enum, force=False) -> List[str]:
+    def _change_past_particle_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
         if form in [self.PastForm.NORMAL]:
-            return verb
+            return [verb]
         else:
             raise ValueError()
 

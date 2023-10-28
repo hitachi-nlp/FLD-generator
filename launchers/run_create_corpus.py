@@ -44,7 +44,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20231012.large_vocab')
 
     # output_top_dir = Path('./outputs/00.create_corpus/20231018.knowledge')
-    output_top_dir = Path('./outputs/00.create_corpus/20231021.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231021.knowledge')
+    output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -93,10 +94,12 @@ def main():
         # '20231018.knowledge.D3.w_knowledge.complex-0.3',
 
         # ---------------------------------- 20231021.knowledge ------------------------------------
-        '20231021.knowledge.D3',
-        '20231021.knowledge.D3.complex-0.3',
-        '20231021.knowledge.D3.complex-0.3.w_knowledge',
+        # '20231021.knowledge.D3',
+        # '20231021.knowledge.D3.complex-0.3',
+        # '20231021.knowledge.D3.complex-0.3.w_knowledge',
 
+        # ---------------------------------- 20231028.knowledge ------------------------------------
+        '20231028.knowledge.D3',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -218,9 +221,10 @@ def make_dataset(dataset_name: str,
             'translation_volume_to_weight',
             'trnsltn_adj_vrb_nn_rt',
 
-            'knowledge_injection_ratio',
+            'knowledge_injection_range',
             'knowledge_no_shuffle',
             'atomic_filepath',
+            'concept_net_100k_filepath',
 
             'num_workers_per_job',
 
@@ -301,9 +305,10 @@ def make_dataset(dataset_name: str,
                 f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
 
-                maybe_option('--knowledge-injection-ratio', job_settings.get("knowledge_injection_ratio", None)),
+                f'--knowledge-injection-range \'{json.dumps(job_settings["knowledge_injection_range"])}\'' if job_settings.get('knowledge_injection_range', None) is not None else '',
                 '--knowledge-no-shuffle' if job_settings.get('knowledge_no_shuffle', False) else '',
                 maybe_option('--atomic-filepath', job_settings.get("atomic_filepath", None)),
+                maybe_option('--concept-net-100k-filepath', job_settings.get("concept_net_100k_filepath", None)),
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',

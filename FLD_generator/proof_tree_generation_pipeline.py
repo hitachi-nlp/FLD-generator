@@ -40,7 +40,7 @@ class ProofTreeGenerationPipeline:
                  assumption_prefix='Let\'s assume that ',
                  add_subj_obj_swapped_distractor=False,
                  # knowledge_translator: Optional[Translator] = None,
-                 knowledge_injection_ratio=0.0,
+                 knowledge_injection_range: Optional[Tuple[float, float]] = None,
                  log_stats=False):
         self.generator = generator
         self.distractor = distractor
@@ -59,7 +59,9 @@ class ProofTreeGenerationPipeline:
         else:
             self._empty_translation_stat = {}
 
-        self._knowledge_injection_ratio = knowledge_injection_ratio
+        if tuple(knowledge_injection_range) == (0.0, 0.0):
+            knowledge_injection_range = None
+        self._knowledge_injection_range = knowledge_injection_range
         # self._knowledge_translator = knowledge_translator
 
         self._reusable_proof_trees: Dict[Tuple[Any], List[ProofTree]] = defaultdict(list)
@@ -267,11 +269,14 @@ class ProofTreeGenerationPipeline:
                 other_formulas += [node.formula for node in negative_tree_attrs['tree'].nodes]
             all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
-            if self._knowledge_injection_ratio > 0.0:
+            if self._knowledge_injection_range is not None:
+                logger.critical(self._knowledge_injection_range)
+                ratio_lower, ratio_upper = self._knowledge_injection_range
+                ratio = ratio_lower + random.random() * (ratio_upper - ratio_lower)
                 knowledge_translatable_leaf_formulas = [formula for formula in leaf_formulas
                                                           if self.translator.is_knowledge_translatable([formula])]
                 knowledge_leaf_formulas = random.sample(knowledge_translatable_leaf_formulas,
-                                                          int(len(knowledge_translatable_leaf_formulas) * self._knowledge_injection_ratio))
+                                                          int(len(knowledge_translatable_leaf_formulas) * ratio))
                 knowledge_nodes = [node for node in tree_nodes
                                      if node.formula in knowledge_leaf_formulas]
                 knowledge_node_idxs = [idx for idx, node in enumerate(tree_nodes)

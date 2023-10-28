@@ -9,7 +9,7 @@ from logger_setup import setup as setup_logger
 
 from shared import sample_mappings
 
-_PATH = './res/knowledge/commonsense-kg-completion/data/atomic/test.txt'
+_PATH = './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt'
 
 
 def test_load_statements():
@@ -20,11 +20,11 @@ def test_load_statements():
 
 
 def test_bank():
-    bank = AtomicKnowledgeBank(_PATH, max_statements=1000)
+    bank = AtomicKnowledgeBank(_PATH)
 
-    # sample_mappings(bank, '{A}{a} -> {B}{a}')
-    # sample_mappings(bank, '{A}{a} -> {B}{b}')
     sample_mappings(bank, '(x): {A}x -> {B}x')
+    # sample_mappings(bank, '(x): ¬{A}x -> {B}x')
+    # sample_mappings(bank, '(x): {A}x -> ¬{B}x')
 
 
 

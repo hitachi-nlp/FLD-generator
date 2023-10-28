@@ -56,11 +56,16 @@ def test_generate_dataset_lang(lang: str):
         raise ValueError()
 
     # knowledge_bank = None
-    knowledge_bank = build_knowledge_bank(
-        'atomic_if_then',
-        atomic_filepath='./res/knowledge/commonsense-kg-completion/data/atomic/test.txt',
-        max_statements=1000,
-    )
+    knowledge_banks = [
+        build_knowledge_bank(
+            'atomic',
+            './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
+        ),
+        build_knowledge_bank(
+            'concept_net_100k',
+            './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
+        ),
+    ]
 
     # translator = None
     translator = build_translator(
@@ -71,10 +76,10 @@ def test_generate_dataset_lang(lang: str):
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
         # volume_to_weight='sqrt',
-        volume_to_weight='logE',
+        volume_to_weight='log10',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
-        knowledge_bank=knowledge_bank,
+        knowledge_banks=knowledge_banks,
     )
 
     # knowledge_translator = build_knowledge_translator()
@@ -167,7 +172,7 @@ def test_generate_dataset_lang(lang: str):
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
-        knowledge_injection_ratio=1.0,
+        knowledge_injection_range=(1.0, 1.0),
         # knowledge_translator=knowledge_translator,
     )
 

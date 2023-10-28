@@ -1,18 +1,24 @@
 from typing import Optional
 from .mock import MockIfThenKnowledgeBank
 from .atomic import AtomicKnowledgeBank
+from .concept_net_100k import ConceptNet100kKnowledgeBank
 
 
 def build(type_: str,
-          atomic_filepath: str,
+          filepath: str,
           max_statements: Optional[int] = None,
           no_shuffle=False):
-    if type_ == 'mock_if_then':
+    if type_ == 'mock':
         raise NotImplementedError('Not maintained')
         # return MockIfThenKnowledgeBank()
-    elif type_ == 'atomic_if_then':
-        return AtomicKnowledgeBank(atomic_filepath,
-                                         max_statements=max_statements,
-                                         shuffle=not no_shuffle)
+    elif type_ == 'atomic':
+        return AtomicKnowledgeBank(filepath,
+                                   max_statements=max_statements,
+                                   shuffle=not no_shuffle)
+    elif type_ == 'concept_net_100k':
+        return ConceptNet100kKnowledgeBank(filepath,
+                                           max_statements=max_statements,
+                                           shuffle=not no_shuffle)
+
     else:
         raise ValueError()

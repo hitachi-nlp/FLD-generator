@@ -51,7 +51,7 @@ class SynsetOp:
         return syn in self._get_event_nouns()
 
     def _get_event_nouns(self) -> Set[Synset]:
-        """ Decide whether a noun can represent a event.
+        """ Decide whether a noun can rePRESENT_PARTICLE_PARTICLE_particle a event.
 
         # We implement this function based on reference 1 and 2.
         # We listed all the possible eventive root and then, filtered out the inappropriate ones as follows.

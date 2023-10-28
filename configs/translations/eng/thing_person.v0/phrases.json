@@ -116,8 +116,8 @@
     "{A}is_tgt": [
       "{A}[ADJ]",
       "{A}[ADJ_SAT]",
-      "{A}[PAST]",
-      "{A}[PRESENT]",
+      "{A}[PAST_PARTICLE]",
+      "{A}[PRESENT_PARTICLE]",
       "<<phrase::{A}a_noun>>"
     ],
 
@@ -143,8 +143,8 @@
     "¬{A}is_not_tgt": [
       "{A}[ADJ]",
       "{A}[ADJ_SAT]",
-      "{A}[PAST]",
-      "{A}[PRESENT]",
+      "{A}[PAST_PARTICLE]",
+      "{A}[PRESENT_PARTICLE]",
       "<<phrase::{A}a_noun>>"
     ],
 
@@ -305,8 +305,8 @@
     "{A}post_modifier": [
       "__{A}[ADJ]",
       "__{A}[ADJ_SAT]",
-      "__{A}[PAST]",
-      "__{A}[PRESENT]",
+      "__{A}[PAST_PARTICLE]",
+      "__{A}[PRESENT_PARTICLE]",
       "__{A}[VERB.ing]",
       "that <<phrase::{A}predicate>>"
     ],

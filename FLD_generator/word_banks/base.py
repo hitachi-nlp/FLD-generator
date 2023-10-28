@@ -17,16 +17,15 @@ class POS(Enum):
     VERB = 'VERB'            # verbs (all tenses and modes)
 
     ADJ = 'ADJ'       # adjectives
+    ADJ_SAT = 'ADJ_SAT'
 
     # He is running at the park
     # Note that we differenciate this from "VERB.ing"
-    # as PRESENT imply that the verb form "must be" present form
-    PRESENT = 'PRESENT'
+    # as PRESENT_PARTICLE imply that the verb form "must be" PRESENT_PARTICLE_PARTICLE_particle form
+    PRESENT_PARTICLE = 'PRESENT_PARTICLE'
 
     # an iron is "used" for cleaning
-    PAST = 'PAST'
-
-    ADJ_SAT = 'ADJ_SAT'
+    PAST_PARTICLE = 'PAST_PARTICLE'
 
     ADV = 'ADV'       # adverbs
 
@@ -110,6 +109,10 @@ class WordBank(ABC):
             return self._change_adj_form(word, self.AdjForm(form), force=force)
         elif pos == POS.NOUN:
             return self._change_noun_form(word, self.NounForm(form), force=force)
+        elif pos == POS.PRESENT_PARTICLE:
+            return self._change_present_particle_form(word, self.PresentForm(form), force=force)
+        elif pos == POS.PAST_PARTICLE:
+            return self._change_past_particle_form(word, self.PastForm(form), force=force)
         else:
             raise Exception()
 
@@ -122,11 +125,11 @@ class WordBank(ABC):
         pass
 
     @abstractmethod
-    def _change_present_form(self, adj: str, form: Enum, force=False) -> List[str]:
+    def _change_present_particle_form(self, adj: str, form: Enum, force=False) -> List[str]:
         pass
 
     @abstractmethod
-    def _change_past_form(self, adj: str, form: Enum, force=False) -> List[str]:
+    def _change_past_particle_form(self, adj: str, form: Enum, force=False) -> List[str]:
         pass
 
     @abstractmethod

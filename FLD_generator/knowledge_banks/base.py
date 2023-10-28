@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional, Tuple, Union, Iterable
 from abc import abstractmethod, ABC
 import logging
+from copy import deepcopy
 
 from FLD_generator.exception import FormalLogicExceptionBase
 from FLD_generator.formula import Formula
@@ -10,6 +11,8 @@ from FLD_generator.utils import RandomCycle
 from .formula import (
     FormulaType,
     get_type_fml,
+    get_declare_constants_fml,
+    get_declare_predicates_fml,
     get_if_then_constants_fml,
     get_if_then_predicates_fml,
 )
@@ -21,6 +24,8 @@ from .statement import (
     StatementType,
     SomeoneX,
     SomeoneY,
+    SomethingX,
+    SomethingY,
 )
 from .utils import type_formula_to_statement, type_statement_to_formula
 
@@ -52,7 +57,7 @@ class KnowledgeBankBase(ABC):
 
     def is_acceptable(self, formulas: List[Formula]) -> bool:
         return all(
-            get_type_fml(formula) in self._formula_types
+            get_type_fml(formula, allow_others=True) in self._formula_types
             for formula in formulas
         )
 
@@ -67,13 +72,8 @@ class KnowledgeBankBase(ABC):
     def _statement_types(self) -> List[StatementType]:
         pass
 
-    def sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
-        if not self.is_acceptable(formulas):
-            raise KnowledgeMappingImpossible()
-        return self._sample_mapping(formulas)
-
-    def _sample_mapping(self, formulas: List[Formula]) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
-        mapping: Dict[str, str] = {}
+    def sample_mapping(self, formulas: List[Formula], mapping: Optional[Dict[str, Tuple[str, POS]]] = None) -> Tuple[Dict[str, Tuple[Phrase, Optional[POS]]], List[bool]]:
+        mapping = deepcopy(mapping) if mapping is not None else {}
         is_mapped: List[bool] = []
 
         for formula in formulas:
@@ -90,17 +90,23 @@ class KnowledgeBankBase(ABC):
                     statement,
                 )
 
-                if fml_type == FormulaType.F:
+                const_formula = get_declare_constants_fml(formula)
+                pred_formula = get_declare_predicates_fml(formula)
+
+                if fml_type in [FormulaType.F, FormulaType.nF]:
                     raise NotImplementedError()
 
-                elif fml_type == FormulaType.Fa:
-                    const_formula = formula.constants[0]
-                    pred_formula = formula.predicates[0]
-
+                elif fml_type in [FormulaType.Fa, FormulaType.nFa]:
                     _new_mapping = {
                         const_formula.rep: (const_phrase, const_pos),
                         pred_formula.rep: (pred_phrase, pred_pos),
                     }
+
+                elif fml_type in [FormulaType.Fx, FormulaType.nFx]:
+                    _new_mapping = {
+                        pred_formula.rep: (pred_phrase, pred_pos),
+                    }
+
                 else:
                     raise NotImplementedError()
 
@@ -115,20 +121,29 @@ class KnowledgeBankBase(ABC):
                 if_pred_formula, then_pred_formula = get_if_then_predicates_fml(formula)
                 if_const_formula, then_const_formula = get_if_then_constants_fml(formula)
 
-                if fml_type == FormulaType.F_G:
+                if fml_type in [FormulaType.F_G,
+                                FormulaType.nF_G,
+                                FormulaType.F_nG,
+                                FormulaType.nF_nG]:
                     _new_mapping = {
                         if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
                         then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
                     }
 
-                elif fml_type == FormulaType.Fa_Ga:
+                elif fml_type in [FormulaType.Fa_Ga,
+                                  FormulaType.nFa_Ga,
+                                  FormulaType.Fa_nGa,
+                                  FormulaType.nFa_nGa]:
                     _new_mapping = {
                         if_const_formula.rep: (if_const_phrase, if_const_pos),
                         if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
                         then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
                     }
 
-                elif fml_type == FormulaType.Fa_Gb:
+                elif fml_type in [FormulaType.Fa_Gb,
+                                  FormulaType.nFa_Gb,
+                                  FormulaType.Fa_nGb,
+                                  FormulaType.nFa_nGb]:
                     _new_mapping = {
                         if_const_formula.rep: (if_const_phrase, if_const_pos),
                         if_pred_formula.rep: (if_pred_phrase, if_pred_pos),
@@ -136,7 +151,10 @@ class KnowledgeBankBase(ABC):
                         then_pred_formula.rep: (then_pred_phrase, then_pred_pos),
                     }
 
-                elif fml_type == FormulaType.Fx_Gx:
+                elif fml_type in [FormulaType.Fx_Gx,
+                                  FormulaType.nFx_Gx,
+                                  FormulaType.Fx_nGx,
+                                  FormulaType.nFx_nGx]:
 
                     def maybe_replace(rep: Optional[str], src: str, dst: str) -> Optional[str]:
                         if rep is None:
@@ -144,7 +162,11 @@ class KnowledgeBankBase(ABC):
                         return rep.replace(src, dst)
 
                     def maybe_replace_pronoun(rep: Optional[str]) -> Optional[str]:
-                        return maybe_replace(maybe_replace(rep, SomeoneX, 'the one'), SomeoneY, 'the other')
+                        rep = maybe_replace(rep, SomeoneX, 'the one')
+                        rep = maybe_replace(rep, SomeoneY, 'the other')
+                        rep = maybe_replace(rep, SomethingX, 'the thing')
+                        rep = maybe_replace(rep, SomethingY, 'the other thing')
+                        return rep
 
                     def rename_someone_pronoun(phrase: PredicatePhrase):
                         return PredicatePhrase(

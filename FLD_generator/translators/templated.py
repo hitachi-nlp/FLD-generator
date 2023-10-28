@@ -82,7 +82,7 @@ class TemplatedTranslator(Translator):
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
                  adj_verb_noun_ratio: Optional[List] = None,
-                 knowledge_bank: Optional[KnowledgeBankBase] = None,
+                 knowledge_banks: Optional[List[KnowledgeBankBase]] = None,
                  log_stats=False):
         super().__init__(log_stats=log_stats)
 
@@ -137,7 +137,7 @@ class TemplatedTranslator(Translator):
 
         self._do_translate_to_nl = do_translate_to_nl
 
-        self._knowledge_bank = knowledge_bank
+        self._knowledge_banks = knowledge_banks or []
 
     def _build_two_layered_config(self, config: Dict) -> Dict[str, Dict[str, List[Tuple[str, str]]]]:
         flat_config = self._completely_flatten_config(config)
@@ -254,7 +254,7 @@ class TemplatedTranslator(Translator):
         return (
             (PredicatePhrase(predicate=pred[0], object=pred[1]) if isinstance(pred, tuple) else PredicatePhrase(predicate=pred) for pred in  zeroary_predicates),
             (PredicatePhrase(predicate=pred[0], object=pred[1]) if isinstance(pred, tuple) else PredicatePhrase(predicate=pred) for pred in  unary_predicates),
-            [ConstantPhrase(constant) for constant in constants],
+            [ConstantPhrase(constant=constant) for constant in constants],
         )
 
     @profile
@@ -320,11 +320,9 @@ class TemplatedTranslator(Translator):
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
         if len(knowledge_injection_idxs) > 0:
-            if self._knowledge_bank is None:
+            if len(self._knowledge_banks) == 0:
                 raise ValueError()
             should_knowledge_formulas = [formulas[idx] for idx in knowledge_injection_idxs]
-            if not self._knowledge_bank.is_acceptable(should_knowledge_formulas):
-                raise ValueError('The following formulas can not be translated with knowledge: %s', str(should_knowledge_formulas))
             (
                 knowledge_injection_mapping,
                 knowledge_pos_mapping,
@@ -371,6 +369,7 @@ class TemplatedTranslator(Translator):
                         f'(i) the key="{translation_key}" in config indeed have no translation',
                         '(ii) we have found translations, but the sampled interpretation mapping could not match the pos and word inflation required by the translations. The interpret_mapping is the following:',
                         '\n    ' + '\n    '.join(pformat(interpret_mapping).split('\n')),
+                        '\n    ' + '\n    '.join(pformat(force_pos_mapping or {}).split('\n')),
                     ]
                     logger.info('\n'.join(msgs))
                     continue
@@ -472,7 +471,8 @@ class TemplatedTranslator(Translator):
         return list(zip(translation_names, translations, SO_swap_formulas, is_knowledge_injected)), count_stats
 
     def is_knowledge_translatable(self, formulas: List[Formula]) -> bool:
-        return self._knowledge_bank.is_acceptable(formulas)
+        return any(knowledge_bank.is_acceptable(formulas)
+                   for knowledge_bank in self._knowledge_banks)
 
     # @profile
     def _find_translation_key(self, formula: Formula) -> Iterable[Tuple[str, Dict[str, str]]]:
@@ -732,7 +732,6 @@ class TemplatedTranslator(Translator):
             volumes.append(iterator_with_volume[1])
 
         if shuffle:
-
             volume_weights = [volume_to_weight(volume) for volume in volumes]
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
@@ -883,11 +882,17 @@ class TemplatedTranslator(Translator):
                                   from_knowledge=False,
                                   ) -> Union[Dict[str, str], Tuple[Dict[str, Phrase], Dict[str, str], List[bool]]]:
 
-        if from_knowledge and self._knowledge_bank.is_acceptable(formulas):
-            _mapping, is_injected = self._knowledge_bank.sample_mapping(formulas)
-            mapping = {key: val[0] for key, val in _mapping}
-            pos_mapping = {key: val[1] for key, val in _mapping if val[1] is not None}
-            return mapping, pos_mapping, is_injected
+        if from_knowledge:
+            mapping = {}
+            is_injected = [False] * len(formulas)
+            for knowledge_bank in shuffle(self._knowledge_banks):
+                _mapping, _is_injected = knowledge_bank.sample_mapping(formulas, mapping)
+                mapping.update(_mapping)
+                is_injected = [is_pre or is_cur for is_pre, is_cur in zip(is_injected, _is_injected)]
+
+            mapping_wo_pos = {key: val[0] for key, val in _mapping.items()}
+            pos_mapping = {key: val[1] for key, val in _mapping.items() if val[1] is not None}
+            return mapping_wo_pos, pos_mapping, is_injected
 
         else:
             constraints = constraints or {}
@@ -1069,19 +1074,15 @@ class TemplatedTranslator(Translator):
 
     @lru_cache(maxsize=1000000)
     def _get_inflated_phrases(self, phrase: Phrase, pos: POS, form: str) -> Union[Tuple[str, ...], Tuple[Phrase, ...]]:
-        if pos == POS.ADJ:
+        if pos in [POS.ADJ, POS.ADJ_SAT]:
             force = True
-        elif pos == POS.VERB:
-            force = False
-        elif pos == POS.NOUN:
-            force = False
         else:
-            raise ValueError()
+            force = False
 
         if isinstance(phrase, PredicatePhrase):
             _word, obj, right_modifier, left_modifier = phrase.predicate, phrase.object, phrase.right_modifier, phrase.left_modifier
         elif isinstance(phrase, ConstantPhrase):
-            _word = phrase.constant
+            _word, right_modifier, left_modifier = phrase.constant, phrase.right_modifier, phrase.left_modifier
         else:
             raise ValueError()
 
@@ -1094,13 +1095,13 @@ class TemplatedTranslator(Translator):
                          for _inflated_word in inflated_words)
 
         elif isinstance(phrase, ConstantPhrase):
-            return tuple(ConstantPhrase(constant=_inflated_word)
+            return tuple(ConstantPhrase(constant=_inflated_word, right_modifier=right_modifier, left_modifier=left_modifier)
                          for _inflated_word in inflated_words)
 
         else:
             raise ValueError()
 
-    @lru_cache(maxsize=1000000)
+    # @lru_cache(maxsize=1000000)
     def _get_pos(self, phrase: Phrase) -> List[POS]:
         if isinstance(phrase, PredicatePhrase):
             _word = phrase.predicate

@@ -12,18 +12,19 @@ from .statement import (
     IfThenStatement,
     SomeoneX,
     SomeoneY,
+    SomethingX,
+    SomethingY,
 )
 from .utils import (
-    parse_pred,
-    parse_subj,
+    parse_as_pred,
+    parse_as_subj,
+    parse,
 )
 
 
 logger = logging.getLogger(__name__)
 
 _WORD_UTILS = WordUtil('eng')
-_PersonX = 'PersonX'
-_PersonY = 'PersonY'
 
 
 class ConceptNet100kRelation(Enum):
@@ -63,6 +64,32 @@ class ConceptNet100kRelation(Enum):
     UsedFor = 'UsedFor'  # 26442
 
 
+_Fx_Gx_relations = [
+    ConceptNet100kRelation.AtLocation,
+    ConceptNet100kRelation.CreatedBy,
+    ConceptNet100kRelation.DefinedAs,
+    ConceptNet100kRelation.LocatedNear,
+    ConceptNet100kRelation.MadeOf,
+    ConceptNet100kRelation.NotMadeOf,
+    ConceptNet100kRelation.PartOf,
+    ConceptNet100kRelation.UsedFor,
+    ConceptNet100kRelation.HasProperty,
+    ConceptNet100kRelation.NotHasProperty,
+    ConceptNet100kRelation.InstanceOf,
+    ConceptNet100kRelation.IsA,
+    ConceptNet100kRelation.NotIsA,
+
+    ConceptNet100kRelation.CapableOf,
+    ConceptNet100kRelation.NotCapableOf,
+    ConceptNet100kRelation.Desires,
+    ConceptNet100kRelation.NotDesires,
+    ConceptNet100kRelation.HasPrerequisite,
+    ConceptNet100kRelation.HasFirstSubevent,
+    ConceptNet100kRelation.HasLastSubevent,
+    ConceptNet100kRelation.HasSubevent,
+]
+
+
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[Statement]:
@@ -77,230 +104,281 @@ def _load_statements(path: str,
     for i_line, line in enumerate(lines):
         if max_statements is not None and i_line >= max_statements:
             break
-        line = line.replace(' be ', ' is ')
+        line = _normalize(line)
 
         rel_str, e0_str, e1_str = line.rstrip('\n').split('\t')
+        negated = False
         relation = ConceptNet100kRelation(rel_str)
 
-        then_subj = None
-        then_subj_right_modif = None
-        then_subj_left_modif = None
-        then_subj_pos = None
+        if relation in _Fx_Gx_relations:
 
-        then_pred = None
-        then_pred_left_modif = None
-        then_pred_right_modif = None
-        then_pred_pos = None
-
-        if relation in [ConceptNet100kRelation.AtLocation,
-                        ConceptNet100kRelation.CreatedBy,
-                        ConceptNet100kRelation.DefinedAs,
-                        ConceptNet100kRelation.LocatedNear,
-                        ConceptNet100kRelation.MadeOf,
-                        ConceptNet100kRelation.PartOf,
-                        ConceptNet100kRelation.UsedFor,
-                        ConceptNet100kRelation.HasProperty,
-                        ConceptNet100kRelation.InstanceOf,
-                        ConceptNet100kRelation.IsA]:
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str)
-
-            if relation == ConceptNet100kRelation.AtLocation:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'located', None, f'at {e1_str}', POS.PAST
-
-            elif relation == ConceptNet100kRelation.CreatedBy:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'created', None, f'by {e1_str}', POS.PAST
-
-            elif relation == ConceptNet100kRelation.DefinedAs:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'defined', None, f'as {e1_str}', POS.PAST
-
-            elif relation == ConceptNet100kRelation.LocatedNear:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'located', None, f'near {e1_str}', POS.PAST
-
-            elif relation == ConceptNet100kRelation.MadeOf:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'made', None, f'of {e1_str}', POS.PAST
-
-            elif relation == ConceptNet100kRelation.PartOf:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'part', None, f'of {e1_str}', POS.NOUN
-
-            elif relation == ConceptNet100kRelation.UsedFor:
-                effect_poss = _WORD_UTILS.get_pos(e1_str.split(' ')[0])
-                if len(effect_poss) == 0:
-                    continue
-
-                if POS.VERB in effect_poss:
-                    if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'used', None, f'to {e1_str}', POS.PAST
-                else:
-                    if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'used', None, f'for {e1_str}', POS.PAST
-
-            elif relation == ConceptNet100kRelation.HasProperty:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_pred(e1_str)
-
-            elif relation in [ConceptNet100kRelation.InstanceOf,
-                              ConceptNet100kRelation.IsA]:
-                e1_words = e1_str.split(' ')
-                if_pred = e1_words[-1]
-                if_pred_left_modif = ' '.join(e1_words[:-1]) or None
-                if_pred_right_modif = None
-                if_pred_pos = POS.NOUN
-
-        elif relation == ConceptNet100kRelation.CapableOf:
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str)
-            if_pred_left_modif = 'can'
-            e1_words = e1_str.split(' ')
-            if_pred = e1_words[0]
-            if_pred_right_modif = ' '.join(e1_words[1:]) or None
-            if_pred_pos = POS.VERB
-
-        elif relation == ConceptNet100kRelation.Causes:
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str, might_be_gerund=True)
-            if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = None, None, None, None
-
-            then_subj, then_subj_left_modif, then_subj_right_modif, then_subj_pos = parse_subj(e1_str, might_be_gerund=True)
-            then_pred, then_subj_left_modif, then_pred_right_modif, then_pred_pos = None, None, None, None
-
-        elif relation == ConceptNet100kRelation.Desires:
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str)
-            if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_pred(f'want to {e1_str}')
-
-        elif relation == ConceptNet100kRelation.HasA:
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str)
-
-            if e1_str.startswith('effect of '):
-                effect_str = e1_str.replace('effect of ', '')
-                effect_poss = _WORD_UTILS.get_pos(effect_str.split(' ')[0])
-                if len(effect_poss) == 0:
-                    continue
-
-                if POS.VERB in effect_poss:
-                    # trade with china    effect of enrich their government
-                    if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_pred(effect_str)
-                else:
-                    if_pred = None
-                    if_pred_left_modif = None
-                    if_pred_right_modif = None
-                    if_pred_pos = None
-
-                    then_subj, then_subj_right_modif = effect_str.split(' ', 1)
-                    then_subj_left_modif = None
-                    then_subj_pos = POS.NOUN
-
-                    then_pred = None
-                    then_pred_left_modif = None
-                    then_pred_right_modif = None
-                    then_pred_pos = None
-            else:
-                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = 'have', None, e1_str, POS.VERB
-
-        elif relation in [ConceptNet100kRelation.HasPrerequisite,
-                          ConceptNet100kRelation.HasFirstSubevent,
-                          ConceptNet100kRelation.HasLastSubevent,
-                          ConceptNet100kRelation.HasSubevent]:
-
-            if relation == ConceptNet100kRelation.HasPrerequisite:
-                _e0_str = f'want to {e0_str}'
-                _e1_str = f'have to {e1_str}'
-
-            else:
-                _e0_str = e0_str
-                _e1_str = e1_str
-
-            if_subj = SomeoneX
+            if_subj = SomethingX
             if_subj_left_modif = None
             if_subj_right_modif = None
             if_subj_pos = POS.NOUN
 
-            if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_pred(_e0_str)
-
-            then_subj = SomeoneX
+            then_subj = SomethingX
             then_subj_left_modif = None
             then_subj_right_modif = None
             then_subj_pos = POS.NOUN
 
-            then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = parse_pred(_e1_str)
+            if relation in [ConceptNet100kRelation.AtLocation,
+                            ConceptNet100kRelation.CreatedBy,
+                            ConceptNet100kRelation.DefinedAs,
+                            ConceptNet100kRelation.LocatedNear,
+                            ConceptNet100kRelation.MadeOf,
+                            ConceptNet100kRelation.NotMadeOf,
+                            ConceptNet100kRelation.PartOf,
+                            ConceptNet100kRelation.UsedFor,
+                            ConceptNet100kRelation.HasProperty,
+                            ConceptNet100kRelation.NotHasProperty,
+                            ConceptNet100kRelation.InstanceOf,
+                            ConceptNet100kRelation.IsA,
+                            ConceptNet100kRelation.NotIsA]:
 
-        elif relation == ConceptNet100kRelation.NotCapableOf:
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str)
-            if_pred_left_modif = 'cannot'
-            e1_words = e1_str.split(' ')
-            if_pred = e1_words[0]
-            if_pred_right_modif = ' '.join(e1_words[1:]) or None
-            if_pred_pos = POS.VERB
+                if_pred, if_pred_left_modif, if_pred_right_modif = parse(e0_str, 'rightmost')
+                if_pred_pos = POS.NOUN
 
-        elif relation == ConceptNet100kRelation.NotDesires:
-            _e0_str = e0_str.replace('person', SomeoneX)
-            if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_subj(e0_str)
-            if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_pred(f'does not want to {e1_str}')
+                if relation == ConceptNet100kRelation.AtLocation:
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'located', None, f'at {e1_str}', POS.PAST_PARTICLE
 
-        elif relation == ConceptNet100kRelation.NotHasA:
-            continue
+                elif relation == ConceptNet100kRelation.CreatedBy:
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'created', None, f'by {e1_str}', POS.PAST_PARTICLE
 
-        elif relation == ConceptNet100kRelation.NotHasProperty:
-            continue
+                elif relation == ConceptNet100kRelation.DefinedAs:
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'defined', None, f'as {e1_str}', POS.PAST_PARTICLE
 
-        elif relation == ConceptNet100kRelation.NotIsA:
-            continue
+                elif relation == ConceptNet100kRelation.LocatedNear:
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'located', None, f'near {e1_str}', POS.PAST_PARTICLE
 
-        elif relation == ConceptNet100kRelation.NotMadeOf:
-            continue
+                elif relation in [ConceptNet100kRelation.MadeOf,
+                                  ConceptNet100kRelation.NotMadeOf]:
+                    if relation == ConceptNet100kRelation.NotMadeOf:
+                        negated = True
 
-        elif relation == ConceptNet100kRelation.CausesDesire:  # rare
-            continue
-        elif relation == [ConceptNet100kRelation.DesireOf]:  # rare
-            continue
-        elif relation == ConceptNet100kRelation.HasPainCharacter:  # rare
-            continue
-        elif relation == ConceptNet100kRelation.HasPainIntensity:  # rare
-            continue
-        elif relation == ConceptNet100kRelation.InheritsFrom:  # examples are low-quality
-            continue
-        elif relation == ConceptNet100kRelation.LocationOfAction:  # rare
-            continue
-        elif relation == ConceptNet100kRelation.MotivatedByGoal:  # examples are difficult to parse
-            continue
-        elif relation == ConceptNet100kRelation.ReceivesAction:  # examples are difficult to parse
-            continue
-        elif relation == ConceptNet100kRelation.RelatedTo:  # relationship is too ambiguous
-            continue
-        elif relation == ConceptNet100kRelation.SymbolOf:  # relationship is too ambiguous
-            continue
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'made', None, f'of {e1_str}', POS.PAST_PARTICLE
+
+                elif relation == ConceptNet100kRelation.PartOf:
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'part', None, f'of {e1_str}', POS.NOUN
+
+                elif relation == ConceptNet100kRelation.UsedFor:
+                    effect_poss = _WORD_UTILS.get_pos(e1_str.split(' ')[0])
+                    if len(effect_poss) == 0:
+                        continue
+
+                    if POS.VERB in effect_poss:
+                        then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'used', None, f'to {e1_str}', POS.PAST_PARTICLE
+                    else:
+                        then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'used', None, f'for {e1_str}', POS.PAST_PARTICLE
+
+                elif relation in [ConceptNet100kRelation.HasProperty,
+                                  ConceptNet100kRelation.NotHasProperty]:
+                    if relation == ConceptNet100kRelation.NotHasProperty:
+                        negated = True
+
+                    if POS.VERB in _WORD_UTILS.get_pos(e1_str.split(' ')[0]):
+                        then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = parse_as_pred(f'{e1_str}')
+                    else:
+                        then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = parse_as_pred(f'is {e1_str}')
+
+                elif relation in [ConceptNet100kRelation.InstanceOf,
+                                  ConceptNet100kRelation.IsA,
+                                  ConceptNet100kRelation.NotIsA]:
+                    if relation == ConceptNet100kRelation.NotIsA:
+                        negated = True
+
+                    then_pred, then_pred_left_modif, then_pred_right_modif = parse(e1_str, 'rightmost')
+                    then_pred_pos = POS.NOUN
+
+                else:
+                    raise ValueError()
+
+            elif relation in [ConceptNet100kRelation.CapableOf,
+                              ConceptNet100kRelation.NotCapableOf]:
+                if relation == ConceptNet100kRelation.NotCapableOf:
+                    negated = True
+
+                if_pred, if_pred_left_modif, if_pred_right_modif = parse(e0_str, 'rightmost')
+                if_pred_pos = POS.NOUN
+
+                then_pred, _, then_pred_right_modif = parse(e1_str, 'leftmost')
+                then_pred_left_modif = 'can'
+                then_pred_pos = POS.VERB
+
+            elif relation in [ConceptNet100kRelation.Desires,
+                              ConceptNet100kRelation.NotDesires]:
+                if relation == ConceptNet100kRelation.NotDesires:
+                    negated = True
+
+                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_as_subj(e0_str)
+                then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = parse_as_pred(f'want to {e1_str}')
+
+            elif relation in [ConceptNet100kRelation.HasPrerequisite,
+                              ConceptNet100kRelation.HasFirstSubevent,
+                              ConceptNet100kRelation.HasLastSubevent,
+                              ConceptNet100kRelation.HasSubevent]:
+
+                if relation == ConceptNet100kRelation.HasPrerequisite:
+                    _e0_str = f'want to {e0_str}'
+                    _e1_str = f'have to {e1_str}'
+
+                else:
+                    _e0_str = e0_str
+                    _e1_str = e1_str
+
+                # the seems to be human
+                if_subj = SomeoneX
+                then_subj = SomeoneX
+
+                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_as_pred(_e0_str)
+                then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = parse_as_pred(_e1_str)
+
+            else:
+                raise ValueError(relation)
+
         else:
-            raise ValueError()
+            if_subj = None
+            if_subj_left_modif = None
+            if_subj_right_modif = None
+            if_subj_pos = None
 
-        if_statement = DeclareStatement(
-            subj=if_subj,
-            subj_right_modif=if_subj_right_modif,
-            subj_left_modif=if_subj_left_modif,
-            subj_pos=if_subj_pos,
+            if_pred = None
+            if_pred_left_modif = None
+            if_pred_right_modif = None
+            if_pred_pos = None
 
-            pred=if_pred,
-            pred_left_modif=if_pred_left_modif,
-            pred_right_modif=if_pred_right_modif,
-            pred_pos=if_pred_pos,
-        )
+            then_subj = None
+            then_subj_left_modif = None
+            then_subj_right_modif = None
+            then_subj_pos = None
+
+            then_pred = None
+            then_pred_left_modif = None
+            then_pred_right_modif = None
+            then_pred_pos = None
+
+            if relation in [ConceptNet100kRelation.HasA,
+                            ConceptNet100kRelation.NotHasA]:
+                if relation == ConceptNet100kRelation.NotHasA:
+                    negated = True
+
+                if e1_str.startswith('effect of '):
+                    effect_str = e1_str.replace('effect of ', '')
+                    effect_poss = _WORD_UTILS.get_pos(effect_str.split(' ')[0])
+                    if len(effect_poss) == 0:
+                        continue
+
+                    if POS.VERB in effect_poss:
+                        # trade with china    effect of enrich their government
+                        if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_as_subj(e0_str)
+                        if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_as_pred(effect_str)
+
+                    else:
+                        if_subj, if_subj_left_modif, if_subj_right_modif = parse(e0_str, 'leftmost')
+                        if_subj_pos = POS.NOUN
+
+                        then_subj, then_subj_left_modif, then_subj_right_modif = parse(effect_str, 'leftmost')
+                        then_subj_pos = POS.NOUN
+                else:
+                    if_subj = SomethingX
+                    if_subj_left_modif = None
+                    if_subj_right_modif = None
+                    if_subj_pos = POS.NOUN
+
+                    if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = parse_as_subj(e0_str)
+
+                    then_subj = SomethingX
+                    then_subj_left_modif = None
+                    then_subj_right_modif = None
+                    then_subj_pos = POS.NOUN
+
+                    then_pred, then_pred_left_modif, then_pred_right_modif, then_pred_pos = 'have', None, e1_str, POS.VERB
+
+            elif relation == ConceptNet100kRelation.Causes:
+                if_subj, if_subj_left_modif, if_subj_right_modif, if_subj_pos = parse_as_subj(e0_str, might_be_gerund=True)
+                if_pred, if_pred_left_modif, if_pred_right_modif, if_pred_pos = None, None, None, None
+
+                then_subj, then_subj_left_modif, then_subj_right_modif, then_subj_pos = parse_as_subj(e1_str, might_be_gerund=True)
+                then_pred, then_subj_left_modif, then_pred_right_modif, then_pred_pos = None, None, None, None
+
+            elif relation == ConceptNet100kRelation.CausesDesire:  # rare
+                continue
+            elif relation == ConceptNet100kRelation.DesireOf:  # rare
+                continue
+            elif relation == ConceptNet100kRelation.HasPainCharacter:  # rare
+                continue
+            elif relation == ConceptNet100kRelation.HasPainIntensity:  # rare
+                continue
+            elif relation == ConceptNet100kRelation.InheritsFrom:  # examples are low-quality
+                continue
+            elif relation == ConceptNet100kRelation.LocationOfAction:  # rare
+                continue
+            elif relation == ConceptNet100kRelation.MotivatedByGoal:  # examples are difficult to parse
+                continue
+            elif relation == ConceptNet100kRelation.ReceivesAction:  # examples are difficult to parse
+                continue
+            elif relation == ConceptNet100kRelation.RelatedTo:  # relationship is too ambiguous
+                continue
+            elif relation == ConceptNet100kRelation.SymbolOf:  # relationship is too ambiguous
+                continue
+            else:
+                raise ValueError(str(relation))
+
+        try:
+            if_statement = DeclareStatement(
+                subj=if_subj,
+                subj_right_modif=if_subj_right_modif,
+                subj_left_modif=if_subj_left_modif,
+                subj_pos=if_subj_pos,
+
+                pred=if_pred,
+                pred_left_modif=if_pred_left_modif,
+                pred_right_modif=if_pred_right_modif,
+                pred_pos=if_pred_pos,
+                negated=False,
+            )
+        except Exception as e:
+            logger.warning('failed to parse line "%s"', line)
+            continue
+            
 
         if then_subj is None:
             statement = if_statement
+            statement.negated = negated
             statement.relation = relation.value
         else:
-            then_statement = DeclareStatement(
-                subj=then_subj,
-                subj_right_modif=then_subj_right_modif,
-                subj_left_modif=then_subj_left_modif,
-                subj_pos=then_subj_pos,
+            try:
+                then_statement = DeclareStatement(
+                    subj=then_subj,
+                    subj_right_modif=then_subj_right_modif,
+                    subj_left_modif=then_subj_left_modif,
+                    subj_pos=then_subj_pos,
 
-                pred=then_pred,
-                pred_left_modif=then_pred_left_modif,
-                pred_right_modif=then_pred_right_modif,
-                pred_pos=then_pred_pos,
-            )
+                    pred=then_pred,
+                    pred_left_modif=then_pred_left_modif,
+                    pred_right_modif=then_pred_right_modif,
+                    pred_pos=then_pred_pos,
+                    negated=negated,
+                )
+            except Exception as e:
+                logger.warning('failed to parse line "%s"', line)
+                continue
+
 
             statement = IfThenStatement(
                 if_statement=if_statement,
                 then_statement=then_statement,
                 relation=relation.value,
+                negated=False,
             )
 
+        logger.info('conceptnet 100k loading a statement...')
         yield statement
+
+
+def _normalize(line: str) -> str:
+    line = line.replace(' be ', ' is ')
+    return line
 
 
 class ConceptNet100kKnowledgeBank(KnowledgeBankBase):
@@ -324,7 +402,12 @@ class ConceptNet100kKnowledgeBank(KnowledgeBankBase):
     @property
     def _statement_types(self) -> List[StatementType]:
         return [
-            StatementType.Fa,
+            # 82 type=StatementType.Fa
+            # 4624 type=StatementType.F_G
+            # 84027 type=StatementType.Fx_Gx
+            # 3293 type=StatementType.Fx_nGx
+
             StatementType.F_G,
             StatementType.Fx_Gx,
+            StatementType.Fx_nGx,
         ]

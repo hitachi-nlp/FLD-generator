@@ -12,7 +12,7 @@ import logging
 import random
 
 from FLD_generator.word_banks import POS
-from FLD_generator.word_banks.english import BE_VERBS
+from FLD_generator.word_banks.english import BE_VERBS, strip_negation
 from .base import KnowledgeBankBase
 from .statement import (
     DeclareStatement,
@@ -23,8 +23,8 @@ from .statement import (
     SomeoneY,
 )
 from .utils import (
-    parse_pred,
-    parse_subj,
+    parse_as_pred,
+    parse_as_subj,
 )
 
 
@@ -77,23 +77,23 @@ def _load_statements(path: str,
         if max_statements is not None and i_line >= max_statements:
             break
         e0_str, rel_str, e1_str = line.rstrip('\n').replace('-', ' ').split('\t')
-        e0_str = _normalize_person_xy(e0_str.lower())
-        e1_str = _normalize_person_xy(e1_str.lower())
+        e0_str = _normalize_e(e0_str)
+        e1_str = _normalize_e(e1_str)
         relation = AtomicRelation(rel_str)
-        if e1_str == 'none':
-            continue
-        if line.find('___') >= 0:
+        if line.find('___') >= 0 or e1_str == 'none':
             continue
 
         (
             (e0_subj, e0_subj_left_modif, e0_subj_right_modif, e0_subj_pos),
             (e0_pred, e0_pred_left_modif, e0_pred_right_modif, e0_pred_pos),
+            e0_is_negated,
         ) = _parse_e0(e0_str, relation)
 
         is_personY_related = e0_pred_right_modif is not None and e0_pred_right_modif.find(SomeoneY) >= 0
         (
             (e1_subj, e1_subj_left_modif, e1_subj_right_modif, e1_subj_pos),
             (e1_pred, e1_pred_left_modif, e1_pred_right_modif, e1_pred_pos),
+            e1_is_negated,
         ) = _parse_e1(e1_str, relation, is_personY_related=is_personY_related)
 
         if e0_subj != SomeoneX:
@@ -110,6 +110,8 @@ def _load_statements(path: str,
             if_pred_right_modif = e0_pred_right_modif
             if_pred_pos = e0_pred_pos
 
+            if_is_negated = e0_is_negated
+
             then_subj = e1_subj
             then_subj_left_modif = e1_subj_left_modif
             then_subj_right_modif = e1_subj_right_modif
@@ -119,6 +121,8 @@ def _load_statements(path: str,
             then_pred_left_modif = e1_pred_left_modif
             then_pred_right_modif = e1_pred_right_modif
             then_pred_pos = e1_pred_pos
+
+            then_is_negated = e1_is_negated
 
         elif relation in _E1_IS_IF_RELATIONS:
             then_subj = e0_subj
@@ -131,6 +135,8 @@ def _load_statements(path: str,
             then_pred_right_modif = e0_pred_right_modif
             then_pred_pos = e0_pred_pos
 
+            then_is_negated = e0_is_negated
+
             if_subj = e1_subj
             if_subj_left_modif = e1_subj_left_modif
             if_subj_right_modif = e1_subj_right_modif
@@ -140,6 +146,8 @@ def _load_statements(path: str,
             if_pred_left_modif = e1_pred_left_modif
             if_pred_right_modif = e1_pred_right_modif
             if_pred_pos = e1_pred_pos
+
+            if_is_negated = e1_is_negated
         else:
             raise Exception()
 
@@ -156,6 +164,7 @@ def _load_statements(path: str,
             pred_left_modif=if_pred_left_modif,
             pred_right_modif=if_pred_right_modif,
             pred_pos=if_pred_pos,
+            negated=if_is_negated,
         )
 
         then_statement = DeclareStatement(
@@ -168,6 +177,7 @@ def _load_statements(path: str,
             pred_left_modif=then_pred_left_modif,
             pred_right_modif=then_pred_right_modif,
             pred_pos=then_pred_pos,
+            negated=then_is_negated,
         )
 
 
@@ -175,23 +185,29 @@ def _load_statements(path: str,
             if_statement=if_statement,
             then_statement=then_statement,
             relation=relation.value,
+            negated=False,
         )
+
+        logger.info('atomic loading a statement...')
 
         yield if_then_statement
 
 
-def _normalize_person_xy(rep: str) -> str:
-    rep = re.sub('[Pp]erson[-]*[Xx]', SomeoneX, rep)
-    rep = re.sub('[Pp]erson[-]*[Yy]', SomeoneY, rep)
-    return rep
+def _normalize_e(line: str) -> str:
+    line = line.lower()
+    line = re.sub('[Pp]erson[-]*[Xx]', SomeoneX, line)
+    line = re.sub('[Pp]erson[-]*[Yy]', SomeoneY, line)
+    return line
 
 
 def _parse_e0(e0_str: str, relation: AtomicRelation) -> Tuple[
     Tuple[Optional[str], Optional[str], Optional[str], Optional[POS]],
     Tuple[Optional[str], Optional[str], Optional[str], Optional[POS]],
+    bool,
 ]:
+    e0_str, is_negated = strip_negation(e0_str)
     e0_subj_str, e0_pred_str = e0_str.split(' ', 1)
-    return parse_subj(e0_subj_str), parse_pred(e0_pred_str)
+    return parse_as_subj(e0_subj_str), parse_as_pred(e0_pred_str), is_negated
 
 
 def _parse_e1(e1_str: str,
@@ -199,7 +215,9 @@ def _parse_e1(e1_str: str,
               is_personY_related=False) -> Tuple[
     Tuple[Optional[str], Optional[str], Optional[str]],
     Tuple[Optional[str], Optional[str], Optional[str]],
+    bool,
 ]:
+    e1_str, is_negated = strip_negation(e1_str)
     e1_words = e1_str.split(' ')
 
     e1_subj_str = e1_words[0] if e1_words[0] in [SomeoneX, SomeoneY] else None
@@ -236,7 +254,7 @@ def _parse_e1(e1_str: str,
         else:
             e1_pred_str = f'is {e1_pred_str}'
 
-    return parse_subj(e1_subj_str), parse_pred(e1_pred_str)
+    return parse_as_subj(e1_subj_str), parse_as_pred(e1_pred_str), is_negated
 
 
 class AtomicKnowledgeBank(KnowledgeBankBase):
@@ -262,5 +280,11 @@ class AtomicKnowledgeBank(KnowledgeBankBase):
         return [
             # StatementType.Fa_Ga,
             # StatementType.Fa_Gb,
+
             StatementType.Fx_Gx,
+
+            # We do have negation statements, but they are rare (~ less than 100 / 100,000)
+            # StatementType.nFx_Gx,
+            # StatementType.Fx_nGx,
+            # StatementType.nFx_nGx,
         ]

@@ -6,6 +6,7 @@ from typing import Set
 from FLD_generator.formula import Formula
 from FLD_generator.utils import starts_with_vowel_sound
 from FLD_generator.word_banks import POS
+from FLD_generator.word_banks.english import MODAL_VERBS
 from FLD_generator.person_names import get_person_names
 from .templated import TemplatedTranslator
 from .base import PredicatePhrase, ConstantPhrase
@@ -61,37 +62,48 @@ class EnglishTranslator(TemplatedTranslator):
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)
 
-        male_names = [word for word in translation.split(' ')
-                     if word in self._male_names]
-        female_names = [word for word in translation.split(' ')
-                        if word in self._female_names]
-        person_names  = male_names + female_names
+        # male_names = [word for word in translation.split(' ')
+        #              if word in self._male_names]
+        # female_names = [word for word in translation.split(' ')
+        #                 if word in self._female_names]
+        # person_names  = male_names + female_names
+        # if len(person_names) > 0 or is_knowledge_injected:
+        #     # fix "the Emma"
+        #     for person_name in male_names + female_names:
+        #         translation = translation\
+        #             .replace(f'the {person_name}', person_name)\
+        #             .replace(f'a {person_name}', person_name)\
+        #             .replace(f'an {person_name}', person_name)
 
-        if len(person_names) > 0 or is_knowledge_injected:
-            # fix "the Emma"
-            for person_name in male_names + female_names:
-                translation = translation\
-                    .replace(f'the {person_name}', person_name)\
-                    .replace(f'a {person_name}', person_name)\
-                    .replace(f'an {person_name}', person_name)\
+        #     # something -> someone, thing -> one
+        #     translation = translation.replace('nothing', 'no one')  # need space bofore "one"
+        #     translation = translation.replace('thing', 'one')
+        #     for interm_constant_prefix in self._word_bank.INTERMEDIATE_CONSTANT_PREFIXES:
+        #         translation = translation.replace(interm_constant_prefix, 'PERSON')
 
-            # something -> someone, thing -> one
-            translation = translation.replace('nothing', 'no one')  # need space bofore "one"
-            translation = translation.replace('thing', 'one')
-            for interm_constant_prefix in self._word_bank.INTERMEDIATE_CONSTANT_PREFIXES:
-                translation = translation.replace(interm_constant_prefix, 'PERSON')
+        #     # it -> he/she/the one
+        #     if len(male_names) > 0 and len(female_names) > 0:
+        #         pronoun = random.choice(['he', 'she'])
+        #     elif len(male_names) > 0:
+        #         pronoun = random.choice(['he'])
+        #     elif len(female_names) > 0:
+        #         pronoun = random.choice(['she'])
+        #     else:
+        #         pronoun = random.choice(['the one'])
+        #     for _pronoun in ['it', 'the thing', 'the one']:
+        #         translation = translation.replace(f' {_pronoun}', f' {pronoun}')
+        if translation.find('someone') >= 0 or translation.find('somebody') >= 0:
+            pronoun = random.choice(['the one'])
+            for pronoun in ['it', 'the thing']:
+               translation = translation.replace(f' {pronoun}', ' the one')
 
-            # it -> he/she/the one
-            if len(male_names) > 0 and len(female_names) > 0:
-                pronoun = random.choice(['he', 'she'])
-            elif len(male_names) > 0:
-                pronoun = random.choice(['he'])
-            elif len(female_names) > 0:
-                pronoun = random.choice(['she'])
-            else:
-                pronoun = random.choice(['the one'])
-            for _pronoun in ['it', 'the thing', 'the one']:
-                translation = translation.replace(f' {_pronoun}', f' {pronoun}')
+
+        for mv0 in MODAL_VERBS:
+            for mv1 in MODAL_VERBS:
+                # something like "does can run fast"  "does not can run fast", which cause from knowledge bank
+                translation = translation.replace(f'{mv0} {mv1}', f'{mv1}')
+                translation = translation.replace(f'{mv0} not {mv1}', f'{mv1} not')
+                translation = translation.replace(f'{mv0}n\'t {mv1}', f'{mv1} not')
 
         # translation = self._uppercase_beggining(translation)  # this module should not know whether this is the beginning if a sentence
         translation = self._add_ending_period(translation)
@@ -212,3 +224,5 @@ class EnglishTranslator(TemplatedTranslator):
     def _add_ending_period(self, translation: str) -> str:
         if not translation.endswith('.'):
             return translation + '.'
+        else:
+            return translation

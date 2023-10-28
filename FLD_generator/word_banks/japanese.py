@@ -190,17 +190,17 @@ class JapaneseWordBank(WordBank):
         else:
             raise ValueError()
 
-    def _change_present_form(self, verb: str, form: Enum, force=False) -> List[str]:
+    def _change_present_particle_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
         if form in [self.PresentForm.NORMAL]:
-            return verb
+            return [verb]
         else:
             raise ValueError()
 
-    def _change_past_form(self, verb: str, form: Enum, force=False) -> List[str]:
+    def _change_past_particle_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
         if form in [self.PastForm.NORMAL]:
-            return verb
+            return [verb]
         else:
             raise ValueError()
 
