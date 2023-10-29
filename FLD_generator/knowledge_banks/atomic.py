@@ -32,6 +32,16 @@ logger = logging.getLogger(__name__)
 
 
 class AtomicRelation(Enum):
+    # 107946 xAttr
+    # 103440 xWant
+    # 81338 xEffect
+    # 78939 xNeed
+    # 60005 xReact
+    # 52547 oWant
+    # 49500 xIntent
+    # 41165 oEffect
+    # 35656 oReact
+
     # "x" means PersonX
     xAttr = 'xAttr'
     xEffect = 'xEffect'

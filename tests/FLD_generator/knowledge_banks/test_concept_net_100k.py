@@ -33,12 +33,8 @@ def test_load_statements():
 def test_bank():
     bank = ConceptNet100kKnowledgeBank(_PATH)
 
-    # sample_mappings(bank, '(x): {F}x')
     sample_mappings(bank, '{F} -> {G}')
     sample_mappings(bank, '(x): {F}x -> {G}x')
-
-    # sample_mappings(bank, '(x): ¬{F}x')
-    # sample_mappings(bank, '{F} -> ¬{G}')
     sample_mappings(bank, '(x): {F}x -> ¬{G}x')
 
 

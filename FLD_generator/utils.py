@@ -1,4 +1,6 @@
 from typing import Optional, Callable, List, Iterable, Any, Tuple, Optional, Union, Iterator
+from pprint import pprint
+from collections import defaultdict
 import math
 from typing import Dict, Any, List, Iterable, Set
 import random
@@ -558,3 +560,106 @@ class RandomCycle:
             except StopIteration:
                 self._is_elems_cached = True
                 self._cur_iter = self._make_current_iterable()
+
+
+@profile
+def down_sample_streaming(elems: Iterable[Any],
+                          elem2type_func: Callable[[Any], Any],
+                          distrib='sqrl',
+                          min_sampling_prob=0.1,  # to prevent too many rejections
+                          burn_in=1000,
+                          recalc_interval=10):
+    """
+    サンプルのタイプをi (= 1 to N)とする．
+    推定しした分布をPe(i)，実現したい分布をP0(i)とする．
+
+    今，Pe(i)に対してダウンサンプル重み w(i) in [0.0, 1.0]を付与した分布 Pw(i) = w(i) x Pe(i) からサンプリングすることにより，P0(i)を実現することを考える．
+    達成されるべき条件は，
+
+    Pw(i) / Pw(m) = w(i) x Pe(i) / w(m) x Pe(m) = P0(i) / P0(m)  (i = 1 to N-1)
+
+    である．ここで，mは基準点である．
+    また，確率の正規化のため，条件はN - 1個で十分であることに注意せよ．
+
+    さて，w(i)はN変数である一方で，条件式はN-1つである．
+    よって，w(i)のうちの１つ，基準点w(m)を自由に選ぶことができる．
+
+    今，解離度を以下で定義する: D(i) = P0(i) / Pe(i)．
+    解離度が一番小さいj = argmin{D(i)}というのは，最もダウンサンプリングを"したくない"タイプである．
+    よって，jに対しては，一切ダウンサンプルしないことが，効率化に繋がる．
+    よって，m = j = argmin{D(i)}, w(m) = 1.0 とする．
+
+    その他のw(i) は，
+    w(i) = w(m) x (Pe(m) / Pe(i)) x (P0(i) / P0(m)) 
+         = D(i) / D(m)
+    として求まる．
+    """
+
+    if math.isclose(min_sampling_prob, 0.0, abs_tol=0.01):
+        logger.warning('setting min_sampling_prob=0.0 may reject many samples, especially if there are very rare sample types'
+                       ', because manjor samples must be down-sampled to be comparable to the rare samples.')
+    counts = defaultdict(int)
+    w: Dict[Any, float] = {}
+    total_counts = 0
+
+    @profile
+    def should_sample(i: int, new_type: Any) -> bool:
+        nonlocal counts
+        nonlocal total_counts
+        nonlocal w
+        counts[new_type] += 1
+        total_counts  += 1
+        is_burn_in = i < burn_in
+
+        if distrib == 'linear':
+            scale_func = lambda c: c
+        elif distrib == 'sqrt':
+            scale_func = lambda c: math.sqrt(c)
+        elif distrib == 'logE':
+            scale_func = lambda c: math.log(c + 1)
+        elif distrib == 'log10':
+            scale_func = lambda c: math.log10(c + 1)
+        else:
+            raise ValueError()
+
+        if is_burn_in or new_type not in w or i % recalc_interval == 0:
+            P_estim = {type_: counts[type_] / total_counts for type_ in counts}
+
+            scaled_counts = {type_: scale_func(count) for type_, count in counts.items()}
+            scaled_count_sum = sum(scaled_counts.values())
+            P_0 = {type_: scaled_count / scaled_count_sum for type_, scaled_count in scaled_counts.items()}
+
+            D = {type_: P_0[type_] / P_estim[type_] for type_ in counts}
+
+            m = sorted((count, type_) for type_, count in D.items())[-1][1]
+
+            w = {type_: D[type_] / D[m] for type_ in P_0.keys()}
+
+        DEBUG = False
+        if DEBUG:
+            print('\n\n\n')
+            print(f'========================== down_sample_streaming [{total_counts}] ======================')
+            for name, dic in [('P_estim', P_estim),
+                              ('P_0', P_0),
+                              ('D', D),
+                              ('m', m),
+                              ('w', w)]:
+                print('')
+                print(f'---------------------------------- {name} ------------------------')
+                pprint(dic)
+
+            print('')
+            print(f'---------------------------------- w["{new_type}"] ------------------------')
+            print(w[new_type])
+
+        if is_burn_in:
+            return False
+        else:
+            sampling_prob = w[new_type]
+            return random.random() < max(sampling_prob, min_sampling_prob)
+
+    for i_elem, elem in enumerate(elems):
+        if should_sample(i_elem, elem2type_func(elem)):
+            yield elem
+        # else:
+        #     logger.critical('rejected sample %s', str(elem))

@@ -68,7 +68,8 @@ def load_dataset(argument_config: List[str],
                  knowledge_injection_range: float,
                  knowledge_no_shuffle: bool,
                  atomic_filepath: str,
-                 concept_net_100k_filepath: str):
+                 concept_net_100k_filepath: str,
+                 dbpedia_filepath: str):
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
@@ -114,7 +115,6 @@ def load_dataset(argument_config: List[str],
                 'atomic',
                 atomic_filepath,
                 no_shuffle=knowledge_no_shuffle,
-                # max_statements=1000,
             )
         )
     if concept_net_100k_filepath is not None:
@@ -123,7 +123,14 @@ def load_dataset(argument_config: List[str],
                 'concept_net_100k',
                 concept_net_100k_filepath,
                 no_shuffle=knowledge_no_shuffle,
-                # max_statements=1000,
+            )
+        )
+    if dbpedia_filepath is not None:
+        knowledge_banks.append(
+            build_knowledge_bank(
+                'dbpedia',
+                dbpedia_filepath,
+                no_shuffle=knowledge_no_shuffle,
             )
         )
 
@@ -256,6 +263,7 @@ def generate_instances(size: int, *args):
 @click.option('--knowledge-no-shuffle', is_flag=True, type=bool, default=False)
 @click.option('--atomic-filepath', type=str, default=None)
 @click.option('--concept-net-100k-filepath', type=str, default=None)
+@click.option('--dbpedia-filepath', type=str, default=None)
 #
 @click.option('--proof-stances', type=str, default=json.dumps(['PROVED', 'DISPROVED', 'UNKNOWN']))
 @click.option('--world-assump', default='OWA')
@@ -308,6 +316,7 @@ def main(output_path,
          knowledge_no_shuffle,
          atomic_filepath,
          concept_net_100k_filepath,
+         dbpedia_filepath,
          proof_stances,
          world_assump,
          unknown_ratio,
@@ -398,6 +407,7 @@ def main(output_path,
                         knowledge_no_shuffle,
                         atomic_filepath,
                         concept_net_100k_filepath,
+                        dbpedia_filepath,
                     )
                 )
 

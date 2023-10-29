@@ -1,10 +1,10 @@
 from typing import Optional, Iterable, List, Dict, Tuple
-from enum import Enum
 import re
 import logging
 import random
 
 from FLD_generator.word_banks.word_utils import WordUtil, POS
+from FLD_generator.utils import down_sample_streaming
 from .base import KnowledgeBankBase
 from .statement import (
     Statement,
@@ -21,6 +21,8 @@ from .utils import (
     parse_as_subj,
     parse,
 )
+
+import line_profiling
 
 
 logger = logging.getLogger(__name__)
@@ -362,6 +364,7 @@ _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
 }
 
 
+@profile
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[Statement]:
@@ -372,6 +375,12 @@ def _load_statements(path: str,
         random.shuffle(lines)
     else:
         lines = open(path)
+
+    lines = down_sample_streaming(lines,
+                                  lambda line: line.rstrip('\n').split('\t')[2],
+                                  distrib='sqrt',
+                                  min_sampling_prob=0.1,
+                                  burn_in=1000)
 
     for i_line, line in enumerate(lines):
         if max_statements is not None and i_line >= max_statements:

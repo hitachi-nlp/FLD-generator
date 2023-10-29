@@ -4,6 +4,7 @@ import logging
 import random
 
 from FLD_generator.word_banks.word_utils import WordUtil, POS
+from FLD_generator.utils import down_sample_streaming
 from .base import KnowledgeBankBase
 from .statement import (
     Statement,
@@ -28,6 +29,41 @@ _WORD_UTILS = WordUtil('eng')
 
 
 class ConceptNet100kRelation(Enum):
+    #   14925 IsA
+    #   14380 AtLocation
+    #   13221 UsedFor
+    #    9894 CapableOf
+    #    7901 HasProperty
+    #    6463 HasSubevent
+    #    5561 HasPrerequisite
+    #    4614 Causes
+    #    3504 HasA
+    #    3404 ReceivesAction
+    #    2983 MotivatedByGoal
+    #    2782 DefinedAs
+    #    1742 Desires
+    #    1689 PartOf
+    #    1626 NotDesires
+    #    1043 NotCapableOf
+    #     970 CausesDesire
+    #     961 HasFirstSubevent
+    #     592 HasLastSubevent
+    #     577 MadeOf
+    #     339 NotHasProperty
+    #     159 SymbolOf
+    #     152 NotIsA
+    #     149 CreatedBy
+    #     120 NotHasA
+    #      89 RelatedTo
+    #      69 InstanceOf
+    #      56 InheritsFrom
+    #      14 DesireOf
+    #      13 NotMadeOf
+    #       3 LocationOfAction
+    #       3 LocatedNear
+    #       1 HasPainIntensity
+    #       1 HasPainCharacter
+
     AtLocation = 'AtLocation'  # 28760
     CapableOf = 'CapableOf'  # 19788
     Causes = 'Causes'  # 9228
@@ -100,6 +136,12 @@ def _load_statements(path: str,
         random.shuffle(lines)
     else:
         lines = open(path)
+
+    lines = down_sample_streaming(lines,
+                                  lambda line: line.rstrip('\n').split('\t')[0],
+                                  distrib='sqrt',
+                                  min_sampling_prob=0.1,
+                                  burn_in=1000)
 
     for i_line, line in enumerate(lines):
         if max_statements is not None and i_line >= max_statements:

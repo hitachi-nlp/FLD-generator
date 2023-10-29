@@ -4675,14 +4675,17 @@ _DATASET_SETTINGS = {
                 # 'translation_variants_per_logic': 3,
                 'atomic_filepath': './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
                 'concept_net_100k_filepath': './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
+                'dbpedia_filepath': './res/knowledge_banks/DBpedia500/train1.txt',
             },
             'valid': {
                 'atomic_filepath': './res/knowledge_banks/commonsense-kg-completion/data/atomic/valid.txt',
                 'concept_net_100k_filepath': './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/valid.txt',
+                'dbpedia_filepath': './res/knowledge_banks/DBpedia500/valid.txt',
             },
             'test': {
                 'atomic_filepath': './res/knowledge_banks/commonsense-kg-completion/data/atomic/test.txt',
                 'concept_net_100k_filepath': './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/test.txt',
+                'dbpedia_filepath': './res/knowledge_banks/DBpedia500/test.txt',
             },
         },
         'split_sizes': {
@@ -4707,6 +4710,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'knowledge_injection_range': None,
         'atomic_filepath': None,
         'concept_net_100k_filepath': None,
+        'dbpedia_filepath': None,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4736,6 +4740,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'knowledge_injection_range': None,
         'atomic_filepath': None,
         'concept_net_100k_filepath': None,
+        'dbpedia_filepath': None,
 
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4771,6 +4776,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'knowledge_injection_range': None,
         'atomic_filepath': None,
         'concept_net_100k_filepath': None,
+        'dbpedia_filepath': None,
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,
         'distractor': 'mixture(negative_tree-0.5.simplified_formula.various_form)',
@@ -4798,6 +4804,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'knowledge_injection_range': None,
         'atomic_filepath': None,
         'concept_net_100k_filepath': None,
+        'dbpedia_filepath': None,
 
         # 'negative_tree_negated_hypothesis_ratio': 0.5,
         'distractor': 'mixture(negative_tree-0.5.simplified_formula.various_form)',

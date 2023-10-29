@@ -12,8 +12,9 @@ from shared import sample_mappings
 
 _PATH = './res/knowledge_banks/DBpedia500/train1.txt'
 
+
 def test_load_statements():
-    for statement in _load_statements(_PATH, max_statements=100000):
+    for statement in _load_statements(_PATH, max_statements=10000):
         print('')
 
         if isinstance(statement, DeclareStatement):
@@ -32,10 +33,7 @@ def test_load_statements():
 
 def test_bank():
     bank = DBpedia(_PATH)
-
     sample_mappings(bank, '{F}{a}', n_trial=1000)
-
-
 
 
 if __name__ == '__main__':

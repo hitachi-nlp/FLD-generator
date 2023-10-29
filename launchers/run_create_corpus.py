@@ -225,6 +225,7 @@ def make_dataset(dataset_name: str,
             'knowledge_no_shuffle',
             'atomic_filepath',
             'concept_net_100k_filepath',
+            'dbpedia_filepath',
 
             'num_workers_per_job',
 
@@ -309,6 +310,7 @@ def make_dataset(dataset_name: str,
                 '--knowledge-no-shuffle' if job_settings.get('knowledge_no_shuffle', False) else '',
                 maybe_option('--atomic-filepath', job_settings.get("atomic_filepath", None)),
                 maybe_option('--concept-net-100k-filepath', job_settings.get("concept_net_100k_filepath", None)),
+                maybe_option('--dbpedia-filepath', job_settings.get("dbpedia_filepath", None)),
 
                 f'--proof-stances \'{json.dumps(job_settings["proof_stances"])}\'' if "proof_stances" in job_settings else '',
                 f'--world-assump {job_settings["world_assump"]}' if "world_assump" in job_settings else '',
