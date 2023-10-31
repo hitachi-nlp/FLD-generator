@@ -40,7 +40,8 @@ class ProofTreeGenerationPipeline:
                  assumption_prefix='Let\'s assume that ',
                  add_subj_obj_swapped_distractor=False,
                  # knowledge_translator: Optional[Translator] = None,
-                 knowledge_injection_range: Optional[Tuple[float, float]] = None,
+                 knowledge_range: Optional[Tuple[float, float]] = None,
+                 collapsed_knowledge_range: Optional[Tuple[float, float]] = None,
                  log_stats=False):
         self.generator = generator
         self.distractor = distractor
@@ -59,9 +60,12 @@ class ProofTreeGenerationPipeline:
         else:
             self._empty_translation_stat = {}
 
-        if tuple(knowledge_injection_range) == (0.0, 0.0):
-            knowledge_injection_range = None
-        self._knowledge_injection_range = knowledge_injection_range
+        self._knowledge_range = (
+            None if knowledge_range is not None and tuple(knowledge_range) == (0.0, 0.0)
+            else knowledge_range)
+        self._collapsed_knowledge_range = (
+            None if collapsed_knowledge_range is not None and tuple(collapsed_knowledge_range) == (0.0, 0.0)
+            else collapsed_knowledge_range)
         # self._knowledge_translator = knowledge_translator
 
         self._reusable_proof_trees: Dict[Tuple[Any], List[ProofTree]] = defaultdict(list)
@@ -269,26 +273,45 @@ class ProofTreeGenerationPipeline:
                 other_formulas += [node.formula for node in negative_tree_attrs['tree'].nodes]
             all_formulas = all_formulas + [formula for formula in other_formulas if formula not in all_formulas]
 
-            if self._knowledge_injection_range is not None:
-                ratio_lower, ratio_upper = self._knowledge_injection_range
-                ratio = ratio_lower + random.random() * (ratio_upper - ratio_lower)
-                knowledge_translatable_leaf_formulas = [formula for formula in leaf_formulas
-                                                          if self.translator.is_knowledge_translatable([formula])]
-                knowledge_leaf_formulas = random.sample(knowledge_translatable_leaf_formulas,
-                                                          int(len(knowledge_translatable_leaf_formulas) * ratio))
-                knowledge_nodes = [node for node in tree_nodes
-                                     if node.formula in knowledge_leaf_formulas]
-                knowledge_node_idxs = [idx for idx, node in enumerate(tree_nodes)
-                                         if node.formula in knowledge_leaf_formulas]
-            else:
-                knowledge_nodes = []
-                knowledge_node_idxs = []
+            knowledge_idxs: List[int] = []
+            collapsed_knowledge_idxs: List[int] = []
+            if self._knowledge_range is not None:
+                knowledge_candidate_formulas = [formula for formula in leaf_formulas
+                                                if self.translator.is_knowledge_translatable(formula)]
+
+                def sample_num(num_max: int, ratio_lower: int, ratio_upper: int) -> float:
+                    ratio = ratio_lower + random.random() * (ratio_upper - ratio_lower)
+                    return int((num_max + 0.99) * ratio)  # add 0.99 to sample the maximum equally to others
+
+                num_all_knowledge = sample_num(len(knowledge_candidate_formulas), *self._knowledge_range)
+                if num_all_knowledge > 0:
+                    all_knowledge_formulas = random.sample(knowledge_candidate_formulas, num_all_knowledge)
+
+                    if self._collapsed_knowledge_range is not None:
+                        num_collapsed_knowledge = sample_num(num_all_knowledge, *self._collapsed_knowledge_range)
+                    else:
+                        num_collapsed_knowledge = 0
+
+                    if num_collapsed_knowledge > 0:
+                        collapsed_knowledge_formulas = random.sample(all_knowledge_formulas, num_collapsed_knowledge)
+                        knowledge_formulas = [formula for formula in all_knowledge_formulas
+                                              if formula not in collapsed_knowledge_formulas]
+                    else:
+                        collapsed_knowledge_formulas = []
+                        knowledge_formulas = all_knowledge_formulas
+
+                    for idx, formula in enumerate(tree_formulas):
+                        if formula in knowledge_formulas:
+                            knowledge_idxs.append(idx)
+                        elif formula in collapsed_knowledge_formulas:
+                            collapsed_knowledge_idxs.append(idx)
 
             try:
                 named_translations, translator_stats = self.translator.translate(
                     all_formulas,
                     list(proof_tree.intermediate_constants),
-                    knowledge_injection_idxs=knowledge_node_idxs,
+                    knowledge_idxs=knowledge_idxs,
+                    collapsed_knowledge_idxs=collapsed_knowledge_idxs,
                     raise_if_translation_not_found=raise_if_translation_not_found,
                 )
             except TranslationFailure as e:
@@ -296,7 +319,7 @@ class ProofTreeGenerationPipeline:
             except TranslationImpossible as e:
                 raise ProofTreeGenerationPipelineImpossible(str(e))
 
-            for i_formula, (formula, (translation_name, translation, SO_swap_formula, is_knowledge_injected)) in enumerate(zip(all_formulas, named_translations)):
+            for i_formula, (formula, (translation_name, translation, SO_swap_formula, knowledge_type)) in enumerate(zip(all_formulas, named_translations)):
 
                 formula.translation_name = translation_name
                 if i_formula in assump_formula_indices:
@@ -310,10 +333,10 @@ class ProofTreeGenerationPipeline:
                     else:
                         formula.translation = translation[0].upper() + translation[1:]
 
-                    if is_knowledge_injected:
+                    if knowledge_type is not None:
                         knowledge_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]
-                        knowledge_injected_node.is_knowledge = True
-                        logger.info('knowledge is injected to a node:%s', str(knowledge_injected_node))
+                        knowledge_injected_node.knowledge_type = knowledge_type
+                        logger.info('%s is injected to a node: %s', knowledge_type, str(knowledge_injected_node))
 
                 if self.add_subj_obj_swapped_distractor and formula in leaf_formulas and SO_swap_formula is not None:
                     logger.info('adding subj obj swapped distractor: "%s"', SO_swap_formula.translation)

@@ -45,7 +45,12 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20231018.knowledge')
     # output_top_dir = Path('./outputs/00.create_corpus/20231021.knowledge')
-    output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge.no_down_sampling')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20231030.knowledge')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -99,7 +104,16 @@ def main():
         # '20231021.knowledge.D3.complex-0.3.w_knowledge',
 
         # ---------------------------------- 20231028.knowledge ------------------------------------
-        '20231028.knowledge.D3',
+        # '20231028.knowledge.D3',
+
+        # ---------------------------------- 20231029.knowledge ------------------------------------
+        # '20231029.knowledge.D3',
+        # '20231029.knowledge.D3.wo_knowledge',
+        # '20231029.knowledge.D3.wo_knowledge.cmplx-0.5',
+
+        # ---------------------------------- 20231029.knowledge ------------------------------------
+        # '20231030.knowledge.D3.knowledge_factor-1.0',
+        '20231030.knowledge.D3.knowledge_factor-5.0',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -221,7 +235,8 @@ def make_dataset(dataset_name: str,
             'translation_volume_to_weight',
             'trnsltn_adj_vrb_nn_rt',
 
-            'knowledge_injection_range',
+            'knowledge_range',
+            'collapsed_knowledge_range',
             'knowledge_no_shuffle',
             'atomic_filepath',
             'concept_net_100k_filepath',
@@ -306,8 +321,10 @@ def make_dataset(dataset_name: str,
                 f'--translation-distractors-range \'{json.dumps(job_settings["translation_distractors_range"])}\'',
                 '--fallback-from-formula-to-translation-distractor' if job_settings.get('fallback_from_formula_to_translation_distractor', False) else '',
 
-                f'--knowledge-injection-range \'{json.dumps(job_settings["knowledge_injection_range"])}\'' if job_settings.get('knowledge_injection_range', None) is not None else '',
+                f'--knowledge-range \'{json.dumps(job_settings["knowledge_range"])}\'' if job_settings.get('knowledge_range', None) is not None else '',
+                f'--collapsed-knowledge-range \'{json.dumps(job_settings["collapsed_knowledge_range"])}\'' if job_settings.get('collapsed_knowledge_range', None) is not None else '',
                 '--knowledge-no-shuffle' if job_settings.get('knowledge_no_shuffle', False) else '',
+                maybe_option('--knowledge-argument-factor', job_settings.get('knowledge_argument_factor', None)),
                 maybe_option('--atomic-filepath', job_settings.get("atomic_filepath", None)),
                 maybe_option('--concept-net-100k-filepath', job_settings.get("concept_net_100k_filepath", None)),
                 maybe_option('--dbpedia-filepath', job_settings.get("dbpedia_filepath", None)),

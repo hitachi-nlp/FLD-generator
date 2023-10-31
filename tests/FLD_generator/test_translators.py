@@ -67,11 +67,11 @@ def make_show_translation_func(translator):
                 if len(formulas) >= 2:
                     print('')
                 translations, _ = translator.translate(_formulas, intermediate_constant_formulas or [], **kwargs)
-                for formula, (_, translation, _, is_knowledge_injected) in zip(_formulas, translations):
+                for formula, (_, translation, _, knowledge_type) in zip(_formulas, translations):
                     print(formula.rep,
                           f'(interm={intermediate_constant_formulas})',
                           '  ->  ',
-                          f'{translation:<100}  is_knowledge_injected={is_knowledge_injected}')
+                          f'{translation:<100}  knowledge_type={str(knowledge_type)}')
             sys.stdout.flush()
 
     return show_translations

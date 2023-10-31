@@ -1,6 +1,6 @@
 import random
 import re
-from typing import Dict
+from typing import Dict, Optional
 
 from .templated import TemplatedTranslator
 from .base import PredicatePhrase, ConstantPhrase
@@ -49,7 +49,7 @@ class JapaneseTranslator(TemplatedTranslator):
 
         return rep
 
-    def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
+    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
         # translation = re.sub('だ ならば', ' ならば', translation)
         # translation = re.sub('だ し', ' ならば', translation)
         if self.insert_word_delimiters:

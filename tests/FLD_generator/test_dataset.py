@@ -137,6 +137,8 @@ def test_generate_dataset_lang(lang: str):
         quantifier_axiom_arguments_weight=0.2,
         # complex_formula_arguments_weight=0.5,
         complex_formula_arguments_weight=0.1,
+        knowledge_argument_factor=5.0,
+        knowledge_banks=knowledge_banks,
         quantifier_axioms=[
             'universal_quantifier_elim',
             'universal_quantifier_intro',
@@ -176,8 +178,12 @@ def test_generate_dataset_lang(lang: str):
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=True,
-        knowledge_injection_range=(1.0, 1.0),
-        # knowledge_translator=knowledge_translator,
+
+        # knowledge_range=None,
+        knowledge_range=(1.0, 1.0),
+
+        # collapsed_knowledge_range=None,
+        collapsed_knowledge_range=(0.0, 1.0),
     )
 
     depth_range = (1, 8)

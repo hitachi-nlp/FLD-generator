@@ -102,7 +102,7 @@ _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
     ],
     'previousWork': [
         ('is next work after', POS.NOUN, False),
-        ('is next work after', POS.NOUN, True),
+        ('is previous work before', POS.NOUN, True),
     ],
     'almaMater': [
         ('graduated from', POS.VERB, False),
@@ -453,10 +453,8 @@ class DBpedia(KnowledgeBankBase):
 
         super().__init__()
 
-    def _load_statements(self, type_: StatementType) -> Iterable[Statement]:
+    def _load_statements(self) -> Iterable[Statement]:
         for stmt in _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle):
-            if stmt.type != type_:
-                continue
             yield stmt
 
     @property

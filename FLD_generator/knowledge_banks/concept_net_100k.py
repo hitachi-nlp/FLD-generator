@@ -22,6 +22,8 @@ from .utils import (
     parse,
 )
 
+import line_profiling
+
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +128,7 @@ _Fx_Gx_relations = [
 ]
 
 
+@profile
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[Statement]:
@@ -435,10 +438,8 @@ class ConceptNet100kKnowledgeBank(KnowledgeBankBase):
 
         super().__init__()
 
-    def _load_statements(self, type_: StatementType) -> Iterable[Statement]:
+    def _load_statements(self) -> Iterable[Statement]:
         for stmt in _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle):
-            if stmt.type != type_:
-                continue
             yield stmt
 
     @property

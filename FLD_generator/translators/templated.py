@@ -9,6 +9,7 @@ import logging
 from pprint import pformat
 from functools import lru_cache
 import math
+from copy import deepcopy
 
 from FLD_generator.formula import Formula, PREDICATES, CONSTANTS, remove_outer_brace
 from FLD_generator.word_banks.base import WordBank, ATTR
@@ -221,7 +222,7 @@ class TemplatedTranslator(Translator):
 
         logger.info('making transitive verb and object combinations ...')
 
-        @profile
+        # @profile
         def build_transitive_verb_PASs() -> Iterable[Tuple[str, str]]:
             _transitive_verbs = shuffle(transitive_verbs)
             _nouns = shuffle(nouns)
@@ -257,7 +258,7 @@ class TemplatedTranslator(Translator):
             [ConstantPhrase(constant=constant) for constant in constants],
         )
 
-    @profile
+    # @profile
     def _load_words_by_pos_attrs(self,
                                  word_bank: WordBank,
                                  pos: Optional[POS] = None,
@@ -286,10 +287,6 @@ class TemplatedTranslator(Translator):
     def acceptable_formulas(self) -> List[str]:
         return list(self._translations.keys())
 
-    # def is_acceptable(self, formulas: List[Formula]) -> List[str]:
-    #     return all(formula.rep in self.acceptable_formulas
-    #                for formula in formulas)
-
     @property
     def translation_names(self) -> List[str]:
         return [self._translation_name(sentence_key, weighted_nl[1])
@@ -299,13 +296,15 @@ class TemplatedTranslator(Translator):
     def _translation_name(self, sentence_key: str, nl: str) -> str:
         return '____'.join([sentence_key, nl])
 
-    @profile
+    # @profile
     def _translate(self,
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
-                   knowledge_injection_idxs: Optional[List[int]] = None,
-                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
-        knowledge_injection_idxs = knowledge_injection_idxs or []
+                   knowledge_idxs: Optional[List[int]] = None,
+                   collapsed_knowledge_idxs: Optional[List[int]] = None,
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], Optional[str]]], Dict[str, int]]:
+        knowledge_idxs = knowledge_idxs or []
+        collapsed_knowledge_idxs = collapsed_knowledge_idxs or []
         self._reset_predicate_phrase_assets()
 
         def raise_or_warn(msg: str) -> None:
@@ -319,34 +318,34 @@ class TemplatedTranslator(Translator):
         translation_names: List[Optional[str]] = []
         count_stats: Dict[str, int] = {'inflation_stats': defaultdict(int)}
 
-        if len(knowledge_injection_idxs) > 0:
+        knowledge_mapping = {}
+        knowledge_pos_mapping = {}
+        knowledge_types = [None] * len(formulas)
+        if len(knowledge_idxs) > 0 or len(collapsed_knowledge_idxs) > 0:
             if len(self._knowledge_banks) == 0:
                 raise ValueError()
-            should_knowledge_formulas = [formulas[idx] for idx in knowledge_injection_idxs]
-            (
-                knowledge_injection_mapping,
-                knowledge_pos_mapping,
-                _is_knowledge_injected,
-            ) = self._choose_interpret_mapping(should_knowledge_formulas,
-                                               [],
-                                               from_knowledge=True)
-            knowledge_formulas = [formula
-                                    for i, (formula, is_injected) in enumerate(zip(should_knowledge_formulas, _is_knowledge_injected))
-                                    if is_injected]
-            is_knowledge_injected = [True if formula in knowledge_formulas else False
-                                       for formula in formulas]
-
-        else:
-            knowledge_injection_mapping = {}
-            knowledge_pos_mapping = {}
-            is_knowledge_injected = [False] * len(formulas)
+            for type_, idxs in [('knowledge', knowledge_idxs),
+                                ('collapsed_knowledge', collapsed_knowledge_idxs)]:
+                should_knowledge_formulas = [formulas[idx] for idx in idxs]
+                (
+                    knowledge_mapping,
+                    knowledge_pos_mapping,
+                    is_injected,
+                ) = self._choose_interpret_mapping(should_knowledge_formulas,
+                                                   [],
+                                                   constraints=knowledge_mapping,
+                                                   POS_constraints=knowledge_pos_mapping,
+                                                   knowledge_type=type_)
+                for knowledge_formula, _is_injected in zip(should_knowledge_formulas, is_injected):
+                    if _is_injected:
+                        knowledge_types[formulas.index(knowledge_formula)] = type_
 
         interpret_mapping = self._choose_interpret_mapping(formulas,
                                                            intermediate_constant_formulas,
-                                                           constraints=knowledge_injection_mapping)
-        force_pos_mapping = knowledge_pos_mapping
+                                                           constraints=knowledge_mapping)
+        pos_mapping = knowledge_pos_mapping
 
-        for formula, _is_knowledge_injected in zip(formulas, is_knowledge_injected):
+        for formula in formulas:
             # find translation key
             found_keys = 0
             is_found = False
@@ -354,11 +353,11 @@ class TemplatedTranslator(Translator):
                 found_keys += 1
 
                 # Choose a translation
-                chosen_nl = self._sample_interpret_mapping_consistent_nl(
+                chosen_nl, _pos_mapping = self._sample_interpret_mapping_consistent_nl(
                     translation_key,
                     interpret_mapping,
                     push_mapping,
-                    force_pos_mapping=force_pos_mapping,
+                    pos_mapping=pos_mapping,
                     block_shuffle=not self.use_fixed_translation,
                     volume_to_weight=self._volume_to_weight_func,
                 )
@@ -369,10 +368,12 @@ class TemplatedTranslator(Translator):
                         f'(i) the key="{translation_key}" in config indeed have no translation',
                         '(ii) we have found translations, but the sampled interpretation mapping could not match the pos and word inflation required by the translations. The interpret_mapping is the following:',
                         '\n    ' + '\n    '.join(pformat(interpret_mapping).split('\n')),
-                        '\n    ' + '\n    '.join(pformat(force_pos_mapping or {}).split('\n')),
+                        '\n    ' + '\n    '.join(pformat(pos_mapping or {}).split('\n')),
                     ]
                     logger.info('\n'.join(msgs))
                     continue
+
+                # pos_mapping.update(_pos_mapping)  # TODO: on
 
                 chosen_nl_pushed = interpret_formula(Formula(chosen_nl), push_mapping).rep
 
@@ -457,21 +458,20 @@ class TemplatedTranslator(Translator):
 
         # fix grammers and other stufs
         translations = [
-            (self._postprocess_translation_all(translation,
-                                               is_knowledge_injected=_is_knowledge_injected) if translation is not None else None)
-            for translation, _is_knowledge_injected in zip(translations, is_knowledge_injected)
+            (self._postprocess_translation_all(translation, knowlege_type=knowlege_type) if translation is not None else None)
+            for translation, knowlege_type in zip(translations, knowledge_types)
         ]
 
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
                 SO_swap_formula.translation = (
-                    self._postprocess_translation_all(SO_swap_formula.translation, is_knowledge_injected=False) if SO_swap_formula.translation is not None
+                    self._postprocess_translation_all(SO_swap_formula.translation, knowlege_type=None) if SO_swap_formula.translation is not None
                     else None)
 
-        return list(zip(translation_names, translations, SO_swap_formulas, is_knowledge_injected)), count_stats
+        return list(zip(translation_names, translations, SO_swap_formulas, knowledge_types)), count_stats
 
-    def is_knowledge_translatable(self, formulas: List[Formula]) -> bool:
-        return any(knowledge_bank.is_acceptable(formulas)
+    def is_knowledge_translatable(self, formula: Formula) -> bool:
+        return any(knowledge_bank.is_formula_accepatable(formula)
                    for knowledge_bank in self._knowledge_banks)
 
     # @profile
@@ -495,10 +495,10 @@ class TemplatedTranslator(Translator):
                                                 sentence_key: str,
                                                 interpret_mapping: Dict[str, Phrase],
                                                 push_mapping: Dict[str, str],
-                                                force_pos_mapping: Optional[Dict[str, str]] = None,
+                                                pos_mapping: Optional[Dict[str, str]] = None,
                                                 block_shuffle=True,
                                                 volume_to_weight = lambda weight: weight,
-                                                log_indent=0) -> Optional[str]:
+                                                log_indent=0) -> Tuple[Optional[str], Optional[Dict[str, POS]]]:
         """ Find translations the pos and nflations of which are consistent with interpret_mapping """
         if _DEBUG:
             print()
@@ -514,7 +514,7 @@ class TemplatedTranslator(Translator):
                 # set(['::'.join([_SENTENCE_TRANSLATION_PREFIX, sentence_key])]),
                 set([transl_nl]),
                 constraint_interpret_mapping=interpret_mapping,
-                constraint_force_pos_mapping=force_pos_mapping,
+                constraint_pos_mapping=pos_mapping,
                 constraint_push_mapping=push_mapping,
                 block_shuffle=block_shuffle,
                 volume_to_weight=volume_to_weight,
@@ -548,16 +548,19 @@ class TemplatedTranslator(Translator):
 
         for resolved_nl, condition in generate():   # SLOW
 
-            condition_is_consistent = self._interpret_mapping_is_consistent_with_condition(
+            condition_is_consistent, _pos_mapping = self._interpret_mapping_is_consistent_with_condition(
                 condition,
                 interpret_mapping,
                 push_mapping,
-                force_pos_mapping=force_pos_mapping,
+                pos_mapping=pos_mapping,
             )
             assert condition_is_consistent  # the consistency should have been checked recursively.
-            return resolved_nl
 
-        return None
+            pos_mapping_updated = deepcopy(pos_mapping)
+            pos_mapping_updated.update(_pos_mapping)
+            return resolved_nl, pos_mapping_updated
+
+        return None, None
 
     @lru_cache(maxsize=100000)
     def _get_weight_factor_func(self, type_: str) -> Callable[[List[float], float], float]:
@@ -600,7 +603,7 @@ class TemplatedTranslator(Translator):
                                            # ancestor_keys: Set[str],
                                            ancestor_nls: Set[str],
                                            constraint_interpret_mapping: Optional[Dict[str, Phrase]] = None,
-                                           constraint_force_pos_mapping: Optional[Dict[str, str]] = None,
+                                           constraint_pos_mapping: Optional[Dict[str, str]] = None,
                                            constraint_push_mapping: Optional[Dict[str, str]] = None,
                                            block_shuffle=True,
                                            volume_to_weight = lambda volume: volume,
@@ -616,13 +619,13 @@ class TemplatedTranslator(Translator):
         if nl.startswith('__'):
             return iter([]), 0
 
-        condition = self._get_pos_form_consistency_condition(nl)  # SLOW
+        condition = self._get_condition_from_nl(nl)
         if constraint_push_mapping is not None\
                 and check_condition\
                 and not self._interpret_mapping_is_consistent_with_condition(condition,
                                                                              constraint_interpret_mapping,
                                                                              constraint_push_mapping,
-                                                                             force_pos_mapping=constraint_force_pos_mapping):
+                                                                             pos_mapping=constraint_pos_mapping)[0]:
             return iter([]), 0
 
         templates = list(self._extract_templates(nl))
@@ -653,7 +656,7 @@ class TemplatedTranslator(Translator):
                         # ancestor_keys,
                         ancestor_nls,
                         constraint_interpret_mapping=constraint_interpret_mapping,
-                        constraint_force_pos_mapping=constraint_force_pos_mapping,
+                        constraint_pos_mapping=constraint_pos_mapping,
                         constraint_push_mapping=constraint_push_mapping,
                         shuffle=block_shuffle,
                         volume_to_weight=volume_to_weight,
@@ -691,7 +694,7 @@ class TemplatedTranslator(Translator):
                                         # ancestor_keys: Set[str],
                                         ancestor_nls: Set[str],
                                         constraint_interpret_mapping: Optional[Dict[str, Phrase]] = None,
-                                        constraint_force_pos_mapping: Optional[Dict[str, str]] = None,
+                                        constraint_pos_mapping: Optional[Dict[str, str]] = None,
                                         constraint_push_mapping: Optional[Dict[str, str]] = None,
                                         shuffle=True,
                                         volume_to_weight = lambda volume: volume,
@@ -721,7 +724,7 @@ class TemplatedTranslator(Translator):
                                                                            # ancestor_keys.union(set([template_key])),
                                                                            ancestor_nls.union(set([template_nl])),
                                                                            constraint_interpret_mapping=constraint_interpret_mapping,
-                                                                           constraint_force_pos_mapping=constraint_force_pos_mapping,
+                                                                           constraint_pos_mapping=constraint_pos_mapping,
                                                                            constraint_push_mapping=constraint_push_mapping,
                                                                            block_shuffle=shuffle,
                                                                            volume_to_weight=volume_to_weight,
@@ -762,12 +765,14 @@ class TemplatedTranslator(Translator):
                                                         condition: _PosFormConditionSet,
                                                         interpret_mapping: Dict[str, Phrase],
                                                         push_mapping: Dict[str, str],
-                                                        force_pos_mapping: Optional[Dict[str, str]] = None) -> bool:
+                                                        pos_mapping: Optional[Dict[str, POS]] = None) -> Tuple[bool, Dict[str, POS]]:
+        _pos_mapping = deepcopy(pos_mapping)
+
         condition_is_consistent = True
         for interprand_rep, pos, form in condition:
             interprand_rep_pushed = push_mapping[interprand_rep]
             phrase = interpret_mapping[interprand_rep_pushed]
-            forced_pos = force_pos_mapping.get(interprand_rep_pushed, None)
+            forced_pos = _pos_mapping.get(interprand_rep_pushed, None)
 
             allowed_pos = [forced_pos] if forced_pos is not None else self._get_pos(phrase)
 
@@ -780,7 +785,12 @@ class TemplatedTranslator(Translator):
                 condition_is_consistent = False
                 break
 
-        return condition_is_consistent
+            # _pos_mapping[interprand_rep_pushed] = pos  # TODO: interprand_rep_pushed, interprand_rep, which?
+
+        if condition_is_consistent:
+            return True, _pos_mapping
+        else:
+            return False, {}
 
     @lru_cache(maxsize=1000000)
     def _find_template_nls(self,
@@ -860,7 +870,7 @@ class TemplatedTranslator(Translator):
             yield template
 
     # @profile
-    def _get_pos_form_consistency_condition(self, nl: str) -> _PosFormConditionSet:
+    def _get_condition_from_nl(self, nl: str) -> _PosFormConditionSet:
         formula = Formula(nl)
         interprands = formula.predicates + formula.constants
 
@@ -879,20 +889,36 @@ class TemplatedTranslator(Translator):
                                   formulas: List[Formula],
                                   intermediate_constant_formulas: List[Formula],
                                   constraints: Optional[Dict[str, Phrase]] = None,
-                                  from_knowledge=False,
+                                  POS_constraints: Optional[Dict[str, POS]] = None,
+                                  knowledge_type: Optional[str] = None,
                                   ) -> Union[Dict[str, str], Tuple[Dict[str, Phrase], Dict[str, str], List[bool]]]:
 
-        if from_knowledge:
-            mapping = {}
+        if knowledge_type is not None:
+            if knowledge_type == 'knowledge':
+                collapse = False
+            elif knowledge_type == 'collapsed_knowledge':
+                collapse = True
+            else:
+                raise ValueError(knowledge_type)
+
+            mapping: Dict[str, Phrase] = deepcopy(constraints or {})
+            pos_mapping: Dict[str, POS] = deepcopy(POS_constraints or {})
             is_injected = [False] * len(formulas)
             for knowledge_bank in shuffle(self._knowledge_banks):
-                _mapping, _is_injected = knowledge_bank.sample_mapping(formulas, mapping)
-                mapping.update(_mapping)
-                is_injected = [is_pre or is_cur for is_pre, is_cur in zip(is_injected, _is_injected)]
+                for i_formula, formula in enumerate(formulas):
+                    new_mapping = knowledge_bank.sample_mapping(formula, collapse=collapse)
+                    if new_mapping is None:
+                        continue
+                    if any(new_key in mapping for new_key in new_mapping):
+                        continue
+                    if any(new_key in pos_mapping for new_key in new_mapping):
+                        raise ValueError('"pos_mapping" is inconsistent with "mapping"')
+                    mapping.update({key: val[0] for key, val in new_mapping.items()})
+                    pos_mapping.update({key: val[1] for key, val in new_mapping.items()
+                                        if val[1] is not None})
+                    is_injected[i_formula] = True
 
-            mapping_wo_pos = {key: val[0] for key, val in _mapping.items()}
-            pos_mapping = {key: val[1] for key, val in _mapping.items() if val[1] is not None}
-            return mapping_wo_pos, pos_mapping, is_injected
+            return mapping, pos_mapping, is_injected
 
         else:
             constraints = constraints or {}
@@ -1101,15 +1127,18 @@ class TemplatedTranslator(Translator):
         else:
             raise ValueError()
 
-    # @lru_cache(maxsize=1000000)
+    @lru_cache(maxsize=1000000)
     def _get_pos(self, phrase: Phrase) -> List[POS]:
         if isinstance(phrase, PredicatePhrase):
-            _word = phrase.predicate
+            POSs = self._word_bank.get_pos(phrase.predicate)
+            if phrase.object is not None:
+                assert POS.VERB in POSs
+                POSs = [POS.VERB]
         elif isinstance(phrase, ConstantPhrase):
-            _word = phrase.constant
+            POSs = self._word_bank.get_pos(phrase.constant)
         else:
-            raise ValueError()
-        return self._word_bank.get_pos(_word)
+            raise ValueError(str(phrase))
+        return POSs
 
     @abstractmethod
     def _postprocess_template(self, template: str) -> str:
@@ -1119,19 +1148,19 @@ class TemplatedTranslator(Translator):
     def _reset_predicate_phrase_assets(self) -> None:
         pass
 
-    def _postprocess_translation_all(self, translation: str, is_knowledge_injected=False) -> str:
-        # if is_knowledge_injected:
+    def _postprocess_translation_all(self, translation: str, knowlege_type: Optional[str] = None) -> str:
+        # if knowlege_type is not None:
         #     for knowledge_bank in self._knowledge_banks:
         #         translation = knowledge_bank.postprocess_translation(translation)
 
-        # We need to postprocess not only "is_knowledge_injected" formulas but others,
+        # We need to postprocess not only "knowlege_type" formulas but others,
         # because the translations can "spills" to other formulas.
         for knowledge_bank in self._knowledge_banks:
             translation = knowledge_bank.postprocess_translation(translation)
 
-        translation = self._postprocess_translation(translation, is_knowledge_injected=is_knowledge_injected)
+        translation = self._postprocess_translation(translation, knowlege_type=knowlege_type)
         return translation
 
     @abstractmethod
-    def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
+    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
         pass

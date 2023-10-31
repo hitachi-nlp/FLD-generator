@@ -38,8 +38,6 @@ def test_bank():
     sample_mappings(bank, '(x): {F}x -> ¬{G}x')
 
 
-
-
 if __name__ == '__main__':
     setup_logger(level=logging.INFO)
 

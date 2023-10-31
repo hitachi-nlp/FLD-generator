@@ -4,7 +4,7 @@ This repository includes the code for generating the FLD corpus.
 See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about the whole FLD project.
 
 ## About this release
-* This is version 2.0 of FLD corpora. See [the arXiv version of our paper](https://arxiv.org/abs/2308.0733) for details.
+* This is version 2.0 of FLD corpora. See the [the arXiv version](https://arxiv.org/abs/2308.0733) of our paper for details.
 
 ## Installation
 The code has been tested on Python 3.7.7.
@@ -21,6 +21,12 @@ $ pip install -r ./requirements/requrements.txt
 ### Knowledge FLD
 ```console
 ./download_scripts/00.download_knowledge_banks.sh
+```
+
+### For Japanese
+Additionally:
+```console
+git clone https://github.com/taku910/mecab/ ./res/word_banks/japanese/mecab/
 ```
 
 ## How to generate FLD corpus

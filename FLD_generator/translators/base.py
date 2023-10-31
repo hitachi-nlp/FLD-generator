@@ -57,20 +57,22 @@ class Translator(ABC):
     def translate(self,
                   formulas: List[Formula],
                   intermediate_constant_formulas: List[Formula],
-                  knowledge_injection_idxs: Optional[List[int]] = None,
+                  knowledge_idxs: Optional[List[int]] = None,
+                  collapsed_knowledge_idxs: Optional[List[int]] = None,
                   raise_if_translation_not_found=True,
                   max_retry: Optional[int] = 3,
                   timeout_per_trial: Optional[int] = None,
-                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
+                  ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], Optional[str]]], Dict[str, int]]:
         min_timeout = 10
-        # timeout_per_trial = min_timeout + int(timeout_per_trial or len(formulas) * 2.0)
-        timeout_per_trial = 9999
+        timeout_per_trial = min_timeout + int(timeout_per_trial or len(formulas) * 2.5)
+        # timeout_per_trial = 9999
         try:
             transls = run_with_timeout_retry(
                 self._translate,
                 func_args=[formulas, intermediate_constant_formulas],
                 func_kwargs={
-                    'knowledge_injection_idxs': knowledge_injection_idxs,
+                    'knowledge_idxs': knowledge_idxs,
+                    'collapsed_knowledge_idxs': collapsed_knowledge_idxs,
                     'raise_if_translation_not_found': raise_if_translation_not_found,
                 },
                 should_retry_exception=TranslationFailure,
@@ -89,7 +91,9 @@ class Translator(ABC):
     def _translate(self,
                    formulas: List[Formula],
                    intermediate_constant_formulas: List[Formula],
-                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], bool]], Dict[str, int]]:
+                   knowledge_idxs: Optional[List[int]] = None,
+                   collapsed_knowledge_idxs: Optional[List[int]] = None,
+                   raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], Optional[str]]], Dict[str, int]]:
         pass
 
     @abstractmethod

@@ -27,6 +27,8 @@ from .utils import (
     parse_as_subj,
 )
 
+import line_profiling
+
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +74,7 @@ _E0_IS_IF_RELATIONS = [
 _E1_IS_IF_RELATIONS = []
 
 
+@profile
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[IfThenStatement]:
@@ -278,10 +281,8 @@ class AtomicKnowledgeBank(KnowledgeBankBase):
 
         super().__init__()
 
-    def _load_statements(self, type_: StatementType) -> Iterable[Statement]:
+    def _load_statements(self) -> Iterable[Statement]:
         for stmt in _load_statements(self._path, max_statements=self._max_statements, shuffle=self._shuffle):
-            if stmt.type != type_:
-                continue
             yield stmt
 
     @property

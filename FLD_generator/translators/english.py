@@ -1,7 +1,7 @@
 import re
 import random
 import logging
-from typing import Set
+from typing import Set, Optional
 
 from FLD_generator.formula import Formula
 from FLD_generator.utils import starts_with_vowel_sound
@@ -57,7 +57,7 @@ class EnglishTranslator(TemplatedTranslator):
             rep += f' {pred.right_modifier}'
         return rep
 
-    def _postprocess_translation(self, translation: str, is_knowledge_injected=False) -> str:
+    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)

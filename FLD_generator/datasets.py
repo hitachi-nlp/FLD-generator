@@ -246,10 +246,10 @@ class NLProofSDataset:
         self.raise_if_translation_not_found = raise_if_translation_not_found
 
         if self.version in ['0.0', '0.1', '0.2']:
-            self._sent_ident = 'sent'
+            self._fact_ident = 'sent'
             self._facts_ident = 'context'
         else:
-            self._sent_ident = 'fact'
+            self._fact_ident = 'fact'
             self._facts_ident = 'facts'
 
         self.use_collapsed_translation_nodes_for_unknown_tree = use_collapsed_translation_nodes_for_unknown_tree
@@ -335,36 +335,44 @@ class NLProofSDataset:
                                 hypothesis_formula = root_negation_formula_var
                                 hypothesis = root_negation_formula_var.translation or root_negation_formula_var.rep
 
-                            could_make_unknown = False
-                            for _ in range(10):
-                                # dead_leaf_nodes = random.sample(proof_tree.leaf_nodes, max(1, int(len(proof_tree.leaf_nodes) * 0.3)))
-                                dead_leaf_nodes = random.sample(proof_tree_var.leaf_nodes, 1)
-                                if is_unknown(
-                                    [node.formula for node in proof_tree_var.leaf_nodes
-                                     if node not in dead_leaf_nodes],
-                                    hypothesis_formula,
-                                ):
-                                    could_make_unknown = True
-                                    break
-                            if not could_make_unknown:
-                                logger.warning('skip the sample because we could not make UNKNOWN proof by sub-sampling nodes.')
-                                continue
+                            if any(self._is_collapsed_knowledge(node) for node in proof_tree_var.leaf_nodes):
+                                dead_leaf_nodes = [node for node in proof_tree_var.leaf_nodes
+                                                   if self._is_collapsed_knowledge(node)]
+                                missing_leaf_nodes = dead_leaf_nodes
+                                collapsed_leaf_nodes = []
+                            else:
+                                could_make_unknown = False
+                                non_knowledge_leaf_formulas = [node for node in proof_tree_var.leaf_nodes
+                                                               if not self._is_knowledge(node)]
+                                if len(non_knowledge_leaf_formulas) > 0:
+                                    for _ in range(10):
+                                        dead_leaf_nodes = random.sample(non_knowledge_leaf_formulas, 1)
+                                        if is_unknown(
+                                            [node.formula for node in proof_tree_var.leaf_nodes
+                                             if node not in dead_leaf_nodes],
+                                            hypothesis_formula,
+                                        ):
+                                            could_make_unknown = True
+                                            break
+                                if not could_make_unknown:
+                                    logger.warning('skip the sample because we could not make UNKNOWN proof by sub-sampling nodes.')
+                                    continue
+
+                                # dead nodes = missing nodes + collapsed nodes
+                                missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
 
                         elif proof_stance == ProofStance.PROVED:
                             hypothesis_formula = proof_tree_var.root_node.formula
                             hypothesis = self._get_sent_from_node(proof_tree_var.root_node)
-                            dead_leaf_nodes = []
+                            dead_leaf_nodes, missing_leaf_nodes, collapsed_leaf_nodes = [], [], []
 
                         elif proof_stance == ProofStance.DISPROVED:
                             hypothesis_formula = root_negation_formula_var
                             hypothesis = root_negation_formula_var.translation or root_negation_formula_var.rep
-                            dead_leaf_nodes = []
+                            dead_leaf_nodes, missing_leaf_nodes, collapsed_leaf_nodes = [], [], []
 
                         alive_leaf_nodes = [node for node in proof_tree_var.leaf_nodes
                                             if node not in dead_leaf_nodes]
-
-                        # dead nodes = missing nodes + collapsed nodes
-                        missing_leaf_nodes, collapsed_leaf_nodes = self._divide_into_missing_and_collapsed_nodes(dead_leaf_nodes)
 
                         # -- make texts --
                         context, formula_context, proof_text, formula_proof_text, node2id, id2node = self._make_text(
@@ -445,7 +453,6 @@ class NLProofSDataset:
                                 logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
                                 logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
                                 logger.critical('\n== tree ==\n' + proof_tree_var.format_str)
-                                # import pudb; pudb.set_trace()
                                 stance_msg = 'the hypothesis can not be proved even the label is PROVED. This is unexpected and implies bugs.'
                         elif proof_stance == ProofStance.DISPROVED:
                             # assert is_disprovable(all_positive_formulas, hypothesis_formula)
@@ -453,7 +460,6 @@ class NLProofSDataset:
                                 logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
                                 logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
                                 logger.critical('\n== tree ==\n' + proof_tree_var.format_str)
-                                # import pudb; pudb.set_trace()
                                 stance_msg = 'the hypothesis can not be disproved even the label is DISPROVED. This is unexpected and implies bugs.'
                         elif proof_stance == ProofStance.UNKNOWN:
                             # assert is_unknown(all_positive_formulas, hypothesis_formula)
@@ -461,7 +467,6 @@ class NLProofSDataset:
                                 logger.critical('\n== all_positive_formulas ==\n' + pformat(all_formulas))
                                 logger.critical('\n== hypothesis_formula ==\n' + hypothesis_formula.rep)
                                 logger.critical('\n== tree ==\n' + proof_tree_var.format_str)
-                                # import pudb; pudb.set_trace()
                                 stance_msg = 'the hypothesis can be (dis)proved even the label is UNKNOWN. This is unexpected and implies bugs.'
                         if stance_msg is not None:
                             logger.fatal('proof_tree leaf nodes:')
@@ -770,6 +775,7 @@ class NLProofSDataset:
         i_sent = 1
         i_assump = 1
         i_knowledge = 1
+        i_collapsed_knowledge = 1
 
         _node2id: Dict[Node, str] = {}
         _id2node: Dict[str, Node] = {}
@@ -798,12 +804,17 @@ class NLProofSDataset:
                     id_ = f'knowledge{i_knowledge}'
                     i_knowledge += 1
 
+                elif self._is_collapsed_knowledge(node):
+                    # collapsed knowledge muts be showed explicitly, thus, we include it as a fact.
+                    id_ = f'{self._fact_ident}{i_collapsed_knowledge}'
+                    i_collapsed_knowledge += 1
+
                 elif self._is_leaf(node, proof_tree):
-                    id_ = f'{self._sent_ident}{i_sent}'
+                    id_ = f'{self._fact_ident}{i_sent}'
                     i_sent += 1
 
                 elif self._is_distractor(node):
-                    id_ = f'{self._sent_ident}{i_sent}'
+                    id_ = f'{self._fact_ident}{i_sent}'
                     i_sent += 1
 
                 else:
@@ -840,8 +851,10 @@ class NLProofSDataset:
                            id2node: Dict[str, Node],
                            missing_leaf_nodes: List[ProofNode],
                            formula_rep=False) -> str:
-        context_id2nodes = {id_: node for id_, node in id2node.items()
-                            if id_.startswith(self._sent_ident) and node not in missing_leaf_nodes}
+        context_id2nodes = {
+            id_: node for id_, node in id2node.items()
+            if id_.startswith(self._fact_ident) and node not in missing_leaf_nodes
+        }
 
         def node2sent(node) -> str:
             if formula_rep:
@@ -855,7 +868,7 @@ class NLProofSDataset:
         return ' '.join([
             f'{id_}: {node2sent(node)}'
             for id_, node in sorted(context_id2nodes.items(),
-                                    key=lambda id_node: int(re.sub(f'{self._sent_ident}([0-9]*)', r'\g<1>', id_node[0])))
+                                    key=lambda id_node: int(re.sub(f'{self._fact_ident}([0-9]*)', r'\g<1>', id_node[0])))
 
         ])
 
@@ -896,6 +909,9 @@ class NLProofSDataset:
                     conclusion_str = f'{knowledge_id}: {node.formula.rep}'
                 else:
                     conclusion_str = f'{knowledge_id}: {self._get_sent_from_node(node)}'
+
+            elif self._is_collapsed_knowledge(node):
+                continue
 
             elif self._is_leaf(node, proof_tree):
                 continue
@@ -947,7 +963,7 @@ class NLProofSDataset:
                                               if not self._is_leaf(node, proof_tree)]
 
                 if len(subtree_root_nodes_wo_leaf) == 0:
-                    sent_ids = [id_ for id_ in id2node.keys() if id_.startswith(self._sent_ident)]
+                    sent_ids = [id_ for id_ in id2node.keys() if id_.startswith(self._fact_ident)]
                     hypothesis_premises = random.sample(sent_ids, 1)
                 else:
                     hypothesis_premises = [node2id[node] for node in subtree_root_nodes_wo_leaf]
@@ -956,7 +972,7 @@ class NLProofSDataset:
 
             elif conclude_hypothesis_from_random_sent_if_proof_is_unknown:
 
-                sent_ids = [id_ for id_ in id2node.keys() if id_.startswith(self._sent_ident)]
+                sent_ids = [id_ for id_ in id2node.keys() if id_.startswith(self._fact_ident)]
                 hypothesis_premises = random.sample(sent_ids, 1)
                 proof_elems.append(' & '.join(hypothesis_premises) + ' -> hypothesis')
 
@@ -982,6 +998,9 @@ class NLProofSDataset:
 
     def _is_knowledge(self, node: Node) -> bool:
         return isinstance(node, ProofNode) and node.is_knowledge
+
+    def _is_collapsed_knowledge(self, node: Node) -> bool:
+        return isinstance(node, ProofNode) and node.is_collapsed_knowledge
 
     def _is_int(self, node: Node, proof_tree: ProofTree) -> bool:
         return isinstance(node, ProofNode)\

@@ -30,7 +30,7 @@ class ProofNode:
                  formula: Formula,
                  argument: Optional[Argument] = None,
                  tree: Optional['ProofTree'] = None,
-                 is_knowledge=False):
+                 knowledge_type: Optional[str] = None):
         self.formula = formula
         self.argument: Optional[Argument] = argument
 
@@ -42,13 +42,13 @@ class ProofNode:
 
         self._tree = tree
 
-        self.is_knowledge = is_knowledge
+        self.knowledge_type = knowledge_type
 
     def copy(self) -> 'ProofNode':
         return ProofNode(
             deepcopy(self.formula),
             argument=deepcopy(self.argument),
-            is_knowledge=self.is_knowledge,
+            knowledge_type=self.knowledge_type,
         )
 
     @property
@@ -168,7 +168,7 @@ class ProofNode:
             node.set_tree(self.tree)
 
     def __str__(self) -> str:
-        return f'ProofNode({self.formula}, is_assump={self.is_assump}, is_knowledge={self.is_knowledge})'
+        return f'ProofNode({self.formula}, is_assump={self.is_assump}, knowledge_type={self.knowledge_type})'
 
     def __repr__(self) -> str:
         return str(self)
@@ -194,6 +194,14 @@ class ProofNode:
     @property
     def is_assump(self) -> bool:
         return not self._has_children and self.assump_parent is not None
+
+    @property
+    def is_knowledge(self) -> bool:
+        return self.knowledge_type == 'knowledge'
+
+    @property
+    def is_collapsed_knowledge(self) -> bool:
+        return self.knowledge_type == 'collapsed_knowledge'
 
     @property
     def has_intermediate_constants(self) -> bool:

@@ -42,6 +42,7 @@ def load_dataset(argument_config: List[str],
                  quantifier_axiom_arguments_weight: float,
                  quantifier_axioms: Optional[List[str]],
                  quantification_degree: str,
+                 knowledge_argument_factor: float,
                  keep_dneg: bool,
                  distractor: str,
                  distractors_range: Tuple[int, int],
@@ -65,11 +66,38 @@ def load_dataset(argument_config: List[str],
                  force_fix_illegal_intermediate_constants: bool,
                  branch_extensions_range: Tuple[int, int],
                  translation_variants_per_logic: int,
-                 knowledge_injection_range: float,
+                 knowledge_range: float,
+                 collapsed_knowledge_range: float,
                  knowledge_no_shuffle: bool,
                  atomic_filepath: str,
                  concept_net_100k_filepath: str,
                  dbpedia_filepath: str):
+    knowledge_banks = []
+    if atomic_filepath is not None:
+        knowledge_banks.append(
+            build_knowledge_bank(
+                'atomic',
+                atomic_filepath,
+                no_shuffle=knowledge_no_shuffle,
+            )
+        )
+    if concept_net_100k_filepath is not None:
+        knowledge_banks.append(
+            build_knowledge_bank(
+                'concept_net_100k',
+                concept_net_100k_filepath,
+                no_shuffle=knowledge_no_shuffle,
+            )
+        )
+    if dbpedia_filepath is not None:
+        knowledge_banks.append(
+            build_knowledge_bank(
+                'dbpedia',
+                dbpedia_filepath,
+                no_shuffle=knowledge_no_shuffle,
+            )
+        )
+
     generator = build_generator(
         argument_config,
         elim_dneg=not keep_dneg,
@@ -77,6 +105,8 @@ def load_dataset(argument_config: List[str],
         quantifier_axiom_arguments_weight=quantifier_axiom_arguments_weight,
         quantifier_axioms=quantifier_axioms,
         quantification_degree=quantification_degree,
+        knowledge_argument_factor=knowledge_argument_factor,
+        knowledge_banks=knowledge_banks,
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
@@ -108,32 +138,6 @@ def load_dataset(argument_config: List[str],
     else:
         _translation_distractor = None
 
-    knowledge_banks = []
-    if atomic_filepath is not None:
-        knowledge_banks.append(
-            build_knowledge_bank(
-                'atomic',
-                atomic_filepath,
-                no_shuffle=knowledge_no_shuffle,
-            )
-        )
-    if concept_net_100k_filepath is not None:
-        knowledge_banks.append(
-            build_knowledge_bank(
-                'concept_net_100k',
-                concept_net_100k_filepath,
-                no_shuffle=knowledge_no_shuffle,
-            )
-        )
-    if dbpedia_filepath is not None:
-        knowledge_banks.append(
-            build_knowledge_bank(
-                'dbpedia',
-                dbpedia_filepath,
-                no_shuffle=knowledge_no_shuffle,
-            )
-        )
-
     logger.info(_build_bounded_msg(f'{"[start] building translator":<30}', 3))
     translator = build_translator(translation_lang,
                                   translation_config,
@@ -161,7 +165,8 @@ def load_dataset(argument_config: List[str],
         translator=translator,
         assumption_prefix=assumption_prefix,
         add_subj_obj_swapped_distractor=not disallow_subj_obj_swapped_distractor,
-        knowledge_injection_range=knowledge_injection_range,
+        knowledge_range=knowledge_range,
+        collapsed_knowledge_range=collapsed_knowledge_range,
     )
 
     if depth_distrib == 'flat':
@@ -228,6 +233,7 @@ def generate_instances(size: int, *args):
 @click.option('--quantifier-axiom-arguments-weight', type=float, default=0.0)
 @click.option('--quantifier-axiom', multiple=True, default=None)
 @click.option('--quantification-degree', type=str, default='all_constants')
+@click.option('--knowledge-argument-factor', type=float, default=1.0)
 #
 @click.option('--depth-range', type=str, default=json.dumps([1, 5]))
 @click.option('--depth-distrib', type=click.Choice(['flat', 'flat.no_reference', 'ruletaker.ours.20221202']))
@@ -259,7 +265,8 @@ def generate_instances(size: int, *args):
 @click.option('--translation-distractors-range', type=str, default=json.dumps([0, 0]))
 @click.option('--fallback-from-formula-to-translation-distractor', is_flag=True, default=False)
 #
-@click.option('--knowledge-injection-range', type=str, default=json.dumps([0.0, 0.0]))
+@click.option('--knowledge-range', type=str, default=json.dumps([0.0, 0.0]))
+@click.option('--collapsed-knowledge-range', type=str, default=json.dumps([0.0, 0.0]))
 @click.option('--knowledge-no-shuffle', is_flag=True, type=bool, default=False)
 @click.option('--atomic-filepath', type=str, default=None)
 @click.option('--concept-net-100k-filepath', type=str, default=None)
@@ -301,6 +308,7 @@ def main(output_path,
          quantifier_axiom_arguments_weight,
          quantifier_axiom,
          quantification_degree,
+         knowledge_argument_factor,
          keep_dneg,
          distractor,
          distractors_range,
@@ -312,7 +320,8 @@ def main(output_path,
          translation_distractor,
          fallback_from_formula_to_translation_distractor,
          translation_distractors_range,
-         knowledge_injection_range,
+         knowledge_range,
+         collapsed_knowledge_range,
          knowledge_no_shuffle,
          atomic_filepath,
          concept_net_100k_filepath,
@@ -335,7 +344,8 @@ def main(output_path,
     branch_extensions_range = json.loads(branch_extensions_range)
     distractors_range = json.loads(distractors_range)
     translation_distractors_range = json.loads(translation_distractors_range)
-    knowledge_injection_range = json.loads(knowledge_injection_range)
+    knowledge_range = json.loads(knowledge_range)
+    collapsed_knowledge_range = json.loads(collapsed_knowledge_range)
     proof_stances = json.loads(proof_stances)
     swap_ng_words = json.load(open(swap_ng_words_config)) if swap_ng_words_config is not None else None
 
@@ -380,6 +390,7 @@ def main(output_path,
                         quantifier_axiom_arguments_weight,
                         quantifier_axiom,
                         quantification_degree,
+                        knowledge_argument_factor,
                         keep_dneg,
                         distractor,
                         distractors_range,
@@ -403,7 +414,8 @@ def main(output_path,
                         force_fix_illegal_intermediate_constants,
                         branch_extensions_range,
                         translation_variants_per_logic,
-                        knowledge_injection_range,
+                        knowledge_range,
+                        collapsed_knowledge_range,
                         knowledge_no_shuffle,
                         atomic_filepath,
                         concept_net_100k_filepath,
