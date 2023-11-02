@@ -74,7 +74,7 @@ _E0_IS_IF_RELATIONS = [
 _E1_IS_IF_RELATIONS = []
 
 
-@profile
+# @profile
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[IfThenStatement]:

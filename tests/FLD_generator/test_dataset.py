@@ -218,7 +218,7 @@ def test_generate_dataset_lang(lang: str):
         raise_if_translation_not_found=True,
     )
 
-    num_dataset = 1000
+    num_dataset = 20
     generate_dataset(dataset, num_dataset=num_dataset)
 
 

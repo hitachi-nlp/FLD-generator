@@ -50,7 +50,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge')
     # output_top_dir = Path('./outputs/00.create_corpus/20231028.knowledge.no_down_sampling')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20231030.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231030.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231030.knowledge.pos_fix')
+    output_top_dir = Path('./outputs/00.create_corpus/20231102.knowledge.speedup_translators')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -112,8 +114,8 @@ def main():
         # '20231029.knowledge.D3.wo_knowledge.cmplx-0.5',
 
         # ---------------------------------- 20231029.knowledge ------------------------------------
-        # '20231030.knowledge.D3.knowledge_factor-1.0',
-        '20231030.knowledge.D3.knowledge_factor-5.0',
+        '20231030.knowledge.D3.knowledge_factor-1.0',
+        # '20231030.knowledge.D3.knowledge_factor-5.0',
     ]
     # dataset_names = dataset_names[::-1]
 

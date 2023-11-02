@@ -364,7 +364,7 @@ _TRANSLATIONS: Dict[str, List[Tuple[str, POS]]] = {
 }
 
 
-@profile
+# @profile
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[Statement]:

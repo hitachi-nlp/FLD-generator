@@ -128,7 +128,7 @@ _Fx_Gx_relations = [
 ]
 
 
-@profile
+# @profile
 def _load_statements(path: str,
                      max_statements: Optional[int] = None,
                      shuffle=False) -> Iterable[Statement]:
