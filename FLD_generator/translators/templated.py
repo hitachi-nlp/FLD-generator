@@ -1093,8 +1093,10 @@ class TemplatedTranslator(Translator):
                 if len(entity_nouns) >= entity_noun_size:
                     break
 
-            # intermediate_constant_nouns = sorted(self._word_bank.get_intermediate_constant_words())[:len(intermediate_constants)]
-            intermediate_constant_nouns = self._sample(self._word_bank.get_intermediate_constant_words(), len(intermediate_constants))
+            intermediate_constant_nouns = [
+                ConstantPhrase(constant=word)
+                for word in self._sample(self._word_bank.get_intermediate_constant_words(), len(intermediate_constants))
+            ]
 
             zeroary_constraints = {k: v for k, v in constraints.items() if k in zeroary_predicates}
             # zero-ary predicate {A}, which appears as ".. {A} i ..", shoud be Noun.
