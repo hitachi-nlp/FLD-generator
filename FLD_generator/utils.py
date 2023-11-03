@@ -506,43 +506,42 @@ class RandomCycle:
                  base_elems: Union[Callable[[], Iterator[Any]], Iterable[Any]],
                  shuffle=True):
         self._cached_list: Optional[List[Any]] = None
+        self._base_elems = base_elems
 
         if shuffle:
-            if isinstance(base_elems, Callable):  # elems is generate
-                self._cached_list = _shuffle_func(elem for elem in base_elems())
+            if isinstance(self._base_elems, Callable):  # elems is generate
+                self._cached_list = _shuffle_func(elem for elem in self._base_elems())
                 self._is_elems_cached = True
             else:
-                if isinstance(base_elems, list):
-                    self._cached_list = _shuffle_func(base_elems)
+                if isinstance(self._base_elems, list):
+                    self._cached_list = _shuffle_func(self._base_elems)
                     self._is_elems_cached = True
                 else:
                     self._cached_list = []
                     self._is_elems_cached = False
         else:
-            if isinstance(base_elems, list):
-                self._cached_list = base_elems
+            if isinstance(self._base_elems, list):
+                self._cached_list = self._base_elems
                 self._is_elems_cached = True
             else:
                 self._cached_list = []
                 self._is_elems_cached = False
 
         def make_current_iterable():
-            if self._is_elems_cached:
-                elems_repr = str(base_elems) if not isinstance(base_elems, list) else type(base_elems)
+            if self._is_elems_cached and not isinstance(self._base_elems, Callable):
+                elems_repr = str(self._base_elems) if not isinstance(self._base_elems, list) else type(self._base_elems)
                 logger.info('making iterable from %d elements, the original one is %s',
                             len(self._cached_list),
                             elems_repr)
-                # if len(self._cached_list) == 0:
-                #     import pudb; pudb.set_trace()
                 return iter(self._cached_list)
             else:
-                if isinstance(base_elems, Callable):  # elems is generate
-                    return base_elems()
+                if isinstance(self._base_elems, Callable):  # elems is generate
+                    return self._base_elems()
                 else:
-                    if isinstance(base_elems, list):
-                        return iter(base_elems)
+                    if isinstance(self._base_elems, list):
+                        return iter(self._base_elems)
                     else:
-                        return base_elems
+                        return self._base_elems
 
         self._make_current_iterable = make_current_iterable
         self._cur_iter = self._make_current_iterable()
@@ -554,7 +553,7 @@ class RandomCycle:
         while True:
             try:
                 item = next(self._cur_iter)
-                if not self._is_elems_cached:
+                if not self._is_elems_cached and not isinstance(self._base_elems, Callable):
                     self._cached_list.append(item)
                 return item
             except StopIteration:

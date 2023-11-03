@@ -66,7 +66,7 @@ class KnowledgeBankBase(ABC):
 
     def __init__(self):
         self._statement_cycle = RandomCycle(
-            self._load_statements(),
+            self._load_statements,
             shuffle=False,  # shuffle should be managed by "self._load_statements()"
         )
         self._statement_cache: Dict[str, Dict[str, DequeWithLimit]] = defaultdict(

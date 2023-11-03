@@ -60,7 +60,7 @@ class Translator(ABC):
                   knowledge_idxs: Optional[List[int]] = None,
                   collapsed_knowledge_idxs: Optional[List[int]] = None,
                   raise_if_translation_not_found=True,
-                  max_retry: Optional[int] = 3,
+                  max_retry: Optional[int] = 5,
                   timeout_per_trial: Optional[int] = None,
                   ) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], Optional[str]]], Dict[str, int]]:
         min_timeout = 10

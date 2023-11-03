@@ -5026,6 +5026,68 @@ _DATASET_SETTINGS = {
 
 
 
+
+
+    '20231103.knowledge.D3.knowledge_factor-5.0': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.3,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+        'knowledge_range': [0.0, 1.0],
+        'collapsed_knowledge_range': [0.0, 1.0],
+        'knowledge_argument_factor': 5.0,
+
+        'split_wise_settings': {
+            'train': {
+                'sample_all_stances_per_logic': True,
+                'context_shuffles_per_instance': 3,
+                'translation_variants_per_logic': 3,
+                'atomic_filepath': './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
+                'concept_net_100k_filepath': './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
+                'dbpedia_filepath': './res/knowledge_banks/DBpedia500/train1.txt',
+            },
+            'valid': {
+                'atomic_filepath': './res/knowledge_banks/commonsense-kg-completion/data/atomic/valid.txt',
+                'concept_net_100k_filepath': './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/valid.txt',
+                'dbpedia_filepath': './res/knowledge_banks/DBpedia500/valid.txt',
+            },
+            'test': {
+                'atomic_filepath': './res/knowledge_banks/commonsense-kg-completion/data/atomic/test.txt',
+                'concept_net_100k_filepath': './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/test.txt',
+                'dbpedia_filepath': './res/knowledge_banks/DBpedia500/test.txt',
+            },
+        },
+        'split_sizes': {
+            # 'test': 1000,
+            # 'valid': 500,
+            'train': 300000,
+        },
+
+    },
+
 }
 
 
@@ -5356,6 +5418,10 @@ _DATASET_NAME_TO_DEFAULT = {
     # ---------------------------------- 20231030.knowledge ------------------------------------
     '20231030.knowledge.D3.knowledge_factor-1.0': '20231018.thing_person_config_translation',
     '20231030.knowledge.D3.knowledge_factor-5.0': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20231103.knowledge.D3 ------------------------------------
+    '20231103.knowledge.D3.knowledge_factor-5.0': '20231018.thing_person_config_translation',
+
 }
 
 
