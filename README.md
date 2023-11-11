@@ -10,6 +10,7 @@ See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about t
 The code has been tested on Python 3.7.7.
 ```console
 $ pip install -r ./requrements.txt
+$ export PYTHONPATH=`pwd -P`:$PYTHONPATH
 ```
 
 ## How to generate FLD corpus
