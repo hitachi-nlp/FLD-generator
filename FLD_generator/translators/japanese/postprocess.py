@@ -49,6 +49,7 @@ class NarabaKatsuyouRule(KatsuyouRule):
                 return None
             else:
                 return [katsuyou_word, 'ば']
+
         elif surfaces == ['だ', 'なら', 'ば']:
             # きれいだならば -> きれいならば
             return ['なら', 'ば']
@@ -81,6 +82,7 @@ class NaiKatsuyouRule(KatsuyouRule):
             return ['で', 'ない']
 
         elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
+            # 美しいない -> 美しくない
             katsuyou_word = self._get_katsuyou_word(morphemes[0], '連用テ接続')
             if katsuyou_word is None:
                 return None
@@ -91,7 +93,24 @@ class NaiKatsuyouRule(KatsuyouRule):
             return None
 
 
-class Katsuyou:
+class NaiNaiKatsuyouRule(KatsuyouRule):
+
+    def __init__(self, word_bank: JapaneseWordBank):
+        self._word_bank = word_bank
+
+    @property
+    def window_size(self) -> int:
+        return 2
+
+    def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
+        surfaces = [morpheme.surface for morpheme in morphemes]
+        if surfaces == ['ない', 'ない']:
+            return ['なく', 'ない']
+        else:
+            return None
+
+
+class KatsuyouTransformer:
 
     def __init__(self, rules: List[KatsuyouRule]):
         self._rules = rules
@@ -128,3 +147,13 @@ class Katsuyou:
     def _slide(self, seq: List[Any], window_size: int) -> Iterable[List[Any]]:
         for i in range(len(seq) - window_size + 1):
             yield seq[i: i + window_size]
+
+
+def build_katsuyou_transformer(word_bank: JapaneseWordBank) -> KatsuyouTransformer:
+    # XXX: the order of rules matters
+    rules = [
+        NarabaKatsuyouRule(word_bank),
+        NaiKatsuyouRule(word_bank),
+        NaiNaiKatsuyouRule(word_bank),
+    ]
+    return KatsuyouTransformer(rules)

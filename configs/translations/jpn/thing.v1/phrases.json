@@ -105,7 +105,7 @@
 
     "{A}is_tgt": [
       "{A}[ADJ]",
-      "<<phrase::{A}a_noun>>である",
+      "<<phrase::{A}a_noun>>だ",
       "{A}[VERB]"
     ],
 
@@ -114,27 +114,22 @@
     ],
 
 
+
     "¬{A}predicate": [
-      ["W_VOL_AVG__0.2", "<<phrase::is>> <<phrase::¬{A}is_tgt>>"],
-      "<<phrase::is>> <<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>>"
+      "<<phrase::is>> <<phrase::¬{A}predicate_wo_ha_ga>>"
     ],
 
     "¬{A}predicate_wo_ha_ga": [
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_tgt>>"],
-      "<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>>",
-      "__<<phrase::is_not_a_kind_of>> <<phrase::{A}a_noun>>",
-
-      "{A}[VERB] <<phrase::pred_not>>"
+      "<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>>"
     ],
 
     "¬{A}is_tgt": [
-      "__{A}[ADJ.neg]"
+      "<<phrase::{A}is_not_tgt>>"
     ],
 
     "¬{A}is_not_tgt": [
-      "{A}[ADJ]",
-      "<<phrase::{A}a_noun>>",
-      "{A}[VERB]"
+      "<<phrase::{A}is_tgt>>"
     ],
 
 
@@ -567,7 +562,7 @@
     ],
 
     "pred_not": [
-      "__<<phrase::toiu_koto>> <<phrase::ha_ga_nai>>",
+      "<<phrase::toiu_koto>> <<phrase::ha_ga_nai>>",
       "ない"
     ],
 

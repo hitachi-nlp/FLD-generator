@@ -5,7 +5,7 @@ import sys
 from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.translators.japanese.postprocess import Katsuyou, NarabaKatsuyouRule, NaiKatsuyouRule
+from FLD_generator.translators.japanese.postprocess import build_katsuyou_transformer
 from FLD_generator.utils import fix_seed
 from FLD_generator.knowledge_banks import build_knowledge_bank
 from FLD_generator.knowledge_banks.base import KnowledgeBankBase
@@ -212,27 +212,32 @@ def test_jpn_katsuyou():
     """
 
     wb = build_wordbank('jpn')
-    katsuyou = Katsuyou([
-        NarabaKatsuyouRule(wb),
-        NaiKatsuyouRule(wb),
-    ])
+    katsuyou = build_katsuyou_transformer(wb)
 
     def _check_katsuyou(src: str, expected: str):
         applied = katsuyou.apply(src)
 
         print('\n\n================ _check_katsuyou ===================')
-        print('str      :', src)
-        print('applied  :', applied)
-        print('expected :', expected)
+        print('input      :', src)
+        print('output     :', applied)
+        print('expected   :', expected)
         assert applied == expected
 
-    _check_katsuyou('もしこの人間が起こるならばつらい', 'もしこの人間が起こればつらい')
-    _check_katsuyou('もしこの人間がきれいだならばつらい', 'もしこの人間がきれいならばつらい')
-    _check_katsuyou('もしこの人間が美しいならばつらい', 'もしこの人間が美しいならばつらい')
+    _check_katsuyou('この人間が走るならばつらい', 'この人間が走ればつらい')
+    _check_katsuyou('この人間が機械だならばつらい', 'この人間が機械ならばつらい')
+    _check_katsuyou('この人間がきれいだならばつらい', 'この人間がきれいならばつらい')
+    _check_katsuyou('この人間が美しいならばつらい', 'この人間が美しいならばつらい')
 
-    _check_katsuyou('この事象は起こるない', 'この事象は起こらない')
-    _check_katsuyou('この事象はきれいだない', 'この事象はきれいでない')
-    _check_katsuyou('この事象は走るない', 'この事象は走らない')
+    _check_katsuyou('この人間は走るない', 'この人間は走らない')
+    _check_katsuyou('この人間は機械だない', 'この人間は機械でない')
+    _check_katsuyou('この人間はきれいだない', 'この人間はきれいでない')
+    _check_katsuyou('この人間が美しいない', 'この人間が美しくない')
+
+    _check_katsuyou('この人間は走るないない', 'この人間は走らなくない')
+    _check_katsuyou('この人間は機械だないない', 'この人間は機械でなくない')
+    _check_katsuyou('この人間はきれいだないない', 'この人間はきれいでなくない')
+    _check_katsuyou('この人間が美しいないない', 'この人間が美しくなくない')
+
 
 
 if __name__ == '__main__':
