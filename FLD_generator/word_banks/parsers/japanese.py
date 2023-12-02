@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional, Iterable
+from typing import List, Optional, Iterable, Any
 from pathlib import Path
 from functools import lru_cache
 
@@ -40,6 +40,9 @@ class Morpheme(BaseModel):
 
     def __lt__(self, other: 'Morpheme'):
         return self.surface < other.surface
+
+    def __repr__(self):
+        return f'Morpheme({super().__repr__()})'
 
 
 def load_morphemes(dir_or_csv: str) -> List[Morpheme]:
@@ -121,6 +124,3 @@ def parse(text: str) -> List[Morpheme]:
 @lru_cache(maxsize=1000000)
 def get_lemma(word: str) -> str:
     return parse(word)[0].base
-    # for morpheme in parse(word):
-    #     if morpheme.katsuyou is None or morpheme.katsuyou == '基本形':
-    #         return morpheme.surface

@@ -1,10 +1,13 @@
-from typing import Optional, Iterable, List, Dict
+from typing import Optional, Iterable, List, Dict, Any, Optional
 from collections import defaultdict
 from enum import Enum
+from abc import abstractmethod, abstractproperty
+from pprint import pprint
 
 from ordered_set import OrderedSet
 from FLD_generator.word_banks.base import POS
 from FLD_generator.word_banks.base import WordBank
+from FLD_generator.word_banks.parsers.japanese import parse
 from FLD_generator.person_names import get_person_names
 import line_profiling
 
@@ -115,7 +118,7 @@ class JapaneseWordBank(WordBank):
 
             elif form == self.VerbForm.ING:
                 verbs: List[str] = []
-                for morpheme in self._get_katsuyou_morphemes(
+                for morpheme in self.get_katsuyou_morphemes(
                     verb,
                     katsuyous=[
                         '連用タ接続',
@@ -166,7 +169,8 @@ class JapaneseWordBank(WordBank):
             return [adj + 'ということ']
 
         elif form == self.AdjForm.ANTI:
-            raise NotImplementedError('antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
+            raise NotImplementedError(
+                'antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
 
             antonyms = self._get_antonyms(adj)
             antonyms += [
@@ -234,7 +238,8 @@ class JapaneseWordBank(WordBank):
             if noun in self._person_names:
                 return []
 
-            raise NotImplementedError('antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
+            raise NotImplementedError(
+                'antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
 
             antonyms = self._get_antonyms(noun)
             antonyms += [word for word in self._change_noun_form(noun, self.NounForm.NEG, force=False)
@@ -286,8 +291,91 @@ class JapaneseWordBank(WordBank):
     def _get_antonyms(self, word: str) -> List[str]:
         return self._word_util.get_antonyms(word)
 
-    def _get_katsuyou_morphemes(self,
-                                word: str,
-                                katsuyous: Optional[List[str]] = None) -> List[Morpheme]:
+    def get_katsuyou_morphemes(self,
+                               word: str,
+                               katsuyous: Optional[List[str]] = None) -> List[Morpheme]:
         return [morpheme for morpheme in self._katsuyou_morphemes[word]
                 if katsuyous is None or morpheme.katsuyou in katsuyous]
+
+
+class KatsuyouRule:
+
+    @abstractproperty
+    def window_size(self) -> int:
+        pass
+
+    def apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
+        if len(morphemes) != self.window_size:
+            raise ValueError()
+        words = self._apply(morphemes)
+        # if words is not None and len(words) != self.window_size:
+        #     raise Exception('bug')
+        return words
+
+    @abstractmethod
+    def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
+        pass
+
+
+class NarabaRule(KatsuyouRule):
+
+    def __init__(self, word_bank: JapaneseWordBank):
+        self._word_bank = word_bank
+
+    @property
+    def window_size(self) -> int:
+        return 3
+
+    def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
+        """
+        surface='起こる' lid=None rid=None cost=None pos='動詞' pos1='自立' pos2=None pos3=None katsuyou_type='五段・ラ行' katsuyou='基本形' base='起こる' yomi='オコル' hatsuon='オコル'
+        surface='なら' lid=None rid=None cost=None pos='助動詞' pos1=None pos2=None pos3=None katsuyou_type='特殊・ダ' katsuyou='仮定形' base='だ' yomi='ナラ' hatsuon='ナラ'
+        surface='ば' lid=None rid=None cost=None pos='助詞' pos1='接続助詞' pos2=None pos3=None katsuyou_type=None katsuyou=None base='ば' yomi='バ' hatsuon='バ'
+        """
+        surfaces = [morpheme.surface for morpheme in morphemes]
+        if surfaces == ['だ', 'なら', 'ば']:  # きれいだならば
+            return ['ならば']
+        elif morphemes[0].pos == '動詞' and surfaces[1:] == ['なら', 'ば']:  # 走るならば
+            verb_katsuyous = self._word_bank.get_katsuyou_morphemes(morphemes[0].base, katsuyous=['仮定形'])
+            if len(verb_katsuyous) == 0:
+                return None
+            else:
+                return [verb_katsuyous[0].surface + 'ば']
+        else:
+            return None
+
+
+class Katsuyou:
+
+    def __init__(self, rules: List[KatsuyouRule]):
+        self._rules = rules
+
+    def apply(self, text: str) -> str:
+        text_modified = text
+        for rule in self._rules:
+            is_appliable = True
+            while is_appliable:
+                morphemes_modified = parse(text_modified)
+                words_modified_org = [morpheme.surface for morpheme in morphemes_modified]
+                words_modified_dst: List[str] = []
+                i_done = 0
+                is_applied = False
+                for i, window in enumerate(self._slide(morphemes_modified, rule.window_size)):
+                    _katsuyou_words = rule.apply(window)
+                    if _katsuyou_words is not None:
+                        words_modified_dst += _katsuyou_words
+                        i_done = i + rule.window_size - 1
+                        is_applied = True
+                        break
+                    else:
+                        words_modified_dst.append(window[0].surface)
+                        i_done = i
+                is_appliable = is_applied
+                words_modified_dst += words_modified_org[i_done + 1:]
+                text_modified = ''.join(words_modified_dst)
+
+        return text_modified
+
+    def _slide(self, seq: List[Any], window_size: int) -> Iterable[List[Any]]:
+        for i in range(len(seq) - window_size + 1):
+            yield seq[i: i + window_size]
