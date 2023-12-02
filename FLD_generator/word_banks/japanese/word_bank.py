@@ -80,7 +80,9 @@ class JapaneseWordBank(WordBank):
             vocab_restrictions=vocab_restrictions,
         )
 
-        self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
+        self._person_names: OrderedSet[str] = OrderedSet([name for name in get_person_names(country='JP')
+                                                          if not name.isascii()])
+        
 
     def _get_all_lemmas(self) -> Iterable[str]:
         for morphemes in self._base_morphemes.values():

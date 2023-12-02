@@ -2,19 +2,26 @@ import random
 import re
 from typing import Dict, Optional
 
+from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translators.templated import TemplatedTranslator
 from FLD_generator.translators.base import PredicatePhrase, ConstantPhrase
+from .postprocessor import build_katsuyou_postprocessor
 
 
 class JapaneseTranslator(TemplatedTranslator):
 
+    KAKU_LIST = ['を', 'に']
+
     def __init__(self,
+                 config_json: Dict[str, Dict],
+                 word_bank: WordBank,
                  *args,
                  insert_word_delimiters=False,
                  **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(config_json, word_bank, *args, **kwargs)
         self.insert_word_delimiters = insert_word_delimiters
         self._transl_to_kaku_cache: Dict[str, str] = {}
+        self._katuyou_postprocessor = build_katsuyou_postprocessor(word_bank)
 
     def _postprocess_template(self, template: str) -> str:
         return template
@@ -40,7 +47,7 @@ class JapaneseTranslator(TemplatedTranslator):
             raise Exception('Can not determine the order of these phrases. We do not expect to pass this code, therefore, might be a bug.')
 
         if pred.object is not None:
-            kaku = self._transl_to_kaku_cache.get(pred, random.choice(['を', 'に']))
+            kaku = self._transl_to_kaku_cache.get(pred, random.choice(self.KAKU_LIST))
             self._transl_to_kaku_cache[pred] = kaku
             rep = pred.object + kaku + rep
 
@@ -52,7 +59,10 @@ class JapaneseTranslator(TemplatedTranslator):
     def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
         # translation = re.sub('だ ならば', ' ならば', translation)
         # translation = re.sub('だ し', ' ならば', translation)
+
         if self.insert_word_delimiters:
-            return translation
-        else:
-            return re.sub(' ', '', translation)
+            raise NotImplementedError()
+
+        translation = re.sub(' ', '', translation)
+        translation = self._katuyou_postprocessor.apply(translation)
+        return translation

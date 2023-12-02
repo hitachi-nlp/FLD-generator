@@ -498,8 +498,10 @@ class TemplatedTranslator(Translator):
                     if predicate_transl.object is not None:
                         SO_swap_interpret_mapping = deepcopy(inflated_mapping)
                         SO_swap_interpret_mapping[constant] = ConstantPhrase(constant=predicate_transl.object)
+                        swap_object = ' '.join([rep for rep in [constant_transl.left_modifier, constant_transl.constant, constant_transl.right_modifier]
+                                               if rep is not None])
                         SO_swap_interpret_mapping[predicate] = PredicatePhrase(predicate=predicate_transl.predicate,
-                                                                               object=constant_transl,
+                                                                               object=swap_object,
                                                                                right_modifier=predicate_transl.right_modifier,
                                                                                left_modifier=predicate_transl.left_modifier)
 
@@ -526,8 +528,6 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula = interpret_formula(formula, {predicate: unused_predicate, constant: unused_constant})
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
-                        # HONOKA: ここら辺，日本語にした場合に大丈夫だろうか？
-                        import pudb; pudb.set_trace()
 
                 translations.append(translation)
 

@@ -4,8 +4,12 @@ import sys
 
 from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
+from FLD_generator.translators.japanese import JapaneseTranslator
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.translators.japanese.postprocess import build_katsuyou_transformer
+from FLD_generator.translators.japanese.postprocessor import (
+    build_katsuyou_postprocessor,
+    build_kaku_random_order_postprocessor,
+)
 from FLD_generator.utils import fix_seed
 from FLD_generator.knowledge_banks import build_knowledge_bank
 from FLD_generator.knowledge_banks.base import KnowledgeBankBase
@@ -170,7 +174,7 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
                 '{F}{f} -> {G}{g}',
             ],
             5,
-            intermediate_constant_formulas=['{a}', '{d}'],
+            intermediate_constant_formula_reps=['{a}', '{d}'],
         )
     else:
         show_translations(['{A}{a}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
@@ -208,10 +212,10 @@ def test_jpn():
 
 def test_jpn_katsuyou():
     wb = build_wordbank('jpn')
-    katsuyou = build_katsuyou_transformer(wb)
+    postprocessor = build_katsuyou_postprocessor(wb)
 
     def _check_katsuyou(src: str, expected: str):
-        applied = katsuyou.apply(src)
+        applied = postprocessor.apply(src)
 
         print('\n\n================ _check_katsuyou ===================')
         print('input      :', src)
@@ -233,7 +237,6 @@ def test_jpn_katsuyou():
     _check_katsuyou('この人間は機械だないない', 'この人間は機械でなくない')
     _check_katsuyou('この人間はきれいだないない', 'この人間はきれいでなくない')
     _check_katsuyou('この人間が美しいないない', 'この人間が美しくなくない')
-
 
 
 if __name__ == '__main__':

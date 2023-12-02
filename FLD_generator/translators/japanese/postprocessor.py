@@ -5,7 +5,7 @@ from ordered_set import OrderedSet
 from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, parse
 
 
-class KatsuyouRule:
+class Rule:
 
     def __init__(self, word_bank: JapaneseWordBank):
         self._word_bank = word_bank
@@ -34,7 +34,7 @@ class KatsuyouRule:
             return katsuyou_morphemes[0].surface
 
 
-class NarabaKatsuyouRule(KatsuyouRule):
+class NarabaKatsuyouRule(Rule):
 
     @property
     def window_size(self) -> int:
@@ -58,7 +58,7 @@ class NarabaKatsuyouRule(KatsuyouRule):
             return None
 
 
-class NaiKatsuyouRule(KatsuyouRule):
+class NaiKatsuyouRule(Rule):
 
     @property
     def window_size(self) -> int:
@@ -90,7 +90,7 @@ class NaiKatsuyouRule(KatsuyouRule):
             return None
 
 
-class NaiNaiKatsuyouRule(KatsuyouRule):
+class NaiNaiKatsuyouRule(Rule):
 
     @property
     def window_size(self) -> int:
@@ -104,43 +104,32 @@ class NaiNaiKatsuyouRule(KatsuyouRule):
             return None
 
 
-class KakuRandomOrderRule(KatsuyouRule):
+class KakuRandomOrderRule(Rule):
+
+    def __init__(self,
+                 word_bank: JapaneseWordBank,
+                 kaku_list: List[str]):
+        self._word_bank = word_bank
+        self._kaku_list = kaku_list
 
     @property
     def window_size(self) -> int:
         return 4
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
-        surfaces = [morpheme.surface for morpheme in morphemes]
-        if morphemes[0].pos == '動詞' and surfaces[1] == 'ない':
-            # 走るない -> 走らない
-            katsuyou_word = self._get_katsuyou_word(morphemes[0], '未然形')
-            if katsuyou_word is None:
-                return None
-            else:
-                return [katsuyou_word, 'ない']
-
-        elif surfaces == ['だ', 'ない']:
-            # きれいだならば -> きれいならば
-            return ['で', 'ない']
-
-        elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
-            # 美しいない -> 美しくない
-            katsuyou_word = self._get_katsuyou_word(morphemes[0], '連用テ接続')
-            if katsuyou_word is None:
-                return None
-            else:
-                return [katsuyou_word, 'ない']
-
-        else:
-            return None
+        # XXX: この実装だとダメ．「赤い人間が猫を追う」 => 「赤い猫を人間が追う」になってしまう．
+        # おそらく，構文解析が必要となる．
+        # surfaces = [morpheme.surface for morpheme in morphemes]
+        # if surfaces[1] in ['は', 'が'] and surfaces[3] in self._kaku_list:
+        #     return [surfaces[2], surfaces[3], surfaces[1], surfaces[0]]
+        # else:
+        #     return None
+        raise NotImplementedError()
 
 
+class Postprocessor:
 
-
-class KatsuyouTransformer:
-
-    def __init__(self, rules: List[KatsuyouRule]):
+    def __init__(self, rules: List[Rule]):
         self._rules = rules
 
     def apply(self, text: str) -> str:
@@ -177,11 +166,19 @@ class KatsuyouTransformer:
             yield seq[i: i + window_size]
 
 
-def build_katsuyou_transformer(word_bank: JapaneseWordBank) -> KatsuyouTransformer:
+def build_katsuyou_postprocessor(word_bank: JapaneseWordBank) -> Postprocessor:
     # XXX: the order of rules matters
     rules = [
         NarabaKatsuyouRule(word_bank),
         NaiKatsuyouRule(word_bank),
         NaiNaiKatsuyouRule(word_bank),
     ]
-    return KatsuyouTransformer(rules)
+    return Postprocessor(rules)
+
+
+def build_kaku_random_order_postprocessor(word_bank: JapaneseWordBank,
+                                          kaku_list: List[str]) -> Postprocessor:
+    rules = [
+        KakuRandomOrderRule(word_bank, kaku_list),
+    ]
+    return Postprocessor(rules)

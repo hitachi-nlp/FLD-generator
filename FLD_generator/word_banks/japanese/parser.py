@@ -10,7 +10,11 @@ import ipadic
 _TAGGER = GenericTagger(ipadic.MECAB_ARGS)
 
 
-def _maybe_field(text: str) -> Optional[str]:
+def _maybe_field(elems: List[str], i: int) -> Optional[str]:
+    if i >= len(elems):
+        return None
+
+    text = elems[i]
     if text == '':
         return None
     elif text == '*':
@@ -62,23 +66,23 @@ def load_morphemes(dir_or_csv: str) -> List[Morpheme]:
             fields = line.rstrip('\n').split(',')
             morphemes.append(
                 Morpheme(
-                    surface = _maybe_field(fields[0]),
+                    surface = _maybe_field(fields, 0),
 
                     lid = int(fields[1]) or None,
                     rid = int(fields[2]) or None,
                     cost = int(fields[3]) or None,
 
-                    pos = _maybe_field(fields[4]),
-                    pos1 = _maybe_field(fields[5]),
-                    pos2 = _maybe_field(fields[6]),
-                    pos3 = _maybe_field(fields[7]),
+                    pos = _maybe_field(fields, 4),
+                    pos1 = _maybe_field(fields, 5),
+                    pos2 = _maybe_field(fields, 6),
+                    pos3 = _maybe_field(fields, 7),
 
-                    katsuyou_type = _maybe_field(fields[8]),
-                    katsuyou = _maybe_field(fields[9]),
+                    katsuyou_type = _maybe_field(fields, 8),
+                    katsuyou = _maybe_field(fields, 9),
 
-                    base = _maybe_field(fields[10]),
-                    yomi = _maybe_field(fields[11]),
-                    hatsuon = _maybe_field(fields[12]),
+                    base = _maybe_field(fields, 10),
+                    yomi = _maybe_field(fields, 11),
+                    hatsuon = _maybe_field(fields, 12),
                 )
             )
 
@@ -103,17 +107,17 @@ def parse(text: str) -> List[Morpheme]:
                 rid=None,
                 cost=None,
 
-                pos = _maybe_field(fields[0]),
-                pos1 = _maybe_field(fields[1]),
-                pos2 = _maybe_field(fields[2]),
-                pos3 = _maybe_field(fields[3]),
+                pos = _maybe_field(fields, 0),
+                pos1 = _maybe_field(fields, 1),
+                pos2 = _maybe_field(fields, 2),
+                pos3 = _maybe_field(fields, 3),
 
-                katsuyou_type = _maybe_field(fields[4]),
-                katsuyou = _maybe_field(fields[5]),
+                katsuyou_type = _maybe_field(fields, 4),
+                katsuyou = _maybe_field(fields, 5),
 
-                base = _maybe_field(fields[6]),
-                yomi = _maybe_field(fields[7]),
-                hatsuon = _maybe_field(fields[8]),
+                base = _maybe_field(fields, 6),
+                yomi = _maybe_field(fields, 7),
+                hatsuon = _maybe_field(fields, 8),
 
 
             )
