@@ -60,9 +60,6 @@ class NarabaKatsuyouRule(KatsuyouRule):
 
 class NaiKatsuyouRule(KatsuyouRule):
 
-    def __init__(self, word_bank: JapaneseWordBank):
-        self._word_bank = word_bank
-
     @property
     def window_size(self) -> int:
         return 2
@@ -95,9 +92,6 @@ class NaiKatsuyouRule(KatsuyouRule):
 
 class NaiNaiKatsuyouRule(KatsuyouRule):
 
-    def __init__(self, word_bank: JapaneseWordBank):
-        self._word_bank = word_bank
-
     @property
     def window_size(self) -> int:
         return 2
@@ -108,6 +102,40 @@ class NaiNaiKatsuyouRule(KatsuyouRule):
             return ['なく', 'ない']
         else:
             return None
+
+
+class KakuRandomOrderRule(KatsuyouRule):
+
+    @property
+    def window_size(self) -> int:
+        return 4
+
+    def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
+        surfaces = [morpheme.surface for morpheme in morphemes]
+        if morphemes[0].pos == '動詞' and surfaces[1] == 'ない':
+            # 走るない -> 走らない
+            katsuyou_word = self._get_katsuyou_word(morphemes[0], '未然形')
+            if katsuyou_word is None:
+                return None
+            else:
+                return [katsuyou_word, 'ない']
+
+        elif surfaces == ['だ', 'ない']:
+            # きれいだならば -> きれいならば
+            return ['で', 'ない']
+
+        elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
+            # 美しいない -> 美しくない
+            katsuyou_word = self._get_katsuyou_word(morphemes[0], '連用テ接続')
+            if katsuyou_word is None:
+                return None
+            else:
+                return [katsuyou_word, 'ない']
+
+        else:
+            return None
+
+
 
 
 class KatsuyouTransformer:

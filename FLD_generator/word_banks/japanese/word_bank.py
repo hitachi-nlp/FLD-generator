@@ -58,6 +58,7 @@ class JapaneseWordBank(WordBank):
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
                  vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
+        super().__init__()
         morphemes = [morpheme for morpheme in morphemes
                      if morpheme.pos in ['名詞', '動詞', '形容詞']]
         self._all_morphemes = sorted(morphemes)
@@ -97,7 +98,7 @@ class JapaneseWordBank(WordBank):
         else:
             morphemes = self._base_morphemes[word]
             return list({
-                self._morpheme_to_POS(morpheme.pos)
+                self._morpheme_to_POS(morpheme)
                 for morpheme in morphemes
             })
 

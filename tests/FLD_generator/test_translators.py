@@ -203,14 +203,10 @@ def test_eng_with_knowledge():
 
 
 def test_jpn():
-    test_templated_translator_lang('eng')
+    test_templated_translator_lang('jpn')
 
 
 def test_jpn_katsuyou():
-    """
-    青臭いでないものであって一種であるもの
-    """
-
     wb = build_wordbank('jpn')
     katsuyou = build_katsuyou_transformer(wb)
 
@@ -244,5 +240,5 @@ if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
     # test_eng()
     # test_eng_with_knowledge()
-    # test_jpn()
-    test_jpn_katsuyou()
+    test_jpn()
+    # test_jpn_katsuyou()

@@ -526,12 +526,11 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula = interpret_formula(formula, {predicate: unused_predicate, constant: unused_constant})
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
+                        # HONOKA: ここら辺，日本語にした場合に大丈夫だろうか？
+                        import pudb; pudb.set_trace()
 
-                # translation = self._make_predicate_phrase_str(translation)
                 translations.append(translation)
 
-                # if SO_swap_formula is not None:
-                #     SO_swap_formula.translation = self._make_predicate_phrase_str(SO_swap_formula.translation)
                 SO_swap_formulas.append(SO_swap_formula)
 
                 translation_names.append(self._translation_name(translation_key, chosen_nl))
@@ -555,8 +554,10 @@ class TemplatedTranslator(Translator):
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
                 SO_swap_formula.translation = (
-                    self._postprocess_translation_all(SO_swap_formula.translation, knowlege_type=None) if SO_swap_formula.translation is not None
-                    else None)
+                    self._postprocess_translation_all(SO_swap_formula.translation, knowlege_type=None)
+                    if SO_swap_formula.translation is not None
+                    else None
+                )
 
         return list(zip(translation_names, translations, SO_swap_formulas, knowledge_types)), count_stats
 

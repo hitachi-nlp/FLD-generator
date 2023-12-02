@@ -227,5 +227,5 @@ if __name__ == '__main__':
     setup_logger(level=logging.INFO)
 
     # test_generate_dataset_AACorpus()
-    test_generate_dataset_lang('eng')
-    # test_generate_dataset_lang('jpn')
+    # test_generate_dataset_lang('eng')
+    test_generate_dataset_lang('jpn')
