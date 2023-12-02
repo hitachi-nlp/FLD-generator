@@ -86,7 +86,7 @@ class WordUtil:
                     continue
                 done_lemmas.add(lemma)
                 lemma_str = lemma.name()
-                for _syn in self._syn_op.from_word(lemma_str):
+                for _syn in self._syn_op.from_word(lemma_str, word_lang=self._language):
                     yield lemma_str, _syn.pos()
 
 
