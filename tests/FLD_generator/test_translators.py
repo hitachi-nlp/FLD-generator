@@ -5,6 +5,7 @@ import sys
 from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.word_banks import build_wordbank
+from FLD_generator.translators.japanese.postprocess import Katsuyou, NarabaKatsuyouRule, NaiKatsuyouRule
 from FLD_generator.utils import fix_seed
 from FLD_generator.knowledge_banks import build_knowledge_bank
 from FLD_generator.knowledge_banks.base import KnowledgeBankBase
@@ -205,8 +206,38 @@ def test_jpn():
     test_templated_translator_lang('eng')
 
 
+def test_jpn_katsuyou():
+    """
+    青臭いでないものであって一種であるもの
+    """
+
+    wb = build_wordbank('jpn')
+    katsuyou = Katsuyou([
+        NarabaKatsuyouRule(wb),
+        NaiKatsuyouRule(wb),
+    ])
+
+    def _check_katsuyou(src: str, expected: str):
+        applied = katsuyou.apply(src)
+
+        print('\n\n================ _check_katsuyou ===================')
+        print('str      :', src)
+        print('applied  :', applied)
+        print('expected :', expected)
+        assert applied == expected
+
+    _check_katsuyou('もしこの人間が起こるならばつらい', 'もしこの人間が起こればつらい')
+    _check_katsuyou('もしこの人間がきれいだならばつらい', 'もしこの人間がきれいならばつらい')
+    _check_katsuyou('もしこの人間が美しいならばつらい', 'もしこの人間が美しいならばつらい')
+
+    _check_katsuyou('この事象は起こるない', 'この事象は起こらない')
+    _check_katsuyou('この事象はきれいだない', 'この事象はきれいでない')
+    _check_katsuyou('この事象は走るない', 'この事象は走らない')
+
+
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
     # test_eng()
-    test_eng_with_knowledge()
+    # test_eng_with_knowledge()
     # test_jpn()
+    test_jpn_katsuyou()

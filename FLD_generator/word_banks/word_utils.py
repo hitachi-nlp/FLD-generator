@@ -6,8 +6,6 @@ import logging
 from nltk.corpus.reader.wordnet import Synset, Lemma
 from FLD_generator.word_banks.base import POS
 
-from .parsers.english import get_lemma as get_lemma_eng
-from .parsers.japanese import get_lemma as get_lemma_jpn
 from .wordnet import WN_POS, SynsetOp, LemmaOp
 
 logger = logging.getLogger(__name__)
@@ -93,6 +91,9 @@ class WordUtil:
 
 
     def get_lemma(self, word: str) -> str:
+        # To avoid circular import
+        from .japanese.parser import get_lemma as get_lemma_jpn
+        from .english.parser import get_lemma as get_lemma_eng
 
         if self._language == 'eng':
             # Why not use wordnet?

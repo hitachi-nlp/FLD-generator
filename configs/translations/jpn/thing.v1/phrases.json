@@ -423,7 +423,7 @@
 
     "¬{A}pre_modifier": [
       "__comment: we include non- because we have no tranlation without it",
-      "__{A}[ADJ.neg]", "{A}[ADJ]でない",
+      "__{A}[ADJ.neg]", "{A}[ADJ]<<phrase::pred_not>>",
       "__non-{A}[VERB.ing] __comments: this will lead to 'eating apple dog is nice' which is not appropriate."
 
     ],
@@ -567,7 +567,8 @@
     ],
 
     "pred_not": [
-      "<<phrase::toiu_koto>> <<phrase::ha_ga_nai>>"
+      "__<<phrase::toiu_koto>> <<phrase::ha_ga_nai>>",
+      "ない"
     ],
 
     "both_pred": [

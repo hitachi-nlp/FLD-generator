@@ -2,8 +2,7 @@ from typing import Set, Optional, Dict, Union, List, Iterable
 
 from FLD_generator.word_banks.base import WordBank, POS
 from .english import EnglishWordBank
-from .japanese import JapaneseWordBank
-from .parsers.japanese import load_morphemes
+from .japanese import JapaneseWordBank, load_morphemes
 
 
 def build(

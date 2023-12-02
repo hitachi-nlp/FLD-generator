@@ -9,8 +9,7 @@ from lemminflect import getInflection
 from FLD_generator.word_banks.base import WordBank, POS
 from FLD_generator.utils import starts_with_vowel_sound
 from FLD_generator.person_names import get_person_names
-
-from .word_utils import WordUtil
+from FLD_generator.word_banks.word_utils import WordUtil
 
 logger = logging.getLogger(__name__)
 

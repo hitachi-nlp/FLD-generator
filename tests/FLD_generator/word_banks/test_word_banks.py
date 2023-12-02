@@ -1,11 +1,8 @@
 from typing import List, Optional, Iterable, Dict
 
 from FLD_generator.word_banks import build_wordbank, POS, ATTR
-from FLD_generator.word_banks.japanese import Katsuyou, NarabaRule
 import logging
 from logger_setup import setup as setup_logger
-
-import line_profiling
 
 setup_logger(level=logging.INFO)
 
@@ -55,46 +52,18 @@ def _test_word_bank(wb):
                             print(f'    {str(form):<40}{str(inflated_word):<40}')
 
 
-def test_katsuyou():
-    """
-    青臭いでないものであって一種であるもの
-    """
-
-    wb = build_wordbank('jpn')
-    katsuyou = Katsuyou([
-        NarabaRule(wb),
-    ])
-
-    def _check_katsuyou(src: str, expected: str):
-        applied = katsuyou.apply(src)
-
-        print('\n\n================ _check_katsuyou ===================')
-        print('str      :', src)
-        print('applied  :', applied)
-        print('expected :', expected)
-        assert applied == expected
-
-    _check_katsuyou('もしこの人間が起こるならばつらい', 'もしこの人間が起こればつらい')
-    _check_katsuyou('もしこの人間がきれいだならばつらい', 'もしこの人間がきれいならばつらい')
-    _check_katsuyou('もしこの人間が美しいならばつらい', 'もしこの人間が美しいならばつらい')
-
-    # _check_katsuyou('この人間は美しいでない', 'この人間は美しいでない')
-
-
 if __name__ == '__main__':
-    # test_word_bank('eng')
+    test_word_bank('eng')
 
-    # # restricted vocab
-    # test_word_bank(
-    #     'eng',
-    #     vocab_restrictions={
-    #         POS.VERB: ['walk', 'run'],
-    #         POS.NOUN: ['apple', 'banana'],
-    #         POS.ADJ: ['tasty', 'beautiful'],
-    #         POS.ADJ_SAT: ['red', 'green'],
-    #     }
-    # )
+    # restricted vocab
+    test_word_bank(
+        'eng',
+        vocab_restrictions={
+            POS.VERB: ['walk', 'run'],
+            POS.NOUN: ['apple', 'banana'],
+            POS.ADJ: ['tasty', 'beautiful'],
+            POS.ADJ_SAT: ['red', 'green'],
+        }
+    )
 
-    # test_word_bank('jpn')
-
-    test_katsuyou()
+    test_word_bank('jpn')

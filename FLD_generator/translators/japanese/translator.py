@@ -2,8 +2,8 @@ import random
 import re
 from typing import Dict, Optional
 
-from .templated import TemplatedTranslator
-from .base import PredicatePhrase, ConstantPhrase
+from FLD_generator.translators.templated import TemplatedTranslator
+from FLD_generator.translators.base import PredicatePhrase, ConstantPhrase
 
 
 class JapaneseTranslator(TemplatedTranslator):

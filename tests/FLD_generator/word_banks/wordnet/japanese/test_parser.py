@@ -1,5 +1,5 @@
 from pprint import pprint
-from FLD_generator.word_banks.parsers.japanese import parse
+from FLD_generator.word_banks.japanese import parse
 
 
 def test_parse():
