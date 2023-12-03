@@ -55,7 +55,9 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20231102.knowledge.speedup_translators')
     # output_top_dir = Path('./outputs/00.create_corpus/20231103.knowledge.speedup_translators')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20231103.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231103.knowledge')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20231203.jpn')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -121,8 +123,13 @@ def main():
         # '20231030.knowledge.D3.knowledge_factor-5.0',
 
         # ---------------------------------- 20231101.knowledge.D3 ------------------------------------
-        '20231103.knowledge.D3.knowledge_factor-5.0',
+        # '20231103.knowledge.D3.knowledge_factor-5.0',
 
+        # ---------------------------------- 20231203.jpn ------------------------------------
+        '20231203.jpn.D1_wo_dist',
+        '20231203.jpn.D1',
+        '20231203.jpn.D3',
+        # '20231203.jpn.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
@@ -138,11 +145,12 @@ def main():
     # min_dataset_size_per_job = 50
     # min_dataset_size_per_job = 10
 
+    timeout_per_job = 3600  # for the case some jobs hangs
+
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # ---------------------------- fixed settings --------------------------
-    timeout_per_job = 7200  # for the case some jobs hangs
     num_workers_per_job = 5
     delete_logs_when_done = False
     dry_run = False
