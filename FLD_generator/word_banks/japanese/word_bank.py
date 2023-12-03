@@ -48,10 +48,10 @@ class JapaneseWordBank(WordBank):
         ANTI = 'anti'
         NEG = 'neg'
 
-    INTERMEDIATE_CONSTANT_PREFIXES = [
-        '事物',
-        '人物',
-    ]
+    # INTERMEDIATE_CONSTANT_PREFIXES = [
+    #     '事物',
+    #     '人物',
+    # ]
 
     def __init__(self,
                  morphemes: List[Morpheme],

@@ -85,10 +85,10 @@ class EnglishWordBank(WordBank):
         ANTI = 'anti'
         NEG = 'neg'
 
-    INTERMEDIATE_CONSTANT_PREFIXES = [
-        'THING',
-        'PERSON',
-    ]
+    # INTERMEDIATE_CONSTANT_PREFIXES = [
+    #     'THING',
+    #     'PERSON',
+    # ]
 
     def __init__(self,
                  transitive_verbs: Optional[Iterable[str]] = None,

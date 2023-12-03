@@ -395,7 +395,7 @@ class TemplatedTranslator(Translator):
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], Optional[str]]], Dict[str, int]]:
         knowledge_idxs = knowledge_idxs or []
         collapsed_knowledge_idxs = collapsed_knowledge_idxs or []
-        self._reset_predicate_phrase_assets()
+        self._reset_assets()
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
@@ -1284,22 +1284,18 @@ class TemplatedTranslator(Translator):
         pass
 
     @abstractmethod
-    def _reset_predicate_phrase_assets(self) -> None:
+    def _reset_assets(self) -> None:
         pass
 
     def _postprocess_translation_all(self, translation: str, knowlege_type: Optional[str] = None) -> str:
-        # if knowlege_type is not None:
-        #     for knowledge_bank in self._knowledge_banks:
-        #         translation = knowledge_bank.postprocess_translation(translation)
-
         # We need to postprocess not only "knowlege_type" formulas but others,
         # because the translations can "spills" to other formulas.
         for knowledge_bank in self._knowledge_banks:
             translation = knowledge_bank.postprocess_translation(translation)
 
-        translation = self._postprocess_translation(translation, knowlege_type=knowlege_type)
+        translation = self._postprocess_translation(translation)
         return translation
 
     @abstractmethod
-    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
+    def _postprocess_translation(self, translation: str) -> str:
         pass

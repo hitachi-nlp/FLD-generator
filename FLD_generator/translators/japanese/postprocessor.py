@@ -12,6 +12,10 @@ class Postprocessor(ABC):
     @abstractmethod
     def apply(self, text: str) -> str:
         pass
+    
+    @abstractmethod
+    def reset_assets(self) -> None:
+        pass
 
 
 class PostprocessorChain(Postprocessor):
@@ -24,6 +28,10 @@ class PostprocessorChain(Postprocessor):
         for postprocessor in self._postprocessors:
             text_modified = postprocessor.apply(text_modified)
         return text_modified
+
+    def reset_assets(self) -> None:
+        for postprocessor in self._postprocessors:
+            postprocessor.reset_assets()
 
 
 class WindowRule:
@@ -53,6 +61,10 @@ class WindowRule:
             return None
         else:
             return katsuyou_morphemes[0].surface
+
+    @abstractmethod
+    def reset_assets(self) -> None:
+        pass
 
 
 class WindowRulesPostprocessor(Postprocessor):
@@ -95,6 +107,10 @@ class WindowRulesPostprocessor(Postprocessor):
         for i in range(len(seq) - window_size + 1):
             yield seq[i: i + window_size]
 
+    def reset_assets(self) -> None:
+        for rule in self._rules:
+            rule.reset_assets()
+
 
 class NarabaKatsuyouRule(WindowRule):
 
@@ -119,6 +135,9 @@ class NarabaKatsuyouRule(WindowRule):
         else:
             return None
 
+    def reset_assets(self) -> None:
+        pass
+
 
 class DaKaKatuyouRule(WindowRule):
 
@@ -133,6 +152,9 @@ class DaKaKatuyouRule(WindowRule):
             return ['である', 'か']
         else:
             return None
+
+    def reset_assets(self) -> None:
+        pass
 
 
 class DaKotoMonoKatuyouRule(WindowRule):
@@ -150,6 +172,9 @@ class DaKotoMonoKatuyouRule(WindowRule):
             return ['な', '」', surfaces[2]]
         else:
             return None
+
+    def reset_assets(self) -> None:
+        pass
 
 
 class ShiKatuyouRule(WindowRule):
@@ -181,6 +206,9 @@ class ShiKatuyouRule(WindowRule):
                 return None
         else:
             return None
+
+    def reset_assets(self) -> None:
+        pass
 
 
 class NaiKatsuyouRule(WindowRule):
@@ -220,6 +248,9 @@ class NaiKatsuyouRule(WindowRule):
         else:
             return None
 
+    def reset_assets(self) -> None:
+        pass
+
 
 class NaiNaiKatsuyouRule(WindowRule):
 
@@ -233,6 +264,9 @@ class NaiNaiKatsuyouRule(WindowRule):
             return ['なく', 'ない']
         else:
             return None
+
+    def reset_assets(self) -> None:
+        pass
 
 
 class KakuRandomOrderRule(WindowRule):
@@ -257,25 +291,40 @@ class KakuRandomOrderRule(WindowRule):
         #     return None
         raise NotImplementedError()
 
+    def reset_assets(self) -> None:
+        pass
+
 
 class UniqueKOSOADOPostprocessor(Postprocessor):
 
     _KOSOADO = ['この', 'その', 'あの']
 
+    def __init__(self):
+        self._obj_to_kosoado: Dict[str, str] = {}
+
     def apply(self, text: str) -> str:
         morphemes = parse(text)
-        obj_to_kosoado: Dict[str, Set[str]] = defaultdict(set)
+        obj_to_kosoados: Dict[str, Set[str]] = defaultdict(set)
         for i, morepheme in enumerate(morphemes):
             if morepheme.surface in self._KOSOADO and i + 1 < len(morphemes):
                 obj = morphemes[i + 1]
-                obj_to_kosoado[obj.surface].add(morepheme.surface)
+                obj_to_kosoados[obj.surface].add(morepheme.surface)
 
         text_modified = text
-        for obj, kosoado_set in obj_to_kosoado.items():
-            unique_kosoado = random.choice(list(kosoado_set))
-            for possible_kosoado in kosoado_set:
+        for obj, kosoados in obj_to_kosoados.items():
+            if obj in self._obj_to_kosoado:
+                unique_kosoado = self._obj_to_kosoado[obj]
+            else:
+                unique_kosoado = random.choice(list(kosoados))
+            self._obj_to_kosoado[obj] = unique_kosoado
+
+            for possible_kosoado in kosoados:
                 text_modified = text_modified.replace(possible_kosoado + obj, unique_kosoado + obj)
+
         return text_modified
+
+    def reset_assets(self) -> None:
+        self._obj_to_kosoado: Dict[str, str] = {}
 
 
 def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor:

@@ -26,8 +26,9 @@ class JapaneseTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return template
 
-    def _reset_predicate_phrase_assets(self) -> None:
+    def _reset_assets(self) -> None:
         self._transl_to_kaku_cache = {}
+        self._postprocessor.reset_assets()
 
     def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
         rep = const.constant
@@ -56,7 +57,7 @@ class JapaneseTranslator(TemplatedTranslator):
 
         return rep
 
-    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
+    def _postprocess_translation(self, translation: str) -> str:
         # translation = re.sub('だ ならば', ' ならば', translation)
         # translation = re.sub('だ し', ' ならば', translation)
 

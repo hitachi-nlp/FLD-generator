@@ -50,14 +50,21 @@ class WordBank(ABC):
     PresentForm: EnumMeta
     PastForm: EnumMeta
     NounForm: EnumMeta
-    INTERMEDIATE_CONSTANT_PREFIXES: List[str]
+    # INTERMEDIATE_CONSTANT_PREFIXES: List[str]
 
     def __init__(self):
-        self._intermediate_constant_words = OrderedSet([
-            f'{prefix}-{alphabet}' 
-            for alphabet in ascii_uppercase
-            for prefix in self.INTERMEDIATE_CONSTANT_PREFIXES
-        ])
+        # self._intermediate_constant_words = OrderedSet([
+        #     f'{prefix}-{alphabet}'
+        #     for alphabet in ascii_uppercase
+        #     for prefix in self.INTERMEDIATE_CONSTANT_PREFIXES
+        # ])
+        self._intermediate_constant_words = OrderedSet(
+            ['X', 'Y', 'Z', 'W'] +
+            ['X' + str(i) for i in range(2, 10)] +
+            ['Y' + str(i) for i in range(2, 10)] +
+            ['Z' + str(i) for i in range(2, 10)] +
+            ['W' + str(i) for i in range(2, 10)]
+        )
 
     def get_words(self) -> Iterable[str]:
         # enumerate base form of words

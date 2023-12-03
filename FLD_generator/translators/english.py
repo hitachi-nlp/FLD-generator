@@ -33,7 +33,7 @@ class EnglishTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return self._add_the_or_it_to_successive_appearance(template)
 
-    def _reset_predicate_phrase_assets(self) -> None:
+    def _reset_assets(self) -> None:
         pass
 
     def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
@@ -57,7 +57,7 @@ class EnglishTranslator(TemplatedTranslator):
             rep += f' {pred.right_modifier}'
         return rep
 
-    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
+    def _postprocess_translation(self, translation: str) -> str:
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)
