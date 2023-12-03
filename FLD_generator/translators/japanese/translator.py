@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from FLD_generator.word_banks.base import WordBank
 from FLD_generator.translators.templated import TemplatedTranslator
 from FLD_generator.translators.base import PredicatePhrase, ConstantPhrase
-from .postprocessor import build_katsuyou_postprocessor
+from .postprocessor import build_postprocessor
 
 
 class JapaneseTranslator(TemplatedTranslator):
@@ -21,7 +21,7 @@ class JapaneseTranslator(TemplatedTranslator):
         super().__init__(config_json, word_bank, *args, **kwargs)
         self.insert_word_delimiters = insert_word_delimiters
         self._transl_to_kaku_cache: Dict[str, str] = {}
-        self._katuyou_postprocessor = build_katsuyou_postprocessor(word_bank)
+        self._postprocessor = build_postprocessor(word_bank)
 
     def _postprocess_template(self, template: str) -> str:
         return template
@@ -64,5 +64,5 @@ class JapaneseTranslator(TemplatedTranslator):
             raise NotImplementedError()
 
         translation = re.sub(' ', '', translation)
-        translation = self._katuyou_postprocessor.apply(translation)
+        translation = self._postprocessor.apply(translation)
         return translation

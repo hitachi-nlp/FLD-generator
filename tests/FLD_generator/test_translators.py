@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Set
 import logging
 import sys
 
@@ -6,10 +6,7 @@ from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.translators.japanese import JapaneseTranslator
 from FLD_generator.word_banks import build_wordbank
-from FLD_generator.translators.japanese.postprocessor import (
-    build_katsuyou_postprocessor,
-    build_kaku_random_order_postprocessor,
-)
+from FLD_generator.translators.japanese.postprocessor import build_postprocessor
 from FLD_generator.utils import fix_seed
 from FLD_generator.knowledge_banks import build_knowledge_bank
 from FLD_generator.knowledge_banks.base import KnowledgeBankBase
@@ -62,6 +59,7 @@ def make_show_translation_func(translator):
             types = ['posi', 'neg']
         else:
             types = ['posi']
+
         for type_ in types:
             if type_ == 'posi':
                 _formulas = formulas
@@ -74,13 +72,12 @@ def make_show_translation_func(translator):
                 translations, _ = translator.translate(_formulas, intermediate_constant_formulas or [], **kwargs)
                 for formula, (_, translation, _, knowledge_type) in zip(_formulas, translations):
                     print(formula.rep,
-                          f'(interm={intermediate_constant_formulas})',
+                          f'(interm={intermediate_constant_formulas}, knowledge_type={knowledge_type})',
                           '  ->  ',
-                          f'{translation:<100}  knowledge_type={str(knowledge_type)}')
+                          f'{translation:<100}')
             sys.stdout.flush()
 
     return show_translations
-
 
 
 def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[KnowledgeBankBase]] = None):
@@ -89,7 +86,6 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
 
     if knowledge_banks is None:
         show_translations(['{A}'], trial=30)
-        show_translations(['¬{A}'], trial=30)
         show_translations(['¬({A})'], trial=30)
 
         show_translations(['(¬{A} & {B})'], trial=30)
@@ -105,7 +101,6 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
 
 
         show_translations(['{A}{a}'], trial=30)
-        show_translations(['¬{A}{a}'], trial=30)
 
         show_translations(['(¬{A}{a} & {B}{a})'], trial=30)
         show_translations(['(¬{A}{a} v {B}{a})'], trial=30)
@@ -132,9 +127,6 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
         show_translations(['(x): {A}x -> {B}x'], trial=30)
         show_translations(['(x): (¬{A}x & {B}x) -> {C}x'], trial=30)
         show_translations(['(x): (¬{A}x v {B}x) -> {C}x'], trial=30)
-
-
-
 
         # # multiple formulas
         show_translations(
@@ -210,38 +202,71 @@ def test_jpn():
     test_templated_translator_lang('jpn')
 
 
-def test_jpn_katsuyou():
+def test_jpn_postprocess():
     wb = build_wordbank('jpn')
-    postprocessor = build_katsuyou_postprocessor(wb)
+    postprocessor = build_postprocessor(wb)
 
-    def _check_katsuyou(src: str, expected: str):
-        applied = postprocessor.apply(src)
+    def _check_katsuyou(src: str, golds: List[str], trial=100):
+        pred = postprocessor.apply(src)
 
         print('\n\n================ _check_katsuyou ===================')
         print('input      :', src)
-        print('output     :', applied)
-        print('expected   :', expected)
-        assert applied == expected
+        print()
+        print('expected   :', golds)
 
-    _check_katsuyou('この人間が走るならばつらい', 'この人間が走ればつらい')
-    _check_katsuyou('この人間が機械だならばつらい', 'この人間が機械ならばつらい')
-    _check_katsuyou('この人間がきれいだならばつらい', 'この人間がきれいならばつらい')
-    _check_katsuyou('この人間が美しいならばつらい', 'この人間が美しいならばつらい')
+        done: Set[str] = set([])
+        for _ in range(trial):
+            pred = postprocessor.apply(src)
+            if pred in done:
+                continue
 
-    _check_katsuyou('この人間は走るない', 'この人間は走らない')
-    _check_katsuyou('この人間は機械だない', 'この人間は機械でない')
-    _check_katsuyou('この人間はきれいだない', 'この人間はきれいでない')
-    _check_katsuyou('この人間が美しいない', 'この人間が美しくない')
+            print()
+            print('output     :', pred)
+            assert pred in golds
+            done.add(pred)
 
-    _check_katsuyou('この人間は走るないない', 'この人間は走らなくない')
-    _check_katsuyou('この人間は機械だないない', 'この人間は機械でなくない')
-    _check_katsuyou('この人間はきれいだないない', 'この人間はきれいでなくない')
-    _check_katsuyou('この人間が美しいないない', 'この人間が美しくなくない')
+        assert set(golds) == done
+
+    _check_katsuyou('この人間が走るならばつらい', ['この人間が走ればつらい'])
+    _check_katsuyou('この人間が機械だならばつらい', ['この人間が機械ならばつらい'])
+    _check_katsuyou('この人間がきれいだならばつらい', ['この人間がきれいならばつらい'])
+    _check_katsuyou('この人間が美しいならばつらい', ['この人間が美しいならばつらい'])
+
+    _check_katsuyou('この人間がきれいだか美しい', ['この人間がきれいであるか美しい'])
+    _check_katsuyou('この人間が会議だか美しい', ['この人間が会議であるか美しい'])
+    _check_katsuyou('もしこのブローチは小館花であるか菊雄だか両方ならばあのどら猫はいする', ['もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫はいする'])
+
+    _check_katsuyou('きれいだものはある', ['きれいなものはある'])
+    _check_katsuyou('きれいだことはある', ['きれいなことはある'])
+    _check_katsuyou('「きれいだ」ものはある', ['「きれいな」ものはある'])
+
+    _check_katsuyou('この人間は美しいし赤い', ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
+    _check_katsuyou('この人間はきれいだし赤い', ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
+
+    _check_katsuyou('この人間は走るない', ['この人間は走らない'])
+    _check_katsuyou('この人間は機械だない', ['この人間は機械でない'])
+    _check_katsuyou('この人間はきれいだない', ['この人間はきれいでない'])
+    _check_katsuyou('この人間が美しいない', ['この人間が美しくない'])
+    _check_katsuyou('この人間は会議するない', ['この人間は会議しない'])
+
+    _check_katsuyou('この人間は走るないない', ['この人間は走らなくない'])
+    _check_katsuyou('この人間は機械だないない', ['この人間は機械でなくない'])
+    _check_katsuyou('この人間はきれいだないない', ['この人間はきれいでなくない'])
+    _check_katsuyou('この人間が美しいないない', ['この人間が美しくなくない'])
+
+    _check_katsuyou(
+        'この人間とあの人間とその人間とこの熊とあの熊とその熊',
+        [f'{ningen_kosoado}人間と{ningen_kosoado}人間と{ningen_kosoado}人間と{kuma_kosoado}熊と{kuma_kosoado}熊と{kuma_kosoado}熊'
+         for ningen_kosoado in ['この', 'あの', 'その']
+         for kuma_kosoado in ['この', 'あの', 'その']]
+    )
 
 
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
+
     # test_eng()
     # test_eng_with_knowledge()
+
+    # test_jpn_postprocess()
     test_jpn()
-    # test_jpn_katsuyou()
