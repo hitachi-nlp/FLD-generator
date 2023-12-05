@@ -55,21 +55,24 @@ def test_generate_dataset_lang(lang: str):
     else:
         raise ValueError()
 
-    # knowledge_bank = None
-    knowledge_banks = [
-        build_knowledge_bank(
-            'atomic',
-            './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
-        ),
-        build_knowledge_bank(
-            'concept_net_100k',
-            './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
-        ),
-        build_knowledge_bank(
-            'dbpedia',
-            './res/knowledge_banks/DBpedia500/train1.txt',
-        ),
-    ]
+    if lang == 'eng':
+        # knowledge_bank = None
+        knowledge_banks = [
+            build_knowledge_bank(
+                'atomic',
+                './res/knowledge_banks/commonsense-kg-completion/data/atomic/train.txt',
+            ),
+            build_knowledge_bank(
+                'concept_net_100k',
+                './res/knowledge_banks/commonsense-kg-completion/data/ConceptNet/train.txt',
+            ),
+            build_knowledge_bank(
+                'dbpedia',
+                './res/knowledge_banks/DBpedia500/train1.txt',
+            ),
+        ]
+    elif lang == 'jpn':
+        knowledge_banks = None
 
     # translator = None
     translator = build_translator(

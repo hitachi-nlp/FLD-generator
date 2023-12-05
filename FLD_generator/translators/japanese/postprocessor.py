@@ -78,7 +78,7 @@ class WindowRulesPostprocessor(Postprocessor):
             # if isinstance(rule, DaKaKaKatsuyouRule):
             #     import pudb; pudb.set_trace()
             is_appliable = True
-            done_windows: Set[Tuple[Tuple[str, Any], ...]] = set([])
+            done_positions: Set[int] = set([])
             while is_appliable:
                 morphemes_modified = parse(text_modified)
                 words_modified_org = [morpheme.surface for morpheme in morphemes_modified]
@@ -90,12 +90,11 @@ class WindowRulesPostprocessor(Postprocessor):
                     #     import pudb; pudb.set_trace()
 
                     _katsuyou_words = rule.apply(window)
-                    window_tuple = tuple(tuple(morpheme)for morpheme in window)
-                    if _katsuyou_words is not None and window_tuple not in done_windows:
+                    if _katsuyou_words is not None and i not in done_positions:
                         words_modified_dst += _katsuyou_words
                         i_end = i + rule.window_size - 1
                         is_applied = True
-                        done_windows.add(window_tuple)
+                        done_positions.add(i)
                         break
                     else:
                         words_modified_dst.append(window[0].surface)
@@ -207,6 +206,14 @@ class ShiKatuyouRule(WindowRule):
                 return ['で']
             else:
                 return None
+
+        elif surfaces == ['ない', 'し']:
+            if random.random() < 0.5:
+                # 走らないし -> 走らなくて
+                return ['なく', 'て']
+            else:
+                return None
+
         else:
             return None
 
@@ -343,10 +350,10 @@ def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor
             NarabaKatsuyouRule(word_bank),
             DaKaKatuyouRule(word_bank),
             DaKotoMonoKatuyouRule(word_bank),
-            ShiKatuyouRule(word_bank),
             NaiKatsuyouRule(word_bank),
             NaiNaiKatsuyouRule(word_bank),
             # KakuRandomOrderRule(word_bank, kaku_list),  # not implemented
+            ShiKatuyouRule(word_bank),
         ]),
         UniqueKOSOADOPostprocessor(),
     ])
