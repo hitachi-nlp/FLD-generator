@@ -86,6 +86,9 @@ class WindowRulesPostprocessor(Postprocessor):
                 i_end = 0
                 is_applied = False
                 for i, window in enumerate(self._slide(morphemes_modified, rule.window_size)):
+                    # if isinstance(rule, NaiKatsuyouRule) and window[0].surface == 'だ':
+                    #     import pudb; pudb.set_trace()
+
                     _katsuyou_words = rule.apply(window)
                     window_tuple = tuple(tuple(morpheme)for morpheme in window)
                     if _katsuyou_words is not None and window_tuple not in done_windows:
@@ -233,9 +236,15 @@ class NaiKatsuyouRule(WindowRule):
             else:
                 return [katsuyou_word, 'ない']
 
-        elif surfaces == ['だ', 'ない']:
-            # きれいだならば -> きれいならば
-            return ['で', 'ない']
+        elif surfaces[0] == 'だ':
+            if surfaces[1] == 'ない':
+                # きれいだない -> きれいでない
+                return ['で', 'ない']
+            elif surfaces[1] == 'ないし':
+                # きれいだないし赤い -> きれいでないし赤い
+                return ['で', 'ないし']
+            else:
+                return None
 
         elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
             # 美しいない -> 美しくない
