@@ -331,7 +331,16 @@ class ProofTreeGenerationPipeline:
                     if translation_prefix:
                         formula.translation = translation_prefix + translation[0] + translation[1:]
                     else:
-                        formula.translation = translation[0].upper() + translation[1:]
+                        try:
+                            formula.translation = translation[0].upper() + translation[1:]
+                        except IndexError as e:
+                            logger.critical('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                            logger.critical('translation: %s', translation)
+                            if translation == "":
+                                raise NotImplementedError('translation is "", which is not expected. Should be debugged.'
+                                                          'Currently we leave it and is just using other successful samples.')
+                            else:
+                                raise 
 
                     if knowledge_type is not None:
                         knowledge_injected_node = [node for node in proof_tree.nodes if node.formula == formula][0]
