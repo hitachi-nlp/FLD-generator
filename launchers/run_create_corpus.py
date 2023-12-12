@@ -131,7 +131,8 @@ def main():
         # '20231203.jpn.D1_wo_dist',
         # '20231203.jpn.D1',
         # '20231203.jpn.D3',
-        '20231203.jpn.D8',
+        '20231203.jpn.D5',
+        # '20231203.jpn.D8',
     ]
     # dataset_names = dataset_names[::-1]
 
