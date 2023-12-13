@@ -159,13 +159,18 @@ def main():
 
     timeout_per_job = 3600  # for the case some jobs hangs
 
+    # skip_if_exists = False
+    skip_if_exists = True
+
+    dry_run = False
+    # dry_run = True
+
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # ---------------------------- fixed settings --------------------------
     num_workers_per_job = 5
     delete_logs_when_done = False
-    dry_run = False
 
     if num_jobs_for_datasets * num_jobs_per_dataset > 180:
         raise ValueError('Too much jobs %s ~ ABCI job limit = 200',
@@ -183,6 +188,7 @@ def main():
                 num_jobs_per_dataset,
                 num_workers_per_job,
                 min_dataset_size_per_job,
+                skip_if_exists,
                 dry_run,
             )
         )
@@ -207,6 +213,7 @@ def make_dataset(dataset_name: str,
                  num_jobs: int,
                  num_workers_per_job: int,
                  min_dataset_size_per_job: int,
+                 skip_if_exists: bool,
                  dry_run: bool) -> None:
     logger.info('====================== make_dataset() for "%s" =========================',
                 dataset_name)
@@ -305,6 +312,10 @@ def make_dataset(dataset_name: str,
             job_output_dir.mkdir(exist_ok=True, parents=True)
 
             job_output_path = job_output_dir / f'{split}.jsonl'
+            if skip_if_exists and job_output_path.exists() and len(open(job_output_path).readlines()) >= 1:
+                logger.info('skip %s because', job_output_path)
+                continue
+
             job_log_path = job_output_dir / 'log.txt'
 
             job_settings = copy.deepcopy(settings)
