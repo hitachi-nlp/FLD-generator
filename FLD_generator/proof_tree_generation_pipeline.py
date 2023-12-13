@@ -337,8 +337,8 @@ class ProofTreeGenerationPipeline:
                             logger.critical('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
                             logger.critical('translation: %s', translation)
                             if translation == "":
-                                raise NotImplementedError('translation is "", which is not expected. Should be debugged.'
-                                                          'Currently we leave it and is just using other successful samples.')
+                                logger.warning('translation is "", which is not expected. Should be debugged.'
+                                               'Currently we leave it and is just using other successful samples.')
                             else:
                                 raise 
 
