@@ -5301,6 +5301,220 @@ _DATASET_SETTINGS = {
 
 
 
+
+
+    '20231213.jpn.D1_wo_dist': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+    '20231213.jpn.D1': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+    '20231213.jpn.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+    '20231213.jpn.D5': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 5),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+
+    '20231213.jpn.D8': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+
+
+
 }
 
 
@@ -5642,6 +5856,12 @@ _DATASET_NAME_TO_DEFAULT = {
     '20231203.jpn.D5': '20231018.thing_person_config_translation',
     '20231203.jpn.D8': '20231018.thing_person_config_translation',
 
+    # ---------------------------------- 20231213.jpn ------------------------------------
+    '20231213.jpn.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20231213.jpn.D1': '20231018.thing_person_config_translation',
+    '20231213.jpn.D3': '20231018.thing_person_config_translation',
+    '20231213.jpn.D5': '20231018.thing_person_config_translation',
+    '20231213.jpn.D8': '20231018.thing_person_config_translation',
 }
 
 
