@@ -92,12 +92,20 @@ class WordUtil:
                     yield lemma_str, _syn.pos()
 
 
-    def get_lemma(self, word: str) -> str:
+    def get_lemma(self, word: str,
+                  # False as default as lemmatization failure always occurs for noun but it is not a problem
+                  warn_lemmatize_failure=False) -> str:
 
         if self._language == 'eng':
             # Why not use wordnet?
             # -> maybe, we wanted to ensure that the lemmatization always succeeds
-            return get_lemma_eng(word)
+            lemma = get_lemma_eng(word)
+            if lemma is not None:
+                return lemma
+            else:
+                if warn_lemmatize_failure:
+                    logger.warning('failed to lemmatize word: %s', word)
+                return word
 
         elif self._language == 'jpn':
             return get_lemma_jpn(word)
