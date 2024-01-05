@@ -8,8 +8,9 @@ setup_logger(level=logging.INFO)
 
 
 def test_word_bank(lang: str,
-                   vocab_restrictions: Optional[Dict[POS, List[str]]] = None):
-    wb = build_wordbank(lang, vocab_restrictions=vocab_restrictions)
+                   vocab: Optional[Dict[POS, List[str]]] = None):
+    print('================================ testing word bank ================================')
+    wb = build_wordbank(lang, vocab=vocab)
     _test_word_bank(wb)
 
 
@@ -54,16 +55,22 @@ def _test_word_bank(wb):
 
 if __name__ == '__main__':
     test_word_bank('eng')
+    # test_word_bank(
+    #     'eng',
+    #     vocab={
+    #         POS.VERB: ['walk', 'run'],
+    #         POS.NOUN: ['apple', 'banana'],
+    #         POS.ADJ: ['tasty', 'beautiful'],
+    #         POS.ADJ_SAT: ['red', 'green'],
+    #     }
+    # )
 
-    # restricted vocab
-    test_word_bank(
-        'eng',
-        vocab_restrictions={
-            POS.VERB: ['walk', 'run'],
-            POS.NOUN: ['apple', 'banana'],
-            POS.ADJ: ['tasty', 'beautiful'],
-            POS.ADJ_SAT: ['red', 'green'],
-        }
-    )
-
-    test_word_bank('jpn')
+    # test_word_bank('jpn')
+    # test_word_bank(
+    #     'jpn',
+    #     vocab={
+    #         POS.VERB: ['走る', '戦う'],
+    #         POS.NOUN: ['ぷにぷに', 'ぴよぴよ', 'ぽよぽよ'],
+    #         POS.ADJ: ['強い', '赤い', 'Lv.1だ'],
+    #     }
+    # )

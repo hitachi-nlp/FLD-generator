@@ -30,7 +30,7 @@ class WordUtil:
                  language: str,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab_restrictions: Optional[Dict[POS, Set[str]]] = None):
+                 vocab: Optional[Dict[POS, Set[str]]] = None):
         if language == 'jpn':
             logger.warning('Wordnet operations such as getting synonyms/antonyms may not produce good results for language=%s, due to not-yet-refined logic', language)
 
@@ -48,28 +48,38 @@ class WordUtil:
         else:
             self._intransitive_verbs = None
 
+        if vocab is not None:
+            logger.info('use restrected vocabulary')
+            # make sure the words are in set. list is too slow.
+            self._vocab = {_POS_WB_TO_WN[pos]: set(words)
+                                        for pos, words in vocab.items()}
+            self._is_user_vocab = True
+        else:
+            self._vocab = None
+            self._is_user_vocab = False
+
         self._word_set: Set[str] = set()
         self._word_to_wn_pos: Dict[str, List[WN_POS]] = defaultdict(list)
 
-        if vocab_restrictions is not None:
-            logger.info('use restrected vocabulary')
-            # make sure the words are in set. list is too slow.
-            self._vocab_restrictions = {_POS_WB_TO_WN[pos]: set(words)
-                                        for pos, words in vocab_restrictions.items()}
+        if self._vocab is not None:
+            logger.info('loading words from specified vocab ...')
+            for pos, words in self._vocab.items():
+                for word in words:
+                    self._word_set.add(word)
+                    self._word_to_wn_pos[word].append(pos)
+            logger.info('loading words from specified vocab done!')
         else:
-            self._vocab_restrictions = None
+            logger.info('loading words from WordNet ...')
+            for word, wn_pos in self._load_all_lemmas_from_wn():
+                if vocab is not None:
+                    if wn_pos in self._vocab\
+                            and word not in self._vocab[wn_pos]:
+                        continue
+                self._word_set.add(word)
+                self._word_to_wn_pos[word].append(wn_pos)
+            logger.info('loading words from WordNet done!')
 
-        logger.info('loading words from WordNet ...')
-        for word, wn_pos in self._load_all_lemmas():
-            if vocab_restrictions is not None:
-                if wn_pos in self._vocab_restrictions\
-                        and word not in self._vocab_restrictions[wn_pos]:
-                    continue
-            self._word_set.add(word)
-            self._word_to_wn_pos[word].append(wn_pos)
-        logger.info('loading words from WordNet done!')
-
-    def _load_all_lemmas(self) -> Iterable[Tuple[str, WN_POS]]:
+    def _load_all_lemmas_from_wn(self) -> Iterable[Tuple[str, WN_POS]]:
         logger.info('loading lemmas...')
         done_lemmas: Set[Lemma] = set([])
         for syn in self._syn_op.all():
@@ -88,7 +98,6 @@ class WordUtil:
                 lemma_str = lemma.name()
                 for _syn in self._syn_op.from_word(lemma_str, word_lang=self._language):
                     yield lemma_str, _syn.pos()
-
 
     def get_lemma(self, word: str,
                   # False as default as lemmatization failure always occurs for noun but it is not a problem
@@ -127,8 +136,19 @@ class WordUtil:
         return self._word_set
 
     def get_pos(self, word: str) -> List[POS]:
-        word = self.get_lemma(word)
-        return list({_POS_WN_TO_WB[WN_POS(syn.pos())] for syn in self._syns_from_word(word)})
+        if self._is_user_vocab:
+            # for the user specified vocab, we stick to the used specified POS
+            if word in self._word_to_wn_pos:
+                wn_poss = self._word_to_wn_pos[word]
+            elif self.get_lemma(word) in self._word_to_wn_pos:
+                wn_poss = self._word_to_wn_pos[self.get_lemma(word)]
+            else:
+                raise ValueError()
+        else:
+            word = self.get_lemma(word)
+            # HONOKA: I forget why we trace the synonyms here...
+            wn_poss = [WN_POS(syn.pos()) for syn in self._syns_from_word(word)]
+        return list(set(_POS_WN_TO_WB[wn_pos] for wn_pos in wn_poss))
 
     def can_be_intransitive_verb(self, verb: str) -> bool:
         if self._intransitive_verbs is None:

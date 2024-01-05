@@ -93,14 +93,14 @@ class EnglishWordBank(WordBank):
     def __init__(self,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab_restrictions: Optional[Dict[POS, Set[str]]] = None):
+                 vocab: Optional[Dict[POS, Set[str]]] = None):
         super().__init__()
 
         self._word_util = WordUtil(
             'eng',
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=vocab_restrictions,
+            vocab=vocab,
         )
 
         self._verb_inflation_mapping = {

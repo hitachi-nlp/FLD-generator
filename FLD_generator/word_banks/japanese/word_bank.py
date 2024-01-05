@@ -57,7 +57,7 @@ class JapaneseWordBank(WordBank):
                  morphemes: List[Morpheme],
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab_restrictions: Optional[Dict[POS, Iterable[str]]] = None):
+                 vocab: Optional[Dict[POS, Iterable[str]]] = None):
         super().__init__()
         morphemes = [morpheme for morpheme in morphemes
                      if morpheme.pos in ['名詞', '動詞', '形容詞']]
@@ -77,7 +77,7 @@ class JapaneseWordBank(WordBank):
             'jpn',
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=vocab_restrictions,
+            vocab=vocab,
         )
 
         self._person_names: OrderedSet[str] = OrderedSet([name for name in get_person_names(country='JP')

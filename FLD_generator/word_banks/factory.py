@@ -9,21 +9,21 @@ def build(
     lang: str,
     transitive_verbs_path: Optional[str] = None,
     intransitive_verbs_path: Optional[str] = None,
-    vocab_restrictions: Optional[Dict[Union[POS, str], Union[Iterable[str]]]] = None,
+    vocab: Optional[Dict[Union[POS, str], Union[Iterable[str]]]] = None,
 ) -> WordBank:
 
-    if vocab_restrictions is not None:
-        _vocab_restrictions: Optional[Dict[POS, Set[str]]] = {}
-        for pos, words in vocab_restrictions.items():
+    if vocab is not None:
+        _vocab: Optional[Dict[POS, Set[str]]] = {}
+        for pos, words in vocab.items():
             if not isinstance(pos, POS):
                 _pos = POS(pos)
             else:
                 _pos = pos
             words = set(words)
 
-            _vocab_restrictions[_pos] = words
+            _vocab[_pos] = words
     else:
-        _vocab_restrictions = None
+        _vocab = None
 
     if lang == 'eng':
 
@@ -38,7 +38,7 @@ def build(
         return EnglishWordBank(
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=_vocab_restrictions,
+            vocab=_vocab,
         )
 
     elif lang == 'jpn':
@@ -57,7 +57,7 @@ def build(
             jpn_morphemes,
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=_vocab_restrictions,
+            vocab=_vocab,
         )
 
     else:
