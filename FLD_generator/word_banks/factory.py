@@ -1,29 +1,20 @@
 from typing import Set, Optional, Dict, Union, List, Iterable
+import logging
 
-from FLD_generator.word_banks.base import WordBank, POS
+from FLD_generator.word_banks.base import WordBank, POS, UserWord
 from .english import EnglishWordBank
 from .japanese import JapaneseWordBank, load_morphemes
+
+logger = logging.getLogger(__name__)
 
 
 def build(
     lang: str,
     transitive_verbs_path: Optional[str] = None,
     intransitive_verbs_path: Optional[str] = None,
-    vocab: Optional[Dict[Union[POS, str], Union[Iterable[str]]]] = None,
+    vocab: Optional[List[UserWord]] = None,
 ) -> WordBank:
-
-    if vocab is not None:
-        _vocab: Optional[Dict[POS, Set[str]]] = {}
-        for pos, words in vocab.items():
-            if not isinstance(pos, POS):
-                _pos = POS(pos)
-            else:
-                _pos = pos
-            words = set(words)
-
-            _vocab[_pos] = words
-    else:
-        _vocab = None
+    logger.info('Building word bank for language=%s ...', lang)
 
     if lang == 'eng':
 
@@ -38,7 +29,7 @@ def build(
         return EnglishWordBank(
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab=_vocab,
+            vocab=vocab,
         )
 
     elif lang == 'jpn':
@@ -57,7 +48,7 @@ def build(
             jpn_morphemes,
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab=_vocab,
+            vocab=vocab,
         )
 
     else:

@@ -5,7 +5,7 @@ import json
 
 from tqdm import tqdm
 from FLD_generator.utils import nested_merge
-from FLD_generator.word_banks.base import WordBank
+from FLD_generator.word_banks.base import WordBank, POS, UserWord
 
 from .base import Translator
 from .templated import TemplatedTranslator
@@ -21,6 +21,7 @@ def build(lang: str,
           word_bank: WordBank,
           adj_verb_noun_ratio: Optional[str] = None,
           insert_word_delimiters=False,
+          extra_vocab: Optional[List[UserWord]] = None,
           **kwargs) -> TemplatedTranslator:
 
     merged_config_json = {}
@@ -50,6 +51,7 @@ def build(lang: str,
             word_bank,
             adj_verb_noun_ratio=_adj_verb_noun_ratio,
             insert_word_delimiters=insert_word_delimiters,
+            extra_vocab=extra_vocab,
             **kwargs,
         )
     else:

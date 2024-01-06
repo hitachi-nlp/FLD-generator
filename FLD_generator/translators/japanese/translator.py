@@ -2,7 +2,7 @@ import random
 import re
 from typing import Dict, Optional
 
-from FLD_generator.word_banks.base import WordBank
+from FLD_generator.word_banks.base import WordBank, UserWord
 from FLD_generator.translators.templated import TemplatedTranslator
 from FLD_generator.translators.base import PredicatePhrase, ConstantPhrase
 from .postprocessor import build_postprocessor
@@ -17,11 +17,12 @@ class JapaneseTranslator(TemplatedTranslator):
                  word_bank: WordBank,
                  *args,
                  insert_word_delimiters=False,
+                 extra_vocab: Optional[Dict[str, UserWord]] = None,
                  **kwargs):
         super().__init__(config_json, word_bank, *args, **kwargs)
         self.insert_word_delimiters = insert_word_delimiters
         self._transl_to_kaku_cache: Dict[str, str] = {}
-        self._postprocessor = build_postprocessor(word_bank)
+        self._postprocessor = build_postprocessor(word_bank, extra_vocab=extra_vocab)
 
     def _postprocess_template(self, template: str) -> str:
         return template
@@ -58,9 +59,6 @@ class JapaneseTranslator(TemplatedTranslator):
         return rep
 
     def _postprocess_translation(self, translation: str) -> str:
-        # translation = re.sub('だ ならば', ' ならば', translation)
-        # translation = re.sub('だ し', ' ならば', translation)
-
         if self.insert_word_delimiters:
             raise NotImplementedError()
 

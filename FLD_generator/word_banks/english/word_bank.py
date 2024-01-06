@@ -6,7 +6,7 @@ from typing import Optional
 
 from ordered_set import OrderedSet
 from lemminflect import getInflection
-from FLD_generator.word_banks.base import WordBank, POS
+from FLD_generator.word_banks.base import WordBank, POS, UserWord
 from FLD_generator.utils import starts_with_vowel_sound
 from FLD_generator.person_names import get_person_names
 from FLD_generator.word_banks.word_utils import WordUtil
@@ -93,8 +93,12 @@ class EnglishWordBank(WordBank):
     def __init__(self,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab: Optional[Dict[POS, Set[str]]] = None):
-        super().__init__()
+                 vocab: Optional[List[UserWord]] = None):
+        super().__init__(vocab=vocab)
+        if vocab is None:  # only when user did not specify the vocab
+            self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
+        else:
+            self._person_names = []
 
         self._word_util = WordUtil(
             'eng',
@@ -108,8 +112,6 @@ class EnglishWordBank(WordBank):
             self.VerbForm.ING: 'VBG',
             self.VerbForm.S: 'VBZ',
         }
-
-        self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
 
     def _get_all_lemmas(self) -> Iterable[str]:
         return sorted(self._word_util.get_all_lemmas()) + list(self._person_names)

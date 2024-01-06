@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, List, Union
+from typing import Optional, Iterable, List, Union, Dict
 from enum import Enum, EnumMeta
 from string import ascii_uppercase
 from abc import ABC, abstractmethod
@@ -6,6 +6,7 @@ from itertools import chain
 from functools import lru_cache
 import logging
 from ordered_set import OrderedSet
+from pydantic import BaseModel
 
 import line_profiling
 
@@ -42,6 +43,17 @@ class ATTR(Enum):
     can_be_entity_noun = 'can_be_entity_noun'
 
 
+class UserWord(BaseModel):
+    lemma: str
+    pos: POS
+
+    # Note that "None" means "should behave as default"
+    can_be_transitive_verb: Optional[bool] = None
+    can_be_intransitive_verb: Optional[bool] = None
+    can_be_event_noun: Optional[bool] = None
+    can_be_entity_noun: Optional[bool] = None
+
+
 class WordBank(ABC):
 
     # implemente in the sub classes
@@ -52,7 +64,9 @@ class WordBank(ABC):
     NounForm: EnumMeta
     # INTERMEDIATE_CONSTANT_PREFIXES: List[str]
 
-    def __init__(self):
+    def __init__(self, vocab: Optional[List[UserWord]] = None):
+        self.user_vocab: Dict[str, UserWord] = {word.lemma: word for word in vocab} if vocab is not None else {}
+
         # self._intermediate_constant_words = OrderedSet([
         #     f'{prefix}-{alphabet}'
         #     for alphabet in ascii_uppercase
@@ -146,14 +160,27 @@ class WordBank(ABC):
     @lru_cache(1000000)
     def get_attrs(self, word: str) -> List[ATTR]:
         attrs = []
-        if POS.VERB in self.get_pos(word) and self._can_be_intransitive_verb(word):
-            attrs.append(ATTR.can_be_intransitive_verb)
-        if POS.VERB in self.get_pos(word) and self._can_be_transitive_verb(word):
-            attrs.append(ATTR.can_be_transitive_verb)
-        if POS.NOUN in self.get_pos(word) and self._can_be_event_noun(word):
-            attrs.append(ATTR.can_be_event_noun)
-        if POS.NOUN in self.get_pos(word) and self._can_be_entity_noun(word):
-            attrs.append(ATTR.can_be_entity_noun)
+
+        def has_attr(name: str) -> bool:
+            if word in self.user_vocab\
+                    and getattr(self.user_vocab[word], name) is not None:  # not None means specified by user
+                return getattr(self.user_vocab[word], name)
+            else:
+                return getattr(self, f'_{name}')
+
+        if POS.VERB in self.get_pos(word):
+            if has_attr('can_be_intransitive_verb'):
+                attrs.append(ATTR.can_be_intransitive_verb)
+        if POS.VERB in self.get_pos(word):
+            if has_attr('can_be_transitive_verb'):
+                attrs.append(ATTR.can_be_transitive_verb)
+        if POS.NOUN in self.get_pos(word):
+            if has_attr('can_be_event_noun'):
+                attrs.append(ATTR.can_be_event_noun)
+        if POS.NOUN in self.get_pos(word):
+            if has_attr('can_be_entity_noun'):
+                attrs.append(ATTR.can_be_entity_noun)
+
         return attrs
 
     @abstractmethod

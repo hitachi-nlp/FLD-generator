@@ -1,11 +1,15 @@
-from typing import List, Optional, Set
+from typing import List, Optional, Set, Dict
 import logging
 import sys
+import json
+from collections import defaultdict
 
 from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
 from FLD_generator.translators.japanese import JapaneseTranslator
 from FLD_generator.word_banks import build_wordbank
+from FLD_generator.word_banks.base import POS, UserWord
+from FLD_generator.word_banks.japanese import load_jp_extra_vocab
 from FLD_generator.translators.japanese.postprocessor import build_postprocessor
 from FLD_generator.utils import fix_seed
 from FLD_generator.knowledge_banks import build_knowledge_bank
@@ -16,9 +20,10 @@ fix_seed(0)
 
 
 def _build_translator(lang,
-                      knowledge_banks: Optional[List[KnowledgeBankBase]] = None):
+                      vocab: Optional[Dict[POS, List[UserWord]]] = None,
+                      knowledge_banks: Optional[List[KnowledgeBankBase]] = None) -> TemplatedTranslator:
     # word_bank = None
-    word_bank = build_wordbank(lang)
+    word_bank = build_wordbank(lang, vocab=vocab)
 
     if lang == 'eng':
         # translation_config_dir = './configs/translations/eng/thing.v1/'
@@ -40,6 +45,7 @@ def _build_translator(lang,
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
         knowledge_banks=knowledge_banks,
+        extra_vocab=vocab,
     )
 
     return translator
@@ -80,84 +86,86 @@ def make_show_translation_func(translator):
     return show_translations
 
 
-def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[KnowledgeBankBase]] = None):
-    translator = _build_translator(lang, knowledge_banks=knowledge_banks)
+def test_templated_translator_lang(lang: str,
+                                   vocab: Optional[Dict[POS, List[UserWord]]] = None,
+                                   knowledge_banks: Optional[List[KnowledgeBankBase]] = None):
+    translator = _build_translator(lang, vocab=vocab, knowledge_banks=knowledge_banks)
     show_translations = make_show_translation_func(translator)
 
     if knowledge_banks is None:
-        # show_translations(['{A}'], trial=30)
-        # show_translations(['¬({A})'], trial=30)
+        show_translations(['{A}'], trial=30)
+        show_translations(['¬({A})'], trial=30)
 
-        # show_translations(['(¬{A} & {B})'], trial=30)
-        # show_translations(['(¬{A} v {B})'], trial=30)
+        show_translations(['(¬{A} & {B})'], trial=30)
+        show_translations(['(¬{A} v {B})'], trial=30)
 
-        # show_translations(['{A} -> {B}'], trial=30)
-        # show_translations(['¬{A} -> {B}'], trial=30)
-        # show_translations(['{A} -> ¬{B}'], trial=30)
-        # show_translations(['({A} & {B}) -> {C}'], trial=30)
-        # show_translations(['({A} v {B}) -> {C}'], trial=30)
-        # show_translations(['{A} -> ({B} & {C})'], trial=30)
-        # show_translations(['{A} -> ({B} v {C})'], trial=30)
-
-
-        # show_translations(['{A}{a}'], trial=30)
-
-        # show_translations(['(¬{A}{a} & {B}{a})'], trial=30)
-        # show_translations(['(¬{A}{a} v {B}{a})'], trial=30)
-
-        # show_translations(['({A}{a} -> {B}{a})'], trial=30)
-        # show_translations(['(¬{A}{a} -> {B}{a})'], trial=30)
-        # show_translations(['({A}{a} -> ¬{B}{a})'], trial=30)
-        # show_translations(['({A}{a} & {B}{a}) -> {C}{c}'], trial=30)
-        # show_translations(['({A}{a} v {B}{a}) -> {C}{c}'], trial=30)
-        # show_translations(['{A}{a} -> ({B}{b} & {C}{b})'], trial=30)
-        # show_translations(['{A}{a} -> ({B}{b} v {C}{b})'], trial=30)
+        show_translations(['{A} -> {B}'], trial=30)
+        show_translations(['¬{A} -> {B}'], trial=30)
+        show_translations(['{A} -> ¬{B}'], trial=30)
+        show_translations(['({A} & {B}) -> {C}'], trial=30)
+        show_translations(['({A} v {B}) -> {C}'], trial=30)
+        show_translations(['{A} -> ({B} & {C})'], trial=30)
+        show_translations(['{A} -> ({B} v {C})'], trial=30)
 
 
-        # show_translations(['(Ex): {A}x'], trial=30)
-        # show_translations(['(Ex): (¬{A}x & {B}x)'], trial=30)
-        # show_translations(['(Ex): (¬{A}x v {B}x)'], trial=30)
-        # show_translations(['(Ex): {A}x -> {B}x'], trial=30)
-        # show_translations(['(Ex): (¬{A}x & {B}x) -> {C}x'], trial=30)
-        # show_translations(['(Ex): (¬{A}x v {B}x) -> {C}x'], trial=30)
+        show_translations(['{A}{a}'], trial=30)
 
-        # show_translations(['(x): {A}x'], trial=30)
-        # show_translations(['(x): (¬{A}x & {B}x)'], trial=30)
-        # show_translations(['(x): (¬{A}x v {B}x)'], trial=30)
-        # show_translations(['(x): {A}x -> {B}x'], trial=30)
-        # show_translations(['(x): (¬{A}x & {B}x) -> {C}x'], trial=30)
-        # show_translations(['(x): (¬{A}x v {B}x) -> {C}x'], trial=30)
+        show_translations(['(¬{A}{a} & {B}{a})'], trial=30)
+        show_translations(['(¬{A}{a} v {B}{a})'], trial=30)
 
-        # # # multiple formulas
-        # show_translations(
-        #     [
-        #         '{A}{a} -> {B}{b}',
-        #         '{B}{b} -> {C}{c}',
-        #         '{C}{c} -> {D}{d}',
-        #     ],
-        #     5
-        # )
+        show_translations(['({A}{a} -> {B}{a})'], trial=30)
+        show_translations(['(¬{A}{a} -> {B}{a})'], trial=30)
+        show_translations(['({A}{a} -> ¬{B}{a})'], trial=30)
+        show_translations(['({A}{a} & {B}{a}) -> {C}{c}'], trial=30)
+        show_translations(['({A}{a} v {B}{a}) -> {C}{c}'], trial=30)
+        show_translations(['{A}{a} -> ({B}{b} & {C}{b})'], trial=30)
+        show_translations(['{A}{a} -> ({B}{b} v {C}{b})'], trial=30)
 
-        # show_translations(
-        #     [
-        #         '{A}',
-        #         '{B}',
-        #         '{C}',
-        #         '{D}{d}',
-        #         '{E}{e}',
-        #         '{F}{f}',
-        #     ],
-        #     5,
-        # )
 
-        # show_translations(
-        #     [
-        #         '(x): {A}x -> {B}x',
-        #         '(x): {B}x -> {C}x',
-        #         '(x): {C}x -> {D}x',
-        #     ],
-        #     5,
-        # )
+        show_translations(['(Ex): {A}x'], trial=30)
+        show_translations(['(Ex): (¬{A}x & {B}x)'], trial=30)
+        show_translations(['(Ex): (¬{A}x v {B}x)'], trial=30)
+        show_translations(['(Ex): {A}x -> {B}x'], trial=30)
+        show_translations(['(Ex): (¬{A}x & {B}x) -> {C}x'], trial=30)
+        show_translations(['(Ex): (¬{A}x v {B}x) -> {C}x'], trial=30)
+
+        show_translations(['(x): {A}x'], trial=30)
+        show_translations(['(x): (¬{A}x & {B}x)'], trial=30)
+        show_translations(['(x): (¬{A}x v {B}x)'], trial=30)
+        show_translations(['(x): {A}x -> {B}x'], trial=30)
+        show_translations(['(x): (¬{A}x & {B}x) -> {C}x'], trial=30)
+        show_translations(['(x): (¬{A}x v {B}x) -> {C}x'], trial=30)
+
+        # # multiple formulas
+        show_translations(
+            [
+                '{A}{a} -> {B}{b}',
+                '{B}{b} -> {C}{c}',
+                '{C}{c} -> {D}{d}',
+            ],
+            5
+        )
+
+        show_translations(
+            [
+                '{A}',
+                '{B}',
+                '{C}',
+                '{D}{d}',
+                '{E}{e}',
+                '{F}{f}',
+            ],
+            5,
+        )
+
+        show_translations(
+            [
+                '(x): {A}x -> {B}x',
+                '(x): {B}x -> {C}x',
+                '(x): {C}x -> {D}x',
+            ],
+            5,
+        )
 
         show_translations(
             [
@@ -170,9 +178,9 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
 
     else:
         show_translations(['{A}{a}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
-        # show_translations(['{A} -> {B}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
-        # show_translations(['(x): {A}x -> {B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
-        # show_translations(['(x): {A}x -> ¬{B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        show_translations(['{A} -> {B}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        show_translations(['(x): {A}x -> {B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
+        show_translations(['(x): {A}x -> ¬{B}x'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
 
 
 def test_eng():
@@ -200,15 +208,20 @@ def test_eng_with_knowledge():
 
 def test_jpn():
     test_templated_translator_lang('jpn')
+    
+
+def test_jpn_with_vocab():
+    vocab = load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json')
+    test_templated_translator_lang('jpn', vocab=vocab)
 
 
 def test_jpn_postprocess():
     wb = build_wordbank('jpn')
-    postprocessor = build_postprocessor(wb)
+
+    extra_vocab = load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json')
+    postprocessor = build_postprocessor(wb, extra_vocab=extra_vocab)
 
     def _check_katsuyou(src: str, golds: List[str], trial=100):
-        pred = postprocessor.apply(src)
-
         print('\n\n================ _check_katsuyou ===================')
         print('input      :', src)
         print()
@@ -235,19 +248,35 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間がきれいだならばつらい', ['この人間がきれいならばつらい'])
     _check_katsuyou('この人間が美しいならばつらい', ['この人間が美しいならばつらい'])
 
+    _check_katsuyou('この人間がぺにょぺにょだならばつらい', ['この人間がぺにょぺにょならばつらい'])
+    _check_katsuyou('この人間がぷいぷいだならばつらい', ['この人間がぷいぷいならばつらい'])
+
+
 
     _check_katsuyou('この人間がきれいだか美しい', ['この人間がきれいであるか美しい'])
     _check_katsuyou('この人間が会議だか美しい', ['この人間が会議であるか美しい'])
     _check_katsuyou('もしこのブローチは小館花であるか菊雄だか両方ならばあのどら猫はいする', ['もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫はいする'])
+
+    _check_katsuyou('この人間がぺにょぺにょだか美しい', ['この人間がぺにょぺにょであるか美しい'])
+    _check_katsuyou('この人間がぷいぷいだか美しい', ['この人間がぷいぷいであるか美しい'])
+
 
 
     _check_katsuyou('きれいだものはある', ['きれいなものはある'])
     _check_katsuyou('きれいだことはある', ['きれいなことはある'])
     _check_katsuyou('「きれいだ」ものはある', ['「きれいな」ものはある'])
 
+    _check_katsuyou('ぺにょぺにょだものはある', ['ぺにょぺにょなものはある'])
+    _check_katsuyou('ぷいぷいだものはある', ['ぷいぷいなものはある'])
+
+
 
     _check_katsuyou('この人間は美しいし赤い', ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
     _check_katsuyou('この人間はきれいだし赤い', ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
+
+    _check_katsuyou('この人間はぺにょぺにょだし赤い', ['この人間はぺにょぺにょだし赤い', 'この人間はぺにょぺにょで赤い'])
+    _check_katsuyou('この人間はぷいぷいだし赤い', ['この人間はぷいぷいだし赤い', 'この人間はぷいぷいで赤い'])
+
 
 
     _check_katsuyou('この人間は走るない', ['この人間は走らない'])
@@ -255,16 +284,26 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間は機械だない', ['この人間は機械でない'])
     _check_katsuyou('この人間は機械だないし，あの熊も機械だない', ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
 
+    _check_katsuyou('この人間はぺにょぺにょだない', ['この人間はぺにょぺにょでない'])
+    _check_katsuyou('この人間はぷいぷいだない', ['この人間はぷいぷいでない'])
+
+
 
     _check_katsuyou('この人間はきれいだない', ['この人間はきれいでない'])
     _check_katsuyou('この人間が美しいない', ['この人間が美しくない'])
     _check_katsuyou('この人間は会議するない', ['この人間は会議しない'])
 
 
+
     _check_katsuyou('この人間は走るないない', ['この人間は走らなくない'])
     _check_katsuyou('この人間は機械だないない', ['この人間は機械でなくない'])
     _check_katsuyou('この人間はきれいだないない', ['この人間はきれいでなくない'])
     _check_katsuyou('この人間が美しいないない', ['この人間が美しくなくない'])
+
+    _check_katsuyou('この人間はぺにょぺにょだないない', ['この人間はぺにょぺにょでなくない'])
+    _check_katsuyou('この人間はぷいぷいだないない', ['この人間はぷいぷいでなくない'])
+
+
 
     _check_katsuyou(
         'この人間とあの人間とその人間とこの熊とあの熊とその熊',
@@ -273,12 +312,13 @@ def test_jpn_postprocess():
          for kuma_kosoado in ['この', 'あの', 'その']]
     )
 
-
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
 
     # test_eng()
     # test_eng_with_knowledge()
 
-    test_jpn_postprocess()
+    # test_jpn_postprocess()
+
     # test_jpn()
+    test_jpn_with_vocab()

@@ -4,10 +4,15 @@ from collections import defaultdict
 import random
 
 from ordered_set import OrderedSet
-from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, parse
+from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, MorphemeParser
+from FLD_generator.word_banks.base import UserWord
 
 
 class Postprocessor(ABC):
+
+    def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
+        self._extra_vocab = extra_vocab
+        self._parser = MorphemeParser(extra_vocab=extra_vocab)
     
     @abstractmethod
     def apply(self, text: str) -> str:
@@ -20,7 +25,8 @@ class Postprocessor(ABC):
 
 class PostprocessorChain(Postprocessor):
 
-    def __init__(self, postprocessors: List[Postprocessor]):
+    def __init__(self, postprocessors: List[Postprocessor], extra_vocab: Optional[List[UserWord]] = None):
+        super().__init__(extra_vocab=extra_vocab)
         self._postprocessors = postprocessors
 
     def apply(self, text: str) -> str:
@@ -69,29 +75,27 @@ class WindowRule:
 
 class WindowRulesPostprocessor(Postprocessor):
 
-    def __init__(self, rules: List[WindowRule]):
+    def __init__(self,
+                 rules: List[WindowRule],
+                 extra_vocab: Optional[List[UserWord]] = None):
+        super().__init__(extra_vocab=extra_vocab)
         self._rules = rules
 
     def apply(self, text: str) -> str:
         text_modified = text
         for rule in self._rules:
-            # if isinstance(rule, DaKaKaKatsuyouRule):
-            #     import pudb; pudb.set_trace()
             is_appliable = True
             done_positions: Set[int] = set([])
             while is_appliable:
-                morphemes_modified = parse(text_modified)
+                morphemes_modified = self._parser.parse(text_modified)
                 words_modified_org = [morpheme.surface for morpheme in morphemes_modified]
                 words_modified_dst: List[str] = []
                 i_end = 0
                 is_applied = False
                 for i, window in enumerate(self._slide(morphemes_modified, rule.window_size)):
-                    # if isinstance(rule, NaiKatsuyouRule) and window[0].surface == 'だ':
-                    #     import pudb; pudb.set_trace()
-
-                    _katsuyou_words = rule.apply(window)
-                    if _katsuyou_words is not None and i not in done_positions:
-                        words_modified_dst += _katsuyou_words
+                    _modified_words = rule.apply(window)
+                    if _modified_words is not None and i not in done_positions:
+                        words_modified_dst += _modified_words
                         i_end = i + rule.window_size - 1
                         is_applied = True
                         done_positions.add(i)
@@ -102,6 +106,8 @@ class WindowRulesPostprocessor(Postprocessor):
                 is_appliable = is_applied
                 words_modified_dst += words_modified_org[i_end + 1:]
                 text_modified = ''.join(words_modified_dst)
+                # if text_modified.find('📙') != -1:
+                #     import pudb; pudb.set_trace()
 
         return text_modified
 
@@ -200,10 +206,18 @@ class ShiKatuyouRule(WindowRule):
                     return [katsuyou_word, 'て']
             else:
                 return None
+
         elif surfaces == ['だ', 'し']:
             if random.random() < 0.5:
                 # きれいだし -> きれいで
                 return ['で']
+            else:
+                return None
+
+        elif surfaces[0] == 'だし':
+            # parsing with user words sometimes fails, such as 「ぽにょぽにょ」 「だし」
+            if random.random() < 0.5:
+                return ['で'] + surfaces[1:]
             else:
                 return None
 
@@ -315,11 +329,13 @@ class UniqueKOSOADOPostprocessor(Postprocessor):
 
     _KOSOADO = ['この', 'その', 'あの']
 
-    def __init__(self):
+    def __init__(self,
+                 extra_vocab: Optional[List[UserWord]] = None):
+        super().__init__(extra_vocab=extra_vocab)
         self._obj_to_kosoado: Dict[str, str] = {}
 
     def apply(self, text: str) -> str:
-        morphemes = parse(text)
+        morphemes = self._parser.parse(text)
         obj_to_kosoados: Dict[str, Set[str]] = defaultdict(set)
         for i, morepheme in enumerate(morphemes):
             if morepheme.surface in self._KOSOADO and i + 1 < len(morphemes):
@@ -343,17 +359,21 @@ class UniqueKOSOADOPostprocessor(Postprocessor):
         self._obj_to_kosoado: Dict[str, str] = {}
 
 
-def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor:
+def build_postprocessor(word_bank: JapaneseWordBank, extra_vocab: Optional[List[UserWord]] = None) -> WindowRulesPostprocessor:
     return PostprocessorChain([
-        WindowRulesPostprocessor([
-            # XXX: the order of rules matters
-            NarabaKatsuyouRule(word_bank),
-            DaKaKatuyouRule(word_bank),
-            DaKotoMonoKatuyouRule(word_bank),
-            NaiKatsuyouRule(word_bank),
-            NaiNaiKatsuyouRule(word_bank),
-            # KakuRandomOrderRule(word_bank, kaku_list),  # not implemented
-            ShiKatuyouRule(word_bank),
-        ]),
-        UniqueKOSOADOPostprocessor(),
+        WindowRulesPostprocessor(
+            [
+                # XXX: the order of rules matters
+                NarabaKatsuyouRule(word_bank),
+                # add extra_vocab as argument
+                DaKaKatuyouRule(word_bank),
+                DaKotoMonoKatuyouRule(word_bank),
+                NaiKatsuyouRule(word_bank),
+                NaiNaiKatsuyouRule(word_bank),
+                # KakuRandomOrderRule(word_bank),
+                ShiKatuyouRule(word_bank),
+            ],
+            extra_vocab=extra_vocab,
+        ),
+        UniqueKOSOADOPostprocessor(extra_vocab=extra_vocab),
     ])

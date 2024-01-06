@@ -3,15 +3,25 @@ from collections import defaultdict
 from enum import Enum
 from abc import abstractmethod, abstractproperty
 from pprint import pprint
+import logging
+import json
 
 from ordered_set import OrderedSet
-from FLD_generator.word_banks.base import POS
-from FLD_generator.word_banks.base import WordBank
+from FLD_generator.word_banks.base import POS, ATTR
+from FLD_generator.word_banks.base import WordBank, UserWord
 from FLD_generator.person_names import get_person_names
 from FLD_generator.word_banks.word_utils import WordUtil
 import line_profiling
 
-from .parser import Morpheme, parse
+from .parser import (
+    Morpheme,
+    NAIYOUGO_POS,
+    morpheme_POS_to_WB_POS,
+    WB_POS_to_morpheme_POS,
+)
+
+
+logger = logging.getLogger(__name__)
 
 
 class JapaneseWordBank(WordBank):
@@ -31,7 +41,7 @@ class JapaneseWordBank(WordBank):
         NESS = 'ness'
 
         ANTI = 'anti'
-        NEG = 'neg'
+        # NEG = 'neg'
 
     class PresentForm(Enum):
         NORMAL = 'normal'
@@ -57,21 +67,8 @@ class JapaneseWordBank(WordBank):
                  morphemes: List[Morpheme],
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab: Optional[Dict[POS, Iterable[str]]] = None):
-        super().__init__()
-        morphemes = [morpheme for morpheme in morphemes
-                     if morpheme.pos in ['名詞', '動詞', '形容詞']]
-        self._all_morphemes = sorted(morphemes)
-
-        self._morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        self._base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        self._katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        for morpheme in morphemes:
-            self._morphemes[morpheme.surface].append(morpheme)
-            if morpheme.surface == morpheme.base:
-                self._base_morphemes[morpheme.base].append(morpheme)
-            else:
-                self._katsuyou_morphemes[morpheme.base].append(morpheme)
+                 vocab: Optional[List[UserWord]] = None):
+        super().__init__(vocab=vocab)
 
         self._word_util = WordUtil(
             'jpn',
@@ -80,8 +77,55 @@ class JapaneseWordBank(WordBank):
             vocab=vocab,
         )
 
-        self._person_names: OrderedSet[str] = OrderedSet([name for name in get_person_names(country='JP')
-                                                          if not name.isascii()])
+        if vocab is not None:
+            # stick to user-specified vocab
+            self._person_names = set([])
+        else:
+            self._person_names: OrderedSet[str] = OrderedSet([name for name in get_person_names(country='JP')
+                                                              if not name.isascii()])
+
+        morphemes = [morpheme for morpheme in morphemes
+                     if morpheme.pos in NAIYOUGO_POS]
+
+        all_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        all_base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        all_katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        for morpheme in morphemes:
+            all_morphemes[morpheme.surface].append(morpheme)
+            if morpheme.surface == morpheme.base:
+                all_base_morphemes[morpheme.base].append(morpheme)
+            else:
+                all_katsuyou_morphemes[morpheme.base].append(morpheme)
+
+        self._morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        self._base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        self._katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
+        if vocab is None:
+            self._morphemes = all_morphemes
+            self._base_morphemes = all_base_morphemes
+            self._katsuyou_morphemes = all_katsuyou_morphemes
+        else:
+            for user_word in vocab:
+                lemma = user_word.lemma
+                pos = user_word.pos
+                mtc_morphemes = [morpheme for morpheme in all_morphemes.get(lemma, [])
+                                 if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
+                if len(mtc_morphemes) == 0:
+                    logger.info('could not find word "%s" in the morpheme list. Will create a morpheme by ourselves.', lemma)
+                    mtc_morphemes = [
+                        Morpheme(
+                            surface=lemma,
+                            pos=WB_POS_to_morpheme_POS(pos),
+                            base=lemma,
+                        )
+                    ]
+
+                for mtc_morpheme in mtc_morphemes:
+                    self._morphemes[mtc_morpheme.surface].append(mtc_morpheme)
+                    if mtc_morpheme.surface == mtc_morpheme.base:
+                        self._base_morphemes[mtc_morpheme.base].append(mtc_morpheme)
+                    else:
+                        self._katsuyou_morphemes[mtc_morpheme.base].append(mtc_morpheme)
         
 
     def _get_all_lemmas(self) -> Iterable[str]:
@@ -100,21 +144,9 @@ class JapaneseWordBank(WordBank):
         else:
             morphemes = self._base_morphemes[word]
             return list({
-                self._morpheme_to_POS(morpheme)
+                morpheme_POS_to_WB_POS(morpheme.pos)
                 for morpheme in morphemes
             })
-
-    def _morpheme_to_POS(self, morpheme: Morpheme) -> POS:
-        if morpheme.pos == '名詞':
-            return POS.NOUN
-        elif morpheme.pos == '動詞':
-            return POS.VERB
-        elif morpheme.pos == '形容詞':
-            return POS.ADJ
-        elif morpheme.pos == '副詞':
-            return POS.ADV
-        else:
-            return POS.OTHERS
 
     def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
 
@@ -180,13 +212,14 @@ class JapaneseWordBank(WordBank):
                 'antonyms from the wordbank are low-quality, and thus we have to refine the logic in the wordbank.')
 
             antonyms = self._get_antonyms(adj)
-            antonyms += [
-                word
-                for word in self._change_adj_form(adj, self.AdjForm.NEG, force=False)
-                if word not in antonyms]
+            # antonyms += [
+            #     word
+            #     for word in self._change_adj_form(adj, self.AdjForm.NEG, force=False)
+            #     if word not in antonyms
+            # ]
 
-            if len(antonyms) == 0 and force:
-                antonyms += self._change_adj_form(adj, self.AdjForm.NEG, force=True)
+            # if len(antonyms) == 0 and force:
+            #     antonyms += self._change_adj_form(adj, self.AdjForm.NEG, force=True)
 
             return antonyms
 
@@ -196,7 +229,7 @@ class JapaneseWordBank(WordBank):
             きれい vs 醜い     -> これはantonymである．
             きれい vs 非きれい -> これがnegnymだが，言葉として存在しない．
             """
-            raise ValueError('Japanese do not have negnyms.')
+            raise ValueError('Japanese adjective do not have negnyms.')
 
         else:
             raise ValueError()
@@ -303,3 +336,19 @@ class JapaneseWordBank(WordBank):
                                katsuyous: Optional[List[str]] = None) -> List[Morpheme]:
         return [morpheme for morpheme in self._katsuyou_morphemes[word]
                 if katsuyous is None or morpheme.katsuyou in katsuyous]
+
+
+def load_jp_extra_vocab(path: str) -> List[UserWord]:
+    vocab: List[UserWord] = []
+    vocab_json = json.load(open(path, 'r'))
+    for key, words in vocab_json.items():
+        if key.find('.') >= 0:
+            pos, attr = key.split('.')
+        else:
+            pos = key
+        attrs = {_attr.value: False for _attr in ATTR}
+        attrs[attr] = True
+        vocab.extend(UserWord(lemma=word, pos=POS(pos), **attrs)
+                     for word in words)
+    return vocab
+
