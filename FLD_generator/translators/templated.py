@@ -381,7 +381,7 @@ class TemplatedTranslator(Translator):
 
         intermediate_cache = self._load_words_by_pos_attrs_cache_interm[cache_key]
         attrs = attrs or []
-        for word in word_bank.get_words():
+        for word in word_bank.get_words(slice_='extra_or_default'):
             if word in intermediate_cache:
                 continue
             if pos is not None and pos not in word_bank.get_pos(word, not_found_warning=False):

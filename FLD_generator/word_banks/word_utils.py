@@ -30,14 +30,14 @@ class WordUtil:
                  language: str,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab: Optional[List[UserWord]] = None):
+                 extra_vocab: Optional[List[UserWord]] = None):
         if language == 'jpn':
             logger.warning('Wordnet operations such as getting synonyms/antonyms may not produce good results for language=%s, due to not-yet-refined logic', language)
 
         # To avoid circular import
         from .japanese.parser import MorphemeParser
         from .english.parser import get_lemma as get_lemma_eng
-        japanese_morpheme_parser = MorphemeParser(extra_vocab=vocab)
+        japanese_morpheme_parser = MorphemeParser(extra_vocab=extra_vocab)
         self._get_lemma_jpn = japanese_morpheme_parser.get_lemma
         self._get_lemma_eng = get_lemma_eng
 
@@ -55,15 +55,13 @@ class WordUtil:
         else:
             self._intransitive_verbs = None
 
+        self._extra_words: Set[str] = {word.lemma for word in extra_vocab} if extra_vocab is not None else set()
         _vocab: Dict[WN_POS, Set[str]] = defaultdict(set)
-        if vocab is not None:
-            for word in vocab:
+        for word, wn_pos in self._load_all_lemmas_from_wn():
+            _vocab[wn_pos].add(word)
+        if extra_vocab is not None:
+            for word in extra_vocab:
                 _vocab[_POS_WB_TO_WN[word.pos]].add(word.lemma)
-            self._is_user_vocab = True
-        else:
-            for word, wn_pos in self._load_all_lemmas_from_wn():
-                _vocab[wn_pos].add(word)
-            self._is_user_vocab = False
 
         self._word_set: Set[str] = set()
         self._word_to_wn_pos: Dict[str, List[WN_POS]] = defaultdict(list)
@@ -125,8 +123,9 @@ class WordUtil:
         return self._word_set
 
     def get_pos(self, word: str) -> List[POS]:
-        if self._is_user_vocab:
-            # for the user specified vocab, we stick to the used specified POS
+        # if self._is_user_vocab:
+        if word in self._extra_words:
+            # for the user specified vocab, we stick to the user specified POS
             if word in self._word_to_wn_pos:
                 wn_poss = self._word_to_wn_pos[word]
             elif self.get_lemma(word) in self._word_to_wn_pos:

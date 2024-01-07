@@ -67,66 +67,54 @@ class JapaneseWordBank(WordBank):
                  morphemes: List[Morpheme],
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab: Optional[List[UserWord]] = None):
-        super().__init__(vocab=vocab)
+                 extra_vocab: Optional[List[UserWord]] = None):
+        super().__init__(extra_vocab=extra_vocab)
 
         self._word_util = WordUtil(
             'jpn',
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab=vocab,
+            extra_vocab=extra_vocab,
         )
 
-        if vocab is not None:
-            # stick to user-specified vocab
-            self._person_names = set([])
-        else:
-            self._person_names: OrderedSet[str] = OrderedSet([name for name in get_person_names(country='JP')
-                                                              if not name.isascii()])
+        self._person_names: OrderedSet[str] = OrderedSet([name for name in get_person_names(country='JP')
+                                                          if not name.isascii()])
 
         morphemes = [morpheme for morpheme in morphemes
                      if morpheme.pos in NAIYOUGO_POS]
 
-        all_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        all_base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        all_katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        for morpheme in morphemes:
-            all_morphemes[morpheme.surface].append(morpheme)
-            if morpheme.surface == morpheme.base:
-                all_base_morphemes[morpheme.base].append(morpheme)
-            else:
-                all_katsuyou_morphemes[morpheme.base].append(morpheme)
-
         self._morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
         self._base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
         self._katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
-        if vocab is None:
-            self._morphemes = all_morphemes
-            self._base_morphemes = all_base_morphemes
-            self._katsuyou_morphemes = all_katsuyou_morphemes
-        else:
-            for user_word in vocab:
-                lemma = user_word.lemma
-                pos = user_word.pos
-                mtc_morphemes = [morpheme for morpheme in all_morphemes.get(lemma, [])
-                                 if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
-                if len(mtc_morphemes) == 0:
-                    logger.info('could not find word "%s" in the morpheme list. Will create a morpheme by ourselves.', lemma)
-                    mtc_morphemes = [
-                        Morpheme(
-                            surface=lemma,
-                            pos=WB_POS_to_morpheme_POS(pos),
-                            base=lemma,
-                        )
-                    ]
+        for morpheme in morphemes:
+            self._morphemes[morpheme.surface].append(morpheme)
+            if morpheme.surface == morpheme.base:
+                self._base_morphemes[morpheme.base].append(morpheme)
+            else:
+                self._katsuyou_morphemes[morpheme.base].append(morpheme)
 
-                for mtc_morpheme in mtc_morphemes:
-                    self._morphemes[mtc_morpheme.surface].append(mtc_morpheme)
-                    if mtc_morpheme.surface == mtc_morpheme.base:
-                        self._base_morphemes[mtc_morpheme.base].append(mtc_morpheme)
-                    else:
-                        self._katsuyou_morphemes[mtc_morpheme.base].append(mtc_morpheme)
-        
+        for user_word in extra_vocab:
+            lemma = user_word.lemma
+            pos = user_word.pos
+            mtc_morphemes = [morpheme for morpheme in self._morphemes.get(lemma, [])
+                             if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
+            if len(mtc_morphemes) == 0:
+                logger.info('could not find word "%s" in the morpheme list. Will create a morpheme by ourselves.', lemma)
+                mtc_morphemes = [
+                    Morpheme(
+                        surface=lemma,
+                        pos=WB_POS_to_morpheme_POS(pos),
+                        base=lemma,
+                    )
+                ]
+
+            for mtc_morpheme in mtc_morphemes:
+                self._morphemes[mtc_morpheme.surface].append(mtc_morpheme)
+                if mtc_morpheme.surface == mtc_morpheme.base:
+                    self._base_morphemes[mtc_morpheme.base].append(mtc_morpheme)
+                else:
+                    self._katsuyou_morphemes[mtc_morpheme.base].append(mtc_morpheme)
+    
 
     def _get_all_lemmas(self) -> Iterable[str]:
         for morphemes in self._base_morphemes.values():

@@ -106,8 +106,6 @@ class WindowRulesPostprocessor(Postprocessor):
                 is_appliable = is_applied
                 words_modified_dst += words_modified_org[i_end + 1:]
                 text_modified = ''.join(words_modified_dst)
-                # if text_modified.find('📙') != -1:
-                #     import pudb; pudb.set_trace()
 
         return text_modified
 
@@ -250,7 +248,6 @@ class NaiKatsuyouRule(WindowRule):
             if morphemes[0].base == 'する':
                 katsuyou_word = 'し'  # as 'する' has more than two 未然形, we explicitly specify it
             else:
-                # HONOKA: 成り立つ -> None
                 katsuyou_word = self._get_katsuyou_word(morphemes[0], '未然形')
 
             if katsuyou_word is None:

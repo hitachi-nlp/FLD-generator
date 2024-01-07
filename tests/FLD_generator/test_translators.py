@@ -22,11 +22,11 @@ fix_seed(0)
 def _build_translator(lang,
                       translation_config='thing',
                       no_adj_verb_as_zeroary=False,
-                      vocab: Optional[Dict[POS, List[UserWord]]] = None,
+                      extra_vocab: Optional[Dict[POS, List[UserWord]]] = None,
                       knowledge_banks: Optional[List[KnowledgeBankBase]] = None,
                       **kwargs) -> TemplatedTranslator:
     # word_bank = None
-    word_bank = build_wordbank(lang, vocab=vocab)
+    word_bank = build_wordbank(lang, extra_vocab=extra_vocab)
 
     if lang == 'eng':
         # translation_config_dir = './configs/translations/eng/thing.v1/'
@@ -57,7 +57,7 @@ def _build_translator(lang,
         adj_verb_noun_ratio='1-1-1',
         no_adj_verb_as_zeroary=no_adj_verb_as_zeroary,
         knowledge_banks=knowledge_banks,
-        extra_vocab=vocab,
+        extra_vocab=extra_vocab,
     )
 
     return translator
@@ -101,12 +101,12 @@ def make_show_translation_func(translator):
 def test_templated_translator_lang(lang: str,
                                    translation_config='thing',
                                    no_adj_verb_as_zeroary=False,
-                                   vocab: Optional[Dict[POS, List[UserWord]]] = None,
+                                   extra_vocab: Optional[Dict[POS, List[UserWord]]] = None,
                                    knowledge_banks: Optional[List[KnowledgeBankBase]] = None):
     translator = _build_translator(lang,
                                    translation_config=translation_config,
                                    no_adj_verb_as_zeroary=no_adj_verb_as_zeroary,
-                                   vocab=vocab,
+                                   extra_vocab=extra_vocab,
                                    knowledge_banks=knowledge_banks)
     show_translations = make_show_translation_func(translator)
 
@@ -229,11 +229,11 @@ def test_jpn():
     
 
 def test_jpn_with_vocab():
-    vocab = load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json')
+    extra_vocab = load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json')
     test_templated_translator_lang('jpn',
                                    translation_config='punipuni',
                                    no_adj_verb_as_zeroary=True,
-                                   vocab=vocab)
+                                   extra_vocab=extra_vocab)
 
 
 def test_jpn_postprocess():

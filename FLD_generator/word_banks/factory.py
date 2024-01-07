@@ -12,7 +12,7 @@ def build(
     lang: str,
     transitive_verbs_path: Optional[str] = None,
     intransitive_verbs_path: Optional[str] = None,
-    vocab: Optional[List[UserWord]] = None,
+    extra_vocab: Optional[List[UserWord]] = None,
 ) -> WordBank:
     logger.info('Building word bank for language=%s ...', lang)
 
@@ -29,7 +29,7 @@ def build(
         return EnglishWordBank(
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab=vocab,
+            extra_vocab=extra_vocab,
         )
 
     elif lang == 'jpn':
@@ -48,7 +48,7 @@ def build(
             jpn_morphemes,
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab=vocab,
+            extra_vocab=extra_vocab,
         )
 
     else:

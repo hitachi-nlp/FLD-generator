@@ -10,9 +10,9 @@ setup_logger(level=logging.INFO)
 
 
 def test_word_bank(lang: str,
-                   vocab: Optional[Dict[POS, List[str]]] = None):
+                   extra_vocab: Optional[Dict[POS, List[str]]] = None):
     print('================================ testing word bank ================================')
-    wb = build_wordbank(lang, vocab=vocab)
+    wb = build_wordbank(lang, extra_vocab=extra_vocab)
     _test_word_bank(wb)
 
 
@@ -21,7 +21,7 @@ def _test_word_bank(wb):
     def get_words(pos: Optional[POS] = None,
                   attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
         attrs = attrs or []
-        for word in wb.get_words():
+        for word in wb.get_words(slice_='extra_or_default'):
             if pos is not None and pos not in wb.get_pos(word):
                 continue
             if any((attr not in wb.get_attrs(word)
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # test_word_bank('eng')
     # test_word_bank(
     #     'eng',
-    #     vocab=[
+    #     extra_vocab=[
 
     #         UserWord(lemma='apple', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
     #         UserWord(lemma='banana', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     test_word_bank(
         'jpn',
-        # vocab=[
+        # extra_vocab=[
         #     UserWord(lemma='ぷにぷに', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
         #     UserWord(lemma='ぴよぴよ', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
 
@@ -85,5 +85,5 @@ if __name__ == '__main__':
         #     UserWord(lemma='赤い', pos=POS.ADJ),
         #     UserWord(lemma='青い', pos=POS.ADJ),
         # ],
-        vocab=load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json'),
+        extra_vocab=load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json'),
     )

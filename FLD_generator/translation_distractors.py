@@ -94,7 +94,7 @@ class WordSwapDistractor(TranslationDistractor):
                                  pos: Optional[POS] = None,
                                  attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
         attrs = attrs or []
-        for word in word_bank.get_words():
+        for word in word_bank.get_words(slice_='extra_or_default'):
             if pos is not None and pos not in word_bank.get_pos(word):
                 continue
             if any((attr not in word_bank.get_attrs(word)
