@@ -93,27 +93,28 @@ class JapaneseWordBank(WordBank):
             else:
                 self._katsuyou_morphemes[morpheme.base].append(morpheme)
 
-        for user_word in extra_vocab:
-            lemma = user_word.lemma
-            pos = user_word.pos
-            mtc_morphemes = [morpheme for morpheme in self._morphemes.get(lemma, [])
-                             if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
-            if len(mtc_morphemes) == 0:
-                logger.info('could not find word "%s" in the morpheme list. Will create a morpheme by ourselves.', lemma)
-                mtc_morphemes = [
-                    Morpheme(
-                        surface=lemma,
-                        pos=WB_POS_to_morpheme_POS(pos),
-                        base=lemma,
-                    )
-                ]
+        if extra_vocab is not None:
+            for user_word in extra_vocab:
+                lemma = user_word.lemma
+                pos = user_word.pos
+                mtc_morphemes = [morpheme for morpheme in self._morphemes.get(lemma, [])
+                                 if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
+                if len(mtc_morphemes) == 0:
+                    logger.info('could not find word "%s" in the morpheme list. Will create a morpheme by ourselves.', lemma)
+                    mtc_morphemes = [
+                        Morpheme(
+                            surface=lemma,
+                            pos=WB_POS_to_morpheme_POS(pos),
+                            base=lemma,
+                        )
+                    ]
 
-            for mtc_morpheme in mtc_morphemes:
-                self._morphemes[mtc_morpheme.surface].append(mtc_morpheme)
-                if mtc_morpheme.surface == mtc_morpheme.base:
-                    self._base_morphemes[mtc_morpheme.base].append(mtc_morpheme)
-                else:
-                    self._katsuyou_morphemes[mtc_morpheme.base].append(mtc_morpheme)
+                for mtc_morpheme in mtc_morphemes:
+                    self._morphemes[mtc_morpheme.surface].append(mtc_morpheme)
+                    if mtc_morpheme.surface == mtc_morpheme.base:
+                        self._base_morphemes[mtc_morpheme.base].append(mtc_morpheme)
+                    else:
+                        self._katsuyou_morphemes[mtc_morpheme.base].append(mtc_morpheme)
     
 
     def _get_all_lemmas(self) -> Iterable[str]:

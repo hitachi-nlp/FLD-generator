@@ -128,15 +128,17 @@ class NarabaKatsuyouRule(WindowRule):
         surfaces = [morpheme.surface for morpheme in morphemes]
         if morphemes[0].pos == '動詞' and surfaces[1:] == ['なら', 'ば']:
             # 走るならば -> 走れば
+            # 走るなら -> 走るなら (変化無し)
             katsuyou_word = self._get_katsuyou_word(morphemes[0], '仮定形')
             if katsuyou_word is None:
                 return None
             else:
                 return [katsuyou_word, 'ば']
 
-        elif surfaces == ['だ', 'なら', 'ば']:
+        elif surfaces[:2] == ['だ', 'なら']:
             # きれいだならば -> きれいならば
-            return ['なら', 'ば']
+            # きれいだなら -> きれいなら
+            return ['なら', surfaces[2]]
 
         else:
             return None

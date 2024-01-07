@@ -105,11 +105,11 @@ class MorphemeParser:
         text_org = text
         if self._user_word_regexp is not None:
             text = self._user_word_regexp.sub(lambda x: f'{self._sep}{x.group(0)}{self._sep}', text)
-            if text != text_org:
-                logger.debug('We parse the text with user word markers, as folllows:'
-                             '\noriginal     : %s'
-                             '\nwith markers : %s',
-                             text_org, text)
+            # if text != text_org:
+            #     logger.debug('We parse the text with user word markers, as folllows:'
+            #                  '\noriginal     : %s'
+            #                  '\nwith markers : %s',
+            #                  text_org, text)
 
         morphemes = _parse(text)
         morphemes_with_user_words: List[Morpheme] = []
