@@ -105,6 +105,7 @@ class MorphemeParser:
         text_org = text
         if self._user_word_regexp is not None:
             text = self._user_word_regexp.sub(lambda x: f'{self._sep}{x.group(0)}{self._sep}', text)
+            text = text.replace(self._sep, f' {self._sep} ')
             # if text != text_org:
             #     logger.debug('We parse the text with user word markers, as folllows:'
             #                  '\noriginal     : %s'
