@@ -250,6 +250,7 @@ class NaiKatsuyouRule(WindowRule):
             if morphemes[0].base == 'する':
                 katsuyou_word = 'し'  # as 'する' has more than two 未然形, we explicitly specify it
             else:
+                # HONOKA: 成り立つ -> None
                 katsuyou_word = self._get_katsuyou_word(morphemes[0], '未然形')
 
             if katsuyou_word is None:

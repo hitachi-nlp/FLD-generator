@@ -1,0 +1,212 @@
+{
+
+  "sentence": {
+
+    "¬({A}{a})": [
+      ["W_VOL_AVG__0.05", "「 <<sentence::{A}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+      "<<sentence::¬{A}{a}>>"
+    ],
+    "¬(¬{A}{a})": [
+      ["W_VOL_AVG__0.05", "「 <<sentence::¬{A}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+      "<<sentence::{A}{a}>>"
+    ],
+
+
+    "¬({A}{a} & {B}{a})": ["「 <<sentence::({A}{a} & {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} & {B}{a})": ["「 <<sentence::(¬{A}{a} & {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} & ¬{B}{a})": ["「 <<sentence::({A}{a} & ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} & ¬{B}{a})": ["「 <<sentence::(¬{A}{a} & ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+    "__¬(¬({A}{a} & {B}{a}))": ["「 <<sentence::¬({A}{a} & {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} & {B}{a}))": ["「 <<sentence::¬(¬{A}{a} & {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "__¬(¬({A}{a} & ¬{B}{a}))": ["「 <<sentence::¬({A}{a} & ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} & ¬{B}{a}))": ["「 <<sentence::¬(¬{A}{a} & ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} v {B}{a})": ["「 <<sentence::({A}{a} v {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} v {B}{a})": ["「 <<sentence::(¬{A}{a} v {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} v ¬{B}{a})": ["「 <<sentence::({A}{a} v ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} v ¬{B}{a})": ["「 <<sentence::(¬{A}{a} v ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "__¬(¬({A}{a} v {B}{a}))": ["「 <<sentence::¬({A}{a} v {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} v {B}{a}))": ["「 <<sentence::¬(¬{A}{a} v {B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "__¬(¬({A}{a} v ¬{B}{a}))": ["「 <<sentence::¬({A}{a} v ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "__¬(¬(¬{A}{a} v ¬{B}{a}))": ["「 <<sentence::¬(¬{A}{a} v ¬{B}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> {B}{b})": ["「 <<sentence::{A}{a} -> {B}{b}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> {B}{b})": ["「 <<sentence::¬{A}{a} -> {B}{b}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬{B}{b})": ["「 <<sentence::{A}{a} -> ¬{B}{b}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬{B}{b})": ["「 <<sentence::¬{A}{a} -> ¬{B}{b}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} & {B}{a}) -> {C}{c})": ["「 <<sentence::({A}{a} & {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> {C}{c})": ["「 <<sentence::(¬{A}{a} & {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> {C}{c})": ["「 <<sentence::({A}{a} & ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & {B}{a}) -> ¬{C}{c})": ["「 <<sentence::({A}{a} & {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> {C}{c})": ["「 <<sentence::(¬{A}{a} & ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> ¬{C}{c})": ["「 <<sentence::(¬{A}{a} & {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::({A}{a} & ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{b} & {C}{b}))": ["「 <<sentence::{A}{a} -> ({B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} & {C}{b}))": ["「 <<sentence::¬{A}{a} -> ({B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} & {C}{b}))": ["「 <<sentence::{A}{a} -> (¬{B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{b} & ¬{C}{b}))": ["「 <<sentence::{A}{a} -> ({B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} & {C}{b}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} & ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> ({B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} & ¬{C}{b}))": ["「 <<sentence::{A}{a} -> (¬{B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} & ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} & {B}{a}) -> {C}{c})": ["「 <<sentence::¬({A}{a} & {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> {C}{c})": ["「 <<sentence::¬(¬{A}{a} & {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> {C}{c})": ["「 <<sentence::¬({A}{a} & ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & {B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬({A}{a} & {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> {C}{c})": ["「 <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬(¬{A}{a} & {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬({A}{a} & ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{b} & {C}{b}))": ["「 <<sentence::{A}{a} -> ¬({B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} & {C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} & {C}{b}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{b} & ¬{C}{b}))": ["「 <<sentence::{A}{a} -> ¬({B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} & {C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{b} & {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} & ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} & ¬{C}{b}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} & ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} v {B}{a}) -> {C}{c})": ["「 <<sentence::({A}{a} v {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> {C}{c})": ["「 <<sentence::(¬{A}{a} v {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> {C}{c})": ["「 <<sentence::({A}{a} v ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v {B}{a}) -> ¬{C}{c})": ["「 <<sentence::({A}{a} v {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> {C}{c})": ["「 <<sentence::(¬{A}{a} v ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> ¬{C}{c})": ["「 <<sentence::(¬{A}{a} v {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::({A}{a} v ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{b} v {C}{b}))": ["「 <<sentence::{A}{a} -> ({B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} v {C}{b}))": ["「 <<sentence::¬{A}{a} -> ({B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} v {C}{b}))": ["「 <<sentence::{A}{a} -> (¬{B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{b} v ¬{C}{b}))": ["「 <<sentence::{A}{a} -> ({B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} v {C}{b}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{b} v ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> ({B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{b} v ¬{C}{b}))": ["「 <<sentence::{A}{a} -> (¬{B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{b} v ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} v {B}{a}) -> {C}{c})": ["「 <<sentence::¬({A}{a} v {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> {C}{c})": ["「 <<sentence::¬(¬{A}{a} v {B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> {C}{c})": ["「 <<sentence::¬({A}{a} v ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v {B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬({A}{a} v {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> {C}{c})": ["「 <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> {C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬(¬{A}{a} v {B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬({A}{a} v ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c})": ["「 <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{c}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{b} v {C}{b}))": ["「 <<sentence::{A}{a} -> ¬({B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} v {C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} v {C}{b}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{b} v ¬{C}{b}))": ["「 <<sentence::{A}{a} -> ¬({B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} v {C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{b} v {C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{b} v ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{b} v ¬{C}{b}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{b} v ¬{C}{b}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> {B}{a})": ["「 <<sentence::{A}{a} -> {B}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> {B}{a})": ["「 <<sentence::¬{A}{a} -> {B}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬{B}{a})": ["「 <<sentence::{A}{a} -> ¬{B}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬{B}{a})": ["「 <<sentence::¬{A}{a} -> ¬{B}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} & {B}{a}) -> {C}{a})": ["「 <<sentence::({A}{a} & {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> {C}{a})": ["「 <<sentence::(¬{A}{a} & {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> {C}{a})": ["「 <<sentence::({A}{a} & ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & {B}{a}) -> ¬{C}{a})": ["「 <<sentence::({A}{a} & {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> {C}{a})": ["「 <<sentence::(¬{A}{a} & ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & {B}{a}) -> ¬{C}{a})": ["「 <<sentence::(¬{A}{a} & {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::({A}{a} & ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{a} & {C}{a}))": ["「 <<sentence::{A}{a} -> ({B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} & {C}{a}))": ["「 <<sentence::¬{A}{a} -> ({B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} & {C}{a}))": ["「 <<sentence::{A}{a} -> (¬{B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{a} & ¬{C}{a}))": ["「 <<sentence::{A}{a} -> ({B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} & {C}{a}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} & ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> ({B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} & ¬{C}{a}))": ["「 <<sentence::{A}{a} -> (¬{B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} & ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} & {B}{a}) -> {C}{a})": ["「 <<sentence::¬({A}{a} & {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> {C}{a})": ["「 <<sentence::¬(¬{A}{a} & {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> {C}{a})": ["「 <<sentence::¬({A}{a} & ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & {B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬({A}{a} & {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> {C}{a})": ["「 <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & {B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬(¬{A}{a} & {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬({A}{a} & ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬(¬{A}{a} & ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{a} & {C}{a}))": ["「 <<sentence::{A}{a} -> ¬({B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} & {C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} & {C}{a}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{a} & ¬{C}{a}))": ["「 <<sentence::{A}{a} -> ¬({B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} & {C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{a} & {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} & ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} & ¬{C}{a}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{a} & ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(({A}{a} v {B}{a}) -> {C}{a})": ["「 <<sentence::({A}{a} v {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> {C}{a})": ["「 <<sentence::(¬{A}{a} v {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> {C}{a})": ["「 <<sentence::({A}{a} v ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v {B}{a}) -> ¬{C}{a})": ["「 <<sentence::({A}{a} v {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> {C}{a})": ["「 <<sentence::(¬{A}{a} v ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v {B}{a}) -> ¬{C}{a})": ["「 <<sentence::(¬{A}{a} v {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(({A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::({A}{a} v ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬((¬{A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ({B}{a} v {C}{a}))": ["「 <<sentence::{A}{a} -> ({B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} v {C}{a}))": ["「 <<sentence::¬{A}{a} -> ({B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} v {C}{a}))": ["「 <<sentence::{A}{a} -> (¬{B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ({B}{a} v ¬{C}{a}))": ["「 <<sentence::{A}{a} -> ({B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} v {C}{a}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ({B}{a} v ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> ({B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> (¬{B}{a} v ¬{C}{a}))": ["「 <<sentence::{A}{a} -> (¬{B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> (¬{B}{a} v ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> (¬{B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬(¬({A}{a} v {B}{a}) -> {C}{a})": ["「 <<sentence::¬({A}{a} v {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> {C}{a})": ["「 <<sentence::¬(¬{A}{a} v {B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> {C}{a})": ["「 <<sentence::¬({A}{a} v ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v {B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬({A}{a} v {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> {C}{a})": ["「 <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> {C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v {B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬(¬{A}{a} v {B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬({A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬({A}{a} v ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a})": ["「 <<sentence::¬(¬{A}{a} v ¬{B}{a}) -> ¬{C}{a}>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+
+
+    "¬({A}{a} -> ¬({B}{a} v {C}{a}))": ["「 <<sentence::{A}{a} -> ¬({B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} v {C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} v {C}{a}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬({B}{a} v ¬{C}{a}))": ["「 <<sentence::{A}{a} -> ¬({B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} v {C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{a} v {C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬({B}{a} v ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬({B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬({A}{a} -> ¬(¬{B}{a} v ¬{C}{a}))": ["「 <<sentence::{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+    "¬(¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a}))": ["「 <<sentence::¬{A}{a} -> ¬(¬{B}{a} v ¬{C}{a})>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"]
+
+
+  }
+
+}

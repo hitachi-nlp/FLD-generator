@@ -1,0 +1,44 @@
+{
+
+  "sentence": {
+
+    "¬({A}it)": [
+      ["W_VOL_AVG__0.05", "「 <<sentence::{A}it>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+      "<<sentence::¬{A}it>>"
+    ],
+    "¬(¬{A}it)": [
+      ["W_VOL_AVG__0.05", "「 <<sentence::¬{A}it>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"],
+      "<<sentence::{A}it>>"
+    ],
+
+
+    "¬({A}it & {B}it)": [
+      "「 <<sentence::({A}it & {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+    "¬(¬{A}it & {B}it)": [
+      "「 <<sentence::(¬{A}it & {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+    "¬({A}it & ¬{B}it)": [
+      "「 <<sentence::({A}it & ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+    "¬(¬{A}it & ¬{B}it)": [
+      "「 <<sentence::(¬{A}it & ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+
+
+    "¬({A}it v {B}it)": [
+      "「 <<sentence::({A}it v {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+    "¬(¬{A}it v {B}it)": [
+      "「 <<sentence::(¬{A}it v {B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+    "¬({A}it v ¬{B}it)": [
+      "「 <<sentence::({A}it v ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ],
+    "¬(¬{A}it v ¬{B}it)": [
+      "「 <<sentence::(¬{A}it v ¬{B}it)>> 」 <<phrase::toiu_koto>> <<phrase::is_not_true>>"
+    ]
+
+  }
+
+}

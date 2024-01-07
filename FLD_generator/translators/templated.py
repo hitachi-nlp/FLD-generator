@@ -172,6 +172,7 @@ class TemplatedTranslator(Translator):
                  volume_to_weight: str = 'log10',
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
+                 no_adj_verb_as_zeroary=False,
                  adj_verb_noun_ratio: Optional[List] = None,
                  knowledge_banks: Optional[List[KnowledgeBankBase]] = None,
                  log_stats=False):
@@ -202,6 +203,7 @@ class TemplatedTranslator(Translator):
 
         self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
+        self._no_adj_verb_as_zeroary = no_adj_verb_as_zeroary
         self._zeroary_predicates, self._unary_predicates, self._constants = self._load_phrases(
             self._word_bank, adj_verb_noun_ratio=adj_verb_noun_ratio)
         if limit_vocab_size_per_type is not None:
@@ -345,8 +347,12 @@ class TemplatedTranslator(Translator):
                 _weights.append(weight)
             return chained_sampling_from_weighted_iterators(_cyclic_words, _weights)
 
-        zeroary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, event_nouns)
-        zeorary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+        if self._no_adj_verb_as_zeroary:
+            zeroary_words = (event_nouns,)
+            zeorary_weights = (1.0,)
+        else:
+            zeroary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, event_nouns)
+            zeorary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
         zeroary_predicates = make_chained_sampling_from_weighted_iterators(zeroary_words, zeorary_weights)
 
         unary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, nouns)

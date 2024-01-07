@@ -64,4 +64,9 @@ class JapaneseTranslator(TemplatedTranslator):
 
         translation = re.sub(' ', '', translation)
         translation = self._postprocessor.apply(translation)
+
+        if translation.find('成り立つない') >= 0:
+            import pudb; pudb.set_trace()
+            translation = self._postprocessor.apply(translation)
+
         return translation

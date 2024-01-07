@@ -20,16 +20,27 @@ fix_seed(0)
 
 
 def _build_translator(lang,
+                      translation_config='thing',
+                      no_adj_verb_as_zeroary=False,
                       vocab: Optional[Dict[POS, List[UserWord]]] = None,
-                      knowledge_banks: Optional[List[KnowledgeBankBase]] = None) -> TemplatedTranslator:
+                      knowledge_banks: Optional[List[KnowledgeBankBase]] = None,
+                      **kwargs) -> TemplatedTranslator:
     # word_bank = None
     word_bank = build_wordbank(lang, vocab=vocab)
 
     if lang == 'eng':
         # translation_config_dir = './configs/translations/eng/thing.v1/'
-        translation_config_dir = './configs/translations/eng/thing_person.v0/'
+        if translation_config == 'thing':
+            translation_config_dir = './configs/translations/eng/thing_person.v0/'
+        else:
+            raise ValueError()
     elif lang == 'jpn':
-        translation_config_dir = './configs/translations/jpn/thing.v1/'
+        if translation_config == 'thing':
+            translation_config_dir = './configs/translations/jpn/thing.v1/'
+        elif translation_config == 'punipuni':
+            translation_config_dir = './configs/translations/jpn/punipuni/'
+        else:
+            raise ValueError()
     else:
         raise ValueError()
 
@@ -44,6 +55,7 @@ def _build_translator(lang,
         volume_to_weight='log10',
         default_weight_factor_type='W_VOL__1.0',
         adj_verb_noun_ratio='1-1-1',
+        no_adj_verb_as_zeroary=no_adj_verb_as_zeroary,
         knowledge_banks=knowledge_banks,
         extra_vocab=vocab,
     )
@@ -87,9 +99,15 @@ def make_show_translation_func(translator):
 
 
 def test_templated_translator_lang(lang: str,
+                                   translation_config='thing',
+                                   no_adj_verb_as_zeroary=False,
                                    vocab: Optional[Dict[POS, List[UserWord]]] = None,
                                    knowledge_banks: Optional[List[KnowledgeBankBase]] = None):
-    translator = _build_translator(lang, vocab=vocab, knowledge_banks=knowledge_banks)
+    translator = _build_translator(lang,
+                                   translation_config=translation_config,
+                                   no_adj_verb_as_zeroary=no_adj_verb_as_zeroary,
+                                   vocab=vocab,
+                                   knowledge_banks=knowledge_banks)
     show_translations = make_show_translation_func(translator)
 
     if knowledge_banks is None:
@@ -212,7 +230,10 @@ def test_jpn():
 
 def test_jpn_with_vocab():
     vocab = load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json')
-    test_templated_translator_lang('jpn', vocab=vocab)
+    test_templated_translator_lang('jpn',
+                                   translation_config='punipuni',
+                                   no_adj_verb_as_zeroary=True,
+                                   vocab=vocab)
 
 
 def test_jpn_postprocess():
@@ -283,6 +304,8 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間は美しいない', ['この人間は美しくない'])
     _check_katsuyou('この人間は機械だない', ['この人間は機械でない'])
     _check_katsuyou('この人間は機械だないし，あの熊も機械だない', ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
+    _check_katsuyou('Xということが成り立つない', ['Xということが成り立たない'])
+
 
     _check_katsuyou('この人間はぺにょぺにょだない', ['この人間はぺにょぺにょでない'])
     _check_katsuyou('この人間はぷいぷいだない', ['この人間はぷいぷいでない'])
@@ -292,7 +315,7 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間はきれいだない', ['この人間はきれいでない'])
     _check_katsuyou('この人間が美しいない', ['この人間が美しくない'])
     _check_katsuyou('この人間は会議するない', ['この人間は会議しない'])
-
+    _check_katsuyou('「黒いということは起こらない」ということは事実と異なるない', ['「黒いということは起こらない」ということは事実と異ならない'])
 
 
     _check_katsuyou('この人間は走るないない', ['この人間は走らなくない'])

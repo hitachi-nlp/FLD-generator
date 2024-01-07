@@ -1,0 +1,42 @@
+{
+
+  "sentence": {
+
+    "{A}something": [
+      "<<clause::verb::{A}something>>"
+    ],
+    "¬{A}something": [
+      "<<clause::verb::¬{A}something>>"
+    ],
+
+
+    "({A}something & {B}something)": [
+      "<<clause::verb::({A}something & {B}something)>>"
+    ],
+    "(¬{A}something & {B}something)": [
+      "<<clause::verb::(¬{A}something & {B}something)>>"
+    ],
+    "({A}something & ¬{B}something)": [
+      "<<clause::verb::({A}something & ¬{B}something)>>"
+    ],
+    "(¬{A}something & ¬{B}something)": [
+      "<<clause::verb::(¬{A}something & ¬{B}something)>>"
+    ],
+
+
+    "({A}something v {B}something)": [
+      "<<clause::verb::({A}something v {B}something)>>"
+    ],
+    "(¬{A}something v {B}something)": [
+      "<<clause::verb::(¬{A}something v {B}something)>>"
+    ],
+    "({A}something v ¬{B}something)": [
+      "<<clause::verb::({A}something v ¬{B}something)>>"
+    ],
+    "(¬{A}something v ¬{B}something)": [
+      "<<clause::verb::(¬{A}something v ¬{B}something)>>"
+    ]
+
+  }
+
+}
