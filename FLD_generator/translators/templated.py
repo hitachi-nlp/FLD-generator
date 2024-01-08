@@ -285,39 +285,48 @@ class TemplatedTranslator(Translator):
                       ) -> Tuple[Iterable[PredicatePhrase], Iterable[PredicatePhrase], List[ConstantPhrase]]:
 
         logger.info('loading nouns ...')
-        intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
-        nouns = [word
-                 for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-                 if word not in intermediate_constant_nouns]
+        intermediate_constant_noun_set = set(word_bank.get_intermediate_constant_words())
+
         event_nouns = [word
                        for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-                       if word not in intermediate_constant_nouns and ATTR.can_be_event_noun in word_bank.get_attrs(word)]
+                       if ATTR.can_be_event_noun in word_bank.get_attrs(word)]
+        event_nouns = list(set(event_nouns) - intermediate_constant_noun_set)
+        random.shuffle(event_nouns)
 
-        logger.info('loading entity nouns ...')
         entity_nouns = [word
                         for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-                        if word not in intermediate_constant_nouns and ATTR.can_be_entity_noun in word_bank.get_attrs(word)]
+                        if ATTR.can_be_entity_noun in word_bank.get_attrs(word)]
+        entity_nouns = list(set(entity_nouns) - intermediate_constant_noun_set)
+        random.shuffle(entity_nouns)
+
+        other_nouns = [word
+                       for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)]
+        other_nouns = list(set(other_nouns) - intermediate_constant_noun_set - set(event_nouns) - set(entity_nouns))
+        random.shuffle(other_nouns)
 
         logger.info('loading adjs ...')
         adjs = [word
                 for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)]
+        random.shuffle(adjs)
 
         logger.info('loading intransitive_verbs ...')
         intransitive_verbs = [word
                               for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
                               if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)]
+        random.shuffle(intransitive_verbs)
 
         logger.info('loading transitive_verbs ...')
         transitive_verbs = [word
                             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
                             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)]
+        random.shuffle(transitive_verbs)
 
         logger.info('making transitive verb and object combinations ...')
 
         @profile
         def build_transitive_verb_PASs() -> Iterable[Tuple[str, str]]:
             _transitive_verbs = shuffle(transitive_verbs)
-            _nouns = shuffle(nouns)
+            _nouns = shuffle(other_nouns)
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
@@ -352,11 +361,11 @@ class TemplatedTranslator(Translator):
             zeorary_weights = (1.0,)
         else:
             zeroary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, event_nouns)
-            zeorary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+            zeorary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
         zeroary_predicates = make_chained_sampling_from_weighted_iterators(zeroary_words, zeorary_weights)
 
-        unary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, nouns)
-        unary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+        unary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, other_nouns)
+        unary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
         unary_predicates = make_chained_sampling_from_weighted_iterators(unary_words, unary_weights)
 
         constants = entity_nouns
