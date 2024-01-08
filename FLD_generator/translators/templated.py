@@ -337,13 +337,13 @@ class TemplatedTranslator(Translator):
         adj_verb_noun_ratio = adj_verb_noun_ratio or [1, 2, 1]
         adj_verb_noun_weight = [3 * ratio / sum(adj_verb_noun_ratio) for ratio in adj_verb_noun_ratio]
 
-        zeorary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+        zeorary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
         zeroary_predicates = chained_sampling_from_weighted_iterators(
             (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(event_nouns)),
             zeorary_word_weights,
         )
 
-        unary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
+        unary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
         unary_predicates = chained_sampling_from_weighted_iterators(
             (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(other_nouns)),
             unary_word_weights,
