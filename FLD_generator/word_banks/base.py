@@ -181,7 +181,7 @@ class WordBank(ABC):
                     and getattr(self._extra_vocab[word], name) is not None:  # not None means specified by user
                 return getattr(self._extra_vocab[word], name)
             else:
-                return getattr(self, f'_{name}')
+                return getattr(self, f'_{name}')(word)
 
         if POS.VERB in self.get_pos(word):
             if has_attr('can_be_intransitive_verb'):
