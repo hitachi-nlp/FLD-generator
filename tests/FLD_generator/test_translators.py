@@ -168,6 +168,15 @@ def test_templated_translator_lang(lang: str, knowledge_banks: Optional[List[Kno
             intermediate_constant_formula_reps=['{b}', '{d}'],
         )
 
+        show_translations(
+            [
+                '{A}{a} -> {B}{b}',
+                '{C}{c} -> {D}{d}',
+                '{F}{f} -> {G}{g}',
+            ],
+            5,
+            intermediate_constant_formula_reps=['{a}', '{d}'],
+        )
     else:
         show_translations(['{A}{a}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
         # show_translations(['{A} -> {B}'], trial=100, knowledge_injection_idxs=[0], do_negation=False)
