@@ -287,28 +287,35 @@ class TemplatedTranslator(Translator):
         nouns = [word
                  for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
                  if word not in intermediate_constant_nouns]
+        random.shuffle(nouns)
+
         event_nouns = [word
                        for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
                        if ATTR.can_be_event_noun in word_bank.get_attrs(word)]
+        random.shuffle(event_nouns)
 
         logger.info('loading entity nouns ...')
         entity_nouns = [word
                         for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
                         if ATTR.can_be_entity_noun in word_bank.get_attrs(word)]
+        random.shuffle(entity_nouns)
 
         logger.info('loading adjs ...')
         adjs = [word
                 for word in self._load_words_by_pos_attrs(word_bank, pos=POS.ADJ)]
+        random.shuffle(adjs)
 
         logger.info('loading intransitive_verbs ...')
         intransitive_verbs = [word
                               for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
                               if ATTR.can_be_intransitive_verb in word_bank.get_attrs(word)]
+        random.shuffle(intransitive_verbs)
 
         logger.info('loading transitive_verbs ...')
         transitive_verbs = [word
                             for word in self._load_words_by_pos_attrs(word_bank, pos=POS.VERB)
                             if ATTR.can_be_transitive_verb in word_bank.get_attrs(word)]
+        random.shuffle(transitive_verbs)
 
         logger.info('making transitive verb and object combinations ...')
 

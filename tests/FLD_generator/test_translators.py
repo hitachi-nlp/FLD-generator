@@ -207,6 +207,6 @@ def test_jpn():
 
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
-    # test_eng()
-    test_eng_with_knowledge()
+    test_eng()
+    # test_eng_with_knowledge()
     # test_jpn()
