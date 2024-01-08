@@ -643,7 +643,6 @@ class TemplatedTranslator(Translator):
             volumes.append(iterator_with_volume[1])
 
         if block_shuffle:
-
             volume_weights = [volume_to_weight(volume) for volume in volumes]
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]

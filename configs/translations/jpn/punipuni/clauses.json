@@ -494,13 +494,13 @@
 
       "{A}.event_occurrence": [
         "<<phrase::{A}event_noun>>",
-        "<<clause::verb::{A}>> <<phrase::toiu_koto>>",
-        "「 <<clause::verb::{A}>> 」 <<phrase::toiu_koto>>"
+        ["W_VOL_AVG__0.1", "<<clause::verb::{A}>> <<phrase::toiu_koto>>"],
+        ["W_VOL_AVG__0.1", "「 <<clause::verb::{A}>> 」 <<phrase::toiu_koto>>"]
       ],
       "¬{A}.event_occurrence": [
         "<<phrase::¬{A}event_noun>>",
-        "<<clause::verb::¬{A}>> <<phrase::toiu_koto>>",
-        "「 <<clause::verb::¬{A}>> 」 <<phrase::toiu_koto>>"
+        ["W_VOL_AVG__0.1", "<<clause::verb::¬{A}>> <<phrase::toiu_koto>>"],
+        ["W_VOL_AVG__0.1", "「 <<clause::verb::¬{A}>> 」 <<phrase::toiu_koto>>"]
       ],
 
 
@@ -511,7 +511,9 @@
           "__",
           "__",
 
-          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"],
+
+          "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & {B}).event_occurrence": [
           "「 <<clause::verb::(¬{A} & {B})>> 」 <<phrase::toiu_koto>>",
