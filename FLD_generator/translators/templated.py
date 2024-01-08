@@ -283,22 +283,24 @@ class TemplatedTranslator(Translator):
                       ) -> Tuple[Iterable[PredicatePhrase], Iterable[PredicatePhrase], List[ConstantPhrase]]:
 
         logger.info('loading nouns ...')
-        intermediate_constant_nouns = set(word_bank.get_intermediate_constant_words())
-        nouns = [word
-                 for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
-                 if word not in intermediate_constant_nouns]
-        random.shuffle(nouns)
+        intermediate_constant_noun_set = set(word_bank.get_intermediate_constant_words())
 
         event_nouns = [word
                        for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
                        if ATTR.can_be_event_noun in word_bank.get_attrs(word)]
+        event_nouns = list(set(event_nouns) - intermediate_constant_noun_set)
         random.shuffle(event_nouns)
 
-        logger.info('loading entity nouns ...')
         entity_nouns = [word
                         for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
                         if ATTR.can_be_entity_noun in word_bank.get_attrs(word)]
+        entity_nouns = list(set(entity_nouns) - intermediate_constant_noun_set)
         random.shuffle(entity_nouns)
+
+        other_nouns = [word
+                       for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)]
+        other_nouns = list(set(other_nouns) - intermediate_constant_noun_set - set(event_nouns) - set(entity_nouns))
+        random.shuffle(other_nouns)
 
         logger.info('loading adjs ...')
         adjs = [word
@@ -322,7 +324,7 @@ class TemplatedTranslator(Translator):
         @profile
         def build_transitive_verb_PASs() -> Iterable[Tuple[str, str]]:
             _transitive_verbs = shuffle(transitive_verbs)
-            _nouns = shuffle(nouns)
+            _nouns = shuffle(other_nouns)
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
@@ -343,7 +345,7 @@ class TemplatedTranslator(Translator):
 
         unary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[0] * 2 / 3, adj_verb_noun_weight[2])
         unary_predicates = chained_sampling_from_weighted_iterators(
-            (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(nouns)),
+            (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(other_nouns)),
             unary_word_weights,
         )
 
