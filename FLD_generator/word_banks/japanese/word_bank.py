@@ -1,10 +1,11 @@
-from typing import Optional, Iterable, List, Dict, Any, Optional, Set
+from typing import Optional, Iterable, List, Dict, Any, Optional, Set, Tuple
 from collections import defaultdict
 from enum import Enum
 from abc import abstractmethod, abstractproperty
 from pprint import pprint
 import logging
 import json
+from collections import defaultdict
 
 from ordered_set import OrderedSet
 from FLD_generator.word_banks.base import POS, ATTR
@@ -333,14 +334,26 @@ class JapaneseWordBank(WordBank):
 def load_jp_extra_vocab(path: str) -> List[UserWord]:
     vocab: List[UserWord] = []
     vocab_json = json.load(open(path, 'r'))
+
+    word_pos_pairs: Set[Tuple[str, POS]] = set([])
+    attrs: Dict[Tuple[str, POS], Dict[str, bool]] = defaultdict(lambda : {_attr.value: False for _attr in ATTR})
     for key, words in vocab_json.items():
         if key.find('.') >= 0:
-            pos, attr = key.split('.')
+            pos_str, attr = key.split('.')
         else:
-            pos = key
-        attrs = {_attr.value: False for _attr in ATTR}
-        attrs[attr] = True
-        vocab.extend(UserWord(lemma=word, pos=POS(pos), **attrs)
-                     for word in words)
+            pos_str = key
+            attr = None
+        pos = POS(pos_str)
+
+        for word in words:
+            word_pos_pairs.add((word, pos))
+            if attr is not None:
+                attrs[(word, pos)][attr] = True
+
+    # we need two-pass loading, as the words can appear multiple times for different attrs.
+    for word, pos in word_pos_pairs:
+        _attrs = attrs[(word, pos)]
+        vocab.append(UserWord(lemma=word, pos=pos, **_attrs))
+
     return vocab
 

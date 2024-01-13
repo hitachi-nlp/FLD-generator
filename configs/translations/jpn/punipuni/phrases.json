@@ -428,7 +428,7 @@
       "__{A}[VERB.ing]",
       "__that <<phrase::{A}predicate>>",
 
-      "であって <<phrase::{A}predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::{A}predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
 
     "¬{A}post_modifier": [
@@ -436,7 +436,7 @@
       "__<<phrase::pred_not>> {A}[VERB.ing]",
       "__that <<phrase::¬{A}predicate>>",
 
-      "であって <<phrase::¬{A}predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
 
 
@@ -474,30 +474,30 @@
 
 
     "({A} & {B})post_modifier": [
-      "であって <<phrase::({A} & {B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::({A} & {B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
     "(¬{A} & {B})post_modifier": [
-      "であって <<phrase::(¬{A} & {B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::(¬{A} & {B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
     "({A} & ¬{B})post_modifier": [
-      "であって <<phrase::({A} & ¬{B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::({A} & ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
     "(¬{A} & ¬{B})post_modifier": [
-      "であって <<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
 
 
     "({A} v {B})post_modifier": [
-      "であって <<phrase::({A} v {B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::({A} v {B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
     "(¬{A} v {B})post_modifier": [
-      "であって <<phrase::(¬{A} v {B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::(¬{A} v {B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
     "({A} v ¬{B})post_modifier": [
-      "であって <<phrase::({A} v ¬{B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::({A} v ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
     "(¬{A} v ¬{B})post_modifier": [
-      "であって <<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>> もの"
+      "<<phrase::deari>> <<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
     ],
 
 
@@ -525,7 +525,8 @@
     "noun_and": [
       "__and",
 
-      "と"
+      "と",
+      "および"
     ],
 
     "or": [
@@ -538,6 +539,7 @@
       "__and/or",
 
       "か",
+      "かまたは",
       "かもしくは",
       "かあるいは"
     ],
@@ -546,7 +548,10 @@
       "__but",
 
       "が",
-      "がしかし"
+      "がしかし",
+      "けど",
+      "けれど",
+      "一方で"
     ],
 
     "but_and": [
@@ -558,7 +563,8 @@
     ],
 
     "noun_not": [
-      "ではなく"
+      "ではなく",
+      "ではなくて"
     ],
 
     "pred_not": [
@@ -567,13 +573,15 @@
     ],
 
     "both_pred": [
-      "__comment: 両方だ は「 両方だ ならば 」となってしまっているので，今は使えない．",
-      "両方だ"
+      "両方だ",
+      "両方ともだ",
+      "どちらもだ"
     ],
 
     "both_noun": [
-      "__comment: 両方だ は「 両方だ ならば 」となってしまっているので，今は使えない．",
-      "両方"
+      "両方",
+      "両方とも",
+      "どちらも"
     ],
 
     "is": [
@@ -677,7 +685,10 @@
       "__because",
       "__since",
 
-      "もし"
+      "もし",
+      "もしも",
+      "仮に",
+      "もし仮に"
     ],
 
     "the_fact_that": [
@@ -715,7 +726,8 @@
       "正しい",
       "真実だ",
       "事実だ",
-      "本当だ"
+      "本当だ",
+      "確かだ"
     ],
 
     "incorrect_adj": [
@@ -731,7 +743,10 @@
       "間違いだ",
       "偽だ",
       "事実と異なる",
-      "嘘だ"
+      "嘘だ",
+
+      "誤っている",
+      "間違っている"
     ],
 
     "hold_verb": [
@@ -770,11 +785,11 @@
     ],
 
     "toiu_mono_ha_ga_aru": [
-      "というもの <<phrase::ha_ga_aru>>"
+      "という<<phrase::thing>> <<phrase::ha_ga_aru>>"
     ],
 
     "mono_ha_ga_aru": [
-      "もの <<phrase::ha_ga_aru>>"
+      "<<phrase::thing>> <<phrase::ha_ga_aru>>"
     ],
 
     "ha_ga_aru": [
@@ -782,7 +797,7 @@
     ],
 
     "toiu_mono_ha_ga_nai": [
-      "というもの <<phrase::ha_ga_nai>>"
+      "という<<phrase::thing>> <<phrase::ha_ga_nai>>"
     ],
 
     "ha_ga_nai": [
@@ -800,7 +815,13 @@
       "__someone",
 
       "何か",
-      "あるもの"
+      "ある<<phrase::thing>>",
+      "何らかの<<phrase::thing>>",
+      "とある<<phrase::thing>>",
+      "なにがしかの<<phrase::thing>>",
+
+      "なにか",
+      "なんらかの<<phrase::thing>>"
     ],
 
     "everything": [
@@ -808,8 +829,13 @@
       "__everyone",
 
       "全て",
-      "全てのもの",
-      "あらゆるもの"
+      "全ての<<phrase::thing>>",
+      "あらゆる<<phrase::thing>>",
+      "何もかも",
+      "どれもこれも",
+
+      "すべて",
+      "すべての<<phrase::thing>>"
     ],
 
     "__nothing": [
@@ -821,14 +847,16 @@
       "__thing",
       "__people",
 
-      "もの"
+      "もの",
+      "物"
     ],
 
     "things": [
       "__things",
       "__people",
 
-      "もの"
+      "<<phrase::thing>>",
+      "<<phrase::thing>>達"
     ],
 
     "maybe_either": [
@@ -843,12 +871,21 @@
       "__",
 
       "ならば",
-      "なら"
+      "なら",
+      "とすれば",
+      "としたら",
+      "とすると"
     ],
 
     "ha_ga": [
       "は",
       "が"
+    ],
+
+    "deari": [
+      "で",
+      "であり",
+      "であって"
     ]
 
   }

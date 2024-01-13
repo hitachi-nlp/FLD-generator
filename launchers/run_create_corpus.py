@@ -326,7 +326,7 @@ def make_dataset(dataset_name: str,
             save_params(job_settings, job_output_dir)
 
             command = ' '.join([
-                'python ./create_corpus.py',
+                'python ./scripts/create_corpus.py',
 
                 f'{job_output_path}',
                 str(int(size_per_job)),

@@ -114,8 +114,15 @@ def test_templated_translator_lang(lang: str,
         show_translations(['{A}'], trial=30)
         show_translations(['¬({A})'], trial=30)
 
+        show_translations(['({A} & {B})'], trial=30)
         show_translations(['(¬{A} & {B})'], trial=30)
+        show_translations(['({A} & ¬{B})'], trial=30)
+        show_translations(['(¬{A} & ¬{B})'], trial=30)
+
+        show_translations(['({A} v {B})'], trial=30)
         show_translations(['(¬{A} v {B})'], trial=30)
+        show_translations(['({A} v ¬{B})'], trial=30)
+        show_translations(['(¬{A} v ¬{B})'], trial=30)
 
         show_translations(['{A} -> {B}'], trial=30)
         show_translations(['¬{A} -> {B}'], trial=30)
@@ -128,8 +135,15 @@ def test_templated_translator_lang(lang: str,
 
         show_translations(['{A}{a}'], trial=30)
 
+        show_translations(['({A}{a} & {B}{a})'], trial=30)
         show_translations(['(¬{A}{a} & {B}{a})'], trial=30)
+        show_translations(['({A}{a} & ¬{B}{a})'], trial=30)
+        show_translations(['(¬{A}{a} & ¬{B}{a})'], trial=30)
+
+        show_translations(['({A}{a} v {B}{a})'], trial=30)
         show_translations(['(¬{A}{a} v {B}{a})'], trial=30)
+        show_translations(['({A}{a} v ¬{B}{a})'], trial=30)
+        show_translations(['(¬{A}{a} v ¬{B}{a})'], trial=30)
 
         show_translations(['({A}{a} -> {B}{a})'], trial=30)
         show_translations(['(¬{A}{a} -> {B}{a})'], trial=30)
@@ -237,8 +251,8 @@ def test_jpn():
     test_templated_translator_lang('jpn')
     
 
-def test_jpn_with_vocab():
-    extra_vocab = load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json')
+def test_jpn_with_vocab(vocab_path='./res/word_banks/japanese/punipuni_vocab.json'):
+    extra_vocab = load_jp_extra_vocab(vocab_path)
     test_templated_translator_lang('jpn',
                                    translation_config='punipuni',
                                    no_adj_verb_as_zeroary=True,
@@ -362,4 +376,5 @@ if __name__ == '__main__':
     # test_jpn_postprocess()
 
     # test_jpn()
-    test_jpn_with_vocab()
+    # test_jpn_with_vocab(vocab_path='./res/word_banks/japanese/punipuni_vocab.json')
+    test_jpn_with_vocab(vocab_path='./res/word_banks/japanese/BCCWJ_vocab/BCCWJ.all.json')
