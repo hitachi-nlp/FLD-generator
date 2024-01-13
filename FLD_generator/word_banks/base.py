@@ -41,6 +41,7 @@ class ATTR(Enum):
 
     can_be_event_noun = 'can_be_event_noun'
     can_be_entity_noun = 'can_be_entity_noun'
+    can_be_predicate_noun = 'can_be_predicate_noun'
 
 
 class UserWord(BaseModel):
@@ -50,8 +51,10 @@ class UserWord(BaseModel):
     # Note that "None" means "should behave as default"
     can_be_transitive_verb: Optional[bool] = None
     can_be_intransitive_verb: Optional[bool] = None
+
     can_be_event_noun: Optional[bool] = None
     can_be_entity_noun: Optional[bool] = None
+    can_be_predicate_noun: Optional[bool] = None
 
 
 class WordBank(ABC):
@@ -195,6 +198,9 @@ class WordBank(ABC):
         if POS.NOUN in self.get_pos(word):
             if has_attr('can_be_entity_noun'):
                 attrs.append(ATTR.can_be_entity_noun)
+        if POS.NOUN in self.get_pos(word):
+            if has_attr('can_be_predicate_noun'):
+                attrs.append(ATTR.can_be_predicate_noun)
 
         return attrs
 
@@ -212,4 +218,8 @@ class WordBank(ABC):
 
     @abstractmethod
     def _can_be_entity_noun(self, noun: str) -> bool:
+        pass
+
+    @abstractmethod
+    def _can_be_predicate_noun(self, noun: str) -> bool:
         pass

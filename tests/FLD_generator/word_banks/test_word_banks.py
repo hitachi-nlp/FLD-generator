@@ -71,19 +71,22 @@ if __name__ == '__main__':
     #     ]
     # )
 
-    test_word_bank('jpn')
+    # test_word_bank('jpn')
+    test_word_bank(
+        'jpn',
+        extra_vocab=[
+            UserWord(lemma='ぷにぷに', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
+            UserWord(lemma='ぴよぴよ', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
 
-    # test_word_bank(
-    #     'jpn',
-    #     # extra_vocab=[
-    #     #     UserWord(lemma='ぷにぷに', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
-    #     #     UserWord(lemma='ぴよぴよ', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
+            # both should appear as predicate noun
+            UserWord(lemma='達者', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=False, can_be_predicate_noun=True),
+            UserWord(lemma='闊達', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=False),
 
-    #     #     UserWord(lemma='歩く', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
-    #     #     UserWord(lemma='走る', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
+            UserWord(lemma='歩く', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
+            UserWord(lemma='走る', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
 
-    #     #     UserWord(lemma='赤い', pos=POS.ADJ),
-    #     #     UserWord(lemma='青い', pos=POS.ADJ),
-    #     # ],
-    #     extra_vocab=load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json'),
-    # )
+            UserWord(lemma='赤い', pos=POS.ADJ),
+            UserWord(lemma='青い', pos=POS.ADJ),
+        ],
+        # extra_vocab=load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json'),
+    )

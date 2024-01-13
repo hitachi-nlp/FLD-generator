@@ -310,6 +310,9 @@ class EnglishWordBank(WordBank):
             return True
         return self._word_util.can_be_entity_noun(noun)
 
+    def _can_be_predicate_noun(self, noun: str) -> bool:
+        return not self._can_be_entity_noun(noun) and not self._can_be_event_noun(noun)
+
     def _get_antonyms(self, word: str) -> List[str]:
         return self._word_util.get_antonyms(word)
 

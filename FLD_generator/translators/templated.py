@@ -299,10 +299,10 @@ class TemplatedTranslator(Translator):
         entity_nouns = list(set(entity_nouns) - intermediate_constant_noun_set)
         random.shuffle(entity_nouns)
 
-        other_nouns = [word
-                       for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)]
-        other_nouns = list(set(other_nouns) - intermediate_constant_noun_set - set(event_nouns) - set(entity_nouns))
-        random.shuffle(other_nouns)
+        predicate_nouns = [word
+                           for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+                           if ATTR.can_be_predicate_noun in word_bank.get_attrs(word)]
+        predicate_nouns = list(set(predicate_nouns) - intermediate_constant_noun_set)
 
         logger.info('loading adjs ...')
         adjs = [word
@@ -326,14 +326,14 @@ class TemplatedTranslator(Translator):
         @profile
         def build_transitive_verb_PASs() -> Iterable[Tuple[str, str]]:
             _transitive_verbs = shuffle(transitive_verbs)
-            _nouns = shuffle(other_nouns)
+            _nouns = shuffle(predicate_nouns)
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
                 # yield pair_pred_with_obj_mdf(verb, obj, None)
                 # yield PredicatePhrase(predicate=verb, object=obj)
                 yield verb, obj
-        is_transitive_verbs_empty = len(transitive_verbs) == 0 or len(nouns) == 0
+        is_transitive_verbs_empty = len(transitive_verbs) == 0 or len(predicate_nouns) == 0
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
@@ -364,7 +364,7 @@ class TemplatedTranslator(Translator):
             zeorary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
         zeroary_predicates = make_chained_sampling_from_weighted_iterators(zeroary_words, zeorary_weights)
 
-        unary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, other_nouns)
+        unary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, predicate_nouns)
         unary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
         unary_predicates = make_chained_sampling_from_weighted_iterators(unary_words, unary_weights)
 
