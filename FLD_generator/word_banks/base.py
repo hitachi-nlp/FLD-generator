@@ -68,7 +68,10 @@ class WordBank(ABC):
     # INTERMEDIATE_CONSTANT_PREFIXES: List[str]
 
     def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
-        self._extra_vocab: Dict[str, UserWord] = (
+        # to be used by translator, we make extra_vocab as public variable.
+        # but it is not good a practice that the translator depends on the UserWord, which is the details of word bank.
+        self.extra_vocab = extra_vocab
+        self._extra_vocab_dict: Dict[str, UserWord] = (
             {word.lemma: word for word in extra_vocab} if extra_vocab is not None\
             else {}
         )
@@ -89,14 +92,14 @@ class WordBank(ABC):
     def get_words(self, slice_='all') -> Iterable[str]:
         # enumerate base form of words
         if slice_ == 'all':
-            yield from chain(self.get_intermediate_constant_words(), self._get_all_lemmas(), self._extra_vocab)
+            yield from chain(self.get_intermediate_constant_words(), self._get_all_lemmas(), self._extra_vocab_dict)
         elif slice_ == 'extra':
-            if len(self._extra_vocab) == 0:
+            if len(self._extra_vocab_dict) == 0:
                 logger.warning('extra_vocab is None. Will return empty list')
-            yield from self._extra_vocab or ()
+            yield from self._extra_vocab_dict or ()
         elif slice_ == 'extra_or_default':
-            if len(self._extra_vocab) > 0:
-                yield from self._extra_vocab
+            if len(self._extra_vocab_dict) > 0:
+                yield from self._extra_vocab_dict
             else:
                 yield from chain(self.get_intermediate_constant_words(), self._get_all_lemmas())
         else:
@@ -180,9 +183,9 @@ class WordBank(ABC):
         attrs = []
 
         def has_attr(name: str) -> bool:
-            if word in self._extra_vocab\
-                    and getattr(self._extra_vocab[word], name) is not None:  # not None means specified by user
-                return getattr(self._extra_vocab[word], name)
+            if word in self._extra_vocab_dict\
+                    and getattr(self._extra_vocab_dict[word], name) is not None:  # not None means specified by user
+                return getattr(self._extra_vocab_dict[word], name)
             else:
                 return getattr(self, f'_{name}')(word)
 

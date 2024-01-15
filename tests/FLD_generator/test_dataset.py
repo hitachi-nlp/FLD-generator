@@ -29,7 +29,7 @@ fix_seed(0)
 
 @profile
 def generate_dataset(dataset: NLProofSDataset,
-                     num_dataset: int = 10000) -> None:
+                     num_dataset: int = 30) -> None:
     # agg_stats: Dict[str, int] = defaultdict(int)
     for i_sample, (nlproof_json, proof_tree, distractors, translation_distractors, stats) in enumerate(dataset.generate(num_dataset)):
         log_results(logger, i_sample=i_sample, nlproof_json=nlproof_json, proof_tree=proof_tree,
@@ -42,18 +42,10 @@ def generate_dataset(dataset: NLProofSDataset,
 
 
 @profile
-def test_generate_dataset_lang(lang: str):
+def test_generate_dataset_lang(lang: str, extra_vocab: Optional[Dict[str, List[str]]] = None):
 
     # word_bank = None
-    word_bank = build_wordbank(lang)
-
-    if lang == 'eng':
-        # translation_config_dir = './configs/translations/eng/thing.v1/'
-        translation_config_dir = './configs/translations/eng/thing_person.v0/'
-    elif lang == 'jpn':
-        translation_config_dir = './configs/translations/jpn/thing.v1/'
-    else:
-        raise ValueError()
+    word_bank = build_wordbank(lang, extra_vocab=extra_vocab)
 
     if lang == 'eng':
         # knowledge_bank = None
@@ -74,11 +66,11 @@ def test_generate_dataset_lang(lang: str):
     elif lang == 'jpn':
         knowledge_banks = None
 
-    # translator = None
     translator = build_translator(
         lang,
-        [translation_config_dir],
+        'thing',
         word_bank,
+        no_transitive_object=False,
         use_fixed_translation=False,
         reused_object_nouns_max_factor=1.0,
         limit_vocab_size_per_type=None,
@@ -231,4 +223,7 @@ if __name__ == '__main__':
 
     # test_generate_dataset_AACorpus()
     # test_generate_dataset_lang('eng')
-    test_generate_dataset_lang('jpn')
+
+    # test_generate_dataset_lang('jpn')
+    # test_generate_dataset_lang('jpn', extra_vocab='BCCWJ')
+    test_generate_dataset_lang('jpn', extra_vocab='punipuni')

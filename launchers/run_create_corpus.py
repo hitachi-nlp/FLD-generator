@@ -343,11 +343,13 @@ def make_dataset(dataset_name: str,
 
                 maybe_option('--translation-lang', job_settings.get('translation_lang', None)),
                 _make_multiple_value_option('--translation-config', job_settings['translation_configs']),
+                '--translation-no-transitive-object' if job_settings.get("translation_no_transitive_object", False) else '',
                 '--use-fixed-translation' if job_settings.get("use_fixed_translation", False) else '',
                 maybe_option('--reused-object-nouns-max-factor', job_settings.get("reused_object_nouns_max_factor", None)),
                 f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                 maybe_option('--translation-volume-to-weight', job_settings.get("translation_volume_to_weight", None)),
                 maybe_option('--translation-adj-verb-noun-ratio', job_settings.get("translation_adj_verb_noun_ratio", None)),
+                maybe_option('--translation-vocab', job_settings.get("translation_vocab", None)),
 
 
                 f'--distractor "{job_settings["distractor"]}"',

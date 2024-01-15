@@ -19,8 +19,13 @@ logger = logging.getLogger(__name__)
 
 class EnglishTranslator(TemplatedTranslator):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 *args,
+                 no_transitive_object=False,
+                 **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._no_transitive_object = no_transitive_object
 
         self._male_names: Set[str] = set()
         self._female_names: Set[str] = set()
@@ -51,7 +56,7 @@ class EnglishTranslator(TemplatedTranslator):
 
         if pred.object is not None and pred.right_modifier is not None:
             raise Exception('Can not determine the order of these phrases. We do not expect to pass this code, therefore, might be a bug.')
-        if pred.object is not None:
+        if pred.object is not None and not self._no_transitive_object:
             rep += f' {pred.object}'
         if pred.right_modifier is not None:
             rep += f' {pred.right_modifier}'

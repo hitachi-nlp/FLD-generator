@@ -2,7 +2,7 @@ from typing import List, Optional, Iterable, Dict
 import json
 
 from FLD_generator.word_banks import build_wordbank, POS, ATTR, UserWord
-from FLD_generator.word_banks.japanese import load_jp_extra_vocab
+from FLD_generator.word_banks import load_vocab
 import logging
 from logger_setup import setup as setup_logger
 
@@ -88,5 +88,5 @@ if __name__ == '__main__':
             UserWord(lemma='赤い', pos=POS.ADJ),
             UserWord(lemma='青い', pos=POS.ADJ),
         ],
-        # extra_vocab=load_jp_extra_vocab('./res/word_banks/japanese/punipuni_vocab.json'),
+        # extra_vocab='punipuni',
     )

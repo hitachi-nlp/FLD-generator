@@ -1,1 +1,1 @@
-{'entity_vocab': 178752, 'event_vocab': 178752}
+{'entity_vocab': 254016, 'event_vocab': 254016}

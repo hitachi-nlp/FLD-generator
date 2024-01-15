@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, List, Dict, Any, Optional, Set, Tuple
+from typing import Optional, Iterable, List, Dict, Any, Optional, Set, Tuple, Union
 from collections import defaultdict
 from enum import Enum
 from abc import abstractmethod, abstractproperty
@@ -6,6 +6,7 @@ from pprint import pprint
 import logging
 import json
 from collections import defaultdict
+from pathlib import Path
 
 from ordered_set import OrderedSet
 from FLD_generator.word_banks.base import POS, ATTR
@@ -101,7 +102,7 @@ class JapaneseWordBank(WordBank):
                 mtc_morphemes = [morpheme for morpheme in self._morphemes.get(lemma, [])
                                  if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
                 if len(mtc_morphemes) == 0:
-                    logger.info('could not find word "%s" in the morpheme list. Will create a morpheme by ourselves.', lemma)
+                    # logger.info('could not find the extra word "%s" in the canonical morpheme list. Will create a morpheme by ourselves.', lemma)
                     mtc_morphemes = [
                         Morpheme(
                             surface=lemma,
@@ -331,26 +332,37 @@ class JapaneseWordBank(WordBank):
                 if katsuyous is None or morpheme.katsuyou in katsuyous]
 
 
-def load_jp_extra_vocab(path: str) -> List[UserWord]:
-    vocab: List[UserWord] = []
-    vocab_json = json.load(open(path, 'r'))
+def load_jp_extra_vocab(path: Union[str, List[str]]) -> List[UserWord]:
+    if isinstance(path, list):
+        all_paths = path
+    else:
+        if Path(path).is_dir():
+            all_paths = list(Path(path).glob('**/*.json'))
+        else:
+            all_paths = [Path(path)]
+    vocab_jsons = []
+    for _path in all_paths:
+        logger.info(f'loading vocaburaly {_path}')
+        vocab_jsons.append(json.load(open(str(_path))))
 
     word_pos_pairs: Set[Tuple[str, POS]] = set([])
     attrs: Dict[Tuple[str, POS], Dict[str, bool]] = defaultdict(lambda : {_attr.value: False for _attr in ATTR})
-    for key, words in vocab_json.items():
-        if key.find('.') >= 0:
-            pos_str, attr = key.split('.')
-        else:
-            pos_str = key
-            attr = None
-        pos = POS(pos_str)
+    for vocab_json in vocab_jsons:
+        for key, words in vocab_json.items():
+            if key.find('.') >= 0:
+                pos_str, attr = key.split('.')
+            else:
+                pos_str = key
+                attr = None
+            pos = POS(pos_str)
 
-        for word in words:
-            word_pos_pairs.add((word, pos))
-            if attr is not None:
-                attrs[(word, pos)][attr] = True
+            for word in words:
+                word_pos_pairs.add((word, pos))
+                if attr is not None:
+                    attrs[(word, pos)][attr] = True
 
     # we need two-pass loading, as the words can appear multiple times for different attrs.
+    vocab: List[UserWord] = []
     for word, pos in word_pos_pairs:
         _attrs = attrs[(word, pos)]
         vocab.append(UserWord(lemma=word, pos=pos, **_attrs))

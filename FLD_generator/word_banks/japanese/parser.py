@@ -4,12 +4,16 @@ from pathlib import Path
 from functools import lru_cache
 import logging
 import re
+from abc import ABC, abstractmethod
 
+from flashtext import KeywordProcessor
 from fugashi import GenericTagger
 from pydantic import BaseModel
 import ipadic
 
 from FLD_generator.word_banks.base import WordBank, POS, ATTR, UserWord
+
+import line_profiling
 
 logger = logging.getLogger(__name__)
 _TAGGER = GenericTagger(ipadic.MECAB_ARGS)
@@ -85,6 +89,60 @@ class Morpheme(BaseModel):
         return f'{super().__repr__()}'
 
 
+class KeywordReplacer(ABC):
+
+    def __init__(self, sep: str):
+        self._sep = sep
+
+    @abstractmethod
+    def add_keywords(self, keywords: List[str]):
+        pass
+
+    @abstractmethod
+    def __call__(self, text: str) -> str:
+        pass
+
+
+class RegexpKeywordReplacer(KeywordReplacer):
+    # XXX: SLOW for large set of keywords
+
+    def __init__(self, sep: str):
+        super().__init__(sep)
+        self._user_word_regexp = None
+
+    def add_keywords(self, keywords: List[str]):
+        if self._user_word_regexp is not None:
+            raise NotImplementedError()
+        self._user_word_regexp = re.compile(
+            '|'.join(sorted(keywords, key=lambda x: - len(x)))
+        )
+
+    def __call__(self, text: str) -> str:
+        if self._user_word_regexp is None:
+            raise ValueError('No keywords are registered.')
+        text = self._user_word_regexp.sub(lambda x: f'{self._sep}{x.group(0)}{self._sep}',
+                                          text)
+        text = text.replace(self._sep, f' {self._sep} ')
+        return text
+
+
+class FlashTextKeywordReplacer(KeywordReplacer):
+    # faster than RegexpKeywordReplacer
+
+    def __init__(self, sep: str):
+        super().__init__(sep)
+        self._keyword_processor = KeywordProcessor()
+
+    def add_keywords(self, keywords: List[str]):
+        for keyword in keywords:
+            self._keyword_processor.add_keyword(keyword, f'{self._sep}{keyword}{self._sep}')
+
+    def __call__(self, text: str) -> str:
+        text = self._keyword_processor.replace_keywords(text)
+        text = text.replace(self._sep, f' {self._sep} ')
+        return text
+
+
 class MorphemeParser:
 
     def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
@@ -92,25 +150,19 @@ class MorphemeParser:
         self._sep = '📙'
 
         if len(self.extra_vocab) > 0:
-            self._user_word_regexp = re.compile(
-                '|'.join(
-                    sorted((word.lemma for word in self.extra_vocab.values()),
-                           key=lambda x: - len(x))
-                )
-            )
-        else:
-            self._user_word_regexp = None
+            # self._keyword_replacer = RegexpKeywordReplacer(self._sep)
+            self._keyword_replacer = FlashTextKeywordReplacer(self._sep)
 
+            keywords = list(self.extra_vocab.keys())
+            self._keyword_replacer.add_keywords(keywords)
+        else:
+            self._keyword_replacer = None
+
+    @profile
     def parse(self, text: str) -> List[Morpheme]:
-        text_org = text
-        if self._user_word_regexp is not None:
-            text = self._user_word_regexp.sub(lambda x: f'{self._sep}{x.group(0)}{self._sep}', text)
-            text = text.replace(self._sep, f' {self._sep} ')
-            # if text != text_org:
-            #     logger.debug('We parse the text with user word markers, as folllows:'
-            #                  '\noriginal     : %s'
-            #                  '\nwith markers : %s',
-            #                  text_org, text)
+        if self._keyword_replacer is not None:
+            text = self._keyword_replacer(text)
+            print(text)
 
         morphemes = _parse(text)
         morphemes_with_user_words: List[Morpheme] = []

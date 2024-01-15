@@ -17,12 +17,13 @@ class JapaneseTranslator(TemplatedTranslator):
                  word_bank: WordBank,
                  *args,
                  insert_word_delimiters=False,
-                 extra_vocab: Optional[Dict[str, UserWord]] = None,
+                 no_transitive_object=False,
                  **kwargs):
         super().__init__(config_json, word_bank, *args, **kwargs)
         self.insert_word_delimiters = insert_word_delimiters
+        self._no_transitive_object = no_transitive_object
         self._transl_to_kaku_cache: Dict[str, str] = {}
-        self._postprocessor = build_postprocessor(word_bank, extra_vocab=extra_vocab)
+        self._postprocessor = build_postprocessor(word_bank)
 
     def _postprocess_template(self, template: str) -> str:
         return template
@@ -48,7 +49,7 @@ class JapaneseTranslator(TemplatedTranslator):
         if pred.object is not None and pred.right_modifier is not None:
             raise Exception('Can not determine the order of these phrases. We do not expect to pass this code, therefore, might be a bug.')
 
-        if pred.object is not None:
+        if pred.object is not None and not self._no_transitive_object:
             kaku = self._transl_to_kaku_cache.get(pred, random.choice(self.KAKU_LIST))
             self._transl_to_kaku_cache[pred] = kaku
             rep = pred.object + kaku + rep

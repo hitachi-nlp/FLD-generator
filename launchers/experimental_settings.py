@@ -2170,6 +2170,7 @@ _DATASET_SETTINGS = {
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
+        'translation_vocab': None,
 
 
         'depth_distrib': 'flat.no_reference',
@@ -2214,6 +2215,7 @@ _DATASET_SETTINGS = {
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
+        'translation_vocab': None,
 
 
         'depth_distrib': 'flat.no_reference',
@@ -2258,6 +2260,7 @@ _DATASET_SETTINGS = {
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
+        'translation_vocab': None,
 
 
         'depth_distrib': 'flat.no_reference',
@@ -5547,6 +5550,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_volume_to_weight': 'sqrt',
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_configs': _TRANSLATION_THING_CONFIGS_ENG,
+        'translation_no_transitive_object': False,
 
         'translation_variants_per_logic': 1,
     },
@@ -5581,6 +5585,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_volume_to_weight': 'sqrt',
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_configs': _TRANSLATION_THING_CONFIGS_ENG,
+        'translation_no_transitive_object': False,
 
 
         'depth_distrib': 'flat',
@@ -5614,6 +5619,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_lang': 'eng',
         'translation_configs': _TRANSLATION_THING_CONFIGS_ENG_V1,
+        'translation_no_transitive_object': False,
 
         'translation_variants_per_logic': 1,
 
@@ -5644,6 +5650,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_lang': 'eng',
         'translation_configs': _TRANSLATION_THING_PERSON_CONFIGS_ENG_V0,
+        'translation_no_transitive_object': False,
 
         'translation_variants_per_logic': 1,
 

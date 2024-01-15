@@ -38,6 +38,8 @@ def load_dataset(argument_config: List[str],
                  translation_volume_to_weight: str,
                  translation_default_weight_factor_type: str,
                  translation_adj_verb_noun_ratio: str,
+                 translation_no_transitive_object: bool,
+                 translation_vocab: str,
                  complex_formula_arguments_weight: float,
                  quantifier_axiom_arguments_weight: float,
                  quantifier_axioms: Optional[List[str]],
@@ -110,7 +112,7 @@ def load_dataset(argument_config: List[str],
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
-    word_bank = build_wordbank(translation_lang)
+    word_bank = build_wordbank(translation_lang, extra_vocab=translation_vocab)
     logger.info(_build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
 
     if distractors_range[1] > 0:
@@ -148,7 +150,8 @@ def load_dataset(argument_config: List[str],
                                   limit_vocab_size_per_type=limit_vocab_size_per_type,
                                   volume_to_weight=translation_volume_to_weight,
                                   default_weight_factor_type=translation_default_weight_factor_type,
-                                  knowledge_banks=knowledge_banks)
+                                  knowledge_banks=knowledge_banks,
+                                  no_transitive_objects=translation_no_transitive_object)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     if translation_lang == 'eng':
@@ -253,6 +256,8 @@ def generate_instances(size: int, *args):
 @click.option('--translation-volume-to-weight', type=str, default='log10')
 @click.option('--translation-default-weight-factor-type', type=str, default='W_VOL__1.0')
 @click.option('--translation-adj-verb-noun-ratio', type=str, default='1:1:1')
+@click.option('--translation-no-transitive-object', type=bool, is_flag=True)
+@click.option('--translation-vocab', type=str, default=None)
 #
 @click.option('--distractor', default='mixture.negative_tree.negative_tree')
 @click.option('--distractors-range', type=str, default=json.dumps([5, 5]))
@@ -299,6 +304,8 @@ def main(output_path,
          translation_volume_to_weight,
          translation_default_weight_factor_type,
          translation_adj_verb_noun_ratio,
+         translation_no_transitive_object,
+         translation_vocab,
          size,
          depth_range,
          depth_distrib,
@@ -386,6 +393,8 @@ def main(output_path,
                         translation_volume_to_weight,
                         translation_default_weight_factor_type,
                         translation_adj_verb_noun_ratio,
+                        translation_no_transitive_object,
+                        translation_vocab,
                         complex_formula_arguments_weight,
                         quantifier_axiom_arguments_weight,
                         quantifier_axiom,

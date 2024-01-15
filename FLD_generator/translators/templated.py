@@ -155,9 +155,6 @@ class GlobalResolveTemplateGenerator:
             )
 
 
-
-
-
 class TemplatedTranslator(Translator):
 
     _TEMPLATE_BRACES = ['<<', '>>']
@@ -576,11 +573,6 @@ class TemplatedTranslator(Translator):
                 translation_names.append(None)
 
         # fix grammers and other stufs
-        for translation in translations:
-            if translation is None:
-                continue
-            processed = self._postprocess_translation_all(translation)
-            processed = self._postprocess_translation_all(translation)
         translations = [
             (self._postprocess_translation_all(translation, knowlege_type=knowlege_type) if translation is not None else None)
             for translation, knowlege_type in zip(translations, knowledge_types)

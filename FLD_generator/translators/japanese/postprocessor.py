@@ -11,7 +11,6 @@ from FLD_generator.word_banks.base import UserWord
 class Postprocessor(ABC):
 
     def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
-        self._extra_vocab = extra_vocab
         self._parser = MorphemeParser(extra_vocab=extra_vocab)
     
     @abstractmethod
@@ -243,6 +242,7 @@ class NaiKatsuyouRule(WindowRule):
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
         surfaces = [morpheme.surface for morpheme in morphemes]
+
         if morphemes[0].pos == '動詞' and surfaces[1] == 'ない':
             # 走るない -> 走らない
             # 会議する -> 会議しない
@@ -268,6 +268,8 @@ class NaiKatsuyouRule(WindowRule):
                 return None
 
         elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
+            if surfaces[0] == 'く':  # sometimes 'く'(ない) is parsed as 形容詞
+                return None
             # 美しいない -> 美しくない
             katsuyou_word = self._get_katsuyou_word(morphemes[0], '連用テ接続')
             if katsuyou_word is None:
@@ -359,7 +361,8 @@ class UniqueKOSOADOPostprocessor(Postprocessor):
         self._obj_to_kosoado: Dict[str, str] = {}
 
 
-def build_postprocessor(word_bank: JapaneseWordBank, extra_vocab: Optional[List[UserWord]] = None) -> WindowRulesPostprocessor:
+def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor:
+    extra_vocab = word_bank.extra_vocab
     return PostprocessorChain([
         WindowRulesPostprocessor(
             [
