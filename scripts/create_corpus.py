@@ -151,7 +151,7 @@ def load_dataset(argument_config: List[str],
                                   volume_to_weight=translation_volume_to_weight,
                                   default_weight_factor_type=translation_default_weight_factor_type,
                                   knowledge_banks=knowledge_banks,
-                                  no_transitive_objects=translation_no_transitive_object)
+                                  no_transitive_object=translation_no_transitive_object)
     logger.info(_build_bounded_msg(f'{"[finish] building translator":<30}', 3))
 
     if translation_lang == 'eng':

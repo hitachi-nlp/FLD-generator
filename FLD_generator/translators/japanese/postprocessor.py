@@ -43,6 +43,7 @@ class WindowRule:
 
     def __init__(self, word_bank: JapaneseWordBank):
         self._word_bank = word_bank
+        self._native_parser = MorphemeParser()
 
     @abstractproperty
     def window_size(self) -> int:
@@ -62,10 +63,21 @@ class WindowRule:
 
     def _get_katsuyou_word(self, morpheme: Morpheme, katsuyou: str) -> Optional[str]:
         katsuyou_morphemes = self._word_bank.get_katsuyou_morphemes(morpheme.base, katsuyous=[katsuyou])
-        if len(katsuyou_morphemes) == 0:
-            return None
-        else:
+        if len(katsuyou_morphemes) > 0:
             return katsuyou_morphemes[0].surface
+        else:
+            # long morpheme coming from user vocab, such as "剥がれ落ちる"
+            shorter_morphemes = self._native_parser.parse(morpheme.surface)
+            if len(shorter_morphemes) <= 1:
+                return None
+            else:
+                last_morpheme = shorter_morphemes[-1]
+                last_katsuyou_morphemes = self._word_bank.get_katsuyou_morphemes(last_morpheme.base, katsuyous=[katsuyou])
+                if len(last_katsuyou_morphemes) == 0:
+                    return None
+                else:
+                    last_katsuyou_morpheme = last_katsuyou_morphemes[0]
+                    return ''.join([morpheme.surface for morpheme in shorter_morphemes[:-1]] + [last_katsuyou_morpheme.surface])
 
     @abstractmethod
     def reset_assets(self) -> None:
@@ -91,17 +103,21 @@ class WindowRulesPostprocessor(Postprocessor):
                 words_modified_dst: List[str] = []
                 i_end = 0
                 is_applied = False
-                for i, window in enumerate(self._slide(morphemes_modified, rule.window_size)):
-                    _modified_words = rule.apply(window)
-                    if _modified_words is not None and i not in done_positions:
-                        words_modified_dst += _modified_words
-                        i_end = i + rule.window_size - 1
-                        is_applied = True
-                        done_positions.add(i)
-                        break
-                    else:
-                        words_modified_dst.append(window[0].surface)
-                        i_end = i
+                if len(morphemes_modified) >= rule.window_size:
+                    for i, window in enumerate(self._slide(morphemes_modified, rule.window_size)):
+                        _modified_words = rule.apply(window)
+                        if _modified_words is not None and i not in done_positions:
+                            words_modified_dst += _modified_words
+                            i_end = i + rule.window_size - 1
+                            is_applied = True
+                            done_positions.add(i)
+                            break
+                        else:
+                            words_modified_dst.append(window[0].surface)
+                            i_end = i
+                else:
+                    is_applied = False
+                    i_end = -1
                 is_appliable = is_applied
                 words_modified_dst += words_modified_org[i_end + 1:]
                 text_modified = ''.join(words_modified_dst)
@@ -270,10 +286,15 @@ class NaiKatsuyouRule(WindowRule):
         elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
             if surfaces[0] == 'く':  # sometimes 'く'(ない) is parsed as 形容詞
                 return None
+
             # 美しいない -> 美しくない
             katsuyou_word = self._get_katsuyou_word(morphemes[0], '連用テ接続')
             if katsuyou_word is None:
-                return None
+                if surfaces[0].endswith('い'):
+                    # should be something like "夫婦らしい"
+                    return [surfaces[0][:-1] + 'く', 'ない']
+                else:
+                    return None
             else:
                 return [katsuyou_word, 'ない']
 
