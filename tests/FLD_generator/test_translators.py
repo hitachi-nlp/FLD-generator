@@ -234,7 +234,7 @@ def test_jpn():
 
 def test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/punipuni_vocab.json'):
     test_templated_translator_lang('jpn',
-                                   translation_config='punipuni',
+                                   translation_config='thing.v1.pretty',
                                    no_adj_verb_as_zeroary=True,
                                    extra_vocab=vocab_name_or_path)
 
@@ -309,6 +309,8 @@ def test_jpn_postprocess():
 
     _check_katsuyou('この人間は走るない', ['この人間は走らない'])
     _check_katsuyou('この人間は美しいない', ['この人間は美しくない'])
+    _check_katsuyou('夫婦らしいない物は分厚いかあるいは忌まわしい', ['夫婦らしくない物は分厚いかあるいは忌まわしい'])
+    _check_katsuyou('剥がれ落ちるない', ['剥がれ落ちない'])
     _check_katsuyou('この人間は機械だない', ['この人間は機械でない'])
     _check_katsuyou('この人間は機械だないし，あの熊も機械だない', ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
     _check_katsuyou('Xということが成り立つない', ['Xということが成り立たない'])

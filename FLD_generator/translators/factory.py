@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Tuple
 import logging
 import json
 
@@ -16,9 +16,11 @@ from .japanese import JapaneseTranslator
 logger = logging.getLogger(__name__)
 
 
-def _get_config_paths(name_or_path: Union[str, List[str]], lang: str) -> List[str]:
-    if isinstance(name_or_path, list):
-        return name_or_path
+def _get_config_paths(name_or_path: Union[str, List[str], Tuple[str]], lang: str) -> List[str]:
+    if isinstance(name_or_path, (list, tuple)):
+        return [_path
+                for path in name_or_path
+                for _path in _get_config_paths(path, lang)]
 
     if Path(name_or_path).is_dir():
         return [str(p) for p in Path(name_or_path).glob('**/*.json')]
@@ -26,23 +28,23 @@ def _get_config_paths(name_or_path: Union[str, List[str]], lang: str) -> List[st
         return [name_or_path]
     else:
         if lang == 'eng':
-            if name_or_path == 'thing':
+            if name_or_path in ['thing', 'thing.v1']:
                 return _get_config_paths('./configs/translations/eng/thing_person.v0/', lang)
             else:
-                raise ValueError()
+                raise ValueError(f'Unsupported config name {name_or_path}')
         elif lang == 'jpn':
-            if name_or_path == 'thing':
+            if name_or_path in ['thing', 'thing.v1']:
                 return _get_config_paths('./configs/translations/jpn/thing.v1/', lang)
-            elif name_or_path == 'punipuni':
+            elif name_or_path in ['thing.pretty', 'thing.v1.pretty']:
                 paths = [path
                          for path in _get_config_paths('./configs/translations/jpn/thing.v1/', lang)
-                         if not path.endswith('phrase.json')]
-                paths.append('./configs/translations/jpn/punipuni/phrases.json')
+                         if not path.endswith('phrases.json')]
+                paths.append('./configs/translations/jpn/thing.v1.pretty/phrases.json')
                 return paths
             else:
-                raise ValueError()
+                raise ValueError(f'Unsupported config name {name_or_path}')
         else:
-            raise ValueError()
+            raise ValueError(f'Unsupported language {lang}')
 
 
 

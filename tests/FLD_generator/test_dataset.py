@@ -68,7 +68,7 @@ def test_generate_dataset_lang(lang: str, extra_vocab: Optional[Dict[str, List[s
 
     translator = build_translator(
         lang,
-        'thing',
+        'thing.v1',
         word_bank,
         no_transitive_object=False,
         use_fixed_translation=False,
@@ -226,4 +226,4 @@ if __name__ == '__main__':
 
     # test_generate_dataset_lang('jpn')
     # test_generate_dataset_lang('jpn', extra_vocab='BCCWJ')
-    test_generate_dataset_lang('jpn', extra_vocab='punipuni')
+    test_generate_dataset_lang('jpn', extra_vocab='thing.pretty')

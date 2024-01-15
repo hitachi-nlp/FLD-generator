@@ -162,7 +162,6 @@ class MorphemeParser:
     def parse(self, text: str) -> List[Morpheme]:
         if self._keyword_replacer is not None:
             text = self._keyword_replacer(text)
-            print(text)
 
         morphemes = _parse(text)
         morphemes_with_user_words: List[Morpheme] = []
