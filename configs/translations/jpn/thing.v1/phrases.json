@@ -63,10 +63,10 @@
 
     "{A}a_event_noun": [
       "{A}[NOUN]",
-      "{A}[ADJ.ness]",
-      "{A}[VERB.koto]",
 
-      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
+      "__XXX: excluding {A}[ADJ.ness] or {A}[VERB.koto] will lead to translation not found error. If you dont like these translations, you should rather exclude zeroary predicates from argument configs.",
+      "{A}[ADJ.ness]",
+      "{A}[VERB.koto]"
     ],
 
     "¬{A}a_event_noun": [
@@ -78,10 +78,10 @@
 
     "{A}event_noun": [
       "{A}[NOUN]",
-      "{A}[ADJ.ness]",
-      "{A}[VERB.koto]",
 
-      "__comment: We wanted to exclude [ADJ.ness] because it is not an event. However excluding it will leads to translation not found error."
+      "__XXX: excluding {A}[ADJ.ness] or {A}[VERB.koto] will lead to translation not found error. If you dont like these translations, you should rather exclude zeroary predicates from argument configs.",
+      "{A}[ADJ.ness]",
+      "{A}[VERB.koto]"
     ],
 
     "¬{A}event_noun": [

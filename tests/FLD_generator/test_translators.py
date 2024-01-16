@@ -234,7 +234,7 @@ def test_jpn():
 
 def test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/punipuni_vocab.json'):
     test_templated_translator_lang('jpn',
-                                   translation_config='thing.v1.pretty',
+                                   translation_config='thing.v1',
                                    no_adj_verb_as_zeroary=True,
                                    extra_vocab=vocab_name_or_path)
 

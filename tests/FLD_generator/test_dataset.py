@@ -68,7 +68,7 @@ def test_generate_dataset_lang(lang: str, extra_vocab: Optional[Dict[str, List[s
 
     translator = build_translator(
         lang,
-        'thing.v1.pretty',
+        'thing.v1',
         word_bank,
         no_transitive_object=False,
         use_fixed_translation=False,

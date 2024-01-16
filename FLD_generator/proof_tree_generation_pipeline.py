@@ -315,10 +315,6 @@ class ProofTreeGenerationPipeline:
                     collapsed_knowledge_idxs=collapsed_knowledge_idxs,
                     raise_if_translation_not_found=raise_if_translation_not_found,
                 )
-            except TranslationNotFoundError as e:
-                for node in proof_tree.nodes:
-                    logger.critical('node: %s', str(node.argument))
-                raise
             except TranslationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
             except TranslationImpossible as e:

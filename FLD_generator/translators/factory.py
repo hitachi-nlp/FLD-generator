@@ -35,12 +35,6 @@ def _get_config_paths(name_or_path: Union[str, List[str], Tuple[str]], lang: str
         elif lang == 'jpn':
             if name_or_path in ['thing', 'thing.v1']:
                 return _get_config_paths('./configs/translations/jpn/thing.v1/', lang)
-            elif name_or_path in ['thing.pretty', 'thing.v1.pretty']:
-                paths = [path
-                         for path in _get_config_paths('./configs/translations/jpn/thing.v1/', lang)
-                         if not path.endswith('phrases.json')]
-                paths.append('./configs/translations/jpn/thing.v1.pretty/phrases.json')
-                return paths
             else:
                 raise ValueError(f'Unsupported config name {name_or_path}')
         else:

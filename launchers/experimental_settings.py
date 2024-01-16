@@ -5721,7 +5721,7 @@ _DATASET_SETTINGS = {
 
 
         'translation_lang': 'jpn',
-        'translation_configs': ['thing.v1.pretty'],
+        'translation_configs': ['thing.v1'],
         'translation_volume_to_weight': 'log10',
         'translation_adj_verb_noun_ratio': '1-1-1',
         'translation_no_transitive_object': True,
@@ -5769,7 +5769,7 @@ _DATASET_SETTINGS = {
 
 
         'translation_lang': 'jpn',
-        'translation_configs': ['thing.v1.pretty'],
+        'translation_configs': ['thing.v1'],
         'translation_volume_to_weight': 'log10',
         'translation_adj_verb_noun_ratio': '1-1-1',
         'translation_no_transitive_object': True,
