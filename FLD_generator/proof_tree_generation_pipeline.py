@@ -15,6 +15,7 @@ from FLD_generator.proof_tree_generators import ProofTreeGenerationFailure, Proo
 from FLD_generator.formula_distractors import FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible, NegativeTreeDistractor
 from FLD_generator.translation_distractors import TranslationDistractor, TranslationDistractorGenerationFailure, TranslationDistractorGenerationImpossible
 from FLD_generator.translators import TranslationFailure, TranslationImpossible
+from FLD_generator.translators.base import TranslationNotFoundError
 from FLD_generator.utils import make_pretty_msg
 import line_profiling
 
@@ -314,6 +315,10 @@ class ProofTreeGenerationPipeline:
                     collapsed_knowledge_idxs=collapsed_knowledge_idxs,
                     raise_if_translation_not_found=raise_if_translation_not_found,
                 )
+            except TranslationNotFoundError as e:
+                for node in proof_tree.nodes:
+                    logger.critical('node: %s', str(node.argument))
+                raise
             except TranslationFailure as e:
                 raise ProofTreeGenerationPipelineFailure(str(e))
             except TranslationImpossible as e:

@@ -2191,6 +2191,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2236,6 +2237,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2280,6 +2282,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2324,6 +2327,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2367,6 +2371,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2411,6 +2416,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2455,6 +2461,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2500,6 +2507,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2545,6 +2553,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2597,6 +2606,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2636,6 +2646,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2675,6 +2686,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2715,6 +2727,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2762,6 +2775,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2801,6 +2815,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2840,6 +2855,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2879,6 +2895,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2920,6 +2937,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2960,6 +2978,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3000,6 +3019,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3041,6 +3061,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3081,6 +3102,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3126,6 +3148,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3165,6 +3188,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3204,6 +3228,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3244,6 +3269,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3285,6 +3311,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3327,6 +3354,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3369,6 +3397,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3413,6 +3442,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3453,6 +3483,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3494,6 +3525,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3534,6 +3566,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3575,6 +3608,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3615,6 +3649,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3654,6 +3689,7 @@ _DATASET_SETTINGS = {
     '20230904.jpn.D1.wo_brnch.wo_dstrct': {
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3694,6 +3730,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3736,6 +3773,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3778,6 +3816,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3820,6 +3859,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3862,6 +3902,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3904,6 +3945,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3944,6 +3986,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3984,6 +4027,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4025,6 +4069,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4067,6 +4112,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4117,6 +4163,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4167,6 +4214,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4217,6 +4265,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4267,6 +4316,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4324,6 +4374,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4379,6 +4430,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4436,6 +4488,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4490,6 +4543,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4541,6 +4595,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4591,6 +4646,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4651,6 +4707,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4711,6 +4768,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4774,6 +4832,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4837,6 +4896,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4904,6 +4964,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4969,6 +5030,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5035,6 +5097,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5099,6 +5162,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5139,6 +5203,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5179,6 +5244,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5222,6 +5288,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5264,6 +5331,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5310,6 +5378,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5351,6 +5420,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5392,6 +5462,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5434,6 +5505,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5477,6 +5549,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5529,6 +5602,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5571,6 +5645,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5608,6 +5683,109 @@ _DATASET_SETTINGS = {
         }
 
     },
+
+
+
+
+    '20230116.jpn.BCCWJ.D3.argument_pred_arg_only': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1.pretty'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            'test': 300,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+    '20230116.jpn.punipuni.D3.argument_pred_arg_only': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1.pretty'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 300,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+
+    },
+
+
+
 
 
 
@@ -5965,6 +6143,10 @@ _DATASET_NAME_TO_DEFAULT = {
     # ---------------------------------- 20230115.jpn ------------------------------------
     '20230115.jpn.BCCWJ.D3': '20231018.thing_person_config_translation',
     '20230115.jpn.punipuni.D3': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230116.jpn ------------------------------------
+    '20230116.jpn.BCCWJ.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+    '20230116.jpn.punipuni.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
 }
 
 

@@ -20,6 +20,8 @@ def load_vocab(name_or_path: str, lang: str) -> List[UserWord]:
                 './res/word_banks/japanese/punipuni_vocab/punipuni.json',
                 './res/word_banks/japanese/BCCWJ_vocab/BCCWJ.wo_transitive_verbs.wo_all_nouns.json',
             ]
+        else:
+            raise ValueError(f'Unknown vocab name "{name_or_path}"')
         return load_jp_extra_vocab(paths)
     else:
         raise ValueError(f'Unknown language "{lang}"')

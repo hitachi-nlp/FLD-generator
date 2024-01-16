@@ -68,7 +68,7 @@ def test_generate_dataset_lang(lang: str, extra_vocab: Optional[Dict[str, List[s
 
     translator = build_translator(
         lang,
-        'thing.v1',
+        'thing.v1.pretty',
         word_bank,
         no_transitive_object=False,
         use_fixed_translation=False,
@@ -89,19 +89,14 @@ def test_generate_dataset_lang(lang: str, extra_vocab: Optional[Dict[str, List[s
     generator = build_generator(
         [
 
-            './configs/arguments/axioms/',
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
 
-            # './configs/arguments/axioms/axiom.pred_only.json',
-            # './configs/arguments/axioms/axiom.pred_arg.json',
-
-            # './configs/arguments/axioms/axiom.and_or.pred_only.json',
-            # './configs/arguments/axioms/axiom.and_or.pred_arg.json',
-
-            # './configs/arguments/axioms/axiom.implication_intro.pred_only.json',
-            # './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
-
-            # './configs/arguments/axioms/axiom.negation.pred_only.json',
-            # './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
 
 
             # # -- AACorpus --
@@ -225,5 +220,4 @@ if __name__ == '__main__':
     # test_generate_dataset_lang('eng')
 
     # test_generate_dataset_lang('jpn')
-    # test_generate_dataset_lang('jpn', extra_vocab='BCCWJ')
-    test_generate_dataset_lang('jpn', extra_vocab='thing.pretty')
+    test_generate_dataset_lang('jpn', extra_vocab='BCCWJ')

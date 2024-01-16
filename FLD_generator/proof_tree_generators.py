@@ -126,20 +126,20 @@ class FixIllegalIntermediateConstantImpossible(ProofTreeGenerationImpossible):
     pass
 
 
-_REFERENCE_ARGUMENTS = [
-    Argument(
-        [Formula('{A}')],
-        Formula('{A}'),
-        {},
-        id='reference.pred_only',
-    ),
-    Argument(
-        [Formula('{A}{a}')],
-        Formula('{A}{a}'),
-        {},
-        id='reference.pred_arg',
-    ),
-]
+# _REFERENCE_ARGUMENTS = [
+#     Argument(
+#         [Formula('{A}')],
+#         Formula('{A}'),
+#         {},
+#         id='reference.pred_only',
+#     ),
+#     Argument(
+#         [Formula('{A}{a}')],
+#         Formula('{A}{a}'),
+#         {},
+#         id='reference.pred_arg',
+#     ),
+# ]
 
 
 class ProofTreeGenerator:
@@ -221,7 +221,7 @@ class ProofTreeGenerator:
             raise NotImplementedError()
         logger.info(make_pretty_msg(title='load arguments', status='start', boundary_level=0))
 
-        arguments = _REFERENCE_ARGUMENTS + arguments
+        # arguments = _REFERENCE_ARGUMENTS + arguments
 
         def _is_numbers_ok_formula(formula: Formula) -> bool:
             if max_PASs_per_formula is not None and len(list(formula.PASs)) > max_PASs_per_formula:

@@ -1,0 +1,9 @@
+[
+  {
+      "id": "reference.pred_arg",
+      "premises": [
+          "{A}{a}"
+      ],
+      "conclusion": "{A}{a}"
+  }
+]
