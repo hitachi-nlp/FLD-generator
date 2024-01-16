@@ -242,7 +242,6 @@ def test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/punipuni_v
 @profile
 def test_jpn_postprocess():
     wb = build_wordbank('jpn', extra_vocab='punipuni')
-    # wb = build_wordbank('jpn')
     postprocessor = build_postprocessor(wb)
 
     def _check_katsuyou(src: str, golds: List[str], trial=1000):
@@ -314,6 +313,8 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間は機械だない', ['この人間は機械でない'])
     _check_katsuyou('この人間は機械だないし，あの熊も機械だない', ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
     _check_katsuyou('Xということが成り立つない', ['Xということが成り立たない'])
+    _check_katsuyou('仕組むない', ['仕組まない'])
+    _check_katsuyou('取り扱い易いものは仕組むないし熱苦しい', ['取り扱い易いものは仕組まないし熱苦しい'])
 
 
     _check_katsuyou('この人間はぷえぷやだない', ['この人間はぷえぷやでない'])

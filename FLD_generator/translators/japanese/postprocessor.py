@@ -228,9 +228,8 @@ class ShiKatuyouRule(WindowRule):
                 return ['で']
             else:
                 return None
-
         elif surfaces[0] == 'だし':
-            # parsing with user words sometimes fails, such as 「ぽにょぽにょ」 「だし」
+            # parsing with user words sometimes fails, such as 「ぽにょぽにょだし...」 into 「ぽにょぽにょ/だし/...」
             if random.random() < 0.5:
                 return ['で'] + surfaces[1:]
             else:
@@ -240,6 +239,12 @@ class ShiKatuyouRule(WindowRule):
             if random.random() < 0.5:
                 # 走らないし -> 走らなくて
                 return ['なく', 'て']
+            else:
+                return None
+        elif surfaces[0] == ['ないし']:
+            # parsing with user words sometimes fails, such as 「ググるないし...」 into 「グルる/ないし/...」
+            if random.random() < 0.5:
+                return ['なくて'] + surfaces[1:]
             else:
                 return None
 
@@ -259,7 +264,7 @@ class NaiKatsuyouRule(WindowRule):
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
         surfaces = [morpheme.surface for morpheme in morphemes]
 
-        if morphemes[0].pos == '動詞' and surfaces[1] == 'ない':
+        if morphemes[0].pos == '動詞' and surfaces[1] in ['ない', 'ないし']:
             # 走るない -> 走らない
             # 会議する -> 会議しない
 
@@ -271,19 +276,14 @@ class NaiKatsuyouRule(WindowRule):
             if katsuyou_word is None:
                 return None
             else:
-                return [katsuyou_word, 'ない']
+                return [katsuyou_word, surfaces[1]]
 
-        elif surfaces[0] == 'だ':
-            if surfaces[1] == 'ない':
-                # きれいだない -> きれいでない
-                return ['で', 'ない']
-            elif surfaces[1] == 'ないし':
-                # きれいだないし赤い -> きれいでないし赤い
-                return ['で', 'ないし']
-            else:
-                return None
+        elif surfaces[0] == 'だ' and surfaces[1] in ['ない', 'ないし']:
+            # きれいだない -> きれいでない
+            # きれいだないし赤い -> きれいでないし赤い
+            return ['で', surfaces[1]]
 
-        elif morphemes[0].pos == '形容詞' and surfaces[1] == 'ない':
+        elif morphemes[0].pos == '形容詞' and surfaces[1] in ['ない', 'ないし']:
             if surfaces[0] == 'く':  # sometimes 'く'(ない) is parsed as 形容詞
                 return None
 
@@ -292,11 +292,11 @@ class NaiKatsuyouRule(WindowRule):
             if katsuyou_word is None:
                 if surfaces[0].endswith('い'):
                     # should be something like "夫婦らしい"
-                    return [surfaces[0][:-1] + 'く', 'ない']
+                    return [surfaces[0][:-1] + 'く', surfaces[1]]
                 else:
                     return None
             else:
-                return [katsuyou_word, 'ない']
+                return [katsuyou_word, surfaces[1]]
 
         else:
             return None
@@ -313,8 +313,8 @@ class NaiNaiKatsuyouRule(WindowRule):
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
         surfaces = [morpheme.surface for morpheme in morphemes]
-        if surfaces == ['ない', 'ない']:
-            return ['なく', 'ない']
+        if surfaces[0] == 'ない' and surfaces[1] in ['ない', 'ないし']:
+            return ['なく', surfaces[1]]
         else:
             return None
 
