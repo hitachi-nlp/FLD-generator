@@ -415,7 +415,8 @@
     "and": [
       "__and",
 
-      "し"
+      "し",
+      "し <<phrase::katsu>>"
     ],
 
     "noun_and": [
@@ -779,9 +780,13 @@
     ],
 
     "deari": [
-      "で",
-      "であり",
-      "であって"
+      "で <<phrase::katsu>>",
+      "であり <<phrase::katsu>>",
+      "であって <<phrase::katsu>>"
+    ],
+
+    "katsu": [
+      "かつ"
     ],
 
     "da_dearu": [
