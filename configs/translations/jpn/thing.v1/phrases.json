@@ -180,6 +180,7 @@
       ["W_VOL_AVG__0.2", "__both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>>"],
       ["W_VOL_AVG__0.2", "__both <<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::and>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>>"],
 
+      "__comment: post_modifier is not common in Japanese",
       ["W_VOL_AVG__0.1", "<<phrase::{A}a_noun>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha_ga>>"],
       ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha_ga>>"],
       ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>> <<phrase::da_dearu>>"]
