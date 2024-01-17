@@ -338,7 +338,7 @@ class KakuRandomOrderRule(WindowRule):
         return 4
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
-        # XXX: この実装だとダメ．「赤い人間が猫を追う」 => 「赤い猫を人間が追う」になってしまう．
+        # XXX: この実装だとダメ．「赤い人間が猫を追う」 => 「赤い猫を人間が追う」 <<phrase::da_dearu>>になってしまう．
         # おそらく，構文解析が必要となる．
         # surfaces = [morpheme.surface for morpheme in morphemes]
         # if surfaces[1] in ['は', 'が'] and surfaces[3] in self._kaku_list:

@@ -92,6 +92,8 @@ def test_templated_translator_lang(lang: str,
     show_translations = make_show_translation_func(translator)
 
     if knowledge_banks is None:
+        show_translations(['(Ex): ({A}x & {B}x)'], trial=30)
+
         show_translations(['{A}'], trial=30)
         show_translations(['¬({A})'], trial=30)
 
@@ -276,9 +278,9 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間がきれいだならつらい', ['この人間がきれいならつらい'])
     _check_katsuyou('この人間が美しいならつらい', ['この人間が美しいならつらい'])
 
-    _check_katsuyou('この人間がぷえぷやだならばつらい', ['この人間がぷえぷやならばつらい'])
+    _check_katsuyou('この人間がぷえぷやLv.0だならばつらい', ['この人間がぷえぷやLv.0ならばつらい'])
 
-    _check_katsuyou('この人間がぷえぷやだならつらい', ['この人間がぷえぷやならつらい'])
+    _check_katsuyou('この人間がぷえぷやLv.0だならつらい', ['この人間がぷえぷやLv.0ならつらい'])
 
 
 
@@ -287,23 +289,23 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間が会議だか美しい', ['この人間が会議であるか美しい'])
     _check_katsuyou('もしこのブローチは小館花であるか菊雄だか両方ならばあのどら猫はいする', ['もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫はいする'])
 
-    _check_katsuyou('この人間がぷえぷやだか美しい', ['この人間がぷえぷやであるか美しい'])
+    _check_katsuyou('この人間がぷえぷやLv.0だか美しい', ['この人間がぷえぷやLv.0であるか美しい'])
 
 
 
     _check_katsuyou('きれいだものはある', ['きれいなものはある'])
     _check_katsuyou('きれいだことはある', ['きれいなことはある'])
     _check_katsuyou('「きれいだ」ものはある', ['「きれいな」ものはある'])
+    _check_katsuyou('「きれいだ」物はある', ['「きれいな」物はある'])
 
-    _check_katsuyou('ぷえぷやだものはある', ['ぷえぷやなものはある'])
+    _check_katsuyou('ぷえぷやLv.0だものはある', ['ぷえぷやLv.0なものはある'])
 
 
 
     _check_katsuyou('この人間は美しいし赤い', ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
     _check_katsuyou('この人間はきれいだし赤い', ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
 
-    _check_katsuyou('この人間はぷえぷやだし赤い', ['この人間はぷえぷやだし赤い', 'この人間はぷえぷやで赤い'])
-
+    _check_katsuyou('この人間はぷえぷやLv.0だし赤い', ['この人間はぷえぷやLv.0だし赤い', 'この人間はぷえぷやLv.0で赤い'])
 
 
     _check_katsuyou('この人間は走るない', ['この人間は走らない'])
@@ -315,9 +317,10 @@ def test_jpn_postprocess():
     _check_katsuyou('Xということが成り立つない', ['Xということが成り立たない'])
     _check_katsuyou('仕組むない', ['仕組まない'])
     _check_katsuyou('取り扱い易いものは仕組むないし熱苦しい', ['取り扱い易いものは仕組まないし熱苦しい'])
+    _check_katsuyou('あのみやみやLv.2は聞き辛いがそれは志願するない', ['あのみやみやLv.2は聞き辛いがそれは志願しない'])
 
 
-    _check_katsuyou('この人間はぷえぷやだない', ['この人間はぷえぷやでない'])
+    _check_katsuyou('この人間はぷえぷやLv.0だない', ['この人間はぷえぷやLv.0でない'])
 
 
 
@@ -332,7 +335,7 @@ def test_jpn_postprocess():
     _check_katsuyou('この人間はきれいだないない', ['この人間はきれいでなくない'])
     _check_katsuyou('この人間が美しいないない', ['この人間が美しくなくない'])
 
-    _check_katsuyou('この人間はぷえぷやだないない', ['この人間はぷえぷやでなくない'])
+    _check_katsuyou('この人間はぷえぷやLv.0だないない', ['この人間はぷえぷやLv.0でなくない'])
 
 
 
@@ -343,14 +346,15 @@ def test_jpn_postprocess():
          for kuma_kosoado in ['この', 'あの', 'その']]
     )
 
+
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
 
     # test_eng()
     # test_eng_with_knowledge()
 
-    test_jpn_postprocess()
+    # test_jpn_postprocess()
 
-    # test_jpn()
+    test_jpn()
     # test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/punipuni_vocab.json')
     # test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/BCCWJ_vocab/BCCWJ.all.json')

@@ -14,11 +14,11 @@ def load_vocab(name_or_path: str, lang: str) -> List[UserWord]:
         raise NotImplementedError()
     elif lang == 'jpn':
         if name_or_path == 'BCCWJ':
-            paths = ['./res/word_banks/japanese/BCCWJ_vocab/BCCWJ.all.json']
+            paths = ['./res/word_banks/japanese/vocab/BCCWJ/vocab.BCCWJ.all.json']
         elif name_or_path == 'punipuni':
             paths = [
-                './res/word_banks/japanese/punipuni_vocab/punipuni.json',
-                './res/word_banks/japanese/BCCWJ_vocab/BCCWJ.wo_transitive_verbs.wo_all_nouns.json',
+                './res/word_banks/japanese/vocab/punipuni/vocab.punipuni.json',
+                './res/word_banks/japanese/vocab/BCCWJ/vocab.BCCWJ.wo_transitive_verbs.wo_all_nouns.json',
             ]
         else:
             raise ValueError(f'Unknown vocab name "{name_or_path}"')
