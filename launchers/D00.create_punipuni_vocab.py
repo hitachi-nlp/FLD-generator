@@ -4,6 +4,7 @@ import logging
 import json
 from pathlib import Path
 from pprint import pformat
+import random
 
 from logger_setup import setup as setup_logger
 import click
@@ -21,14 +22,18 @@ logger = logging.getLogger(__name__)
 @click.option('--no_level_postfix', is_flag=True, default=False)
 @click.option('--level_lower', type=int, default=0)
 @click.option('--level_upper', type=int, default=99)
+@click.option('--vocab_size', type=int, default=100000,
+              help='XXX: large size will lead to too much memory consumption'
+                   'when we handle them by flashtext')
 def main(output_dir: str,
          vary_even_words: bool,
          fix_odd_words: bool,
          min_repeats: int,
          max_repeats: int,
          no_level_postfix: bool,
-         lovel_lower: int,
-         level_upper: int):
+         level_lower: int,
+         level_upper: int,
+         vocab_size: int):
     setup_logger(do_stderr=True, level=logging.INFO)
     fix_even_words = not vary_even_words
 
@@ -39,14 +44,21 @@ def main(output_dir: str,
     ]
     odd_words = [
         'い', 'え',
-        'ぃ', 'ぇ',
-        'く', 'け',
+
+        # 'ぃ', 'ぇ',
+
+        # 'く', 'け',
+        'く',
+
         'ちゃ', 'ちゅ', 'ちょ',
         'な', 'に', 'ね', 'の',
         'にゃ', 'にゅ', 'にょ',
+
         'や', 'ゆ', 'よ',
-        'ゃ', 'ゅ', 'ょ',
-        'わ', 'を',
+        # 'ゃ', 'ゅ', 'ょ',
+
+        # 'わ', 'を',
+        'わ',
     ]
 
     entity_vocab: List[str] = []
@@ -85,6 +97,8 @@ def main(output_dir: str,
             punipunis_with_lv_postfix = [f'{punipuni}Lv.{level}' for punipuni in punipunis for level in levels]
         entity_vocab.extend(punipunis_with_lv_postfix)
 
+    logger.info('sampling %d words from %d words', vocab_size, len(entity_vocab))
+    entity_vocab = random.sample(entity_vocab, vocab_size)
     event_vocab: List[str] = [entity + '事件' for entity in entity_vocab]
 
     output_dir = Path(output_dir)
@@ -103,8 +117,6 @@ def main(output_dir: str,
         f.write(pformat(stats))
     logger.info(f'stats:\n{pformat(stats)}')
     logger.info('written to %s', str(output_dir))
-
-    logger.info('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ./launchers/D00.create_evennievenni_vocab.py !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 
 if __name__ == '__main__':
