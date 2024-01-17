@@ -1,0 +1,1 @@
+{'entity_vocab': 345600, 'event_vocab': 345600}

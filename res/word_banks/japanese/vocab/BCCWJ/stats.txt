@@ -1,0 +1,5 @@
+{'adjs': 1414,
+ 'can_be_entity_nouns': 140593,
+ 'can_be_event_nouns': 4326,
+ 'can_be_predicate_nouns': 140687,
+ 'verbs': 16301}

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 @click.command()
-@click.option('--output_dir', type=str, default='./res/word_banks/japanese/BCCWJ_vocab')
+@click.option('--output_dir', type=str, default='./res/word_banks/japanese/vocab/BCCWJ')
 @click.option('--bccwj_short_unit_vocab', type=str,
               default='./res/word_banks/japanese/BCCWJ_word_frequency/BCCWJ_frequencylist_suw_ver1_0.tsv')
 @click.option('--bccwj_short_unit_rank_limit', type=int, default=30000)
@@ -100,7 +100,7 @@ def main(output_dir: str,
             'VERB.can_be_transitive_verb': _verbs,
             'ADJ': _adjs,
         },
-        output_dir / 'BCCWJ.all.json',
+        output_dir / 'vocab.BCCWJ.all.json',
     )
     dump_json(
         {
@@ -111,7 +111,7 @@ def main(output_dir: str,
             'VERB.can_be_transitive_verb': [],
             'ADJ': _adjs,
         },
-        output_dir / 'BCCWJ.wo_transitive_verbs.json',
+        output_dir / 'vocab.BCCWJ.wo_transitive_verbs.json',
     )
     dump_json(
         {
@@ -122,7 +122,7 @@ def main(output_dir: str,
             'VERB.can_be_transitive_verb': [],
             'ADJ': _adjs,
         },
-        output_dir / 'BCCWJ.wo_transitive_verbs.wo_event_entity_nouns.json',
+        output_dir / 'vocab.BCCWJ.wo_transitive_verbs.wo_event_entity_nouns.json',
     )
     dump_json(
         {
@@ -133,7 +133,7 @@ def main(output_dir: str,
             'VERB.can_be_transitive_verb': [],
             'ADJ': _adjs,
         },
-        output_dir / 'BCCWJ.wo_transitive_verbs.wo_all_nouns.json',
+        output_dir / 'vocab.BCCWJ.wo_transitive_verbs.wo_all_nouns.json',
     )
 
     stats = {

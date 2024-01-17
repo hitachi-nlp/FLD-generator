@@ -151,7 +151,7 @@ def main():
         # '20230115.jpn.punipuni.D3',
 
         # ---------------------------------- 20230116.jpn ------------------------------------
-        '20230116.jpn.BCCWJ.D3.argument_pred_arg_only',
+        # '20230116.jpn.BCCWJ.D3.argument_pred_arg_only',
         '20230116.jpn.punipuni.D3.argument_pred_arg_only',
 
     ]
