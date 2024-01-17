@@ -681,7 +681,7 @@
     ],
 
     "toiu_mono_ha_ga_aru": [
-      "という<<phrase::thing>> <<phrase::ha_ga_aru>>"
+      "という <<phrase::thing>> <<phrase::ha_ga_aru>>"
     ],
 
     "mono_ha_ga_aru": [
@@ -693,7 +693,7 @@
     ],
 
     "toiu_mono_ha_ga_nai": [
-      "という<<phrase::thing>> <<phrase::ha_ga_nai>>"
+      "という <<phrase::thing>> <<phrase::ha_ga_nai>>"
     ],
 
     "ha_ga_nai": [
@@ -711,13 +711,13 @@
       "__someone",
 
       "何か",
-      "ある<<phrase::thing>>",
-      "何らかの<<phrase::thing>>",
-      "とある<<phrase::thing>>",
-      "なにがしかの<<phrase::thing>>",
+      "ある <<phrase::thing>>",
+      "何らかの <<phrase::thing>>",
+      "とある <<phrase::thing>>",
+      "なにがしかの <<phrase::thing>>",
 
       "なにか",
-      "なんらかの<<phrase::thing>>"
+      "なんらかの <<phrase::thing>>"
     ],
 
     "everything": [
@@ -725,13 +725,13 @@
       "__everyone",
 
       "全て",
-      "全ての<<phrase::thing>>",
-      "あらゆる<<phrase::thing>>",
+      "全ての <<phrase::thing>>",
+      "あらゆる <<phrase::thing>>",
       "何もかも",
       "どれもこれも",
 
       "すべて",
-      "すべての<<phrase::thing>>"
+      "すべての <<phrase::thing>>"
     ],
 
     "__nothing": [
