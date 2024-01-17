@@ -234,7 +234,8 @@ def test_jpn():
     test_templated_translator_lang('jpn')
     
 
-def test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/punipuni_vocab.json'):
+
+def test_jpn_with_vocab(vocab_name_or_path: str):
     test_templated_translator_lang('jpn',
                                    translation_config='thing.v1',
                                    no_adj_verb_as_zeroary=True,
@@ -318,6 +319,7 @@ def test_jpn_postprocess():
     _check_katsuyou('仕組むない', ['仕組まない'])
     _check_katsuyou('取り扱い易いものは仕組むないし熱苦しい', ['取り扱い易いものは仕組まないし熱苦しい'])
     _check_katsuyou('あのみやみやLv.2は聞き辛いがそれは志願するない', ['あのみやみやLv.2は聞き辛いがそれは志願しない'])
+    _check_katsuyou('何もかもは和大であるないかまたは与太る', ['何もかもは和大でないかまたは与太る'])
 
 
     _check_katsuyou('この人間はぷえぷやLv.0だない', ['この人間はぷえぷやLv.0でない'])
@@ -353,8 +355,8 @@ if __name__ == '__main__':
     # test_eng()
     # test_eng_with_knowledge()
 
-    # test_jpn_postprocess()
+    # test_jpn()
+    test_jpn_with_vocab(vocab_name_or_path='punipuni')
+    # test_jpn_with_vocab(vocab_name_or_path='BCCWJ')
 
-    test_jpn()
-    # test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/punipuni_vocab.json')
-    # test_jpn_with_vocab(vocab_name_or_path='./res/word_banks/japanese/BCCWJ_vocab/BCCWJ.all.json')
+    # test_jpn_postprocess()

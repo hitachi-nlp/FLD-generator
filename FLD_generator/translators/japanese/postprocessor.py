@@ -213,6 +213,7 @@ class ShiKatuyouRule(WindowRule):
         if morphemes[0].pos == '動詞' and surfaces[1] == 'し':
             # 走るし青い -> 走って青い (微妙)
             return None
+
         elif morphemes[0].pos == '形容詞' and surfaces[1] == 'し':
             # 彼は赤いし青い -> 彼は赤くて青い
             if random.random() < 0.5:
@@ -285,6 +286,9 @@ class NaiKatsuyouRule(WindowRule):
             # きれいだない -> きれいでない
             # きれいだないし赤い -> きれいでないし赤い
             return ['で', surfaces[1]]
+        elif surfaces[0] == 'ある' and surfaces[1] in ['ない', 'ないし']:
+            # きれいであるない -> きれいでない
+            return [surfaces[1]]
 
         elif morphemes[0].pos == '形容詞' and surfaces[1] in ['ない', 'ないし']:
             if surfaces[0] == 'く':  # sometimes 'く'(ない) is parsed as 形容詞
