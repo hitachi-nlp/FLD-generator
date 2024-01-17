@@ -2,6 +2,7 @@ from typing import Optional, Iterable, List, Dict, Any, Optional, Set, Tuple
 from abc import abstractmethod, abstractproperty, ABC
 from collections import defaultdict
 import random
+import re
 
 from ordered_set import OrderedSet
 from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, MorphemeParser
@@ -188,10 +189,11 @@ class DaKotoMonoKatuyouRule(WindowRule):
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
         # 彼はきれいだか楽しい -> 彼はきれいであるか楽しい
+        koto_mono = ['こと', '事', 'もの', '物']
         surfaces = [morpheme.surface for morpheme in morphemes]
-        if surfaces[0] == 'だ' and surfaces[1] in ['こと', 'もの']:
+        if surfaces[0] == 'だ' and surfaces[1] in koto_mono:
             return ['な', surfaces[1], surfaces[2]]
-        if surfaces[0] == 'だ' and surfaces[1] == '」' and surfaces[2] in ['こと', 'もの']:
+        if surfaces[0] == 'だ' and surfaces[1] == '」' and surfaces[2] in koto_mono:
             return ['な', '」', surfaces[2]]
         else:
             return None
@@ -268,8 +270,9 @@ class NaiKatsuyouRule(WindowRule):
             # 走るない -> 走らない
             # 会議する -> 会議しない
 
-            if morphemes[0].base == 'する':
-                katsuyou_word = 'し'  # as 'する' has more than two 未然形, we explicitly specify it
+            if morphemes[0].base.endswith('する'):
+                # as 'する' has more than two 未然形, we explicitly specify it
+                katsuyou_word = re.sub('する$', '', morphemes[0].base) + 'し'
             else:
                 katsuyou_word = self._get_katsuyou_word(morphemes[0], '未然形')
 
