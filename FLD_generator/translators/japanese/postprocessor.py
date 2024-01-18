@@ -425,26 +425,37 @@ class HaGaUsagePostprocessor(Postprocessor):
     _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
     _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
 
-    # TODO: follow ShiKatuyouRule
+    # XXX: ALWAYS follow ShiKatuyouRule
     _parallel_morphemes = [
         # ---- and like morphemes ----
         Morpheme(surface='し', lid=None, rid=None, cost=None, pos='動詞', pos1='自立', pos2=None, pos3=None, katsuyou_type='サ変・スル', katsuyou='連用形', base='する', yomi='シ', hatsuon='シ', misc={}),
         Morpheme(surface='し', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='し', yomi='シ', hatsuon='シ', misc={}),
+
         Morpheme(surface='て', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='て', yomi='テ', hatsuon='テ', misc={}),
+
         Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='で', yomi='デ', hatsuon='デ', misc={}),
+        Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助動詞', pos1=None, pos2=None, pos3=None, katsuyou_type='特殊・ダ', katsuyou='連用形', base='だ', yomi='デ', hatsuon='デ', misc={}),
+
         # sometime, 「赤くないし青くない」 is wrongly parsed into 「赤く/ないし/青く/ない」
         Morpheme(surface='ないし', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='ないし', yomi='ナイシ', hatsuon='ナイシ', misc={}),
+
 
         # ---- or like morphemes ----
         Morpheme(surface='か', lid=None, rid=None, cost=None, pos='助詞', pos1='副助詞／並立助詞／終助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='か', yomi='カ', hatsuon='カ', misc={}),
         # somethines, 「赤いかまたは青い」 is wrongly parsed into 「赤い/かまた/は/青い」
         Morpheme(surface='かまた', lid=None, rid=None, cost=None, pos='名詞', pos1='固有名詞', pos2='人名', pos3='姓', katsuyou_type=None, katsuyou=None, base='かまた', yomi='カマタ', hatsuon='カマタ', misc={}),
 
+
         # ---- and but like morphemes ----
         Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
         Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
+
         Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
+        Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
+
         Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
+        Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
+
         Morpheme(surface='一方', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='一方', yomi='イッポウ', hatsuon='イッポー', misc={}),
     ]
 

@@ -166,6 +166,41 @@ def test_parse():
         parser_with_extra_vocab,
     )
 
+    _test_parse(
+        'ぷにぷにはモンスターで赤い',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'ぷにぷにはモンスターであり赤い',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'ぷにぷにはモンスターであって赤い',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'ぷにぷには優しくて赤い',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'ぷにぷにはスキーして、赤い',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'ぷにぷには優しいか赤い',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'ぷにぷにはスキーするか、赤い',
+        parser_with_extra_vocab,
+    )
+
 
 if __name__ == '__main__':
     test_parse()

@@ -519,8 +519,9 @@ def test_jpn_postprocess():
 
 
     _test_in_out = build_test_in_out_func([
-        HaGaUsagePostprocessor(extra_vocab=wb.extra_vocab),
+      HaGaUsagePostprocessor(extra_vocab=wb.extra_vocab),
     ])
+    
 
     _test_in_out('きつねが赤ければそれが走る',
                  ['きつねが赤ければそれは走る'])
@@ -585,6 +586,16 @@ def test_jpn_postprocess():
     
     _test_in_out('もし仮にこのぽえぽのLv.92は変わり易いとすれば散る',
                  ['もし仮にこのぽえぽのLv.92は変わり易いとすれば散る'])
+
+    _test_in_out('このぽちゃぽえLv.80が渋くないけれどそれは赤っぽい',
+                 ['このぽちゃぽえLv.80は渋くないけれどそれは赤っぽい'])
+
+    _test_in_out('このぽちゃぽえLv.80が渋くないけどそれは赤っぽい',
+                 ['このぽちゃぽえLv.80は渋くないけどそれは赤っぽい'])
+
+    _test_in_out('このぽちゃぽえLv.80がモンスターでありそれは赤い',
+                 ['このぽちゃぽえLv.80はモンスターでありそれは赤い'])
+
 
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
