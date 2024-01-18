@@ -9,6 +9,11 @@ from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, Morphe
 from FLD_generator.word_banks.base import UserWord
 
 
+def _slide(seq: List[Any], window_size: int) -> Iterable[List[Any]]:
+    for i in range(len(seq) - window_size + 1):
+        yield seq[i: i + window_size]
+
+
 class Postprocessor(ABC):
 
     def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
@@ -105,7 +110,7 @@ class WindowRulesPostprocessor(Postprocessor):
                 i_end = 0
                 is_applied = False
                 if len(morphemes_modified) >= rule.window_size:
-                    for i, window in enumerate(self._slide(morphemes_modified, rule.window_size)):
+                    for i, window in enumerate(_slide(morphemes_modified, rule.window_size)):
                         _modified_words = rule.apply(window)
                         if _modified_words is not None and i not in done_positions:
                             words_modified_dst += _modified_words
@@ -124,10 +129,6 @@ class WindowRulesPostprocessor(Postprocessor):
                 text_modified = ''.join(words_modified_dst)
 
         return text_modified
-
-    def _slide(self, seq: List[Any], window_size: int) -> Iterable[List[Any]]:
-        for i in range(len(seq) - window_size + 1):
-            yield seq[i: i + window_size]
 
     def reset_assets(self) -> None:
         for rule in self._rules:
@@ -188,7 +189,7 @@ class DaKotoMonoKatuyouRule(WindowRule):
         return 3
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
-        # 彼はきれいだか楽しい -> 彼はきれいであるか楽しい
+        # きれいだもの -> きれいなもの
         koto_mono = ['こと', '事', 'もの', '物']
         surfaces = [morpheme.surface for morpheme in morphemes]
         if surfaces[0] == 'だ' and surfaces[1] in koto_mono:
@@ -210,6 +211,7 @@ class ShiKatuyouRule(WindowRule):
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
         surfaces = [morpheme.surface for morpheme in morphemes]
+
         if morphemes[0].pos == '動詞' and surfaces[1] == 'し':
             # 走るし青い -> 走って青い (微妙)
             return None
@@ -359,8 +361,7 @@ class UniqueKOSOADOPostprocessor(Postprocessor):
 
     _KOSOADO = ['この', 'その', 'あの']
 
-    def __init__(self,
-                 extra_vocab: Optional[List[UserWord]] = None):
+    def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
         super().__init__(extra_vocab=extra_vocab)
         self._obj_to_kosoado: Dict[str, str] = {}
 
@@ -389,6 +390,97 @@ class UniqueKOSOADOPostprocessor(Postprocessor):
         self._obj_to_kosoado: Dict[str, str] = {}
 
 
+class HaGaUsagePostprocessor(Postprocessor):
+    """ convert last が to は in a block of 「...」
+
+    See "「は」「が」の使い分け" in FLD-docs/japanese/NLP_2024/README.md for details.
+    """
+
+    _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
+    _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
+
+    # TODO: follow ShiKatuyouRule
+    _parallel_morphemes = [
+        # ---- and like morphemes ----
+        Morpheme(surface='し', lid=None, rid=None, cost=None, pos='動詞', pos1='自立', pos2=None, pos3=None, katsuyou_type='サ変・スル', katsuyou='連用形', base='する', yomi='シ', hatsuon='シ', misc={}),
+        Morpheme(surface='し', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='し', yomi='シ', hatsuon='シ', misc={}),
+        Morpheme(surface='て', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='て', yomi='テ', hatsuon='テ', misc={}),
+        Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='で', yomi='デ', hatsuon='デ', misc={}),
+        # sometime, 「赤くないし青くない」 is wrongly parsed into 「赤く/ないし/青く/ない」
+        Morpheme(surface='ないし', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='ないし', yomi='ナイシ', hatsuon='ナイシ', misc={}),
+
+        # ---- or like morphemes ----
+        Morpheme(surface='か', lid=None, rid=None, cost=None, pos='助詞', pos1='副助詞／並立助詞／終助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='か', yomi='カ', hatsuon='カ', misc={}),
+        # somethines, 「赤いかまたは青い」 is wrongly parsed into 「赤い/かまた/は/青い」
+        Morpheme(surface='かまた', lid=None, rid=None, cost=None, pos='名詞', pos1='固有名詞', pos2='人名', pos3='姓', katsuyou_type=None, katsuyou=None, base='かまた', yomi='カマタ', hatsuon='カマタ', misc={}),
+
+        # ---- and but like morphemes ----
+        Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
+        Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
+        Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
+        Morpheme(surface='一方', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='一方', yomi='イッポウ', hatsuon='イッポー', misc={}),
+    ]
+
+    def __init__(self,
+                 extra_vocab: Optional[List[UserWord]] = None):
+        super().__init__(extra_vocab=extra_vocab)
+
+    def apply(self, text: str) -> str:
+        morphemes = self._parser.parse(text)
+        morphemes_processed = morphemes.copy()
+
+        haga_positions_block_stack: List[List[int]] = []
+        haga_positions_block = None
+        parallel_positions_block_stack: List[List[int]] = []
+        parallel_positions_block = None
+        for i_pos, morpheme in enumerate(morphemes):
+
+            if morpheme.surface == '「' or i_pos == 0:
+                is_degenerate = morpheme.surface == '「' and i_pos == 0
+                for _ in range(2 if is_degenerate else 1):
+                    haga_positions_block_stack.append([])
+                    parallel_positions_block_stack.append([])
+                continue
+
+            if morpheme.surface == '」' or i_pos == len(morphemes) - 1:
+                is_degenerate = morpheme.surface == '」' and i_pos == len(morphemes) - 1
+                for _ in range(2 if is_degenerate else 1):
+                    done_haga_positions = haga_positions_block_stack.pop()
+                    if len(done_haga_positions) >= 2:
+                        for pos in done_haga_positions[:-1]:
+                            morphemes_processed[pos] = self._ga_morpheme
+                        for pos in done_haga_positions[-1:]:   # i.e., -1
+                            morphemes_processed[pos] = self._ha_morpheme
+
+                        # share は・が before and after an and morpheme
+                        done_parallel_positions = parallel_positions_block_stack.pop()
+                        for parallel_positions in done_parallel_positions:
+                            for left_pos, right_pos in [done_haga_positions[i: i + 2] for i in range(0, len(done_haga_positions) - 1)]:
+                                if left_pos < parallel_positions < right_pos:  # Xは..し，Yが.. というように，「またぐ」構造になっている．
+                                    # 並列構造になっているかどうかを判定するヒューリスティック
+                                    if morphemes[right_pos - 1].surface == 'それ'\
+                                            or right_pos - left_pos <= 4:
+                                        morphemes_processed[left_pos] = morphemes_processed[right_pos]
+                continue
+
+            haga_positions_block = haga_positions_block_stack[-1]
+            if morpheme in [self._ha_morpheme, self._ga_morpheme]:
+                haga_positions_block.append(i_pos)
+
+            parallel_positions_block = parallel_positions_block_stack[-1]
+            if morpheme in self._parallel_morphemes:
+                if morpheme.surface == 'が' and i_pos - 1 >= 0 and morphemes[i_pos - 1].pos == '名詞':
+                    # this is not the 'が' of 接続関係 such as 「彼は走るが歩く」, but just the 'が' of 主語 such as 「猫が..」
+                    pass
+                else:
+                    parallel_positions_block.append(i_pos)
+
+        return ''.join(m.surface for m in morphemes_processed)
+
+    def reset_assets(self) -> None:
+        pass
+
+
 def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor:
     extra_vocab = word_bank.extra_vocab
     return PostprocessorChain([
@@ -407,4 +499,5 @@ def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor
             extra_vocab=extra_vocab,
         ),
         UniqueKOSOADOPostprocessor(extra_vocab=extra_vocab),
+        HaGaUsagePostprocessor(extra_vocab=extra_vocab),
     ])

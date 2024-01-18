@@ -332,7 +332,10 @@ class JapaneseWordBank(WordBank):
                 if katsuyous is None or morpheme.katsuyou in katsuyous]
 
 
-def load_jp_extra_vocab(path: Union[str, List[str]]) -> List[UserWord]:
+def load_jp_extra_vocab(path: Union[str, List[str]],
+                        ng_words: List[str] = None) -> List[UserWord]:
+    ng_words = ng_words or []
+
     if isinstance(path, list):
         all_paths = path
     else:
@@ -364,6 +367,8 @@ def load_jp_extra_vocab(path: Union[str, List[str]]) -> List[UserWord]:
     # we need two-pass loading, as the words can appear multiple times for different attrs.
     vocab: List[UserWord] = []
     for word, pos in word_pos_pairs:
+        if word in ng_words:
+            continue
         _attrs = attrs[(word, pos)]
         vocab.append(UserWord(lemma=word, pos=pos, **_attrs))
 

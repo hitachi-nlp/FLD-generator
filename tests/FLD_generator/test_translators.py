@@ -3,6 +3,7 @@ import logging
 import sys
 import json
 from collections import defaultdict
+import re
 
 from FLD_generator.formula import Formula, negate, eliminate_double_negation
 from FLD_generator.translators import build as build_translator, TemplatedTranslator
@@ -92,8 +93,6 @@ def test_templated_translator_lang(lang: str,
     show_translations = make_show_translation_func(translator)
 
     if knowledge_banks is None:
-        show_translations(['(Ex): ({A}x & {B}x)'], trial=30)
-
         show_translations(['{A}'], trial=30)
         show_translations(['¬({A})'], trial=30)
 
@@ -115,7 +114,6 @@ def test_templated_translator_lang(lang: str,
         show_translations(['{A} -> ({B} & {C})'], trial=30)
         show_translations(['{A} -> ({B} v {C})'], trial=30)
 
-
         show_translations(['{A}{a}'], trial=30)
 
         show_translations(['({A}{a} & {B}{a})'], trial=30)
@@ -135,7 +133,6 @@ def test_templated_translator_lang(lang: str,
         show_translations(['({A}{a} v {B}{a}) -> {C}{c}'], trial=30)
         show_translations(['{A}{a} -> ({B}{b} & {C}{b})'], trial=30)
         show_translations(['{A}{a} -> ({B}{b} v {C}{b})'], trial=30)
-
 
         show_translations(['(Ex): {A}x'], trial=30)
         show_translations(['(Ex): (¬{A}x & {B}x)'], trial=30)
@@ -232,14 +229,13 @@ def test_eng_with_knowledge():
 
 def test_jpn():
     test_templated_translator_lang('jpn')
-    
 
 
-def test_jpn_with_vocab(vocab_name_or_path: str):
+def test_jpn_with_user_vocab():
     test_templated_translator_lang('jpn',
-                                   translation_config='thing.v1',
+                                   translation_config='punipuni',
                                    no_adj_verb_as_zeroary=True,
-                                   extra_vocab=vocab_name_or_path)
+                                   extra_vocab='punipuni')
 
 
 @profile
@@ -247,8 +243,12 @@ def test_jpn_postprocess():
     wb = build_wordbank('jpn', extra_vocab='punipuni')
     postprocessor = build_postprocessor(wb)
 
-    def _check_katsuyou(src: str, golds: List[str], trial=1000):
-        print('\n\n================ _check_katsuyou ===================')
+    def _test_in_out(src: str, golds: List[str], trial=1000):
+        # zero_anaphora_golds = [re.sub('それ(は|が)', '', gold)
+        #                        for gold in golds]
+        # golds = golds + zero_anaphora_golds
+        
+        print('\n\n================ test_jpn_postprocess ===================')
         print('input      :', src)
         print()
         print('expected   :', golds)
@@ -269,84 +269,179 @@ def test_jpn_postprocess():
 
         assert done == set(golds)
 
-    _check_katsuyou('この人間が走るならばつらい', ['この人間が走ればつらい'])
-    _check_katsuyou('この人間が機械だならばつらい', ['この人間が機械ならばつらい'])
-    _check_katsuyou('この人間がきれいだならばつらい', ['この人間がきれいならばつらい'])
-    _check_katsuyou('この人間が美しいならばつらい', ['この人間が美しいならばつらい'])
+    _test_in_out('この人間は走るならばつらい',
+                 ['この人間は走ればつらい'])
+    _test_in_out('この人間は機械だならばつらい',
+                 ['この人間は機械ならばつらい'])
+    _test_in_out('この人間はきれいだならばつらい',
+                 ['この人間はきれいならばつらい'])
+    _test_in_out('この人間は美しいならばつらい',
+                 ['この人間は美しいならばつらい'])
 
-    _check_katsuyou('この人間が走るならつらい', ['この人間が走るならつらい'])
-    _check_katsuyou('この人間が機械だならつらい', ['この人間が機械ならつらい'])
-    _check_katsuyou('この人間がきれいだならつらい', ['この人間がきれいならつらい'])
-    _check_katsuyou('この人間が美しいならつらい', ['この人間が美しいならつらい'])
+    _test_in_out('この人間は走るならつらい',
+                 ['この人間は走るならつらい'])
+    _test_in_out('この人間は機械だならつらい',
+                 ['この人間は機械ならつらい'])
+    _test_in_out('この人間はきれいだならつらい',
+                 ['この人間はきれいならつらい'])
+    _test_in_out('この人間は美しいならつらい',
+                 ['この人間は美しいならつらい'])
 
-    _check_katsuyou('この人間がぷえぷやLv.0だならばつらい', ['この人間がぷえぷやLv.0ならばつらい'])
+    _test_in_out('この人間はぷえぷやLv.3だならばつらい',
+                 ['この人間はぷえぷやLv.3ならばつらい'])
 
-    _check_katsuyou('この人間がぷえぷやLv.0だならつらい', ['この人間がぷえぷやLv.0ならつらい'])
+    _test_in_out('この人間はぷえぷやLv.3だならつらい',
+                 ['この人間はぷえぷやLv.3ならつらい'])
 
+    _test_in_out('この人間はきれいだか美しい',
+                 ['この人間はきれいであるか美しい'])
+    _test_in_out('この人間は会議だか美しい',
+                 ['この人間は会議であるか美しい'])
+    _test_in_out('もしこのブローチは小館花であるか菊雄だか両方ならばあのどら猫は赤い',
+                 ['もしこのブローチが小館花であるか菊雄であるか両方ならばあのどら猫は赤い'])
 
+    _test_in_out('この人間はぷえぷやLv.3だか美しい',
+                 ['この人間はぷえぷやLv.3であるか美しい'])
 
+    _test_in_out('きれいだものはある',
+                 ['きれいなものはある'])
+    _test_in_out('きれいだことはある',
+                 ['きれいなことはある'])
+    _test_in_out('「きれいだ」ものはある',
+                 ['「きれいな」ものはある'])
+    _test_in_out('「きれいだ」物はある',
+                 ['「きれいな」物はある'])
 
-    _check_katsuyou('この人間がきれいだか美しい', ['この人間がきれいであるか美しい'])
-    _check_katsuyou('この人間が会議だか美しい', ['この人間が会議であるか美しい'])
-    _check_katsuyou('もしこのブローチは小館花であるか菊雄だか両方ならばあのどら猫はいする', ['もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫はいする'])
+    _test_in_out('ぷえぷやLv.3だものはある',
+                 ['ぷえぷやLv.3なものはある'])
 
-    _check_katsuyou('この人間がぷえぷやLv.0だか美しい', ['この人間がぷえぷやLv.0であるか美しい'])
+    _test_in_out('この人間は美しいし赤い',
+                 ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
+    _test_in_out('この人間はきれいだし赤い',
+                 ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
 
+    _test_in_out('この人間はぷえぷやLv.3だし赤い',
+                 ['この人間はぷえぷやLv.3だし赤い', 'この人間はぷえぷやLv.3で赤い'])
 
+    _test_in_out('この人間は走るない',
+                 ['この人間は走らない'])
+    _test_in_out('この人間は美しいない',
+                 ['この人間は美しくない'])
+    _test_in_out('夫婦らしいない物は分厚いかあるいは忌まわしい',
+                 ['夫婦らしくない物は分厚いかあるいは忌まわしい'])
+    _test_in_out('剥がれ落ちるない',
+                 ['剥がれ落ちない'])
+    _test_in_out('この人間は機械だない',
+                 ['この人間は機械でない'])
+    _test_in_out('この人間は機械だないし，あの熊も機械だない',
+                 ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
+    _test_in_out('Xということは成り立つない',
+                 ['Xということは成り立たない'])
+    _test_in_out('仕組むない',
+                 ['仕組まない'])
+    _test_in_out('取り扱い易いものは仕組むないし熱苦しい',
+                 ['取り扱い易いものは仕組まないし熱苦しい'])
+    _test_in_out('あのみやみやLv.2は聞き辛いがそれは志願するない',
+                 ['あのみやみやLv.2が聞き辛いがそれは志願しない'])
+    _test_in_out('何もかもは和大であるないかまたは与太る',
+                 ['何もかもは和大でないかまたは与太る'])
 
-    _check_katsuyou('きれいだものはある', ['きれいなものはある'])
-    _check_katsuyou('きれいだことはある', ['きれいなことはある'])
-    _check_katsuyou('「きれいだ」ものはある', ['「きれいな」ものはある'])
-    _check_katsuyou('「きれいだ」物はある', ['「きれいな」物はある'])
+    _test_in_out('この人間はぷえぷやLv.3だない',
+                 ['この人間はぷえぷやLv.3でない'])
 
-    _check_katsuyou('ぷえぷやLv.0だものはある', ['ぷえぷやLv.0なものはある'])
+    _test_in_out('この人間はきれいだない',
+                 ['この人間はきれいでない'])
+    _test_in_out('この人間は美しいない',
+                 ['この人間は美しくない'])
+    _test_in_out('この人間は会議するない',
+                 ['この人間は会議しない'])
+    _test_in_out('「黒いということは起こらない」ということは事実と異なるない',
+                 ['「黒いということは起こらない」ということは事実と異ならない'])
 
+    _test_in_out('この人間は走るないない',
+                 ['この人間は走らなくない'])
+    _test_in_out('この人間は機械だないない',
+                 ['この人間は機械でなくない'])
+    _test_in_out('この人間はきれいだないない',
+                 ['この人間はきれいでなくない'])
+    _test_in_out('この人間は美しいないない',
+                 ['この人間は美しくなくない'])
 
+    _test_in_out('この人間はぷえぷやLv.3だないない',
+                 ['この人間はぷえぷやLv.3でなくない'])
 
-    _check_katsuyou('この人間は美しいし赤い', ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
-    _check_katsuyou('この人間はきれいだし赤い', ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
-
-    _check_katsuyou('この人間はぷえぷやLv.0だし赤い', ['この人間はぷえぷやLv.0だし赤い', 'この人間はぷえぷやLv.0で赤い'])
-
-
-    _check_katsuyou('この人間は走るない', ['この人間は走らない'])
-    _check_katsuyou('この人間は美しいない', ['この人間は美しくない'])
-    _check_katsuyou('夫婦らしいない物は分厚いかあるいは忌まわしい', ['夫婦らしくない物は分厚いかあるいは忌まわしい'])
-    _check_katsuyou('剥がれ落ちるない', ['剥がれ落ちない'])
-    _check_katsuyou('この人間は機械だない', ['この人間は機械でない'])
-    _check_katsuyou('この人間は機械だないし，あの熊も機械だない', ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
-    _check_katsuyou('Xということが成り立つない', ['Xということが成り立たない'])
-    _check_katsuyou('仕組むない', ['仕組まない'])
-    _check_katsuyou('取り扱い易いものは仕組むないし熱苦しい', ['取り扱い易いものは仕組まないし熱苦しい'])
-    _check_katsuyou('あのみやみやLv.2は聞き辛いがそれは志願するない', ['あのみやみやLv.2は聞き辛いがそれは志願しない'])
-    _check_katsuyou('何もかもは和大であるないかまたは与太る', ['何もかもは和大でないかまたは与太る'])
-
-
-    _check_katsuyou('この人間はぷえぷやLv.0だない', ['この人間はぷえぷやLv.0でない'])
-
-
-
-    _check_katsuyou('この人間はきれいだない', ['この人間はきれいでない'])
-    _check_katsuyou('この人間が美しいない', ['この人間が美しくない'])
-    _check_katsuyou('この人間は会議するない', ['この人間は会議しない'])
-    _check_katsuyou('「黒いということは起こらない」ということは事実と異なるない', ['「黒いということは起こらない」ということは事実と異ならない'])
-
-
-    _check_katsuyou('この人間は走るないない', ['この人間は走らなくない'])
-    _check_katsuyou('この人間は機械だないない', ['この人間は機械でなくない'])
-    _check_katsuyou('この人間はきれいだないない', ['この人間はきれいでなくない'])
-    _check_katsuyou('この人間が美しいないない', ['この人間が美しくなくない'])
-
-    _check_katsuyou('この人間はぷえぷやLv.0だないない', ['この人間はぷえぷやLv.0でなくない'])
-
-
-
-    _check_katsuyou(
+    _test_in_out(
         'この人間とあの人間とその人間とこの熊とあの熊とその熊',
         [f'{ningen_kosoado}人間と{ningen_kosoado}人間と{ningen_kosoado}人間と{kuma_kosoado}熊と{kuma_kosoado}熊と{kuma_kosoado}熊'
          for ningen_kosoado in ['この', 'あの', 'その']
          for kuma_kosoado in ['この', 'あの', 'その']]
     )
+
+    _test_in_out('きつねが赤ければそれが走る',
+                 ['きつねが赤ければそれは走る'])
+    _test_in_out('きつねは赤ければそれが走る',
+                 ['きつねが赤ければそれは走る'])
+    _test_in_out('きつねが赤ければそれは走る',
+                 ['きつねが赤ければそれは走る'])
+    _test_in_out('きつねは赤ければそれは走る',
+                 ['きつねが赤ければそれは走る'])
+
+    _test_in_out('「きつねが赤ければそれが走る」が成り立つが，「たぬきが赤ければそれが走る」が成り立たない',
+                 ['「きつねが赤ければそれは走る」が成り立つが，「たぬきが赤ければそれは走る」は成り立たない'])
+
+    _test_in_out('きつねが赤ければそれが走る',
+                 ['きつねが赤ければそれは走る'])
+
+
+    # ------------- same 「は/が」 before and after "&" ----------
+    _test_in_out('あのぷやぷやLv.3が歩くしそれが走る',
+                 ['あのぷやぷやLv.3は歩くしそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が赤いしそれが走る',
+                 ['あのぷやぷやLv.3は赤いしそれは走る',
+                  'あのぷやぷやLv.3は赤くてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が電撃でそれが走る',
+                 ['あのぷやぷやLv.3は電撃でそれは走る',
+                  'あのぷやぷやLv.3は電撃でそれは走る'])
+
+
+    _test_in_out('あのぷやぷやLv.3が歩いてそれが走る',
+                 ['あのぷやぷやLv.3は歩いてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が赤くてそれが走る',
+                 ['あのぷやぷやLv.3は赤くてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が電撃でそれが走る',
+                 ['あのぷやぷやLv.3は電撃でそれは走る',
+                  'あのぷやぷやLv.3は電撃でそれは走る'])
+
+
+    _test_in_out('あのぷやぷやLv.3が歩かないしそれが走る',
+                 ['あのぷやぷやLv.3は歩かないしそれは走る',
+                  'あのぷやぷやLv.3は歩かなくてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が赤くないしそれが走る',
+                 ['あのぷやぷやLv.3は赤くないしそれは走る',
+                  'あのぷやぷやLv.3は赤くなくてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が電撃でないしそれが走る',
+                 ['あのぷやぷやLv.3は電撃でないしそれは走る',
+                  'あのぷやぷやLv.3は電撃でなくてそれは走る'])
+
+
+    _test_in_out('あのぷやぷやLv.3が歩かなくてそれが走る',
+                 ['あのぷやぷやLv.3は歩かなくてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が赤くなくてそれが走る',
+                 ['あのぷやぷやLv.3は赤くなくてそれは走る'])
+
+    _test_in_out('あのぷやぷやLv.3が電撃でなくてそれが走る',
+                 ['あのぷやぷやLv.3は電撃でなくてそれは走る'])
+
+    _test_in_out('狸が踊るし猫が走る',
+                 ['狸は踊るし猫は走る'])
+
 
 
 if __name__ == '__main__':
@@ -356,7 +451,6 @@ if __name__ == '__main__':
     # test_eng_with_knowledge()
 
     # test_jpn()
-    test_jpn_with_vocab(vocab_name_or_path='punipuni')
-    # test_jpn_with_vocab(vocab_name_or_path='BCCWJ')
+    # test_jpn_with_user_vocab()
 
-    # test_jpn_postprocess()
+    test_jpn_postprocess()

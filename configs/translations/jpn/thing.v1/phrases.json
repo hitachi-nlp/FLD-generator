@@ -776,10 +776,15 @@
 
     "ha_ga": [
       "は",
+      "__comment we will add 'が' in the post processing",
       "__が"
     ],
 
     "deari": [
+      "で",
+      "であり",
+      "であって",
+
       "で <<phrase::katsu>>",
       "であり <<phrase::katsu>>",
       "であって <<phrase::katsu>>"
