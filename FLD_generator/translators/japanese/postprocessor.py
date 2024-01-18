@@ -442,6 +442,7 @@ class HaGaUsagePostprocessor(Postprocessor):
 
         # ---- and but like morphemes ----
         Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
+        Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
         Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
         Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
         Morpheme(surface='一方', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='一方', yomi='イッポウ', hatsuon='イッポー', misc={}),
@@ -490,7 +491,9 @@ class HaGaUsagePostprocessor(Postprocessor):
                 continue
 
             haga_positions_block = haga_positions_block_stack[-1]
-            if morpheme in [self._ha_morpheme, self._ga_morpheme]:
+            if morpheme == self._ha_morpheme and i_pos - 1 >= 0 and morphemes[i_pos - 1].surface not in ['また', 'もしく', 'あるい']:
+                haga_positions_block.append(i_pos)
+            if morpheme == self._ga_morpheme:
                 haga_positions_block.append(i_pos)
 
             parallel_positions_block = parallel_positions_block_stack[-1]
@@ -524,7 +527,7 @@ def build_postprocessor(word_bank: JapaneseWordBank,
             extra_vocab=extra_vocab,
         ),
         UniqueKOSOADOPostprocessor(extra_vocab=extra_vocab),
-        ZeroAnaphoraPostprocessor(extra_vocab=extra_vocab),
         HaGaUsagePostprocessor(extra_vocab=extra_vocab),
+        ZeroAnaphoraPostprocessor(extra_vocab=extra_vocab),
     ]
     return PostprocessorChain(postprocessors)

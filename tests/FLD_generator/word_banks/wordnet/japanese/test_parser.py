@@ -161,6 +161,11 @@ def test_parse():
         parser_with_extra_vocab,
     )
 
+    _test_parse(
+        'このみわみのLv.15はむず痒くないがそれは取り辛い',
+        parser_with_extra_vocab,
+    )
+
 
 if __name__ == '__main__':
     test_parse()

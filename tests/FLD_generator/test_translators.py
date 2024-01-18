@@ -487,6 +487,10 @@ def test_jpn_postprocess():
     _test_in_out('この人間はぷえぷやLv.3だし赤い',
                  ['この人間はぷえぷやLv.3だし赤い', 'この人間はぷえぷやLv.3で赤い'])
 
+    _test_in_out('あのぷちゃぷにLv.66は切除するしかつ思い付く',
+                 ['あのぷちゃぷにLv.66は切除するしかつ思い付く'])
+
+    
 
 
 
@@ -576,6 +580,11 @@ def test_jpn_postprocess():
     _test_in_out('もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫は赤い',
                  ['もしこのブローチが小館花であるか菊雄であるか両方ならばあのどら猫は赤い'])
 
+    _test_in_out('このみわみのLv.15がむず痒くないがそれは取り辛い',
+                 ['このみわみのLv.15はむず痒くないがそれは取り辛い'])
+    
+    _test_in_out('もし仮にこのぽえぽのLv.92は変わり易いとすれば散る',
+                 ['もし仮にこのぽえぽのLv.92は変わり易いとすれば散る'])
 
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
@@ -584,6 +593,6 @@ if __name__ == '__main__':
     # test_eng_with_knowledge()
 
     # test_jpn()
-    # test_jpn_with_user_vocab()
+    test_jpn_with_user_vocab()
 
-    test_jpn_postprocess()
+    # test_jpn_postprocess()
