@@ -13,6 +13,9 @@ def load_vocab(name_or_path: str, lang: str) -> List[UserWord]:
     if lang == 'eng':
         raise NotImplementedError()
     elif lang == 'jpn':
+        ng_words = [
+            # 'かまた',   # 赤いかまたは青い を引っかけてしまう．
+        ]
         if name_or_path == 'BCCWJ':
             paths = ['./res/word_banks/japanese/vocab/BCCWJ/vocab.BCCWJ.all.json']
         elif name_or_path == 'punipuni':
@@ -22,7 +25,7 @@ def load_vocab(name_or_path: str, lang: str) -> List[UserWord]:
             ]
         else:
             raise ValueError(f'Unknown vocab name "{name_or_path}"')
-        return load_jp_extra_vocab(paths)
+        return load_jp_extra_vocab(paths, ng_words=ng_words)
     else:
         raise ValueError(f'Unknown language "{lang}"')
 

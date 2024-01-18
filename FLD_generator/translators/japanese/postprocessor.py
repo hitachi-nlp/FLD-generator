@@ -357,6 +357,32 @@ class KakuRandomOrderRule(WindowRule):
         pass
 
 
+class ZeroAnaphoraPostprocessor(Postprocessor):
+
+    def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
+        super().__init__(extra_vocab=extra_vocab)
+
+    def apply(self, text: str) -> str:
+        morphemes = self._parser.parse(text)
+        morphemes_processed = []
+        do_skip = False
+        for window in _slide(morphemes, 2):
+            if window[0].surface == 'それ' and window[1].surface in ['は', 'が']:
+                if random.random() < 0.5:
+                    do_skip = True
+                    continue
+            if do_skip:
+                do_skip = False
+                continue
+            morphemes_processed.append(window[0])
+        morphemes_processed.append(morphemes[-1])
+
+        return ''.join(m.surface for m in morphemes_processed)
+
+    def reset_assets(self) -> None:
+        pass
+
+
 class UniqueKOSOADOPostprocessor(Postprocessor):
 
     _KOSOADO = ['この', 'その', 'あの']
@@ -481,23 +507,24 @@ class HaGaUsagePostprocessor(Postprocessor):
         pass
 
 
-def build_postprocessor(word_bank: JapaneseWordBank) -> WindowRulesPostprocessor:
+def build_postprocessor(word_bank: JapaneseWordBank,
+                        postprocessors: Optional[List[Postprocessor]] = None) -> Postprocessor:
     extra_vocab = word_bank.extra_vocab
-    return PostprocessorChain([
+    postprocessors = postprocessors or [
+        # XXX: THE ORDER OF RULES MATTERS!!
         WindowRulesPostprocessor(
             [
-                # XXX: the order of rules matters
                 NarabaKatsuyouRule(word_bank),
-                # add extra_vocab as argument
                 DaKaKatuyouRule(word_bank),
                 DaKotoMonoKatuyouRule(word_bank),
                 NaiKatsuyouRule(word_bank),
                 NaiNaiKatsuyouRule(word_bank),
-                # KakuRandomOrderRule(word_bank),
                 ShiKatuyouRule(word_bank),
             ],
             extra_vocab=extra_vocab,
         ),
         UniqueKOSOADOPostprocessor(extra_vocab=extra_vocab),
+        ZeroAnaphoraPostprocessor(extra_vocab=extra_vocab),
         HaGaUsagePostprocessor(extra_vocab=extra_vocab),
-    ])
+    ]
+    return PostprocessorChain(postprocessors)

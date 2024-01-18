@@ -15,6 +15,19 @@ from FLD_generator.translators.japanese.postprocessor import build_postprocessor
 from FLD_generator.utils import fix_seed
 from FLD_generator.knowledge_banks import build_knowledge_bank
 from FLD_generator.knowledge_banks.base import KnowledgeBankBase
+from FLD_generator.translators.japanese.postprocessor import (
+    Postprocessor,
+    WindowRulesPostprocessor,
+    NarabaKatsuyouRule,
+    DaKaKatuyouRule,
+    DaKotoMonoKatuyouRule,
+    NaiKatsuyouRule,
+    NaiNaiKatsuyouRule,
+    ShiKatuyouRule,
+    UniqueKOSOADOPostprocessor,
+    ZeroAnaphoraPostprocessor,
+    HaGaUsagePostprocessor,
+)
 from logger_setup import setup as setup_logger
 
 import line_profiling
@@ -240,50 +253,72 @@ def test_jpn_with_user_vocab():
 
 @profile
 def test_jpn_postprocess():
+
     wb = build_wordbank('jpn', extra_vocab='punipuni')
-    postprocessor = build_postprocessor(wb)
 
-    def _test_in_out(src: str, golds: List[str], trial=1000):
-        # zero_anaphora_golds = [re.sub('それ(は|が)', '', gold)
-        #                        for gold in golds]
-        # golds = golds + zero_anaphora_golds
-        
-        print('\n\n================ test_jpn_postprocess ===================')
-        print('input      :', src)
-        print()
-        print('expected   :', golds)
+    def build_test_in_out_func(postprocessors: List[Postprocessor]):
 
-        done: Set[str] = set([])
-        for _ in range(trial):
-            postprocessor.reset_assets()
-            pred = postprocessor.apply(src)
-            if pred in done:
-                continue
+        postprocessor_chain = build_postprocessor(wb,
+                                                  postprocessors=postprocessors)
 
+        def _test_in_out(src: str, golds: List[str], trial=1000):
+            print('\n\n================ test_jpn_postprocess ===================')
+            print('input      :', src)
             print()
-            print('output     :', pred)
-            assert pred in golds
-            done.add(pred)
-            if done == set(golds):
-                break
+            print('expected   :', golds)
 
-        assert done == set(golds)
+            done: Set[str] = set([])
+            for _ in range(trial):
+                postprocessor_chain.reset_assets()
+                pred = postprocessor_chain.apply(src)
+                if pred in done:
+                    continue
+
+                print()
+                print('output     :', pred)
+                assert pred in golds
+                done.add(pred)
+                if done == set(golds):
+                    break
+
+            assert done == set(golds)
+
+        return _test_in_out
+
+
+
+
+
+    _test_in_out = build_test_in_out_func([
+        WindowRulesPostprocessor(
+            [
+                NarabaKatsuyouRule(wb),
+            ],
+            extra_vocab=wb.extra_vocab,
+        ),
+    ])
 
     _test_in_out('この人間は走るならばつらい',
                  ['この人間は走ればつらい'])
+
     _test_in_out('この人間は機械だならばつらい',
                  ['この人間は機械ならばつらい'])
+
     _test_in_out('この人間はきれいだならばつらい',
                  ['この人間はきれいならばつらい'])
+
     _test_in_out('この人間は美しいならばつらい',
                  ['この人間は美しいならばつらい'])
 
     _test_in_out('この人間は走るならつらい',
                  ['この人間は走るならつらい'])
+
     _test_in_out('この人間は機械だならつらい',
                  ['この人間は機械ならつらい'])
+
     _test_in_out('この人間はきれいだならつらい',
                  ['この人間はきれいならつらい'])
+
     _test_in_out('この人間は美しいならつらい',
                  ['この人間は美しいならつらい'])
 
@@ -293,56 +328,99 @@ def test_jpn_postprocess():
     _test_in_out('この人間はぷえぷやLv.3だならつらい',
                  ['この人間はぷえぷやLv.3ならつらい'])
 
+
+
+
+    _test_in_out = build_test_in_out_func([
+        WindowRulesPostprocessor(
+            [
+                DaKaKatuyouRule(wb),
+            ],
+            extra_vocab=wb.extra_vocab,
+        )
+    ])
+
     _test_in_out('この人間はきれいだか美しい',
                  ['この人間はきれいであるか美しい'])
+
     _test_in_out('この人間は会議だか美しい',
                  ['この人間は会議であるか美しい'])
+
     _test_in_out('もしこのブローチは小館花であるか菊雄だか両方ならばあのどら猫は赤い',
-                 ['もしこのブローチが小館花であるか菊雄であるか両方ならばあのどら猫は赤い'])
+                 ['もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫は赤い'])
 
     _test_in_out('この人間はぷえぷやLv.3だか美しい',
                  ['この人間はぷえぷやLv.3であるか美しい'])
 
+
+
+
+    _test_in_out = build_test_in_out_func([
+        WindowRulesPostprocessor(
+            [
+                DaKotoMonoKatuyouRule(wb),
+            ],
+            extra_vocab=wb.extra_vocab,
+        )
+    ])
+
     _test_in_out('きれいだものはある',
                  ['きれいなものはある'])
+
     _test_in_out('きれいだことはある',
                  ['きれいなことはある'])
+
     _test_in_out('「きれいだ」ものはある',
                  ['「きれいな」ものはある'])
+
     _test_in_out('「きれいだ」物はある',
                  ['「きれいな」物はある'])
 
     _test_in_out('ぷえぷやLv.3だものはある',
                  ['ぷえぷやLv.3なものはある'])
 
-    _test_in_out('この人間は美しいし赤い',
-                 ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
-    _test_in_out('この人間はきれいだし赤い',
-                 ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
 
-    _test_in_out('この人間はぷえぷやLv.3だし赤い',
-                 ['この人間はぷえぷやLv.3だし赤い', 'この人間はぷえぷやLv.3で赤い'])
+
+
+    _test_in_out = build_test_in_out_func([
+        WindowRulesPostprocessor(
+            [
+                NaiKatsuyouRule(wb)
+            ],
+            extra_vocab=wb.extra_vocab,
+        )
+    ])
 
     _test_in_out('この人間は走るない',
                  ['この人間は走らない'])
+
     _test_in_out('この人間は美しいない',
                  ['この人間は美しくない'])
+
     _test_in_out('夫婦らしいない物は分厚いかあるいは忌まわしい',
                  ['夫婦らしくない物は分厚いかあるいは忌まわしい'])
+
     _test_in_out('剥がれ落ちるない',
                  ['剥がれ落ちない'])
+
     _test_in_out('この人間は機械だない',
                  ['この人間は機械でない'])
+
     _test_in_out('この人間は機械だないし，あの熊も機械だない',
-                 ['この人間は機械でないし，あの熊も機械でない', 'この人間は機械でなくて，あの熊も機械でない'])
+                 ['この人間は機械でないし，あの熊も機械でない'])
+
     _test_in_out('Xということは成り立つない',
                  ['Xということは成り立たない'])
+
     _test_in_out('仕組むない',
                  ['仕組まない'])
+
     _test_in_out('取り扱い易いものは仕組むないし熱苦しい',
                  ['取り扱い易いものは仕組まないし熱苦しい'])
+
     _test_in_out('あのみやみやLv.2は聞き辛いがそれは志願するない',
-                 ['あのみやみやLv.2が聞き辛いがそれは志願しない'])
+                 ['あのみやみやLv.2は聞き辛いがそれは志願しない'])
+
     _test_in_out('何もかもは和大であるないかまたは与太る',
                  ['何もかもは和大でないかまたは与太る'])
 
@@ -351,24 +429,70 @@ def test_jpn_postprocess():
 
     _test_in_out('この人間はきれいだない',
                  ['この人間はきれいでない'])
+
     _test_in_out('この人間は美しいない',
                  ['この人間は美しくない'])
+
     _test_in_out('この人間は会議するない',
                  ['この人間は会議しない'])
+
     _test_in_out('「黒いということは起こらない」ということは事実と異なるない',
                  ['「黒いということは起こらない」ということは事実と異ならない'])
 
-    _test_in_out('この人間は走るないない',
+
+
+
+    _test_in_out = build_test_in_out_func([
+        WindowRulesPostprocessor(
+            [
+                NaiNaiKatsuyouRule(wb),
+            ],
+            extra_vocab=wb.extra_vocab,
+        )
+    ])
+
+    _test_in_out('この人間は走らないない',
                  ['この人間は走らなくない'])
-    _test_in_out('この人間は機械だないない',
+
+    _test_in_out('この人間は機械でないない',
                  ['この人間は機械でなくない'])
-    _test_in_out('この人間はきれいだないない',
+
+    _test_in_out('この人間はきれいでないない',
                  ['この人間はきれいでなくない'])
-    _test_in_out('この人間は美しいないない',
+
+    _test_in_out('この人間は美しくないない',
                  ['この人間は美しくなくない'])
 
-    _test_in_out('この人間はぷえぷやLv.3だないない',
+    _test_in_out('この人間はぷえぷやLv.3でないない',
                  ['この人間はぷえぷやLv.3でなくない'])
+
+
+
+
+    _test_in_out = build_test_in_out_func([
+        WindowRulesPostprocessor(
+            [
+                ShiKatuyouRule(wb),
+            ],
+            extra_vocab=wb.extra_vocab,
+        )
+    ])
+
+    _test_in_out('この人間は美しいし赤い',
+                 ['この人間は美しいし赤い', 'この人間は美しくて赤い'])
+
+    _test_in_out('この人間はきれいだし赤い',
+                 ['この人間はきれいだし赤い', 'この人間はきれいで赤い'])
+
+    _test_in_out('この人間はぷえぷやLv.3だし赤い',
+                 ['この人間はぷえぷやLv.3だし赤い', 'この人間はぷえぷやLv.3で赤い'])
+
+
+
+
+    _test_in_out = build_test_in_out_func([
+        UniqueKOSOADOPostprocessor(extra_vocab=wb.extra_vocab),
+    ])
 
     _test_in_out(
         'この人間とあの人間とその人間とこの熊とあの熊とその熊',
@@ -377,34 +501,47 @@ def test_jpn_postprocess():
          for kuma_kosoado in ['この', 'あの', 'その']]
     )
 
+
+
+
+    _test_in_out = build_test_in_out_func([
+        ZeroAnaphoraPostprocessor(extra_vocab=wb.extra_vocab),
+    ])
+
+    _test_in_out('きつねが赤ければそれは走る',
+                 ['きつねが赤ければそれは走る', 'きつねが赤ければ走る'])
+
+
+
+
+    _test_in_out = build_test_in_out_func([
+        HaGaUsagePostprocessor(extra_vocab=wb.extra_vocab),
+    ])
+
     _test_in_out('きつねが赤ければそれが走る',
                  ['きつねが赤ければそれは走る'])
-    _test_in_out('きつねは赤ければそれが走る',
-                 ['きつねが赤ければそれは走る'])
+
     _test_in_out('きつねが赤ければそれは走る',
                  ['きつねが赤ければそれは走る'])
+
+    _test_in_out('きつねは赤ければそれが走る',
+                 ['きつねが赤ければそれは走る'])
+
     _test_in_out('きつねは赤ければそれは走る',
                  ['きつねが赤ければそれは走る'])
 
     _test_in_out('「きつねが赤ければそれが走る」が成り立つが，「たぬきが赤ければそれが走る」が成り立たない',
                  ['「きつねが赤ければそれは走る」が成り立つが，「たぬきが赤ければそれは走る」は成り立たない'])
 
-    _test_in_out('きつねが赤ければそれが走る',
-                 ['きつねが赤ければそれは走る'])
-
-
     # ------------- same 「は/が」 before and after "&" ----------
     _test_in_out('あのぷやぷやLv.3が歩くしそれが走る',
                  ['あのぷやぷやLv.3は歩くしそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が赤いしそれが走る',
-                 ['あのぷやぷやLv.3は赤いしそれは走る',
-                  'あのぷやぷやLv.3は赤くてそれは走る'])
+                 ['あのぷやぷやLv.3は赤いしそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が電撃でそれが走る',
-                 ['あのぷやぷやLv.3は電撃でそれは走る',
-                  'あのぷやぷやLv.3は電撃でそれは走る'])
-
+                 ['あのぷやぷやLv.3は電撃でそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が歩いてそれが走る',
                  ['あのぷやぷやLv.3は歩いてそれは走る'])
@@ -413,22 +550,16 @@ def test_jpn_postprocess():
                  ['あのぷやぷやLv.3は赤くてそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が電撃でそれが走る',
-                 ['あのぷやぷやLv.3は電撃でそれは走る',
-                  'あのぷやぷやLv.3は電撃でそれは走る'])
-
+                 ['あのぷやぷやLv.3は電撃でそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が歩かないしそれが走る',
-                 ['あのぷやぷやLv.3は歩かないしそれは走る',
-                  'あのぷやぷやLv.3は歩かなくてそれは走る'])
+                 ['あのぷやぷやLv.3は歩かないしそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が赤くないしそれが走る',
-                 ['あのぷやぷやLv.3は赤くないしそれは走る',
-                  'あのぷやぷやLv.3は赤くなくてそれは走る'])
+                 ['あのぷやぷやLv.3は赤くないしそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が電撃でないしそれが走る',
-                 ['あのぷやぷやLv.3は電撃でないしそれは走る',
-                  'あのぷやぷやLv.3は電撃でなくてそれは走る'])
-
+                 ['あのぷやぷやLv.3は電撃でないしそれは走る'])
 
     _test_in_out('あのぷやぷやLv.3が歩かなくてそれが走る',
                  ['あのぷやぷやLv.3は歩かなくてそれは走る'])
@@ -442,6 +573,8 @@ def test_jpn_postprocess():
     _test_in_out('狸が踊るし猫が走る',
                  ['狸は踊るし猫は走る'])
 
+    _test_in_out('もしこのブローチは小館花であるか菊雄であるか両方ならばあのどら猫は赤い',
+                 ['もしこのブローチが小館花であるか菊雄であるか両方ならばあのどら猫は赤い'])
 
 
 if __name__ == '__main__':
