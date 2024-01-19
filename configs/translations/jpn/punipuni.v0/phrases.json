@@ -95,10 +95,10 @@
 
 
     "{A}predicate": [
-      "<<phrase::is>> <<phrase::{A}predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::{A}predicate_wo_ha>>"
     ],
 
-    "{A}predicate_wo_ha_ga": [
+    "{A}predicate_wo_ha": [
         "<<phrase::{A}is_tgt>>",
         ["W_VOL_AVG__0.2", "<<phrase::{A}is_not_tgt>> <<phrase::pred_not>>"]
     ],
@@ -116,10 +116,10 @@
 
 
     "¬{A}predicate": [
-      "<<phrase::is>> <<phrase::¬{A}predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::¬{A}predicate_wo_ha>>"
     ],
 
-    "¬{A}predicate_wo_ha_ga": [
+    "¬{A}predicate_wo_ha": [
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_tgt>>"],
       "<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>>"
     ],
@@ -135,40 +135,40 @@
 
 
     "({A} & {B})predicate": [
-      "<<phrase::is>> <<phrase::({A} & {B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::({A} & {B})predicate_wo_ha>>"
     ],
     "(¬{A} & {B})predicate": [
-      "<<phrase::is>> <<phrase::(¬{A} & {B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::(¬{A} & {B})predicate_wo_ha>>"
     ],
     "({A} & ¬{B})predicate": [
-      "<<phrase::is>> <<phrase::({A} & ¬{B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::({A} & ¬{B})predicate_wo_ha>>"
     ],
     "(¬{A} & ¬{B})predicate": [
-      "<<phrase::is>> <<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::(¬{A} & ¬{B})predicate_wo_ha>>"
     ],
 
 
     "({A} v {B})predicate": [
-      "<<phrase::is>> <<phrase::({A} v {B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::({A} v {B})predicate_wo_ha>>"
     ],
     "(¬{A} v {B})predicate": [
-      "<<phrase::is>> <<phrase::(¬{A} v {B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::(¬{A} v {B})predicate_wo_ha>>"
     ],
     "({A} v ¬{B})predicate": [
-      "<<phrase::is>> <<phrase::({A} v ¬{B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::({A} v ¬{B})predicate_wo_ha>>"
     ],
     "(¬{A} v ¬{B})predicate": [
-      "<<phrase::is>> <<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>>"
+      "<<phrase::is>> <<phrase::(¬{A} v ¬{B})predicate_wo_ha>>"
     ],
 
 
 
 
 
-    "({A} & {B})predicate_wo_ha_ga": [
-      "__comment: we do not use predicate_wo_ha_ga, but instead we use is_tgt directly, so that we can choose appropriate joint from 'and' or 'but'",
-      "__<<phrase::{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::{B}predicate_wo_ha_ga>>",
-      "____both <<phrase::{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::{B}predicate_wo_ha_ga>>",
+    "({A} & {B})predicate_wo_ha": [
+      "__comment: we do not use predicate_wo_ha, but instead we use is_tgt directly, so that we can choose appropriate joint from 'and' or 'but'",
+      "__<<phrase::{A}predicate_wo_ha>> <<phrase::and>> <<phrase::{B}predicate_wo_ha>>",
+      "____both <<phrase::{A}predicate_wo_ha>> <<phrase::and>> <<phrase::{B}predicate_wo_ha>>",
 
       "<<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>",
       ["W_VOL_AVG__0.2", "<<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::but>> <<phrase::{B}is_tgt>>"],
@@ -182,13 +182,13 @@
       ["W_VOL_AVG__0.2", "__both <<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::and>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>>"],
 
       "__comment: post_modifier is not common in Japanese",
-      ["W_VOL_AVG__0.1", "<<phrase::{A}a_noun>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha_ga>>"],
-      ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha_ga>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::{A}a_noun>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha>>"],
       ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::{B}a_noun>> <<phrase::da_dearu>>"]
     ],
-    "(¬{A} & {B})predicate_wo_ha_ga": [
-      "__<<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::{B}predicate_wo_ha_ga>>",
-      "____both <<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::{B}predicate_wo_ha_ga>>",
+    "(¬{A} & {B})predicate_wo_ha": [
+      "__<<phrase::¬{A}predicate_wo_ha>> <<phrase::and>> <<phrase::{B}predicate_wo_ha>>",
+      "____both <<phrase::¬{A}predicate_wo_ha>> <<phrase::and>> <<phrase::{B}predicate_wo_ha>>",
 
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_tgt>>"],
       "<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::but>> <<phrase::{B}is_tgt>>",
@@ -200,13 +200,13 @@
       ["W_VOL_AVG__0.2", "__both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>>"],
       ["W_VOL_AVG__0.2", "__both <<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::and>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>>"],
 
-      ["W_VOL_AVG__0.1", "<<phrase::¬{A}a_noun>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha_ga>>"],
-      ["W_VOL_AVG__0.1", "<<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha_ga>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::¬{A}a_noun>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::{B}predicate_wo_ha>>"],
       ["W_VOL_AVG__0.1", "<<phrase::¬{A}pre_modifier>> <<phrase::{B}a_noun>> <<phrase::da_dearu>>"]
     ],
-    "({A} & ¬{B})predicate_wo_ha_ga": [
-      "__<<phrase::{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha_ga>>",
-      "____both <<phrase::{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha_ga>>",
+    "({A} & ¬{B})predicate_wo_ha": [
+      "__<<phrase::{A}predicate_wo_ha>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha>>",
+      "____both <<phrase::{A}predicate_wo_ha>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha>>",
 
       ["W_VOL_AVG__0.2", "<<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
       ["W_VOL_AVG__0.2", "<<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
@@ -218,13 +218,13 @@
       "__both <<phrase::{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_not_tgt>> <<phrase::pred_not>>",
       ["W_VOL_AVG__0.2", "__both <<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::and>> <<phrase::¬{B}is_not_tgt>> <<phrase::pred_not>>"],
 
-      ["W_VOL_AVG__0.1", "<<phrase::{A}a_noun>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha_ga>>"],
-      ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha_ga>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::{A}a_noun>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha>>"],
       ["W_VOL_AVG__0.1", "<<phrase::{A}pre_modifier>> <<phrase::¬{B}a_noun>> <<phrase::da_dearu>>"]
     ],
-    "(¬{A} & ¬{B})predicate_wo_ha_ga": [
-      "__<<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha_ga>>",
-      "____both <<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha_ga>>",
+    "(¬{A} & ¬{B})predicate_wo_ha": [
+      "__<<phrase::¬{A}predicate_wo_ha>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha>>",
+      "____both <<phrase::¬{A}predicate_wo_ha>> <<phrase::and>> <<phrase::¬{B}predicate_wo_ha>>",
 
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_tgt>>"],
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::but>> <<phrase::¬{B}is_tgt>>"],
@@ -236,15 +236,15 @@
       ["W_VOL_AVG__0.2", "__both <<phrase::¬{A}is_tgt>> <<phrase::and>> <<phrase::¬{B}is_not_tgt>> <<phrase::pred_not>>"],
       "__both <<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::and>> <<phrase::¬{B}is_not_tgt>> <<phrase::pred_not>>",
 
-      ["W_VOL_AVG__0.1", "<<phrase::¬{A}a_noun>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha_ga>>"],
-      ["W_VOL_AVG__0.1", "<<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha_ga>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::¬{A}a_noun>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha>>"],
+      ["W_VOL_AVG__0.1", "<<phrase::¬{A}pre_modifier>> <<phrase::thing>> <<phrase::deari>> <<phrase::¬{B}predicate_wo_ha>>"],
       ["W_VOL_AVG__0.1", "<<phrase::¬{A}pre_modifier>> <<phrase::¬{B}a_noun>> <<phrase::da_dearu>>"]
     ],
 
 
-    "({A} v {B})predicate_wo_ha_ga": [
-      "__<<phrase::{A}predicate_wo_ha_ga>> <<phrase::andOr>> <<phrase::{B}predicate_wo_ha_ga>>",
-      "__<<phrase::maybe_either>> <<phrase::{A}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::{B}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::both_pred>>",
+    "({A} v {B})predicate_wo_ha": [
+      "__<<phrase::{A}predicate_wo_ha>> <<phrase::andOr>> <<phrase::{B}predicate_wo_ha>>",
+      "__<<phrase::maybe_either>> <<phrase::{A}predicate_wo_ha>> <<phrase::or>> <<phrase::{B}predicate_wo_ha>> <<phrase::or>> <<phrase::both_pred>>",
 
       "<<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
       ["W_VOL_AVG__0.2", "__<<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
@@ -256,9 +256,9 @@
       ["W_VOL_AVG__0.2", "<<phrase::maybe_either>> <<phrase::{A}is_tgt>> <<phrase::or>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::both_pred>>"],
       ["W_VOL_AVG__0.2", "<<phrase::maybe_either>> <<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::both_pred>>"]
     ],
-    "(¬{A} v {B})predicate_wo_ha_ga": [
-      "__<<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::andOr>> <<phrase::{B}predicate_wo_ha_ga>>",
-      "__<<phrase::maybe_either>> <<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::{B}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::both_pred>>",
+    "(¬{A} v {B})predicate_wo_ha": [
+      "__<<phrase::¬{A}predicate_wo_ha>> <<phrase::andOr>> <<phrase::{B}predicate_wo_ha>>",
+      "__<<phrase::maybe_either>> <<phrase::¬{A}predicate_wo_ha>> <<phrase::or>> <<phrase::{B}predicate_wo_ha>> <<phrase::or>> <<phrase::both_pred>>",
 
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::{B}is_tgt>>"],
       "__<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::andOr>> <<phrase::{B}is_tgt>>",
@@ -270,9 +270,9 @@
       ["W_VOL_AVG__0.2", "<<phrase::maybe_either>> <<phrase::¬{A}is_tgt>> <<phrase::or>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::both_pred>>"],
       ["W_VOL_AVG__0.2", "<<phrase::maybe_either>> <<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::{B}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::both_pred>>"]
     ],
-    "({A} v ¬{B})predicate_wo_ha_ga": [
-      "__<<phrase::{A}predicate_wo_ha_ga>> <<phrase::andOr>> <<phrase::¬{B}predicate_wo_ha_ga>>",
-      "__<<phrase::maybe_either>> <<phrase::{A}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::¬{B}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::both_pred>>",
+    "({A} v ¬{B})predicate_wo_ha": [
+      "__<<phrase::{A}predicate_wo_ha>> <<phrase::andOr>> <<phrase::¬{B}predicate_wo_ha>>",
+      "__<<phrase::maybe_either>> <<phrase::{A}predicate_wo_ha>> <<phrase::or>> <<phrase::¬{B}predicate_wo_ha>> <<phrase::or>> <<phrase::both_pred>>",
 
       ["W_VOL_AVG__0.2", "<<phrase::{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
       ["W_VOL_AVG__0.2", "__<<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
@@ -284,9 +284,9 @@
       "<<phrase::maybe_either>> <<phrase::{A}is_tgt>> <<phrase::or>> <<phrase::¬{B}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::both_pred>>",
       ["W_VOL_AVG__0.2", "<<phrase::maybe_either>> <<phrase::{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::¬{B}is_not_tgt>> <<phrase::pred_not>> <<phrase::or>> <<phrase::both_pred>>"]
     ],
-    "(¬{A} v ¬{B})predicate_wo_ha_ga": [
-      "__<<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::andOr>> <<phrase::¬{B}predicate_wo_ha_ga>>",
-      "__<<phrase::maybe_either>> <<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::¬{B}predicate_wo_ha_ga>> <<phrase::or>> <<phrase::both_pred>>",
+    "(¬{A} v ¬{B})predicate_wo_ha": [
+      "__<<phrase::¬{A}predicate_wo_ha>> <<phrase::andOr>> <<phrase::¬{B}predicate_wo_ha>>",
+      "__<<phrase::maybe_either>> <<phrase::¬{A}predicate_wo_ha>> <<phrase::or>> <<phrase::¬{B}predicate_wo_ha>> <<phrase::or>> <<phrase::both_pred>>",
 
       ["W_VOL_AVG__0.2", "<<phrase::¬{A}is_tgt>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
       ["W_VOL_AVG__0.2", "__<<phrase::¬{A}is_not_tgt>> <<phrase::pred_not>> <<phrase::andOr>> <<phrase::¬{B}is_tgt>>"],
@@ -325,7 +325,7 @@
       "__{A}[VERB.ing]",
       "__that <<phrase::{A}predicate>>",
 
-      "<<phrase::deari>> <<phrase::{A}predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::{A}predicate_wo_ha>> <<phrase::thing>>"
     ],
 
     "¬{A}post_modifier": [
@@ -333,7 +333,7 @@
       "__<<phrase::pred_not>> {A}[VERB.ing]",
       "__that <<phrase::¬{A}predicate>>",
 
-      "<<phrase::deari>> <<phrase::¬{A}predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::¬{A}predicate_wo_ha>> <<phrase::thing>>"
     ],
 
 
@@ -371,30 +371,30 @@
 
 
     "({A} & {B})post_modifier": [
-      "<<phrase::deari>> <<phrase::({A} & {B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::({A} & {B})predicate_wo_ha>> <<phrase::thing>>"
     ],
     "(¬{A} & {B})post_modifier": [
-      "<<phrase::deari>> <<phrase::(¬{A} & {B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::(¬{A} & {B})predicate_wo_ha>> <<phrase::thing>>"
     ],
     "({A} & ¬{B})post_modifier": [
-      "<<phrase::deari>> <<phrase::({A} & ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::({A} & ¬{B})predicate_wo_ha>> <<phrase::thing>>"
     ],
     "(¬{A} & ¬{B})post_modifier": [
-      "<<phrase::deari>> <<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::(¬{A} & ¬{B})predicate_wo_ha>> <<phrase::thing>>"
     ],
 
 
     "({A} v {B})post_modifier": [
-      "<<phrase::deari>> <<phrase::({A} v {B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::({A} v {B})predicate_wo_ha>> <<phrase::thing>>"
     ],
     "(¬{A} v {B})post_modifier": [
-      "<<phrase::deari>> <<phrase::(¬{A} v {B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::(¬{A} v {B})predicate_wo_ha>> <<phrase::thing>>"
     ],
     "({A} v ¬{B})post_modifier": [
-      "<<phrase::deari>> <<phrase::({A} v ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::({A} v ¬{B})predicate_wo_ha>> <<phrase::thing>>"
     ],
     "(¬{A} v ¬{B})post_modifier": [
-      "<<phrase::deari>> <<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>> <<phrase::thing>>"
+      "<<phrase::deari>> <<phrase::(¬{A} v ¬{B})predicate_wo_ha>> <<phrase::thing>>"
     ],
 
 
@@ -466,7 +466,7 @@
     ],
 
     "pred_not": [
-      ["W_VOL_AVG__0.2", "<<phrase::toiu_koto>> <<phrase::ha_ga_nai>>"],
+      ["W_VOL_AVG__0.2", "<<phrase::toiu_koto>> <<phrase::ha_nai>>"],
       "ない"
     ],
 
@@ -485,7 +485,7 @@
     "is": [
       "__is",
 
-      "<<phrase::ha_ga>>"
+      "<<phrase::ha>>"
     ],
 
     "cause_verb": [
@@ -651,7 +651,7 @@
       "__hold",
       "__apply",
 
-      "<<phrase::ha_ga>> 成り立つ"
+      "<<phrase::ha>> 成り立つ"
     ],
 
     "occur": [
@@ -659,10 +659,11 @@
       "__happens",
       "__takes its rise",
 
-      "<<phrase::ha_ga>> <<phrase::occur_wo_ha_ga>>"
+      "__comment: 'が'起こる is natural",
+      "<<phrase::ga>> <<phrase::occur_wo_ha>>"
     ],
 
-    "occur_wo_ha_ga": [
+    "occur_wo_ha": [
       "起こる",
       "起きる",
       "発生する",
@@ -672,34 +673,34 @@
     "not_occur": [
       "__<<phrase::does>> <<phrase::pred_not>> <<phrase::occur>>",
 
-      "<<phrase::ha_ga>> <<phrase::not_occur_wo_ha_ga>>"
+      "<<phrase::ha>> <<phrase::not_occur_wo_ha>>"
     ],
 
-    "not_occur_wo_ha_ga": [
+    "not_occur_wo_ha": [
       "起こらない",
       "起きない",
       "発生しない",
       "生じない"
     ],
 
-    "toiu_mono_ha_ga_aru": [
-      "という <<phrase::thing>> <<phrase::ha_ga_aru>>"
+    "toiu_mono_ha_aru": [
+      "という <<phrase::thing>> <<phrase::ha_aru>>"
     ],
 
-    "mono_ha_ga_aru": [
-      "<<phrase::thing>> <<phrase::ha_ga_aru>>"
+    "mono_ha_aru": [
+      "<<phrase::thing>> <<phrase::ha_aru>>"
     ],
 
-    "ha_ga_aru": [
-      "<<phrase::ha_ga>> いる"
+    "ha_aru": [
+      "<<phrase::ha>> いる"
     ],
 
-    "toiu_mono_ha_ga_nai": [
-      "という <<phrase::thing>> <<phrase::ha_ga_nai>>"
+    "toiu_mono_ha_nai": [
+      "という <<phrase::thing>> <<phrase::ha_nai>>"
     ],
 
-    "ha_ga_nai": [
-      "<<phrase::ha_ga>> ない"
+    "ha_nai": [
+      "<<phrase::ha>> ない"
     ],
 
     "it": [
@@ -774,10 +775,14 @@
       "とすると"
     ],
 
-    "ha_ga": [
+    "ha": [
       "は",
       "__comment we will add 'が' in the post processing",
       "__が"
+    ],
+
+    "ga": [
+      "が"
     ],
 
     "deari": [

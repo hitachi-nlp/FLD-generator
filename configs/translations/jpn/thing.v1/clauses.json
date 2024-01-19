@@ -418,33 +418,33 @@
 
 
       "{A}none": [
-        "<<phrase::{A}predicate_wo_ha_ga>>"
+        "<<phrase::{A}predicate_wo_ha>>"
       ],
       "¬{A}none": [
-        "<<phrase::¬{A}predicate_wo_ha_ga>>"
+        "<<phrase::¬{A}predicate_wo_ha>>"
       ],
 
 
       "({A}none & {B}none)": [
-          "<<phrase::({A} & {B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} & {B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::and>> <<clause::verb::{B}none>>",
 
           "__"
       ],
       "(¬{A}none & {B}none)": [
-          "<<phrase::(¬{A} & {B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} & {B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::and>> <<clause::verb::{B}none>>",
 
           "__"
       ],
       "({A}none & ¬{B}none)": [
-          "<<phrase::({A} & ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} & ¬{B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::and>> <<clause::verb::¬{B}none>>",
 
           "__"
       ],
       "(¬{A}none & ¬{B}none)": [
-          "<<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} & ¬{B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::and>> <<clause::verb::¬{B}none>>",
 
           "__"
@@ -452,28 +452,28 @@
 
 
       "({A}none v {B}none)": [
-          "<<phrase::({A} v {B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} v {B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::andOr>> <<clause::verb::{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::{A}none>> <<phrase::or>> <<clause::verb::{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}none v {B}none)": [
-          "<<phrase::(¬{A} v {B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} v {B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::andOr>> <<clause::verb::{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::¬{A}none>> <<phrase::or>> <<clause::verb::{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "({A}none v ¬{B}none)": [
-          "<<phrase::({A} v ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} v ¬{B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::andOr>> <<clause::verb::¬{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::{A}none>> <<phrase::or>> <<clause::verb::¬{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}none v ¬{B}none)": [
-          "<<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} v ¬{B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::andOr>> <<clause::verb::¬{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::¬{A}none>> <<phrase::or>> <<clause::verb::¬{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 

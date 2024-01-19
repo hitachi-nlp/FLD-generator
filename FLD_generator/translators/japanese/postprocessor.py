@@ -422,7 +422,7 @@ class HaGaUsagePostprocessor(Postprocessor):
     See "「は」「が」の使い分け" in FLD-docs/japanese/NLP_2024/README.md for details.
     """
 
-    _SHARED_SUBJECT_MAX_INTERVAL = 8
+    _SHARED_SUBJECT_MAX_INTERVAL = 10
 
     _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
     _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
@@ -432,6 +432,9 @@ class HaGaUsagePostprocessor(Postprocessor):
         # ---- and like morphemes ----
         Morpheme(surface='し', lid=None, rid=None, cost=None, pos='動詞', pos1='自立', pos2=None, pos3=None, katsuyou_type='サ変・スル', katsuyou='連用形', base='する', yomi='シ', hatsuon='シ', misc={}),
         Morpheme(surface='し', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='し', yomi='シ', hatsuon='シ', misc={}),
+
+        # 走るししかも is sometimes parses as 「走る/しし/かも」
+        Morpheme(surface='しし', lid=None, rid=None, cost=None, pos='名詞', pos1='一般', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='しし', yomi='シシ', hatsuon='シシ', misc={}),
 
         Morpheme(surface='て', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='て', yomi='テ', hatsuon='テ', misc={}),
 
@@ -503,21 +506,27 @@ class HaGaUsagePostprocessor(Postprocessor):
                                         morphemes_processed[left_pos] = morphemes_processed[right_pos]
                 continue
 
-            haga_positions_block = haga_positions_block_stack[-1]
-            if morpheme == self._ha_morpheme\
-                    and i_pos - 1 >= 0\
-                    and morphemes[i_pos - 1].surface not in ['こと', '事', 'もの', '物', '者', 'モンスター',
-                                                             'また', 'もしく', 'あるい']:
-                haga_positions_block.append(i_pos)
+            is_subject_ha = morpheme == self._ha_morpheme\
+                and i_pos - 1 >= 0 and (morphemes[i_pos - 1].pos == '名詞' or morphemes[i_pos - 1].surface == '」')
+            should_kept_ha = morpheme == self._ha_morpheme\
+                and i_pos - 1 >= 0 and morphemes[i_pos - 1].surface in ['こと', '事', 'もの', '物', '者', 'モンスター', 'また', 'かまた', 'もしく', 'あるい']
 
-            is_ga_of_subject =  morpheme == self._ga_morpheme and i_pos - 1 >= 0 and morphemes[i_pos - 1].pos == '名詞'
+            is_subject_ga = morpheme == self._ga_morpheme\
+                and i_pos - 1 >= 0 and (morphemes[i_pos - 1].pos == '名詞' or morphemes[i_pos - 1].surface == '」')
+            should_kept_ga = morpheme == self._ga_morpheme\
+                and (
+                    (i_pos - 1 >= 0 and morphemes[i_pos - 1].surface in ['こと', '事', 'もの', '物', '者', 'モンスター'])\
+                    or (i_pos + 1 < len(morphemes) and morphemes[i_pos + 1].surface in ['起こる', '起きる', '発生', '生じる'])
+                )
 
-            if is_ga_of_subject:
-                haga_positions_block.append(i_pos)
+            is_parallel_conjunction = morpheme in self._parallel_morphemes and not is_subject_ga and not is_subject_ha
 
-            parallel_positions_block = parallel_positions_block_stack[-1]
-            if morpheme in self._parallel_morphemes and not is_ga_of_subject:
-                parallel_positions_block.append(i_pos)
+            if is_subject_ha and not should_kept_ha:
+                haga_positions_block_stack[-1].append(i_pos)
+            if is_subject_ga and not should_kept_ga:
+                haga_positions_block_stack[-1].append(i_pos)
+            if is_parallel_conjunction:
+                parallel_positions_block_stack[-1].append(i_pos)
 
         return ''.join(m.surface for m in morphemes_processed)
 

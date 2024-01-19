@@ -211,5 +211,40 @@ def test_parse():
         parser_with_extra_vocab,
     )
 
+    _test_parse(
+        '事件が起こる',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '事件が起きる',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '事件が発生する',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '事件が生じる',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '両方が生じる',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '両方ともが生じる',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'どちらもが生じる',
+        parser_with_extra_vocab,
+    )
+
 if __name__ == '__main__':
     test_parse()
