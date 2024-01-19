@@ -422,6 +422,8 @@ class HaGaUsagePostprocessor(Postprocessor):
     See "「は」「が」の使い分け" in FLD-docs/japanese/NLP_2024/README.md for details.
     """
 
+    _SHARED_SUBJECT_MAX_INTERVAL = 8
+
     _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
     _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
 
@@ -497,12 +499,15 @@ class HaGaUsagePostprocessor(Postprocessor):
                                 if left_pos < parallel_positions < right_pos:  # Xは..し，Yが.. というように，「またぐ」構造になっている．
                                     # 並列構造になっているかどうかを判定するヒューリスティック
                                     if morphemes[right_pos - 1].surface == 'それ'\
-                                            or right_pos - left_pos <= 4:
+                                            or right_pos - left_pos <= self._SHARED_SUBJECT_MAX_INTERVAL:
                                         morphemes_processed[left_pos] = morphemes_processed[right_pos]
                 continue
 
             haga_positions_block = haga_positions_block_stack[-1]
-            if morpheme == self._ha_morpheme and i_pos - 1 >= 0 and morphemes[i_pos - 1].surface not in ['また', 'もしく', 'あるい']:
+            if morpheme == self._ha_morpheme\
+                    and i_pos - 1 >= 0\
+                    and morphemes[i_pos - 1].surface not in ['こと', '事', 'もの', '物', '者', 'モンスター',
+                                                             'また', 'もしく', 'あるい']:
                 haga_positions_block.append(i_pos)
             if morpheme == self._ga_morpheme:
                 haga_positions_block.append(i_pos)
