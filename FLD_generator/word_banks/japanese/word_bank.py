@@ -89,35 +89,40 @@ class JapaneseWordBank(WordBank):
         self._base_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
         self._katsuyou_morphemes: Dict[str, List[Morpheme]] = defaultdict(list)
         for morpheme in morphemes:
-            self._morphemes[morpheme.surface].append(morpheme)
-            if morpheme.surface == morpheme.base:
-                self._base_morphemes[morpheme.base].append(morpheme)
+            surface = morpheme.surface
+            base = morpheme.base
+
+            self._morphemes[surface].append(morpheme)
+            if surface == base:
+                self._base_morphemes[base].append(morpheme)
             else:
-                self._katsuyou_morphemes[morpheme.base].append(morpheme)
+                self._katsuyou_morphemes[base].append(morpheme)
 
         if extra_vocab is not None:
             for user_word in extra_vocab:
-                lemma = user_word.lemma
+                base = user_word.lemma
                 pos = user_word.pos
-                mtc_morphemes = [morpheme for morpheme in self._morphemes.get(lemma, [])
+                mtc_morphemes = [morpheme for morpheme in self._morphemes.get(base, [])
                                  if morpheme.pos == WB_POS_to_morpheme_POS(pos)]
                 if len(mtc_morphemes) == 0:
                     # logger.info('could not find the extra word "%s" in the canonical morpheme list. Will create a morpheme by ourselves.', lemma)
                     mtc_morphemes = [
-                        Morpheme(
-                            surface=lemma,
-                            pos=WB_POS_to_morpheme_POS(pos),
-                            base=lemma,
-                        )
+                        Morpheme(surface=base,
+                                 pos=WB_POS_to_morpheme_POS(pos),
+                                 base=base)
                     ]
 
                 for mtc_morpheme in mtc_morphemes:
-                    self._morphemes[mtc_morpheme.surface].append(mtc_morpheme)
-                    if mtc_morpheme.surface == mtc_morpheme.base:
-                        self._base_morphemes[mtc_morpheme.base].append(mtc_morpheme)
+                    surface = mtc_morpheme.surface
+
+                    self._morphemes[surface].append(mtc_morpheme)
+                    if surface == base:
+                        # self._base_morphemes[base].append(mtc_morpheme)
+                        # we override the canonical morphemes, so that only the user words are used.
+                        self._base_morphemes[base] = [mtc_morpheme]
                     else:
-                        self._katsuyou_morphemes[mtc_morpheme.base].append(mtc_morpheme)
-    
+                        # We prioritize but do not ovierride the canonical morphemes, as we may want to rely on canonical morphemes for katsuyou.
+                        self._katsuyou_morphemes[base] = [mtc_morpheme] + self._katsuyou_morphemes[base]
 
     def _get_all_lemmas(self) -> Iterable[str]:
         for morphemes in self._base_morphemes.values():
@@ -349,7 +354,7 @@ def load_jp_extra_vocab(path: Union[str, List[str]],
         vocab_jsons.append(json.load(open(str(_path))))
 
     word_pos_pairs: Set[Tuple[str, POS]] = set([])
-    attrs: Dict[Tuple[str, POS], Dict[str, bool]] = defaultdict(lambda : {_attr.value: False for _attr in ATTR})
+    attrs: Dict[Tuple[str, POS], Dict[str, bool]] = defaultdict(lambda: {_attr.value: False for _attr in ATTR})
     for vocab_json in vocab_jsons:
         for key, words in vocab_json.items():
             if key.find('.') >= 0:
@@ -373,4 +378,3 @@ def load_jp_extra_vocab(path: Union[str, List[str]],
         vocab.append(UserWord(lemma=word, pos=pos, **_attrs))
 
     return vocab
-
