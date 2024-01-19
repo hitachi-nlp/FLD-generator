@@ -116,7 +116,6 @@ class EnglishWordBank(WordBank):
     def _get_pos(self, word: str) -> List[POS]:
         if word in self._person_names:
             return [POS.NOUN]
-
         return self._word_util.get_pos(word)
 
     def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
