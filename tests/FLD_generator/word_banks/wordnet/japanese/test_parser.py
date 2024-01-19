@@ -201,6 +201,15 @@ def test_parse():
         parser_with_extra_vocab,
     )
 
+    _test_parse(
+        'あのまわまちょLv.3は規定するない',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'あのぴくぴにゃLv.54が実現し易いがしかし赤い',
+        parser_with_extra_vocab,
+    )
 
 if __name__ == '__main__':
     test_parse()

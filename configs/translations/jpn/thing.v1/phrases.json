@@ -417,7 +417,7 @@
       "__and",
 
       "し",
-      "し <<phrase::katsu>>"
+      "し <<phrase::katsu_shikamo>>"
     ],
 
     "noun_and": [
@@ -786,13 +786,21 @@
       "であり",
       "であって",
 
-      "で <<phrase::katsu>>",
-      "であり <<phrase::katsu>>",
-      "であって <<phrase::katsu>>"
+      "で <<phrase::katsu_shikamo>>",
+      "であり <<phrase::katsu_shikamo>>",
+      "であって <<phrase::katsu_shikamo>>"
     ],
 
-    "katsu": [
-      "かつ"
+    "katsu_shikamo": [
+      "かつ",
+      "しかも",
+      "それに",
+      "その上",
+      "おまけに",
+      "また",
+      "加えて",
+      "更に",
+      "さらに"
     ],
 
     "da_dearu": [

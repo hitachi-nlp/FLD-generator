@@ -439,7 +439,12 @@ def test_jpn_postprocess():
     _test_in_out('「黒いということは起こらない」ということは事実と異なるない',
                  ['「黒いということは起こらない」ということは事実と異ならない'])
 
+    _test_in_out('あのまわまちょLv.3は規定するない',
+                 ['あのまわまちょLv.3は規定しない'])
 
+    # "規定す" という動詞の活用らしい．
+    _test_in_out('あのまわまちょLv.3は規定すない',
+                 ['あのまわまちょLv.3は規定すらない'])
 
 
     _test_in_out = build_test_in_out_func([
@@ -521,7 +526,6 @@ def test_jpn_postprocess():
     _test_in_out = build_test_in_out_func([
       HaGaUsagePostprocessor(extra_vocab=wb.extra_vocab),
     ])
-    
 
     _test_in_out('きつねが赤ければそれが走る',
                  ['きつねが赤ければそれは走る'])
@@ -595,6 +599,10 @@ def test_jpn_postprocess():
 
     _test_in_out('このぽちゃぽえLv.80がモンスターでありそれは赤い',
                  ['このぽちゃぽえLv.80はモンスターでありそれは赤い'])
+
+    _test_in_out('あのみなみちゅLv.62は上がり難いということはないしかつ腹黒い',
+                 ['あのみなみちゅLv.62は上がり難いということはないしかつ腹黒い'])
+    
 
 
 if __name__ == '__main__':
