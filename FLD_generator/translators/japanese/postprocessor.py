@@ -509,16 +509,15 @@ class HaGaUsagePostprocessor(Postprocessor):
                     and morphemes[i_pos - 1].surface not in ['こと', '事', 'もの', '物', '者', 'モンスター',
                                                              'また', 'もしく', 'あるい']:
                 haga_positions_block.append(i_pos)
-            if morpheme == self._ga_morpheme:
+
+            is_ga_of_subject =  morpheme == self._ga_morpheme and i_pos - 1 >= 0 and morphemes[i_pos - 1].pos == '名詞'
+
+            if is_ga_of_subject:
                 haga_positions_block.append(i_pos)
 
             parallel_positions_block = parallel_positions_block_stack[-1]
-            if morpheme in self._parallel_morphemes:
-                if morpheme.surface == 'が' and i_pos - 1 >= 0 and morphemes[i_pos - 1].pos == '名詞':
-                    # this is not the 'が' of 接続関係 such as 「彼は走るが歩く」, but just the 'が' of 主語 such as 「猫が..」
-                    pass
-                else:
-                    parallel_positions_block.append(i_pos)
+            if morpheme in self._parallel_morphemes and not is_ga_of_subject:
+                parallel_positions_block.append(i_pos)
 
         return ''.join(m.surface for m in morphemes_processed)
 
