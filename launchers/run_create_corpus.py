@@ -159,8 +159,10 @@ def main():
 
         # ---------------------------------- 20230118.jpn ------------------------------------
         '20230118.jpn.wordnet.D3',
-        '20230118.jpn.BCCWJ.D3.argument_pred_arg_only',
-        '20230118.jpn.punipuni.D3.argument_pred_arg_only',
+        '20230118.jpn.wordnet.D3.argument_pred_arg_only',
+        '20230118.jpn.wordnet.D3.argument_pred_arg_only.no_kaku',
+        '20230118.jpn.BCCWJ.D3',
+        '20230118.jpn.punipuni.D3',
     ]
     # dataset_names = dataset_names[::-1]
 
