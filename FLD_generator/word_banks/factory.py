@@ -71,7 +71,8 @@ def build(
 
         if isinstance(extra_vocab, str):
             extra_vocab = load_vocab(extra_vocab, lang)
-            intermediate_constant_prefix = 'モンスター'
+            if extra_vocab.find('punipuni') >= 0:
+                intermediate_constant_prefix = 'モンスター'
 
         jpn_dict_csvs_dir = './res/word_banks/japanese/mecab/mecab-ipadic/'
         jpn_morphemes = load_morphemes(jpn_dict_csvs_dir)
