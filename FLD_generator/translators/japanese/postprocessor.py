@@ -3,6 +3,7 @@ from abc import abstractmethod, abstractproperty, ABC
 from collections import defaultdict
 import random
 import re
+from pprint import pprint
 
 from ordered_set import OrderedSet
 from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, MorphemeParser
@@ -422,7 +423,7 @@ class HaGaUsagePostprocessor(Postprocessor):
     See "「は」「が」の使い分け" in FLD-docs/japanese/NLP_2024/README.md for details.
     """
 
-    _SHARED_SUBJECT_MAX_INTERVAL = 10
+    _SHARED_SUBJECT_MAX_INTERVAL = 5
 
     _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
     _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
@@ -464,6 +465,13 @@ class HaGaUsagePostprocessor(Postprocessor):
         Morpheme(surface='一方', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='一方', yomi='イッポウ', hatsuon='イッポー', misc={}),
     ]
 
+    # ---- implication like morphemes ----
+    _implication_morphemes = [
+        # surface='と' lid=None rid=None cost=None pos='助詞' pos1='接続助詞' pos2=None pos3=None katsuyou_type=None katsuyou=None base='と' yomi='ト' hatsuon='ト' misc={}
+        # surface='ば' lid=None rid=None cost=None pos='助詞' pos1='接続助詞' pos2=None pos3=None katsuyou_type=None katsuyou=None base='ば' yomi='バ' hatsuon='バ' misc={}
+
+    ]
+
     def __init__(self,
                  extra_vocab: Optional[List[UserWord]] = None):
         super().__init__(extra_vocab=extra_vocab)
@@ -497,9 +505,9 @@ class HaGaUsagePostprocessor(Postprocessor):
 
                         # share は・が before and after an and morpheme
                         done_parallel_positions = parallel_positions_block_stack.pop()
-                        for parallel_positions in done_parallel_positions:
+                        for parallel_pos in done_parallel_positions:
                             for left_pos, right_pos in [done_haga_positions[i: i + 2] for i in range(0, len(done_haga_positions) - 1)]:
-                                if left_pos < parallel_positions < right_pos:  # Xは..し，Yが.. というように，「またぐ」構造になっている．
+                                if left_pos < parallel_pos < right_pos:  # Xは..し，Yが.. というように，「またぐ」構造になっている．
                                     # 並列構造になっているかどうかを判定するヒューリスティック
                                     if morphemes[right_pos - 1].surface == 'それ'\
                                             or right_pos - left_pos <= self._SHARED_SUBJECT_MAX_INTERVAL:
@@ -519,7 +527,9 @@ class HaGaUsagePostprocessor(Postprocessor):
                     or (i_pos + 1 < len(morphemes) and morphemes[i_pos + 1].surface in ['起こる', '起きる', '発生', '生じる'])
                 )
 
-            is_parallel_conjunction = morpheme in self._parallel_morphemes and not is_subject_ga and not is_subject_ha
+            is_parallel_conjunction = morpheme in self._parallel_morphemes\
+                and not is_subject_ga and not is_subject_ha\
+                and not (morpheme.surface == 'し' and i_pos + 1 < len(morphemes) and morphemes[i_pos + 1].surface == 'たら')\
 
             if is_subject_ha and not should_kept_ha:
                 haga_positions_block_stack[-1].append(i_pos)

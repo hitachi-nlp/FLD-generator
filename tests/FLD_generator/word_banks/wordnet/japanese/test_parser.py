@@ -246,5 +246,37 @@ def test_parse():
         parser_with_extra_vocab,
     )
 
+
+    _test_parse(
+        '走るならば歩く',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '走るなら歩く',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '走るとすれば歩く',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '走るとしたら歩く',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '走るとすると歩く',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '走れば歩く',
+        parser_with_extra_vocab,
+    )
+
+
 if __name__ == '__main__':
     test_parse()
