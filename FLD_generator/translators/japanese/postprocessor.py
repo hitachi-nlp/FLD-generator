@@ -1,4 +1,4 @@
-from typing import Optional, Iterable, List, Dict, Any, Optional, Set, Tuple
+from typing import Optional, Iterable, List, Dict, Any, Optional, Set, Tuple, Union
 from abc import abstractmethod, abstractproperty, ABC
 from collections import defaultdict
 import random
@@ -10,6 +10,26 @@ from FLD_generator.word_banks.japanese import JapaneseWordBank, Morpheme, Morphe
 from FLD_generator.word_banks.base import UserWord
 
 
+_KOTO_MONO_NOUNS = ['こと', '事', 'もの', '物', '者', 'モンスター']
+_STATE_PREDS = [
+    '正しい',
+    '真実',
+    '事実',
+    '本当',
+    '確か',
+    '誤り',
+    '間違い',
+    '偽',
+    '事実',
+    '嘘',
+    '誤っ',
+    'いる',
+    '間違っ',
+]
+
+_OCCUR_VERBS = ['起こる', '起きる', '発生', '生じる']
+
+
 def _slide(seq: List[Any], window_size: int) -> Iterable[List[Any]]:
     for i in range(len(seq) - window_size + 1):
         yield seq[i: i + window_size]
@@ -19,11 +39,11 @@ class Postprocessor(ABC):
 
     def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
         self._parser = MorphemeParser(extra_vocab=extra_vocab)
-    
+
     @abstractmethod
     def apply(self, text: str) -> str:
         pass
-    
+
     @abstractmethod
     def reset_assets(self) -> None:
         pass
@@ -191,11 +211,10 @@ class DaKotoMonoKatuyouRule(WindowRule):
 
     def _apply(self, morphemes: List[Morpheme]) -> Optional[List[str]]:
         # きれいだもの -> きれいなもの
-        koto_mono = ['こと', '事', 'もの', '物']
         surfaces = [morpheme.surface for morpheme in morphemes]
-        if surfaces[0] == 'だ' and surfaces[1] in koto_mono:
+        if surfaces[0] == 'だ' and surfaces[1] in _KOTO_MONO_NOUNS:
             return ['な', surfaces[1], surfaces[2]]
-        if surfaces[0] == 'だ' and surfaces[1] == '」' and surfaces[2] in koto_mono:
+        if surfaces[0] == 'だ' and surfaces[1] == '」' and surfaces[2] in _KOTO_MONO_NOUNS:
             return ['な', '」', surfaces[2]]
         else:
             return None
@@ -425,44 +444,62 @@ class HaGaUsagePostprocessor(Postprocessor):
 
     _SHARED_SUBJECT_MAX_INTERVAL = 5
 
-    _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
-    _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
+    _ha_morpheme = Morpheme(surface='は', lid=None, rid=None, cost=None, pos='助詞', pos1='係助詞', pos2=None,
+                            pos3=None, katsuyou_type=None, katsuyou=None, base='は', yomi='ハ', hatsuon='ワ', misc={})
+    _ga_morpheme = Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般',
+                            pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={})
 
     # XXX: ALWAYS follow ShiKatuyouRule
     _parallel_morphemes = [
         # ---- and like morphemes ----
-        Morpheme(surface='し', lid=None, rid=None, cost=None, pos='動詞', pos1='自立', pos2=None, pos3=None, katsuyou_type='サ変・スル', katsuyou='連用形', base='する', yomi='シ', hatsuon='シ', misc={}),
-        Morpheme(surface='し', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='し', yomi='シ', hatsuon='シ', misc={}),
+        Morpheme(surface='し', lid=None, rid=None, cost=None, pos='動詞', pos1='自立', pos2=None, pos3=None,
+                 katsuyou_type='サ変・スル', katsuyou='連用形', base='する', yomi='シ', hatsuon='シ', misc={}),
+        Morpheme(surface='し', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None,
+                 pos3=None, katsuyou_type=None, katsuyou=None, base='し', yomi='シ', hatsuon='シ', misc={}),
 
         # 走るししかも is sometimes parses as 「走る/しし/かも」
-        Morpheme(surface='しし', lid=None, rid=None, cost=None, pos='名詞', pos1='一般', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='しし', yomi='シシ', hatsuon='シシ', misc={}),
+        Morpheme(surface='しし', lid=None, rid=None, cost=None, pos='名詞', pos1='一般', pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='しし', yomi='シシ', hatsuon='シシ', misc={}),
 
-        Morpheme(surface='て', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='て', yomi='テ', hatsuon='テ', misc={}),
+        Morpheme(surface='て', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None,
+                 pos3=None, katsuyou_type=None, katsuyou=None, base='て', yomi='テ', hatsuon='テ', misc={}),
 
-        Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='で', yomi='デ', hatsuon='デ', misc={}),
-        Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助動詞', pos1=None, pos2=None, pos3=None, katsuyou_type='特殊・ダ', katsuyou='連用形', base='だ', yomi='デ', hatsuon='デ', misc={}),
+        Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='で', yomi='デ', hatsuon='デ', misc={}),
+        Morpheme(surface='で', lid=None, rid=None, cost=None, pos='助動詞', pos1=None, pos2=None, pos3=None,
+                 katsuyou_type='特殊・ダ', katsuyou='連用形', base='だ', yomi='デ', hatsuon='デ', misc={}),
 
         # sometime, 「赤くないし青くない」 is wrongly parsed into 「赤く/ないし/青く/ない」
-        Morpheme(surface='ないし', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='ないし', yomi='ナイシ', hatsuon='ナイシ', misc={}),
+        Morpheme(surface='ないし', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='ないし', yomi='ナイシ', hatsuon='ナイシ', misc={}),
 
 
         # ---- or like morphemes ----
-        Morpheme(surface='か', lid=None, rid=None, cost=None, pos='助詞', pos1='副助詞／並立助詞／終助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='か', yomi='カ', hatsuon='カ', misc={}),
+        Morpheme(surface='か', lid=None, rid=None, cost=None, pos='助詞', pos1='副助詞／並立助詞／終助詞', pos2=None,
+                 pos3=None, katsuyou_type=None, katsuyou=None, base='か', yomi='カ', hatsuon='カ', misc={}),
         # somethines, 「赤いかまたは青い」 is wrongly parsed into 「赤い/かまた/は/青い」
-        Morpheme(surface='かまた', lid=None, rid=None, cost=None, pos='名詞', pos1='固有名詞', pos2='人名', pos3='姓', katsuyou_type=None, katsuyou=None, base='かまた', yomi='カマタ', hatsuon='カマタ', misc={}),
+        Morpheme(surface='かまた', lid=None, rid=None, cost=None, pos='名詞', pos1='固有名詞', pos2='人名', pos3='姓',
+                 katsuyou_type=None, katsuyou=None, base='かまた', yomi='カマタ', hatsuon='カマタ', misc={}),
 
 
         # ---- and but like morphemes ----
-        Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
-        Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
+        Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='格助詞', pos2='一般', pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
+        Morpheme(surface='が', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None,
+                 pos3=None, katsuyou_type=None, katsuyou=None, base='が', yomi='ガ', hatsuon='ガ', misc={}),
 
-        Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
-        Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
+        Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
+        Morpheme(surface='けど', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='けど', yomi='ケド', hatsuon='ケド', misc={}),
 
-        Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
-        Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
+        Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
+        Morpheme(surface='けれど', lid=None, rid=None, cost=None, pos='助詞', pos1='接続助詞', pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='けれど', yomi='ケレド', hatsuon='ケレド', misc={}),
 
-        Morpheme(surface='一方', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None, katsuyou_type=None, katsuyou=None, base='一方', yomi='イッポウ', hatsuon='イッポー', misc={}),
+        Morpheme(surface='一方', lid=None, rid=None, cost=None, pos='接続詞', pos1=None, pos2=None, pos3=None,
+                 katsuyou_type=None, katsuyou=None, base='一方', yomi='イッポウ', hatsuon='イッポー', misc={}),
     ]
 
     # ---- implication like morphemes ----
@@ -481,9 +518,7 @@ class HaGaUsagePostprocessor(Postprocessor):
         morphemes_processed = morphemes.copy()
 
         haga_positions_block_stack: List[List[int]] = []
-        haga_positions_block = None
         parallel_positions_block_stack: List[List[int]] = []
-        parallel_positions_block = None
         for i_pos, morpheme in enumerate(morphemes):
 
             if morpheme.surface == '「' or i_pos == 0:
@@ -514,22 +549,47 @@ class HaGaUsagePostprocessor(Postprocessor):
                                         morphemes_processed[left_pos] = morphemes_processed[right_pos]
                 continue
 
+            def match(maybe_morpheme: Optional[Morpheme], attr: str, gold: Union[str, List[str]]) -> bool:
+                if maybe_morpheme is None:
+                    return False
+                if not hasattr(maybe_morpheme, attr):
+                    return False
+                else:
+                    if isinstance(gold, str):
+                        return getattr(maybe_morpheme, attr) == gold
+                    elif isinstance(gold, list):
+                        return getattr(maybe_morpheme, attr) in gold
+                    else:
+                        raise ValueError()
+
+            prev_morpheme = morphemes[i_pos - 1] if i_pos - 1 >= 0 else None
+            prev_prev_morpheme = morphemes[i_pos - 2] if i_pos - 2 >= 0 else None
+            next_morepheme = morphemes[i_pos + 1] if i_pos + 1 < len(morphemes) else None
+
             is_subject_ha = morpheme == self._ha_morpheme\
-                and i_pos - 1 >= 0 and (morphemes[i_pos - 1].pos == '名詞' or morphemes[i_pos - 1].surface == '」')
+                and (match(prev_morpheme, 'pos', '名詞') or match(prev_morpheme, 'surface', '」'))
             should_kept_ha = morpheme == self._ha_morpheme\
-                and i_pos - 1 >= 0 and morphemes[i_pos - 1].surface in ['こと', '事', 'もの', '物', '者', 'モンスター', 'また', 'かまた', 'もしく', 'あるい']
+                and (
+                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(next_morepheme, 'surface', _STATE_PREDS)) or
+                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(prev_prev_morpheme, 'surface', 'という')) or
+                    match(prev_morpheme, 'surface', ['また', 'かまた', 'もしく', 'あるい'])
+                )
 
             is_subject_ga = morpheme == self._ga_morpheme\
-                and i_pos - 1 >= 0 and (morphemes[i_pos - 1].pos == '名詞' or morphemes[i_pos - 1].surface == '」')
+                and (
+                    # 何"が"しかのもの
+                    (match(prev_morpheme, 'pos', '名詞') and not match(prev_morpheme, 'surface', ['何', 'なに', '何ら'])) or
+                    match(prev_morpheme, 'surface', '」')
+                )
             should_kept_ga = morpheme == self._ga_morpheme\
                 and (
-                    (i_pos - 1 >= 0 and morphemes[i_pos - 1].surface in ['こと', '事', 'もの', '物', '者', 'モンスター'])\
-                    or (i_pos + 1 < len(morphemes) and morphemes[i_pos + 1].surface in ['起こる', '起きる', '発生', '生じる'])
+                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(next_morepheme, 'surface', _STATE_PREDS)) or
+                    match(next_morepheme, 'surface', _OCCUR_VERBS)
                 )
 
             is_parallel_conjunction = morpheme in self._parallel_morphemes\
                 and not is_subject_ga and not is_subject_ha\
-                and not (morpheme.surface == 'し' and i_pos + 1 < len(morphemes) and morphemes[i_pos + 1].surface == 'たら')\
+                and not (morpheme.surface == 'し' and match(next_morepheme, 'surface', 'たら'))
 
             if is_subject_ha and not should_kept_ha:
                 haga_positions_block_stack[-1].append(i_pos)

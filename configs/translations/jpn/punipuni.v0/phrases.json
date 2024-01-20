@@ -714,13 +714,13 @@
       "__something",
       "__someone",
 
-      "何か",
+      "__何か",
       "ある <<phrase::thing>>",
       "何らかの <<phrase::thing>>",
       "とある <<phrase::thing>>",
       "なにがしかの <<phrase::thing>>",
 
-      "なにか",
+      "__なにか",
       "なんらかの <<phrase::thing>>"
     ],
 
@@ -728,13 +728,13 @@
       "__everything",
       "__everyone",
 
-      "全て",
+      "__全て",
       "全ての <<phrase::thing>>",
       "あらゆる <<phrase::thing>>",
-      "何もかも",
-      "どれもこれも",
+      "__何もかも",
+      "__どれもこれも",
 
-      "すべて",
+      "__すべて",
       "すべての <<phrase::thing>>"
     ],
 

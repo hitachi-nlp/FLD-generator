@@ -379,6 +379,8 @@ def test_jpn_postprocess():
     _test_in_out('ぷえぷやLv.3だものはある',
                  ['ぷえぷやLv.3なものはある'])
 
+    _test_in_out('「ぷえぷやLv.3だ」モンスターはある．',
+                 ['「ぷえぷやLv.3な」モンスターはある．'])
 
 
 
@@ -618,6 +620,12 @@ def test_jpn_postprocess():
     _test_in_out('もしもそのまのまゆLv.85が作り易いとしたらそれは喋り捲る',
                  ['もしもそのまのまゆLv.85が作り易いとしたらそれは喋り捲る'])
 
+    _test_in_out('もし仮になにがしかのモンスターは恐怖すればそれは感染し易い',
+                 ['もし仮になにがしかのモンスターが恐怖すればそれは感染し易い'])
+
+    _test_in_out('もし私らしくないモンスターは付き易いとしたらそれは読み出せる',
+                 ['もし私らしくないモンスターが付き易いとしたらそれは読み出せる'])
+
 
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
@@ -626,6 +634,6 @@ if __name__ == '__main__':
     # test_eng_with_knowledge()
 
     # test_jpn()
-    test_jpn_with_user_vocab()
+    # test_jpn_with_user_vocab()
 
-    # test_jpn_postprocess()
+    test_jpn_postprocess()

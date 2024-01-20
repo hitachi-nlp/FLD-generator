@@ -277,6 +277,80 @@ def test_parse():
         parser_with_extra_vocab,
     )
 
+    _test_parse(
+        '何らかのモンスター',
+        parser_with_extra_vocab,
+    )
+
+
+
+
+    _test_parse(
+        'これは正しい',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは真実だ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは事実だ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは本当だ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは確かだ',
+        parser_with_extra_vocab,
+    )
+
+
+    _test_parse(
+        'これは誤りだ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは間違いだ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは偽だ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは事実と異なる',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは嘘だ',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは誤っている',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        'これは間違っている',
+        parser_with_extra_vocab,
+    )
+
+    _test_parse(
+        '優しいということはない',
+        parser_with_extra_vocab,
+    )
+
 
 if __name__ == '__main__':
     test_parse()
