@@ -635,6 +635,9 @@ def test_jpn_postprocess():
     _test_in_out('もし私らしくないモンスターは付き易いとしたらそれは読み出せる',
                  ['もし私らしくないモンスターが付き易いとしたらそれは読み出せる'])
 
+    _test_in_out('仮にど偉いか書き難いかまたは両方であるモンスターはいるならそのぴくぴいLv.78は伸び易くない',
+                 ['仮にど偉いか書き難いかまたは両方であるモンスターがいるならそのぴくぴいLv.78は伸び易くない'])
+
 
 if __name__ == '__main__':
     setup_logger(level=logging.DEBUG)
@@ -644,6 +647,6 @@ if __name__ == '__main__':
 
     # test_jpn()
     # test_jpn_with_user_vocab('punipuni')
-    test_jpn_with_user_vocab('BCCWJ')
+    # test_jpn_with_user_vocab('BCCWJ')
 
-    # test_jpn_postprocess()
+    test_jpn_postprocess()

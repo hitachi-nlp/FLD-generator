@@ -5789,7 +5789,7 @@ _DATASET_SETTINGS = {
 
 
 
-    '20230118.jpn.BCCWJ.D3.wordnet': {
+    '20230118.jpn.wordnet.D3': {
 
         'argument_configs': [
             './configs/arguments/axioms/',
@@ -6283,9 +6283,15 @@ _DATASET_NAME_TO_DEFAULT = {
     '20230115.jpn.punipuni.D3': '20231018.thing_person_config_translation',
 
     # ---------------------------------- 20230116.jpn ------------------------------------
-    '20230118.jpn.BCCWJ.D3.wordnet': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3': '20231018.thing_person_config_translation',
     '20230116.jpn.BCCWJ.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
     '20230116.jpn.punipuni.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230116.jpn ------------------------------------
+    '20230118.jpn.wordnet.D3': '20231018.thing_person_config_translation',
+    '20230118.jpn.BCCWJ.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+    '20230118.jpn.punipuni.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+
 }
 
 

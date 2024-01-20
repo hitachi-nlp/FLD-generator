@@ -23,7 +23,6 @@ _STATE_PREDS = [
     '事実',
     '嘘',
     '誤っ',
-    'いる',
     '間違っ',
 ]
 
@@ -570,21 +569,21 @@ class HaGaUsagePostprocessor(Postprocessor):
                 and (match(prev_morpheme, 'pos', '名詞') or match(prev_morpheme, 'surface', '」'))
             should_kept_ha = morpheme == self._ha_morpheme\
                 and (
-                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(next_morepheme, 'surface', _STATE_PREDS)) or
-                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(prev_prev_morpheme, 'surface', 'という')) or
-                    match(prev_morpheme, 'surface', ['また', 'かまた', 'もしく', 'あるい'])
+                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(next_morepheme, 'surface', _STATE_PREDS))
+                    or (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(prev_prev_morpheme, 'surface', 'という'))
+                    or match(prev_morpheme, 'surface', ['また', 'かまた', 'もしく', 'あるい'])
                 )
 
             is_subject_ga = morpheme == self._ga_morpheme\
                 and (
                     # 何"が"しかのもの
-                    (match(prev_morpheme, 'pos', '名詞') and not match(prev_morpheme, 'surface', ['何', 'なに', '何ら'])) or
-                    match(prev_morpheme, 'surface', '」')
+                    (match(prev_morpheme, 'pos', '名詞') and not match(prev_morpheme, 'surface', ['何', 'なに', '何ら']))
+                    or match(prev_morpheme, 'surface', '」')
                 )
             should_kept_ga = morpheme == self._ga_morpheme\
                 and (
-                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(next_morepheme, 'surface', _STATE_PREDS)) or
-                    match(next_morepheme, 'surface', _OCCUR_VERBS)
+                    (match(prev_morpheme, 'surface', _KOTO_MONO_NOUNS) and match(next_morepheme, 'surface', _STATE_PREDS))
+                    or match(next_morepheme, 'surface', _OCCUR_VERBS)
                 )
 
             is_parallel_conjunction = morpheme in self._parallel_morphemes\
