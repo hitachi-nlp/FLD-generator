@@ -49,12 +49,14 @@ def build(
         intransitive_verbs = set(line.strip('\n') for line in open(intransitive_verbs_path))
 
         if isinstance(extra_vocab, str):
-            extra_vocab = load_vocab(extra_vocab, lang)
+            _extra_vocab = load_vocab(extra_vocab, lang)
+        else:
+            _extra_vocab = extra_vocab
 
         return EnglishWordBank(
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            extra_vocab=extra_vocab,
+            extra_vocab=_extra_vocab,
         )
 
     elif lang == 'jpn':
@@ -70,9 +72,11 @@ def build(
         intransitive_verbs = None
 
         if isinstance(extra_vocab, str):
-            extra_vocab = load_vocab(extra_vocab, lang)
             if extra_vocab.find('punipuni') >= 0:
                 intermediate_constant_prefix = 'モンスター'
+            _extra_vocab = load_vocab(extra_vocab, lang)
+        else:
+            _extra_vocab = extra_vocab
 
         jpn_dict_csvs_dir = './res/word_banks/japanese/mecab/mecab-ipadic/'
         jpn_morphemes = load_morphemes(jpn_dict_csvs_dir)
@@ -80,7 +84,7 @@ def build(
             jpn_morphemes,
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            extra_vocab=extra_vocab,
+            extra_vocab=_extra_vocab,
             intermediate_constant_prefix=intermediate_constant_prefix,
         )
 

@@ -112,7 +112,10 @@ def load_dataset(argument_config: List[str],
     )
 
     logger.info(_build_bounded_msg(f'{"[start] building wordnet":<30}', 3))
-    word_bank = build_wordbank(translation_lang, extra_vocab=translation_vocab)
+    word_bank = build_wordbank(
+        translation_lang,
+        extra_vocab = translation_vocab if translation_vocab not in [None, 'wordnet'] else None
+    )
     logger.info(_build_bounded_msg(f'{"[finish] building wordnet":<30}', 3))
 
     if distractors_range[1] > 0:
