@@ -59,6 +59,8 @@ def build(
 
     elif lang == 'jpn':
 
+        intermediate_constant_prefix = None
+
         if transitive_verbs_path is not None:
             raise NotImplementedError()
         transitive_verbs = None
@@ -69,6 +71,7 @@ def build(
 
         if isinstance(extra_vocab, str):
             extra_vocab = load_vocab(extra_vocab, lang)
+            intermediate_constant_prefix = 'モンスター'
 
         jpn_dict_csvs_dir = './res/word_banks/japanese/mecab/mecab-ipadic/'
         jpn_morphemes = load_morphemes(jpn_dict_csvs_dir)
@@ -77,6 +80,7 @@ def build(
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
             extra_vocab=extra_vocab,
+            intermediate_constant_prefix=intermediate_constant_prefix,
         )
 
     else:

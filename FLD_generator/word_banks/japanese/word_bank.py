@@ -69,8 +69,10 @@ class JapaneseWordBank(WordBank):
                  morphemes: List[Morpheme],
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 extra_vocab: Optional[List[UserWord]] = None):
-        super().__init__(extra_vocab=extra_vocab)
+                 extra_vocab: Optional[List[UserWord]] = None,
+                 intermediate_constant_prefix: Optional[str] = None):
+        super().__init__(extra_vocab=extra_vocab,
+                         intermediate_constant_prefix=intermediate_constant_prefix)
 
         self._word_util = WordUtil(
             'jpn',

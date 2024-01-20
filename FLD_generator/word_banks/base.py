@@ -67,7 +67,9 @@ class WordBank(ABC):
     NounForm: EnumMeta
     # INTERMEDIATE_CONSTANT_PREFIXES: List[str]
 
-    def __init__(self, extra_vocab: Optional[List[UserWord]] = None):
+    def __init__(self,
+                 extra_vocab: Optional[List[UserWord]] = None,
+                 intermediate_constant_prefix: Optional[str] = None):
         # to be used by translator, we make extra_vocab as public variable.
         # but it is not good a practice that the translator depends on the UserWord, which is the details of word bank.
         self.extra_vocab = extra_vocab
@@ -88,6 +90,11 @@ class WordBank(ABC):
             ['Z' + str(i) for i in range(2, 10)] +
             ['W' + str(i) for i in range(2, 10)]
         )
+        if intermediate_constant_prefix is not None:
+            self._intermediate_constant_words = OrderedSet([
+                f'{intermediate_constant_prefix}{interm_constant}'
+                for interm_constant in self._intermediate_constant_words
+            ])
 
     def get_words(self, slice_='all') -> Iterable[str]:
         # enumerate base form of words
