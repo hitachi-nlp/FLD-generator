@@ -68,7 +68,9 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn/')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20230118.jpn.ICL')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230118.jpn.ICL')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn.punipuni')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -168,12 +170,26 @@ def main():
 
         # ---------------------------------- 20230118.jpn.ICL ------------------------------------
         # '20230118.jpn.wordnet.D3.extension-3.distractor-10',
-        '20230118.jpn.wordnet.D3.extension-3.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-3.distractor-5',
         # '20230118.jpn.wordnet.D3.extension-3.distractor-3',
         # '20230118.jpn.wordnet.D3.extension-2.distractor-5',
         # '20230118.jpn.wordnet.D3.extension-2.distractor-3',
         # '20230118.jpn.wordnet.D3.extension-1.distractor-5',
         # '20230118.jpn.wordnet.D3.extension-1.distractor-3',
+
+
+        # ---------------------------------- 20230120.jpn.punipuni ------------------------------------
+        '20230120.jpn.wordnet.D3',
+
+        '20230120.jpn.BCCWJ.D1_wo_dist',
+        '20230120.jpn.BCCWJ.D1',
+        '20230120.jpn.BCCWJ.D3',
+        '20230120.jpn.BCCWJ.D8',
+
+        '20230120.jpn.punipuni.D1_wo_dist',
+        '20230120.jpn.punipuni.D1',
+        '20230120.jpn.punipuni.D3',
+        '20230120.jpn.punipuni.D8',
     ]
 
     # dataset_names = dataset_names[::-1]
