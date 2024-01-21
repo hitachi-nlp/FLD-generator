@@ -67,7 +67,8 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20230116.jpn.argument_pred_arg_only')
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn/')
-    output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn.large')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230118.jpn.ICL')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -159,12 +160,22 @@ def main():
         # '20230116.jpn.punipuni.D3.argument_pred_arg_only',
 
         # ---------------------------------- 20230118.jpn ------------------------------------
-        '20230118.jpn.wordnet.D3',
-        '20230118.jpn.wordnet.D3.argument_pred_arg_only',
-        '20230118.jpn.wordnet.D3.argument_pred_arg_only.no_kaku',
-        '20230118.jpn.BCCWJ.D3',
-        '20230118.jpn.punipuni.D3',
+        # '20230118.jpn.wordnet.D3',
+        # '20230118.jpn.wordnet.D3.argument_pred_arg_only',
+        # '20230118.jpn.wordnet.D3.argument_pred_arg_only.no_kaku',
+        # '20230118.jpn.BCCWJ.D3',
+        # '20230118.jpn.punipuni.D3',
+
+        # ---------------------------------- 20230118.jpn.ICL ------------------------------------
+        # '20230118.jpn.wordnet.D3.extension-3.distractor-10',
+        '20230118.jpn.wordnet.D3.extension-3.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-3.distractor-3',
+        # '20230118.jpn.wordnet.D3.extension-2.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-2.distractor-3',
+        # '20230118.jpn.wordnet.D3.extension-1.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-1.distractor-3',
     ]
+
     # dataset_names = dataset_names[::-1]
 
     num_jobs_for_datasets = 3
