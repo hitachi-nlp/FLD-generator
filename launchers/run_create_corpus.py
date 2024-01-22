@@ -179,17 +179,23 @@ def main():
 
 
         # ---------------------------------- 20230120.jpn.punipuni ------------------------------------
-        '20230120.jpn.wordnet.D3',
+        # '20230120.jpn.wordnet.D3',
 
-        '20230120.jpn.BCCWJ.D1_wo_dist',
-        '20230120.jpn.BCCWJ.D1',
-        '20230120.jpn.BCCWJ.D3',
-        '20230120.jpn.BCCWJ.D8',
+        # '20230120.jpn.BCCWJ.D1_wo_dist',
+        # '20230120.jpn.BCCWJ.D1',
+        # '20230120.jpn.BCCWJ.D3',
+        # '20230120.jpn.BCCWJ.D8',
 
-        '20230120.jpn.punipuni.D1_wo_dist',
-        '20230120.jpn.punipuni.D1',
-        '20230120.jpn.punipuni.D3',
-        '20230120.jpn.punipuni.D8',
+        # '20230120.jpn.punipuni.D1_wo_dist',
+        # '20230120.jpn.punipuni.D1',
+        # '20230120.jpn.punipuni.D3',
+        # '20230120.jpn.punipuni.D8',
+
+        # ---------------------------------- 20230122.jpn.ICL ------------------------------------
+        '20230122.jpn.ICL.punipuni.D1_wo_dist',
+        '20230122.jpn.ICL.punipuni.D1',
+        '20230122.jpn.ICL.punipuni.D3_wo_dist',
+        '20230122.jpn.ICL.punipuni.D3',
     ]
 
     # dataset_names = dataset_names[::-1]
