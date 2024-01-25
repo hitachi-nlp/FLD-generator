@@ -228,11 +228,11 @@ def main():
     # skip_if_exists = False
     skip_if_exists = True
 
-    # dry_run = False
-    dry_run = True
+    dry_run = False
+    # dry_run = True
 
-    engine = SubprocessEngine()
-    # engine = QsubEngine('ABCI', 'rt_C.small')
+    # engine = SubprocessEngine()
+    engine = QsubEngine('ABCI', 'rt_C.small')
 
     # ---------------------------- fixed settings --------------------------
     num_workers_per_job = 5
