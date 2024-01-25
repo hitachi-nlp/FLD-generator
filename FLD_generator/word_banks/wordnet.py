@@ -45,7 +45,8 @@ class SynsetOp:
         if exact:
             return [_WN.synset(word)]
         else:
-            return _WN.synsets(word, pos=pos, lang=word_lang)
+            pos_str = pos.value if pos is not None else None
+            return _WN.synsets(word, pos=pos_str, lang=word_lang)
 
     def is_event(self, syn: Synset) -> bool:
         return syn in self._get_event_nouns()

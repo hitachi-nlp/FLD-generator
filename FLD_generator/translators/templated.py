@@ -155,9 +155,6 @@ class GlobalResolveTemplateGenerator:
             )
 
 
-
-
-
 class TemplatedTranslator(Translator):
 
     _TEMPLATE_BRACES = ['<<', '>>']
@@ -172,6 +169,7 @@ class TemplatedTranslator(Translator):
                  volume_to_weight: str = 'log10',
                  default_weight_factor_type='W_VOL__1.0',
                  do_translate_to_nl=True,
+                 no_adj_verb_as_zeroary=False,
                  adj_verb_noun_ratio: Optional[List] = None,
                  knowledge_banks: Optional[List[KnowledgeBankBase]] = None,
                  log_stats=False):
@@ -202,6 +200,7 @@ class TemplatedTranslator(Translator):
 
         self.use_fixed_translation = use_fixed_translation
         self.reused_object_nouns_max_factor = reused_object_nouns_max_factor
+        self._no_adj_verb_as_zeroary = no_adj_verb_as_zeroary
         self._zeroary_predicates, self._unary_predicates, self._constants = self._load_phrases(
             self._word_bank, adj_verb_noun_ratio=adj_verb_noun_ratio)
         if limit_vocab_size_per_type is not None:
@@ -297,10 +296,10 @@ class TemplatedTranslator(Translator):
         entity_nouns = list(set(entity_nouns) - intermediate_constant_noun_set)
         random.shuffle(entity_nouns)
 
-        other_nouns = [word
-                       for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)]
-        other_nouns = list(set(other_nouns) - intermediate_constant_noun_set - set(event_nouns) - set(entity_nouns))
-        random.shuffle(other_nouns)
+        predicate_nouns = [word
+                           for word in self._load_words_by_pos_attrs(word_bank, pos=POS.NOUN)
+                           if ATTR.can_be_predicate_noun in word_bank.get_attrs(word)]
+        predicate_nouns = list(set(predicate_nouns) - intermediate_constant_noun_set)
 
         logger.info('loading adjs ...')
         adjs = [word
@@ -324,36 +323,55 @@ class TemplatedTranslator(Translator):
         @profile
         def build_transitive_verb_PASs() -> Iterable[Tuple[str, str]]:
             _transitive_verbs = shuffle(transitive_verbs)
-            _nouns = shuffle(other_nouns)
+            _nouns = shuffle(predicate_nouns)
             for i in range(min(len(_transitive_verbs), len(_nouns))):
                 verb = _transitive_verbs[i]
                 obj = _nouns[i]
                 # yield pair_pred_with_obj_mdf(verb, obj, None)
                 # yield PredicatePhrase(predicate=verb, object=obj)
                 yield verb, obj
+        is_transitive_verbs_empty = len(transitive_verbs) == 0 or len(predicate_nouns) == 0
 
         if adj_verb_noun_ratio is not None and len(adj_verb_noun_ratio) != 3:
             raise ValueError()
         adj_verb_noun_ratio = adj_verb_noun_ratio or [1, 2, 1]
         adj_verb_noun_weight = [3 * ratio / sum(adj_verb_noun_ratio) for ratio in adj_verb_noun_ratio]
 
-        zeorary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
-        zeroary_predicates = chained_sampling_from_weighted_iterators(
-            (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(event_nouns)),
-            zeorary_word_weights,
-        )
+        def make_chained_sampling_from_weighted_iterators(words, weights):
+            _cyclic_words = []
+            _weights = []
+            for _words, weight in zip(words, weights):
+                if _words == build_transitive_verb_PASs:
+                    if is_transitive_verbs_empty:
+                        continue
+                    random_cycle = RandomCycle(_words, shuffle=False)
+                else:
+                    if len(_words) == 0:
+                        continue
+                    random_cycle = RandomCycle(_words)
+                _cyclic_words.append(random_cycle)
+                _weights.append(weight)
+            return chained_sampling_from_weighted_iterators(_cyclic_words, _weights)
 
-        unary_word_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
-        unary_predicates = chained_sampling_from_weighted_iterators(
-            (RandomCycle(adjs), RandomCycle(intransitive_verbs), RandomCycle(build_transitive_verb_PASs, shuffle=False), RandomCycle(other_nouns)),
-            unary_word_weights,
-        )
+        if self._no_adj_verb_as_zeroary:
+            zeroary_words = (event_nouns,)
+            zeorary_weights = (1.0,)
+        else:
+            zeroary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, event_nouns)
+            zeorary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
+        zeroary_predicates = make_chained_sampling_from_weighted_iterators(zeroary_words, zeorary_weights)
+
+        unary_words = (adjs, intransitive_verbs, build_transitive_verb_PASs, predicate_nouns)
+        unary_weights = (adj_verb_noun_weight[0], adj_verb_noun_weight[1] * 1 / 3, adj_verb_noun_weight[1] * 2 / 3, adj_verb_noun_weight[2])
+        unary_predicates = make_chained_sampling_from_weighted_iterators(unary_words, unary_weights)
 
         constants = entity_nouns
 
         return (
-            (PredicatePhrase(predicate=pred[0], object=pred[1]) if isinstance(pred, tuple) else PredicatePhrase(predicate=pred) for pred in  zeroary_predicates),
-            (PredicatePhrase(predicate=pred[0], object=pred[1]) if isinstance(pred, tuple) else PredicatePhrase(predicate=pred) for pred in  unary_predicates),
+            (PredicatePhrase(predicate=pred[0], object=pred[1]) if isinstance(pred, tuple) else PredicatePhrase(predicate=pred)
+             for pred in  zeroary_predicates),
+            (PredicatePhrase(predicate=pred[0], object=pred[1]) if isinstance(pred, tuple) else PredicatePhrase(predicate=pred)
+             for pred in  unary_predicates),
             [ConstantPhrase(constant=constant) for constant in constants],
         )
 
@@ -369,7 +387,7 @@ class TemplatedTranslator(Translator):
 
         intermediate_cache = self._load_words_by_pos_attrs_cache_interm[cache_key]
         attrs = attrs or []
-        for word in word_bank.get_words():
+        for word in word_bank.get_words(slice_='extra_or_default'):
             if word in intermediate_cache:
                 continue
             if pos is not None and pos not in word_bank.get_pos(word, not_found_warning=False):
@@ -404,7 +422,7 @@ class TemplatedTranslator(Translator):
                    raise_if_translation_not_found=True) -> Tuple[List[Tuple[Optional[str], Optional[str], Optional[Formula], Optional[str]]], Dict[str, int]]:
         knowledge_idxs = knowledge_idxs or []
         collapsed_knowledge_idxs = collapsed_knowledge_idxs or []
-        self._reset_predicate_phrase_assets()
+        self._reset_assets()
 
         def raise_or_warn(msg: str) -> None:
             if raise_if_translation_not_found:
@@ -507,8 +525,10 @@ class TemplatedTranslator(Translator):
                     if predicate_transl.object is not None:
                         SO_swap_interpret_mapping = deepcopy(inflated_mapping)
                         SO_swap_interpret_mapping[constant] = ConstantPhrase(constant=predicate_transl.object)
+                        swap_object = ' '.join([rep for rep in [constant_transl.left_modifier, constant_transl.constant, constant_transl.right_modifier]
+                                               if rep is not None])
                         SO_swap_interpret_mapping[predicate] = PredicatePhrase(predicate=predicate_transl.predicate,
-                                                                               object=constant_transl,
+                                                                               object=swap_object,
                                                                                right_modifier=predicate_transl.right_modifier,
                                                                                left_modifier=predicate_transl.left_modifier)
 
@@ -536,11 +556,8 @@ class TemplatedTranslator(Translator):
                             SO_swap_formula.translation = SO_swap_translation
                             logger.debug('make subj obj swapped translation: %s', SO_swap_translation)
 
-                # translation = self._make_predicate_phrase_str(translation)
                 translations.append(translation)
 
-                # if SO_swap_formula is not None:
-                #     SO_swap_formula.translation = self._make_predicate_phrase_str(SO_swap_formula.translation)
                 SO_swap_formulas.append(SO_swap_formula)
 
                 translation_names.append(self._translation_name(translation_key, chosen_nl))
@@ -564,8 +581,10 @@ class TemplatedTranslator(Translator):
         for SO_swap_formula in SO_swap_formulas:
             if SO_swap_formula is not None and SO_swap_formula.translation is not None:
                 SO_swap_formula.translation = (
-                    self._postprocess_translation_all(SO_swap_formula.translation, knowlege_type=None) if SO_swap_formula.translation is not None
-                    else None)
+                    self._postprocess_translation_all(SO_swap_formula.translation, knowlege_type=None)
+                    if SO_swap_formula.translation is not None
+                    else None
+                )
 
         return list(zip(translation_names, translations, SO_swap_formulas, knowledge_types)), count_stats
 
@@ -625,7 +644,6 @@ class TemplatedTranslator(Translator):
             volumes.append(iterator_with_volume[1])
 
         if block_shuffle:
-
             volume_weights = [volume_to_weight(volume) for volume in volumes]
             weights = [self._get_weight_factor_func(weight_type)(volume_weights, i_iterator)
                        for i_iterator, weight_type in enumerate(weight_types)]
@@ -1077,6 +1095,7 @@ class TemplatedTranslator(Translator):
 
             # we sample more phrases so that we have more chance of POS/FORM condition matching.
             adj_verb_nouns = self._sample(self._unary_predicates, len(unary_predicates) * 3)
+
             if self.reused_object_nouns_max_factor > 0.0:
                 obj_nouns = list({phrase.object for phrase in adj_verb_nouns
                                   if isinstance(phrase, PredicatePhrase)})
@@ -1292,22 +1311,18 @@ class TemplatedTranslator(Translator):
         pass
 
     @abstractmethod
-    def _reset_predicate_phrase_assets(self) -> None:
+    def _reset_assets(self) -> None:
         pass
 
     def _postprocess_translation_all(self, translation: str, knowlege_type: Optional[str] = None) -> str:
-        # if knowlege_type is not None:
-        #     for knowledge_bank in self._knowledge_banks:
-        #         translation = knowledge_bank.postprocess_translation(translation)
-
         # We need to postprocess not only "knowlege_type" formulas but others,
         # because the translations can "spills" to other formulas.
         for knowledge_bank in self._knowledge_banks:
             translation = knowledge_bank.postprocess_translation(translation)
 
-        translation = self._postprocess_translation(translation, knowlege_type=knowlege_type)
+        translation = self._postprocess_translation(translation)
         return translation
 
     @abstractmethod
-    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
+    def _postprocess_translation(self, translation: str) -> str:
         pass

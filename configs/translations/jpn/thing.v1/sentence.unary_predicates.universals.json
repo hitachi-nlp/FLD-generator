@@ -28,23 +28,23 @@
 
     "(x): ¬({A}x & {B}x)": [
       "__<<sentence::¬({A}everything & {B}everything)>>",
-      "<<sentence::({A}it & {B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::({A}it & {B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
     "(x): ¬(¬{A}x & {B}x)": [
       "__<<sentence::¬(¬{A}everything & {B}everything)>>",
-      "<<sentence::(¬{A}it & {B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::(¬{A}it & {B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
     "(x): ¬({A}x & ¬{B}x)": [
       "__<<sentence::¬({A}everything & ¬{B}everything)>>",
-      "<<sentence::({A}it & ¬{B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::({A}it & ¬{B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
     "(x): ¬(¬{A}x & ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything & ¬{B}everything)>>",
-      "<<sentence::(¬{A}it & ¬{B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::(¬{A}it & ¬{B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
 
 
@@ -64,23 +64,23 @@
 
     "(x): ¬({A}x v {B}x)": [
       "__<<sentence::¬({A}everything v {B}everything)>>",
-      "<<sentence::({A}it v {B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::({A}it v {B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
     "(x): ¬(¬{A}x v {B}x)": [
       "__<<sentence::¬(¬{A}everything v {B}everything)>>",
-      "<<sentence::(¬{A}it v {B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::(¬{A}it v {B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
     "(x): ¬({A}x v ¬{B}x)": [
       "__<<sentence::¬({A}everything v ¬{B}everything)>>",
-      "<<sentence::({A}it v ¬{B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::({A}it v ¬{B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
     "(x): ¬(¬{A}x v ¬{B}x)": [
       "__<<sentence::¬(¬{A}everything v ¬{B}everything)>>",
-      "<<sentence::(¬{A}it v ¬{B}it)>> <<phrase::toiu_mono_ha_ga_nai>>",
-      "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::ha_ga_nai>>"
+      "<<sentence::(¬{A}it v ¬{B}it)>> <<phrase::toiu_mono_ha_nai>>",
+      "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::ha_nai>>"
     ],
 
 

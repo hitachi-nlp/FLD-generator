@@ -19,8 +19,13 @@ logger = logging.getLogger(__name__)
 
 class EnglishTranslator(TemplatedTranslator):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 *args,
+                 no_transitive_object=False,
+                 **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._no_transitive_object = no_transitive_object
 
         self._male_names: Set[str] = set()
         self._female_names: Set[str] = set()
@@ -33,7 +38,7 @@ class EnglishTranslator(TemplatedTranslator):
     def _postprocess_template(self, template: str) -> str:
         return self._add_the_or_it_to_successive_appearance(template)
 
-    def _reset_predicate_phrase_assets(self) -> None:
+    def _reset_assets(self) -> None:
         pass
 
     def _make_constant_phrase_str(self, const: ConstantPhrase) -> str:
@@ -51,13 +56,13 @@ class EnglishTranslator(TemplatedTranslator):
 
         if pred.object is not None and pred.right_modifier is not None:
             raise Exception('Can not determine the order of these phrases. We do not expect to pass this code, therefore, might be a bug.')
-        if pred.object is not None:
+        if pred.object is not None and not self._no_transitive_object:
             rep += f' {pred.object}'
         if pred.right_modifier is not None:
             rep += f' {pred.right_modifier}'
         return rep
 
-    def _postprocess_translation(self, translation: str, knowlege_type: Optional[str] = None) -> str:
+    def _postprocess_translation(self, translation: str) -> str:
         translation = self._correct_indefinite_particles(translation)
         translation = self._fix_pred_singularity(translation)
         translation = self._reduce_degenerate_blanks(translation)

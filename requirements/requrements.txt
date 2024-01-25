@@ -12,5 +12,6 @@ pydantic
 ipadic
 names-dataset
 ordered-set
+flashtext
 
 line_profiling@git+https://github.com/hitachi-nlp/line-profiling.git@main

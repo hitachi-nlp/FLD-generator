@@ -545,6 +545,7 @@ class RandomCycle:
 
         self._make_current_iterable = make_current_iterable
         self._cur_iter = self._make_current_iterable()
+        self._prev_is_stop_iteration = False
 
     def __iter__(self):
         return self
@@ -555,8 +556,12 @@ class RandomCycle:
                 item = next(self._cur_iter)
                 if not self._is_elems_cached and not isinstance(self._base_elems, Callable):
                     self._cached_list.append(item)
+                self._prev_is_stop_iteration = False
                 return item
             except StopIteration:
+                if self._prev_is_stop_iteration:
+                    raise ValueError('We encountered StopIteration successsibly. This is probably because the base_elems is empty.')
+                self._prev_is_stop_iteration = True
                 self._is_elems_cached = True
                 self._cur_iter = self._make_current_iterable()
 

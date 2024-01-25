@@ -19,7 +19,7 @@
           "__comment: both {A} and {B} is OK but confusing when combined with subject, such as 'He both is red and green'",
 
           "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__"
       ],
@@ -28,7 +28,7 @@
           "__<<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::{B}>> <<phrase::both_pred>>",
 
           "<<phrase::¬{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::¬{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::¬{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "<<phrase::{A}event_noun>> <<phrase::noun_not>> <<phrase::{B}event_noun>> <<phrase::occur>>"
       ],
@@ -37,7 +37,7 @@
           "__<<clause::verb::{A}>> <<phrase::and>> <<clause::verb::¬{B}>> <<phrase::both_pred>>",
 
           "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::¬{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::¬{B}event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::¬{B}event_noun>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__<<phrase::{A}event_noun>> <<phrase::but>> <<phrase::noun_not>> <<phrase::{B}event_noun>> <<phrase::occur>>"
       ],
@@ -46,7 +46,7 @@
           "__<<clause::verb::¬{A}>> <<phrase::and>> <<clause::verb::¬{B}>> <<phrase::both_pred>>",
 
           "<<phrase::¬{A}event_noun>> <<phrase::noun_and>> <<phrase::¬{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::¬{A}event_noun>> <<phrase::noun_and>> <<phrase::¬{B}event_noun>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::¬{A}event_noun>> <<phrase::noun_and>> <<phrase::¬{B}event_noun>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__"
       ],
@@ -57,7 +57,7 @@
           "<<phrase::maybe_either>> <<clause::verb::{A}>> <<phrase::or>> <<clause::verb::{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::{A}event_noun>> <<phrase::andOr>> <<phrase::{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::{A}event_noun>> <<phrase::or>> <<phrase::{B}event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::{A}event_noun>> <<phrase::or>> <<phrase::{B}event_noun>> <<phrase::or>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__"
       ],
@@ -66,7 +66,7 @@
           "<<phrase::maybe_either>> <<clause::verb::¬{A}>> <<phrase::or>> <<clause::verb::{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::¬{A}event_noun>> <<phrase::andOr>> <<phrase::{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::¬{A}event_noun>> <<phrase::or>> <<phrase::{B}event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::¬{A}event_noun>> <<phrase::or>> <<phrase::{B}event_noun>> <<phrase::or>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__"
       ],
@@ -75,7 +75,7 @@
           "<<phrase::maybe_either>> <<clause::verb::{A}>> <<phrase::or>> <<clause::verb::¬{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::{A}event_noun>> <<phrase::andOr>> <<phrase::¬{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::{A}event_noun>> <<phrase::or>> <<phrase::¬{B}event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::{A}event_noun>> <<phrase::or>> <<phrase::¬{B}event_noun>> <<phrase::or>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__"
       ],
@@ -84,7 +84,7 @@
           "<<phrase::maybe_either>> <<clause::verb::¬{A}>> <<phrase::or>> <<clause::verb::¬{B}>> <<phrase::or>> <<phrase::both_pred>>",
 
           "<<phrase::¬{A}event_noun>> <<phrase::andOr>> <<phrase::¬{B}event_noun>> <<phrase::occur>>",
-          "<<phrase::maybe_either>> <<phrase::¬{A}event_noun>> <<phrase::or>> <<phrase::¬{B}event_noun>> <<phrase::or>> <<phrase::both_pred>> <<phrase::occur>>",
+          "<<phrase::maybe_either>> <<phrase::¬{A}event_noun>> <<phrase::or>> <<phrase::¬{B}event_noun>> <<phrase::or>> <<phrase::both_noun>> <<phrase::occur>>",
 
           "__"
       ],
@@ -418,33 +418,33 @@
 
 
       "{A}none": [
-        "<<phrase::{A}predicate_wo_ha_ga>>"
+        "<<phrase::{A}predicate_wo_ha>>"
       ],
       "¬{A}none": [
-        "<<phrase::¬{A}predicate_wo_ha_ga>>"
+        "<<phrase::¬{A}predicate_wo_ha>>"
       ],
 
 
       "({A}none & {B}none)": [
-          "<<phrase::({A} & {B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} & {B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::and>> <<clause::verb::{B}none>>",
 
           "__"
       ],
       "(¬{A}none & {B}none)": [
-          "<<phrase::(¬{A} & {B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} & {B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::and>> <<clause::verb::{B}none>>",
 
           "__"
       ],
       "({A}none & ¬{B}none)": [
-          "<<phrase::({A} & ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} & ¬{B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::and>> <<clause::verb::¬{B}none>>",
 
           "__"
       ],
       "(¬{A}none & ¬{B}none)": [
-          "<<phrase::(¬{A} & ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} & ¬{B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::and>> <<clause::verb::¬{B}none>>",
 
           "__"
@@ -452,28 +452,28 @@
 
 
       "({A}none v {B}none)": [
-          "<<phrase::({A} v {B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} v {B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::andOr>> <<clause::verb::{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::{A}none>> <<phrase::or>> <<clause::verb::{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}none v {B}none)": [
-          "<<phrase::(¬{A} v {B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} v {B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::andOr>> <<clause::verb::{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::¬{A}none>> <<phrase::or>> <<clause::verb::{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "({A}none v ¬{B}none)": [
-          "<<phrase::({A} v ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::({A} v ¬{B})predicate_wo_ha>>",
           "<<clause::verb::{A}none>> <<phrase::andOr>> <<clause::verb::¬{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::{A}none>> <<phrase::or>> <<clause::verb::¬{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
           "__"
       ],
       "(¬{A}none v ¬{B}none)": [
-          "<<phrase::(¬{A} v ¬{B})predicate_wo_ha_ga>>",
+          "<<phrase::(¬{A} v ¬{B})predicate_wo_ha>>",
           "<<clause::verb::¬{A}none>> <<phrase::andOr>> <<clause::verb::¬{B}none>>",
           "<<phrase::maybe_either>> <<clause::verb::¬{A}none>> <<phrase::or>> <<clause::verb::¬{B}none>> <<phrase::or>> <<phrase::both_pred>>",
 
@@ -494,13 +494,13 @@
 
       "{A}.event_occurrence": [
         "<<phrase::{A}event_noun>>",
-        "<<clause::verb::{A}>> <<phrase::toiu_koto>>",
-        "「 <<clause::verb::{A}>> 」 <<phrase::toiu_koto>>"
+        ["W_VOL_AVG__0.1", "<<clause::verb::{A}>> <<phrase::toiu_koto>>"],
+        ["W_VOL_AVG__0.1", "「 <<clause::verb::{A}>> 」 <<phrase::toiu_koto>>"]
       ],
       "¬{A}.event_occurrence": [
         "<<phrase::¬{A}event_noun>>",
-        "<<clause::verb::¬{A}>> <<phrase::toiu_koto>>",
-        "「 <<clause::verb::¬{A}>> 」 <<phrase::toiu_koto>>"
+        ["W_VOL_AVG__0.1", "<<clause::verb::¬{A}>> <<phrase::toiu_koto>>"],
+        ["W_VOL_AVG__0.1", "「 <<clause::verb::¬{A}>> 」 <<phrase::toiu_koto>>"]
       ],
 
 
@@ -511,7 +511,8 @@
           "__",
           "__",
 
-          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
+          ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} & {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"],
+          "<<phrase::{A}event_noun>> <<phrase::noun_and>> <<phrase::{B}event_noun>> <<phrase::occur>>"
       ],
       "(¬{A} & {B}).event_occurrence": [
           "「 <<clause::verb::(¬{A} & {B})>> 」 <<phrase::toiu_koto>>",
@@ -557,7 +558,7 @@
           "「 <<clause::verb::({A} v {B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> <<phrase::or>> <<clause::noun::{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> <<phrase::or>> <<clause::noun::{B}.event_occurrence>> <<phrase::or>> <<phrase::both_noun>>",
 
           ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} v {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
@@ -565,7 +566,7 @@
           "「 <<clause::verb::(¬{A} v {B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> <<phrase::or>> <<clause::noun::{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> <<phrase::or>> <<clause::noun::{B}.event_occurrence>> <<phrase::or>> <<phrase::both_noun>>",
 
           ["W_VOL_AVG__0.05", "「 <<clause::noun::(¬{A} v {B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
@@ -573,7 +574,7 @@
           "「 <<clause::verb::({A} v ¬{B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> <<phrase::or>> <<clause::noun::¬{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
+          "<<phrase::maybe_either>> <<clause::noun::{A}.event_occurrence>> <<phrase::or>> <<clause::noun::¬{B}.event_occurrence>> <<phrase::or>> <<phrase::both_noun>>",
 
           ["W_VOL_AVG__0.05", "「 <<clause::noun::({A} v ¬{B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],
@@ -581,7 +582,7 @@
           "「 <<clause::verb::(¬{A} v ¬{B})>> 」 <<phrase::toiu_koto>>",
 
           "<<clause::noun::¬{A}.event_occurrence>> <<phrase::andOr>> <<clause::noun::¬{B}.event_occurrence>>",
-          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> <<phrase::or>> <<clause::noun::¬{B}.event_occurrence>> <<phrase::or>> <<phrase::both_pred>>",
+          "<<phrase::maybe_either>> <<clause::noun::¬{A}.event_occurrence>> <<phrase::or>> <<clause::noun::¬{B}.event_occurrence>> <<phrase::or>> <<phrase::both_noun>>",
 
           ["W_VOL_AVG__0.05", "「 <<clause::noun::(¬{A} v ¬{B}).event_occurrence>> <<phrase::is_true>> 」 <<phrase::toiu_koto>>"]
       ],

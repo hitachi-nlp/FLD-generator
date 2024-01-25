@@ -55,7 +55,22 @@ def main():
     # output_top_dir = Path('./outputs/00.create_corpus/20231102.knowledge.speedup_translators')
     # output_top_dir = Path('./outputs/00.create_corpus/20231103.knowledge.speedup_translators')
 
-    output_top_dir = Path('./outputs/00.create_corpus/20231103.knowledge')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231103.knowledge')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20231203.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20231205.postprocess_debug')
+    # output_top_dir = Path('./outputs/00.create_corpus/debug')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20231213.jpn')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230115.jpn')
+    # output_top_dir = Path('./outputs/00.create_corpus/20230116.jpn.argument_pred_arg_only')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn/')
+
+    # output_top_dir = Path('./outputs/00.create_corpus/20230118.jpn.ICL')
+
+    output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn.punipuni')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -121,9 +136,74 @@ def main():
         # '20231030.knowledge.D3.knowledge_factor-5.0',
 
         # ---------------------------------- 20231101.knowledge.D3 ------------------------------------
-        '20231103.knowledge.D3.knowledge_factor-5.0',
+        # '20231103.knowledge.D3.knowledge_factor-5.0',
 
+        # ---------------------------------- 20231203.jpn ------------------------------------
+        # '20231203.jpn.D1_wo_dist',
+        # '20231203.jpn.D1',
+        # '20231203.jpn.D3',
+        # '20231203.jpn.D5',
+        # '20231203.jpn.D8',
+
+        # ---------------------------------- 20231213.jpn ------------------------------------
+        # '20231213.jpn.D1_wo_dist',
+        # '20231213.jpn.D1',
+        # '20231213.jpn.D3',
+        # '20231213.jpn.D5',
+        # '20231213.jpn.D8',
+
+        # ---------------------------------- 20230115.jpn ------------------------------------
+        # '20230115.jpn.BCCWJ.D3',
+        # '20230115.jpn.punipuni.D3',
+
+        # ---------------------------------- 20230116.jpn ------------------------------------
+        # '20230118.jpn.BCCWJ.D3.wordnet',
+        # '20230116.jpn.BCCWJ.D3.argument_pred_arg_only',
+        # '20230116.jpn.punipuni.D3.argument_pred_arg_only',
+
+        # ---------------------------------- 20230118.jpn ------------------------------------
+        # '20230118.jpn.wordnet.D3',
+        # '20230118.jpn.wordnet.D3.argument_pred_arg_only',
+        # '20230118.jpn.wordnet.D3.argument_pred_arg_only.no_kaku',
+        # '20230118.jpn.BCCWJ.D3',
+        # '20230118.jpn.punipuni.D3',
+
+        # ---------------------------------- 20230118.jpn.ICL ------------------------------------
+        # '20230118.jpn.wordnet.D3.extension-3.distractor-10',
+        # '20230118.jpn.wordnet.D3.extension-3.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-3.distractor-3',
+        # '20230118.jpn.wordnet.D3.extension-2.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-2.distractor-3',
+        # '20230118.jpn.wordnet.D3.extension-1.distractor-5',
+        # '20230118.jpn.wordnet.D3.extension-1.distractor-3',
+
+
+        # ---------------------------------- 20230120.jpn.punipuni ------------------------------------
+        # '20230120.jpn.wordnet.D3',
+
+        # '20230120.jpn.BCCWJ.D1_wo_dist',
+        # '20230120.jpn.BCCWJ.D1',
+        # '20230120.jpn.BCCWJ.D3',
+        # '20230120.jpn.BCCWJ.D8',
+
+        # '20230120.jpn.punipuni.D1_wo_dist',
+        # '20230120.jpn.punipuni.D1',
+        # '20230120.jpn.punipuni.D3',
+        # '20230120.jpn.punipuni.D8',
+
+        '20230120.jpn.wordnet_repro_wo_proposition.D1_wo_dist',
+        '20230120.jpn.wordnet_repro_wo_proposition.D1',
+        '20230120.jpn.wordnet_repro_wo_proposition.D3',
+        '20230120.jpn.wordnet_repro_wo_proposition.D8',
+
+
+        # ---------------------------------- 20230122.jpn.ICL ------------------------------------
+        # '20230122.jpn.ICL.punipuni.D1_wo_dist',
+        # '20230122.jpn.ICL.punipuni.D1',
+        # '20230122.jpn.ICL.punipuni.D3_wo_dist',
+        # '20230122.jpn.ICL.punipuni.D3',
     ]
+
     # dataset_names = dataset_names[::-1]
 
     num_jobs_for_datasets = 3
@@ -138,14 +218,20 @@ def main():
     # min_dataset_size_per_job = 50
     # min_dataset_size_per_job = 10
 
+    timeout_per_job = 3600  # for the case some jobs hangs
+
+    # skip_if_exists = False
+    skip_if_exists = True
+
+    dry_run = False
+    # dry_run = True
+
     # engine = SubprocessEngine()
     engine = QsubEngine('ABCI', 'rt_C.small')
 
     # ---------------------------- fixed settings --------------------------
-    timeout_per_job = 7200  # for the case some jobs hangs
     num_workers_per_job = 5
     delete_logs_when_done = False
-    dry_run = False
 
     if num_jobs_for_datasets * num_jobs_per_dataset > 180:
         raise ValueError('Too much jobs %s ~ ABCI job limit = 200',
@@ -163,6 +249,7 @@ def main():
                 num_jobs_per_dataset,
                 num_workers_per_job,
                 min_dataset_size_per_job,
+                skip_if_exists,
                 dry_run,
             )
         )
@@ -187,6 +274,7 @@ def make_dataset(dataset_name: str,
                  num_jobs: int,
                  num_workers_per_job: int,
                  min_dataset_size_per_job: int,
+                 skip_if_exists: bool,
                  dry_run: bool) -> None:
     logger.info('====================== make_dataset() for "%s" =========================',
                 dataset_name)
@@ -285,6 +373,10 @@ def make_dataset(dataset_name: str,
             job_output_dir.mkdir(exist_ok=True, parents=True)
 
             job_output_path = job_output_dir / f'{split}.jsonl'
+            if skip_if_exists and job_output_path.exists() and len(open(job_output_path).readlines()) >= 1:
+                logger.info('skip %s because', job_output_path)
+                continue
+
             job_log_path = job_output_dir / 'log.txt'
 
             job_settings = copy.deepcopy(settings)
@@ -295,7 +387,7 @@ def make_dataset(dataset_name: str,
             save_params(job_settings, job_output_dir)
 
             command = ' '.join([
-                'python ./create_corpus.py',
+                'python ./scripts/create_corpus.py',
 
                 f'{job_output_path}',
                 str(int(size_per_job)),
@@ -312,11 +404,13 @@ def make_dataset(dataset_name: str,
 
                 maybe_option('--translation-lang', job_settings.get('translation_lang', None)),
                 _make_multiple_value_option('--translation-config', job_settings['translation_configs']),
+                '--translation-no-transitive-object' if job_settings.get("translation_no_transitive_object", False) else '',
                 '--use-fixed-translation' if job_settings.get("use_fixed_translation", False) else '',
                 maybe_option('--reused-object-nouns-max-factor', job_settings.get("reused_object_nouns_max_factor", None)),
                 f'--limit-vocab-size-per-type {job_settings["limit_vocab_size_per_type"]}' if job_settings.get("limit_vocab_size_per_type", None) is not None else '',
                 maybe_option('--translation-volume-to-weight', job_settings.get("translation_volume_to_weight", None)),
                 maybe_option('--translation-adj-verb-noun-ratio', job_settings.get("translation_adj_verb_noun_ratio", None)),
+                maybe_option('--translation-vocab', job_settings.get("translation_vocab", None)),
 
 
                 f'--distractor "{job_settings["distractor"]}"',
@@ -434,7 +528,6 @@ def make_dataset(dataset_name: str,
                 agg_stats[name] = statistics.mean(cnt)
         json.dump(dict(agg_stats), open(str(split_output_dir / f'{split}.jsonl.stats.json'), 'w'),
                   ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
-
 
 
 if __name__ == '__main__':

@@ -2170,6 +2170,7 @@ _DATASET_SETTINGS = {
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
+        'translation_vocab': None,
 
 
         'depth_distrib': 'flat.no_reference',
@@ -2190,6 +2191,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2214,6 +2216,7 @@ _DATASET_SETTINGS = {
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
+        'translation_vocab': None,
 
 
         'depth_distrib': 'flat.no_reference',
@@ -2234,6 +2237,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2258,6 +2262,7 @@ _DATASET_SETTINGS = {
 
         'use_fixed_translation': False,
         'limit_vocab_size_per_type': None,
+        'translation_vocab': None,
 
 
         'depth_distrib': 'flat.no_reference',
@@ -2277,6 +2282,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2321,6 +2327,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2364,6 +2371,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2408,6 +2416,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2452,6 +2461,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2497,6 +2507,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2542,6 +2553,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axiom_arguments_weight': 0.2,
 
@@ -2594,6 +2606,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2633,6 +2646,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2672,6 +2686,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2712,6 +2727,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2759,6 +2775,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2798,6 +2815,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2837,6 +2855,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2876,6 +2895,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2917,6 +2937,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2957,6 +2978,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -2997,6 +3019,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3038,6 +3061,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3078,6 +3102,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3123,6 +3148,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3162,6 +3188,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3201,6 +3228,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3241,6 +3269,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3282,6 +3311,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3324,6 +3354,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3366,6 +3397,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3410,6 +3442,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3450,6 +3483,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3491,6 +3525,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3531,6 +3566,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3572,6 +3608,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3612,6 +3649,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3651,6 +3689,7 @@ _DATASET_SETTINGS = {
     '20230904.jpn.D1.wo_brnch.wo_dstrct': {
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3691,6 +3730,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3733,6 +3773,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3775,6 +3816,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3817,6 +3859,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3859,6 +3902,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3901,6 +3945,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3941,6 +3986,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -3981,6 +4027,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4022,6 +4069,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4064,6 +4112,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4114,6 +4163,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4164,6 +4214,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4214,6 +4265,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4264,6 +4316,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4321,6 +4374,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4376,6 +4430,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4433,6 +4488,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4487,6 +4543,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4538,6 +4595,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4588,6 +4646,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4648,6 +4707,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4708,6 +4768,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4771,6 +4832,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4834,6 +4896,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4901,6 +4964,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -4966,6 +5030,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5032,6 +5097,7 @@ _DATASET_SETTINGS = {
 
         'argument_configs': [
             './configs/arguments/axioms/',
+            './configs/arguments/references/',
         ],
         'quantifier_axioms': [
             'universal_quantifier_elim',
@@ -5088,6 +5154,2104 @@ _DATASET_SETTINGS = {
 
     },
 
+
+
+
+
+    '20231203.jpn.D1_wo_dist': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 10000,
+        }
+
+    },
+
+
+    '20231203.jpn.D1': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 10000,
+        }
+
+    },
+
+
+    '20231203.jpn.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            # 'test': 500,
+            'train': 1000,
+
+            # 'test': 1000,
+        }
+
+    },
+
+
+
+    '20231203.jpn.D5': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 5),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 500,
+            'train': 1000,
+        }
+
+    },
+
+
+
+
+    '20231203.jpn.D8': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            # 'test': 500,
+            'train': 1000,
+        }
+
+    },
+
+
+
+
+
+
+
+
+    '20231213.jpn.D1_wo_dist': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+    '20231213.jpn.D1': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+    '20231213.jpn.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+    '20231213.jpn.D5': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 5),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+
+    '20231213.jpn.D8': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': _TRANSLATION_THING_CONFIGS_JPN_V1,
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '20230115.jpn.BCCWJ.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1.pretty'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            'test': 100,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+
+    },
+
+    '20230115.jpn.punipuni.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1.pretty'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 100,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+
+    },
+
+
+
+
+    '20230116.jpn.BCCWJ.D3.argument_pred_arg_only': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            'test': 300,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+    '20230116.jpn.punipuni.D3.argument_pred_arg_only': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 300,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+
+    },
+
+
+
+
+
+
+    '20230118.jpn.wordnet.D3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+    '20230118.jpn.wordnet.D3.argument_pred_arg_only': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+    '20230118.jpn.wordnet.D3.argument_pred_arg_only.no_kaku': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+
+
+    '20230118.jpn.BCCWJ.D3': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+
+    '20230118.jpn.punipuni.D3': {
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            'train': 30000,
+        }
+
+    },
+
+
+
+
+
+
+    '20230118.jpn.wordnet.D3.extension-3.distractor-10': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 3),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 10),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+
+    '20230118.jpn.wordnet.D3.extension-3.distractor-5': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 3),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 5),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+    '20230118.jpn.wordnet.D3.extension-3.distractor-3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 3),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 3),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+
+    '20230118.jpn.wordnet.D3.extension-2.distractor-5': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 2),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 5),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+    '20230118.jpn.wordnet.D3.extension-2.distractor-3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 2),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 3),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+
+    '20230118.jpn.wordnet.D3.extension-1.distractor-5': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 1),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 5),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+    '20230118.jpn.wordnet.D3.extension-1.distractor-3': {
+
+        'argument_configs': [
+            './configs/arguments/axioms/',
+            './configs/arguments/references/',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 1),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 3),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '20230120.jpn.wordnet.D3': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.BCCWJ.D1_wo_dist': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+    '20230120.jpn.BCCWJ.D1': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.BCCWJ.D3': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.BCCWJ.D8': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'BCCWJ',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '20230120.jpn.punipuni.D1_wo_dist': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+    '20230120.jpn.punipuni.D1': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.punipuni.D3': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.punipuni.D8': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            # 'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '20230120.jpn.wordnet_repro_wo_proposition.D1_wo_dist': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+    '20230120.jpn.wordnet_repro_wo_proposition.D1': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.wordnet_repro_wo_proposition.D3': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+    '20230120.jpn.wordnet_repro_wo_proposition.D8': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 8),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['thing.v1'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': False,
+        'translation_vocab': 'wordnet',
+
+
+        'split_sizes': {
+            'test': 5000,
+            'valid': 5000,
+            'train': 30000,
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+    '20230122.jpn.ICL.punipuni.D1_wo_dist': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+    '20230122.jpn.ICL.punipuni.D1': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 1),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 0),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+
+    '20230122.jpn.ICL.punipuni.D3_wo_dist': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 0),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
+
+
+    '20230122.jpn.ICL.punipuni.D3': {
+
+
+        'argument_configs': [
+            # './configs/arguments/axioms/',
+            # './configs/arguments/references/',
+
+            './configs/arguments/axioms/axiom.and_or.pred_arg.json',
+            './configs/arguments/axioms/axiom.implication_intro.pred_arg.json',
+            './configs/arguments/axioms/axiom.negation.pred_arg.json',
+            './configs/arguments/axioms/axiom.pred_arg.json',
+            './configs/arguments/references/reference.pred_arg.json',
+        ],
+        'quantifier_axioms': [
+            'universal_quantifier_elim',
+            'universal_quantifier_intro',
+            'existential_quantifier_intro',
+            'existential_quantifier_elim',
+        ],
+        'quantifier_axiom_arguments_weight': 0.2,
+        'complex_formula_arguments_weight': 0.5,
+
+
+        'depth_range': (1, 3),
+        'depth_distrib': 'flat',
+        'branch_extensions_range': (0, 5),
+
+
+        'distractor': 'mixture(negative_tree_double.simplified_formula.various_form)',
+        'distractors_range': (0, 20),
+        'translation_distractors_range': (0, 0),
+        'use_collapsed_translation_nodes_for_unknown_tree': False,
+
+
+        'translation_lang': 'jpn',
+        'translation_configs': ['punipuni.v0'],
+        'translation_volume_to_weight': 'log10',
+        'translation_adj_verb_noun_ratio': '1-1-1',
+        'translation_no_transitive_object': True,
+        'translation_vocab': 'punipuni',
+
+
+        'split_sizes': {
+            'test': 500,
+            # 'valid': 5000,
+            # 'train': 30000,
+        }
+    },
+
+
 }
 
 
@@ -5120,6 +7284,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_volume_to_weight': 'sqrt',
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_configs': _TRANSLATION_THING_CONFIGS_ENG,
+        'translation_no_transitive_object': False,
 
         'translation_variants_per_logic': 1,
     },
@@ -5154,6 +7319,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_volume_to_weight': 'sqrt',
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_configs': _TRANSLATION_THING_CONFIGS_ENG,
+        'translation_no_transitive_object': False,
 
 
         'depth_distrib': 'flat',
@@ -5187,6 +7353,7 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_lang': 'eng',
         'translation_configs': _TRANSLATION_THING_CONFIGS_ENG_V1,
+        'translation_no_transitive_object': False,
 
         'translation_variants_per_logic': 1,
 
@@ -5217,12 +7384,11 @@ _DEFAULT_DATASET_SETTINGS = {
         'translation_adj_verb_noun_ratio': '1-2-1',
         'translation_lang': 'eng',
         'translation_configs': _TRANSLATION_THING_PERSON_CONFIGS_ENG_V0,
+        'translation_no_transitive_object': False,
 
         'translation_variants_per_logic': 1,
 
     },
-
-
 
 
 
@@ -5422,6 +7588,69 @@ _DATASET_NAME_TO_DEFAULT = {
     # ---------------------------------- 20231103.knowledge.D3 ------------------------------------
     '20231103.knowledge.D3.knowledge_factor-5.0': '20231018.thing_person_config_translation',
 
+    # ---------------------------------- 20231203.jpn ------------------------------------
+    '20231203.jpn.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20231203.jpn.D1': '20231018.thing_person_config_translation',
+    '20231203.jpn.D3': '20231018.thing_person_config_translation',
+    '20231203.jpn.D5': '20231018.thing_person_config_translation',
+    '20231203.jpn.D8': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20231213.jpn ------------------------------------
+    '20231213.jpn.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20231213.jpn.D1': '20231018.thing_person_config_translation',
+    '20231213.jpn.D3': '20231018.thing_person_config_translation',
+    '20231213.jpn.D5': '20231018.thing_person_config_translation',
+    '20231213.jpn.D8': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230115.jpn ------------------------------------
+    '20230115.jpn.BCCWJ.D3': '20231018.thing_person_config_translation',
+    '20230115.jpn.punipuni.D3': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230116.jpn ------------------------------------
+    '20230116.jpn.wordnet.D3': '20231018.thing_person_config_translation',
+    '20230116.jpn.BCCWJ.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+    '20230116.jpn.punipuni.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230116.jpn ------------------------------------
+    '20230118.jpn.wordnet.D3': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.argument_pred_arg_only': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.argument_pred_arg_only.no_kaku': '20231018.thing_person_config_translation',
+    '20230118.jpn.BCCWJ.D3': '20231018.thing_person_config_translation',
+    '20230118.jpn.punipuni.D3': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230118.jpn.ICL ------------------------------------
+    '20230118.jpn.wordnet.D3.extension-3.distractor-10': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.extension-3.distractor-5': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.extension-3.distractor-3': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.extension-2.distractor-5': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.extension-2.distractor-3': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.extension-1.distractor-5': '20231018.thing_person_config_translation',
+    '20230118.jpn.wordnet.D3.extension-1.distractor-3': '20231018.thing_person_config_translation',
+
+    # ---------------------------------- 20230120.jpn.punipuni ------------------------------------
+    '20230120.jpn.wordnet.D3': '20231018.thing_person_config_translation',
+
+    '20230120.jpn.BCCWJ.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20230120.jpn.BCCWJ.D1': '20231018.thing_person_config_translation',
+    '20230120.jpn.BCCWJ.D3': '20231018.thing_person_config_translation',
+    '20230120.jpn.BCCWJ.D8': '20231018.thing_person_config_translation',
+
+    '20230120.jpn.punipuni.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20230120.jpn.punipuni.D1': '20231018.thing_person_config_translation',
+    '20230120.jpn.punipuni.D3': '20231018.thing_person_config_translation',
+    '20230120.jpn.punipuni.D8': '20231018.thing_person_config_translation',
+
+    '20230120.jpn.wordnet_repro_wo_proposition.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20230120.jpn.wordnet_repro_wo_proposition.D1': '20231018.thing_person_config_translation',
+    '20230120.jpn.wordnet_repro_wo_proposition.D3': '20231018.thing_person_config_translation',
+    '20230120.jpn.wordnet_repro_wo_proposition.D8': '20231018.thing_person_config_translation',
+
+
+    # ---------------------------------- 20230122.jpn.ICL ------------------------------------
+    '20230122.jpn.ICL.punipuni.D1_wo_dist': '20231018.thing_person_config_translation',
+    '20230122.jpn.ICL.punipuni.D1': '20231018.thing_person_config_translation',
+    '20230122.jpn.ICL.punipuni.D3_wo_dist': '20231018.thing_person_config_translation',
+    '20230122.jpn.ICL.punipuni.D3': '20231018.thing_person_config_translation',
 }
 
 
