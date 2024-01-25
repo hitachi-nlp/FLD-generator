@@ -15,6 +15,7 @@ from FLD_generator.proof_tree_generators import ProofTreeGenerationFailure, Proo
 from FLD_generator.formula_distractors import FormulaDistractorGenerationFailure, FormulaDistractorGenerationImpossible, NegativeTreeDistractor
 from FLD_generator.translation_distractors import TranslationDistractor, TranslationDistractorGenerationFailure, TranslationDistractorGenerationImpossible
 from FLD_generator.translators import TranslationFailure, TranslationImpossible
+from FLD_generator.translators.base import TranslationNotFoundError
 from FLD_generator.utils import make_pretty_msg
 import line_profiling
 

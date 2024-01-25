@@ -5,11 +5,11 @@ from .concept_net_100k import ConceptNet100kKnowledgeBank
 from .dbpedia import DBpedia
 
 
-
 def build(type_: str,
           filepath: str,
           max_statements: Optional[int] = None,
           no_shuffle=False):
+
     if type_ == 'mock':
         raise NotImplementedError('Not maintained')
         # return MockIfThenKnowledgeBank()

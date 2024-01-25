@@ -11,8 +11,8 @@ See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about t
 ## Installation
 The code has been tested on Python 3.7.7.
 ```console
-$ pip install -r ./requirements/requrements.txt
-$ export PYTHONPATH=`pwd -P`:$PYTHONPATH
+pip install -r ./requirements/requrements.txt
+export PYTHONPATH=`pwd -P`:$PYTHONPATH
 ```
 
 ## Additional Resources Required
@@ -37,7 +37,7 @@ Use `./create_corpus.py`, which generates a corpus with the design specified by 
 
 We can create **FLD** (FLD.3) by running the follows command:
 ```console
-$ python ./create_corpus.py\
+python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --depth-range '[1, 3]'\
@@ -59,7 +59,7 @@ $ python ./create_corpus.py\
 
 We can create **FLD★** (FLD.4) by running the follows command:
 ```console
-$ python ./create_corpus.py\
+python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --depth-range '[1, 8]'\

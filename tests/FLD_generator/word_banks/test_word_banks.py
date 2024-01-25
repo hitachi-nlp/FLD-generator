@@ -1,6 +1,8 @@
 from typing import List, Optional, Iterable, Dict
+import json
 
-from FLD_generator.word_banks import build_wordbank, POS, ATTR
+from FLD_generator.word_banks import build_wordbank, POS, ATTR, UserWord
+from FLD_generator.word_banks import load_vocab
 import logging
 from logger_setup import setup as setup_logger
 
@@ -8,8 +10,9 @@ setup_logger(level=logging.INFO)
 
 
 def test_word_bank(lang: str,
-                   vocab_restrictions: Optional[Dict[POS, List[str]]] = None):
-    wb = build_wordbank(lang, vocab_restrictions=vocab_restrictions)
+                   extra_vocab: Optional[Dict[POS, List[str]]] = None):
+    print('================================ testing word bank ================================')
+    wb = build_wordbank(lang, extra_vocab=extra_vocab)
     _test_word_bank(wb)
 
 
@@ -18,7 +21,7 @@ def _test_word_bank(wb):
     def get_words(pos: Optional[POS] = None,
                   attrs: Optional[List[ATTR]] = None) -> Iterable[str]:
         attrs = attrs or []
-        for word in wb.get_words():
+        for word in wb.get_words(slice_='extra_or_default'):
             if pos is not None and pos not in wb.get_pos(word):
                 continue
             if any((attr not in wb.get_attrs(word)
@@ -30,7 +33,6 @@ def _test_word_bank(wb):
     for pos in POS:
         for attr in [None] + list(ATTR):
             for i_word, word in enumerate(get_words(pos=pos, attrs=[attr])):
-                # print(i_word)
                 if attr is None:
                     print(f'{str(pos):<20}{"None":<30}{word:<20}')
                 else:
@@ -53,17 +55,38 @@ def _test_word_bank(wb):
 
 
 if __name__ == '__main__':
-    test_word_bank('eng')
+    # test_word_bank('eng')
+    # test_word_bank(
+    #     'eng',
+    #     extra_vocab=[
 
-    # restricted vocab
-    test_word_bank(
-        'eng',
-        vocab_restrictions={
-            POS.VERB: ['walk', 'run'],
-            POS.NOUN: ['apple', 'banana'],
-            POS.ADJ: ['tasty', 'beautiful'],
-            POS.ADJ_SAT: ['red', 'green'],
-        }
-    )
+    #         UserWord(lemma='apple', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
+    #         UserWord(lemma='banana', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
 
-    test_word_bank('jpn')
+    #         UserWord(lemma='walk', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
+    #         UserWord(lemma='run', pos=POS.VERB, can_be_transitive_vers=False, can_be_intransitive_verb=True),
+
+    #         UserWord(lemma='tasty', pos=POS.ADJ),
+    #         UserWord(lemma='beautiful', pos=POS.ADJ),
+    #     ]
+    # )
+
+    test_word_bank('jpn', extra_vocab='punipuni')
+    # test_word_bank(
+    #     'jpn',
+    #     extra_vocab=[
+    #         UserWord(lemma='ぷにぷに', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
+    #         UserWord(lemma='ぴよぴよ', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=True),
+
+    #         # both should appear as predicate noun
+    #         UserWord(lemma='達者', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=False, can_be_predicate_noun=True),
+    #         UserWord(lemma='闊達', pos=POS.NOUN, can_be_event_noun=False, can_be_entity_noun=False),
+
+    #         UserWord(lemma='歩く', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
+    #         UserWord(lemma='走る', pos=POS.VERB, can_be_transitive_verb=False, can_be_intransitive_verb=True),
+
+    #         UserWord(lemma='赤い', pos=POS.ADJ),
+    #         UserWord(lemma='青い', pos=POS.ADJ),
+    #     ],
+    #     # extra_vocab='punipuni',
+    # )

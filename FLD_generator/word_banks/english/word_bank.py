@@ -6,7 +6,7 @@ from typing import Optional
 
 from ordered_set import OrderedSet
 from lemminflect import getInflection
-from FLD_generator.word_banks.base import WordBank, POS
+from FLD_generator.word_banks.base import WordBank, POS, UserWord
 from FLD_generator.utils import starts_with_vowel_sound
 from FLD_generator.person_names import get_person_names
 from FLD_generator.word_banks.word_utils import WordUtil
@@ -93,14 +93,17 @@ class EnglishWordBank(WordBank):
     def __init__(self,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab_restrictions: Optional[Dict[POS, Set[str]]] = None):
-        super().__init__()
+                 extra_vocab: Optional[List[UserWord]] = None,
+                 intermediate_constant_prefix: Optional[str] = None):
+        super().__init__(extra_vocab=extra_vocab,
+                         intermediate_constant_prefix=intermediate_constant_prefix)
+        self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
 
         self._word_util = WordUtil(
             'eng',
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=vocab_restrictions,
+            extra_vocab=extra_vocab,
         )
 
         self._verb_inflation_mapping = {
@@ -109,15 +112,12 @@ class EnglishWordBank(WordBank):
             self.VerbForm.S: 'VBZ',
         }
 
-        self._person_names: OrderedSet[str] = OrderedSet(get_person_names(country='US'))
-
     def _get_all_lemmas(self) -> Iterable[str]:
         return sorted(self._word_util.get_all_lemmas()) + list(self._person_names)
 
     def _get_pos(self, word: str) -> List[POS]:
         if word in self._person_names:
             return [POS.NOUN]
-
         return self._word_util.get_pos(word)
 
     def _change_verb_form(self, verb: str, form: Enum, force=False) -> List[str]:
@@ -310,6 +310,9 @@ class EnglishWordBank(WordBank):
         if noun in self._person_names:
             return True
         return self._word_util.can_be_entity_noun(noun)
+
+    def _can_be_predicate_noun(self, noun: str) -> bool:
+        return not self._can_be_entity_noun(noun) and not self._can_be_event_noun(noun)
 
     def _get_antonyms(self, word: str) -> List[str]:
         return self._word_util.get_antonyms(word)

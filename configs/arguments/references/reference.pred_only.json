@@ -1,0 +1,9 @@
+[
+  {
+      "id": "reference.pred_only",
+      "premises": [
+          "{A}"
+      ],
+      "conclusion": "{A}"
+  }
+]

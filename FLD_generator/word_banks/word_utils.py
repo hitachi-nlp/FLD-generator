@@ -4,7 +4,7 @@ from typing import Optional, Iterable, Dict, List, Set, Tuple
 import logging
 
 from nltk.corpus.reader.wordnet import Synset, Lemma
-from FLD_generator.word_banks.base import POS
+from FLD_generator.word_banks.base import POS, UserWord
 
 from .wordnet import WN_POS, SynsetOp, LemmaOp
 
@@ -30,9 +30,16 @@ class WordUtil:
                  language: str,
                  transitive_verbs: Optional[Iterable[str]] = None,
                  intransitive_verbs: Optional[Iterable[str]] = None,
-                 vocab_restrictions: Optional[Dict[POS, Set[str]]] = None):
+                 extra_vocab: Optional[List[UserWord]] = None):
         if language == 'jpn':
             logger.warning('Wordnet operations such as getting synonyms/antonyms may not produce good results for language=%s, due to not-yet-refined logic', language)
+
+        # To avoid circular import
+        from .japanese.parser import MorphemeParser
+        from .english.parser import get_lemma as get_lemma_eng
+        japanese_morpheme_parser = MorphemeParser(extra_vocab=extra_vocab)
+        self._get_lemma_jpn = japanese_morpheme_parser.get_lemma
+        self._get_lemma_eng = get_lemma_eng
 
         self._language = language
         self._syn_op = SynsetOp()
@@ -48,28 +55,22 @@ class WordUtil:
         else:
             self._intransitive_verbs = None
 
+        self._extra_words: Set[str] = {word.lemma for word in extra_vocab} if extra_vocab is not None else set()
+        _vocab: Dict[WN_POS, Set[str]] = defaultdict(set)
+        for word, wn_pos in self._load_all_lemmas_from_wn():
+            _vocab[wn_pos].add(word)
+        if extra_vocab is not None:
+            for word in extra_vocab:
+                _vocab[_POS_WB_TO_WN[word.pos]].add(word.lemma)
+
         self._word_set: Set[str] = set()
         self._word_to_wn_pos: Dict[str, List[WN_POS]] = defaultdict(list)
+        for wn_pos, words in _vocab.items():
+            for word in words:
+                self._word_set.add(word)
+                self._word_to_wn_pos[word].append(wn_pos)
 
-        if vocab_restrictions is not None:
-            logger.info('use restrected vocabulary')
-            # make sure the words are in set. list is too slow.
-            self._vocab_restrictions = {_POS_WB_TO_WN[pos]: set(words)
-                                        for pos, words in vocab_restrictions.items()}
-        else:
-            self._vocab_restrictions = None
-
-        logger.info('loading words from WordNet ...')
-        for word, wn_pos in self._load_all_lemmas():
-            if vocab_restrictions is not None:
-                if wn_pos in self._vocab_restrictions\
-                        and word not in self._vocab_restrictions[wn_pos]:
-                    continue
-            self._word_set.add(word)
-            self._word_to_wn_pos[word].append(wn_pos)
-        logger.info('loading words from WordNet done!')
-
-    def _load_all_lemmas(self) -> Iterable[Tuple[str, WN_POS]]:
+    def _load_all_lemmas_from_wn(self) -> Iterable[Tuple[str, WN_POS]]:
         logger.info('loading lemmas...')
         done_lemmas: Set[Lemma] = set([])
         for syn in self._syn_op.all():
@@ -87,20 +88,15 @@ class WordUtil:
                 done_lemmas.add(lemma)
                 lemma_str = lemma.name()
                 for _syn in self._syn_op.from_word(lemma_str, word_lang=self._language):
-                    yield lemma_str, _syn.pos()
-
+                    yield lemma_str, WN_POS(_syn.pos())
 
     def get_lemma(self, word: str,
                   # False as default as lemmatization failure always occurs for noun but it is not a problem
                   warn_lemmatize_failure=False) -> str:
-        # To avoid circular import
-        from .japanese.parser import get_lemma as get_lemma_jpn
-        from .english.parser import get_lemma as get_lemma_eng
-
         if self._language == 'eng':
             # Why not use wordnet?
             # -> maybe, we wanted to ensure that the lemmatization always succeeds
-            lemma = get_lemma_eng(word)
+            lemma = self._get_lemma_eng(word)
             if lemma is not None:
                 return lemma
             else:
@@ -109,7 +105,7 @@ class WordUtil:
                 return word
 
         elif self._language == 'jpn':
-            return get_lemma_jpn(word)
+            return self._get_lemma_jpn(word)
 
         else:
             raise NotImplementedError()
@@ -127,8 +123,20 @@ class WordUtil:
         return self._word_set
 
     def get_pos(self, word: str) -> List[POS]:
-        word = self.get_lemma(word)
-        return list({_POS_WN_TO_WB[WN_POS(syn.pos())] for syn in self._syns_from_word(word)})
+        # if self._is_user_vocab:
+        if word in self._extra_words:
+            # for the user specified vocab, we stick to the user specified POS
+            if word in self._word_to_wn_pos:
+                wn_poss = self._word_to_wn_pos[word]
+            elif self.get_lemma(word) in self._word_to_wn_pos:
+                wn_poss = self._word_to_wn_pos[self.get_lemma(word)]
+            else:
+                raise ValueError()
+        else:
+            word = self.get_lemma(word)
+            # HONOKA: I forget why we trace the synonyms here...
+            wn_poss = [WN_POS(syn.pos()) for syn in self._syns_from_word(word)]
+        return list(set(_POS_WN_TO_WB[wn_pos] for wn_pos in wn_poss))
 
     def can_be_intransitive_verb(self, verb: str) -> bool:
         if self._intransitive_verbs is None:

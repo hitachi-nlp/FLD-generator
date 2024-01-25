@@ -1,11 +1,11 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Union, Tuple
 import logging
 import json
 
 from tqdm import tqdm
 from FLD_generator.utils import nested_merge
-from FLD_generator.word_banks.base import WordBank
+from FLD_generator.word_banks.base import WordBank, POS, UserWord
 
 from .base import Translator
 from .templated import TemplatedTranslator
@@ -16,12 +16,51 @@ from .japanese import JapaneseTranslator
 logger = logging.getLogger(__name__)
 
 
+def _get_config_paths(name_or_path: Union[str, List[str], Tuple[str]], lang: str) -> List[str]:
+    if isinstance(name_or_path, (list, tuple)):
+        return [_path
+                for path in name_or_path
+                for _path in _get_config_paths(path, lang)]
+
+    if Path(name_or_path).is_dir():
+        return [str(p) for p in Path(name_or_path).glob('**/*.json')]
+
+    elif Path(name_or_path).is_file():
+        return [name_or_path]
+
+    else:
+        if lang == 'eng':
+            if name_or_path in ['thing', 'thing.v1']:
+                return _get_config_paths('./configs/translations/eng/thing_person.v0/', lang)
+            else:
+                raise ValueError(f'Unsupported config name {name_or_path}')
+
+        elif lang == 'jpn':
+            if name_or_path in ['thing', 'thing.v1']:
+                return _get_config_paths('./configs/translations/jpn/thing.v1/', lang)
+
+            elif name_or_path in ['punipuni', 'punipuni.v0']:
+                paths = [path for path in _get_config_paths('./configs/translations/jpn/thing.v1/', lang)
+                         if not path.endswith('phrases.json')]
+                paths.append('./configs/translations/jpn/punipuni.v0/phrases.json')
+                return paths
+
+            else:
+                raise ValueError(f'Unsupported config name {name_or_path}')
+
+        else:
+            raise ValueError(f'Unsupported language {lang}')
+
+
+
 def build(lang: str,
-          config_paths: List[str],
+          config_name_or_path: List[str],
           word_bank: WordBank,
           adj_verb_noun_ratio: Optional[str] = None,
           insert_word_delimiters=False,
           **kwargs) -> TemplatedTranslator:
+
+    config_paths = _get_config_paths(config_name_or_path, lang)
 
     merged_config_json = {}
     for config_path in config_paths:

@@ -1,29 +1,42 @@
 from typing import Set, Optional, Dict, Union, List, Iterable
+import logging
 
-from FLD_generator.word_banks.base import WordBank, POS
+from FLD_generator.word_banks.base import WordBank, POS, UserWord
 from .english import EnglishWordBank
+from .japanese.word_bank import load_jp_extra_vocab
 from .japanese import JapaneseWordBank, load_morphemes
+
+logger = logging.getLogger(__name__)
+
+
+def load_vocab(name_or_path: str, lang: str) -> List[UserWord]:
+    if lang == 'eng':
+        raise NotImplementedError()
+    elif lang == 'jpn':
+        ng_words = [
+            # 'かまた',   # 赤いかまたは青い を引っかけてしまう．
+        ]
+        if name_or_path == 'BCCWJ':
+            paths = ['./res/word_banks/japanese/vocab/BCCWJ/vocab.BCCWJ.all.json']
+        elif name_or_path == 'punipuni':
+            paths = [
+                './res/word_banks/japanese/vocab/punipuni/vocab.punipuni.json',
+                './res/word_banks/japanese/vocab/BCCWJ/vocab.BCCWJ.wo_transitive_verbs.wo_all_nouns.json',
+            ]
+        else:
+            raise ValueError(f'Unknown vocab name "{name_or_path}"')
+        return load_jp_extra_vocab(paths, ng_words=ng_words)
+    else:
+        raise ValueError(f'Unknown language "{lang}"')
 
 
 def build(
     lang: str,
     transitive_verbs_path: Optional[str] = None,
     intransitive_verbs_path: Optional[str] = None,
-    vocab_restrictions: Optional[Dict[Union[POS, str], Union[Iterable[str]]]] = None,
+    extra_vocab: Optional[Union[str, List[UserWord]]] = None,
 ) -> WordBank:
-
-    if vocab_restrictions is not None:
-        _vocab_restrictions: Optional[Dict[POS, Set[str]]] = {}
-        for pos, words in vocab_restrictions.items():
-            if not isinstance(pos, POS):
-                _pos = POS(pos)
-            else:
-                _pos = pos
-            words = set(words)
-
-            _vocab_restrictions[_pos] = words
-    else:
-        _vocab_restrictions = None
+    logger.info('Building word bank for language=%s ...', lang)
 
     if lang == 'eng':
 
@@ -35,13 +48,20 @@ def build(
             intransitive_verbs_path = './res/word_banks/english/intransitive_verbs.txt'
         intransitive_verbs = set(line.strip('\n') for line in open(intransitive_verbs_path))
 
+        if isinstance(extra_vocab, str):
+            _extra_vocab = load_vocab(extra_vocab, lang)
+        else:
+            _extra_vocab = extra_vocab
+
         return EnglishWordBank(
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=_vocab_restrictions,
+            extra_vocab=_extra_vocab,
         )
 
     elif lang == 'jpn':
+
+        intermediate_constant_prefix = None
 
         if transitive_verbs_path is not None:
             raise NotImplementedError()
@@ -51,13 +71,21 @@ def build(
             raise NotImplementedError()
         intransitive_verbs = None
 
+        if isinstance(extra_vocab, str):
+            if extra_vocab.find('punipuni') >= 0:
+                intermediate_constant_prefix = 'モンスター'
+            _extra_vocab = load_vocab(extra_vocab, lang)
+        else:
+            _extra_vocab = extra_vocab
+
         jpn_dict_csvs_dir = './res/word_banks/japanese/mecab/mecab-ipadic/'
         jpn_morphemes = load_morphemes(jpn_dict_csvs_dir)
         return JapaneseWordBank(
             jpn_morphemes,
             transitive_verbs=transitive_verbs,
             intransitive_verbs=intransitive_verbs,
-            vocab_restrictions=_vocab_restrictions,
+            extra_vocab=_extra_vocab,
+            intermediate_constant_prefix=intermediate_constant_prefix,
         )
 
     else:

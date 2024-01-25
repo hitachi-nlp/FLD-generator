@@ -3,325 +3,325 @@
   "sentence": {
 
     "(Ex): {A}x": [
-      "「 <<sentence::{A}none>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::{A}something.generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::{A}none>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::{A}something.generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::{A}something>>"
     ],
     "(Ex): ¬{A}x": [
-      "「 <<sentence::¬{A}none>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬{A}something.generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬{A}none>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬{A}something.generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::¬{A}something>>"
     ],
 
 
     "(Ex): ({A}x & {B}x)": [
-      "「 <<sentence::({A}none & {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::({A}none & {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::({A}something & {B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::({A}something & {B}something)>>"
     ],
     "(Ex): (¬{A}x & {B}x)": [
-      "「 <<sentence::(¬{A}none & {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::(¬{A}none & {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::(¬{A}something & {B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::(¬{A}something & {B}something)>>"
     ],
     "(Ex): ({A}x & ¬{B}x)": [
-      "「 <<sentence::({A}none & ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::({A}none & ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::({A}something & ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::({A}something & ¬{B}something)>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x)": [
-      "「 <<sentence::(¬{A}none & ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::(¬{A}none & ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::(¬{A}something & ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "(Ex): ¬({A}x & {B}x)": [
-      "「 <<sentence::¬({A}none & {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬({A}something & {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬({A}none & {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬({A}something & {B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬({A}something & {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x)": [
-      "「 <<sentence::¬(¬{A}none & {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬(¬{A}something & {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬(¬{A}none & {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬(¬{A}something & {B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬(¬{A}something & {B}something)>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x)": [
-      "「 <<sentence::¬({A}none & ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬({A}something & ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬({A}none & ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬({A}something & ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬({A}something & ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x)": [
-      "「 <<sentence::¬(¬{A}none & ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬(¬{A}something & ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬(¬{A}none & ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬(¬{A}something & ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬(¬{A}something & ¬{B}something)>>"
     ],
 
 
     "(Ex): ({A}x v {B}x)": [
-      "「 <<sentence::({A}none v {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::({A}none v {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::({A}something v {B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::({A}something v {B}something)>>"
     ],
     "(Ex): (¬{A}x v {B}x)": [
-      "「 <<sentence::(¬{A}none v {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::(¬{A}none v {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::(¬{A}something v {B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::(¬{A}something v {B}something)>>"
     ],
     "(Ex): ({A}x v ¬{B}x)": [
-      "「 <<sentence::({A}none v ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::({A}none v ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::({A}something v ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::({A}something v ¬{B}something)>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x)": [
-      "「 <<sentence::(¬{A}none v ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::(¬{A}none v ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::(¬{A}something v ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "<<sentence::(¬{A}something v ¬{B}something)>>"
     ],
 
 
     "(Ex): ¬({A}x v {B}x)": [
-      "「 <<sentence::¬({A}none v {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬({A}something v {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬({A}none v {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬({A}something v {B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬({A}something v {B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x)": [
-      "「 <<sentence::¬(¬{A}none v {B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬(¬{A}something v {B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬(¬{A}none v {B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬(¬{A}something v {B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬(¬{A}something v {B}something)>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x)": [
-      "「 <<sentence::¬({A}none v ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬({A}something v ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬({A}none v ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬({A}something v ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬({A}something v ¬{B}something)>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x)": [
-      "「 <<sentence::¬(¬{A}none v ¬{B}none)>> 」 <<phrase::mono_ha_ga_aru>>",
-      "<<clause::noun::¬(¬{A}something v ¬{B}something)generic_subj>> <<phrase::ha_ga_aru>>",
+      "「 <<sentence::¬(¬{A}none v ¬{B}none)>> 」 <<phrase::mono_ha_aru>>",
+      "<<clause::noun::¬(¬{A}something v ¬{B}something)generic_subj>> <<phrase::ha_aru>>",
       "__<<sentence::¬(¬{A}something v ¬{B}something)>>"
     ],
 
 
     "(Ex): {A}x -> {B}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::{B}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::{B}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> {B}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::{B}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::{B}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬{B}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬{B}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}none>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): ({A}x & {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x & ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x & {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x & ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ({B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ({B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): ¬({A}x & {B}x) -> {C}x": [
-     "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+     "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x & {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ¬({B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬({B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x & {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x & ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none & ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
 
     "(Ex): ({A}x v {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x v ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x v {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x v ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ({B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ({B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): ¬({A}x v {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x v {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x) -> {C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x) -> ¬{C}x": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}none>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ¬({B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬({B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x v {C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v {C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}x v ¬{C}x)": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}none v ¬{C}none)>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
@@ -558,225 +558,225 @@
 
 
     "(Ex): {A}x -> {B}{b}": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::{B}{b}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::{B}{b}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> {B}{b}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::{B}{b}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::{B}{b}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬{B}{b}": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}{b}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}{b}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬{B}{b}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}{b}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬{B}{b}>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): ({A}x & {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x & ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x & {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x & ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x & ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ({B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ({B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): ¬({A}x & {B}x) -> {C}{c}": [
-     "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+     "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x & {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x & ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x & ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none & ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ¬({B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬({B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}{b} & {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}{b} & ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} & ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
 
     "(Ex): ({A}x v {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x v ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x v {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ({A}x v ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): (¬{A}x v ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ({B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ({B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ({B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> (¬{B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> (¬{B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): ¬({A}x v {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x v {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x) -> {C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v {B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v {B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬({A}x v ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬({A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬(¬{A}x v ¬{B}x) -> ¬{C}{c}": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬(¬{A}none v ¬{B}none)>> <<phrase::maybe_then>> <<sentence::¬{C}{c}>> 」 <<phrase::mono_ha_aru>>"
     ],
 
 
     "(Ex): {A}x -> ¬({B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬({B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}{b} v {C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v {C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬({B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬({B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): {A}x -> ¬(¬{B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ],
     "(Ex): ¬{A}x -> ¬(¬{B}{b} v ¬{C}{b})": [
-      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_ga_aru>>"
+      "「 <<phrase::if_conjunction>> <<sentence::¬{A}none>> <<phrase::maybe_then>> <<sentence::¬(¬{B}{b} v ¬{C}{b})>> 」 <<phrase::mono_ha_aru>>"
     ]
 
   }
