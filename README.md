@@ -5,14 +5,24 @@ This repository includes the code for generating the FLD corpus.
 
 See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about the whole FLD project.
 
-## About this release
-* This is version 2.0 of FLD corpora. See the Appendix.H of [our paper](https://arxiv.org/abs/2308.07336) for details.
+
+
+
+## Releases (READ CAREFULLY to determine which branch suits you)
+* **`NLP_2024_KOBE_BEEF`** branch (2024-01-24) 
+    - Released at LREC-COLING 2024 and NLP (言語処理学会) 2024.
+    - **Now capable of generating Japanese corpora (JFLD).**
+    - Slight changes in the corpus schema.
+    - **This branch and the generated corpora might not be compatible with older branches of related repositories.**
+* **`main`** branch (2023-08-22)
+    - Initial release at ICML 2023.
+    - This is version 2.0 of FLD corpora. See the Appendix H of [our paper](https://arxiv.org/abs/2308.07336) for details.
 
 ## Installation
 The code has been tested on Python 3.7.7.
 ```console
-$ pip install -r ./requrements.txt
-$ export PYTHONPATH=`pwd -P`:$PYTHONPATH
+pip install -r ./requrements.txt
+export PYTHONPATH=`pwd -P`:$PYTHONPATH
 ```
 
 ## How to generate FLD corpus
@@ -20,7 +30,7 @@ Use `./create_corpus.py`, which generates a corpus with the design specified by 
 
 We can create **FLD** (FLD.3) by running the follows command:
 ```console
-$ python ./create_corpus.py\
+python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --depth-range '[1, 3]'\
@@ -42,7 +52,7 @@ $ python ./create_corpus.py\
 
 We can create **FLD★** (FLD.4) by running the follows command:
 ```console
-$ python ./create_corpus.py\
+python ./create_corpus.py\
     <output_dir>\
     <dataset_size>\
     --depth-range '[1, 8]'\
