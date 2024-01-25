@@ -70,8 +70,7 @@ def main():
 
     # output_top_dir = Path('./outputs/00.create_corpus/20230118.jpn.ICL')
 
-    # output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn.punipuni')
-    output_top_dir = Path('./outputs/00.create_corpus/tmp')
+    output_top_dir = Path('./outputs/00.create_corpus/20230120.jpn.punipuni')
 
     dataset_names = [
         # ---------------------------------- 20230729.case_study_finalize (ICML-official-release-v2) ------------------------------------
@@ -182,8 +181,18 @@ def main():
         # ---------------------------------- 20230120.jpn.punipuni ------------------------------------
         # '20230120.jpn.wordnet.D3',
 
+        '20230120.jpn.wordnet_repro_w_proposition.D1_wo_dist',
+        '20230120.jpn.wordnet_repro_w_proposition.D1',
+        '20230120.jpn.wordnet_repro_w_proposition.D3',
+        '20230120.jpn.wordnet_repro_w_proposition.D8',
+
+        # '20230120.jpn.wordnet_repro_wo_proposition.D1_wo_dist',
+        # '20230120.jpn.wordnet_repro_wo_proposition.D1',
+        # '20230120.jpn.wordnet_repro_wo_proposition.D3',
+        # '20230120.jpn.wordnet_repro_wo_proposition.D8',
+
         # '20230120.jpn.BCCWJ.D1_wo_dist',
-        '20230120.jpn.BCCWJ.D1',
+        # '20230120.jpn.BCCWJ.D1',
         # '20230120.jpn.BCCWJ.D3',
         # '20230120.jpn.BCCWJ.D8',
 
@@ -191,11 +200,6 @@ def main():
         # '20230120.jpn.punipuni.D1',
         # '20230120.jpn.punipuni.D3',
         # '20230120.jpn.punipuni.D8',
-
-        # '20230120.jpn.wordnet_repro_wo_proposition.D1_wo_dist',
-        # '20230120.jpn.wordnet_repro_wo_proposition.D1',
-        # '20230120.jpn.wordnet_repro_wo_proposition.D3',
-        # '20230120.jpn.wordnet_repro_wo_proposition.D8',
 
 
         # ---------------------------------- 20230122.jpn.ICL ------------------------------------
