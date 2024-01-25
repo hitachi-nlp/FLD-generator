@@ -344,6 +344,8 @@ class VariousFormUnkownInterprandsDistractor(FormulaDistractor):
             num_constant = len(src_formula.constants)
 
             def _sample_at_most(elems: Iterable[Any], num: int) -> List[Any]:
+                if isinstance(elems, set):
+                    elems = list(elems)
                 return random.sample(elems, min(num, len(elems)))
 
             # mix unsed predicates constants a little

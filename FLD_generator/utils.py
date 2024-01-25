@@ -47,6 +47,8 @@ def flatten_dict(dic: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def shuffle(elems: List[Any]) -> List[Any]:
+    if isinstance(elems, set):
+        elems = list(elems)
     return random.sample(elems, len(elems))
 
 
