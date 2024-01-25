@@ -10,14 +10,13 @@ See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about t
 
 ## Releases (READ CAREFULLY to determine which branch suits you)
 * **`NLP_2024_KOBE_BEEF`** branch (2024-01-24) 
-    - Release at LREC-COLING 2024 and NLP(言語処理学会) 2024．
-    - **We made it possible to generate Japanese corpora (JFLD)**.
-    - The corpus schema is changed a bit.
-    - **This branch and generated corpora might not be compatible (not sure) with the older branches of relevant repositories.**
+    - Released at LREC-COLING 2024 and NLP (言語処理学会) 2024.
+    - **Now capable of generating Japanese corpora (JFLD).**
+    - Slight changes in the corpus schema.
+    - **This branch and the generated corpora might not be compatible with older branches of related repositories.**
 * **`main`** branch (2023-08-22)
     - Initial release at ICML 2023.
-    * This is version 2.0 of FLD corpora. See the Appendix.H of [our paper](https://arxiv.org/abs/2308.07336) for details.
-
+    * This is version 2.0 of FLD corpora. See the Appendix H of [our paper](https://arxiv.org/abs/2308.07336) for details.
 
 
 ## Installation
@@ -31,23 +30,21 @@ export PYTHONPATH=`pwd -P`:$PYTHONPATH
 
 
 ## Additional Resources Required
-
-### For Japanese FLD
-```console
-./download_scripts/00.download_JFLD_resources.sh
-```
-
-### For Knowledge FLD
-```console
-./download_scripts/00.download_knowledge_banks.sh
-```
+* For Japanese FLD
+    ```console
+    ./download_scripts/00.download_JFLD_resources.sh
+    ```
+* For knowledge FLD
+    ```console
+    ./download_scripts/00.download_knowledge_banks.sh
+    ```
 
 
 
 
 ## How to generate FLD corpus
-Use `./scripts/create_corpus.py`, which generates a corpus with the design specified by the option values.
-Note that creating corpora takes much computationally cost, e.g., ~ 500 CPUs times 30 minutes for 30,000 exmaples.
+Use `./scripts/create_corpus.py`, which generates a corpus based on the design specified by the option values.
+Note that creating corpora is computationally expensive; for instance, generating 30,000 examples may require approximately 500 CPU cores for 30 minutes."
 
 * **FLD** (FLD.3):
     ```console
