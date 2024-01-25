@@ -51,6 +51,8 @@ def main(output_dir: str,
     can_be_predicate_nouns: Set[str] = set()
     for path, rank_limit in zip([bccwj_short_unit_vocab, bccwj_long_unit_vocab],
                                 [bccwj_short_unit_rank_limit, bccwj_long_unit_rank_limit]):
+        if not Path(path).exists():
+            raise FileNotFoundError(f'{path} does not exist. Please download it from https://clrd.ninjal.ac.jp/bccwj/freq-list.html')
         vocab_df = pd.read_csv(path, sep='\t')
         vocab_df = vocab_df.sort_values(sort_col, ascending=False)[:rank_limit or 9999999999]
 
