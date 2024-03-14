@@ -10,7 +10,7 @@ See [the entry-point repository](https://github.com/hitachi-nlp/FLD.git) about t
 
 ## Releases (READ CAREFULLY to determine which branch suits you)
 * **`NLP_2024_KOBE_BEEF`** branch (2024-01-24) 
-    - Release NLP (言語処理学会) 2024.
+    - Release at NLP (言語処理学会) 2024.
     - **Now capable of generating Japanese corpora (JFLD).**
     - Slight changes in the corpus schema.
     - **This branch and the generated corpora might not be compatible with older branches of related repositories.**
